@@ -69501,3 +69501,8 @@
 [2021-03-31 03:24:21] Type 'help' for a list of commands.
 [2021-03-31 03:26:07] CONNECT: Nurupo connected (IP: 192.168.1.171  Serial: B5EEFEC9171FE69DD87AFA6470B1F161  Version: 1.5.8-9.20802.0)
 [2021-03-31 03:26:08] JOIN: Nurupo joined the game (IP: 192.168.1.171)
+[2021-03-31 03:26:46] INFO: Nurupo    Loaded vcs In : 6.31    Secounds
+[2021-03-31 03:43:13] QUIT: Nurupo left the game [Quit]
+[2021-03-31 03:44:14] Server stopped!
+[2021-03-31 03:44:14] Stopping resources.........
+[2021-03-31 03:44:18] Closing SQLite3 database
