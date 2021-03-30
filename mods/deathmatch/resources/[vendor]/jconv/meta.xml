@@ -1,0 +1,14 @@
+<meta>
+	<info type="script" name="" author="Codyl" description="JConvertor" version="8.1.6" />
+	<script type="server" src="config.lua" />
+	<script type="server" src="Scripts/AvaliableIDs.lua" />
+	<script type="server" src="Scripts/Presets.lua" />
+	<script type="server" src="Scripts/gtaLoader.lua" />
+	<script type="server" src="Scripts/Loader.lua" />
+	<script type="server" src="Scripts/objectLoader.lua" />
+	<script type="server" src="Scripts/JSDLoader.lua" />
+	<script type="server" src="Scripts/CWaterDataLoader.lua" />
+	<script type="server" src="Scripts/metaLoader.lua" />
+	<script type="server" src="Scripts/JSPLoader.lua" />
+	<script type="server" src="Scripts/Debug.lua" />
+</meta>

@@ -1,0 +1,238 @@
+objs
+7300, ndc_golfball, ndc_golfball, 1, 100, 0
+7301, ndc_boatrampNarrow, ndc_boatrampNarrow, 1, 200, 128
+7302, ndc_buoyRightArrow, ndc_buoyRightArrow, 1, 200, 128
+7303, ndc_buoyLeftArrow, ndc_buoyLeftArrow, 1, 200, 128
+7304, ndc_boatrampHump, ndc_boatrampHump, 1, 200, 128
+7305, ndc_navalmine, ndc_navalmine, 1, 200, 128
+7306, ndc_ammobox, ndc_ammobox, 1, 100, 0
+7307, jm_umb4_exit02, jm_umb4_exit02, 1, 100, 0
+7308, jm_umb4_exit01, jm_umb4_exit01, 1, 100, 0
+7309, jm_umb4_exit03, jm_umb4_exit03, 1, 100, 0
+7310, jm_umb4_shut, jm_umb4_shut, 1, 100, 0
+7311, gd_dildo, gd_dildo, 1, 100, 0
+7312, ndc_buoyTarget, ndc_buoyTarget, 1, 250, 128
+7313, pinata_man, pinata_man, 1, 100, 0
+7314, pm_hotgateleft, pm_hotgateleft, 1, 100, 0
+7315, sjl_crate, sjl_crate, 1, 150, 0
+7316, sjl_bobohand_04, sjl_bobohand_04, 1, 100, 0
+7317, sjl_bobohand_02, sjl_bobohand_02, 1, 100, 0
+7318, sjl_bobohand_03, sjl_bobohand_03, 1, 100, 0
+7319, sjl_bobohand_01, sjl_bobohand_01, 1, 100, 0
+7320, ca_sp_sportsbag, ca_sp_sportsbag, 1, 100, 0
+7321, me_boomshine_dr, me_boomshine_dr, 1, 100, 0
+7322, ndc_drugspillbig, ndc_drugspillbig, 1, 100, 0
+7323, ndc_drugspill, ndc_drugspill, 1, 100, 0
+7324, ndc_drugstack, ndc_drugstack, 1, 100, 0
+7325, ndc_drugpile, ndc_drugpile, 1, 100, 0
+7326, ndc_drugsopen, ndc_drugsopen, 1, 100, 0
+7327, gd_rocket, gd_rocket, 1, 100, 0
+7328, gd_camhelicopter, gd_camhelicopter, 1, 100, 0
+7329, gd_camtruckbase, gd_camtruckbase, 1, 100, 0
+7330, gd_camtrucktop, gd_camtrucktop, 1, 100, 0
+7331, pm_wallholed, pm_wallholed, 1, 150, 0
+7332, pm_wallwhole, pm_wallwhole, 1, 150, 0
+7333, pm_wallplastpile, pm_wallplastpile, 1, 100, 0
+7334, pm_gardoorwslux, pm_gardoorwslux, 1, 200, 0
+7335, gd_cratePile, gd_cratePile, 1, 100, 0
+7336, jm_heligate, jm_heligate, 1, 150, 0
+7337, jm_carpoundgate, jm_carpoundgate, 1, 100, 0
+7338, ndc_boatrampWide, ndc_boatrampWide, 1, 200, 128
+7339, TestRamp2, TestRamp2, 1, 100, 0
+7340, TestRamp1, TestRamp1, 1, 100, 0
+7341, TestRamp3, TestRamp3, 1, 100, 0
+7342, TestRamp4, TestRamp4, 1, 100, 0
+7343, TestRamp5, TestRamp5, 1, 100, 0
+7344, ndc_drugpacket, ndc_drugpacket, 1, 100, 0
+7345, pm_node_walls, pm_node_walls, 1, 50, 128
+7346, jm_dks_bhdoor, jm_dks_bhdoor, 1, 150, 0
+7347, ndc_boomstack, ndc_boomstack, 1, 100, 0
+7348, me_policeantennee, me_policeantennee, 1, 100, 0
+7349, me_mainrigrope, me_mainrigrope, 1, 200, 0
+7350, ndc_helibucket, ndc_helibucket, 1, 100, 0
+7351, pmdivide_door, pmdivide_door, 1, 299, 0
+7352, pm_elevdoor, pm_elevdoor, 1, 100, 0
+7353, ndc_helirescuerig, ndc_helirescuerig, 1, 100, 0
+7354, eb_pros_2_A_n, eb_pros_2_A_n, 1, 150, 12
+7355, eb_prot_1_A_n, eb_prot_1_A_n, 1, 150, 0
+7356, eb_prot_2_A_n, eb_prot_2_A_n, 1, 150, 12
+7357, eb_prot_3_A_n, eb_prot_3_A_n, 1, 100, 0
+7358, eb_smug_3_A_n, eb_smug_3_A_n, 1, 150, 12
+7359, eb_smug_2_A_n, eb_smug_2_A_n, 1, 150, 12
+7360, eb_loan_1_A_n, eb_loan_1_A_n, 1, 150, 12
+7361, eb_loan_2_A_n, eb_loan_2_A_n, 1, 150, 12
+7362, eb_loan_3_A_n, eb_loan_3_A_n, 1, 150, 12
+7363, eb_drug_1_A_n, eb_drug_1_A_n, 1, 150, 12
+7364, eb_drug_2_A_n, eb_drug_2_A_n, 1, 150, 12
+7365, eb_rob_2_A_n, eb_rob_2_A_n, 1, 150, 12
+7366, eb_rob_3_A_n, eb_rob_3_A_n, 1, 150, 12
+7367, eb_rob_1_A_n, eb_rob_1_A_n, 1, 150, 12
+7368, eb_drug_3_A_n, eb_drug_3_A_n, 1, 150, 12
+7369, sjl_bobohand_05, sjl_bobohand_05, 1, 100, 0
+7370, ndc_redballoon, ndc_redballoon, 1, 200, 0
+7371, gd_briefcase_red, gd_briefcase_red, 1, 100, 0
+7372, gd_briefcase_blue, gd_briefcase_blue, 1, 100, 0
+7373, gd_briefcase_brown, gd_briefcase_brown, 1, 100, 0
+7374, pmoffidoor, pmoffidoor, 1, 100, 0
+7375, dr_lifesaver, dr_lifesaver, 1, 100, 0
+7376, eb_pros_1_A_n, eb_pros_1_A_n, 1, 100, 0
+7377, eb_pros_3_A_n, eb_pros_3_A_n, 1, 150, 12
+7378, gd_safedoor, gd_safedoor, 1, 100, 0
+7379, ndc_kockwheel, ndc_kockwheel, 1, 100, 0
+7380, me_liftdoor, me_liftdoor, 1, 100, 0
+7381, mplaycrate, mplaycrate, 1, 100, 0
+7382, mplaycrate_doorB, mplaycrate_doorB, 1, 100, 0
+7383, mplaycrate_doorA, mplaycrate_doorA, 1, 100, 0
+7384, megaDamage, megaDamage, 1, 100, 0
+7385, regenerator, regenerator, 1, 100, 0
+7386, invisible, invisible, 1, 100, 0
+7387, bad_car, bad_car, 1, 100, 0
+7388, good_car, good_car, 1, 100, 0
+7389, ed_blockdocks, ed_blockdocks, 1, 150, 0
+7390, ed_blockgolf, ed_blockgolf, 1, 150, 0
+7391, ed_blockprawn, ed_blockprawn, 1, 150, 0
+7392, gd_helimagnet, gd_helimagnet, 1, 100, 0
+7393, ndc_impoundSignA, ndc_impoundSignA, 1, 100, 0
+7394, ndc_impoundSignB, ndc_impoundSignB, 1, 100, 0
+7395, ndc_impoundSignD, ndc_impoundSignD, 1, 100, 0
+7396, ndc_impoundSignC, ndc_impoundSignC, 1, 100, 0
+7397, ndc_impoundStrike, ndc_impoundStrike, 1, 100, 0
+7398, IZ_fbsDrs_blnk, IZ_fbsDrs_blnk, 1, 100, 0
+7399, jm_dts_csdoor, jm_dts_csdoor, 1, 100, 0
+7400, ndc_shopbag, ndc_shopbag, 1, 100, 0
+7401, rampageCompleted, rampageCompleted, 1, 100, 128
+7402, mar_a2_stereo, mar_a2_stereo, 2, 100, 100, 0
+7403, mar_a2tv, mar_a2tv, 2, 100, 100, 0
+7404, gd_beertray, gd_beertray, 1, 100, 0
+7405, gd_cigar, gd_cigar, 1, 100, 0
+7406, gd_cigarbox, gd_cigarbox, 1, 100, 0
+7407, gd_rubbish3, gd_rubbish3, 1, 100, 0
+7408, gd_rubbish2, gd_rubbish2, 1, 100, 0
+7409, gd_rubbish1, gd_rubbish1, 1, 100, 0
+7410, gd_snackTray, gd_snackTray, 1, 100, 0
+7411, dr_valve, dr_valve, 2, 100, 100, 0
+7412, ebprop_barstool, ebprop_barstool, 2, 100, 100, 0
+7413, ebprop_bed, ebprop_bed, 2, 100, 100, 0
+7414, ebprop_bigbed, ebprop_bigbed, 2, 100, 100, 0
+7415, ebprop_chair, ebprop_chair, 2, 100, 100, 0
+7416, ebprop_clothesrail, ebprop_clothesrail, 2, 100, 100, 0
+7417, ebprop_comfychair, ebprop_comfychair, 2, 100, 100, 0
+7418, ebprop_copier, ebprop_copier, 2, 100, 100, 0
+7419, ebprop_crate, ebprop_crate, 2, 100, 100, 0
+7420, ebprop_drugtableA, ebprop_drugtableA, 2, 100, 100, 0
+7421, ebprop_drugtableB, ebprop_drugtableB, 2, 100, 100, 0
+7422, ebprop_floorlamp, ebprop_floorlamp, 2, 100, 100, 0
+7423, ebprop_gblaster, ebprop_gblaster, 2, 100, 100, 0
+7424, ebprop_officedeskA, ebprop_officedeskA, 2, 100, 100, 0
+7425, ebprop_plantpot, ebprop_plantpot, 2, 100, 100, 0
+7426, ebprop_sack, ebprop_sack, 2, 100, 100, 0
+7427, ebprop_speaker, ebprop_speaker, 2, 100, 100, 0
+7428, ebprop_tableround, ebprop_tableround, 2, 100, 100, 0
+7429, ebprop_tablesquare, ebprop_tablesquare, 2, 100, 100, 0
+7430, ebprop_tablewide, ebprop_tablewide, 2, 100, 100, 0
+7431, eb_forsale, eb_forsale, 1, 150, 0
+7432, eb_cons_A, eb_cons_A, 1, 150, 0
+7433, eb_pros_1_A, eb_pros_1_A, 1, 150, 0
+7434, eb_rob_1_A, eb_rob_1_A, 1, 150, 0
+7435, eb_rob_2_A, eb_rob_2_A, 1, 150, 0
+7436, eb_loan_1_A, eb_loan_1_A, 1, 150, 0
+7437, eb_rob_3_A, eb_rob_3_A, 1, 100, 0
+7438, jm_bks_pedgte, jm_bks_pedgte, 1, 100, 0
+7439, ndc_bikerampNarrow, ndc_bikerampNarrow, 1, 200, 128
+7440, ebprop_delicounter, ebprop_delicounter, 2, 100, 100, 0
+7441, ebprop_freezerfloor, ebprop_freezerfloor, 2, 100, 100, 0
+7442, ebprop_freezer, ebprop_freezer, 2, 100, 100, 0
+7443, eb_prot_1_A, eb_prot_1_A, 1, 150, 0
+7444, ndc_moneypile, generic, 1, 40, 128
+7445, ndc_nodamagedesk, ndc_nodamagedesk, 1, 100, 0
+7446, ndc_debrisa, ndc_debrisa, 1, 100, 0
+7447, ndc_debrisb, ndc_debrisb, 1, 100, 0
+7448, ndc_debrisc, ndc_debrisc, 1, 100, 0
+7449, hash_8795aea8, knackers, 1, 150, 0
+7450, pm_piergate, pm_piergate, 1, 70, 132
+7451, pm_gardoorwslut, pm_gardoorwslut, 1, 200, 0
+7452, jm_brks_gate, jm_brks_gate, 1, 150, 0
+7453, sjl_learjet, sjl_learjet, 1, 200, 0
+7454, sjl_learjet_near, sjl_learjet_near, 1, 100, 0
+7455, eb_drug_3_C, eb_drug_3_C, 1, 150, 0
+7456, eb_drug_2_C, eb_drug_2_C, 1, 150, 0
+7457, eb_drug_1_C, eb_drug_1_C, 1, 150, 0
+7458, eb_prot_3_C, eb_prot_3_C, 1, 150, 0
+7459, eb_prot_2_C, eb_prot_2_C, 1, 150, 0
+7460, eb_prot_1_C, eb_prot_1_C, 1, 150, 0
+7461, eb_pros_3_C, eb_pros_3_C, 1, 150, 0
+7462, eb_pros_2_C, eb_pros_2_C, 1, 150, 0
+7463, eb_pros_1_C, eb_pros_1_C, 1, 150, 0
+7464, eb_loan_3_C, eb_loan_3_C, 1, 150, 0
+7465, eb_loan_2_C, eb_loan_2_C, 1, 150, 0
+7466, eb_loan_1_C, eb_loan_1_C, 1, 150, 0
+7467, eb_smug_3_C, eb_smug_3_C, 1, 150, 0
+7468, eb_smug_2_C, eb_smug_2_C, 1, 150, 0
+7469, eb_smug_1_C, eb_smug_1_C, 1, 150, 0
+7470, eb_rob_3_C, eb_rob_3_C, 1, 150, 0
+7471, eb_rob_2_C, eb_rob_2_C, 1, 150, 0
+7472, eb_rob_1_C, eb_rob_1_C, 1, 150, 0
+7473, isd1_bike01, isd1_bike01, 1, 100, 0
+7474, isd1_bike02, isd1_bike02, 1, 100, 0
+7475, isd1_bike03, isd1_bike03, 1, 100, 0
+7476, isd1_car01, isd1_car01, 1, 100, 0
+7477, isd1_car02, isd1_car02, 1, 100, 0
+7478, isd1_car03, isd1_car03, 1, 100, 0
+7479, jm_skydoor, jm_skydoor, 1, 150, 0
+7480, Marty_cut_door, Marty_cut_door, 1, 100, 0
+7481, gd_hotelsofa, gd_hotelsofa, 2, 100, 100, 0
+7482, gd_hotelsofabit, gd_hotelsofabit, 1, 100, 0
+7483, ndc_philstick, ndc_philstick, 1, 100, 0
+7484, isd2_bike01, isd2_bike01, 1, 100, 0
+7485, isd2_bike02, isd2_bike02, 1, 100, 0
+7486, isd2_bike03, isd2_bike03, 1, 100, 0
+7487, isd2_car02, isd2_car02, 1, 100, 0
+7488, isd2_car01, isd2_car01, 1, 100, 0
+7489, isd2_car03, isd2_car03, 1, 100, 0
+7490, unlockableIcon, unlockableIcon, 1, 100, 0
+7491, ebprop_cashreg, ebprop_cashreg, 2, 100, 100, 0
+7492, gd_phoneHandle, gd_phoneHandle, 1, 100, 0
+7493, me_mainlightrig, me_mainlightrig, 1, 200, 0
+7494, stagelite_light1, stagelite_light1, 1, 299, 0
+7495, stagelite_light2, stagelite_light2, 1, 299, 0
+7496, stagelite_light3, stagelite_light3, 1, 299, 0
+7497, stagelite_light4, stagelite_light4, 1, 299, 0
+7498, stagelite_light5, stagelite_light5, 1, 299, 0
+7499, jm_bks_barrier, jm_bks_barrier, 1, 62, 128
+7500, ps_philheadmic, ps_philheadmic, 1, 100, 0
+7501, gd_spraycans, gd_spraycans, 1, 100, 0
+7502, ebprop_filecab, ebprop_filecab, 2, 100, 100, 0
+7503, ndc_radioPhone, ndc_radioPhone, 1, 100, 0
+7504, eb_drug_1_A, eb_drug_1_A, 2, 150, 100, 0
+7505, eb_drug_1_B, eb_drug_1_B, 2, 150, 100, 0
+7506, eb_drug_2_A, eb_drug_2_A, 2, 150, 100, 0
+7507, eb_drug_2_B, eb_drug_2_B, 2, 150, 100, 0
+7508, eb_drug_3_A, eb_drug_3_A, 2, 150, 100, 0
+7509, eb_drug_3_B, eb_drug_3_B, 2, 150, 100, 0
+7510, eb_loan_1_B, eb_loan_1_B, 2, 150, 100, 0
+7511, eb_loan_2_A, eb_loan_2_A, 2, 150, 100, 0
+7512, eb_loan_2_B, eb_loan_2_B, 2, 150, 100, 0
+7513, eb_loan_3_A, eb_loan_3_A, 2, 150, 100, 0
+7514, eb_loan_3_B, eb_loan_3_B, 2, 150, 100, 0
+7515, eb_pros_1_B, eb_pros_1_B, 2, 150, 100, 0
+7516, eb_pros_2_A, eb_pros_2_A, 2, 150, 100, 0
+7517, eb_pros_2_B, eb_pros_2_B, 2, 150, 100, 0
+7518, eb_pros_3_A, eb_pros_3_A, 2, 150, 100, 0
+7519, eb_pros_3_B, eb_pros_3_B, 2, 150, 100, 0
+7520, eb_prot_1_B, eb_prot_1_B, 2, 150, 100, 0
+7521, eb_prot_2_A, eb_prot_2_A, 2, 150, 100, 0
+7522, eb_prot_2_B, eb_prot_2_B, 2, 150, 100, 0
+7523, eb_prot_3_A, eb_prot_3_A, 2, 100, 100, 0
+7524, eb_prot_3_B, eb_prot_3_B, 2, 150, 100, 0
+7525, eb_rob_1_B, eb_rob_1_B, 2, 150, 100, 0
+7526, eb_rob_2_B, eb_rob_2_B, 2, 150, 100, 0
+7527, eb_rob_3_B, eb_rob_3_B, 2, 150, 100, 0
+7528, eb_smug_1_A, eb_smug_1_A, 2, 150, 100, 0
+7529, eb_smug_1_B, eb_smug_1_B, 2, 150, 100, 0
+7530, eb_smug_2_A, eb_smug_2_A, 2, 150, 100, 0
+7531, eb_smug_2_B, eb_smug_2_B, 2, 150, 100, 0
+7532, eb_smug_3_A, eb_smug_3_A, 2, 150, 100, 0
+7533, eb_smug_3_B, eb_smug_3_B, 2, 150, 100, 0
+end
+tobj
+end

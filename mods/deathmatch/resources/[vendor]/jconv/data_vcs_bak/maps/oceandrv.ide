@@ -1,0 +1,121 @@
+objs
+4345, plants01, knackers, 1, 299, 0
+4346, deco_buildkb09, knackers, 1, 150, 0
+4347, deco_polgrnda12, knackers, 1, 160, 0
+4348, deco_polgrnda13, knackers, 1, 140, 0
+4349, deco_polgrnda14, knackers, 1, 140, 0
+4350, deco_polgrnda17, knackers, 1, 140, 0
+4351, oceanrda06_dy, knackers, 1, 200, 1
+4352, oceanrda05_dy, knackers, 1, 200, 1
+4353, oceanrda04_dy, knackers, 1, 200, 1
+4354, oceanrda03_dy, knackers, 1, 200, 1
+4355, od_walkway2, knackers, 1, 200, 0
+4356, od_walkway3, knackers, 1, 125, 0
+4357, plants04, knackers, 1, 200, 0
+4358, plants05, knackers, 1, 150, 0
+4360, od_northstar, knackers, 1, 150, 0
+4361, od_alleys1_01_dy, knackers, 1, 150, 0
+4362, od_acne, knackers, 1, 130, 0
+4363, od_bigshops2, knackers, 1, 140, 0
+4364, od_bigshops1, knackers, 1, 110, 0
+4365, dr_odhotel, knackers, 1, 150, 0
+4366, od_clevelfence, knackers, 1, 100, 0
+4367, oddoorwayS1, knackers, 1, 250, 0
+4368, odrv_bushes, knackers, 1, 200, 0
+4369, od_alleys3b_01_dy, knackers, 1, 150, 1
+4370, od_newscafe_dy, knackers, 1, 150, 0
+4371, od_oceanrdN1_dy, knackers, 1, 200, 1
+4372, miamiland_kb03, knackers, 1, 295, 0
+4373, miamiland_kb04, knackers, 1, 200, 0
+4374, miamiland_ws04, knackers, 1, 200, 0
+4375, miamiland_ws04b, knackers, 1, 295, 0
+4376, miamiland_kb02, knackers, 1, 299, 0
+4377, od_lhland, knackers, 1, 299, 0
+4378, beachlo1, knackers, 1, 295, 0
+4379, miamiland_kb01_dy, knackers, 1, 299, 0
+4380, odlowsand2, knackers, 1, 200, 0
+4381, odlowsand1, knackers, 1, 200, 0
+4382, odhighsandgrs1, knackers, 1, 200, 0
+4383, oddoorwayS02, knackers, 1, 100, 0
+4384, odrv_bushes01, knackers, 1, 200, 0
+4385, od_alleys3_01_dy, knackers, 1, 150, 0
+4386, beachblend15, knackers, 1, 150, 0
+4387, beachblend12, knackers, 1, 150, 0
+4388, beachblend13, knackers, 1, 150, 0
+4389, beachblend14, knackers, 1, 150, 0
+4390, beachblend16, knackers, 1, 150, 0
+4391, plants05b, knackers, 1, 150, 0
+4392, od_alleys1b_01_dy, knackers, 1, 150, 1
+4393, hash_eef57bc4, knackers, 1, 100, 0
+4394, od_majestic2c_dy, knackers, 1, 150, 0
+4395, od_alleys2_01_dy, knackers, 1, 180, 0
+4396, eb_odv_30, knackers, 1, 100, 0
+4407, LODanrda06_dy, knackers, 1, 2000, 128
+4408, LODanrda05_dy, knackers, 1, 2000, 128
+4409, LODanrda04_dy, knackers, 1, 2000, 128
+4410, LODanrda03_dy, knackers, 1, 2000, 128
+4411, LODo_polgrnda12, knackers, 1, 2000, 128
+4412, LODo_polgrnda13, knackers, 1, 2000, 128
+4413, LODo_polgrnda14, knackers, 1, 2000, 128
+4414, LODo_polgrnda16, knackers, 1, 2000, 128
+4415, LODo_polgrnda17, knackers, 1, 2000, 128
+4416, LODacne, knackers, 1, 2000, 128
+4417, LODbigshops1, knackers, 1, 2000, 128
+4418, LODbigshops2, knackers, 1, 2000, 128
+4419, LODbphq, knackers, 1, 2000, 128
+4420, LODodhotel, knackers, 1, 2000, 128
+4421, LODclevelander_dy, knackers, 1, 2000, 128
+4422, lodalleys1b_01_dy, knackers, 1, 2000, 128
+4423, lodalleys2_01_dy, knackers, 1, 2000, 128
+4424, LODmajestic2c_dy, knackers, 1, 2000, 128
+4425, LODnewscafe_dy, knackers, 1, 2000, 128
+4426, lodo_buildkb09, knackers, 1, 2000, 128
+4427, LODmiland_ws04, knackers, 1, 2000, 128
+4428, LODmiland_kb04, knackers, 1, 2000, 128
+4429, LODmiland_kb03, knackers, 1, 2000, 128
+4430, LODmiland_ws04b, knackers, 1, 2000, 128
+4431, LODlhland, knackers, 1, 2000, 128
+4432, LODchlo1, knackers, 1, 2000, 128
+4433, lodmiland_kb02, knackers, 1, 2000, 128
+4434, LODmiland_kb01_dy, knackers, 1, 2000, 128
+4435, LODoceanrdN1_dy, knackers, 1, 2000, 128
+4436, lodwalkway2, knackers, 1, 2000, 128
+4437, lodowsand1, knackers, 1, 2000, 128
+4438, lodighsandgrs1, knackers, 1, 2000, 128
+4439, lodowsand2, knackers, 1, 2000, 128
+4440, lodalleys1_01_dy, knackers, 1, 2000, 128
+4441, lodalleys3_01_dy, knackers, 1, 2000, 128
+4442, lodalleys3b_01_dy, knackers, 1, 2000, 128
+4443, lodnorthstar, knackers, 1, 2000, 128
+4444, hash_abebc892, knackers, 1, 60, 0
+4445, hash_e3e574fb, knackers, 1, 60, 0
+4447, hash_a96af956, knackers, 1, 60, 0
+4448, od_clevelander_dy, knackers, 1, 110, 0
+4449, deco_polgrnda16, knackers, 1, 140, 0
+4450, hash_d67e6365, knackers, 1, 250, 0
+4451, hash_9bc5bbe3, knackers, 1, 150, 0
+4452, hash_db677c79, knackers, 1, 120, 0
+4453, hash_af91da6, knackers, 1, 90, 0
+4454, hash_f4fcb6bd, knackers, 1, 60, 0
+4455, od_lightext1, knackers, 1, 299, 0
+4456, LODlightext, knackers, 1, 2000, 0
+4457, od_lightext, knackers, 1, 299, 128
+4458, LODlightext1, knackers, 1, 2000, 0
+4459, miamiland_kb02X, knackers, 1, 299, 0
+4460, LODmiland_kb02X, knackers, 1, 2000, 128
+4461, od_bphq, knackers, 1, 150, 0
+end
+tobj
+4359, od_lightbeam, knackers, 1, 299, 44, 19, 5
+4397, hash_bbf25029, knackers, 1, 299, 12, 18, 5
+4398, hash_22fb0193, knackers, 1, 100, 12, 18, 5
+4399, hash_55fc3105, knackers, 1, 100, 12, 18, 5
+4400, hash_cb98a4a6, knackers, 1, 100, 12, 19, 5
+4401, od_neons3b_nt, knackers, 1, 200, 172, 19, 5
+4402, od_neons2b_nt, knackers, 1, 299, 172, 18, 5
+4403, ocdneona_nt, knackers, 1, 299, 172, 19, 5
+4404, ocdneonb_nt, knackers, 1, 295, 172, 19, 5
+4405, od_neonx1, knackers, 1, 200, 172, 19, 5
+4406, od_neonn, knackers, 1, 200, 172, 19, 5
+4446, pm_neonshps, knackers, 1, 100, 172, 19, 5
+end

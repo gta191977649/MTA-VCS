@@ -1,0 +1,43 @@
+objs
+540, veg_tree3, veg_tree3, 1, 299, 132
+541, veg_treea1, veg_treea1, 1, 180, 132
+542, veg_treeb1, veg_treeb1, 1, 250, 132
+543, veg_treea3, veg_treea3, 1, 140, 132
+544, veg_palwee03, knackers, 1, 290, 132
+545, veg_palm04, veg_palm04, 1, 290, 132
+546, veg_palm02, veg_palm02, 1, 290, 132
+547, veg_palm03, veg_palm03, 1, 290, 132
+548, veg_palwee01, veg_palwee01, 1, 290, 132
+549, veg_palwee02, veg_palwee02, 1, 290, 132
+550, veg_palmkb1, knackers, 1, 45, 4
+551, veg_palmkb2, knackers, 1, 45, 132
+552, veg_palmkb3, knackers, 1, 45, 132
+553, veg_palmkb4, knackers, 1, 45, 132
+554, veg_palmkb5, knackers, 1, 45, 4
+555, veg_palmkb8, knackers, 1, 22, 132
+556, veg_palmkb9, knackers, 1, 22, 132
+557, veg_palmkb7, knackers, 1, 35, 132
+558, veg_palmkb10, knackers, 1, 35, 132
+559, veg_palmkbb11, knackers, 1, 45, 132
+560, veg_fern_balcny_kb1, knackers, 1, 45, 132
+561, veg_fern_balcny_kb2, knackers, 1, 45, 132
+562, kb_pot_1, knackers, 1, 35, 132
+563, kb_planterbush2, knackers, 1, 40, 132
+564, kb_planterbox, knackers, 1, 40, 132
+565, kb_planter+bush, knackers, 1, 40, 132
+566, veg_ivy_balcny_kb3, knackers, 1, 45, 132
+567, new_bushtest, knackers, 1, 200, 132
+568, kb_planter+bush2, knackers, 1, 45, 132
+569, veg_palmkb13, knackers, 1, 45, 132
+570, kb_canopy_test, knackers, 1, 30, 128
+571, kb_chr_tbl_test, knackers, 1, 30, 128
+572, pot_02, knackers, 1, 45, 132
+573, pot_01, knackers, 1, 35, 132
+574, veg_palmbig14, veg_palmbig14, 1, 290, 132
+575, veg_palmkb14, knackers, 1, 35, 132
+576, pot_03, knackers, 1, 35, 132
+577, new_bushsm, knackers, 1, 50, 132
+578, veg_palm01, veg_palm01, 1, 290, 132
+end
+tobj
+end

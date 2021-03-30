@@ -1,0 +1,158 @@
+objs
+5010, od_buildkb2_dy, knackers, 1, 150, 0
+5011, od_buildkb23_dy, knackers, 1, 150, 0
+5012, deco_buildkb_dy, knackers, 1, 150, 0
+5013, deco_buildkb29_dy, knackers, 1, 150, 0
+5014, odNroad04od_dy, knackers, 1, 250, 1
+5015, odNroad05od, knackers, 1, 250, 1
+5016, oceanroad05, knackers, 1, 200, 0
+5017, oceanrd1_dy, knackers, 1, 200, 1
+5018, deco_polgrnda9, knackers, 1, 150, 0
+5019, deco_polgrnda10, knackers, 1, 150, 0
+5020, spad_watr2, knackers, 1, 100, 64
+5021, spad_veg1, knackers, 1, 100, 0
+5022, od_clubback, knackers, 1, 150, 0
+5023, LODroad08_dy, knackers, 1, 2000, 0
+5024, LODanrod2b_dy, knackers, 1, 2000, 0
+5025, LODanrd1_dy, knackers, 1, 2000, 0
+5026, LODroad05od, knackers, 1, 2000, 0
+5027, LODroad04od_dy, knackers, 1, 2000, 0
+5028, LODanroad05, knackers, 1, 2000, 0
+5029, LODo_polgrnda7, knackers, 1, 2000, 0
+5030, LODo_polgrnda8, knackers, 1, 2000, 0
+5031, LODo_polgrnda9, knackers, 1, 2000, 0
+5032, LODo_polgrnda10, knackers, 1, 2000, 0
+5033, od_wt, knackers, 1, 150, 0
+5034, od_wtsign, knackers, 1, 100, 0
+5035, od_wtlegs, knackers, 1, 150, 0
+5037, od_buildkb27_dy, knackers, 1, 150, 0
+5040, spad_buildnew, knackers, 1, 150, 0
+5041, bighotelgrnd, knackers, 1, 180, 1
+5042, LODhotelgrnd, knackers, 1, 1200, 0
+5047, deco_buildkb25, knackers, 1, 100, 0
+5048, odn_hotelhot_dy, knackers, 1, 100, 0
+5050, odalleyground_dy, knackers, 1, 150, 1
+5051, odalleyground4_dy, knackers, 1, 150, 1
+5052, odndoorway3, knackers, 1, 100, 0
+5053, oddoorway2, knackers, 1, 100, 0
+5054, new_bushtest42, knackers, 1, 200, 0
+5055, odnvegbush1, knackers, 1, 20, 0
+5056, oceanroad04, knackers, 1, 200, 0
+5057, LODanroad04, knackers, 1, 2000, 0
+5058, LODroad03od, knackers, 1, 2000, 0
+5059, LODlleyground4, knackers, 1, 2000, 0
+5060, LODlleyground5, knackers, 1, 2000, 0
+5061, LODlleyground2, knackers, 1, 2000, 0
+5062, LODbuildkb2_dy, knackers, 1, 2000, 0
+5063, LODbuildkb27_dy, knackers, 1, 2000, 0
+5064, LODo_buildkb_dy, knackers, 1, 2000, 0
+5065, LODo_buildkb29_dy, knackers, 1, 2000, 0
+5066, LOD_hotelhot_dy, knackers, 1, 2000, 0
+5067, LODbuildkb23_dy, knackers, 1, 2000, 0
+5068, LODclubback, knackers, 1, 1800, 0
+5069, miamiodnroadxa, knackers, 1, 210, 0
+5070, LODd_buildnew, knackers, 1, 2000, 0
+5071, odrroofst02, knackers, 1, 100, 0
+5072, odrroofst07, knackers, 1, 80, 0
+5073, LODlleyground, knackers, 1, 2000, 0
+5074, deco_copgrnd, knackers, 1, 150, 0
+5075, od_clubout_dy, knackers, 1, 150, 0
+5076, LODclubout_dy, knackers, 1, 1800, 0
+5077, LODo_polbuild, knackers, 1, 2000, 0
+5078, LODo_copgrnd, knackers, 1, 2000, 0
+5079, od_clubdoors, knackers, 1, 100, 0
+5081, ocndbridge, knackers, 1, 200, 1
+5082, LODdbridge, knackers, 1, 2000, 0
+5083, od_bighotpool2, knackers, 1, 230, 0
+5084, od_divingbds, knackers, 1, 100, 0
+5085, od_divingbdsteps, knackers, 1, 30, 0
+5086, od_bighotpool, knackers, 1, 100, 0
+5087, od_bighotcons, knackers, 1, 50, 0
+5088, od_chariot, knackers, 1, 200, 0
+5089, miamiland_kb10, knackers, 1, 200, 1
+5090, miamiland_kb11, knackers, 1, 200, 0
+5091, miamiland_kb12, knackers, 1, 200, 0
+5092, miamiland_kb11b, knackers, 1, 200, 0
+5093, miamiland_kb13, knackers, 1, 299, 0
+5094, miamiland_kb12b, knackers, 1, 200, 0
+5095, miamiland_kb10b, knackers, 1, 200, 0
+5096, beachblend08, knackers, 1, 200, 0
+5097, beachblend09, knackers, 1, 200, 0
+5098, beachblend10, knackers, 1, 200, 0
+5099, beachblend11, knackers, 1, 200, 0
+5100, LODmiland_kb12, knackers, 1, 2000, 0
+5101, LODmiland_kb11, knackers, 1, 2000, 0
+5102, LODmiland_kb11b, knackers, 1, 2000, 0
+5103, LODmiland_kb12b, knackers, 1, 2000, 0
+5104, LODmiland_kb10b, knackers, 1, 2000, 0
+5105, LODchariot, knackers, 1, 2000, 0
+5106, odNroad01_dy, knackers, 1, 250, 1
+5107, odNroad02, knackers, 1, 250, 1
+5108, odNroad06_dy, knackers, 1, 250, 1
+5109, odnanrod2b_dy, knackers, 1, 250, 1
+5110, odNroad08_dy, knackers, 1, 250, 1
+5111, lodbighotpool, knackers, 1, 2000, 0
+5112, LODo_buildkb25, knackers, 1, 2000, 0
+5113, LODlleygb_dy, knackers, 1, 2000, 0
+5114, lodmiland_kb10, knackers, 1, 2000, 0
+5115, odrampbit, knackers, 1, 80, 0
+5116, deco_polgrnda7, knackers, 1, 150, 0
+5117, deco_polgrnda8, knackers, 1, 150, 0
+5118, odrroofst06, knackers, 1, 80, 0
+5119, odalleyground2_dy, knackers, 1, 150, 1
+5120, odNroad03od, knackers, 1, 250, 1
+5121, odalleyground5_dy, knackers, 1, 150, 1
+5124, odnvegbush2b, knackers, 1, 100, 0
+5125, lodmiodnroadxa, knackers, 1, 2000, 0
+5126, lodroad01_dy, knackers, 1, 2000, 0
+5127, lodbighotel_dy, knackers, 1, 2000, 0
+5128, od_bighotel_dy, knackers, 1, 200, 0
+5129, hash_f18c7936, knackers, 1, 150, 0
+5130, LODstarlite_dy01, knackers, 1, 2000, 0
+5131, od_chariotland, knackers, 1, 200, 0
+5132, od_clubfnce, knackers, 1, 150, 0
+5133, od_clubdoora, knackers, 1, 100, 0
+5134, od_clubfence_dy, knackers, 1, 150, 0
+5135, eb_odn_25, knackers, 1, 100, 0
+5136, eb_odn_24, knackers, 1, 100, 0
+5137, hash_1af6bb34, knackers, 1, 100, 0
+5138, eb_odn_23, knackers, 1, 100, 0
+5139, pm_roofacc, knackers, 1, 110, 0
+5140, deco_polbuild, knackers, 1, 150, 1
+5141, pm_helipad2, knackers, 1, 250, 1
+5142, pm_widesteps, knackers, 1, 150, 0
+5143, hash_9301f219, knackers, 1, 180, 0
+5146, hash_a303edf0, knackers, 1, 100, 0
+5147, hash_71021c7e, knackers, 1, 100, 0
+5148, hash_e80b4dc4, knackers, 1, 100, 0
+5150, miamiland_kb12C, knackers, 1, 200, 0
+5151, miamiland_kb13B, knackers, 1, 200, 0
+5152, miamiland_kb13C, knackers, 1, 200, 0
+5153, miamiland_kb13D, knackers, 1, 200, 0
+5154, LODmiland_kb12C, knackers, 1, 2000, 0
+5155, LODmiland_kb13F, knackers, 1, 2000, 0
+5156, LODmiland_kb13B, knackers, 1, 2000, 0
+5157, LODmiland_kb13E, knackers, 1, 2000, 0
+5158, dr_10egg, knackers, 1, 40, 0
+5159, odalleygb_dy, knackers, 1, 150, 1
+5160, LODmiland_kb13C, knackers, 1, 2000, 0
+5161, LODmiland_kb13, knackers, 1, 2000, 0
+5162, hash_1dfeb2cd, knackers, 1, 80, 0
+end
+tobj
+5036, odneontest, knackers, 1, 299, 44, 18, 5
+5038, odn_neonht1a, knackers, 1, 299, 44, 18, 5
+5039, od_neona1, knackers, 1, 299, 44, 18, 5
+5043, odnneaon1, knackers, 1, 100, 172, 18, 5
+5044, odnneaon3, knackers, 1, 299, 44, 18, 5
+5045, odnneaon2, knackers, 1, 299, 44, 18, 5
+5046, odnneaon4, knackers, 1, 100, 44, 18, 5
+5049, odneontest01, knackers, 1, 200, 44, 19, 5
+5080, od_clubneon, knackers, 1, 299, 12, 18, 6
+5122, od_hotel_windows, knackers, 1, 299, 12, 18, 5
+5123, lodhotel_windows, knackers, 1, 2000, 40, 18, 5
+5144, hash_bc9f9430, knackers, 1, 299, 12, 19, 5
+5145, hash_2596c58a, knackers, 1, 299, 44, 18, 5
+5149, od_chariot_lghts01, knackers, 1, 299, 44, 18, 5
+5163, lodchariot_lghts01, knackers, 1, 2000, 40, 18, 5
+end

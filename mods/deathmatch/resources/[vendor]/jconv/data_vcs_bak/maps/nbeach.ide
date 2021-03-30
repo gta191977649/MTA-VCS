@@ -1,0 +1,185 @@
+objs
+5940, nbmiamiland048, knackers, 1, 100, 0
+5941, nbmiamiland049, knackers, 1, 150, 0
+5942, nbmiamiland050, knackers, 1, 150, 0
+5943, nbmiamiland051, knackers, 1, 150, 0
+5944, nbmiamiland052, knackers, 1, 150, 0
+5945, nbmiamiland053, knackers, 1, 150, 0
+5946, nbmiamiland054, knackers, 1, 150, 0
+5947, nbmiamiland055, knackers, 1, 150, 0
+5948, nbmiamiland057, knackers, 1, 150, 0
+5949, nbmiamiland059, knackers, 1, 150, 0
+5950, nbmiamiland061, knackers, 1, 150, 0
+5951, nbmiamiland068, knackers, 1, 150, 0
+5952, nbsavehotel, knackers, 1, 180, 1
+5953, nbhotel02, knackers, 1, 180, 0
+5954, nbhotel01, knackers, 1, 180, 0
+5955, nbhotel03, knackers, 1, 180, 1
+5956, nbdecoshop02, knackers, 1, 100, 0
+5957, nbdecoshop01, knackers, 1, 200, 128
+5958, nbdecoshop03, knackers, 1, 150, 128
+5959, nbhotel05, knackers, 1, 180, 0
+5960, nbhotel06, knackers, 1, 180, 0
+5961, nbhotel04, knackers, 1, 180, 0
+5962, nbhotel07, knackers, 1, 180, 0
+5963, nb_road15, knackers, 1, 200, 1
+5964, nbmiamiland065, knackers, 1, 150, 0
+5965, nbmiamiland063, knackers, 1, 150, 0
+5966, nbdecopromnd, knackers, 1, 180, 0
+5967, mallseats01, knackers, 1, 180, 128
+5968, LODiamiland048, knackers, 1, 2500, 0
+5969, LODiamiland049, knackers, 1, 2500, 0
+5970, LODiamiland050, knackers, 1, 2500, 0
+5971, LODiamiland051, knackers, 1, 2500, 0
+5972, LODiamiland052, knackers, 1, 2500, 0
+5973, LODiamiland053, knackers, 1, 2500, 0
+5974, LODiamiland054, knackers, 1, 2500, 0
+5975, LODiamiland055, knackers, 1, 2500, 0
+5976, LODiamiland057, knackers, 1, 2500, 0
+5977, LODiamiland059, knackers, 1, 2500, 0
+5978, LODiamiland061, knackers, 1, 2500, 0
+5979, LODiamiland068, knackers, 1, 2500, 0
+5980, LODroad15, knackers, 1, 2500, 0
+5981, LODiamiland065, knackers, 1, 2500, 0
+5982, LODiamiland063, knackers, 1, 2500, 0
+5983, LODecopromnd, knackers, 1, 2500, 0
+5984, LODotel04, knackers, 1, 2500, 0
+5985, LODotel05, knackers, 1, 2500, 0
+5986, LODotel01, knackers, 1, 2500, 0
+5987, LODotel02, knackers, 1, 2500, 0
+5988, LODotel03, knackers, 1, 2500, 0
+5989, LODotel06, knackers, 1, 2500, 0
+5990, LODotel07, knackers, 1, 2500, 0
+5991, LODotel08, knackers, 1, 2000, 0
+5992, LODavehotel, knackers, 1, 2500, 0
+5993, LODecoshop02, knackers, 1, 2500, 0
+5994, LODecoshop01, knackers, 1, 2500, 0
+5995, LODecoshop03, knackers, 1, 2500, 0
+5996, nbdcprmndfnc2, knackers, 1, 100, 132
+5997, nbdcprmndfnc1, knackers, 1, 100, 132
+5998, nbsavhtlglass, knackers, 1, 100, 132
+5999, nbdcoshp01glss, knackers, 1, 100, 132
+6000, shopfronts03, knackers, 1, 150, 128
+6001, shpfrnts03rail02, knackers, 1, 100, 132
+6002, LODpfronts03, knackers, 1, 2500, 0
+6003, nb_road01, knackers, 1, 220, 1
+6004, nb_road02, knackers, 1, 220, 1
+6005, nb_road03, knackers, 1, 180, 1
+6006, nb_road04, knackers, 1, 180, 1
+6007, nb_road05, knackers, 1, 150, 1
+6008, nb_road06, knackers, 1, 150, 1
+6009, nb_road07, knackers, 1, 150, 1
+6010, nb_road08, knackers, 1, 150, 1
+6011, nb_road09, knackers, 1, 150, 1
+6012, nb_road10, knackers, 1, 150, 1
+6013, nb_road11, knackers, 1, 100, 1
+6014, nb_road12, knackers, 1, 200, 1
+6015, nb_road13, knackers, 1, 150, 1
+6016, nb_road14, knackers, 1, 150, 1
+6017, LODroad01, knackers, 1, 2500, 0
+6018, LODroad02, knackers, 1, 2500, 0
+6019, LODroad03, knackers, 1, 2500, 0
+6020, LODroad04, knackers, 1, 2500, 0
+6021, LODroad05, knackers, 1, 2500, 0
+6022, LODroad06, knackers, 1, 2500, 0
+6023, LODroad07, knackers, 1, 2500, 0
+6024, LODroad08, knackers, 1, 2500, 0
+6025, LODroad09, knackers, 1, 2500, 0
+6026, LODroad10, knackers, 1, 2500, 0
+6027, LODroad11, knackers, 1, 2500, 0
+6028, LODroad12, knackers, 1, 2500, 0
+6029, LODroad13, knackers, 1, 2500, 0
+6030, LODroad14, knackers, 1, 2500, 0
+6031, nbroadnew1, knackers, 1, 100, 1
+6032, 4x4racecotop, knackers, 1, 299, 0
+6033, nbeachb, knackers, 1, 299, 0
+6034, nbeachb1, knackers, 1, 299, 0
+6035, 4x4racecotop2, knackers, 1, 299, 0
+6036, beachblend01, knackers, 1, 299, 0
+6037, beachblend02, knackers, 1, 299, 0
+6038, beachblend03, knackers, 1, 299, 0
+6039, beachblend04, knackers, 1, 299, 0
+6040, LODachb1, knackers, 1, 2500, 0
+6041, LODachb, knackers, 1, 2500, 0
+6042, LODoadnew1, knackers, 1, 2500, 0
+6043, LODnbbridge1, knackers, 1, 5001, 0
+6044, ci_nbbridge1, knackers, 1, 160, 1
+6045, ci_nbbridge1fn3, knackers, 1, 70, 132
+6046, ci_nbbridge1fn2, knackers, 1, 70, 132
+6047, nbeachrdsign, knackers, 1, 70, 0
+6048, hoteltrees05, knackers, 1, 300, 132
+6049, hoteltrees06, knackers, 1, 300, 132
+6050, mlmiamiland056, knackers, 1, 140, 1
+6051, mlmiamiland058, knackers, 1, 140, 1
+6052, mlmiamiland060, knackers, 1, 140, 1
+6053, newmallcp_03, knackers, 1, 150, 128
+6054, newmallcp_05, knackers, 1, 80, 128
+6055, newmallcp_02, knackers, 1, 90, 128
+6056, newmallcp_04, knackers, 1, 90, 128
+6057, LODorthmallext1, knackers, 1, 2500, 0
+6058, LODlloutside, knackers, 1, 2500, 0
+6059, LODorthmalllftex, knackers, 1, 2500, 0
+6060, LODiamiland056, knackers, 1, 2500, 0
+6061, LODiamiland058, knackers, 1, 2500, 0
+6062, newmallcp_01, knackers, 1, 100, 128
+6063, LODmallcp_05, knackers, 1, 2500, 0
+6064, nmalloutside, knackers, 1, 220, 128
+6065, nbnorthmallext1, knackers, 1, 220, 128
+6066, mlnorthmalllftex, knackers, 1, 220, 128
+6067, mlmallroof01, knackers, 1, 220, 0
+6068, mlmiamiland060b, knackers, 1, 140, 0
+6069, LODallroof01, knackers, 1, 2500, 0
+6070, eb_nbh_15, knackers, 1, 100, 0
+6071, eb_nbh_16, knackers, 1, 100, 0
+6072, eb_nbh_17, knackers, 1, 100, 0
+6073, LODracecotop, knackers, 1, 2500, 0
+6074, LODracecotop2, knackers, 1, 2500, 0
+6081, LODiamiland61, knackers, 1, 2500, 0
+6082, LODiamiland060b01, knackers, 1, 2500, 0
+6084, nb_neonback, knackers, 1, 150, 128
+6094, hash_ac5249cc, knackers, 1, 100, 0
+6095, hash_db55795a, knackers, 1, 100, 0
+6096, LODallroof02, knackers, 1, 2500, 0
+6097, mlmallroof02, knackers, 1, 220, 0
+6098, LODneonback, knackers, 1, 2500, 0
+6099, nb_ramp, knackers, 1, 150, 0
+6100, hash_419d7c56, knackers, 1, 80, 0
+6101, hash_6e66db19, knackers, 1, 120, 0
+6102, hash_931711ae, knackers, 1, 100, 0
+6103, LODnbramp, knackers, 1, 600, 0
+6106, hash_9b776d36, knackers, 1, 100, 0
+6107, dr_nb_graff01, knackers, 1, 80, 0
+6108, nbhotel08, knackers, 1, 180, 0
+6114, nbdecopromnd2, knackers, 1, 180, 1
+6115, LODecopromnd2, knackers, 1, 2500, 0
+end
+tobj
+6075, nb_neon02, knackers, 1, 299, 12, 19, 5
+6076, nb_neon01, knackers, 1, 299, 12, 18, 5
+6077, nb_lights01, knackers, 1, 299, 12, 18, 5
+6078, nb_lights03, knackers, 1, 299, 12, 18, 6
+6079, nb_neon04, knackers, 1, 299, 12, 18, 5
+6080, nb_neon05, knackers, 1, 299, 12, 18, 5
+6083, nb_neon09, knackers, 1, 299, 12, 18, 5
+6085, nb_neon07, knackers, 1, 299, 12, 18, 6
+6086, LODneon07, knackers, 1, 2000, 8, 18, 6
+6087, LODneon02, knackers, 1, 2000, 8, 19, 5
+6088, LODneon09, knackers, 1, 2000, 8, 18, 5
+6089, LODneon04, knackers, 1, 2000, 8, 18, 5
+6090, LODlights01, knackers, 1, 5001, 8, 18, 5
+6091, LODlights03, knackers, 1, 5001, 8, 18, 6
+6092, br_mallneon01, knackers, 1, 299, 12, 18, 5
+6093, lodmallneon01, knackers, 1, 5001, 8, 18, 5
+6104, br_mallneon01b, knackers, 1, 299, 12, 18, 5
+6105, lodmallneon01b, knackers, 1, 5001, 8, 18, 5
+6109, LODlights03b, knackers, 1, 2000, 12, 18, 6
+6110, LODlights02, knackers, 1, 5001, 8, 18, 5
+6111, nb_lights02, knackers, 1, 299, 12, 18, 5
+6112, LODlights02b, knackers, 1, 2000, 12, 18, 5
+6113, LODlights01b, knackers, 1, 2000, 8, 18, 5
+6116, nb_lights01b, knackers, 1, 299, 12, 18, 5
+6117, br_mallneon01x, knackers, 1, 299, 12, 18, 5
+6118, br_mallneon01bx, knackers, 1, 299, 12, 18, 5
+6119, lodmallneon01bx, knackers, 1, 2000, 8, 18, 5
+6120, lodmallneon01x, knackers, 1, 2000, 8, 18, 5
+end
