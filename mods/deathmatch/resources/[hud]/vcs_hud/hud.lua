@@ -4,8 +4,8 @@ FONT = exports.font
 --dgsCreateImage(0,0,1,1,"frontend/hud.png",true)
 COLOR = {
     ["HP"] = tocolor(255,152,206,200),
-    ["AP"] = tocolor(255,255,255,200),
-    ["OXY"] = tocolor(255,255,255,200),
+    ["AP"] = tocolor(0,255,255,200),
+    ["OXY"] = tocolor(0,128,192,200),
 }
 HUD_SCALE = 0.165
 BAR_SCALE = 0.068
@@ -78,7 +78,7 @@ function HUD_Update()
         dgsProgressBarSetProgress(HUD.ap.bar,o2 * 0.1)
     elseif ap > 0 then
         dgsSetVisible(HUD.ap.bar,true)
-        dgsSetProperty(HUD.ap.bar,"indicatorColor",COLOR["OXY"])
+        dgsSetProperty(HUD.ap.bar,"indicatorColor",COLOR["AP"])
         dgsProgressBarSetProgress(HUD.ap.bar,ap)
     else -- hide 
         dgsSetVisible(HUD.ap.bar,false)
