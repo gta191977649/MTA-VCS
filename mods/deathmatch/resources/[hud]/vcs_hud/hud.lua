@@ -2,14 +2,32 @@ loadstring(exports.dgs:dgsImportFunction())()
 FONT = exports.font
 -- render refer
 --dgsCreateImage(0,0,1,1,"frontend/hud.png",true)
-
+COLOR = {
+    ["HP"] = tocolor(255,152,206,200),
+    ["AP"] = tocolor(255,255,255,200),
+    ["OXY"] = tocolor(255,255,255,200),
+}
 HUD_SCALE = 0.165
+BAR_SCALE = 0.068
 HUD = {
     weapon_icon = dgsCreateImage(0.9,0.04,0.5 * HUD_SCALE,1 * HUD_SCALE,"frontend/hud/fists.png",true),
     time = {},
     --time = dgsCreateLabel(0.845,0.03,0.04,0.5,"10:11",true),
-    cash = dgsCreateLabel(0.919,0.158,0.04,0.5,"$000000000",true),
+    cash = dgsCreateLabel(0.919,0.16,0.04,0.5,"$000000000",true),
+    hp = {},
+    ap = {}
 }
+--HUD.hp.bar_bk = dgsCreateImage(0.824,0.126,1.01 * BAR_SCALE,0.55*BAR_SCALE ,"frontend/hud/bar.png",true)
+
+HUD.hp.bar = dgsCreateProgressBar(0.827,0.13,0.91 * BAR_SCALE,0.43*BAR_SCALE, true)
+HUD.hp.bar_bk = dgsCreateImage(-0.022,-0.08,1.07,1.22,"frontend/hud/bar.png",true,HUD.hp.bar)
+
+
+HUD.ap.bar = dgsCreateProgressBar(0.827,0.09,0.91 * BAR_SCALE,0.43*BAR_SCALE, true)
+HUD.ap.bar_bk = dgsCreateImage(-0.022,-0.08,1.07,1.22,"frontend/hud/bar.png",true,HUD.ap.bar)
+--
+dgsSetProperty(HUD.hp.bar,"indicatorColor",COLOR["HP"])
+
 function apply_ui_style(label,color,align)
     align = align or "right"
     dgsSetProperty(label,"alignment",{align,"top"})
@@ -46,8 +64,30 @@ apply_ui_style(HUD.cash,tocolor(54,104,44,255))
 
 setPlayerHudComponentVisible ("all",false)
 -- update time
-setTimer(function() 
-    local h,m = getTime()
 
+function HUD_Update() 
+    local hp = getElementHealth(localPlayer)
+    dgsProgressBarSetProgress(HUD.hp.bar,hp)
+    -- display armour or oxygen if swim
+    local ap = getPedArmor(localPlayer)
+    if isElementInWater(localPlayer) then
+        dgsSetVisible(HUD.ap.bar,true)
+        dgsSetProperty(HUD.ap.bar,"indicatorColor",COLOR["OXY"])
+        local o2 = getPedOxygenLevel(localPlayer)
+        -- wrap to 0-100 scale 
+        dgsProgressBarSetProgress(HUD.ap.bar,o2 * 0.1)
+    elseif ap > 0 then
+        dgsSetVisible(HUD.ap.bar,true)
+        dgsSetProperty(HUD.ap.bar,"indicatorColor",COLOR["OXY"])
+        dgsProgressBarSetProgress(HUD.ap.bar,ap)
+    else -- hide 
+        dgsSetVisible(HUD.ap.bar,false)
+    end
+    local cash = getPlayerMoney(localPlayer)
+    dgsSetProperty(HUD.cash,"text",string.format("$%09d",cash))
+
+    local h,m = getTime()
     updateHUDText(HUD.time,string.format("%02d:%02d",h,m)) 
-end,500,0)
+end
+addEventHandler("onClientHUDRender", root,HUD_Update)
+

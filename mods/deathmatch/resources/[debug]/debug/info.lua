@@ -59,4 +59,5 @@ addEventHandler( "onClientElementStreamOut", root,
 --setCloudsEnabled(false)
 setOcclusionsEnabled (false)
 setFarClipDistance( 1500 ) 
+setWaveHeight(2)
 --setFarClipDistance( 9999 ) 

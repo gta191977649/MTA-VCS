@@ -5,6 +5,7 @@
     <file src="shader/texreplace.fx" type="client"/>
     <!-- Radar -->
     <file src="frontend/hud/fists.png" type="client"/>
+    <file src="frontend/hud/bar.png" type="client"/>
     <file src="frontend/hud.png" type="client"/>
     <file src="frontend/hud/radardisc.png" type="client"/>
     <file src="frontend/hud/radar_north.png" type="client"/>

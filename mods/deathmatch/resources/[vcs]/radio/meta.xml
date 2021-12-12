@@ -1,5 +1,6 @@
 <meta>
 	<script src="radio.lua" type="client"/>
+	<script src="vehicle_func.lua" type="client"/>
 
 	<!-- 
 	<file src="audio/flash.mp3" type="client"/>
