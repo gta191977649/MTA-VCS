@@ -1,0 +1,110 @@
+objs
+6000, mall_a1, mall_a, 450, 2097156
+6001, mall_a2, mall_a, 450, 2097156
+6002, mall_a3, mall_a, 450, 2097156
+6003, mall_a4, mall_a, 450, 2097156
+6004, mall_a5, mall_a, 450, 2097156
+6005, mall_a6, mall_a, 450, 2097156
+6006, mall_a7, mall_a, 450, 2097156
+6007, mall_a8, mall_a, 450, 2097156
+6008, mall_a9, mall_a, 450, 2097156
+6009, mall_a10, mall_a, 450, 2097156
+6010, mall_a11, mall_a, 450, 2097156
+6011, mall_a12, mall_a, 450, 2097156
+6012, mall_a13, mall_a, 450, 2097156
+6013, mall_a14, mall_a, 450, 2097156
+6014, mall_a15, mall_a, 450, 2097156
+6015, mall_a16, mall_a, 450, 2097156
+6016, mall_a17, mall_a, 450, 2097156
+6017, mall_a18, mall_a, 450, 2097156
+6018, mall_i1, mall_i, 450, 0
+6019, mall_i2, mall_i, 450, 2097156
+6020, mall_i3, mall_i, 450, 0
+6021, mall_i4, mall_i, 450, 0
+6022, mall_i5, mall_i, 450, 0
+6023, mall_i6, mall_i, 450, 0
+6024, mall_i7, mall_i, 450, 0
+6025, mall_i8, mall_i, 450, 0
+6026, mall_i9, mall_i, 450, 0
+6027, mall_i10, mall_i, 450, 0
+6028, mall_i11, mall_i, 450, 0
+6029, mall_i12, mall_i, 450, 0
+6030, mall_i13, mall_i, 450, 0
+6031, mall_i14, mall_i, 450, 0
+6032, mall_i15, mall_i, 450, 0
+6033, mall_i16, mall_i, 450, 2097152
+6034, mall_i17, mall_i, 450, 0
+6035, mall_i18, mall_i, 450, 0
+6036, mall_i19, mall_i, 450, 0
+6037, mall_i20, mall_i, 450, 0
+6038, mall_i21, mall_i, 450, 2097152
+6039, mall_i22, mall_i, 450, 0
+6040, mall_i23, mall_i, 450, 0
+6041, mall_i24, mall_i, 450, 0
+6042, mall_i25, mall_i, 450, 0
+6043, mall_i26, mall_i, 450, 0
+6044, mall_i27, mall_i, 450, 0
+6045, mall_i28, mall_i, 450, 0
+6046, mall_i29, mall_i, 450, 0
+6047, mall_i30, mall_i, 450, 0
+6048, mall_i31, mall_i, 450, 2097152
+6049, mall_i32, mall_i, 450, 0
+6050, mall_i33, mall_i, 450, 0
+6051, mall_i34, mall_i, 450, 0
+6052, mall_m1, mall_m, 450, 0
+6053, mall_m2, mall_m, 450, 0
+6054, mall_m3, mall_m, 450, 0
+6055, mall_m4, mall_m, 450, 0
+6056, mall_m5, mall_m, 450, 0
+6057, mall_m6, mall_m, 450, 0
+6058, mall_m7, mall_m, 450, 0
+6059, mall_m8, mall_m, 450, 0
+6060, mall_m9, mall_m, 450, 0
+6061, mall_m10, mall_m, 450, 0
+6062, mall_m11, mall_m, 450, 0
+6063, mall_m12, mall_m, 450, 0
+6064, mall_m13, mall_m, 450, 0
+6065, mall_m14, mall_m, 450, 0
+6066, mall_m15, mall_m, 450, 0
+6067, mall_m16, mall_m, 450, 0
+6068, mall_m17, mall_m, 450, 0
+6069, mall_m18, mall_m, 450, 0
+6070, mall_m19, mall_m, 450, 0
+6071, mall_m20, mall_m, 450, 0
+6072, mall_m21, mall_m, 450, 0
+6073, mall_m22, mall_m, 450, 0
+6074, mall_m23, mall_m, 450, 0
+6075, mall_m24, mall_m, 450, 0
+6076, mall_m25, mall_m, 450, 0
+6077, mall_m26, mall_m, 450, 0
+6078, mall_m27, mall_m, 450, 0
+6079, mall_m28, mall_m, 450, 0
+6080, mall_m29, mall_m, 450, 0
+6081, mall_m30, mall_m, 450, 0
+6082, mall_m31, mall_m, 450, 0
+6083, mall_m32, mall_m, 450, 0
+6084, mall_m33, mall_m, 450, 0
+6085, mall_m34, mall_m, 450, 0
+6086, mall_m35, mall_m, 450, 0
+6087, mall_m36, mall_m, 450, 0
+6088, mall_m37, mall_m, 450, 0
+6089, mall_m38, mall_m, 450, 0
+6096, mall_m39, mall_x, 450, 0
+6097, mall_m40, mall_x, 450, 0
+6098, mall_m41, mall_x, 450, 0
+end
+tobj
+6090, mall_n1, mall_n, 450, 2097388, 21, 6
+6091, mall_n2, mall_n, 450, 2097388, 21, 6
+6092, mall_n3, mall_n, 450, 2097388, 21, 6
+6093, mall_n4, mall_n, 450, 2097388, 21, 6
+6094, mall_n5, mall_n, 450, 2097388, 21, 6
+6095, mall_n6, mall_n, 450, 2097388, 21, 6
+end
+txdp
+mall_m,mall_a
+end
+path
+end
+2dfx
+end

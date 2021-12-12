@@ -1,0 +1,7 @@
+<meta>
+    <script src="font.lua" type="client"/>
+    <export function="getDxFont" type="client"/>
+    <file src="euro.ttf" type="client"/>
+    <file src="vcs.ttf" type="client"/>
+    <file src="pricedown_ui.ttf" type="client"/>
+</meta>

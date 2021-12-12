@@ -1,0 +1,214 @@
+objs
+1203, lou_int, lou_int, 300, 0
+1204, lou_intA, lou_intalpha, 300, 2097388
+1205, LOD_house06, haiti_LOD, 1500, 2097152
+1206, LOD_house07, haiti_LOD, 1500, 2097152
+1207, LOD_house08, haiti_LOD, 1500, 2097152
+1208, LOD_house09, haiti_LOD, 1500, 2097152
+1209, LODtistation01, haiti_LOD, 1500, 2097152
+1460, LOD_house03, haiti_LOD, 1500, 2097152
+1461, LOD_house04, haiti_LOD, 1500, 2097152
+1462, LOD_house05, haiti_LOD, 1500, 2097152
+1464, lh_crushers09, junkjard, 450, 0
+1465, lh_crushers08, junkjard, 450, 0
+1466, junk_fence01, junkjard, 450, 2097228
+1467, scrapgate, junkjard, 450, 2097152
+1468, junk_fence02, junkjard, 450, 2097228
+1469, haiti_billbd, docks1, 450, 12
+1470, littlehacoast05, h_roads, 450, 0
+1471, sjmcoast04, h_roads, 450, 0
+1472, sjmhafinrd, h_roads, 450, 0
+1473, haiti1rd, h_roads, 450, 2097152
+1474, haiti2rd, h_roads, 450, 0
+1475, litharoada6, h_roads, 450, 0
+1476, litharoada9, h_roads, 450, 0
+1477, litharoada8, h_roads, 450, 0
+1478, htnroadnew, h_roads, 450, 0
+1479, haitiroadbuild, h_ground, 450, 0
+1480, hibita1, h_ground, 450, 2097152
+1481, grassbitsjm, h_ground, 450, 0
+1482, sewer2, h_ground, 450, 2097152
+1483, haitiskyt, haitbuildb, 450, 0
+1484, pw_groundplane, h_ground, 450, 0
+1485, litlhaitibuilding07, h_ground, 450, 2097152
+1486, sjmnd04, h_ground, 450, 0
+1487, haiticent, h_ground, 450, 0
+1488, haicoastfirst, h_ground, 450, 0
+1489, haicoast1, h_ground, 450, 0
+1490, haicoast2, h_ground, 450, 0
+1491, haitibuilding01, h_buildings, 450, 0
+1492, bed_shop, h_buildings, 450, 0
+1493, haitipaynspray, haiwash, 450, 2097152
+1494, hpns_a, haiwash, 450, 2097228
+1495, drugstoreext, chem, 450, 0
+1497, hai_house01, hai_hoj, 450, 2097152
+1498, hai_house02, hai_hoj, 450, 2097152
+1499, hai_house03, hai_hoj, 450, 2097152
+1500, hai_house04, hai_hoj, 450, 2097152
+1501, hai_house05, hai_hoj, 450, 2097152
+1502, hai_house06, hai_hoj, 450, 2097152
+1503, hai_house07, hai_hoj, 450, 2097152
+1504, hai_house08, hai_hoj, 450, 2097152
+1505, hai_house09, hai_hoj, 450, 2097152
+1506, litlhaitibuilding09, lhaitiblk6k, 450, 2097152
+1507, lh_hitbuild1a, lhaitiblk6k, 450, 2097152
+1508, lh-hitbuild1aa, lhaitiblk6k, 450, 2097152
+1509, ph_wh_ext, ph_warehouse, 450, 0
+1510, litlhaitibuilding02, lhaitiblk6f, 450, 0
+1511, ihaitsnip, lhaitiblk6f, 450, 0
+1512, lh_haiblockc1, lhaitiblk6f, 450, 0
+1513, pw_printworks, printworks, 450, 0
+1514, pw_bayfence, printworks, 450, 0
+1515, pw_struct, printworks, 450, 0
+1516, pw_stairbarrier, printworks, 450, 0
+1517, pw_stairs, printworks, 450, 0
+1518, sjmcrushbn, junkjard, 450, 0
+1519, sjmcrushju, junkjard, 450, 0
+1520, sjmcrushlpo, junkjard, 450, 0
+1521, sjmcrushmnf, junkjard, 450, 0
+1522, lh_crushers14, junkjard, 450, 0
+1523, haitifence01, h_stuff, 450, 2097152
+1524, haitifence01A, h_stuff, 450, 2097228
+1525, h_cabel01, h_stuff, 450, 2097228
+1526, h_cabel02, h_stuff, 450, 2097228
+1527, h_cabel03, h_stuff, 450, 2097228
+1528, h_cabel04, h_stuff, 450, 2097228
+1529, h_cabel05, h_stuff, 450, 2097228
+1530, h_cabel06, h_stuff, 450, 2097228
+1531, h_fence01, h_stuff, 450, 2097152
+1532, h_fence02, h_stuff, 450, 2097228
+1533, haitifence02, h_stuff, 450, 2097152
+1534, haitifence02A, h_stuff, 450, 2097228
+1535, haitifence03, h_stuff, 450, 2097152
+1536, haitifence03A, h_stuff, 450, 2097228
+1537, h_brush01, h_stuff, 450, 2097164
+1538, h_brush02, h_stuff, 450, 2097164
+1539, h_fence03A, h_stuff, 450, 2097228
+1540, h_fence03, h_stuff, 450, 2097152
+1541, haitistation01, h_stuff, 450, 0
+1542, h_fence04, h_stuff, 450, 2097228
+1543, h_alpha01, h_stuff, 450, 2097228
+1544, h_alpha02, h_stuff, 450, 2097228
+1545, h_alpha03, h_stuff, 450, 2097228
+1546, h_ramp01, h_stuff, 450, 2097152
+1547, haiti_bridge, h_stuff, 450, 2097152
+1548, h_bridgeA, h_stuff, 450, 2097228
+1549, haiti_adv01, h_stuff, 450, 2097152
+1550, haiti_adv02, h_stuff, 450, 2097152
+1551, h_graffiti01, h_stuff, 450, 2097228
+1553, h_sea2land01, h_stuff, 450, 2097152
+1554, haiti_anim, h_stuff, 450, 0
+1555, haiwshpnsdoor, haiwash, 450, 2048
+1556, pm_gardoorwslut, ph_warehouse, 450, 2097152
+1557, wh_prop13, ph_warehouse, 450, 0
+1558, wh_prop09, ph_warehouse, 450, 0
+1559, wh_prop04, ph_warehouse, 450, 0
+1560, ph_wh_int, ph_warehouse, 450, 2097152
+1561, ph_wh_alpha, ph_warehouse, 450, 2097228
+1562, LODcoast04, haiti_LOD, 1500, 2097152
+1563, LODtlehacoast05, haiti_LOD, 1500, 2097152
+1564, LODhafinrd, haiti_LOD, 1500, 2097152
+1565, LODti1rd, haiti_LOD, 1500, 2097152
+1566, LODti2rd, haiti_LOD, 1500, 2097152
+1567, LODharoada6, haiti_LOD, 1500, 2097152
+1568, LODharoada9, haiti_LOD, 1500, 2097152
+1569, LODharoada8, haiti_LOD, 1500, 2097152
+1570, LODroadnew, haiti_LOD, 1500, 2097152
+1571, LODlhaitibuilding07, haiti_LOD, 1500, 2097152
+1572, LODita1, haiti_LOD, 1500, 2097152
+1573, LODssbitsjm, haiti_LOD, 1500, 2097152
+1574, LODer2, haiti_LOD, 1500, 2097152
+1575, LODtiroadbuild, haiti_LOD, 1500, 2097152
+1576, LODtibuilding01, haiti_LOD, 1500, 2097152
+1577, LOD_shop, haiti_LOD, 1500, 2097152
+1578, LODtipaynspray, haiti_LOD, 1500, 2097152
+1579, LODgstoreext, haiti_LOD, 1500, 2097152
+1580, LODtiskyt, haiti_LOD, 1500, 2097152
+1581, LODnd04, haiti_LOD, 1500, 2097152
+1582, LODticent, haiti_LOD, 1500, 2097152
+1583, LODlhaitibuilding09, haiti_LOD, 1500, 2097152
+1584, LODhitbuild1a, haiti_LOD, 1500, 2097152
+1585, LODhitbuild1aa, haiti_LOD, 1500, 2097152
+1586, LODprintworks, haiti_LOD, 1500, 2097152
+1587, LODgroundplane, haiti_LOD, 1500, 2097152
+1588, LODcoastfirst, haiti_LOD, 1500, 2097152
+1589, LODwh_ext, haiti_LOD, 1500, 2097152
+1590, LODcoast1, haiti_LOD, 1500, 2097152
+1591, LODlhaitibuilding02, haiti_LOD, 1500, 2097152
+1592, LODitsnip, haiti_LOD, 1500, 2097152
+1593, LODhaiblockc1, haiti_LOD, 1500, 2097152
+1594, LODcoast2, haiti_LOD, 1500, 2097152
+1595, LODcrushbn, haiti_LOD, 1500, 2097152
+1596, LODcrushju, haiti_LOD, 1500, 2097152
+1597, LODcrushmnf, haiti_LOD, 1500, 2097152
+1598, LODcrushers14, haiti_LOD, 1500, 2097152
+1599, LODcrushers08, haiti_LOD, 1500, 2097152
+1600, LODti_bridge, haiti_LOD, 1500, 2097152
+1601, LODti_adv01, haiti_LOD, 1500, 2097152
+1602, LODti_adv02, haiti_LOD, 1500, 2097152
+1603, LOD_house01, haiti_LOD, 1500, 2097152
+1604, LOD_house02, haiti_LOD, 1500, 2097152
+end
+tobj
+1463, h_neon02, h_buildings, 1500, 2097388, 20, 6
+1496, h_neon01, h_buildings, 1500, 2097388, 20, 6
+1552, haiti_nitelites, h_stuff, 1500, 2097388, 20, 6
+end
+path
+end
+2dfx
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

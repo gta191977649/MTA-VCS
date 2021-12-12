@@ -1,0 +1,87 @@
+<meta>
+    <script src="font.lua" type="client" cache="false"/>
+    <script src="textbox.lua" type="server"/>
+    <script src="textbox_c.lua" type="client" cache="false"/>
+    <script src="bottomrightlabel.lua" type="client" cache="false"/>
+    <script src="gametext_c.lua" type="client" cache="false"/>
+    <script src="lefttext_c.lua" type="client" cache="false"/>
+    <script src="lefttext_s.lua" type="server"/>
+    <script src="gametext.lua" type="server"/>
+    <script src="subtitle_s.lua" type="server"/>
+    <script src="subtitle_c.lua" type="client" cache="false"/>
+    <script src="bar_c.lua" type="client" cache="false"/>
+    <script src="skill_bar_c.lua" type="client" cache="false"/>
+    
+
+    <script src="menu_c.lua" type="client" cache="false"/>
+    <script src="stats_c.lua" type="client" cache="false"/>
+    <script src="race_c.lua" type="client" cache="false"/>
+    <script src="dialog_c.lua" type="client" cache="false"/>
+    <script src="colorpicker_c.lua" type="client" cache="false"/>
+    <script src="wager_c.lua" type="client" cache="false"/>
+    <script src="title.lua" type="client" cache="false"/>
+    <script src="title_s.lua" type="server" cache="false"/>
+
+    <script src="mission.lua" type="server" cache="false"/>
+    <script src="mission_c.lua" type="client" cache="false"/>
+    <!-- 
+    <script src="colorpicker_c.lua" type="client" cache="false"/>
+    <script src="menu_test.lua" type="client"/>
+    -->
+    <file src="res/samp_button.png" type="client"/>
+    <file src="back.wav" type="client"/>
+    <file src="blip.wav" type="client"/>
+    <file src="ahronbd.ttf" type="client"/>
+    <file src="tip.ttf" type="client"/>
+    <file src="bankgothic.ttf" type="client"/>
+    <file src="jp_normal.ttf" type="client"/>
+    <file src="arial.ttf" type="client"/>
+    <file src="gametext.png" type="client"/>
+    <file src="left.png" type="client"/>
+    
+
+    <export function="showPayoutGameText" type="shared" />
+    <export function="getFont" type="client" />
+    <export function="showTextBox" type="server" />
+    <export function="showTextBox" type="client" />
+    <export function="showGameTextForPlayer" type="client" />
+    <export function="showGameTextForPlayer" type="server" />
+    <export function="showBottomRightText" type="client" />
+    <export function="showCaptionForPlayer" type="client" />
+    <export function="hideCaptionForPlayer" type="client" />
+    <export function="hideCaptionForPlayer" type="server" />
+    <export function="showCaptionForPlayer" type="server" />
+    <export function="showLeftTextForPlayer" type="client" />
+    <export function="showLeftTextForPlayer" type="server" />
+    <export function="hideLeftTextForPlayer" type="client" />
+    <export function="hideLeftTextForPlayer" type="server" />
+    <export function="showProgressBarForPlayer" type="client" />
+    <export function="hideProgressBarForPlayer" type="client" />
+    <export function="showTitle" type="client" />
+    <export function="showTitleForPlayer" type="server" />
+    <export function="showSkillBar" type="client" />
+    <!-- Menu -->
+    <export function="createMenu" type="client" />
+    <export function="addMenuItem" type="client" />
+    <export function="showMenuForPlayer" type="client" />
+    <export function="hideMenuForPlayer" type="client" />
+    <export function="clearMenu" type="client" />
+    <export function="setMenuHeader" type="client" />
+    <export function="setMenuColumnHeader" type="client" />
+    <!-- replaced by stats resouces
+    <export function="showStatusBar" type="client" />
+    <export function="hideStatusBar" type="client" />
+    -->
+    <!-- Race -->
+    <export function="showRacePos" type="client" />
+    <export function="hideRacePos" type="client" />
+    <!-- Color picker -->
+    <export function="showColorPicker" type="client" />
+    <export function="hideColorPicker" type="client" />
+    <export function="getColorPicker" type="client" />
+    <!-- Wager -->
+    <export function="showWager" type="client"/>
+    <export function="hideWager" type="client"/>
+    <export function="updateValue" type="client"/>
+    <export function="getWager" type="client"/>
+</meta>

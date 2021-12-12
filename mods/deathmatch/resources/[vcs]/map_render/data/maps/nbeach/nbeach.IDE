@@ -1,0 +1,188 @@
+#IDE file generated from Kam's GTA Map IO
+# 01/08/2014
+#id from 4186 to 4355
+objs
+4186, nbeach_r1, nbeach_r, 450, 1
+4187, nbeach_r2, nbeach_r, 450, 1
+4188, nbeach_r3, nbeach_r, 450, 1
+4189, nbeach_r4, nbeach_r, 450, 1
+4190, nbeach_r5, nbeach_r, 450, 1
+4191, nbeach_r6, nbeach_r, 450, 1
+4192, nbeach_r7, nbeach_r, 450, 1
+4193, nbeach_r8, nbeach_r, 450, 1
+4194, nbeach_r9, nbeach_r, 450, 1
+4195, nbeach_r10, nbeach_r, 450, 1
+4196, nbeach_r11, nbeach_r, 450, 1
+4197, nbeach_r12, nbeach_r, 450, 1
+4198, nbeach_r13, nbeach_r, 450, 1
+4199, nbeach_r14, nbeach_r, 450, 1
+4200, nbeach_r15, nbeach_r, 450, 1
+4201, nbeach_r16, nbeach_r, 450, 1
+4202, nbeach_r17, nbeach_r, 450, 1
+4203, nbeach_s1, nbeachbt_s, 450, 0
+4204, nbeach_s2, nbeachbt_s, 450, 0
+4205, nbeach_s3, nbeachbt_s, 450, 0
+4206, nbeach_s4, nbeachbt_s, 450, 0
+4207, nbeach_s5, nbeachbt_s, 450, 0
+4208, nbeach_g1, nbeach_g, 450, 0
+4209, nbeach_g2, nbeach_g, 450, 0
+4210, nbeach_g3, nbeach_g, 450, 0
+4211, nbeach_g4, nbeach_g, 450, 0
+4212, nbeach_g5, nbeach_g, 450, 0
+4213, nbeach_g6, nbeach_g, 450, 0
+4214, nbeach_g7, nbeach_g, 450, 0
+4215, nbeach_g8, nbeach_g, 450, 0
+4216, nbeach_g9, nbeach_g, 450, 0
+4217, nbeach_g10, nbeach_g, 450, 0
+4218, nbeach_g11, nbeach_g, 450, 0
+4219, nbeach_g12, nbeach_g, 450, 0
+4220, nbeach_g13, nbeach_g, 450, 0
+4221, nbeach_g14, nbeach_g, 450, 0
+4222, nbeach_g15, nbeach_g, 450, 0
+4223, nbeach_b1, nbeach_b, 450, 0
+4224, nbeach_b2, nbeach_b, 450, 0
+4225, nbeach_b3, nbeach_b, 450, 0
+4226, nbeach_b4, nbeach_b, 450, 0
+4227, nbeach_b5, nbeach_b, 450, 0
+4228, nbeach_b6, nbeach_b, 450, 0
+4229, nbeach_b7, nbeach_b, 450, 0
+4230, nbeach_b8, nbeach_b, 450, 0
+4231, nbeach_b9, nbeach_b, 450, 0
+4232, nbeach_b10, nbeach_b, 450, 0
+4233, nbeach_b11, nbeach_b, 450, 0
+4234, nbeach_b12, nbeach_b, 450, 0
+4235, nbeach_b13, nbeach_b, 450, 0
+4236, nbeach_g16, nbeach_g, 450, 0
+4237, nbeach_g17, nbeach_g, 450, 0
+4238, nbeach_g18, nbeach_g, 450, 0
+4239, nbeach_g19, nbeach_g, 450, 0
+4240, nbeach_gr1, nbeach_gr, 450, 2097152
+4241, nbeach_gr2, nbeach_gr, 450, 2097152
+4242, nbeach_gr3, nbeach_gr, 450, 2097152
+4243, nbeach_gr4, nbeach_gr, 450, 2097152
+4244, nbeach_gr5, nbeach_gr, 450, 2097152
+4245, nbeach_b14, nbeach_b, 450, 0
+4246, nbeach_b15, nbeach_b, 450, 0
+4247, nbeach_b16, nbeach_b, 450, 0
+4248, nbeach_b17, nbeach_b, 450, 0
+4249, nbeach_b18, nbeach_b, 450, 0
+4250, nbeach_a1, nbeach_a, 450, 2097156
+4251, nbeach_a2, nbeach_a, 450, 2097156
+4252, nbeach_a3, nbeach_a, 450, 2097156
+4253, nbeach_a4, nbeach_a, 450, 2097156
+4254, nbeach_a5, nbeach_a, 450, 2097156
+4255, nbeach_a6, nbeach_a, 450, 2097156
+4256, nbeach_a7, nbeach_a, 450, 2097156
+4257, nbeach_a8, nbeach_a, 450, 2097156
+4258, nbeach_a9, nbeach_a, 450, 2097156
+4259, nbeach_a10, nbeach_a, 450, 2097156
+4260, nbeach_a11, nbeach_a, 450, 2097156
+4261, nbeach_a12, nbeach_a, 450, 2097156
+4262, nbeach_a13, nbeach_a, 450, 2097156
+4263, nbeach_a14, nbeach_a, 450, 2097156
+4264, nbeach_a15, nbeach_a, 450, 2097156
+4265, nbeach_a16, nbeach_a, 450, 2097156
+4266, nbeach_a17, nbeach_a, 450, 2097156
+4267, nbeach_a18, nbeach_a, 450, 2097156
+4268, nbeach_a19, nbeach_a, 450, 2097156
+4269, nbeach_a20, nbeach_a, 450, 2097156
+4270, nbeach_a21, nbeach_a, 450, 2097156
+4271, nbeach_a22, nbeach_a, 450, 2097156
+4272, nbeach_a23, nbeach_a, 450, 2097156
+4273, nbeach_a24, nbeach_a, 450, 2097156
+4274, nbeach_a25, nbeach_a, 450, 2097156
+4275, nbeach_a26, nbeach_a, 450, 2097156
+4276, nbeach_a27, nbeach_a, 450, 2097156
+4277, nbeach_g20, nbeach_g, 450, 0
+4278, nbeach_m1, nbeach_m, 450, 0
+4279, nbeach_m2, nbeach_m, 450, 0
+4280, nbeach_m3, nbeach_m, 450, 2097156
+4281, nbeach_m4, nbeach_m, 450, 0
+4282, nbeach_m5, nbeach_m, 450, 2097152
+4283, nbeach_m6, nbeach_m, 450, 0
+4284, nbeach_m7, nbeach_m, 450, 0
+4296, LODach_s1, nbeach_LOD, 1500, 0
+4297, LODach_s2, nbeach_LOD, 1500, 0
+4298, LODach_s3, nbeach_LOD, 1500, 0
+4299, LODach_s4, nbeach_LOD, 1500, 0
+4300, LODach_r1, nbeach_LOD, 1500, 0
+4301, LODach_r2, nbeach_LOD, 1500, 0
+4302, LODach_r3, nbeach_LOD, 1500, 0
+4303, LODach_r4, nbeach_LOD, 1500, 0
+4304, LODach_r5, nbeach_LOD, 1500, 0
+4305, LODach_r6, nbeach_LOD, 1500, 0
+4306, LODach_r7, nbeach_LOD, 1500, 0
+4307, LODach_r8, nbeach_LOD, 1500, 0
+4308, LODach_r9, nbeach_LOD, 1500, 0
+4309, LODach_r10, nbeach_LOD, 1500, 0
+4310, LODach_r11, nbeach_LOD, 1500, 0
+4311, LODach_r12, nbeach_LOD, 1500, 0
+4312, LODach_r13, nbeach_LOD, 1500, 0
+4313, LODach_r14, nbeach_LOD, 1500, 0
+4314, LODach_r15, nbeach_LOD, 1500, 0
+4315, LODach_r16, nbeach_LOD, 1500, 0
+4316, LODach_r17, nbeach_LOD, 1500, 0
+4317, LODach_g1, nbeach_LOD, 1500, 0
+4318, LODach_g2, nbeach_LOD, 1500, 0
+4319, LODach_g3, nbeach_LOD, 1500, 0
+4320, LODach_g4, nbeach_LOD, 1500, 0
+4321, LODach_g5, nbeach_LOD, 1500, 0
+4322, LODach_g6, nbeach_LOD, 1500, 0
+4323, LODach_g7, nbeach_LOD, 1500, 0
+4324, LODach_g8, nbeach_LOD, 1500, 0
+4325, LODach_g9, nbeach_LOD, 1500, 0
+4326, LODach_g10, nbeach_LOD, 1500, 0
+4327, LODach_g11, nbeach_LOD, 1500, 0
+4328, LODach_g12, nbeach_LOD, 1500, 0
+4329, LODach_g13, nbeach_LOD, 1500, 0
+4330, LODach_g14, nbeach_LOD, 1500, 0
+4331, LODach_g15, nbeach_LOD, 1500, 0
+4332, LODach_g16, nbeach_LOD, 1500, 0
+4333, LODach_g17, nbeach_LOD, 1500, 0
+4334, LODach_g18, nbeach_LOD, 1500, 0
+4335, LODach_g19, nbeach_LOD, 1500, 0
+4336, LODach_g20, nbeach_LOD, 1500, 0
+4337, LODach_b1, nbeach_LOD, 1500, 0
+4338, LODach_b2, nbeach_LOD, 1500, 0
+4339, LODach_b3, nbeach_LOD, 1500, 0
+4340, LODach_b4, nbeach_LOD, 1500, 0
+4341, LODach_b5, nbeach_LOD, 1500, 0
+4342, LODach_b6, nbeach_LOD, 1500, 0
+4343, LODach_b7, nbeach_LOD, 1500, 0
+4344, LODach_b8, nbeach_LOD, 1500, 0
+4345, LODach_b9, nbeach_LOD, 1500, 0
+4346, LODach_b10, nbeach_LOD, 1500, 0
+4347, LODach_b11, nbeach_LOD, 1500, 0
+4348, LODach_b12, nbeach_LOD, 1500, 0
+4349, LODach_b13, nbeach_LOD, 1500, 0
+4350, LODach_b14, nbeach_LOD, 1500, 0
+4351, LODach_b15, nbeach_LOD, 1500, 0
+4352, LODach_b16, nbeach_LOD, 1500, 0
+4353, LODach_b17, nbeach_LOD, 1500, 0
+4354, LODach_b18, nbeach_LOD, 1500, 0
+4355, LODach_gr5, nbeach_LOD, 1500, 0
+2600, nbeach_s6, nbeachbt_s, 450, 0
+2601, nbeach_s7, nbeachbt_s, 450, 0
+2602, nbeach_s8, nbeachbt_s, 450, 0
+end
+tobj
+4285, nbeach_n1, neons2, 1500, 2097228, 20, 6
+4286, nbeach_n2, neons2, 1500, 2097228, 20, 6
+4287, nbeach_n3, neons2, 1500, 2097228, 20, 6
+4288, nbeach_n4, neons2, 1500, 2097228, 20, 6
+4289, nbeach_n5, neons2, 1500, 2097228, 20, 6
+4290, nbeach_n6, neons2, 1500, 2097228, 20, 6
+4291, nbeach_n7, neons2, 1500, 2097228, 20, 6
+4292, nbeach_n8, neons2, 1500, 2097228, 20, 6
+4293, nbeach_n9, neons2, 1500, 2097228, 20, 6
+4294, nbeach_n10, neons2, 1500, 2097228, 20, 6
+4295, nbeach_n11, neons2, 1500, 2097228, 20, 6
+end
+path
+end
+2dfx
+end
+txdp
+neons2,neons1
+end
+

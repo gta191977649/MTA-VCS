@@ -1,0 +1,6 @@
+<meta>
+    <script src="table.lua" type="client"/>
+    <script src="ycg.lua" type="client"/>
+    <file src="mta-helper.fx" type="client"/>
+    <file src="ycg.fx" type="client"/>
+</meta>

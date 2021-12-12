@@ -1,0 +1,43 @@
+objs
+
+5001, int_shop, int_shopstruct, 100, 32768 
+
+5003, mal_viento, mal_viento02, 80, 2097152
+
+5005, viento_shad, shops_shad, 50, 2097220
+5006, shop_shad, shops_shad, 50, 2097220
+
+5008, nalgas_shad, shops_shad, 50, 2097220
+5009, nalgas_granders, nalgas_granders, 80, 2097152
+5010, int_shop01, int_shopstruct, 100, 32768 
+5011, verdi, verdi, 80, 2097152
+5012, verdi_shad, shops_shad, 50, 2097220
+5013, shop_shad01, shops_shad, 50, 2097220
+
+5015, electric_boulevard, electric_boulevard, 80, 2097152
+5016, electric_shad, shops_shad, 50, 2097220 
+
+5019, mal_viento01, mal_viento, 80, 2097152
+5020, viento01_shad, shops_shad, 50, 2097220
+5021, int_shop02, int_shopstruct, 100, 32768 
+5022, shop_shad02, shops_shad, 50, 2097220
+5023, fidl, fidl, 80, 2097152
+5024, fidl_shad, shops_shad, 50, 2097220
+5025, hermit, hermit, 80, 2097152
+5026, hermit_shad, shops_shad, 50, 2097220
+5027, int_ammu-nation, ammu-nation, 150, 2097152
+5028, int_ammu-nationA, ammu-nation, 150, 2097220
+end
+tobj
+end
+path
+end
+2dfx
+end
+
+
+
+
+
+
+

@@ -1,0 +1,97 @@
+objs
+10500, pc_scene, pc_stadium01, 450, 2097152
+10501, pc_stadium_struct01, pc_stadium02, 450, 2097152
+10502, pc_stadium_struct02, pc_stadium02, 450, 2097152
+10503, pc_stadium_struct03, pc_stadium02, 450, 2097152
+10504, pc_stadium_struct04, pc_stadium02, 450, 2097152
+10505, pc_stadium_struct05, pc_stadium02, 450, 2097152
+10506, pc_stadium_struct06, pc_stadium02, 450, 2097152
+10507, pc_stadium_struct07, pc_stadium02, 450, 2097152
+10508, pc_stadium_struct08, pc_stadium02, 450, 2097152
+10509, pc_stadium_shadow, pc_stadium02, 500, 2097344
+10510, pc_stadium_tunel01, pc_stadium03, 450, 2097152
+10511, pc_stadium_tunel02, pc_stadium03, 450, 2097152
+10512, pc_stadium_tunel03, pc_stadium03, 450, 2097152
+10513, pc_stadium_tunel04, pc_stadium03, 450, 2097152
+10514, pc_stadium_tunel05, pc_stadium03, 450, 2097152
+10515, pc_stadium_tunel06, pc_stadium03, 450, 2097152
+10516, pc_stadium_tunel07, pc_stadium03, 450, 2097152
+10517, pc_stadium_tunel08, pc_stadium03, 450, 2097152
+10518, pc_stadium_sub01, pc_stadium03, 450, 2097152
+10519, pc_stadium_sub02, pc_stadium03, 450, 2097152
+10520, pc_scene01, pc_stadium01, 450, 2097156
+10521, pc_scene02, pc_stadium01, 450, 2097152
+10522, pc_scene03, pc_stadium01, 450, 2097152
+10523, pc_scene04, pc_stadium01, 450, 2097152
+10524, pc_scene05, pc_stadium01, 450, 2097156
+10525, pc_scene06, pc_stadium01, 450, 2097156
+10526, pc_scene07, pc_stadium01, 450, 2097152
+10527, pc_scene08, pc_stadium01, 450, 2097156
+10528, pc_scene09, pc_stadium01, 450, 2097152
+10529, pc_scene10, pc_stadium01, 450, 2097156
+10530, pc_equA, pc_equ, 450, 2097152
+10531, pc_equB, pc_equ, 450, 2097228
+10532, pc_neon-logo, pc_stadium01, 450, 2097228
+10533, pc_scene11, pc_stadium01, 450, 2097152
+10534, pc_scene12, pc_stadium01, 450, 2097156
+10535, pc_scene13, pc_stadium01, 450, 2097152
+10536, pc_scene14, pc_stadium01, 450, 2097152
+10537, pc_scene15, pc_stadium01, 450, 2097156
+10538, pc_scene16, pc_stadium01, 450, 2097152
+10539, pc_scene17, pc_stadium01, 450, 2097156
+10540, pc_scene18, pc_stadium01, 450, 2097152
+10541, pc_scene19, pc_stadium01, 450, 2097152
+10542, pc_scene20, pc_stadium01, 450, 2097156
+10543, pc_scene21, pc_stadium01, 450, 2097152
+10544, pc_scene22, pc_stadium01, 450, 2097156
+10545, pc_scene23, pc_stadium01, 450, 2097152
+10546, pc_scene24, pc_stadium01, 450, 2097156
+10547, pc_scene25, pc_stadium01, 450, 2097152
+10548, pc_scene26, pc_stadium01, 450, 2097152
+10549, pc_scene27, pc_stadium01, 450, 2097156
+10550, pc_scene28, pc_stadium01, 450, 2097156
+10551, pc_scene29, pc_stadium01, 450, 2097152
+10552, pc_scene30, pc_stadium01, 450, 2097152
+10553, pc_scene31, pc_stadium01, 450, 2097152
+10554, pc_scene32, pc_stadium01, 450, 2097152
+end
+tobj
+end
+path
+end
+2dfx
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

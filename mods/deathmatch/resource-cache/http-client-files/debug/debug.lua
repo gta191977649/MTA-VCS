@@ -1,1 +1,0 @@
-setElementPosition (getLocalPlayer(), -1461,-827, 18 )  

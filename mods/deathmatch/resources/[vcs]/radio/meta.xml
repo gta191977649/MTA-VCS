@@ -1,0 +1,16 @@
+<meta>
+	<script src="radio.lua" type="client"/>
+
+	<!-- 
+	<file src="audio/flash.mp3" type="client"/>
+	<file src="audio/vrock.mp3" type="client"/>
+	<file src="audio/emotion.mp3" type="client"/>
+	<file src="audio/espant.mp3" type="client"/>
+	<file src="audio/fresh.mp3" type="client"/>
+	<file src="audio/paradise.mp3" type="client"/>
+	<file src="audio/vcfl.mp3" type="client"/>
+	<file src="audio/vcpr.mp3" type="client"/>
+	<file src="audio/wave.mp3" type="client"/>
+	-->
+	<include resource="font"/>
+</meta>

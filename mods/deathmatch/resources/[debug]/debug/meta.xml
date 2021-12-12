@@ -1,0 +1,20 @@
+<meta>
+    <script src="test_s.lua" type="server" />
+    <script src="fps.lua" type="client" />
+    <script src="test_c.lua" type="client" />
+    <script src="info.lua" type="client" />
+    <script src="debug_s.lua" type="server" />
+    
+    <script src="airbrake.lua" type="client" />
+    <script src="npc_test.lua" type="server" />
+    <!-- 
+    <script src="npc_test.lua" type="server" />
+    <script src="vc_trail.lua" type="client" />
+    <file src="mta-helper.fx" type="client" />
+    -->
+   
+    <export function="addDebugMessage" type="client"/>
+
+
+    <min_mta_version client="1.5.8-9.20797"></min_mta_version>
+</meta>

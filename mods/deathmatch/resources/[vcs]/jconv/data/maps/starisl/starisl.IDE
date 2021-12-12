@@ -1,0 +1,67 @@
+#IDE file generated from Kam's GTA Map IO
+# 13/01/2015
+#id from 2364 to 2410/2447
+objs
+2364, star_A1, starisl, 450, 1
+2365, star_A2, starisl, 450, 1
+2366, star_A3, starisl, 450, 1
+2367, star_A4, starisl, 450, 2097156
+2368, star_A5, starisl, 450, 2097152
+2369, star_A6, starisl, 450, 2097152
+2370, star_A7, starisl, 450, 2097156
+2371, star_A8, starisl, 450, 2097156
+2372, star_A9, starisl, 450, 2097156
+2373, star_A10, starisl, 450, 2097156
+2374, star_A11, starisl, 450, 2097156
+2375, star_A12, starisl, 450, 2097157
+2376, star_A13, starisl, 450, 2097152
+2377, star_A14, starisl, 450, 2097156
+2378, star_A15, starisl, 450, 2097156
+2379, star_A16, starisl, 450, 2097156
+2380, star_A17, starisl, 450, 2097152
+2382, star_A19, starisl, 450, 2097156
+2384, star_A21, starisl, 450, 1
+2385, star_A22, starisl, 450, 0
+2383, star_A20, starisl, 450, 2097156
+2387, star_A24, starisl, 450, 0
+2386, star_A23, starisl, 450, 0
+2388, star_A25, starisl, 450, 2097152
+2389, star_A26, starisl, 450, 2097156
+2390, star_A27, starisl, 450, 2097157
+2391, LODr_A1, star_LOD, 3000, 0
+2392, LODr_A2, star_LOD, 3000, 0
+2393, LODr_A3, star_LOD, 3000, 0
+2394, LODr_A4, star_LOD, 3000, 0
+2395, LODr_A5, star_LOD, 3000, 0
+2396, LODr_A6, star_LOD, 3000, 0
+2397, LODr_A7, star_LOD, 3000, 0
+2398, LODr_A8, star_LOD, 3000, 0
+2399, LODr_A17, star_LOD, 3000, 0
+2400, LODr_A19, star_LOD, 3000, 0
+2401, LODr_A26, star_LOD, 3000, 0
+2402, LODr_A12, star_LOD, 3000, 0
+2403, LODr_A13, star_LOD, 3000, 0
+2404, LODr_A14, star_LOD, 3000, 0
+2405, LODr_A22, star_LOD, 3000, 0
+2406, LODr_A27, star_LOD, 3000, 0
+2407, LODr_A21, star_LOD, 3000, 0
+2409, star_A21_alpha, starisl, 450, 4
+2411, star_A28, starisl, 450, 2097156
+2412, star_A29, starisl, 450, 2097156
+2413, star_A30, starisl, 450, 2097156
+2414, star_A31, starisl, 450, 2097156
+2415, star_A32, starisl, 450, 2097156
+2416, star_A33, starisl, 450, 2097156
+2447, comgate2closed, starisl, 450, 2097156
+13238, STARBLOCKER02, starisl, 450, 2097156
+13237, STARBLOCKER1, starisl, 450, 2097156
+end
+tobj
+2410, star_n1, neons1, 1500, 2097228, 20, 6
+end
+path
+end
+2dfx
+end
+txdp
+end

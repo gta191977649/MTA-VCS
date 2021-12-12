@@ -1,0 +1,261 @@
+objs
+1605, haitiN_road01, hN_roads, 450, 0
+1606, haitiN_road02, hN_roads, 450, 0
+1607, haitiN_road03, hN_roads, 450, 0
+1608, haitiN_road04, hN_roads, 450, 0
+1609, haitiN_road05, hN_roads, 450, 0
+1610, haitiN_road06, hN_roads, 450, 0
+1611, haitiN_road07, hN_roads, 450, 2097152
+1612, haitiN_road08, hN_roads, 450, 0
+1613, haitiN_road09, hN_roads, 450, 2097152
+1614, haitiN_road10, hN_roads, 450, 0
+1615, hN_ground01, hN_ground, 450, 0
+1616, hN_ground02, hN_ground, 450, 0
+1617, hN_ground03, hN_ground, 450, 0
+1618, hN_ground04, hN_ground, 450, 0
+1619, hN_ground05, hN_ground, 450, 0
+1620, hN_partA01, hN_builground, 450, 2097152
+1621, hN_partA02, hN_builground, 450, 0
+1622, hN_partA03, hN_builground, 450, 2097152
+1623, hN_partA04, hN_builground, 450, 2097152
+1624, hN_partA05, hN_kingknuts, 450, 2097152
+1625, hN_partC01, hN_build1k, 450, 2097152
+1626, hN_partC02, hN_build1k, 450, 2097152
+1627, hN_partC03, hN_build1k, 450, 2097152
+1628, hN_partC04, hN_build1k, 450, 2097152
+1629, hN_partB01, hN_philplace, 450, 2097152
+1630, hN_partD01, hN_build2k, 450, 0
+1631, hN_partD02, hN_build2k, 450, 0
+1632, hN_partD03, hN_build2k, 450, 0
+1633, hN_partD04, hN_build2k, 450, 0
+1634, hN_partD05, hN_build2k, 450, 0
+1635, hN_partE01, hN_build3k, 450, 2097152
+1636, hN_partE02, hN_build3k, 450, 2097152
+1637, hN_partE03, hN_build3k, 450, 2097152
+1638, hN_partE04, hN_build3k, 450, 2097152
+1639, hN_partE05, hN_build3k, 450, 2097152
+1640, hN_junkA01, hN_junk01, 450, 2097152
+1641, hN_junkA02, hN_junk01, 450, 2097152
+1642, hN_junkA03, hN_junk01, 450, 2097152
+1643, haitiN_house01, hN_midbuild, 450, 2097152
+1644, haitiN_house02, hN_midbuild, 450, 2097152
+1645, haitiN_house03, hN_midbuild, 450, 2097152
+1646, haitiN_house04, hN_midbuild, 450, 2097152
+1647, haitiN_house05, hN_midbuild, 450, 2097152
+1648, haitiN_house06, hN_midbuild, 450, 2097152
+1649, haitiN_house07, hN_midbuild, 450, 2097152
+1650, haitiN_house08, hN_midbuild, 450, 2097152
+1651, haitiN_house09, hN_midbuild, 450, 2097152
+1652, haitiN_house10, hN_midbuild, 450, 2097152
+1653, haitiN_house11, hN_midbuild, 450, 2097152
+1654, hN_build-ext01, hN_specbuild, 450, 0
+1655, hN_whgood, hN_specbuild, 450, 2097152
+1656, hN_whdamage, hN_specbuild, 450, 2097152
+1657, hN_wstalionz-ext, hN_specbuild, 450, 2097152
+1658, hN_stuff01, hN_stuff, 450, 2097152
+1659, hN_stuff02, hN_stuff, 450, 2097152
+1660, hN_stuff03, hN_stuff, 450, 2097152
+1661, hN_stuff04, hN_stuff, 450, 2097152
+1662, hN_stuff05, hN_stuff, 450, 2097152
+1663, hN_stuff06, hN_stuff, 450, 2097152
+1664, hN_stuff07, hN_stuff, 450, 2097152
+1665, hN_stuff08, hN_stuff, 450, 2097152
+1666, hN_stuff09, hN_stuff, 450, 2097152
+1667, hN_stuff10, hN_stuff, 450, 2097152
+1668, hN_stuff11, hN_stuff, 450, 2097152
+1669, hN_stuff12, hN_stuff, 450, 2097152
+1670, hN_stuff13, hN_stuff, 450, 2097152
+1671, hN_objalpha01, hN_objalpha, 450, 2097228
+1672, hN_objalpha02, hN_objalpha, 450, 2097228
+1673, hN_objalpha03, hN_objalpha, 450, 2097228
+1674, hN_objalpha04, hN_objalpha, 450, 2097228
+1675, hN_objalpha05, hN_objalpha, 450, 2097228
+1676, hN_objalpha06, hN_objalpha, 450, 2097228
+1677, hN_objalpha07, hN_objalpha, 450, 2097164
+1678, hN_objalpha08, hN_objalpha, 450, 2097228
+1679, hN_objalpha09, hN_objalpha, 450, 2097228
+1680, hN_objalpha10, hN_objalpha, 450, 2097228
+1681, hN_objalpha11, hN_objalpha, 450, 2097164
+1682, hN_objalpha12, hN_objalpha, 450, 2097228
+1683, hN_objalpha13, hN_objalpha, 450, 2097164
+1684, hN_objalpha14, hN_objalpha, 450, 2097228
+1685, hN_objalpha15, hN_objalpha, 450, 2097164
+1686, hN_objalpha16, hN_objalpha, 450, 2097164
+1687, hN_objalpha17, hN_objalpha, 450, 2097228
+1688, hN_objalpha18, hN_objalpha, 450, 2097228
+1689, hN_objalpha19, hN_objalpha, 450, 2097228
+1690, hN_objalpha20, hN_objalpha, 450, 2097228
+1691, hN_objalpha21, hN_objalpha, 450, 2097228
+1692, hN_wsalpha01, hN_objalpha, 450, 2097228
+1698, hN_partB02, hN_philplace, 450, 2097152
+1699, hN_safehouse1-ext, hN_philplace, 450, 2097152
+1700, hN_partB03, hN_philplace, 450, 2097152
+1701, hN_partB04, hN_philplace, 450, 2097152
+1702, kingknuts_int, hN_kingknuts, 100, 2097152
+1703, kingknuts_intA, hN_kingknuts, 100, 2097228
+1704, kingknuts_mask, hN_neons, 100, 2097152
+1705, hN_gesafedoor, hN_stuff, 450, 2048
+1706, garagegate01, hN_stuff, 450, 2097152
+1707, jm_umb4_shut, hN_stuff, 450, 2097152
+1708, jm_umb4_exit01, hN_stuff, 450, 2097152
+1709, jm_umb4_exit02, hN_stuff, 450, 2097152
+1710, binbignew, hN_stuff, 450, 2359296
+1711, hN_adv01, hN_stuff, 450, 2097152
+1712, hN_graffiti01, hN_objalpha, 450, 2097388
+1713, compound, compound, 100, 2097152
+1714, compoundA, compound, 100, 2097388
+4610, LODtiN_road01, haitiN_LOD, 1500, 2097152
+4611, LODtiN_road02, haitiN_LOD, 1500, 2097152
+4612, LODtiN_road03, haitiN_LOD, 1500, 2097152
+4613, LODtiN_road04, haitiN_LOD, 1500, 2097152
+4614, LODtiN_road05, haitiN_LOD, 1500, 2097152
+4615, LODtiN_road06, haitiN_LOD, 1500, 2097152
+4616, LODtiN_road07, haitiN_LOD, 1500, 2097152
+4617, LODtiN_road08, haitiN_LOD, 1500, 2097152
+4618, LODtiN_road09, haitiN_LOD, 1500, 2097152
+4619, LODtiN_road10, haitiN_LOD, 1500, 2097152
+4620, LODground01, haitiN_LOD, 1500, 2097152
+4621, LODground02, haitiN_LOD, 1500, 2097152
+4622, LODground03, haitiN_LOD, 1500, 2097152
+4623, LODground04, haitiN_LOD, 1500, 2097152
+4624, LODground05, haitiN_LOD, 1500, 2097152
+4625, LODpartB01, haitiN_LOD, 1500, 2097152
+4626, LODpartE01, haitiN_LOD, 1500, 2097152
+4627, LODpartE02, haitiN_LOD, 1500, 2097152
+4628, LODpartE03, haitiN_LOD, 1500, 2097152
+4629, LODpartC01, haitiN_LOD, 1500, 2097152
+4631, LODpartC03, haitiN_LOD, 1500, 2097152
+4632, LODpartC04, haitiN_LOD, 1500, 2097152
+4630, LODpartC02, haitiN_LOD, 1500, 2097152
+4633, LODwstalionz-ext, haitiN_LOD, 1500, 2097152
+4634, LODbuild-ext01, haitiN_LOD, 1500, 2097152
+4635, LODjunkA01, haitiN_LOD, 1500, 2097152
+4636, LODjunkA02, haitiN_LOD, 1500, 2097152
+4637, LODjunkA03, haitiN_LOD, 1500, 2097152
+4638, LODpartA01, haitiN_LOD, 1500, 2097152
+4639, LODpartA02, haitiN_LOD, 1500, 2097152
+4640, LODpartA03, haitiN_LOD, 1500, 2097152
+4641, LODpartA04, haitiN_LOD, 1500, 2097152
+4642, LODpartA05, haitiN_LOD, 1500, 2097152
+4643, LODpartD01, haitiN_LOD, 1500, 2097152
+4644, LODpartD02, haitiN_LOD, 1500, 2097152
+4645, LODpartD03, haitiN_LOD, 1500, 2097152
+4646, LODpartD04, haitiN_LOD, 1500, 2097152
+4647, LODpartD05, haitiN_LOD, 1500, 2097152
+4648, LODpartE04, haitiN_LOD, 1500, 2097152
+4649, LODpartE05, haitiN_LOD, 1500, 2097152
+end
+tobj
+1693, hN_anim01, hN_neons, 500, 2097388, 6, 20
+1694, hN_anim02, hN_neons, 500, 2097388, 20, 6
+1695, hN_neon01, hN_neons, 1500, 2097388, 20, 6
+1696, hN_neon02, hN_neons, 1500, 2097388, 20, 6
+1697, hN_night01, hN_neons, 1500, 2097388, 20, 6
+end
+path
+end
+2dfx
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

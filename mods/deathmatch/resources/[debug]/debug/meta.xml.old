@@ -1,0 +1,41 @@
+<meta>
+	<script src="test_s.lua" type="server" />
+	<script src="test_c.lua" type="client" />
+	<script src="vc_trail.lua" type="client" />
+	<script src="airbrake.lua" type="client" />
+	
+	<file src="fx/blobs.fx" type="client" />	
+	<file src="fx/blobsMod.fx" type="client" />	
+	<file src="fx/colCircle.fx" type="client" />	
+	<file src="fx/colDonut.fx" type="client" />	
+	<file src="fx/colFractals.fx" type="client" />	
+	<file src="fx/colNeckl.fx" type="client" />	
+	<file src="fx/colorDrops.fx" type="client" />	
+	<file src="fx/coolWaves.fx" type="client" />	
+	<file src="fx/energyField.fx" type="client" />	
+	<file src="fx/grayWaves.fx" type="client" />	
+	<file src="fx/greenCircle.fx" type="client" />	
+	<file src="fx/gridWalk.fx" type="client" />	
+	<file src="fx/hypnoCircles.fx" type="client" />	
+	<file src="fx/hypnoWheel.fx" type="client" />	
+	<file src="fx/merryXMass.fx" type="client" />	
+	<file src="fx/mixPaint.fx" type="client" />	
+	<file src="fx/mouseVioletCircle.fx" type="client" />	
+	<file src="fx/noise.fx" type="client" />	
+	<file src="fx/purpleSine.fx" type="client" />	
+	<file src="fx/redFlower.fx" type="client" />	
+	<file src="fx/redPlanet.fx" type="client" />	
+	<file src="fx/screenFlare.fx" type="client" />	
+	<file src="fx/sineColors.fx" type="client" />	
+	<file src="fx/sineWeb.fx" type="client" />	
+	<file src="fx/spin.fx" type="client" />	
+	<file src="fx/spinNeckl.fx" type="client" />	
+	<file src="fx/spinx.fx" type="client" />	
+	<file src="fx/starTravel.fx" type="client" />	
+	<file src="fx/tunnel.fx" type="client" />	
+	<file src="fx/verticalStrobes.fx" type="client" />	
+	<file src="fx/violetExplosion.fx" type="client" />	
+	<file src="fx/warpedSiveWave.fx" type="client" />	
+	<file src="fx/weirdFlower.fx" type="client" />	
+	<file src="fx/whiteCircles.fx" type="client" />	
+</meta>

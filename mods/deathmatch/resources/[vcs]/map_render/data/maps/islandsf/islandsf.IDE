@@ -1,0 +1,65 @@
+objs
+#from 2600 to 2692 free ids
+15010, seabed01, underworld, 3000, 256
+15011, seabed02, underworld, 3000, 256
+15012, seabed03, underworld, 3000, 256
+15013, seabed04, underworld, 3000, 256
+15014, seabed05, underworld, 3000, 256
+15015, seabed06, underworld, 3000, 256
+15016, seabed07, underworld, 3000, 256
+15017, seabed08, underworld, 3000, 256
+15018, seabed09, underworld, 3000, 256
+15019, seabed10, underworld, 3000, 256
+15020, seabed11, underworld, 3000, 256
+15021, seabed12, underworld, 3000, 256
+15022, seabed13, underworld, 3000, 256
+15023, seabed14, underworld, 3000, 256
+15024, seabed15, underworld, 3000, 256
+15025, seabed16, underworld, 3000, 256
+15026, seabed17, underworld, 3000, 256
+15027, seabed18, underworld, 3000, 256
+15028, seabed19, underworld, 3000, 256
+15029, seabed20, underworld, 3000, 256
+15030, seabed21, underworld, 3000, 256
+15031, seabed22, underworld, 3000, 256
+15032, seabed23, underworld, 3000, 256
+15033, seabed24, underworld, 3000, 256
+15034, seabed25, underworld, 3000, 256
+15035, seabed26, underworld, 3000, 256
+#Docks
+15036, seabed_shallow01, underworld, 3000, 256
+#
+#Starfish & Mansion
+15037, seabed_shallow02, underworld, 3000, 256
+15038, seabed_shallow03, underworld, 3000, 256
+15039, seabed_shallow04, underworld, 3000, 256
+15040, seabed_shallow05, underworld, 3000, 256
+15041, seabed_shallow06, underworld, 3000, 256
+15042, seabed_shallow07, underworld, 3000, 256
+15043, seabed_shallow08, underworld, 3000, 256
+#
+15044, seabed27, underworld, 3000, 256
+15045, seabed28, underworld, 3000, 256
+15046, seabed29, underworld, 3000, 256
+15047, seabed30, underworld, 3000, 256
+15048, seabed31, underworld, 3000, 256
+15049, seabed32, underworld, 3000, 256
+15050, seabed33, underworld, 3000, 256
+15051, seabed34, underworld, 3000, 256
+15052, seabed35, underworld, 3000, 256
+15053, seabed36, underworld, 3000, 256
+15054, seabed37, underworld, 3000, 256
+#Prawn
+15055, seabed_shallow09, underworld, 3000, 256
+15056, seabed_shallow10, underworld, 3000, 256
+#
+end
+tobj
+end
+path
+end
+2dfx
+end
+txdp
+underworld, boathouse1
+end

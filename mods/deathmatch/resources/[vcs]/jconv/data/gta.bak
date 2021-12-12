@@ -1,0 +1,57 @@
+IDE DATA\MAPS\generic\vegepart.IDE
+IDE DATA\MAPS\generic\barriers.IDE #CRASH!!!!
+IDE DATA\MAPS\generic\dynamic.IDE
+IDE DATA\MAPS\generic\dynamic2.IDE #crash
+IDE DATA\MAPS\generic\multiobj.IDE
+IDE DATA\MAPS\generic\procobj.IDE #crash
+
+
+IDE DATA\MAPS\airportN\airportN.IDE
+IDE DATA\MAPS\airport\airport.IDE
+IDE DATA\MAPS\littleha\littleha.IDE
+IDE DATA\MAPS\docks\docks.IDE
+IDE DATA\MAPS\mansion\mansion.IDE
+IDE DATA\MAPS\starisl\starisl.IDE
+IDE DATA\MAPS\haiti\haiti.IDE
+IDE DATA\MAPS\haitiN\haitiN.IDE
+IDE DATA\MAPS\bridge\bridge.IDE
+IDE DATA\MAPS\golf\golf.IDE
+IDE DATA\MAPS\downtowS\downtowS.IDE
+IDE DATA\MAPS\downtowN\downtowN.IDE
+IDE DATA\MAPS\cisland\cisland.IDE
+IDE DATA\MAPS\nbeachw\nbeachw.IDE
+IDE DATA\MAPS\islandsf\islandsf.IDE
+IDE DATA\MAPS\oceandn\oceandn.IDE
+IDE DATA\MAPS\oceandrv\oceandrv.IDE
+IDE DATA\MAPS\nbeach\nbeach.IDE #CRASH
+IDE DATA\MAPS\nbeachbt\nbeachbt.IDE
+IDE DATA\MAPS\washintN\washintN.IDE #CRASH
+IDE DATA\MAPS\washintS\washintS.IDE #CRASH
+IDE DATA\MAPS\mall\mall.IDE #CRASH
+IDE DATA\MAPS\shops\shops.IDE
+IDE DATA\MAPS\empire\empire.IDE
+
+IPL DATA\MAPS\airport\airport.IPL
+IPL DATA\MAPS\airportN\airportN.IPL
+IPL DATA\MAPS\littleha\littleha.IPL
+IPL DATA\MAPS\docks\docks.IPL
+IPL DATA\MAPS\mansion\mansion.IPL
+IPL DATA\MAPS\starisl\starisl.IPL
+IPL DATA\MAPS\haiti\haiti.IPL
+IPL DATA\MAPS\haitiN\haitiN.IPL
+IPL DATA\MAPS\bridge\bridge.IPL
+IPL DATA\MAPS\golf\golf.IPL
+IPL DATA\MAPS\downtowS\downtowS.IPL
+IPL DATA\MAPS\downtowN\downtowN.IPL
+IPL DATA\MAPS\cisland\cisland.IPL
+IPL DATA\MAPS\nbeachw\nbeachw.IPL
+IPL DATA\MAPS\islandsf\islandsf.IPL
+IPL DATA\MAPS\oceandn\oceandn.IPL
+IPL DATA\MAPS\oceandrv\oceandrv.IPL
+IPL DATA\MAPS\nbeach\nbeach.IPL
+IPL DATA\MAPS\nbeachbt\nbeachbt.IPL
+IPL DATA\MAPS\mall\mall.IPL
+IPL DATA\MAPS\washintN\washintN.IPL
+IPL DATA\MAPS\washintS\washintS.IPL
+IPL DATA\MAPS\shops\shops.IPL
+IPL DATA\MAPS\empire\empire.IPL

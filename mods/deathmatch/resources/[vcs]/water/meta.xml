@@ -1,0 +1,6 @@
+<meta>
+    <script src="water.lua" type="client"/>
+    <script src="fx.lua" type="client"/>
+    <file src="waterclear256.png" type="client" cache="false"/>
+    <file src="water_vc.fx" type="client" cache="false"/>
+</meta>

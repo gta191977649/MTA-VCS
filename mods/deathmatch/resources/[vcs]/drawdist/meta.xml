@@ -1,0 +1,12 @@
+<meta>
+    <info author="IIYAMA" type="script" version="1.0.2" name="Draw distance increase" description="This resource improves draw distance of maps that are loaded by any resources that have been started after this one." />
+
+
+    <min_mta_version client="1.5.4" server="1.5.4" />
+	
+	<download_priority_group>10</download_priority_group> <!-- Download priority is required to detect resources -->
+	
+	<script src="scripts/timer_c.lua" type="client" />
+	<script src="scripts/main_c.lua" type="client" />
+    
+</meta>

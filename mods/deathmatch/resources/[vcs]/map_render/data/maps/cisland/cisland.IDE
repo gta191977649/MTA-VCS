@@ -1,0 +1,72 @@
+#IDE file generated from Kam's GTA Map IO
+objs
+2197, prawn_A8, prawn_TXD, 450, 1
+2202, prawn_A13, prawn_TXD, 450, 0
+2213, prawn_A24, prawn_TXD, 450, 0
+2211, prawn_A22, prawn_TXD, 450, 0
+2205, prawn_A16, prawn_TXD, 450, 0
+2204, prawn_A15, prawn_TXD, 450, 2097156
+2216, prawn_A27, prawn_TXD, 450, 0
+2200, prawn_A11, prawn_TXD, 450, 0
+2206, prawn_A17, prawn_TXD, 450, 0
+2199, prawn_A10, prawn_TXD, 450, 1
+2212, prawn_A23, prawn_TXD, 450, 4
+2208, prawn_A19, prawn_TXD, 450, 12
+2196, prawn_A7, prawn_TXD, 450, 0
+2194, prawn_A5, prawn_TXD, 450, 0
+2207, prawn_A18, prawn_TXD, 450, 0
+2210, prawn_A21, prawn_TXD, 450, 0
+2209, prawn_A20, prawn_TXD, 450, 0
+2191, prawn_A2, prawn_TXD, 450, 0
+2190, prawn_A1, prawn_TXD, 450, 2097153
+2215, prawn_A26, prawn_TXD, 450, 0
+2217, prawn_A28, prawn_TXD, 450, 0
+2203, prawn_A14, prawn_TXD, 450, 0
+2198, prawn_A9, prawn_TXD, 450, 0
+2192, prawn_A3, prawn_TXD, 450, 0
+2214, prawn_A25, prawn_TXD, 450, 0
+2195, prawn_A6, prawn_TXD, 450, 0
+2193, prawn_A4, prawn_TXD, 450, 0
+2201, prawn_A12, prawn_TXD, 450, 0
+2224, LODwn_A11, prawn_LOD, 3000, 0
+2220, LODwn_A5, prawn_LOD, 3000, 0
+2219, LODwn_A2, prawn_LOD, 3000, 0
+2221, LODwn_A7, prawn_LOD, 3000, 0
+2218, LODwn_A1, prawn_LOD, 3000, 0
+2223, LODwn_A10, prawn_LOD, 3000, 0
+2222, LODwn_A8, prawn_LOD, 3000, 0
+2229, LODwn_A20, prawn_LOD, 3000, 0
+2230, LODwn_A21, prawn_LOD, 3000, 0
+2228, LODwn_A18, prawn_LOD, 3000, 0
+2225, LODwn_A14, prawn_LOD, 3000, 0
+2233, LODwn_A24, prawn_LOD, 3000, 0
+2231, LODwn_A22, prawn_LOD, 3000, 0
+2232, LODwn_A23, prawn_LOD, 3000, 0
+2226, LODwn_A15, prawn_LOD, 3000, 0
+2227, LODwn_A16, prawn_LOD, 3000, 0
+2234, prawn_A30, prawn_TXD, 450, 0
+2235, prawn_A31, prawn_TXD, 450, 4
+2236, prawn_A32, prawn_TXD, 450, 4
+2237, prawn_A33, prawn_TXD, 450, 4
+2238, prawn_A34, prawn_TXD, 450, 4
+2239, prawn_A35, prawn_TXD, 450, 4
+2240, prawn_A36, prawn_TXD, 450, 2097156
+2241, prawn_A37, prawn_TXD, 450, 2097156
+2242, prawn_A38, prawn_TXD, 450, 2097156
+2243, prawn_A39, prawn_TXD, 450, 2097156
+end
+tobj
+end
+path
+end
+2dfx
+end
+anim
+end
+txdp
+prawn_TXD,prawn_TXD2
+prawn_TXD2,prawn_TXD3
+prawn_TXD3,prawn_TXD4
+prawn_TXD4,prawn_TXD5
+end
+
