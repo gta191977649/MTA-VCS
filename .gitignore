@@ -1,13 +1,9 @@
 mods/deathmatch/backups/
 mods/deathmatch/resource-cache/
 mods/deathmatch/logs
-mods/deathmatch/databases/system/fileblock.db
-mods/deathmatch/databases/system/stats.db
+mods/deathmatch/databases/
 mods/deathmatch/internal.db
 mods/deathmatch/internal.db-journal
 dumps/private/README.txt
-mods/deathmatch/databases/system/fileblock.db
-mods/deathmatch/databases/system/stats.db
 mods/deathmatch/internal.db
 mods/deathmatch/registry.db
-mods/deathmatch/databases/system/stats.db
