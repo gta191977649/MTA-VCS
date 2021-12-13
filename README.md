@@ -3,6 +3,7 @@ A Total Convetion of VCS Map to MTASA
 # To do
 * Map
   * Interiors
+  * Empire Buildings
   * Objects Fix
     * Aplha Blending Textures
     * Breakble Objects
