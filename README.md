@@ -8,7 +8,10 @@ A Total Convetion of VCS Map to MTASA
     * Time Object
     * UV Animation
     * Txds (Needs custom implmention fix txdp flag)
-* VCS HUD
+* Vehicle
+* Peds
+* Weapons
+* HUD/UI
   * Game Texts
     * Radio
     * Vehicle Name
@@ -20,4 +23,3 @@ A Total Convetion of VCS Map to MTASA
     * Oxygen (In Water)
     * Cash
 * Radio Stations
-* 
