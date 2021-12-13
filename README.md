@@ -4,6 +4,7 @@ A Total Convetion of VCS Map to MTASA
 * Map
   * Interiors
   * Objects Fix
+    * Aplha Blending Textures
     * Breakble Objects
     * Time Object
     * UV Animation
