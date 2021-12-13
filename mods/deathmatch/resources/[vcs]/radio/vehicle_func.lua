@@ -7,7 +7,7 @@ addEventHandler("onClientVehicleEnter", getRootElement(),
         end
     end
 )
-addEventHandler("onClientVehicleExit", getRootElement(),
+addEventHandler("onClientVehicleStartExit", getRootElement(),
     function(thePlayer, seat)
         if thePlayer == getLocalPlayer() then
             stopRadio()
