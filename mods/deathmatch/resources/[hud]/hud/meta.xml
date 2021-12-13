@@ -1,6 +1,9 @@
 <meta>
     <script src="hud.lua" type="client"/>
-    <script src="miniradar.lua" type="client"/>
+    <script src="gametext.lua" type="client"/>
+
+    <!-- functions -->
+    <export function="showGameText" type="shared"/>
     <!-- Shader -->
     <file src="shader/texreplace.fx" type="client"/>
     <!-- Radar -->

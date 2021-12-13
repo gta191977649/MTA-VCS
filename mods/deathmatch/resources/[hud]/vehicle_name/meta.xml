@@ -1,0 +1,4 @@
+<meta>
+    <script src="vehicle_name.lua" type="client"/>
+    <include resource="hud"/>
+</meta>

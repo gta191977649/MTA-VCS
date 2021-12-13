@@ -15,16 +15,14 @@ HUD = {
     --time = dgsCreateLabel(0.845,0.03,0.04,0.5,"10:11",true),
     cash = dgsCreateLabel(0.919,0.16,0.04,0.5,"$000000000",true),
     hp = {},
-    ap = {}
+    ap = {},
 }
 --HUD.hp.bar_bk = dgsCreateImage(0.824,0.126,1.01 * BAR_SCALE,0.55*BAR_SCALE ,"frontend/hud/bar.png",true)
-
 HUD.hp.bar = dgsCreateProgressBar(0.827,0.13,0.91 * BAR_SCALE,0.43*BAR_SCALE, true)
 HUD.hp.bar_bk = dgsCreateImage(-0.022,-0.08,1.07,1.22,"frontend/hud/bar.png",true,HUD.hp.bar)
-
-
 HUD.ap.bar = dgsCreateProgressBar(0.827,0.09,0.91 * BAR_SCALE,0.43*BAR_SCALE, true)
 HUD.ap.bar_bk = dgsCreateImage(-0.022,-0.08,1.07,1.22,"frontend/hud/bar.png",true,HUD.ap.bar)
+
 --
 dgsSetProperty(HUD.hp.bar,"indicatorColor",COLOR["HP"])
 
