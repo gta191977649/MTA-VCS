@@ -1,5 +1,5 @@
 # Multi Theft Auto: Vice City Stories Freeroam 
-Vice City Stories Map Converted Into MTASA
+A Total Convetion of VCS Map to MTASA
 # To do
 * Map
   * Interiors
