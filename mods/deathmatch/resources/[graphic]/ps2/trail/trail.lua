@@ -2,13 +2,13 @@ local scx, scy = guiGetScreenSize()
 local myScreenSource = dxCreateScreenSource(scx/2, scy/2)
 local Settings = {
     ["fadeSpeed"] = 0,
-    ["streng"] = 2,
-    ["maxStreng"] = 2,
+    ["streng"] = 3,
+    ["maxStreng"] = 5,
     ["speed"] = 0,
     ["intens"] = 0,
-    ["blur"] = 0.15 ,
-    ["choke"] = 0,
-    ["maxAlpha"] = 35,
+    ["blur"] = 0.06,
+    ["choke"] =0,
+    ["maxAlpha"] = 30,
 }
 
 function applyEsotropiaH( Src, blur, propX, propY, pSpeed, pChoke, strenght )
