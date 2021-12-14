@@ -1,5 +1,7 @@
 
 Debug = {}
+IPLList = {}
+IPLList2 = {}
 
 function OutPutDebug2(Messege)
 	print (Messege) -- Print our messege
@@ -61,7 +63,7 @@ for i,v in pairs(IPLTable) do
 		if vA[2] and tonumber(vA[1]) and tonumber(vA[3]) and tonumber(vA[4]) and (not tonumber(vA[2])) then
 
 			Exists[removeSpace(vA[2])] = true
-			local lod_index = tonumber(vA[11])+1
+			local lod_index = vA[11] and tonumber(vA[11])+1 or nil
 			if Proccessed_tmp[lod_index] then 
 				LODS[removeSpace(vA[2])] = removeSpace(Proccessed_tmp[lod_index][2])
 			else
@@ -105,8 +107,6 @@ for i,v in pairs(IDETable) do
 	end
 end
 
-IPLList = {}
-IPLList2 = {}
 for i,v in pairs(IPLTable) do
 	local File =	fileOpen(v)
 	local Data =	fileRead(File, fileGetSize(File))

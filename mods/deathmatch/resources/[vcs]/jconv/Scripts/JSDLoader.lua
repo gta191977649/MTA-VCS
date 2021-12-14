@@ -2,11 +2,7 @@ print("Writing Client Object Data")
 ObjectDataC = {}
 
 function AdditionalFlag(InPut)
-	if InPut == 4 or InPut == 8 then
-		return 'true'
-	else
-		return 'nil'
-	end
+	return InPut
 end
 
 Culled = {}

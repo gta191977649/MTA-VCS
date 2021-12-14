@@ -34,6 +34,9 @@ end,100,0)
 function addDebugMessage(msg)
     DGS:dgsMemoInsertText(debug_memo,0,1,msg)
 end
+setOcclusionsEnabled (false)
+setFarClipDistance( 1500 ) 
+setWaveHeight(1)
 
 -- Stream debug
 --[[
@@ -57,7 +60,5 @@ addEventHandler( "onClientElementStreamOut", root,
 )
 ]]
 --setCloudsEnabled(false)
-setOcclusionsEnabled (false)
-setFarClipDistance( 1500 ) 
-setWaveHeight(2)
+
 --setFarClipDistance( 9999 ) 

@@ -1,4 +1,4 @@
-MapName = 'Output'
+MapName = 'vcs'
 
 GlobalX = 0
 GlobalY = 0

@@ -21,11 +21,12 @@ IDE DATA\MAPS\nbeachw\nbeachw.IDE
 IDE DATA\MAPS\islandsf\islandsf.IDE
 IDE DATA\MAPS\oceandn\oceandn.IDE
 IDE DATA\MAPS\oceandrv\oceandrv.IDE
-IDE DATA\MAPS\nbeach\nbeach.IDE #CRASH
+IDE DATA\MAPS\nbeach\nbeach.IDE
 IDE DATA\MAPS\nbeachbt\nbeachbt.IDE
-IDE DATA\MAPS\washintN\washintN.IDE #CRASH
-IDE DATA\MAPS\washintS\washintS.IDE #CRASH
-IDE DATA\MAPS\mall\mall.IDE #CRASH
+IDE DATA\MAPS\washintN\washintN.IDE
+IDE DATA\MAPS\washintS\washintS.IDE
+IDE DATA\MAPS\mall\mall.IDE
+IDE DATA\MAPS\stadium\stadium.IDE
 IDE DATA\MAPS\shops\shops.IDE
 IDE DATA\MAPS\empire\empire.IDE
 IDE DATA\MAPS\leveldes\levelxre.IDE
@@ -50,6 +51,8 @@ IPL DATA\MAPS\oceandrv\oceandrv.IPL
 IPL DATA\MAPS\nbeach\nbeach.IPL
 IPL DATA\MAPS\nbeachbt\nbeachbt.IPL
 IPL DATA\MAPS\mall\mall.IPL
+IPL DATA\MAPS\stadium\stadium.IPL
 IPL DATA\MAPS\washintN\washintN.IPL
 IPL DATA\MAPS\washintS\washintS.IPL
 IPL DATA\MAPS\leveldes\levelxre.IPL
+IPL DATA\MAPS\empire\empire.IPL

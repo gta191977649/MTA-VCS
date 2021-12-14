@@ -42,18 +42,6 @@ objs
 3838, LODrob_1_C, business, 1000, 0
 3839, LODsmug_1_C, business, 1000, 0
 3840, LODprot_1_C, business, 1000, 0
-#3841 medium LOD
-#3842 medium LOD
-#3843 medium LOD
-#3844 medium LOD
-#3845 medium LOD
-#3846 medium LOD
-#3847 large LOD
-#3848 large LOD
-#3849 large LOD
-#3850 large LOD
-#3851 large LOD
-#3852 large LOD
 3871, eb_pros_1_A_int, eb_small-time, 250, 2097152
 3872, eb_prot_1_A_int, eb_small-time, 250, 2097152
 3873, eb_loan_1_A_int, eb_small-time, 250, 2097152
@@ -84,14 +72,6 @@ objs
 3898, eb_prot_3_A_int_a, eb_high-roll, 250, 2097228
 3899, eb_rob_3_A_int_a, eb_high-roll, 250, 2097228
 3900, eb_smug_3_A_int_a, eb_high-roll, 250, 2097228
-#3901 large interior dam
-#3902 large interior dam
-#3903 large interior dam
-#3904 large interior dam
-#3905 large interior dam
-#3906 large interior dam
-#
-#Alpha
 3907, eb_rob_1_B_a, business, 450, 68
 3908, eb_drug_1_B_a, business, 450, 68
 3909, eb_loan_1_B_a, business, 450, 68
@@ -110,8 +90,6 @@ objs
 3922, eb_prot_3_B_a, business, 450, 68
 3923, eb_rob_3_B_a, business, 450, 68
 3924, eb_smug_3_B_a, business, 450, 68
-#
-#Fence
 3925, eb_rob_1_B_f, business, 450, 4
 3926, eb_drug_1_B_f, business, 450, 4
 3927, eb_loan_1_B_f, business, 450, 4
@@ -136,8 +114,6 @@ objs
 3948, eb_pros_3_B_f, business, 450, 4
 3949, eb_rob_3_B_f, business, 450, 4
 3950, eb_smug_3_B_f, business, 450, 4
-#
-#Other
 3951, eb_forsale, business_intems, 450, 0
 3952, ebprop_bed, eb_prop, 80, 4096
 3953, ebprop_plantpot, eb_prop, 80, 4100
@@ -171,7 +147,6 @@ tobj
 3854, eb_drug_1_A_n, business_n, 1000, 0, 20, 6
 3855, eb_loan_1_A_n, business_n, 1000, 0, 20, 6
 3856, eb_rob_1_A_n, business_n, 1000, 0, 20, 6
-#3857 small neon
 3858, eb_prot_1_A_n, business_n, 1000, 68, 20, 6
 3859, eb_pros_2_A_n, business_n, 1000, 68, 20, 6
 3860, eb_drug_2_A_n, business_n, 1000, 0, 20, 6

@@ -1,7 +1,6 @@
 print("Writing Map Data")
 Map = {}
 
-
 for i,v in pairs(IPLList) do
 	local model = removeSpace(v[1])
 	local Interior = removeSpace(v[2])

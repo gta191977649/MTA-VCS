@@ -179,30 +179,48 @@ function loadMap (resource)																				 -- // Load the map
 end
 
 function defineDefintion(dTable,resourceName) -- Define defintion stuff
-	local ID,model,texture,collision,draw,alpha,backface,lod,turnOn,turnOff = unpack(dTable)
-	data.resourceData[resourceName][ID] = {model,texture,collision,draw,toBoolean(alpha),toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
+	local ID,model,texture,collision,draw,flag,backface,lod,turnOn,turnOff = unpack(dTable)
+	data.resourceData[resourceName][ID] = {model,texture,collision,draw,flag,toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
 	data.globalData[ID] = data.resourceData[resourceName][ID]
 	
 end
 
 function getData(name)
 	if data.globalData[name] then
-		local _,_,_,drawdist,_,cull,lod,_,_,id = unpack(data.globalData[name])
-		return cull,lod,id,drawdist
+		
+		local _,_,_,drawdist,flag,cull,lod,_,_,id = unpack(data.globalData[name])
+		return cull,lod,id,drawdist,flag
 	else
 		return false,false,getModelFromID(name)
 	end
 end
+function setElementFlag(element,flag)
 
+	local flagTable = {
+		["2097152"] = function() -- disable backface culling
+			setElementDoubleSided(element,true)
+		end,
+		["128"] = function() -- breakable
+			print("Breakable")
+			--setObjectBreakable(element,true)
+		end,
+		["2097228"] = function() -- alpha on
+
+		end,
+	}
+
+	if flagTable[flag] then flagTable[flag]() end
+
+end
 
 function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 	if getModelFromID(model) then
 		blackList(model)
 	end
-	
-	local cull,lod,id,drawdist = getData(model)
-	
+	local cull,lod,id,drawdist,flag = getData(model)
+
 	if tonumber(id) then
+
 		local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
 		if not isElement(object) then
 			print(id,model)
@@ -212,8 +230,10 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 		if cull then
 			setElementDoubleSided(object,true)
 		end
-
 		setElementFrozen(object,true)
+		if flag ~= nil and tonumber(flag) ~= 0 then 
+			setElementFlag(object,flag)
+		end
 		-- deal with lods
 		if lod ~= "nil" or tonumber(drawdist) > 999 then
 			--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
@@ -224,8 +244,11 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 			--setElementData(lowLOD,'id',lod)
 			setElementID(lowLOD,model)	
 			setElementData(lowLOD,'id',model)
-			setElementInterior(lowLOD,int or 0)
+			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
+			if flag then 
+				setElementFlag(lowLOD,flag)
+			end
 			if cull then 
 				setElementDoubleSided(lowLOD,true)
 			end
