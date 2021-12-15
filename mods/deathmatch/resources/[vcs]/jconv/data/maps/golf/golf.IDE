@@ -1,48 +1,48 @@
 objs
 2085, golf_partA01, golfground, 450, 2097152
-2086, golf_partA02, golfground, 450, 2097152
-2087, golf_partA03, golfground, 450, 2097152
-2088, golf_partA04, golfground, 450, 2097152
-2089, golf_partA05, golfground, 450, 2097152
-2090, golf_partA06, golfground, 450, 2097152
-2091, golf_partA07, golfground, 450, 2097152
-2092, golf_partA08, golfground, 450, 2097152
-2093, golf_partA09, golfground, 450, 2097152
-2094, golf_partA10, golfground, 450, 2097152
-2095, golf_partA11, golfground, 450, 2097152
-2096, golf_partA12, golfground, 450, 2097152
-2097, golf_partA13, golfground, 450, 2097152
-2098, golf_partA14, golfground, 450, 2097152
-2099, golf_partB01, golfthigs, 450, 2097152
-2100, golf_partB02, golfthigs, 450, 2097152
-2101, golf_partB03, golfthigs, 450, 2097152
-2102, golf_partB04, golfthigs, 450, 2097152
-2103, golf_partB05, golfthigs, 450, 2097152
-2104, golf_partB06, golfthigs, 450, 2097152
-2105, golf_partB07, golfthigs, 450, 2097152
-2106, golf_partB08, golfthigs, 450, 2097152
-2107, golf_road01, golfroad, 450, 2097152
-2108, golf_road02, golfroad, 450, 2097152
-2109, golf_road03, golfroad, 450, 2097152
-2110, golf_road04, golfroad, 450, 2097152
-2111, golf_partC01, golfthigs, 450, 2097152
-2112, golf_partC02, golfthigs, 450, 2097152
-2113, golf_partC03, golfthigs, 450, 2097152
-2114, golf_partC04, golfthigs, 450, 2097152
-2115, golf_partC05, golfthigs, 450, 2097152
-2116, golf_partC06, golfthigs, 450, 2097152
-2117, golf_partC07, golfthigs, 450, 2097152
-2118, golf_partC08, golfthigs, 450, 2097152
-2119, golf_partC09, golfthigs, 450, 2097152
-2120, golf_partC10, golfthigs, 450, 2097152
-2121, golf_partC11, golfthigs, 450, 2097152
-2122, golf_partC12, golfthigs, 450, 2097152
-2123, golf_partC13, golfthigs, 450, 2097152
-2124, golf_partC14, golfthigs, 450, 2097152
-2125, golf_partC15, golfthigs, 450, 2097152
-2126, golf_partC16, golfthigs, 450, 2097152
-2127, golf_partC17, golfthigs, 450, 2097152
-2128, golf_partC18, golfthigs, 450, 2097152
+2086, golf_partA02, golf_txd, 450, 2097152
+2087, golf_partA03, golf_txd, 450, 2097152
+2088, golf_partA04, golf_txd, 450, 2097152
+2089, golf_partA05, golf_txd, 450, 2097152
+2090, golf_partA06, golf_txd, 450, 2097152
+2091, golf_partA07, golf_txd, 450, 2097152
+2092, golf_partA08, golf_txd, 450, 2097152
+2093, golf_partA09, golf_txd, 450, 2097152
+2094, golf_partA10, golf_txd, 450, 2097152
+2095, golf_partA11, golf_txd, 450, 2097152
+2096, golf_partA12, golf_txd, 450, 2097152
+2097, golf_partA13, golf_txd, 450, 2097152
+2098, golf_partA14, golf_txd, 450, 2097152
+2099, golf_partB01, golf_txd, 450, 2097152
+2100, golf_partB02, golf_txd, 450, 2097152
+2101, golf_partB03, golf_txd, 450, 2097152
+2102, golf_partB04, golf_txd, 450, 2097152
+2103, golf_partB05, golf_txd, 450, 2097152
+2104, golf_partB06, golf_txd, 450, 2097152
+2105, golf_partB07, golf_txd, 450, 2097152
+2106, golf_partB08, golf_txd, 450, 2097152
+2107, golf_road01, golf_txd, 450, 2097152
+2108, golf_road02, golf_txd, 450, 2097152
+2109, golf_road03, golf_txd, 450, 2097152
+2110, golf_road04, golf_txd, 450, 2097152
+2111, golf_partC01, golf_txd, 450, 2097152
+2112, golf_partC02, golf_txd, 450, 2097152
+2113, golf_partC03, golf_txd, 450, 2097152
+2114, golf_partC04, golf_txd, 450, 2097152
+2115, golf_partC05, golf_txd, 450, 2097152
+2116, golf_partC06, golf_txd, 450, 2097152
+2117, golf_partC07, golf_txd, 450, 2097152
+2118, golf_partC08, golf_txd, 450, 2097152
+2119, golf_partC09, golf_txd, 450, 2097152
+2120, golf_partC10, golf_txd, 450, 2097152
+2121, golf_partC11, golf_txd, 450, 2097152
+2122, golf_partC12, golf_txd, 450, 2097152
+2123, golf_partC13, golf_txd, 450, 2097152
+2124, golf_partC14, golf_txd, 450, 2097152
+2125, golf_partC15, golf_txd, 450, 2097152
+2126, golf_partC16, golf_txd, 450, 2097152
+2127, golf_partC17, golf_txd, 450, 2097152
+2128, golf_partC18, golf_txd, 450, 2097152
 2129, golf_vege01, golfvegealpha, 1500, 2097156
 2130, golf_vege02, golfvegealpha, 1500, 2097156
 2131, golf_vege03, golfvegealpha, 1500, 2097156
@@ -102,28 +102,3 @@ objs
 2185, LODf_road03, golf_LOD, 1500, 2097152
 2186, LODf_road04, golf_LOD, 1500, 2097152
 end
-tobj
-end
-path
-end
-2dfx
-end
-txdp
-golfthigs, golfground
-golfroad, golfground
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
