@@ -58,7 +58,7 @@ local function updateWorldDiffuse()
             --print(minute)
             local r, g, b = getEasingValueFromTime(worldDiffuse, hour, minute)
             dxSetShaderValue(shader, "WorldDiffuse", {r/255, g/255, b/255})
-            dxSetShaderValue(shader, "Intensity",1.35)
+            dxSetShaderValue(shader, "Intensity",1.55)
             -- apply ps2 vehicle diffuse
             local inten = 60
             local r = r + inten < 255 and r+ inten or r 

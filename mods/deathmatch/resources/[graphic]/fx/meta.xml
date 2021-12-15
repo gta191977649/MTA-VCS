@@ -1,0 +1,6 @@
+<meta>
+    <script src="fx.lua" type="client"/>
+    <file src="texreplace.fx" type="client"/>
+    <!-- FX -->
+    <file src="src/coronastar.png" type="client"/>
+</meta>

@@ -15,3 +15,4 @@ function disablePs2Effect()
     disableDiffuse()
 end
 enablePs2Effect()
+--enableDiffuse()

@@ -7,7 +7,7 @@
     <script src="sun/sunshader.lua" type="client" cache="false"/>
     <script src="v_pipe/v_reflect.lua" type="client" cache="false"/>
     <script src="v_pipe/headlight.lua" type="client" cache="false"/>
-    <script src="diffuse/diffuse_old.lua" type="client" cache="false"/>
+    <script src="diffuse/diffuse_vcs.lua" type="client" cache="false"/>
     <script src="trail/RTPool.lua" type="client" cache="false"/>
     <script src="trail/trail.lua" type="client" cache="false"/>
     <script src="weather/weather.lua" type="client" cache="false"/>
@@ -21,6 +21,7 @@
     <script src="radiosity/radiosity.lua" type="client" cache="false"/>
     <script src="ps2.lua" type="client" cache="false"/>
 
+    <file src="fx/buildingvs_vcs.fx" type="client" cache="false"/>
     <file src="fx/addBlend.fx" type="client" cache="false"/>
 	<file src="fx/blurH.fx" type="client" cache="false"/>
 	<file src="fx/blurV.fx" type="client" cache="false"/>

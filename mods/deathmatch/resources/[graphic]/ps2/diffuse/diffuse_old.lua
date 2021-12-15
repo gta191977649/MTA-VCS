@@ -63,7 +63,7 @@ function updateWorldDiffuse()
             local hour, minute = getTime()
             local r, g, b = getEasingValueFromTime(worldDiffuse, hour, minute)
             dxSetShaderValue(shader, "WorldDiffuse", {r/255, g/255, b/255})
-            dxSetShaderValue(shader, "Intensity",1.5)
+            dxSetShaderValue(shader, "Intensity",2)
             local inten = 0
             local r = r + inten < 255 and r+ inten or r 
             local g = g + inten < 255 and g+ inten or g 
