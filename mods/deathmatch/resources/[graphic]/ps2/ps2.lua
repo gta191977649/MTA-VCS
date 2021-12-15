@@ -3,7 +3,7 @@ function enablePs2Effect()
     enableTrail()
     enableVehiclePipe()
     enableRotorPs2Fix()
-    --enableBloom()
+    enableBloom()
     enableDiffuse()
 end
 function disablePs2Effect()

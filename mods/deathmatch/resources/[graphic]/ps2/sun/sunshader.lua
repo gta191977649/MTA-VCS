@@ -141,7 +141,7 @@ function SunShader:update()
 			-- check if can see through
 			local px,py,pz = getElementPosition(localPlayer)
 			if getElementInterior(localPlayer) == 0 then
-				self.sunSize = getSunSize () * 0.08
+				self.sunSize = getSunSize () * 0.05
 				
 			else
 				self.sunSize = 0
