@@ -1573,6 +1573,7 @@ nbeachbt_s8,nbeachbt_s8,nbeachbt_s,nbeachbt_s8,300,0,true,nil
 nbeachbt_s9,nbeachbt_s9,nbeachbt_s,nbeachbt_s9,300,0,true,nil
 nbeachbt_s10,nbeachbt_s10,nbeachbt_s,nbeachbt_s10,300,0,true,nil
 nbeachbt_s11,nbeachbt_s11,nbeachbt_s,nbeachbt_s11,300,0,true,nil
+dr_dts_winsa,dr_dts_winsa,knackers,dr_dts_winsa,1500,2097228,true,nil,20,6
 bridge_r1,bridge_r1,bridge_r,bridge_r1,450,2097153,true,LODdge_r1
 bridge_r2,bridge_r2,bridge_r,bridge_r2,450,2097153,true,LODdge_r2
 bridge_r3,bridge_r3,bridge_r,bridge_r3,450,2097153,true,LODdge_r3
@@ -2836,6 +2837,14 @@ LODhintS_buildG04,LODhintS_buildG04,wshS_LOD,LODhintS_buildG04,1500,2097152,true
 LODhintS_buildH04,LODhintS_buildH04,wshS_LOD,LODhintS_buildH04,1500,2097152,true,nil
 LODhintS_buildD03,LODhintS_buildD03,wshS_LOD,LODhintS_buildD03,1500,2097152,true,nil
 LODhintS_groundB01,LODhintS_groundB01,wshS_LOD,LODhintS_groundB01,1500,2097152,true,nil
+rsbrdg4_dt_neon,rsbrdg4_dt_neon,knackers,rsbrdg4_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg07_dt_neon,rsbrdg07_dt_neon,knackers,rsbrdg07_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg1_dt_neon,rsbrdg1_dt_neon,knackers,rsbrdg1_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg5_dt_neon,rsbrdg5_dt_neon,knackers,rsbrdg5_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg2_dt_neon,rsbrdg2_dt_neon,knackers,rsbrdg2_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg6_dt_neon,rsbrdg6_dt_neon,knackers,rsbrdg6_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg3_dt_neon,rsbrdg3_dt_neon,knackers,rsbrdg3_dt_neon,1500,2097228,true,nil,20,6
+rsbrdg_dt_neon,rsbrdg_dt_neon,knackers,rsbrdg_dt_neon,1500,2097228,true,nil,20,6
 mainland_garage,mainland_garage,nbw_buildingsZ,mainland_garage,450,2097152,true,nil
 kb_planter+bush,kb_planter+bush,veg_leavesplnt,kb_planter+bush,40,2097284,true,nil
 nbw_alpha09,nbw_alpha09,nbw_alphavegs,nbw_alpha09,450,2097228,true,nil

@@ -21,7 +21,7 @@
     <script src="radiosity/radiosity.lua" type="client" cache="false"/>
     <script src="ps2.lua" type="client" cache="false"/>
 
-    <file src="fx/buildingvs_vcs.fx" type="client" cache="false"/>
+    <file src="fx/building_vcs.fx" type="client" cache="false"/>
     <file src="fx/addBlend.fx" type="client" cache="false"/>
 	<file src="fx/blurH.fx" type="client" cache="false"/>
 	<file src="fx/blurV.fx" type="client" cache="false"/>
