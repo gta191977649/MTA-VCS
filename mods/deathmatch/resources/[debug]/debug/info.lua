@@ -37,7 +37,7 @@ end
 setOcclusionsEnabled (false)
 setFarClipDistance( 1500 ) 
 setWaveHeight(1)
-
+print(engineStreamingFreeUpMemory (104857600))
 -- Stream debug
 --[[
 addEventHandler( "onClientElementStreamIn", root,
