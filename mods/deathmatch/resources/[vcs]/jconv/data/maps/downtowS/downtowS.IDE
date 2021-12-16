@@ -160,7 +160,7 @@ objs
 1727, LODntowS_a6, downtowS_LOD, 3000, 4
 end
 tobj
-1728, downtowS_n1, neons1, 3000, 4, 20, 6
+1728, downtowS_n1, neons1, 3000, 2097388, 20, 6
 1729, downtowS_n2, neons1, 3000, 2097388, 20, 6
 1730, downtowS_n3, neons1, 3000, 2097388, 20, 6
 1731, downtowS_n4, neons1, 3000, 2097388, 20, 6
