@@ -122,7 +122,8 @@ for i,v in pairs(IPLTable) do
 			local PosX,PosY,PosZ = Split[4],Split[5],Split[6]
 			local QX,QY,QZ,QW = Split[7],Split[8],Split[9],Split[10]
 			--local QX,QY,QZ,QW = Split[10],Split[11],Split[12],Split[13] -- VC Format
-			local xr,yr,zr = quaternion_to_euler_angle(QW,QX,QY,QZ)
+			--local xr,yr,zr = quaternion_to_euler_angle(QW,QX,QY,QZ)
+			local xr,yr,zr = fromQuaternion(QX,QY,QZ,QW) -- replace algorithm
 			local LOD = tonumber(Split[11])
 			if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) then
 				if IDEList1[ID] or Defaults[Model] or Defaults2[Model] then -- If it doesn't exist ignore it
