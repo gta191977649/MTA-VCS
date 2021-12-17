@@ -1,0 +1,4 @@
+<meta>
+    <script src="timecyc_vcs.lua" type="client"/>
+    <file src="timecyc_vcs.dat" type="client"/>
+</meta>
