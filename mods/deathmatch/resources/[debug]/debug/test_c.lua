@@ -160,6 +160,7 @@ end)
 
 function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, worldZ, clickedElement )
     --if an element was clicked on screen
+    if not clickElement then return end
     engineRemoveShaderFromWorldTexture ( click_myShader, "*" )
     if clickedElement and  getElementType ( clickedElement ) == "object"  then
         local name = getElementID(clickedElement)
