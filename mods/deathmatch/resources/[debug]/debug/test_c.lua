@@ -150,3 +150,23 @@ function toggleWaterDrawnLast ()
 end
 addCommandHandler ('togglewater', toggleWaterDrawnLast)
 ]]
+local clickElement = false
+local click_myShader, tec = dxCreateShader ( "fx/tex_names.fx", 1, 0, false, "all" )
+addCommandHandler("obj",function() 
+    clickElement = not clickElement
+    showCursor(clickElement)
+end)
+
+
+function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, worldZ, clickedElement )
+    --if an element was clicked on screen
+    engineRemoveShaderFromWorldTexture ( click_myShader, "*" )
+    if clickedElement and  getElementType ( clickedElement ) == "object"  then
+        local name = getElementID(clickedElement)
+        engineApplyShaderToWorldTexture ( click_myShader, "*",clickedElement )
+        setClipboard( name )
+        outputChatBox(name)
+        showCursor(false)
+    end
+end
+addEventHandler ( "onClientClick", root, addLabelOnClick )

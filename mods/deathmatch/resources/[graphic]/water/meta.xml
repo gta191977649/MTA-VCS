@@ -4,11 +4,11 @@
     <script src="water.lua" type="client"/>
     <script src="fx.lua" type="client"/>
     <file src="fx/water_vc.fx" type="client" cache="false"/>
-
+    <file src="images/waterclear256.png" type="client"/>
     <!-- 
     <script src="c_main.lua" type="client"/>
     <script src="c_switch.lua" type="client"/>
-    <file src="images/waterclear256.png" type="client"/>
+    
     <file src="images/waterClear_NRM.dds" type="client"/>
     <file src="images/cube_env256.dds" type="client"/>
     <file src="images/water.png" type="client"/>

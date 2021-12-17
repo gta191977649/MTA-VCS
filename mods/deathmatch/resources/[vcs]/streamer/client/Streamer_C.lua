@@ -43,7 +43,7 @@ function loadMap ( Proccessed,resourceName )
 			engineReplaceCOL(collision,data[10])
 			table.insert(resource[resourceName],cache)
 			
-			engineReplaceModel(model,data[10],isTransparentFlag(data[5]))
+			engineReplaceModel(model,data[10],isTransparentFlag(tonumber(data[5])))
 			--engineReplaceModel(model,data[10],true)
 			--triggerServerEvent("onResourceLoading",root,data[1])
 			

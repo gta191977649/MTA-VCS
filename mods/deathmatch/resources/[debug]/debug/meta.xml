@@ -12,7 +12,8 @@
     <script src="vc_trail.lua" type="client" />
     <file src="mta-helper.fx" type="client" />
     -->
-   
+    <file src="fx/tex_names.fx" type="client" />
+
     <export function="addDebugMessage" type="client"/>
 
 
