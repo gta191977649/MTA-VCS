@@ -16,6 +16,7 @@ function start()
         local weatherid = getWeather()
         setWeatherFromTimecyc(weatherid,hour,min)
     end
+    resetWaterColor()
     resetSunColor()
     resetSunSize()
     addEventHandler ( "onClientPreRender", root, updateTimecyc )
