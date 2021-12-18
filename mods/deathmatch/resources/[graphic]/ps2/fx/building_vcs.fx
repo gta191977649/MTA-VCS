@@ -3,7 +3,7 @@
 //#define surfAmb (surfProps.x)
 #include "mta-helper.fx"
 
-#define surfAmb 0.5
+#define surfAmb 0.35
 #define ambient gGlobalAmbient
 
 sampler Sampler0 = sampler_state
