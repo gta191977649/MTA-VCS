@@ -25,7 +25,7 @@ function loadMap ( Proccessed,resourceName )
 		
 		if tonumber(data[10]) then
 			DEBUG:addDebugMessage(string.format("%s model\n",data[1]))
-			print(string.format("attmpt load: %s ",data[1]))
+			print(string.format("request: %s",data[1]))
 			
 			-- load txd
 			local path = ':'..resourceName..'/Content/textures/'..data[2]..'.txd'
@@ -61,6 +61,7 @@ function loadMap ( Proccessed,resourceName )
 			--engineSetModelLODDistance (data[10],math.max(tonumber(data[4]),270))
 			engineSetModelLODDistance(data[10],tonumber(data[4]))
 			table.insert(resource[resourceName],cache)
+			print(string.format("%s loaded.",data[1]))
 		end
 	end)
 

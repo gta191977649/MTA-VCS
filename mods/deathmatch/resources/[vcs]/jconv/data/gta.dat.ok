@@ -1,7 +1,8 @@
 IDE DATA\MAPS\generic\vegepart.IDE
-IDE DATA\MAPS\generic\barriers.IDE
-IDE DATA\MAPS\generic\dynamic.IDE
 IDE DATA\MAPS\generic\multiobj.IDE
+IDE DATA\MAPS\generic\dynamic.IDE
+IDE DATA\MAPS\generic\dynamic2.IDE
+IDE DATA\MAPS\generic\procobj.IDE
 
 IDE DATA\MAPS\airportN\airportN.IDE
 IDE DATA\MAPS\airport\airport.IDE
@@ -15,6 +16,21 @@ IDE DATA\MAPS\bridge\bridge.IDE
 IDE DATA\MAPS\golf\golf.IDE
 IDE DATA\MAPS\downtowS\downtowS.IDE
 IDE DATA\MAPS\downtowN\downtowN.IDE
+IDE DATA\MAPS\cisland\cisland.IDE
+IDE DATA\MAPS\nbeachw\nbeachw.IDE
+IDE DATA\MAPS\islandsf\islandsf.IDE
+IDE DATA\MAPS\oceandn\oceandn.IDE
+IDE DATA\MAPS\oceandrv\oceandrv.IDE
+IDE DATA\MAPS\nbeach\nbeach.IDE
+IDE DATA\MAPS\nbeachbt\nbeachbt.IDE
+IDE DATA\MAPS\washintN\washintN.IDE
+IDE DATA\MAPS\washintS\washintS.IDE
+IDE DATA\MAPS\mall\mall.IDE
+IDE DATA\MAPS\stadium\stadium.IDE
+IDE DATA\MAPS\shops\shops.IDE
+IDE DATA\MAPS\empire\empire.IDE
+IDE DATA\MAPS\leveldes\levelxre.IDE
+IDE DATA\MAPS\neons\neons.IDE
 
 IPL DATA\MAPS\airport\airport.IPL
 IPL DATA\MAPS\airportN\airportN.IPL
@@ -28,3 +44,17 @@ IPL DATA\MAPS\bridge\bridge.IPL
 IPL DATA\MAPS\golf\golf.IPL
 IPL DATA\MAPS\downtowS\downtowS.IPL
 IPL DATA\MAPS\downtowN\downtowN.IPL
+IPL DATA\MAPS\cisland\cisland.IPL
+IPL DATA\MAPS\nbeachw\nbeachw.IPL
+IPL DATA\MAPS\islandsf\islandsf.IPL
+IPL DATA\MAPS\oceandn\oceandn.IPL
+IPL DATA\MAPS\oceandrv\oceandrv.IPL
+IPL DATA\MAPS\nbeach\nbeach.IPL
+IPL DATA\MAPS\nbeachbt\nbeachbt.IPL
+IPL DATA\MAPS\mall\mall.IPL
+IPL DATA\MAPS\stadium\stadium.IPL
+IPL DATA\MAPS\washintN\washintN.IPL
+IPL DATA\MAPS\washintS\washintS.IPL
+IPL DATA\MAPS\leveldes\levelxre.IPL
+IPL DATA\MAPS\empire\empire.IPL
+IPL DATA\MAPS\neons\neons.IPL

@@ -1,22 +1,16 @@
 objs
-
 5001, int_shop, int_shopstruct, 100, 32768 
-
 5003, mal_viento, mal_viento02, 80, 2097152
-
 5005, viento_shad, shops_shad, 50, 2097220
 5006, shop_shad, shops_shad, 50, 2097220
-
 5008, nalgas_shad, shops_shad, 50, 2097220
 5009, nalgas_granders, nalgas_granders, 80, 2097152
 5010, int_shop01, int_shopstruct, 100, 32768 
 5011, verdi, verdi, 80, 2097152
 5012, verdi_shad, shops_shad, 50, 2097220
 5013, shop_shad01, shops_shad, 50, 2097220
-
 5015, electric_boulevard, electric_boulevard, 80, 2097152
 5016, electric_shad, shops_shad, 50, 2097220 
-
 5019, mal_viento01, mal_viento, 80, 2097152
 5020, viento01_shad, shops_shad, 50, 2097220
 5021, int_shop02, int_shopstruct, 100, 32768 

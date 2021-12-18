@@ -115,32 +115,32 @@ objs
 3949, eb_rob_3_B_f, business, 450, 4
 3950, eb_smug_3_B_f, business, 450, 4
 3951, eb_forsale, business_intems, 450, 0
-3952, ebprop_bed, eb_prop, 80, 4096
-3953, ebprop_plantpot, eb_prop, 80, 4100
-3954, ebprop_floorlamp, eb_prop, 80, 4096
-3955, ebprop_chair, ebprop, 80, 4096
-3956, ebprop_speaker, ebprop, 80, 4096
-3957, ebprop_tablewide, ebprop, 80, 4096
-3958, mar_a2_stereo, ebprop, 80, 4096
-3959, ebprop_drugtableA, ebprop, 80, 4096
-3960, ebprop_cashreg, ebprop, 80, 4096
-3961, ebprop_delicounter, ebprop, 80, 4228
-3962, ebprop_freezer, ebprop, 80, 4228
-3963, ebprop_clothesrail, ebprops2, 80, 4096
-3964, ebprop_freezerfloor, ebprop, 80, 4096
-3965, mar_a2tv, ebprop, 80, 4096
-3966, ebprop_gblaster, ebprop, 80, 4096
-3967, ebprop_drugtableB, ebprop, 80, 4100
-3968, ebprop_officedeskA, ebprop, 80, 4096
-3969, ebprop_crate, ebprop, 80, 4096
-3970, ebprop_comfychair, ebprop, 80, 4096
-3971, ebprop_bigbed, ebprop, 80, 4096
-3972, ebprop_sack, ebprop, 80, 4096
-3973, ebprop_filecab, ebprop, 80, 4096
-3974, ebprop_copier, ebprop, 80, 4096
-3975, ebprop_tablesquare, ebprop, 80, 4096
-3976, ebprop_barstool, ebprop, 80, 4096
-3977, ebprop_tableround, ebprop, 80, 4096
+#3952, ebprop_bed, eb_prop, 80, 4096
+#3953, ebprop_plantpot, eb_prop, 80, 4100
+#3954, ebprop_floorlamp, eb_prop, 80, 4096
+#3955, ebprop_chair, ebprop, 80, 4096
+#3956, ebprop_speaker, ebprop, 80, 4096
+#3957, ebprop_tablewide, ebprop, 80, 4096
+#3959, ebprop_drugtableA, ebprop, 80, 4096
+#3960, ebprop_cashreg, ebprop, 80, 4096
+#3961, ebprop_delicounter, ebprop, 80, 4228
+#3963, ebprop_clothesrail, ebprops2, 80, 4096
+#3965, mar_a2tv, ebprop, 80, 4096
+#3966, ebprop_gblaster, ebprop, 80, 4096
+#3967, ebprop_drugtableB, ebprop, 80, 4100
+#3968, ebprop_officedeskA, ebprop, 80, 4096
+#3969, ebprop_crate, ebprop, 80, 4096
+#3970, ebprop_comfychair, ebprop, 80, 4096
+#3971, ebprop_bigbed, ebprop, 80, 4096
+#3972, ebprop_sack, ebprop, 80, 4096
+#3973, ebprop_filecab, ebprop, 80, 4096
+#3974, ebprop_copier, ebprop, 80, 4096
+#3975, ebprop_tablesquare, ebprop, 80, 4096
+#3976, ebprop_barstool, ebprop, 80, 4096
+#3977, ebprop_tableround, ebprop, 80, 4096
+#3962, ebprop_freezer, ebprop, 80, 4228 #BUG!!!!!!
+#3958, mar_a2_stereo, ebprop, 80, 4096 #BUG!!!!!!
+#3964, ebprop_freezerfloor, ebprop, 80, 4096 #BUG!!!!!!
 end
 tobj
 3853, eb_pros_1_A_n, business_n, 1000, 68, 20, 6
