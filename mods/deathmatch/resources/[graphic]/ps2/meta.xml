@@ -58,4 +58,5 @@
 
     <export function="enablePs2Effect" type="client" />
     <export function="disablePs2Effect" type="client"/>
+    <export function="setRadiosity" type="client"/>
 </meta>

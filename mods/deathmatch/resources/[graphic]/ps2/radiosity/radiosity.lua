@@ -76,9 +76,9 @@ end
 function setEffectVariables()
     local v = Settings.var
     -- Bloom
-    v.cutoff = 0.6
-    v.power = 2
-	v.blur = 0.5
+    v.cutoff = 0.5
+    v.power = 1
+	v.blur = 0.1
     v.bloom = 3
     v.blendR = 204
     v.blendG = 153
@@ -87,11 +87,17 @@ function setEffectVariables()
 
 	-- Debugging
     v.PreviewEnable=0
-    v.PreviewPosY=0
-    v.PreviewPosX=100
-    v.PreviewSize=70
+    v.PreviewPosY=100
+    v.PreviewPosX=0
+    v.PreviewSize=200
+
+
 end
 
+function setRadiosity(intensity) 
+	--Settings.var.cutoff = limit * 0.7
+	Settings.var.bloom = 3 * (intensity/50)
+end
 -----------------------------------------------------------------------------------
 -- onClientHUDRender
 -----------------------------------------------------------------------------------
@@ -115,7 +121,7 @@ addEventHandler( "onClientHUDRender", root,
 		current = applyDownsample( current )
 		current = applyGBlurH( current, v.bloom, v.blur )
 		current = applyGBlurV( current, v.bloom, v.blur )
-
+		print(v.bloom)
 		-- When we're done, turn the render target back to default
 		dxSetRenderTarget()
 

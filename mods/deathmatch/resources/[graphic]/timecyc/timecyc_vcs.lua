@@ -3,6 +3,7 @@
     (C) Project Sparrow 2021
     By: Nurupo
 ]]
+PS2 = exports.ps2
 Weather = {
     id = 0,
     blend = false,
@@ -19,6 +20,8 @@ function start()
     resetWaterColor()
     resetSunColor()
     resetSunSize()
+    -- setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
+    resetColorFilter()
     addEventHandler ( "onClientPreRender", root, updateTimecyc )
 end
 
@@ -42,7 +45,7 @@ function loadTimeCycle(filename)
      
         end
     end
-    --iprint(#Timecyc[1])
+    iprint(#Timecyc[7])
 
     start()
 end
@@ -122,17 +125,15 @@ function getInterpolationValue(a,b,hour,min)
     local length = 1
     local intervalIndex = getTimeIntervalIndex(hour,min)
 
-    local current = (hour-getTimeIntervalLengthFromIndex(intervalIndex)) + min/60 
+    local current = min/60 
     local progress = current/length -- get time escapted percentage & normalized to 0-1 range
 
-    local result = a * (1-progress) + b * progress
-
-	if result >= b then
-		result = b
-	elseif result <= a then
-		result = a
-	end
-	return result
+    if b > a then 
+        return a + ((b - a) * progress)
+    else
+        return a - ((a - b) * progress)
+    end
+	
 end
 
 function getGradientInterpolationValue(startGrident,endGradient,hour,min)
@@ -145,40 +146,42 @@ function getGradientInterpolationValue(startGrident,endGradient,hour,min)
 end
 function setWeatherFromTimecyc(weather_id,hour,min) 
     weather_id = weather_id + 1 -- due to sa weather start from 0
+    if not Timecyc[weather_id] then 
+        weather_id = 1
+    end
     local intervalIndex = getTimeIntervalIndex(hour,min)
 
     local WT_S = Timecyc[weather_id][intervalIndex]
     local endTntervalIndex = intervalIndex + 1 > #Timecyc[weather_id] and 1 or intervalIndex + 1
     local WT_E = Timecyc[weather_id][endTntervalIndex]
-
+    -- color filter 48
+    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3], 30)
 
     -- sky gradient
     local skyTopGradient = getGradientInterpolationValue({WT_S[16],WT_S[17],WT_S[18]},{WT_E[16],WT_E[17],WT_E[18]},hour,min) -- SkytopGradient
     local skyBottomGradient = getGradientInterpolationValue({WT_S[19],WT_S[20],WT_S[21]},{WT_E[19],WT_E[20],WT_E[21]},hour,min) -- SkyBottomGradient
-  
-    --local skyTopGradient = {WT_S[16],WT_S[17],WT_S[18]}
-    --local skyBottomGradient = {WT_S[19],WT_S[20],WT_S[21]}
-    --iprint(skyTopGradient)
 
     setSkyGradient(skyTopGradient[1],skyTopGradient[2],skyTopGradient[3],skyBottomGradient[1],skyBottomGradient[2],skyBottomGradient[3])
 
     -- sun 
-    --local sunColor = getGradientInterpolationValue({WT_S[22],WT_S[23],WT_S[24]},{WT_E[22],WT_E[23],WT_E[24]},hour,min) 
-    --setSunColor(sunColor[1],sunColor[2],sunColor[3])
+    local sunColor = getGradientInterpolationValue({WT_S[25],WT_S[26],WT_S[27]},{WT_E[25],WT_E[26],WT_E[27]},hour,min) 
+    setSunColor(sunColor[1],sunColor[2],sunColor[3])
     --iprint(sunColor)
 
-    --local sunSize = getInterpolationValue(WT_S[28],WT_E[28],hour,min)
-    --setSunSize(sunSize)
-    
-    --print(sunSize)
+    local sunSize = getInterpolationValue(WT_S[28],WT_E[28],hour,min)
+    setSunSize(sunSize)
     --  water
-    --local waterColor = getGradientInterpolationValue({WT_S[37],WT_S[38],WT_S[39]},{WT_E[37],WT_E[38],WT_E[39]},hour,min) 
-    --local waterAlpha = getInterpolationValue(WT_S[40],WT_E[40],hour,min)
+    --local waterColor = getGradientInterpolationValue({WT_S[51],WT_S[52],WT_S[53]},{WT_E[51],WT_E[52],WT_E[53]},hour,min) 
+    --local waterAlpha = getInterpolationValue(WT_S[54],WT_E[54],hour,min)
     --setWaterColor(waterColor[1],waterColor[2],waterColor[3],waterAlpha)
     -- environmental effect
 
     setFarClipDistance(getInterpolationValue(WT_S[34],WT_E[34],hour,min))
-    --setFogDistance(getInterpolationValue(WT_S[29],WT_E[29],hour,min))
+    setFogDistance(getInterpolationValue(WT_S[35],WT_E[35],hour,min))
+
+    -- radiosity
+    print("set radio")
+    PS2:setRadiosity(getInterpolationValue(WT_S[36],WT_E[36],hour,min))
 end
 --[[
 function setWeatherFromTimecyc(weather_id,hour,min) 

@@ -3,7 +3,7 @@
 //#define surfAmb (surfProps.x)
 #include "mta-helper.fx"
 
-#define surfAmb 0.6
+#define surfAmb 0.5
 #define ambient gGlobalAmbient
 
 sampler Sampler0 = sampler_state
@@ -13,7 +13,7 @@ sampler Sampler0 = sampler_state
 
 struct VS_INPUT
 {
-	float4 Position		: POSITION;
+	float4 Position		: POSITION; 
 	float2 TexCoord		: TEXCOORD0;
 	float4 Color		: COLOR0;
 };
@@ -58,7 +58,6 @@ technique worldfiff
     pass P0
     {
         VertexShader = compile vs_2_0 Vertex_Pipeline();
-        //PixelShader = compile ps_2_0 Pixel_Pipeline();
-        
+    	PixelShader = compile ps_2_0 Pixel_Pipeline();
     }
 }

@@ -26,7 +26,7 @@ setTimer(function()
     local net_info = getNetworkStats ()
     local x,y,z = getElementPosition(localPlayer)
     DGS:dgsSetProperty(build_info,"text",string.format("VICE CITY STORIES FREEROAM - DEV BUILD"))
-    DGS:dgsSetProperty(debug_info,"text",string.format("STREAMING: %d KB FPS: %d",engineStreamingGetUsedMemory() * 0.001,getCurrentFPS()))
+    DGS:dgsSetProperty(debug_info,"text",string.format("WEA: %d STREAMING: %d KB FPS: %d",getWeather(),engineStreamingGetUsedMemory() * 0.001,getCurrentFPS()))
     DGS:dgsSetProperty(pos_info,"text",string.format("%f %f %f",x,y,z))
 
 end,100,0)
