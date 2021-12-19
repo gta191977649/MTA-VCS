@@ -4,12 +4,18 @@ tobj
 6207, rsbrdg_dt_neon, knackers, 1500, 2097228, 20, 6
 6203, rsbrdg3_dt_neon, knackers, 1500, 2097228, 20, 6
 6206, rsbrdg6_dt_neon, knackers, 1500,2097228, 20, 6
-6202, rsbrdg2_dt_neon, knackers,1500, 2097228, 20, 6
-6205, rsbrdg5_dt_neon, knackers,1500,2097228, 20, 6
+6202, rsbrdg2_dt_neon, knackers, 1500, 2097228, 20, 6
+6205, rsbrdg5_dt_neon, knackers, 1500,2097228, 20, 6
 6201, rsbrdg1_dt_neon, knackers, 1500,2097228, 20, 6
 6200, rsbrdg07_dt_neon, knackers, 1500,2097228, 20, 6
 6204, rsbrdg4_dt_neon, knackers, 1500, 2097228, 20, 6
 2652, dr_dts_winsa, knackers, 1500,2097228, 20, 6
+265334, dt_nitelites4, knackers, 1500,2097228, 20, 6
+265338, dt_nitelites1, knackers, 1500,2097228, 20, 6
+3035, pm_scraplights2, knackers, 1500,2097228, 20, 6
+3036, pm_scraplights, knackers, 1500,2097228, 20, 6
+968, dr_dks_neonA, knackers, 1500,2097228, 20, 6
+265336, dr_dts_winsb, knackers, 1500,2097228, 20, 6
 end
 path
 end

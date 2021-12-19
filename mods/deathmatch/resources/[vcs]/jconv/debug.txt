@@ -1,4 +1,5 @@
 
+ERROR - Model:dr_dts_winsb Missing DFF
 ERROR - IPL:lhouse_barrier1 Missing IDE
 ERROR - IPL:lhouse_barrier1 Missing IDE
 ERROR - IPL:lhouse_barrier1 Missing IDE
@@ -39,6 +40,7 @@ ERROR - IPL:bar_barrier12 Missing IDE
 ERROR - IPL:bar_barrier12 Missing IDE
 ERROR - IPL:bar_barrier12 Missing IDE
 ERROR - IPL:bar_barrier12 Missing IDE
+ERROR - IPL:dr_dts_winsb Missing IDE
 ERROR - IPL:ebprop_cashreg Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE

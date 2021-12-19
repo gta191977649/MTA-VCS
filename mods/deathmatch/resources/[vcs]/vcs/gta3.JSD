@@ -280,6 +280,7 @@ ap_rland02,ap_rland02,ap_viceairport,ap_rland02,450,0,true,LODrland02
 ap_rland01,ap_rland01,ap_viceairport,ap_rland01,450,0,true,LODrland01
 ap_wallfence1,ap_wallfence1,ap_roads,ap_wallfence1,450,4,true,nil
 ap_wallfence2,ap_wallfence2,ap_roads,ap_wallfence2,450,4,true,nil
+dr_dks_neonA,dr_dks_neonA,knackers,dr_dks_neonA,1500,2097228,true,nil,20,6
 ap_adv2,ap_adv2,airstuff2,ap_adv2,450,0,true,nil
 ap_adv3,ap_adv3,airstuff2,ap_adv3,450,0,true,nil
 ap_barriergate2,ap_barriergate2,ap_newthings,ap_barriergate2,200,4,true,nil
@@ -1838,8 +1839,8 @@ LODhintS_road22,LODhintS_road22,wshS_LOD,LODhintS_road22,1500,2097152,true,nil
 LODhintS_road23,LODhintS_road23,wshS_LOD,LODhintS_road23,1500,2097152,true,nil
 LODhintS_road24,LODhintS_road24,wshS_LOD,LODhintS_road24,1500,2097152,true,nil
 LODhintS_ground01,LODhintS_ground01,wshS_LOD,LODhintS_ground01,1500,2097152,true,nil
-LODhintS_ground02,LODhintS_ground02,wshS_LOD,LODhintS_ground02,1500,2097152,true,nil
-LODhintS_ground03,LODhintS_ground03,wshS_LOD,LODhintS_ground03,1500,2097152,true,nil
+pm_scraplights2,pm_scraplights2,knackers,pm_scraplights2,1500,2097228,true,nil,20,6
+pm_scraplights,pm_scraplights,knackers,pm_scraplights,1500,2097228,true,nil,20,6
 LODhintS_pier01,LODhintS_pier01,wshS_LOD,LODhintS_pier01,1500,2097152,true,nil
 LODhintS_pier02,LODhintS_pier02,wshS_LOD,LODhintS_pier02,1500,2097152,true,nil
 LODhintS_pier03,LODhintS_pier03,wshS_LOD,LODhintS_pier03,1500,2097152,true,nil
@@ -2849,6 +2850,8 @@ veg_palmkbb11,veg_palmkbb11,new_palm,veg_palmkbb11,80,2113668,true,nil
 LODachw_partA06,LODachw_partA06,nbeachw_LOD,LODachw_partA06,1500,2097152,true,nil
 LODachw_partA07,LODachw_partA07,nbeachw_LOD,LODachw_partA07,1500,2097152,true,nil
 veg_palmkb13,veg_palmkb13,new_palm,veg_palmkb13,80,2113668,true,nil
+dt_nitelites1,dt_nitelites1,knackers,dt_nitelites1,1500,2097228,true,nil,20,6
+dt_nitelites4,dt_nitelites4,knackers,dt_nitelites4,1500,2097228,true,nil,20,6
 rsbrdg4_dt_neon,rsbrdg4_dt_neon,knackers,rsbrdg4_dt_neon,1500,2097228,true,nil,20,6
 rsbrdg07_dt_neon,rsbrdg07_dt_neon,knackers,rsbrdg07_dt_neon,1500,2097228,true,nil,20,6
 rsbrdg1_dt_neon,rsbrdg1_dt_neon,knackers,rsbrdg1_dt_neon,1500,2097228,true,nil,20,6
