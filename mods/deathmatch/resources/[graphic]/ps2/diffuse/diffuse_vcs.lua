@@ -1,4 +1,4 @@
-local buildingPipeline = dxCreateShader("fx/building_vcs.fx", 0, 0, false, "world,object")
+local buildingPipeline = dxCreateShader("fx/building_vcs.fx", 0, 0, false, "object")
 
 function enableDiffuse()
     print("VCS Diffuse Enabled")
