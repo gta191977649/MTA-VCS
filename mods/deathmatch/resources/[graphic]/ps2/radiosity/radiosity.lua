@@ -121,7 +121,7 @@ addEventHandler( "onClientHUDRender", root,
 		current = applyDownsample( current )
 		current = applyGBlurH( current, v.bloom, v.blur )
 		current = applyGBlurV( current, v.bloom, v.blur )
-		print(v.bloom)
+		--print(v.bloom)
 		-- When we're done, turn the render target back to default
 		dxSetRenderTarget()
 

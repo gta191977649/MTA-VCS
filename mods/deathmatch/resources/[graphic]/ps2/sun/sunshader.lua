@@ -155,7 +155,7 @@ function SunShader:update()
 			]]
 
 			local inX,inY,inZ,outX,outY,outZ = getSunColor ()
-			print(inX,inY,inZ)
+			--print(inX,inY,inZ)
 			self.sunColorInner = {inX/255,inY/255,inZ/255,1}
 			self.sunColorOuter = {outX/255,outY/255,outZ/255,1}
 			dxUpdateScreenSource(self.screenSource)	

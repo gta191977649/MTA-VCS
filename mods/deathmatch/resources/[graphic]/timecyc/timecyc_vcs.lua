@@ -20,8 +20,8 @@ function start()
     resetWaterColor()
     resetSunColor()
     resetSunSize()
-    -- setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
-    resetColorFilter()
+    setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
+    --resetColorFilter()
     addEventHandler ( "onClientPreRender", root, updateTimecyc )
 end
 
@@ -180,7 +180,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     setFogDistance(getInterpolationValue(WT_S[35],WT_E[35],hour,min))
 
     -- radiosity
-    print("set radio")
+    --print("set radio")
     PS2:setRadiosity(getInterpolationValue(WT_S[36],WT_E[36],hour,min))
 end
 --[[
