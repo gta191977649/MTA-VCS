@@ -1,5 +1,6 @@
 <meta>
     <script src="lib.lua" type="client"/>
+    <script src="anim.lua" type="client"/>
     <script src="enex.lua" type="client"/>
 
     <file src="enex.ipl" type="client" />

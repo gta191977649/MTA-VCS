@@ -3,6 +3,7 @@ local readingFlag = false
 local HIT_COOLDOWN_TIME = 3000
 local lastHit = getTickCount()
 Enex = {}
+local enexElement = createElement("enex")
 function createEnex(x1,y1,z1,rot,w1,w2,x2,y2,z2,rot2,int,flag,name) 
 
     local nwx, nwy = getPositionFromOffsetByPosRot(x1, y1, z1, 0.0, 0.0, rot, w1/2, w2/2, 0.0)
@@ -27,6 +28,7 @@ function createEnex(x1,y1,z1,rot,w1,w2,x2,y2,z2,rot2,int,flag,name)
         name = name,
     }
     local marker = createMarker(x1,y1,z1+2,"arrow",1.8,0xED,0x82,0xB4)
+    setElementParent(marker,enexElement)
     setElementInterior(marker,int)
     setElementInterior(colshape,int)
 end
@@ -78,7 +80,7 @@ function loadEnex(path)
                 local x,y,z = unpack(Enex[link].pos_exit)
                 lastHit = getTickCount()
                 setElementInterior(localPlayer,Enex[link].int)
-                setElementPosition(localPlayer,x,y,z+1)
+                setElementPosition(localPlayer,x,y,z+0.5)
                 if Enex[source].flag == 6 then -- only show at entry
                     HUD:showGameText(Enex[source].name,"LOCATION_NAME",5000)
                 end
@@ -90,4 +92,8 @@ function loadEnex(path)
     end)
 end
 
-loadEnex("enex.ipl")
+
+-- animation
+addEventHandler( "onClientResourceStart", resourceRoot,function()
+    loadEnex("enex.ipl")
+end)
