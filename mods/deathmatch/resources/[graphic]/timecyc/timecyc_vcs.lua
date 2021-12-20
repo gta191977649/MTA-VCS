@@ -20,8 +20,8 @@ function start()
     resetWaterColor()
     resetSunColor()
     resetSunSize()
-    -- setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
-    resetColorFilter()
+    setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
+    --resetColorFilter()
     addEventHandler ( "onClientPreRender", root, updateTimecyc )
 end
 
@@ -155,7 +155,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     local endTntervalIndex = intervalIndex + 1 > #Timecyc[weather_id] and 1 or intervalIndex + 1
     local WT_E = Timecyc[weather_id][endTntervalIndex]
     -- color filter 48
-    setColorFilter (WT_S[1], WT_S[2], WT_S[3],50, WT_S[1], WT_S[2], WT_S[3],50)
+    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3],30)
 
     -- sky gradient
     local skyTopGradient = getGradientInterpolationValue({WT_S[16],WT_S[17],WT_S[18]},{WT_E[16],WT_E[17],WT_E[18]},hour,min) -- SkytopGradient
@@ -180,7 +180,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     setFogDistance(getInterpolationValue(WT_S[35],WT_E[35],hour,min))
 
     -- radiosity
-    print("set radio")
+    --print("set radio")
     PS2:setRadiosity(getInterpolationValue(WT_S[36],WT_E[36],hour,min))
 end
 --[[

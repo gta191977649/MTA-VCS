@@ -3,8 +3,8 @@
 //#define surfAmb (surfProps.x)
 #include "mta-helper.fx"
 
-#define surfAmb 0.4
-#define ambient gGlobalAmbient
+#define surfAmb 0.35
+#define ambient 1.0
 
 sampler Sampler0 = sampler_state
 {
@@ -59,5 +59,7 @@ technique worldfiff
     {
         VertexShader = compile vs_2_0 Vertex_Pipeline();
     	PixelShader = compile ps_2_0 Pixel_Pipeline();
+		AlphaBlendEnable = true;
+		AlphaRef = 1;
     }
 }
