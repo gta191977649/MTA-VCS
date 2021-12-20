@@ -155,7 +155,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     local endTntervalIndex = intervalIndex + 1 > #Timecyc[weather_id] and 1 or intervalIndex + 1
     local WT_E = Timecyc[weather_id][endTntervalIndex]
     -- color filter 48
-    setColorFilter (WT_S[1], WT_S[2], WT_S[3],50, WT_S[1], WT_S[2], WT_S[3],50)
+    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3],30)
 
     -- sky gradient
     local skyTopGradient = getGradientInterpolationValue({WT_S[16],WT_S[17],WT_S[18]},{WT_E[16],WT_E[17],WT_E[18]},hour,min) -- SkytopGradient
@@ -169,7 +169,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     --iprint(sunColor)
 
     local sunSize = getInterpolationValue(WT_S[28],WT_E[28],hour,min)
-    setSunSize(sunSize)
+    setSunSize(sunSize )
     --  water
     --local waterColor = getGradientInterpolationValue({WT_S[51],WT_S[52],WT_S[53]},{WT_E[51],WT_E[52],WT_E[53]},hour,min) 
     --local waterAlpha = getInterpolationValue(WT_S[54],WT_E[54],hour,min)
