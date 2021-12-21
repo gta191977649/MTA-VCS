@@ -13,6 +13,7 @@ addEventHandler( "onClientResourceStart", getRootElement( ),onResourceStart)
 
 
 function loadMap ( Proccessed,resourceName )
+	engineSetAsynchronousLoading( true, false )
 	startTickCount = getTickCount ()
 	resource[resourceName] = {}
 	
