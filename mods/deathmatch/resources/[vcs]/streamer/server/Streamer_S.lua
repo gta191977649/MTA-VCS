@@ -12,6 +12,10 @@ for i = 1,#events do
 end
 
 -- Tables --
+system = {
+	objs = 0,
+	lods = 0,
+}
 data = {id={},resourceObjects={},globalObjects = {},resourceData={},globalData = {}}
 suffixList = {'gta3','mta'}
 
@@ -142,12 +146,11 @@ function loadMap (resource)																				 -- // Load the map
 				end
 			end)
 			
-			
+		
+
 			XA,YA,ZA = 0,0,0
 			iA = 0
-			
 			Async:setPriority("medium")
-	
 			Async:foreach(ProccessedA, function(vA)
 				iA = iA + 1
 				if (iA == 1) then
@@ -162,36 +165,54 @@ function loadMap (resource)																				 -- // Load the map
 								return
 							end
 						end
-						
+				
 						local object = streamObject(SplitB[1],tonumber(SplitB[4])+XA,tonumber(SplitB[5])+YA,tonumber(SplitB[6])+ZA,tonumber(SplitB[7]),tonumber(SplitB[8]),tonumber(SplitB[9]),resourceName,tonumber(SplitB[3]),tonumber(SplitB[2]))  -- ## 
 						if object then
 							setElementInterior(object,tonumber(SplitB[2]))
 							setElementDimension(object,tonumber(SplitB[3]))
 						end
+	
 					end
 				end
 			end)
+
 		end
 	end
 	
 	local endTick = getTickCount()
 	print(resourceName,'Loaded In : '..tonumber(endTick-tickCount),'Milisecounds')
+	print(string.format("TOTAL OBJS: %d, LODS: %d",system.objs,system.lods))
 end
 
 function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	local ID,model,texture,collision,draw,flag,backface,lod,turnOn,turnOff = unpack(dTable)
-	data.resourceData[resourceName][ID] = {model,texture,collision,draw,flag,toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
+	--data.resourceData[resourceName][ID] = {model,texture,collision,draw,flag,toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
+	data.resourceData[resourceName][ID] = {
+		id = getFreeID(ID),
+		model = model,
+		texture = texture,
+		collision = collision,
+		draw = tonumber(draw),
+		flag = flag,
+		cull = toBoolean(backface),
+		lod = lod == "nil" and false or lod,
+		turnOn = tonumber(turnOn),
+		turnOff = tonumber(turnOff),
+		resourceName = resourceName,
+	}
 	data.globalData[ID] = data.resourceData[resourceName][ID]
 	
 end
 
 function getData(name)
 	if data.globalData[name] then
-		
+		--[[
 		local _,_,_,drawdist,flag,cull,lod,_,_,id = unpack(data.globalData[name])
 		return cull,lod,id,drawdist,flag
+		]]
+		return data.globalData[name]
 	else
-		return false,false,getModelFromID(name)
+		return false
 	end
 end
 function setElementFlag(element,flag)
@@ -208,58 +229,69 @@ function setElementFlag(element,flag)
 
 		end,
 	}
-
 	if flagTable[flag] then flagTable[flag]() end
-
 end
 
 function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 	if getModelFromID(model) then
 		blackList(model)
 	end
-	local cull,lod,id,drawdist,flag = getData(model)
+	local modelInfo = getData(model)
+	if not modelInfo then 
+		print(model.." not found")
+		return
+	end
+	local cull,lod,id,drawdist,flag = modelInfo.cull,modelInfo.lod,modelInfo.id,modelInfo.draw ,modelInfo.flag
 
+	if flag == "SA_PROP" then -- deal with sa object
+		id = getModelFromID(model)
+	end
+	
 	if tonumber(id) then
-
 		local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
-		if not isElement(object) then
-			print(id,model)
-		end
+	
 		setElementID(object,model)	
 		setElementData(object,'id',model)
 		if cull then
 			setElementDoubleSided(object,true)
 		end
-		setElementFrozen(object,true)
-		if flag ~= nil and tonumber(flag) ~= 0 then 
+		
+		if flag and tonumber(flag) ~= 0 then 
 			setElementFlag(object,flag)
 		end
 		-- deal with lods
-		if lod ~= "nil" or tonumber(drawdist) > 999 then
-			--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-			setLowLODElement ( object, lowLOD )
-			setElementCollisionsEnabled(lowLOD,false)
-			--setElementID(lowLOD,lod)	
-			--setElementData(lowLOD,'id',lod)
-			setElementID(lowLOD,model)	
-			setElementData(lowLOD,'id',model)
-			setElementInterior(lowLOD,int >= 0 and int or 0)
-			setElementDimension(lowLOD,dim or -1)
-			if flag then 
-				setElementFlag(lowLOD,flag)
-			end
-			if cull then 
-				setElementDoubleSided(lowLOD,true)
-			end
-			if resource then
-				table.insert(data.resourceObjects[resource],lowLOD)
+		if lod or drawdist and tonumber(drawdist) > 999 then
+			if flag ~= "SA_PROP" then -- we don't want mess with sa models
+				--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+				local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+				setLowLODElement ( object, lowLOD )
+				setElementCollisionsEnabled(lowLOD,false)
+				--setElementID(lowLOD,lod)	
+				--setElementData(lowLOD,'id',lod)
+				setElementID(lowLOD,model)	
+				setElementData(lowLOD,'id',model)
+				setElementInterior(lowLOD,int >= 0 and int or 0)
+				setElementDimension(lowLOD,dim or -1)
+				if flag then 
+					setElementFlag(lowLOD,flag)
+				end
+				if cull then 
+					setElementDoubleSided(lowLOD,true)
+				end
+				if resource then
+					table.insert(data.resourceObjects[resource],lowLOD)
+					data.globalData[model].object_lod = lowLOD
+				end
+				print("created lod for "..model)
+				system.lods = system.lods + 1
 			end
 		end
 		
 		if resource then
 			table.insert(data.resourceObjects[resource],object)
+			data.globalData[model].object = object
 		end
+		system.objs = system.objs + 1
 
 		return object
 	end
@@ -296,12 +328,13 @@ function playerLoaded ( loadTime,resource )
 end
 addEventHandler( "onPlayerLoad", resourceRoot, playerLoaded )
 
-addEvent( "onResourceLoading", true )
-addEventHandler( "onResourceLoading", resourceRoot, onResourceLoading )
+
 
 function onResourceLoading(resouce)
 	print(resouce)
 end
+addEvent( "onResourceLoading", true )
+addEventHandler( "onResourceLoading", resourceRoot, onResourceLoading )
 
 function onElementDestroy()
 	if getElementType(source) == "object" then

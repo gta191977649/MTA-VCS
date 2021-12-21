@@ -22,93 +22,41 @@ function loadMap ( Proccessed,resourceName )
 	end
 	Async:setPriority("high")
 	Async:foreach(dataToLoad, function(data)
-		
-		if tonumber(data[10]) then
-			DEBUG:addDebugMessage(string.format("%s model\n",data[1]))
-			print(string.format("request: %s",data[1]))
-			
-			-- load txd
-			local path = ':'..resourceName..'/Content/textures/'..data[2]..'.txd'
-			local texture,cache = requestTextureArchive(path,data[2])
-			engineImportTXD(texture,data[10])
-			table.insert(resource[resourceName],cache)
+		--iprint(data)
+		if data ~= nil then
+			if data.flag ~= "SA_PROP" then
+				DEBUG:addDebugMessage(string.format("%s model\n",data.model))
+				print(string.format("request: %s",data.model))
+				
+				-- load txd
+				local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
+				local texture,cache = requestTextureArchive(path,data.texture)
+				engineImportTXD(texture,data.id)
+				table.insert(resource[resourceName],cache)
 
-			-- load dff
-			local path = ':'..resourceName..'/Content/models/'..data[1]..'.dff'
-			local model,cache = requestModel(path,data[1])
-			
-			-- load col
-			local path = ':'..resourceName..'/Content/coll/'..data[3]..'.col'
-			local collision,cache = requestCollision(path,data[3])
-			engineReplaceCOL(collision,data[10])
-			table.insert(resource[resourceName],cache)
-			
-			engineReplaceModel(model,data[10],isTransparentFlag(tonumber(data[5])))
-			--engineReplaceModel(model,data[10],true)
-			--triggerServerEvent("onResourceLoading",root,data[1])
-			
+				-- load dff
+				local path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
+				local model,cache = requestModel(path,data.model)
+				engineReplaceModel(model,data.id,isTransparentFlag(data.flag))
+				table.insert(resource[resourceName],cache)
 
-			if tonumber(data[8]) and tonumber(data[9]) then
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],tonumber(data[9]),tonumber(data[8]))
+				-- load col
+				local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
+				local collision,cache = requestCollision(path,data.collision)
+				engineReplaceCOL(collision,data.id)
+				table.insert(resource[resourceName],cache)
+
+				if tonumber(data.turnOn) and tonumber(data.turnOff) then
+					engineSetModelVisibleTime(data.id,data.turnOn,data.turnOff)
+					addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
 				end
-				addNightElement(data[1],tonumber(data[8]),tonumber(data[9]))
-			else
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],0,0)
-				end
+				-- deal with common flags properties, e.g. breakable
+				setElementFlagProperty(data.object,data.flag)
 			end
-			--engineSetModelLODDistance (data[10],math.max(tonumber(data[4]),270))
-			engineSetModelLODDistance(data[10],tonumber(data[4]))
-			table.insert(resource[resourceName],cache)
-			print(string.format("%s loaded.",data[1]))
+			engineSetModelLODDistance(data.id,data.draw)	
+			print(string.format("%s loaded, drawdist %d",data.model,data.draw))
 		end
 	end)
-
-	--[[
-	Async:setPriority("medium")
-	Async:foreach(dataToLoad, function(data)
-		if tonumber(data[10]) then
-			local path = ':'..resourceName..'/Content/coll/'..data[3]..'.col'
-			local collision,cache = requestCollision(path,data[3])
-			engineReplaceCOL(collision,data[10])
-			table.insert(resource[resourceName],cache)
-		end
-	end)
-	
-	Async:setPriority("medium")
-	Async:foreach(dataToLoad, function(data)
-		if tonumber(data[10]) then
-			local path = ':'..resourceName..'/Content/textures/'..data[2]..'.txd'
-			local texture,cache = requestTextureArchive(path,data[2])
-			engineImportTXD(texture,data[10])
-			table.insert(resource[resourceName],cache)
-		end
-	end)
-
-	Async:setPriority("medium")
-	Async:foreach(dataToLoad, function(data)
-		if tonumber(data[10]) then
-			local path = ':'..resourceName..'/Content/models/'..data[1]..'.dff'
-			local model,cache = requestModel(path,data[1])
-			engineReplaceModel(model,data[10],data[5])
-			if tonumber(data[8]) and tonumber(data[9]) then
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],tonumber(data[9]),tonumber(data[8]))
-				end
-				addNightElement(data[1],tonumber(data[8]),tonumber(data[9]))
-			else
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],0,0)
-				end
-			end
-			
-			engineSetModelLODDistance (data[10],math.max(tonumber(data[4]),270))
-			
-			table.insert(resource[resourceName],cache)
-		end
-	end)
-	--]]
 	engineRestreamWorld()
 	vegitationElementReload()
 	loadedFunction(resourceName)
@@ -154,41 +102,6 @@ function restore(model)
 end
 addEvent( "restoreModel", true )
 addEventHandler( "restoreModel", localPlayer, restore )
-
-
-function forceLoad(data,resourceName)
-	if (getResourceState ( getResourceFromName(resourceName) ) == 'running') then
-		if tonumber(data[10]) then
-			local path,cache = ':'..resourceName..'/'..data[2]..'.txd'
-			local texture = requestTextureArchive(path,data[2])
-			engineImportTXD(texture,data[10])
-			table.insert(resource[resourceName],cache)
-			
-			local path,cache = ':'..resourceName..'/'..data[3]..'.col'
-			local collision = requestCollision(path,data[3])
-			engineReplaceCOL(collision,data[10])
-			table.insert(resource[resourceName],cache)
-
-			local path,cache = ':'..resourceName..'/'..data[1]..'.dff'
-			local model = requestModel(path,data[1])
-			engineReplaceModel(model,data[10],data[5])
-			if tonumber(data[8]) and tonumber(data[9]) then
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],tonumber(data[9]),tonumber(data[8]))
-				end
-				addNightElement(data[1],tonumber(data[8]),tonumber(data[9]))
-			else
-				if engineSetModelVisibleTime then
-					engineSetModelVisibleTime(data[10],0,0)
-				end
-			end
-			table.insert(resource[resourceName],cache)
-			engineSetModelLODDistance (data[10],math.max(tonumber(data[4]),270))
-		end
-	end
-end
-addEvent( "loadModel", true )
-addEventHandler( "loadModel", localPlayer, forceLoad )
 
 function onResourceStop(name)
 	if resource[name] then

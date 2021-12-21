@@ -74,6 +74,6 @@ ERROR - IPL:ebprop_clothesrail Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE
 ERROR - TXD:vehicle Missing TXD
-ERROR - Col:imy_shash_LOD Missing COL
-ERROR - Col:LODf_partC04 Missing COL
 ERROR - Col:LODmtleha_police Missing COL
+ERROR - Col:LODf_partC04 Missing COL
+ERROR - Col:imy_shash_LOD Missing COL

@@ -2,6 +2,7 @@
 Debug = {}
 IPLList = {}
 IPLList2 = {}
+USE_SA_PROPS = true
 
 function OutPutDebug2(Messege)
 	print (Messege) -- Print our messege
@@ -92,11 +93,11 @@ for i,v in pairs(IDETable) do
 			local Flag = Split[5]
 			--if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) or Defaults2[Model] then
 			if fileExists ("Resources/"..removeSpace(Model)..".dff") or Defaults2[Model] then
-				if not Defaults2[Model] then
-					IDEList1[ID] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
-				else
+				if USE_SA_PROPS and Defaults2[Model] then
+					Flag = "SA_PROP"
 					Defaults[Model] = true
 				end
+				IDEList1[ID] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
 			else
 				if Exists[removeSpace(Model)] then
 					OutPutDebug2("Model:"..Model.." Missing DFF")
