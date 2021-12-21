@@ -77,9 +77,9 @@ function setEffectVariables()
     local v = Settings.var
     -- Bloom
     v.cutoff = 0.5
-    v.power = 0.8
-	v.blur = 0.2
-    v.bloom = 1
+    v.power = 1
+	v.blur = 0.1
+    v.bloom = 3
     v.blendR = 204
     v.blendG = 153
     v.blendB = 130
@@ -96,7 +96,7 @@ end
 
 function setRadiosity(intensity) 
 	--Settings.var.cutoff = limit * 0.7
-	Settings.var.bloom = 1.5 * (intensity/50)
+	Settings.var.bloom = 3 * (intensity/50)
 end
 -----------------------------------------------------------------------------------
 -- onClientHUDRender
