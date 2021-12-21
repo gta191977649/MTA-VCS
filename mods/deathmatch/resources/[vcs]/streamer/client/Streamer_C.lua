@@ -13,6 +13,8 @@ addEventHandler( "onClientResourceStart", getRootElement( ),onResourceStart)
 
 
 function loadMap ( Proccessed,resourceName )
+	setElementPosition(localPlayer,3000,3000,10)
+
 	startTickCount = getTickCount ()
 	resource[resourceName] = {}
 	
@@ -20,12 +22,13 @@ function loadMap ( Proccessed,resourceName )
 	for i,v in pairs(Proccessed) do
 		table.insert(dataToLoad,v)
 	end
+	local loaded = 0
 	Async:setPriority("high")
 	Async:foreach(dataToLoad, function(data)
 		--iprint(data)
 		if data ~= nil then
 			if data.flag ~= "SA_PROP" then
-				DEBUG:addDebugMessage(string.format("%s model\n",data.model))
+				
 				print(string.format("request: %s",data.model))
 				
 				-- load txd
@@ -56,11 +59,20 @@ function loadMap ( Proccessed,resourceName )
 			engineSetModelLODDistance(data.id,data.draw)	
 			print(string.format("%s loaded, drawdist %d",data.model,data.draw))
 		end
+
+		loaded = loaded + 1
+		DEBUG:addDebugMessage(loaded.." OF ".. #dataToLoad.."\n")
+		if loaded >= #dataToLoad then 
+			engineRestreamWorld()
+			vegitationElementReload()
+			loadedFunction(resourceName)
+			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
+			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
+		end
 	end)
-	engineRestreamWorld()
-	vegitationElementReload()
-	loadedFunction(resourceName)
-	outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
+	
+
+
 end
 addEvent( "MTAStream_Client", true )
 addEventHandler( "MTAStream_Client", localPlayer, loadMap )

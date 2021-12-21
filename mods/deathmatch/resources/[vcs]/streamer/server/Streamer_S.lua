@@ -282,7 +282,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 					table.insert(data.resourceObjects[resource],lowLOD)
 					data.globalData[model].object_lod = lowLOD
 				end
-				print("created lod for "..model)
+				--print("created lod for "..model)
 				system.lods = system.lods + 1
 			end
 		end
@@ -300,8 +300,9 @@ end
 function changeObjectModel(name,newModel)
 	if data.globalData[name] then
 		print(name,'Revoked')
-		data.globalData[name][10] = newModel
-		data.resourceData[data.globalData[name][11]][name][10] = newModel
+		data.globalData[name].id = newModel
+		local resName = data.globalData[name].resourceName
+		data.resourceData[resName][name].id = newModel
 		
 		
 		for i,v in pairs(getElementsByType('object')) do
@@ -309,7 +310,7 @@ function changeObjectModel(name,newModel)
 				setElementModel(v,newModel)
 			end
 		end
-		triggerClientEvent ("loadModel",root,data.globalData[name],data.globalData[name][11])
+		triggerClientEvent ("loadModel",root,data.globalData[name],resName)
 	end
 end
 
