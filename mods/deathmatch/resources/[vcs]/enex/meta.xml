@@ -4,4 +4,6 @@
     <script src="enex.lua" type="client"/>
 
     <file src="enex.ipl" type="client" />
+
+    <include resource="hud"/>
 </meta>
