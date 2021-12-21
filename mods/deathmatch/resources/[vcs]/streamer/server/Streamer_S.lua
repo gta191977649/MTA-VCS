@@ -230,7 +230,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 		if cull then
 			setElementDoubleSided(object,true)
 		end
-		setElementFrozen(object,true)
+		--setElementFrozen(object,true)
 		if flag ~= nil and tonumber(flag) ~= 0 then 
 			setElementFlag(object,flag)
 		end
