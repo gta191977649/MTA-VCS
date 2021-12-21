@@ -264,8 +264,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 			if flag ~= "SA_PROP" then -- we don't want mess with sa models
 				--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 				local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-				setLowLODElement ( object, lowLOD )
-				setElementCollisionsEnabled(lowLOD,false)
+				--setElementCollisionsEnabled(lowLOD,false)
 				--setElementID(lowLOD,lod)	
 				--setElementData(lowLOD,'id',lod)
 				setElementID(lowLOD,model)	
@@ -283,6 +282,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 					data.globalData[model].object_lod = lowLOD
 				end
 				--print("created lod for "..model)
+				setLowLODElement ( object, lowLOD )
 				system.lods = system.lods + 1
 			end
 		end
