@@ -11,17 +11,21 @@ Weather = {
 }
 Timecyc = {}
 
+local _,lastMin = getTime()
 function start() 
     function updateTimecyc ()
         local hour,min = getTime()
         local weatherid = getWeather()
-        setWeatherFromTimecyc(weatherid,hour,min)
+        if min ~= lastMin then --save a bit processing power
+            setWeatherFromTimecyc(weatherid,hour,min)
+        end
     end
     resetWaterColor()
     resetSunColor()
     resetSunSize()
     setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
     --resetColorFilter()
+    updateTimecyc()
     addEventHandler ( "onClientPreRender", root, updateTimecyc )
 end
 
