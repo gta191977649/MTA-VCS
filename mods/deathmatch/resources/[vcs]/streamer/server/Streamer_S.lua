@@ -238,6 +238,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 		if lod ~= "nil" or tonumber(drawdist) > 999 then
 			--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+			setLowLODElement ( lowLOD, false )
 			setLowLODElement ( object, lowLOD )
 			setElementCollisionsEnabled(lowLOD,false)
 			--setElementID(lowLOD,lod)	
