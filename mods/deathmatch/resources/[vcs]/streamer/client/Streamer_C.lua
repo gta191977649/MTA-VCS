@@ -5,14 +5,14 @@ debug.sethook(nil)
 -- Tables --
 cache = {}
 resource = {}
-
+model_cache = {}
 function onResourceStart(resourcea)
-	triggerServerEvent ( "onResourceLoad", resourceRoot, getResourceName(resourcea))
+	triggerServerEvent ( "onResourceLoad", root, getResourceName(resourcea))
 end
-addEventHandler( "onClientResourceStart", getRootElement( ),onResourceStart)
+addEventHandler( "onClientResourceStart", root,onResourceStart)
 
-
-function loadMap ( Proccessed,resourceName )
+--[[
+function loadModel ( Proccessed,resourceName )
 	setGameSpeed(0)
 	setElementPosition(localPlayer,3000,3000,10)
 	
@@ -73,8 +73,134 @@ function loadMap ( Proccessed,resourceName )
 		end
 	end)
 end
-addEvent( "Client_loadModel", true )
-addEventHandler( "Client_loadModel", localPlayer, loadMap )
+-]]
+
+function loadModel(data,resourceName) 
+
+	if data and data.flag ~= "SA_PROP" then
+		print(string.format("request: %s",data.model))
+		local id = data.id
+		-- load txd
+		local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
+		local texture,cache = requestTextureArchive(path,data.texture)
+		engineImportTXD(texture,id)
+		table.insert(resource[resourceName],cache)
+
+		-- load dff
+		local path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
+		local model,cache = requestModel(path,data.model)
+		engineReplaceModel(model,id,isTransparentFlag(data.flag))
+		table.insert(resource[resourceName],cache)
+
+		-- load col
+		local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
+		local collision,cache = requestCollision(path,data.collision)
+		engineReplaceCOL(collision,id)
+		table.insert(resource[resourceName],cache)
+
+		if data.turnOn and tonumber(data.turnOn) and data.turnOff and tonumber(data.turnOff) then
+			engineSetModelVisibleTime(id,data.turnOn,data.turnOff)
+			addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
+		end
+		-- deal with common flags properties, e.g. breakable
+		--setElementFlagProperty(data.object,data.flag)
+				
+		model_cache[data.model] = id
+		return id
+	end
+end
+
+function loadObject(data) 
+	local cull,lod,id,drawdist,flag = data.info.cull,data.info.lod,data.info.id,data.info.draw ,data.info.flag
+	local x,y,z = unpack(data.pos)
+	local xr,yr,zr = unpack(data.rot)
+	local int, dim = tonumber(data.int), tonumber(data.dim)
+	local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
+	local model = data.model
+	setElementID(object,model)	
+	setElementData(object,'id',model)
+	if cull then
+		setElementDoubleSided(object,true)
+	end
+	
+	if flag and tonumber(flag) ~= 0 then 
+		setElementFlagProperty(object,data.flag)
+	end
+	-- deal with lods
+	if lod or drawdist and tonumber(drawdist) > 999 then
+		if flag ~= "SA_PROP" then -- we don't want mess with sa models
+			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+			setLowLODElement(lowLOD, false)
+			setLowLODElement (object,lowLOD)
+			setElementID(lowLOD,model)	
+			setElementData(lowLOD,'id',model)
+			--setElementCollisionsEnabled(lowLOD,false)
+
+			if flag and tonumber(flag) ~= 0 then 
+				setElementFlagProperty(lowLOD,data.flag)
+			end
+			if cull then 
+				setElementDoubleSided(lowLOD,true)
+			end
+
+			setElementInterior(lowLOD,int >= 0 and int or 0)
+			setElementDimension(lowLOD,dim or -1)
+			engineSetModelLODDistance(id,drawdist)
+			
+		end
+	end
+	
+
+	return object
+
+end
+function loadMap(ipls,ides,mapname) 
+	startTickCount = getTickCount ()
+	resource[mapname] = {}
+	loaded = 0
+	setOcclusionsEnabled(false)
+
+	-- create object
+	for i,data in ipairs(ipls) do 
+		loadObject(data) 
+	end
+
+
+	local dataToLoad = {}
+	for i,v in pairs(ides) do
+		table.insert(dataToLoad,v)
+	end
+
+	ides = {}
+
+	Async:setPriority("high")
+	Async:foreach(dataToLoad, function(data) 
+		-- load model
+		if model_cache[data.model] == nil then
+			loadModel(data,mapname)
+		else
+			DEBUG:addDebugMessage(string.format("Exist: %s has already loaded, skipping...\n",data.model))
+		end
+
+		loaded = loaded + 1
+		local debugMsg = string.format("Request: %s | %d OF %d remain.\n",data.model,loaded,#dataToLoad)
+		print(debugMsg)
+		DEBUG:addDebugMessage(debugMsg)
+
+		if loaded >= #dataToLoad then 
+			engineRestreamWorld()
+			vegitationElementReload()
+			loadedFunction(mapname)
+			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
+			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
+			--setGameSpeed(1)
+		end
+	end)
+
+end
+addEvent( "MTAStream_Client", true )
+addEventHandler( "MTAStream_Client", localPlayer, loadMap )
+
 
 function loadedFunction (resourceName)
 	local endTickCount = getTickCount ()-startTickCount

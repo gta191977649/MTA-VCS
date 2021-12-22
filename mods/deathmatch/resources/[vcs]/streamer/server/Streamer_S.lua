@@ -104,6 +104,7 @@ function loadMap (resource)																				 -- // Load the map
 	local resourceName = getResourceName(resource)
 	data.resourceObjects[resourceName] = {}
 	data.resourceData[resourceName] = {}
+	data.placementData[resourceName] = {}
 	
 	for _,suffix in pairs(suffixList) do
 		local File = fetchPlacement(resourceName,suffix)
@@ -173,13 +174,12 @@ function loadMap (resource)																				 -- // Load the map
 								return
 							end
 						end
-				
+						
+						definePlacement(SplitB,resourceName)
+						--[[
+							we do it in client instead
 						local object = streamObject(SplitB[1],tonumber(SplitB[4])+XA,tonumber(SplitB[5])+YA,tonumber(SplitB[6])+ZA,tonumber(SplitB[7]),tonumber(SplitB[8]),tonumber(SplitB[9]),resourceName,tonumber(SplitB[3]),tonumber(SplitB[2]))  -- ## 
-						if object then
-							setElementInterior(object,tonumber(SplitB[2]))
-							setElementDimension(object,tonumber(SplitB[3]))
-						end
-	
+						]]
 					end
 				end
 			end)
@@ -190,6 +190,7 @@ function loadMap (resource)																				 -- // Load the map
 	local endTick = getTickCount()
 	print(resourceName,'Loaded In : '..tonumber(endTick-tickCount),'Milisecounds')
 	print(string.format("TOTAL OBJS: %d, LODS: %d",system.objs,system.lods))
+
 end
 
 function defineDefintion(dTable,resourceName) -- Define defintion stuff
@@ -211,7 +212,31 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	data.globalData[ID] = data.resourceData[resourceName][ID]
 	
 end
+function definePlacement(dTable,resourceName) 
+	local model,int,dim,x,y,z,rx,ry,rz= unpack(dTable)
+	-- find model id
 
+	local modelInfo = getData(model)
+	if not modelInfo then 
+		print(model.." id not found")
+		return
+	end
+	local id = modelInfo.id
+
+	if modelInfo.flag == "SA_PROP" then -- deal with sa object
+		id = getModelFromID(model)
+	end
+
+	table.insert(data.placementData[resourceName], {
+		id = id,
+		model = model,
+		int = int,
+		dim = dim,
+		pos = {x,y,z},
+		rot = {rx,ry,rz},
+		info = modelInfo
+	})
+end
 
 function getData(name)
 	if data.globalData[name] then
@@ -329,7 +354,7 @@ function onResourceLoad ( resource )
 	local resource = getResourceFromName(resource)
 	if getResourceInfo ( resource, 'Streamer') or getResourceInfo ( resource, 'cStream') then
 		local name = getResourceName(resource)
-		triggerClientEvent("Client_loadModel",client,data.resourceData[name],name )
+		triggerClientEvent("MTAStream_Client",client,data.placementData[name],data.resourceData[name],name)
 	end
 end
 addEvent( "onResourceLoad", true )
@@ -379,7 +404,8 @@ function onResourceStop(resource)
 		data.resourceObjects[name] = nil
 	end
 end
-addEventHandler( "onResourceStop", root,onResourceStop)
+--addEventHandler( "onResourceStop", root,onResourceStop)
+
 
 function getMaps()
 	local tempTable = {}
