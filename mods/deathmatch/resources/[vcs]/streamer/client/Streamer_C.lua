@@ -106,7 +106,7 @@ function loadModel(data,resourceName)
 		-- clamp
 		--local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
 		local drawdist = tonumber(data.draw)
-		engineSetModelLODDistance(id,math.max(drawdist,150))
+		engineSetModelLODDistance(id,drawdist)
 
 		model_cache[data.model] = id
 		return id
