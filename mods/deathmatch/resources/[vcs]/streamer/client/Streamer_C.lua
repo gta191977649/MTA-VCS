@@ -76,10 +76,15 @@ end
 -]]
 
 function loadModel(data,resourceName) 
-
 	if data and data.flag ~= "SA_PROP" then
 		print(string.format("request: %s",data.model))
 		local id = data.id
+		-- load col
+		local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
+		local collision,cache = requestCollision(path,data.collision)
+		engineReplaceCOL(collision,id)
+		table.insert(resource[resourceName],cache)
+
 		-- load txd
 		local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
 		local texture,cache = requestTextureArchive(path,data.texture)
@@ -92,23 +97,16 @@ function loadModel(data,resourceName)
 		engineReplaceModel(model,id,isTransparentFlag(data.flag))
 		table.insert(resource[resourceName],cache)
 
-		-- load col
-		local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
-		local collision,cache = requestCollision(path,data.collision)
-		engineReplaceCOL(collision,id)
-		table.insert(resource[resourceName],cache)
-
 		if data.turnOn and tonumber(data.turnOn) and data.turnOff and tonumber(data.turnOff) then
 			engineSetModelVisibleTime(id,data.turnOn,data.turnOff)
 			addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
 		end
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
-
 		-- clamp
-		local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
-		engineSetModelLODDistance(id,drawdist)
-
+		--local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
+		local drawdist = tonumber(data.draw)
+		engineSetModelLODDistance(id,math.max(drawdist,150))
 
 		model_cache[data.model] = id
 		return id
@@ -116,7 +114,7 @@ function loadModel(data,resourceName)
 end
 
 function loadObject(data) 
-	local cull,lod,id,drawdist,flag = data.info.cull,data.info.lod,data.info.id,data.info.draw ,data.info.flag
+	local cull,lod,id,drawdist,flag = data.info.cull,data.info.lod,data.info.id,data.info.draw,data.info.flag
 	local x,y,z = unpack(data.pos)
 	local xr,yr,zr = unpack(data.rot)
 	local int, dim = tonumber(data.int), tonumber(data.dim)
@@ -132,7 +130,7 @@ function loadObject(data)
 		setElementFlagProperty(object,data.flag)
 	end
 	-- deal with lods
-	if lod or drawdist and tonumber(drawdist) > 999 then
+	if lod or tonumber(data.info.draw) > 900 then
 		if flag ~= "SA_PROP" then -- we don't want mess with sa models
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 			setLowLODElement(lowLOD, false)
@@ -148,6 +146,8 @@ function loadObject(data)
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
 		end
+	else
+		setLowLODElement(object,false)
 	end
 	return object
 

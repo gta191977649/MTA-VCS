@@ -46,6 +46,8 @@ function dgsCreate3DImage(...)
 		UVSize = {},
 		rotation = 0,
 		rotationCenter = {0,0},
+		isOnScreen = false,
+		isBlocked = false,
 		materialInfo = {},
 	}
 	dgsElementData[image3d].image = type(img) == "string" and dgsImageCreateTextureExternal(image3d,sourceResource,img) or img
@@ -257,13 +259,15 @@ dgsRenderer["dgs-dx3dimage"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInheri
 			local imageSizeX,imageSizeY = eleData.imageSize[1],eleData.imageSize[2]
 			local fadeDistance = eleData.fadeDistance
 			local image = eleData.image
-			if (not canBeBlocked or (canBeBlocked and isLineOfSightClear(wx, wy, wz, camX, camY, camZ, canBeBlocked.checkBuildings, canBeBlocked.checkVehicles, canBeBlocked.checkPeds, canBeBlocked.checkObjects, canBeBlocked.checkDummies, canBeBlocked.seeThroughStuff,canBeBlocked.ignoreSomeObjectsForCamera))) then
+			eleData.isBlocked = (not canBeBlocked or (canBeBlocked and isLineOfSightClear(wx, wy, wz, camX, camY, camZ, canBeBlocked.checkBuildings, canBeBlocked.checkVehicles, canBeBlocked.checkPeds, canBeBlocked.checkObjects, canBeBlocked.checkDummies, canBeBlocked.seeThroughStuff,canBeBlocked.ignoreSomeObjectsForCamera)))
+			if eleData.isBlocked then
 				local fadeMulti = 1
 				if maxDistance > fadeDistance and distance >= fadeDistance then
 					fadeMulti = 1-(distance-fadeDistance)/(maxDistance-fadeDistance)
 				end
 				local x,y = getScreenFromWorldPosition(wx,wy,wz,0.5)
-				if x and y then
+				eleData.isOnScreen = x and y
+				if eleData.isOnScreen then
 					local x,y = x-x%1,y-y%1
 					if eleData.fixImageSize then
 						distance = 50
@@ -308,7 +312,7 @@ dgsRenderer["dgs-dx3dimage"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInheri
 									dxDrawImageSection(x+shadowoffx,y-shadowoffy,w,h,uvPx,uvPy,uvSx,uvSy,image,rot,rotOffx,rotOffy,shadowc,isPostGUI,rndtgt)
 								end
 							end
-							dxDrawImageSection(x,y,w,h,uvPx,uvPy,uvSx,uvSy,image,rot,rotOffy,rotOffy,colors,isPostGUI,rndtgt)
+							dxDrawImageSection(x,y,w,h,uvPx,uvPy,uvSx,uvSy,image,rot,rotOffy,rotOffy,color,isPostGUI,rndtgt)
 						else
 							if shadowoffx and shadowoffy and shadowc then
 								local shadowc = applyColorAlpha(shadowc,parentAlpha)
@@ -319,11 +323,10 @@ dgsRenderer["dgs-dx3dimage"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInheri
 									dxDrawImage(x+shadowoffx,y-shadowoffy,w,h,image,rot,rotOffx,rotOffy,shadowc,isPostGUI,rndtgt)
 								end
 							end
-							dxDrawImage(x,y,w,h,image,rot,rotOffx,rotOffy,colors,isPostGUI,rndtgt)
+							dxDrawImage(x,y,w,h,image,rot,rotOffx,rotOffy,color,isPostGUI,rndtgt)
 						end
-						dxDrawImage(x,y,w,h,image,0,0,0,color)
 					else
-						dxDrawRectangle(x,y,w,h,color)
+						dxDrawRectangle(x,y,w,h,color,isPostGUI)
 					end
 					------------------------------------OutLine
 					local outlineData = eleData.outline
@@ -335,46 +338,48 @@ dgsRenderer["dgs-dx3dimage"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInheri
 						local side = outlineData[1]
 						if side == "in" then
 							if outlineData[6] ~= false then
-								dxDrawLine(x,y+hSideSize,x+w,y+hSideSize,sideColor,sideSize)
+								dxDrawLine(x,y+hSideSize,x+w,y+hSideSize,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[4] ~= false then
-								dxDrawLine(x+hSideSize,y,x+hSideSize,y+h,sideColor,sideSize)
+								dxDrawLine(x+hSideSize,y,x+hSideSize,y+h,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[5] ~= false then 
-								dxDrawLine(x+w-hSideSize,y,x+w-hSideSize,y+h,sideColor,sideSize)
+								dxDrawLine(x+w-hSideSize,y,x+w-hSideSize,y+h,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[7] ~= false then
-								dxDrawLine(x,y+h-hSideSize,x+w,y+h-hSideSize,sideColor,sideSize)
+								dxDrawLine(x,y+h-hSideSize,x+w,y+h-hSideSize,sideColor,sideSize,isPostGUI)
 							end
 						elseif side == "center" then
 							if outlineData[6] ~= false then
-								dxDrawLine(x-hSideSize,y,x+w+hSideSize,y,sideColor,sideSize)
+								dxDrawLine(x-hSideSize,y,x+w+hSideSize,y,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[4] ~= false then
-								dxDrawLine(x,y+hSideSize,x,y+h-hSideSize,sideColor,sideSize)
+								dxDrawLine(x,y+hSideSize,x,y+h-hSideSize,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[5] ~= false then 
-								dxDrawLine(x+w,y+hSideSize,x+w,y+h-hSideSize,sideColor,sideSize)
+								dxDrawLine(x+w,y+hSideSize,x+w,y+h-hSideSize,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[7] ~= false then
-								dxDrawLine(x-hSideSize,y+h,x+w+hSideSize,y+h,sideColor,sideSize)
+								dxDrawLine(x-hSideSize,y+h,x+w+hSideSize,y+h,sideColor,sideSize,isPostGUI)
 							end
 						elseif side == "out" then
 							if outlineData[6] ~= false then
-								dxDrawLine(x-sideSize,y-hSideSize,x+w+sideSize,y-hSideSize,sideColor,sideSize)
+								dxDrawLine(x-sideSize,y-hSideSize,x+w+sideSize,y-hSideSize,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[4] ~= false then
-								dxDrawLine(x-hSideSize,y,x-hSideSize,y+h,sideColor,sideSize)
+								dxDrawLine(x-hSideSize,y,x-hSideSize,y+h,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[5] ~= false then 
-								dxDrawLine(x+w+hSideSize,y,x+w+hSideSize,y+h,sideColor,sideSize)
+								dxDrawLine(x+w+hSideSize,y,x+w+hSideSize,y+h,sideColor,sideSize,isPostGUI)
 							end
 							if outlineData[7] ~= false then 
-								dxDrawLine(x-sideSize,y+h+hSideSize,x+w+sideSize,y+h+hSideSize,sideColor,sideSize)
+								dxDrawLine(x-sideSize,y+h+hSideSize,x+w+sideSize,y+h+hSideSize,sideColor,sideSize,isPostGUI)
 							end
 						end
 					end
 				end
+			else
+				eleData.isOnScreen = false
 			end
 		end
 	end

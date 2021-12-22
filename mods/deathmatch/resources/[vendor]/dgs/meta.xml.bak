@@ -23,7 +23,6 @@
 	<script src="Core/gridlist.lua" type="client" />
 	<script src="Core/image.lua" type="client" />
 	<script src="Core/label.lua" type="client" />
-	<script src="Core/layout.lua" type="client" />
 	<script src="Core/line.lua" type="client" />
 	<script src="Core/memo.lua" type="client" />
 	<script src="Core/menulist.lua" type="client" />
@@ -127,6 +126,8 @@
 	<!--(Custom Style 2) -->
 
 	<!--&Add Your Styles Here-->
+	<script src="lastExecution.lua" type="client" />
+
 	<export function="dgsAddEasingFunction" type="client" />
 	<export function="dgsEasingFunctionExists" type="client" />
 	<export function="dgsRemoveEasingFunction" type="client" />
@@ -565,11 +566,6 @@
 	<export function="dgsLabelGetVerticalAlign" type="client" />
 	<export function="dgsLabelGetTextExtent" type="client" />
 	<export function="dgsLabelGetFontHeight" type="client" />
-	
-	<export funcdef="dgsCreateLayout" type="client" />
-	<export funcdef="dgsLayoutAddItem" type="client" />
-	<export funcdef="dgsLayoutRemoveItem" type="client" />
-	<export funcdef="dgsLayoutGetItemIndex" type="client" />
 
 	<export function="dgsCreateLine" type="client"/>
 	<export function="dgsLineAddItem" type="client"/>

@@ -59,3 +59,16 @@ addEventHandler( "onClientElementStreamOut", root,
 --setCloudsEnabled(false)
 
 --setFarClipDistance( 9999 ) 
+
+local objectsTable = getElementsByType("object")
+local objectElement = false
+local objectModel = false
+
+for i = 1, #objectsTable do
+	objectElement = objectsTable[i]
+	objectModel = getElementModel(objectElement)
+    if not isElementLowLOD(objectElement) then
+	    engineSetModelLODDistance(objectModel,2000) -- Set maximum draw distance
+    end
+    print("set lod for" ..objectModel)
+end

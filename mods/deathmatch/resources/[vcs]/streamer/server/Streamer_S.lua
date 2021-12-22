@@ -136,55 +136,59 @@ function loadMap (resource)																				 -- // Load the map
 			local Proccessed = split(Data,10)
 			fileClose (File)
 
-			iA = 0
-			
-			Async:setPriority("medium")
-
-			Async:foreach(Proccessed, function(vA)
-				iA = iA + 1
+			for i,vA in ipairs(Proccessed) do 
 				local SplitA = split(vA,",")
 				if (type(SplitA) == 'table') then
+					local isError = false
 					if not (SplitA[1] == '!') then -- If the first character is equal to # then ignore, used for debugging.
-						for i=1,8 do
+						for i=1,#SplitA do
 							if not SplitA[i] then
 								print(SplitA[1],'| Object definition load error','| Row '..i)					-- // If there is any missing information inform the server, added 'Row' information for better debugging.
-								return
+								isError = true
 							end
 						end
-						defineDefintion(SplitA,resourceName) -- ## 
+						if not isError then
+							defineDefintion(SplitA,resourceName) -- ## 
+						end
 					end
 				end
-			end)
+			end
+	
+			-- fix the lod render dist
+			for ID,obj in pairs(data.resourceData[resourceName]) do
+				if obj.lod and data.resourceData[resourceName][obj.lod] then 
+					obj.draw = data.resourceData[resourceName][obj.lod].draw
+					--print(string.format("LOD: Fix %s draw -> %d",obj.model,obj.draw))
+				end
+			end
 			
-		
 
+			-- make ipl list
 			XA,YA,ZA = 0,0,0
-			iA = 0
-			Async:setPriority("medium")
-			Async:foreach(ProccessedA, function(vA)
-				iA = iA + 1
-				if (iA == 1) then
+			for iA,vA in ipairs(ProccessedA) do
+				if (iA == 1) then -- deal with offset
 					local x,y,z = split(vA,",")[1],split(vA,",")[2],split(vA,",")[3]
 					XA,YA,ZA = tonumber(x),tonumber(y),tonumber(z)
 				else
 					local SplitB = split(vA,",")
 					if not (SplitB[1] == '!') then -- If the first character is equal to # then ignore, used for debugging.
-						for i=1,9 do
+						local isError = false
+						for i=1,#SplitB do
 							if not SplitB[i] then
 								print(SplitB[1],'| Object placement load error','| Row '..i)					-- // If there is any missing information inform the server, added 'Row' information for better debugging.
-								return
+								isError = true
 							end
 						end
-						
-						definePlacement(SplitB,resourceName)
+						if not isError then
+							definePlacement(SplitB,resourceName)
+						end
 						--[[
 							we do it in client instead
 						local object = streamObject(SplitB[1],tonumber(SplitB[4])+XA,tonumber(SplitB[5])+YA,tonumber(SplitB[6])+ZA,tonumber(SplitB[7]),tonumber(SplitB[8]),tonumber(SplitB[9]),resourceName,tonumber(SplitB[3]),tonumber(SplitB[2]))  -- ## 
 						]]
 					end
 				end
-			end)
-
+			end
 		end
 	end
 	
@@ -207,7 +211,7 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 		draw = tonumber(draw),
 		flag = flag,
 		cull = toBoolean(backface),
-		lod = lod == "nil" and false or lod,
+		lod = lod and string.find(lod,"nil") == nil and lod:gsub('\r', '') or false,
 		turnOn = tonumber(turnOn),
 		turnOff = tonumber(turnOff),
 		resourceName = resourceName,
@@ -215,7 +219,6 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	data.globalData[ID] = data.resourceData[resourceName][ID]
 	
 	if flag == "SA_PROP" then -- deal with sa object
-		id = getModelFromID(model)
 		system.sa_objs = system.sa_objs + 1
 	else
 		system.objs = system.objs + 1 

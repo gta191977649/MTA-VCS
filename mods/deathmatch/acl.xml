@@ -811,7 +811,7 @@
         <right name="command.listscreenshots" access="false"></right>
     </acl>
     <acl name="autoACL_dgs">
-        <right name="function.fetchRemote" access="false" who="" pending="true" date=""></right>
-        <right name="general.ModifyOtherObjects" access="false" who="" pending="true" date=""></right>
+        <right name="function.fetchRemote" access="true" who="Console" pending="false" date="2021-12-23 03:43:11"></right>
+        <right name="general.ModifyOtherObjects" access="true" who="Console" pending="false" date="2021-12-23 03:43:11"></right>
     </acl>
 </acl>
