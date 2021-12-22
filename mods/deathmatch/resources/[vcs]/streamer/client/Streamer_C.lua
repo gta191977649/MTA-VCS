@@ -130,7 +130,7 @@ function loadObject(data)
 		setElementFlagProperty(object,data.flag)
 	end
 	-- deal with lods
-	if lod or tonumber(data.info.draw) > 900 then
+	if lod or tonumber(data.info.draw) >= 1000 then
 		if flag ~= "SA_PROP" then -- we don't want mess with sa models
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 			setLowLODElement(lowLOD, false)
