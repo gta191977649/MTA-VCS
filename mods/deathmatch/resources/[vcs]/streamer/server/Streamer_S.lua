@@ -15,6 +15,7 @@ end
 -- Tables --
 system = {
 	objs = 0,
+	sa_objs = 0,
 	lods = 0,
 }
 data = {
@@ -189,15 +190,17 @@ function loadMap (resource)																				 -- // Load the map
 	
 	local endTick = getTickCount()
 	print(resourceName,'Loaded In : '..tonumber(endTick-tickCount),'Milisecounds')
-	print(string.format("TOTAL OBJS: %d, LODS: %d",system.objs,system.lods))
+	print(string.format("TOTAL OBJS: %d, LODS: %d SA_OBJS: %d",system.objs,system.lods,system.sa_objs))
 
 end
 
 function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	local ID,model,texture,collision,draw,flag,backface,lod,turnOn,turnOff = unpack(dTable)
 	--data.resourceData[resourceName][ID] = {model,texture,collision,draw,flag,toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
+	-- check sa_props
+
 	data.resourceData[resourceName][ID] = {
-		id = getFreeID(ID),
+		id = flag == "SA_PROP" and getModelFromID(model) or getFreeID(ID),
 		model = model,
 		texture = texture,
 		collision = collision,
@@ -211,21 +214,32 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	}
 	data.globalData[ID] = data.resourceData[resourceName][ID]
 	
+	if flag == "SA_PROP" then -- deal with sa object
+		id = getModelFromID(model)
+		system.sa_objs = system.sa_objs + 1
+	else
+		system.objs = system.objs + 1 
+	end
+
+	if lod ~= "nil" then 
+		system.lods = system.lods + 1
+	end
 end
 function definePlacement(dTable,resourceName) 
+
+
 	local model,int,dim,x,y,z,rx,ry,rz= unpack(dTable)
 	-- find model id
-
+	if getModelFromID(model) then
+		blackList(model)
+	end
+	
 	local modelInfo = getData(model)
 	if not modelInfo then 
 		print(model.." id not found")
 		return
 	end
 	local id = modelInfo.id
-
-	if modelInfo.flag == "SA_PROP" then -- deal with sa object
-		id = getModelFromID(model)
-	end
 
 	table.insert(data.placementData[resourceName], {
 		id = id,
@@ -277,6 +291,7 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 
 	if flag == "SA_PROP" then -- deal with sa object
 		id = getModelFromID(model)
+		print("sa prop")
 	end
 	
 	if tonumber(id) then

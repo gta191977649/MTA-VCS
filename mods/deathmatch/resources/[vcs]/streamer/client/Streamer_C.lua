@@ -104,7 +104,12 @@ function loadModel(data,resourceName)
 		end
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
-				
+
+		-- clamp
+		local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
+		engineSetModelLODDistance(id,drawdist)
+
+
 		model_cache[data.model] = id
 		return id
 	end
@@ -134,23 +139,16 @@ function loadObject(data)
 			setLowLODElement (object,lowLOD)
 			setElementID(lowLOD,model)	
 			setElementData(lowLOD,'id',model)
-			--setElementCollisionsEnabled(lowLOD,false)
+			setElementCollisionsEnabled(lowLOD,false)
 
-			if flag and tonumber(flag) ~= 0 then 
-				setElementFlagProperty(lowLOD,data.flag)
-			end
 			if cull then 
 				setElementDoubleSided(lowLOD,true)
 			end
 
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
-			engineSetModelLODDistance(id,drawdist)
-			
 		end
 	end
-	
-
 	return object
 
 end
@@ -159,6 +157,8 @@ function loadMap(ipls,ides,mapname)
 	resource[mapname] = {}
 	loaded = 0
 	setOcclusionsEnabled(false)
+	setGameSpeed(0)
+	setElementPosition(localPlayer,3000,3000,10)
 
 	-- create object
 	for i,data in ipairs(ipls) do 
@@ -173,13 +173,13 @@ function loadMap(ipls,ides,mapname)
 
 	ides = {}
 
-	Async:setPriority("high")
+	Async:setPriority(100, 1000);
 	Async:foreach(dataToLoad, function(data) 
 		-- load model
-		if model_cache[data.model] == nil then
+		if model_cache[data.model] == nil and data.flag ~= "SA_PROP"then
 			loadModel(data,mapname)
 		else
-			DEBUG:addDebugMessage(string.format("Exist: %s has already loaded, skipping...\n",data.model))
+			DEBUG:addDebugMessage(string.format("Exist: %s has already loaded or is a SA Prop, skipping...\n",data.model))
 		end
 
 		loaded = loaded + 1
@@ -188,12 +188,13 @@ function loadMap(ipls,ides,mapname)
 		DEBUG:addDebugMessage(debugMsg)
 
 		if loaded >= #dataToLoad then 
-			engineRestreamWorld()
 			vegitationElementReload()
-			loadedFunction(mapname)
+			engineStreamingFreeUpMemory(104857600)
+			engineRestreamWorld()
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
 			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
-			--setGameSpeed(1)
+			setGameSpeed(1)
+			loadedFunction(mapname)
 		end
 	end)
 
