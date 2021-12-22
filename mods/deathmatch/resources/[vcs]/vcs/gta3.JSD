@@ -193,7 +193,7 @@ Helipad0,Helipad0,helipad,Helipad0,400,0,true,LODipad0
 ap_screens1_01,ap_screens1_01,airstuff2,ap_screens1_01,390,0,true,nil
 ap_runsign3_01,ap_runsign3_01,ap_runsigns1,ap_runsign3_01,450,0,true,nil
 high_lampost,high_lampost,docklight,high_lampost,450,4,true,nil
-lamproad3,lamproad3,dynsigns,lamproad3,450,0,true,nil
+lamproad3,lamproad3,dynsigns,lamproad3,450,4096,true,nil
 ap_gatedisp1_01,ap_gatedisp1_01,ap_airstuff1,ap_gatedisp1_01,390,0,true,nil
 LODroadsect1A,LODroadsect1A,LODairport,LODroadsect1A,1600,1,true,nil
 LODrland09a,LODrland09a,LODairport,LODrland09a,1600,1,true,nil

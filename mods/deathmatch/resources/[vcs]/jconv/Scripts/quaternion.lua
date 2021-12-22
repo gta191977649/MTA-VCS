@@ -42,12 +42,16 @@ function getEulerAnglesFromMatrix(x1,y1,z1,x2,y2,z2,x3,y3,z3)
 end
 
 function fromQuaternion(x,y,z,w) 
+
 	local matrix = QuaternionTo3x3(x,y,z,w)
 	local ox,oy,oz = getEulerAnglesFromMatrix(
 		matrix[1][1], matrix[1][2], matrix[1][3], 
 		matrix[2][1], matrix[2][2], matrix[2][3],
 		matrix[3][1], matrix[3][2], matrix[3][3]
 	)
-
+	-- check nan
+	ox = ox == ox and ox or 0
+	oy = oy == oy and oy or 0
+	oz = oz == oz and oz or 0
 	return ox,oy,oz
 end

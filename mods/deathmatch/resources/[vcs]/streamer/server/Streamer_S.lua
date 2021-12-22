@@ -1,10 +1,11 @@
+USE_ORIGINAL_LODS = false
 debug.sethook(nil)
-for i=550,20000 do
-    removeWorldModel(i,10000,0,0,0)
+-- initial setup --
+for i = 550, 20000 do
+	removeWorldModel(i,10000,0,0,0)
 end
-setOcclusionsEnabled(false)
 setWaterLevel(-5000)
-
+setOcclusionsEnabled(false)
 -- Events --
 events = {'onPlayerLoad','onElementBreak','onPlayerFailedLoad','fetchID','prepOriginals'}
 for i = 1,#events do
@@ -16,13 +17,20 @@ system = {
 	objs = 0,
 	lods = 0,
 }
-data = {id={},resourceObjects={},globalObjects = {},resourceData={},globalData = {}}
+data = {
+	id={},
+	resourceObjects={},
+	globalObjects = {},
+	resourceData={},
+	globalData = {},
+	placementData = {},
+}
 suffixList = {'gta3','mta'}
 
 blacklist = {}
- -- ID defines the assigned SA ID, objects are the objects per SID, resource defines objects per resource.
- 
- -- Functions --
+-- ID defines the assigned SA ID, objects are the objects per SID, resource defines objects per resource.
+
+-- Functions --
  
 function blackList(model)
 	if (type(model) == 'table') then
@@ -204,12 +212,9 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	
 end
 
+
 function getData(name)
 	if data.globalData[name] then
-		--[[
-		local _,_,_,drawdist,flag,cull,lod,_,_,id = unpack(data.globalData[name])
-		return cull,lod,id,drawdist,flag
-		]]
 		return data.globalData[name]
 	else
 		return false
@@ -233,9 +238,11 @@ function setElementFlag(element,flag)
 end
 
 function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
+	--[[
 	if getModelFromID(model) then
 		blackList(model)
 	end
+	]]
 	local modelInfo = getData(model)
 	if not modelInfo then 
 		print(model.." not found")
@@ -262,13 +269,19 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 		-- deal with lods
 		if lod or drawdist and tonumber(drawdist) > 999 then
 			if flag ~= "SA_PROP" then -- we don't want mess with sa models
-				--local lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-				local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+				local lowLOD
+				if USE_ORIGINAL_LODS then
+					lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+					setLowLODElement (object,lowLOD)
+					setElementID(lowLOD,lod)	
+					setElementData(lowLOD,'id',lod)
+				else
+					lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+					setElementID(lowLOD,model)	
+					setElementData(lowLOD,'id',model)
+				end
 				--setElementCollisionsEnabled(lowLOD,false)
-				--setElementID(lowLOD,lod)	
-				--setElementData(lowLOD,'id',lod)
-				setElementID(lowLOD,model)	
-				setElementData(lowLOD,'id',model)
+
 				setElementInterior(lowLOD,int >= 0 and int or 0)
 				setElementDimension(lowLOD,dim or -1)
 				if flag then 
@@ -281,8 +294,6 @@ function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
 					table.insert(data.resourceObjects[resource],lowLOD)
 					data.globalData[model].object_lod = lowLOD
 				end
-				--print("created lod for "..model)
-				setLowLODElement ( object, lowLOD )
 				system.lods = system.lods + 1
 			end
 		end
@@ -318,7 +329,7 @@ function onResourceLoad ( resource )
 	local resource = getResourceFromName(resource)
 	if getResourceInfo ( resource, 'Streamer') or getResourceInfo ( resource, 'cStream') then
 		local name = getResourceName(resource)
-		triggerClientEvent("MTAStream_Client",client,data.resourceData[name],name )
+		triggerClientEvent("Client_loadModel",client,data.resourceData[name],name )
 	end
 end
 addEvent( "onResourceLoad", true )

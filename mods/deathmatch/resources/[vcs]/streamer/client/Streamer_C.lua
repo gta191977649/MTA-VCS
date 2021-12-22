@@ -13,8 +13,9 @@ addEventHandler( "onClientResourceStart", getRootElement( ),onResourceStart)
 
 
 function loadMap ( Proccessed,resourceName )
+	setGameSpeed(0)
 	setElementPosition(localPlayer,3000,3000,10)
-
+	
 	startTickCount = getTickCount ()
 	resource[resourceName] = {}
 	
@@ -36,7 +37,7 @@ function loadMap ( Proccessed,resourceName )
 				local texture,cache = requestTextureArchive(path,data.texture)
 				engineImportTXD(texture,data.id)
 				table.insert(resource[resourceName],cache)
-
+	
 				-- load dff
 				local path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
 				local model,cache = requestModel(path,data.model)
@@ -54,33 +55,33 @@ function loadMap ( Proccessed,resourceName )
 					addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
 				end
 				-- deal with common flags properties, e.g. breakable
-				setElementFlagProperty(data.object,data.flag)
+				--setElementFlagProperty(data.object,data.flag)
+				engineSetModelLODDistance(data.id,data.draw)
 			end
-			engineSetModelLODDistance(data.id,data.draw)	
-			print(string.format("%s loaded, drawdist %d",data.model,data.draw))
+			
 		end
 
 		loaded = loaded + 1
-		DEBUG:addDebugMessage(loaded.." OF ".. #dataToLoad.."\n")
+		DEBUG:addDebugMessage(string.format("%d OF %d remain.\n",loaded,#dataToLoad))
 		if loaded >= #dataToLoad then 
 			engineRestreamWorld()
 			vegitationElementReload()
 			loadedFunction(resourceName)
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
 			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
+			setGameSpeed(1)
 		end
 	end)
-	
-
-
 end
-addEvent( "MTAStream_Client", true )
-addEventHandler( "MTAStream_Client", localPlayer, loadMap )
+addEvent( "Client_loadModel", true )
+addEventHandler( "Client_loadModel", localPlayer, loadMap )
 
 function loadedFunction (resourceName)
 	local endTickCount = getTickCount ()-startTickCount
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
+
+	cache = {} -- clearn the cache
 end
 
 function requestTextureArchive(path)
