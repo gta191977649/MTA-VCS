@@ -122,6 +122,9 @@ function loadObject(data)
 	local model = data.model
 	setElementID(object,model)	
 	setElementData(object,'id',model)
+	setElementInterior(object,int >= 0 and int or 0)
+	setElementDimension(object,dim or -1)
+	
 	if cull then
 		setElementDoubleSided(object,true)
 	end
