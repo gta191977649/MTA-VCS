@@ -1,6 +1,6 @@
 local LibertyTexture = dxCreateTexture('radarvc.jpg')
 local radar = {}
-local Offset = {[1] = -120, [2] = -245}
+local Offset = {[1] = -120, [2] = -241}
 local Size = 124
 local myRenderTarget = {}
 local tiles = {}
