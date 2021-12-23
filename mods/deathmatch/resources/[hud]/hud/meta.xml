@@ -1,12 +1,16 @@
 <meta>
+    <min_mta_version client="1.5.4" server="1.5.4" />
     <script src="hud.lua" type="client"/>
     <script src="gametext.lua" type="client"/>
+    <script src="miniradar.lua" type="client"/>
 
     <!-- functions -->
     <export function="showGameText" type="shared"/>
     <!-- Shader -->
     <file src="shader/texreplace.fx" type="client"/>
     <!-- Radar -->
+    <file src="radarvc.png" type="client"/>
+
     <file src="frontend/hud/fists.png" type="client"/>
     <file src="frontend/hud/bar.png" type="client"/>
     <file src="frontend/hud.png" type="client"/>

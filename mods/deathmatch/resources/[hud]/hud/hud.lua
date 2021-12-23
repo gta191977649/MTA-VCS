@@ -1,4 +1,7 @@
 loadstring(exports.dgs:dgsImportFunction())()
+setPlayerHudComponentVisible ("all",false)
+setPlayerHudComponentVisible ("radar",true)
+
 FONT = exports.font
 -- render refer
 --dgsCreateImage(0,0,1,1,"frontend/hud.png",true)
@@ -60,7 +63,6 @@ apply_ui_style(HUD.cash,tocolor(54,104,44,255))
 --updateHUDText(HUD.time,"18:05") 
 
 
-setPlayerHudComponentVisible ("all",false)
 -- update time
 
 function HUD_Update() 
