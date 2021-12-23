@@ -27,10 +27,19 @@ function createEnex(x1,y1,z1,rot,w1,w2,x2,y2,z2,rot2,int,flag,name)
         flag = tonumber(flag),
         name = name,
     }
-    local marker = createMarker(x1,y1,z1+2,"arrow",1.8,0xED,0x82,0xB4)
+    local marker = createMarker(x1,y1,z1+2,"arrow",1.5,0,255,255,100)
     setElementParent(marker,enexElement)
     setElementInterior(marker,int)
     setElementInterior(colshape,int)
+end
+
+function teleportPlayerToLinkedInterior(source,link) 
+    fadeCamera(true,0.5)
+    print("hit "..Enex[source].name.." flag "..Enex[source].flag)
+    local x,y,z = unpack(Enex[link].pos_exit)
+    lastHit = getTickCount()
+    setElementInterior(localPlayer,Enex[link].int)
+    setElementPosition(localPlayer,x,y,z+0.5)
 end
 function loadEnex(path) 
     -- step 1 load enex
@@ -76,16 +85,15 @@ function loadEnex(path)
             if getTickCount() - lastHit < HIT_COOLDOWN_TIME then return end
             local link = Enex[source].link
             if link ~= nil and Enex[link] ~= nil then 
-                print("hit "..Enex[source].name.." flag "..Enex[source].flag)
-                local x,y,z = unpack(Enex[link].pos_exit)
-                lastHit = getTickCount()
-                setElementInterior(localPlayer,Enex[link].int)
-                setElementPosition(localPlayer,x,y,z+0.5)
                 if Enex[source].flag == 6 then -- only show at entry
-                    HUD:showGameText(Enex[source].name,"LOCATION_NAME",5000)
+                    HUD:showGameText(Enex[source].name,"LOCATION_NAME",3000)
                 end
+                --fade camera
+                fadeCamera(false,0.5)
+                setTimer(teleportPlayerToLinkedInterior,500,1,source,link)
+                --teleportPlayerToLinkedInterior() 
             else
-                HUD:showGameText("Enex Pair Missing!","LOCATION_NAME",5000)
+                HUD:showGameText("Enex Pair Missing!","LOCATION_NAME",3000)
                 print(Enex[source].name.." link not found!")
             end
         end
@@ -95,5 +103,6 @@ end
 
 -- animation
 addEventHandler( "onClientResourceStart", resourceRoot,function()
+    fadeCamera(true)
     loadEnex("enex.ipl")
 end)
