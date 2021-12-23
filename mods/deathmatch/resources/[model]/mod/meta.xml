@@ -1,0 +1,71 @@
+<meta>
+    <min_mta_version client="1.5.7-9.20147"></min_mta_version>
+    <script src="mod.lua" type="shared" cache="false"/>
+    <script src="mod_c.lua" type="client" cache="false"/>
+    <script src="mod_s.lua" type="server" cache="false"/>
+    
+    <file src="shader/replace.fx" type="client"/>
+    <!-- vcs generic txd fix -->
+    <file src="src/generic/backplate.png" type="client"/>
+    <file src="src/generic/plateback1.png" type="client"/>
+    <file src="src/generic/plateback2.png" type="client"/>
+    <file src="src/generic/plateback3.png" type="client"/>
+    <file src="src/generic/vehiclesteering128.png" type="client"/>
+    <file src="src/generic/vehicletyres128.png" type="client"/>
+    <file src="src/generic/vehiclegeneric256.png" type="client"/>
+    <file src="src/generic/vehiclegrunge256.png" type="client"/>
+    <file src="src/generic/vehiclelights128.png" type="client"/>
+    <file src="src/generic/vehiclelightson128.png" type="client"/>
+    <!-- vcs vehicles -->
+    <file src="src/vehicle/admiral.txd" type="client"/>
+    <file src="src/vehicle/admiral.dff" type="client"/>
+
+    <file src="src/vehicle/cabbie.txd" type="client"/>
+    <file src="src/vehicle/cabbie.dff" type="client"/>
+
+    <file src="src/vehicle/caddy.txd" type="client"/>
+    <file src="src/vehicle/caddy.dff" type="client"/>
+
+    <file src="src/vehicle/banshee.txd" type="client"/>
+    <file src="src/vehicle/banshee.dff" type="client"/>
+
+    <file src="src/vehicle/quad.txd" type="client"/>
+    <file src="src/vehicle/quad.dff" type="client"/>
+
+    <file src="src/vehicle/pcj600.txd" type="client"/>
+    <file src="src/vehicle/pcj600.dff" type="client"/>
+
+    <file src="src/vehicle/infernus.txd" type="client"/>
+    <file src="src/vehicle/infernus.dff" type="client"/>
+
+    <file src="src/vehicle/cheetah.txd" type="client"/>
+    <file src="src/vehicle/cheetah.dff" type="client"/>
+    <file src="src/vehicle/voodoo.txd" type="client"/>
+    <file src="src/vehicle/voodoo.dff" type="client"/>
+
+    <file src="src/vehicle/sentinel.txd" type="client"/>
+    <file src="src/vehicle/sentinel.dff" type="client"/>
+
+    <file src="src/vehicle/bmxboy.txd" type="client"/>
+    <file src="src/vehicle/bmxboy.dff" type="client"/>
+
+    <file src="src/vehicle/hovercr.txd" type="client"/>
+    <file src="src/vehicle/hovercr.dff" type="client"/>
+    <file src="src/vehicle/6atv.txd" type="client"/>
+    <file src="src/vehicle/6atv.dff" type="client"/>
+
+    <file src="src/vehicle/jetski.txd" type="client"/>
+    <file src="src/vehicle/jetski.dff" type="client"/>
+
+
+    <!-- VCS Only Vehicles -->
+    <file src="src/vehicle/stinger.txd" type="client"/>
+    <file src="src/vehicle/stinger.dff" type="client"/>
+  
+
+    <!-- exports -->
+    <export function="setElementModModel" type="server" />
+    <export function="setElementModModel" type="client" />
+    <export function="getVehicleName" type="client" />
+
+</meta>

@@ -128,9 +128,11 @@ function loadObject(data)
 		setElementDoubleSided(object,true)
 	end
 	
+	--[[
 	if flag and tonumber(flag) ~= 0 then 
 		setElementFlagProperty(object,data.flag)
 	end
+	]]
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 then
 		if flag ~= "SA_PROP" then -- we don't want mess with sa models
