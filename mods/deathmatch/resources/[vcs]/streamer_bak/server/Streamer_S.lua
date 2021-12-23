@@ -2,7 +2,6 @@ debug.sethook(nil)
 for i=550,20000 do
     removeWorldModel(i,10000,0,0,0)
 end
-setOcclusionsEnabled(false)
 setWaterLevel(-5000)
 
 -- Events --

@@ -1,7 +1,6 @@
 DEBUG = exports.DEBUG
 
 debug.sethook(nil)
-
 -- Tables --
 cache = {}
 resource = {}
@@ -159,7 +158,6 @@ function loadMap(ipls,ides,mapname)
 	startTickCount = getTickCount ()
 	resource[mapname] = {}
 	loaded = 0
-	setOcclusionsEnabled(false)
 	setGameSpeed(0)
 	setElementPosition(localPlayer,3000,3000,10)
 

@@ -2661,8 +2661,7 @@ seabed35,seabed35,underworld,seabed35,3000,256,true,nil
 cardboardbox,cardboardbox,boxes,cardboardbox,45,SA_PROP,true,nil
 mlamppost,mlamppost,streetlights,mlamppost,65,SA_PROP,true,nil
 kb_pot_1,kb_pot_1,new_palm,kb_pot_1,35,SA_PROP,true,nil
-mall_a2,mall_a2,mall_a,mall_a2,450,360,true,nil
-mall_a10,mall_a10,mall_a,mall_a10,450,360,true,nil
+ap_army_neon,ap_army_neon,knackers,ap_army_neon,1000,2097228,true,nil,20,5
 mall_i8,mall_i8,mall_i,mall_i8,450,0,true,nil
 mall_i16,mall_i16,mall_i,mall_i16,450,360,true,nil
 mall_i24,mall_i24,mall_i,mall_i24,450,0,true,nil
@@ -2757,8 +2756,7 @@ parkbench1,parkbench1,benches_cj,parkbench1,55,SA_PROP,true,nil
 CJ_Dumpster2,CJ_Dumpster2,CJ_BINS2,CJ_Dumpster2,70,SA_PROP,true,nil
 veg_treeb1,veg_treeb1,new_palm,veg_treeb1,200,2097284,true,nil
 ramp_new,ramp_new,ramp2,ramp_new,450,0,true,nil
-mall_a3,mall_a3,mall_a,mall_a3,450,360,true,nil
-mall_a11,mall_a11,mall_a,mall_a11,450,360,true,nil
+wsh_sfhus_neon,wsh_sfhus_neon,knackers,wsh_sfhus_neon,1500,209722812,true,nil,20,7
 mall_i1,mall_i1,mall_i,mall_i1,450,0,true,nil
 mall_i9,mall_i9,mall_i,mall_i9,450,0,true,nil
 mall_i17,mall_i17,mall_i,mall_i17,450,0,true,nil
@@ -2880,7 +2878,7 @@ nbeachw_build03,nbeachw_build03,nbw_buildingsX,nbeachw_build03,450,2097152,true,
 LODbuild-ext01,LODbuild-ext01,haitiN_LOD,LODbuild-ext01,1500,2097152,true,nil
 LODachw_partA15,LODachw_partA15,nbeachw_LOD,LODachw_partA15,1500,2097152,true,nil
 pc_scene08,pc_scene08,pc_stadium01,pc_scene08,450,2097156,true,nil
-mall_a4,mall_a4,mall_a,mall_a4,450,360,true,nil
+dr_hapol_neon,dr_hapol_neon,knackers,dr_hapol_neon,1500,2097228,true,nil,20,7
 mall_a12,mall_a12,mall_a,mall_a12,450,360,true,nil
 mall_i2,mall_i2,mall_i,mall_i2,450,360,true,nil
 mall_i10,mall_i10,mall_i,mall_i10,450,0,true,nil
@@ -2988,7 +2986,7 @@ MTraffic2,MTraffic2,mitraffic,MTraffic2,95,SA_PROP,true,nil
 bin1,bin1,metal,bin1,45,SA_PROP,true,nil
 nt_vent2_01,nt_vent2_01,alleyprop,nt_vent2_01,34,SA_PROP,true,nil
 veg_palm02,veg_palm02,new_palm,veg_palm02,200,2130052,true,nil
-mall_a5,mall_a5,mall_a,mall_a5,450,360,true,nil
+doontoon_hymn_neons,doontoon_hymn_neons,knackers,doontoon_hymn_neons,1500,2097228,true,nil,20,7
 mall_a13,mall_a13,mall_a,mall_a13,450,360,true,nil
 mall_i3,mall_i3,mall_i,mall_i3,450,0,true,nil
 mall_i11,mall_i11,mall_i,mall_i11,450,0,true,nil
@@ -3107,7 +3105,7 @@ pc_stadium_struct05,pc_stadium_struct05,pc_stadium02,pc_stadium_struct05,450,209
 Fan1,Fan1,Particle_HM128,Fan1,299,12,true,nil
 pc_stadium_struct03,pc_stadium_struct03,pc_stadium02,pc_stadium_struct03,450,2097152,true,nil
 pc_stadium_struct01,pc_stadium_struct01,pc_stadium02,pc_stadium_struct01,450,2097152,true,nil
-mall_a6,mall_a6,mall_a,mall_a6,450,360,true,nil
+dr_ryaid_neon,dr_ryaid_neon,knackers,dr_ryaid_neon,1500,2097228,true,nil,20,6
 mall_a14,mall_a14,mall_a,mall_a14,450,360,true,nil
 mall_i4,mall_i4,mall_i,mall_i4,450,0,true,nil
 mall_i12,mall_i12,mall_i,mall_i12,450,0,true,nil
@@ -3235,7 +3233,7 @@ lounge_wood_up,lounge_wood_up,od_beachstuff,lounge_wood_up,50,SA_PROP,true,nil
 veg_palmkb8,veg_palmkb8,new_palm,veg_palmkb8,60,2097284,true,nil
 veg_palmkb14,veg_palmkb14,new_palm,veg_palmkb14,40,2097284,true,nil
 pot_03,pot_03,new_palm,pot_03,35,SA_PROP,true,nil
-mall_a7,mall_a7,mall_a,mall_a7,450,360,true,nil
+wsh_law_neon,wsh_law_neon,knackers,wsh_law_neon,1000,2097228,true,nil,20,6
 mall_a15,mall_a15,mall_a,mall_a15,450,360,true,nil
 mall_i5,mall_i5,mall_i,mall_i5,450,0,true,nil
 mall_i13,mall_i13,mall_i,mall_i13,450,0,true,nil
@@ -3341,7 +3339,7 @@ chairsntable,chairsntable,chairsntable,chairsntable,70,SA_PROP,true,nil
 veg_palmkb3,veg_palmkb3,new_palm,veg_palmkb3,60,2097284,true,nil
 kb_chr_tbl_test,kb_chr_tbl_test,canopy,kb_chr_tbl_test,30,2097280,true,nil
 chunder_partF04,chunder_partF04,nbw_fairgroundY,chunder_partF04,449,2097152,true,nil
-mall_a8,mall_a8,mall_a,mall_a8,450,360,true,nil
+wsh_ap3c_neon,wsh_ap3c_neon,knackers,wsh_ap3c_neon,1000,2097228,true,nil,20,6
 mall_a16,mall_a16,mall_a,mall_a16,450,360,true,nil
 mall_i6,mall_i6,mall_i,mall_i6,450,0,true,nil
 mall_i14,mall_i14,mall_i,mall_i14,450,0,true,nil
@@ -3472,8 +3470,7 @@ LODtiN_road06,LODtiN_road06,haitiN_LOD,LODtiN_road06,1500,2097152,true,nil
 LODground04,LODground04,haitiN_LOD,LODground04,1500,2097152,true,nil
 LODpartC03,LODpartC03,haitiN_LOD,LODpartC03,1500,2097152,true,nil
 LODpartA02,LODpartA02,haitiN_LOD,LODpartA02,1500,2097152,true,nil
-mall_a1,mall_a1,mall_a,mall_a1,450,360,true,nil
-mall_a9,mall_a9,mall_a,mall_a9,450,360,true,nil
+dr_kaufcab_neon,dr_kaufcab_neon,knackers,dr_kaufcab_neon,1000,2097228,true,nil,20,6
 mall_a17,mall_a17,mall_a,mall_a17,450,360,true,nil
 mall_i7,mall_i7,mall_i,mall_i7,450,0,true,nil
 mall_i15,mall_i15,mall_i,mall_i15,450,0,true,nil
