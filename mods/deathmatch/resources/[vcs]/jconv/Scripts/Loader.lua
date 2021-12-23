@@ -2,6 +2,7 @@
 Debug = {}
 IPLList = {}
 IPLList2 = {}
+USE_SA_PROPS = true
 
 function OutPutDebug2(Messege)
 	print (Messege) -- Print our messege
@@ -92,11 +93,11 @@ for i,v in pairs(IDETable) do
 			local Flag = Split[5]
 			--if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) or Defaults2[Model] then
 			if fileExists ("Resources/"..removeSpace(Model)..".dff") or Defaults2[Model] then
-				if not Defaults2[Model] then
-					IDEList1[ID] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
-				else
+				if USE_SA_PROPS and Defaults2[Model] then
+					Flag = "SA_PROP"
 					Defaults[Model] = true
 				end
+				IDEList1[ID] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
 			else
 				if Exists[removeSpace(Model)] then
 					OutPutDebug2("Model:"..Model.." Missing DFF")
@@ -123,7 +124,9 @@ for i,v in pairs(IPLTable) do
 			local QX,QY,QZ,QW = Split[7],Split[8],Split[9],Split[10]
 			--local QX,QY,QZ,QW = Split[10],Split[11],Split[12],Split[13] -- VC Format
 			--local xr,yr,zr = quaternion_to_euler_angle(QW,QX,QY,QZ)
+			
 			local xr,yr,zr = fromQuaternion(QX,QY,QZ,QW) -- replace algorithm
+ 
 			local LOD = tonumber(Split[11])
 			if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) then
 				if IDEList1[ID] or Defaults[Model] or Defaults2[Model] then -- If it doesn't exist ignore it

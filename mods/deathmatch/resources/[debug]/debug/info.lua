@@ -16,7 +16,7 @@ formatLabel(build_info)
 formatLabel(debug_info,tocolor(209, 157, 0,255))
 formatLabel(pos_info,tocolor(209, 157, 0,255))
 
-local debug_memo = DGS:dgsCreateMemo(0.75,0.3,0.2,0.5,"DEBUG INFO",true,Window)
+local debug_memo = DGS:dgsCreateMemo(0.5,0.3,0.45,0.5,"SPARROW DEBUG TERMIAL.\nReady.",true,Window)
 DGS:dgsSetProperty(debug_memo,"font","sans")
 DGS:dgsSetProperty(debug_memo,"textSize",{1.2,1.2})
 DGS:dgsSetProperty(debug_memo,"bgColor",tocolor(209, 157, 0,0))
@@ -34,10 +34,7 @@ end,100,0)
 function addDebugMessage(msg)
     DGS:dgsMemoInsertText(debug_memo,0,1,msg)
 end
-setOcclusionsEnabled (false)
-setFarClipDistance( 1500 ) 
 setWaveHeight(1)
-print(engineStreamingFreeUpMemory (104857600))
 -- Stream debug
 --[[
 addEventHandler( "onClientElementStreamIn", root,
@@ -62,3 +59,5 @@ addEventHandler( "onClientElementStreamOut", root,
 --setCloudsEnabled(false)
 
 --setFarClipDistance( 9999 ) 
+
+

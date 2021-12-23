@@ -16,6 +16,17 @@ tobj
 3036, pm_scraplights, knackers, 1500,2097228, 20, 6
 968, dr_dks_neonA, knackers, 1500,2097228, 20, 6
 265336, dr_dts_winsb, knackers, 1500,2097228, 20, 6
+6000, dr_sunshn_neon, knackers,1500, 2097228, 20, 6
+6001, si_manbld_neon, knackers,1500, 2097228, 20, 7
+6002, od_char_neon, knackers,1500, 2097228, 20, 6
+6003, dr_hapol_neon, knackers,1500, 2097228, 20, 7
+6004, doontoon_hymn_neons, knackers,1500, 2097228, 20, 7
+6005, dr_ryaid_neon, knackers,1500, 2097228, 20, 6
+6006, wsh_law_neon, knackers,1000, 2097228, 20, 6
+6007, wsh_ap3c_neon, knackers,1000, 2097228, 20, 6
+6008, dr_kaufcab_neon, knackers,1000, 2097228, 20, 6
+6009, ap_army_neon, knackers,1000, 2097228, 20, 5
+6010, wsh_sfhus_neon, knackers,1500,209722812,20, 7
 end
 path
 end

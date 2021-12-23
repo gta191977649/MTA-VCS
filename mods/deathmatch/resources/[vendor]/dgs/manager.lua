@@ -129,7 +129,7 @@ function dgsSetParent(child,parent,nocheckfather,noUpdatePosSize)
 		if id then
 			tableRemove(parentTable,id)
 		end
-		FatherTable[id] = nil
+		FatherTable[child] = nil
 		tableInsert(CenterFatherTable,child)
 		setElementParent(child,resourceRoot)
 	end
@@ -161,7 +161,8 @@ function blurEditMemo()
 end
 
 function dgsBringToFront(dgsEle,mouse,dontMoveParent,dontChangeData)
-	if not(dgsIsType(dgsEle)) then error(dgsGenAsrt(dgsEle,"dgsBringToFront",1,"dgs-dxelement")) end
+	local eleType = dgsIsType(dgsEle)
+	if not(eleType) then error(dgsGenAsrt(dgsEle,"dgsBringToFront",1,"dgs-dxelement")) end
 	local parent = FatherTable[dgsEle]	--Get Parent
 	local lastFront = MouseData.focused
 	if not dontChangeData then
@@ -190,17 +191,32 @@ function dgsBringToFront(dgsEle,mouse,dontMoveParent,dontChangeData)
 	end
 	if dgsElementData[dgsEle].changeOrder then
 		if not isElement(parent) then
-			local layer = dgsElementData[dgsEle].alwaysOn or "center"
-			local layerTable = LayerCastTable[layer]
-			local id = tableFind(layerTable,dgsEle)
-			if id then
-				tableRemove(layerTable,id)
-				tableInsert(layerTable,dgsEle)
+			if dgsScreen3DType[eleType] then
+				local id = tableFind(dgsScreen3DTable,dgsEle)
+				if id then
+					tableRemove(dgsScreen3DTable,id)
+					tableInsert(dgsScreen3DTable,dgsEle)
+				end
+			elseif dgsWorld3DType[eleType] then
+				local id = tableFind(dgsWorld3DTable,dgsEle)
+				if id then
+					tableRemove(dgsWorld3DTable,id)
+					tableInsert(dgsWorld3DTable,dgsEle)
+				end
+			else
+				local layer = dgsElementData[dgsEle].alwaysOn or "center"
+				local layerTable = LayerCastTable[layer]
+				local id = tableFind(layerTable,dgsEle)
+				if id then
+					tableRemove(layerTable,id)
+					tableInsert(layerTable,dgsEle)
+				end
 			end
 		else
 			local parents = dgsEle
 			while true do
 				local uparents = FatherTable[parents]	--Get Parent
+				local eleType = dgsIsType(uparents)
 				if isElement(uparents) then
 					local children = ChildrenTable[uparents]
 					local id = tableFind(children,parents)
@@ -215,17 +231,35 @@ function dgsBringToFront(dgsEle,mouse,dontMoveParent,dontChangeData)
 					end
 					parents = uparents
 				else
-					local id = tableFind(CenterFatherTable,parents)
-					if id then
-						tableRemove(CenterFatherTable,id)
-						tableInsert(CenterFatherTable,parents)
-						if dgsElementType[parents] == "dgs-dxscrollpane" then
-							local scrollbar = dgsElementData[parents].scrollbars
-							dgsBringToFront(scrollbar[1],"left",_,true)
-							dgsBringToFront(scrollbar[2],"left",_,true)
+					if dgsScreen3DType[eleType] then
+						local id = tableFind(dgsScreen3DTable,parents)
+						if id then
+							tableRemove(dgsScreen3DTable,id)
+							tableInsert(dgsScreen3DTable,parents)
 						end
+						break
+					elseif dgsWorld3DType[eleType] then
+						local id = tableFind(dgsWorld3DTable,parents)
+						if id then
+							tableRemove(dgsWorld3DTable,id)
+							tableInsert(dgsWorld3DTable,parents)
+						end
+						break
+					else
+						local layer = dgsElementData[parents].alwaysOn or "center"
+						local layerTable = LayerCastTable[layer]
+						local id = tableFind(layerTable,parents)
+						if id then
+							tableRemove(layerTable,id)
+							tableInsert(layerTable,parents)
+							if dgsElementType[parents] == "dgs-dxscrollpane" then
+								local scrollbar = dgsElementData[parents].scrollbars
+								dgsBringToFront(scrollbar[1],"left",_,true)
+								dgsBringToFront(scrollbar[2],"left",_,true)
+							end
+						end
+						break
 					end
-					break
 				end
 				if dontMoveParent then
 					break
@@ -290,6 +324,7 @@ dgsType = {
 	"dgs-dxcheckbox",
 	"dgs-dxlabel",
 	"dgs-dxline",
+	"dgs-dxlayout",
 	"dgs-dxscrollbar",
 	"dgs-dxscrollpane",
 	"dgs-dxscalepane",
@@ -571,6 +606,15 @@ local dgsDataFunctions = {
 			dgsSetData(dgsEle,"width",mathClamp(dxGetTextWidth(dgsElementData[dgsEle].text,dgsElementData[dgsEle].textSize[1],dgsElementData[dgsEle].font or dgsElementData[tabpanel].font),minwidth,maxwidth))
 		end,
 		font = function(dgsEle,key,value,oldValue)
+			--Multilingual
+			if type(value) == "table" then
+				dgsElementData[dgsEle]._translationFont = value
+				value = dgsGetTranslationFont(dgsEle,value,sourceResource)
+			else
+				dgsElementData[dgsEle]._translationFont = nil
+			end
+			dgsElementData[dgsEle].font = value
+			
 			local tabpanel = dgsElementData[dgsEle].parent
 			local w = dgsElementData[tabpanel].absSize[1]
 			local t_minWid = dgsElementData[tabpanel].tabMinWidth
@@ -596,6 +640,15 @@ local dgsDataFunctions = {
 			dgsElementData[dgsEle].updateTextRTNextFrame = true
 		end,
 		font = function(dgsEle,key,value,oldValue)
+			--Multilingual
+			if type(value) == "table" then
+				dgsElementData[dgsEle]._translationFont = value
+				value = dgsGetTranslationFont(dgsEle,value,sourceResource)
+			else
+				dgsElementData[dgsEle]._translationFont = nil
+			end
+			dgsElementData[dgsEle].font = value
+			
 			local eleData = dgsElementData[dgsEle]
 			eleData.textFontLen = dxGetTextWidth(eleData.text,eleData.textSize[1],eleData.font)
 			dgsElementData[dgsEle].updateTextRTNextFrame = true
@@ -628,6 +681,15 @@ local dgsDataFunctions = {
 			dgsElementData[dgsEle].updateTextRTNextFrame = true
 		end,
 		font = function(dgsEle,key,value,oldValue)
+			--Multilingual
+			if type(value) == "table" then
+				dgsElementData[dgsEle]._translationFont = value
+				value = dgsGetTranslationFont(dgsEle,value,sourceResource)
+			else
+				dgsElementData[dgsEle]._translationFont = nil
+			end
+			dgsElementData[dgsEle].font = value
+			
 			dgsMemoRebuildTextTable(dgsEle)
 			dgsElementData[dgsEle].updateTextRTNextFrame = true
 		end,
@@ -683,6 +745,16 @@ local dgsDataFunctions = {
 			end
 			dgsElementData[dgsEle].text = tostring(value)
 			triggerEvent("onDgsTextChange",dgsEle)
+		end,
+		font = function(dgsEle,key,value,oldValue)
+			--Multilingual
+			if type(value) == "table" then
+				dgsElementData[dgsEle]._translationFont = value
+				value = dgsGetTranslationFont(dgsEle,value,sourceResource)
+			else
+				dgsElementData[dgsEle]._translationFont = nil
+			end
+			dgsElementData[dgsEle].font = value
 		end,
 		caption = function(dgsEle,key,value,oldValue)
 			if type(value) == "table" then

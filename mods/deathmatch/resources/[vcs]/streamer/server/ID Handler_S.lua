@@ -30,10 +30,8 @@ function readFile2()
 end
 
 function index(table,all)
-	Async:setPriority("high")
-	
-	Async:foreach(table, function(v)
-			local split = split(v,",")
+	for idx,v in ipairs(table) do
+		local split = split(v,",")
 		if not all then
 			if (string.count(split[2],'DYN_') < 1) then
 				count = count + 1
@@ -43,7 +41,7 @@ function index(table,all)
 		
 		modelID[tonumber(split[1])] = split[2]
 		modelID[split[2]] = tonumber(split[1])
-	end)
+	end
 end
 index(readFile()) 
 index(readFile2(),true) 
