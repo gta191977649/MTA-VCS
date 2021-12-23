@@ -9,7 +9,7 @@
     <!-- Shader -->
     <file src="shader/texreplace.fx" type="client"/>
     <!-- Radar -->
-    <file src="radarvc.png" type="client"/>
+    <file src="radarvc.jpg" type="client"/>
 
     <file src="frontend/hud/fists.png" type="client"/>
     <file src="frontend/hud/bar.png" type="client"/>
