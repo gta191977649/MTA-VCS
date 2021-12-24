@@ -97,7 +97,7 @@ for i,v in pairs(IDETable) do
 					Flag = "SA_PROP"
 					Defaults[Model] = true
 				end
-				IDEList1[ID] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
+				IDEList1[Model] = {Model,Texture,DrawDistance,TimeOn,TimeOff,Flag,LODS[Model]} -- Flag is important for optmization!
 			else
 				if Exists[removeSpace(Model)] then
 					OutPutDebug2("Model:"..Model.." Missing DFF")
@@ -129,8 +129,8 @@ for i,v in pairs(IPLTable) do
  
 			local LOD = tonumber(Split[11])
 			if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) then
-				if IDEList1[ID] or Defaults[Model] or Defaults2[Model] then -- If it doesn't exist ignore it
-					IPLList2[ID] = true
+				if IDEList1[Model] or Defaults[Model] or Defaults2[Model] then -- If it doesn't exist ignore it
+					IPLList2[Model] = true
 					table.insert(IPLList,{Model,Interior,PosX,PosY,PosZ,xr,yr,zr,LOD})
 				else
 					if string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1	then

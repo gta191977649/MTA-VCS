@@ -1,9 +1,9 @@
 objs
 end
 tobj
-6207, rsbrdg_dt_neon, knackers, 1500, 2097228, 20, 6
-6203, rsbrdg3_dt_neon, knackers, 1500, 2097228, 20, 6
-6206, rsbrdg6_dt_neon, knackers, 1500,2097228, 20, 6
+8000, rsbrdg_dt_neon, knackers, 1500, 2097228, 20, 6
+8001, rsbrdg3_dt_neon, knackers, 1500, 2097228, 20, 6
+8002, rsbrdg6_dt_neon, knackers, 1500,2097228, 20, 6
 6202, rsbrdg2_dt_neon, knackers, 1500, 2097228, 20, 6
 6205, rsbrdg5_dt_neon, knackers, 1500,2097228, 20, 6
 6201, rsbrdg1_dt_neon, knackers, 1500,2097228, 20, 6

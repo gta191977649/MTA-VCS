@@ -1,6 +1,7 @@
 
 AvaliableIDS = {}
 
+--[[
 AvaliableIDS[1] = {615,"veg_tree3"}
 AvaliableIDS[2] = {616,"veg_treea1"}
 AvaliableIDS[3] = {617,"veg_treeb1"}
@@ -23,6 +24,7 @@ AvaliableIDS[19] = {633,"veg_palmkb10"}
 AvaliableIDS[20] = {634,"veg_palmkbb11"}
 AvaliableIDS[21] = {635,"veg_fern_balcny_kb1"}
 AvaliableIDS[22] = {636,"veg_fern_balcny_kb2"}
+
 AvaliableIDS[23] = {637,"kb_planterbox"}
 AvaliableIDS[24] = {638,"kb_plante"}
 AvaliableIDS[25] = {639,"veg_ivy_balcny_kb3"}
@@ -54,6 +56,7 @@ AvaliableIDS[50] = {670,"sm_firtallded"}
 AvaliableIDS[51] = {671,"sm_bushytree"}
 AvaliableIDS[52] = {672,"sm_veg_tree5"}
 AvaliableIDS[53] = {673,"sm_bevhiltree"}
+--]]
 AvaliableIDS[54] = {674,"sm_des_josh_lrg1"}
 AvaliableIDS[55] = {675,"josh_ball"}
 AvaliableIDS[56] = {676,"sm_des_josh_sml1"}
@@ -8551,4 +8554,6 @@ AvaliableIDS[8547] = {18630,"cs_landbit_20_A"}
 
 Defaults = {}
 Defaults2 = {}
-
+for i,v in pairs(AvaliableIDS) do
+	Defaults2[v[2]] = v[1] 
+end

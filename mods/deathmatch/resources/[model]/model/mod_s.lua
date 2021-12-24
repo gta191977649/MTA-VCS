@@ -2,9 +2,17 @@ local PlayerModModel = {}
 function initModels() 
     -- process vehicle handing
     for key,val in pairs(IMG_VEHICLE) do 
-        if val.replace == true and val.handing ~= nil then
+        if val.replace == true and val.handing ~= false then
             -- deal with replace vehicle handing
-            applyVehicleCustomHanding(val.parent,val.handing) 
+            local handing = split(val.handing,",")
+            for i=1,#handing do 
+                if tonumber(handing[i]) then
+                    handing[i] = tonumber(handing[i])
+                end
+            end
+            iprint(handing)
+            applyVehicleCustomHanding(val.parent,handing) 
+
             print(string.format("vehicle %d is handing loaded.",val.parent))
         end
     end
@@ -25,7 +33,9 @@ addEventHandler("mod.server.spawnVehicle",root,function(model,parent,x,y,z)
 end)
 
 function applyVehicleCustomHanding(theVehicle,handing) 
+
     if tonumber(theVehicle) then -- dealwith replaced vehicle
+
         setModelHandling(theVehicle, "mass",handing[1])
         setModelHandling(theVehicle, "turnMass",handing[2])
         setModelHandling(theVehicle, "dragCoeff",handing[3])
@@ -58,7 +68,9 @@ function applyVehicleCustomHanding(theVehicle,handing)
         setModelHandling(theVehicle, "headLight",handing[32]) 
         setModelHandling(theVehicle, "tailLight",handing[33]) 
         setModelHandling(theVehicle, "animGroup",handing[34]) 
+  
     else -- deal with imported vehicle
+
         setVehicleHandling(theVehicle, "mass",handing[1])
         setVehicleHandling(theVehicle, "turnMass",handing[2])
         setVehicleHandling(theVehicle, "dragCoeff",handing[3])
@@ -91,7 +103,8 @@ function applyVehicleCustomHanding(theVehicle,handing)
         --setVehicleHandling(theVehicle, "headLight",handing[32]) 
         --setVehicleHandling(theVehicle, "tailLight",handing[33]) 
         --setVehicleHandling(theVehicle, "animGroup",handing[34]) 
+
     end
     print("model handing loaded.")
 end
-addEventHandler ( "onResourceStart", resourceRoot,initModels)
+--addEventHandler ( "onResourceStart", resourceRoot,initModels) -- BUG NOT FIXED
