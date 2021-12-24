@@ -1,6 +1,7 @@
 DEBUG = exports.DEBUG
 
 debug.sethook(nil)
+setWaterDrawnLast(true)
 -- Tables --
 cache = {}
 resource = {}
