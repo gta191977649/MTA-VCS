@@ -1,0 +1,226 @@
+#
+# see default.ide for id ranges
+#
+# flags:
+# 0x01 gets streamed out after 1 car is generated (for dumpsters, MrWoopy etc)
+# 0x02 Don't use. Used by code internally.
+
+cars
+# Id,	Model name, 	Txd name,	Type 		HandlingId	Game name, 	Anims	Class		Frq	flags   Comprules
+#
+# cars have two extra fields wheelmodelId and wheel scale
+# planes have one extra field model id of low level of detail
+400,	landstal, 	landstal, 	car, 		LANDSTAL, 	LANDSTK, 	null,	normal, 	10,	0,	0,		-1, 0.768, 0.768,	0
+401, 	bravura, 	bravura, 	car, 		STALLION, 	SALEFT,   	null,	poorfamily,	10, 	0,	0,		-1, 0.74, 0.74,		0
+402, 	buffalo, 	buffalo, 	car, 		PHOENIX,	 	SALEFT, 	        null,	executive, 	5, 	0,	0,		-1, 0.7, 0.7,		0
+403, 	linerun, 	linerun, 	car, 		LINERUN, 	LINERUN, 	truck,	big,	 	6,	0,	0,		-1, 1.1, 1.1,		-1
+404, 	peren,		peren, 		car, 		PEREN, 		PEREN,	 	null,	poorfamily,	10, 	0,	0,		-1, 0.66, 0.66,		0
+405, 	sentinel, 	sentinel, 	car, 		SENTINEL, 	SENTINL, 	null,	richfamily, 	10, 	0,	0,		-1, 0.7, 0.7,		0
+406, 	dumper,		dumper,	 	mtruck, 	MONSTER,		SALEFT,		truck,	worker,	 	5,	1,	0,		-1, 2.28, 2.28,		-1
+407, 	firetruk, 	firetruk, 	car, 		FIRETRUK, 	FIRETRK, 	null,	ignore,		10,	0,	0,		-1, 1.0, 1.0,		-1
+408, 	trash,		trash,	 	car, 		TRASH, 		TRASHM,		null,	big,	 	5,	0,	0,		-1, 1.06, 1.06,		-1
+409, 	stretch, 	stretch, 	car, 		STRETCH, 	STRETCH,	null, 	ignore, 	5, 	0, 	0, 		-1, 0.7, 0.7, 			0
+410, 	manana, 	manana, 	car, 		MANANA, 	MANANA, 	null,	poorfamily,	10, 	0,	0,		-1, 0.68, 0.68,		0
+411, 	infernus, 	infernus, 	car, 		INFERNUS, 	INFERNS, 	null,	executive, 	5, 	0,	0,		-1, 0.7, 0.7,		0
+412, 	voodoo, 	voodoo, 	car, 		VOODOO, 	VOODOO, 	null,	poorfamily,	10, 	0,	0,		-1, 0.7, 0.7,		0
+413, 	pony,		pony,		car, 		PONY, 		PONY, 		van,	worker,		10, 	0,	0,		-1, 0.72, 0.72,		-1
+414, 	mule, 		mule, 		car, 		MULE, 		MULE, 		null,	worker, 	10, 	0,	0,		-1, 0.76, 0.76,		-1
+415, 	cheetah, 	cheetah, 	car, 		CHEETAH, 	CHEETAH, 	null,	executive, 	5, 	0,	0,		-1, 0.68, 0.68,		0
+416, 	ambulan, 	ambulan, 	car, 		AMBULAN, 	AMBULAN, 	van,	ignore,		10,	0,	0,		-1, 0.864, 0.864,	-1
+417, 	hueyhosp, 	hueyhosp, 	heli, 		HUEY, 		AIRAMB,		null,	ignore,		5,	0,	0,		-1, 0.4, 0.4,		-1
+418, 	moonbeam, 	moonbeam, 	car, 		MOONBEAM, 	MOONBM, 	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+419, 	esperant, 	esperant, 	car, 		ESPERANT, 	ESPERAN, 	null,	normal,		10, 	0,	0,		-1, 0.64, 0.64,		0
+420, 	taxi, 		taxi, 		car, 		TAXI, 		TAXI, 		null,	taxi,		10, 	0,	1f10,		-1, 0.7, 0.7,		0
+421, 	washin, 	washin, 	car, 		WASHING, 	WASHING, 	null,	richfamily,	10, 	0,	0,		-1, 0.68, 0.68,		0
+422, 	bobcat, 	bobcat, 	car, 		BOBCAT, 	BOBCAT, 	null,	worker, 	10, 	0,	0,		-1, 0.7, 0.7,		0
+423, 	mrwhoo, 	mrwhoo, 	car, 		MRWHOOP, 	WHOOPEE, 	null,	ignore, 	4,	1,	0,		-1, 0.7, 0.7,		-1
+424, 	bfinject, 	bfinject, 	car, 		BFINJECT, 	BFINJC,	 	null,	executive,	6,	0,	0,		-1, 0.84, 0.92,		-1
+425, 	hunter,		hunter, 	heli, 		HUNTER, 	HUNTER,		null,	ignore,		10,	0,	0,		-1, 0.64, 0.4,		-1
+426, 	premier, 	premier, 	car, 		TAXI,	 	PREMIER,	null,	richfamily,	10,	0,	0,		-1, 0.7, 0.7,		0
+427, 	enforce, 	enforce, 	car, 		ENFORCER, 	ENFORCR, 	van,	ignore,		10,	0,	0,		-1, 0.936, 0.936,	-1
+428, 	securica, 	securica, 	car, 		SECURICA, 	SECURI, 	van,	big,	 	4, 	0,	3f10,		-1, 0.914, 0.914,	-1
+429, 	banshee, 	banshee, 	car, 		BANSHEE,	BANSHEE, 	null,	executive, 	5, 	0,	0,		-1, 0.7, 0.7,		0
+430, 	predator, 	predator, 	boat,		PREDATOR,	PREDATR, 	null,	ignore,		10,	0,	0
+431, 	bus, 		bus,	 	car, 		BUS, 		BUS, 		bus,	normal,	 	5, 	0,	0,		-1, 1, 1,		-1
+432, 	rhino, 		rhino, 		car, 		RHINO, 		RHINO, 		null,	ignore,		10, 	0,	0,		-1, 1.3, 1.3,		-1
+433, 	ammotruk, 	ammotruk, 	car, 		BARRACKS, 	BARRACK, 	truck,	ignore,		4, 	0,	1f10,		-1, 1.2, 1.2,		-1
+434, 	hotknife, 	hotknife, 	car, 		CUBAN, 	SALEFT, 	        null,	executive, 	4, 	0,	0,		-1, 0.72, 0.8,		-1
+435, 	artict1, 	artict1, 	trailer,	ADMIRAL, 	SALEFT,	        null,	ignore,	 	10, 	0,	0,		-1, 0.74, 0.74,		0
+436, 	previon, 	previon, 	car, 		ADMIRAL, 	SALEFT,	        null,	poorfamily,	10, 	0,	0,		-1, 0.7, 0.7,		0
+437,	coach, 		coach, 		car, 		COACH, 		COACH, 		coach,	normal,	 	5,	0,	1f10,		-1, 1.0, 1.0,		-1
+438, 	cabbie, 	cabbie, 	car, 		CABBIE, 	CABBIE, 	null,	taxi,	 	6, 	0,	1f10,		-1, 0.7, 0.7,		0
+439, 	stallion, 	stallion, 	car, 		STALLION, 	STALION, 	null,	poorfamily,	10, 	0,	3210,		-1, 0.7, 0.7,		0
+440, 	rumpo, 		rumpo, 		car, 		RUMPO, 		RUMPO, 		van,	poorfamily, 	10,	0,	0,		-1, 0.7, 0.7,		-1
+441, 	rcbandit, 	rcbandit, 	car, 		RCBANDIT, 	SALEFT, 	null,	ignore,		1, 	0,	0,		-1, 0.35, 0.35,		-1
+442, 	romero,		romero, 	car, 		ROMERO,		HEARSE,	 	null,	normal,		4, 	0,	0,		-1, 0.68, 0.68,		0
+443, 	packer, 	packer, 	car, 		PACKER, 	PACKER, 	truck,	big,	 	5,	0,	0,		-1, 1.082, 1.082,	-1
+444,	monster, 	monster, 	mtruck,		MONSTER, 	MONSTER, 	truck,	ignore,		1,	0,	0,		-1, 1.5, 1.5,		-1
+445, 	admiral, 	admiral, 	car, 		ADMIRAL, 	ADMIRAL, 	null,	richfamily, 	10,	0,	0,		-1, 0.68, 0.68,		0
+446, 	squalo, 	squalo, 	boat,		SQUALO,		SQUALO, 	null,	ignore,		10,	0, 	0,
+447, 	sesparow,	sesparow, 	heli, 		SEASPAR, 	SEASPAR,	null,	ignore,		10,	0,	0,		-1, 0.7, 0.7,		-1
+448,	pizzaboy,	pizzaboy,	bike,		MOPED,		PIZZABO,	bikev,	normal,		10,	0,	0,		16, 0.464, 0.464,	-1
+449, 	rio, 		rio, 		boat, 		RIO,		RIO, 		null,	leisureboat,	10,	0,	4fff
+450, 	artict2, 	artict2, 	trailer,	ADMIRAL, 	SALEFT, 	        null,	ignore,	 	10, 	0,	0,		-1, 0.74, 0.74,		0
+451, 	turismo, 	turismo, 	car, 		TURISMO, 	TURISMO, 	null,	executive, 	4, 	0,	0,		-1, 0.7, 0.75,		0
+452, 	speeder, 	speeder, 	boat,		SPEEDER,	SPEEDER, 	null,	leisureboat,	10,	0, 	4fff
+453, 	reefer, 	reefer, 	boat,		REEFER,		REEFER, 	null,	workerboat,	10,	0,	3f01
+454, 	tropic, 	tropic, 	boat,		TROPIC,		TROPIC, 	null,	leisureboat,	10,	0,	4fff
+455, 	flatbed, 	flatbed, 	car, 		FLATBED, 	FLATBED, 	truck,	big,		5, 	0,	4fff,		0, 1.3, 1.3,		-1
+456, 	yankee, 	yankee, 	car, 		YANKEE, 	YANKEE, 	null,	worker, 	10, 	0,	0,		-1, 0.84, 0.84,		-1
+457,	caddy, 		caddy, 		car, 		GOLFCART, 	CADDY, 		null,	richfamily,	1,	0,	30123345,	-1, 0.5, 0.5,		-1
+458, 	yola, 	        yola,   	boat, 		YOLA,	 	YOLA, 	        null,	workerboat,	10,	0,	3f01
+459,	topfun,		topfun,		car,		TOPFUN,		WLDTOY,		van,	ignore,		1,	0,	0,		-1, 0.7, 0.7,		-1
+460, 	skimmer,	skimmer, 	plane,		SEAPLANE,	SKIMMER,	null,	ignore,		5,	0,	0
+461,	pcj600,		pcj600,		bike,		BIKE,		PCJ600,		bikes,	motorbike,	10,	0,	0,		16, 0.67, 0.67,		-1
+462,	faggio,		faggio,		bike,		MOPED,		FAGGIO,		bikev,	moped,		10,	0,	0,		16, 0.464, 0.464,	-1
+463,	freeway,	freeway,	bike,		FREEWAY,	FREEWAY,	bikeh,	motorbike,	10,	0,	0,		23, 0.654, 0.654,	-1
+464, 	rcbaron, 	rcbaron, 	plane, 		BIPLANE, 	SALEFT, 	        null,	ignore,		1,	0,	0,		-1, 0.25, 0.25,		-1
+465, 	rcraider, 	rcraider, 	heli, 		HUEY, 	SALEFT,	        null,	ignore,		1,	0,	0,		-1, 0.25, 0.25,		-1
+466, 	glendale, 	glendale, 	car, 		GLENDALE, 	GLENDAL, 	null,	executive,		10, 	0,	0,		-1, 0.7, 0.7,		0
+467, 	oceanic, 	oceanic, 	car, 		OCEANIC, 	OCEANIC, 	null,	executive,		10, 	0,	0,		-1, 0.7, 0.7,		0
+468,	sanchez,	sanchez,	bike,		DIRTBIKE,	SANCHEZ,	biked,	motorbike,	5,	0,	0,		23, 0.68, 0.62,		-1
+469, 	sparrow,	sparrow, 	heli, 		SPARROW, 	SPARROW,	null,	ignore,		10,	0,	0,		-1, 0.7, 0.7,		-1
+470,	patriot, 	patriot, 	car, 		PATRIOT, 	PATRIOT, 	null,	ignore,		2,	0,	0,		-1, 0.88, 0.88,	-1
+471,	quad,		quad,		quad, 		QUADBIKE, 	QUAD,		quad, 	normal,		4,	0,	0,		-1, 0.76, 0.76,		-1
+472, 	coastg, 	coastg, 	boat,		COASTGRD,	COASTG, 	null,	ignore,		5,	0, 	3012
+473, 	dinghy, 	dinghy, 	boat,		DINGHY,		DINGHY, 	null,	workerboat,	7,	0, 	0
+474, 	hermes, 	hermes, 	car, 		HERMES, 	HERMES, 	null,	richfamily,	4, 	0,	0,		-1, 0.7, 0.7,		0
+475, 	sabre, 		sabre, 		car, 		SABRE,	 	SABRE, 		null,	normal,		10, 	0,	2ff0,		-1, 0.7, 0.7,		0
+476, 	rustler, 	rustler, 	plane, 		BIPLANE, 	SALEFT,	        rustler,ignore,		10,	0,	0,		-1, 0.6, 0.3,		-1
+477, 	turbo, 		turbo, 		car, 		TURBO,		TURBO, 		null,	richfamily, 	10, 	0,	0,		-1, 0.76, 0.76,		0
+478, 	walton, 	walton, 	car, 		WALTON, 	WALTON, 	null,	worker, 	6, 	0,	0,		-1, 0.7, 0.7,		0
+479, 	regina, 	regina, 	car, 		REGINA, 	REGINA, 	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+480,	comet,		comet,		car, 		COMET,	 	COMET, 		null,	executive, 	5, 	0,	2ff0,		-1, 0.7, 0.7,		0
+481,	bmxboy,		bmxboy,		bmx, 		BMXBOY,	 	BMX, 		bmx,	ignore,		5,	0,	0,		23, 0.54, 0.54,		-1
+482, 	burrito, 	burrito, 	car, 		BURRITO,	BURRITO, 	van,	normal, 	10,	0,	0,		-1, 0.7, 0.7,		-1
+483, 	barracks, 	barracks, 	car, 		BARRACKS, 	BARRCKS, 	truck,	ignore,		4, 	0,	1f10,		-1, 1.2, 1.2,		-1
+484, 	marquis, 	marquis, 	boat,		MARQUIS,	MARQUIS, 	null,	workerboat,	10,	0,	0
+485, 	baggage,	baggage,	car, 		BAGGAGE,	BAGGAGE, 	null,	bicycle,	4, 	0,	0,		-1, 0.6, 0.6,		-1
+486, 	bulldoze, 	bulldoze, 	car, 		BULLDOZE,	BULLDOZ, 	truck,	ignore, 	4, 	0,	0,		-1, 1.5, 1.5,		-1
+487, 	maverick,	maverick, 	heli, 		MAVERICK,	MAVERIC,	null,	ignore,		10,	0,	0,		-1, 0.4, 0.4,		-1
+488, 	vcnmav,		vcnmav, 	heli, 		COASTMAV, 	VCNMAV,		null,	ignore,		6,	0,	0,		-1, 0.7, 0.7,		-1
+489,	rancher, 	rancher, 	car,		RANCHER, 	RANCHER, 	null,	normal,		10,	0,	0,		-1, 0.9, 0.9,		0
+490,	fbiran, 	fbiran, 	car, 		FBIRANCH, 	FBIRANC, 	null,	ignore, 	3,	0,	0,		-1, 0.92, 0.92,		-1
+491, 	virgo, 		virgo, 		car, 		VIRGO, 		VIRGO, 		null,	normal, 	10, 0, 	0, 		-1, 0.65, 0.65,		0
+492, 	greenwoo, 	greenwoo, 	car, 		GREENWOO, 	GREENWO, 	null,	poorfamily,	10, 	0,	0,		-1, 0.7, 0.7,		0
+493, 	jetmax, 	jetmax, 	boat,		CUPBOAT,	CUBJET, 	null,	ignore,		8,	0, 	0
+494,	hotring, 	hotring, 	car, 		BEELINE, 	BEELINE, 	null,	ignore, 	1,	0,	0,		-1, 0.82, 0.82,		-1
+495, 	sandking, 	sandking, 	car, 		SANDKING, 	SANDKIN, 	null, 	ignore, 4, 0, 0, -1, 1, 1, -1
+496,	blistac, 	blistac, 	car, 		BLISTAC, 	BLISTAC, 	null,	normal, 	10,	0,	0,		-1, 0.7, 0.7,		0
+497, 	polmav,		polmav, 	heli, 		POLMAV, 	POLMAV,		null,	ignore,		10,	0,	0,		-1, 0.4, 0.4,		-1
+498, 	boxvil, 	boxvil, 	car, 		BOXVILLE,	BOXVILL, 	van,	worker, 	10, 	0,	0,		-1, 0.76, 0.76,		-1
+499, 	benson, 	benson, 	car, 		BENSON,		BENSON, 	null,	worker, 	10, 	0,	0,		-1, 0.8, 0.8,		-1
+500,	mesa, 		mesa, 		car, 		MESA,	 	MESA, 		null,	normal, 	8,	0,	0,		-1, 0.8, 0.8,		0
+501, 	rcgoblin, 	rcgoblin, 	heli, 		HUEY, 	SALEFT,   	null,	ignore,		1,	0,	0,		-1, 0.25, 0.25,		-1
+502,	speeder2, 	speeder2, 	boat, 		SPEEDER2, 	SPEED2, 	null,	ignore, 	1,	7,	4fff
+503,	hotrinb, 	hotrinb, 	car, 		BEELINE, 	SALEFT,   	null,	ignore, 	1,	0,	4fff,		-1, 0.82, 0.82,		-1
+504, 	bloodra, 	bloodra, 	car, 		PIMP, 	SALEFT,   	BF_injection,	ignore,		1, 	0,	4fff,		-1, 0.7, 0.7,		-1
+505,	rnchlure, 	rnchlure, 	car,		RANCHER, 	SALEFT,   	null,	normal,		10,	0,	0,		-1, 0.9, 0.9,		-1
+506, 	vicechee, 	cheetah, 	car, 		CHEETAH, 	VICECHE, 	null,	ignore, 	10, 	0,	0,		-1, 0.68, 0.68,		0
+507, 	elegant, 	elegant, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+508, 	scarab, 	scarab, 	boat, 		SCARAB,		SCARAB, 	null,	ignore,		10,	0, 	0
+509,	bmxgirl,	bmxgirl,	bmx, 		BMXGIRL,	BMXG, 		bmx,	ignore,	7,	0,	0,		23, 0.526, 0.612,	-1
+510,	mtbike,		mtbike,		bmx, 		BMXGIRL, 	SALEFT,   	mtb,	bicycle,	7,	0,	0,		23, 0.68, 0.68,		-1
+511, 	beagle, 	beagle, 	plane, 		BIPLANE, 	SALEFT,		van,	ignore,		10,	0,	0,		-1, 0.52, 0.52,		-1
+512, 	cropdust, 	cropdust, 	plane, 		BIPLANE, 	SALEFT,   	rustler,	ignore,		6,	0,	0,		-1, 0.7, 0.3,		-1
+513, 	biplane, 	biplane, 	plane, 		BIPLANE, 	BIPLANE,	rustler,	ignore,	6,	0,	0,		-1, 0.2, 0.7,		-1
+514, 	petro, 		petro, 		car, 		LINERUN, 	SALEFT,   	truck,	worker,	 	5,	0,	0,		-1, 1.106, 1.106,	-1
+515, 	rdtrain, 	rdtrain, 	car, 		LINERUN, 	SALEFT,   	truck,	worker,	 	5,	0,	0,		-1, 1.18, 1.18,		-1
+516, 	nebula, 	nebula, 	car, 		ADMIRAL, 	SALEFT, 	        null,	poorfamily,	10, 	0,	0,		-1, 0.75, 0.75,		0
+517, 	cougar, 	cougar, 	car, 		VIRGO, 	SALEFT, 	        null,	normal,		10, 	0,	0,		
+518, 	buccanee, 	buccanee, 	car, 		VOODOO, 	SALEFT, 	        null,	normal,		10, 	0,	0,		-1, 0.66, 0.66,		0
+519, 	shamal, 	shamal, 	plane, 		BIPLANE, 	SALEFT,		shamal,	ignore,		5,	0,	0,		-1, 0.62, 0.62,		-1
+520, 	hydra, 		hydra, 		plane, 		BIPLANE,	 	SALEFT,		rustler,	ignore,		4,	0,	0,		-1, 0.7, 0.3,		-1
+521,	double,		double,		bike,		DOUBLE,		DOUBLE,		bikes,	motorbike,	6,	0,	3f341210,		16, 0.68, 0.68,		-1
+522,	nrg500,		nrg500,		bike,		DOUBLE,		SALEFT,		bikes,	motorbike,	10,	0,	1f341210,		16, 0.68, 0.68,		-1
+523,	electrap,	electrap,	bike,		ELECTRAP,	ELECTRP,	wayfarer,ignore,		10,	0,	0,		16, 0.68, 0.68,		-1
+524, 	cement,		cement,	 	car, 		MULE,		SALEFT,		null,	worker,	 	4,	0,	0,		-1, 1.12, 1,		-1
+525, 	towtruck,	towtruck,	car, 		LUTON,		LUTON, 	        van,	worker,		5, 	0,	0,		-1, 0.92, 0.92,		-1
+526, 	fortune, 	fortune, 	car, 		VIRGO, 	SALEFT, 	        null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+527, 	cossie, 	cossie, 	car, 		COSSIE, 	COSSIE, 	null,	ignore,		10, 	0,	0,		-1, 0.7, 0.7,		0
+528, 	fbitruck, 	fbitruck, 	car, 		RANCHER, 	SALEFT, 	        van,	big,	 	4, 	0,	0,		-1, 0.85, 0.85,		-1
+529, 	willard, 	willard, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+530, 	forklift,	forklift,	car, 		FORKLIFT,	FORKLIF, 	null,	worker,		1, 	0,	0,		-1, 0.55, 0.55,		-1
+531, 	tractor,	tractor,	car, 		BURRITO,	SALEFT, 	        null,	normal,		5, 	0,	0,		-1, 0.68, 1.3,		-1
+532, 	combine,	combine,	car, 		MONSTER, 	SALEFT,   	truck,	ignore,	 	5,	0,	0,		-1, 0.588, 1,		-1
+533,	feltzer,	feltzer,	car, 		STINGER, 	SALEFT,   	null,	executive, 	10, 	0,	0,		-1, 0.7, 0.7,		0
+534, 	cuban, 		cuban,	 	car, 		CUBAN,	 	CUBAN,		null,	bicycle,		10, 	0,	0,		-1, 0.7, 0.7,		2
+535, 	slamvan, 	slamvan, 	car, 		CUBAN, 	SALEFT,   	null,	richfamily,	5, 	0,	1f10,		-1, 0.74, 0.74,		2
+536, 	chollo, 	chollo, 	car, 		CHOLLO,	 	CHOLO,		null,	bicycle,	7, 	0,	0,		-1, 0.7, 0.7,		2
+537, 	freight,	freight,	train, 		ADMIRAL,	SALEFT,   	truck,	ignore,	 	10,	0,	0,		-1, 1.06, 1.06,		-1
+538, 	streak,		streak,	 	train, 		ADMIRAL, 	SALEFT,		truck,	ignore,	 	10,	0,	0,		-1, 1.06, 1.06,		-1
+539, 	hovercr, 	hovercr, 	plane, 		HOVER,		HOVER,  	null,	ignore, 	4,	0,	0,		-1, 0.7, 0.7,		-1
+540, 	vincent, 	vincent, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+541, 	bullet,		bullet,		car, 		TURBO,		SALEFT,   	null,	executive,	4, 	0,	0,		-1, 0.7, 0.75,		0
+542, 	clover, 	clover, 	car, 		CUBAN, 	SALEFT,   	null,	poorfamily,	10, 	0,	0,		-1, 0.74, 0.74,		0
+543,	sabretb,	sabret,		car, 		SABRETUR, 	SABRETU, 	null,	executive,	7, 	0,	0,		-1, 0.7, 0.7,		2
+544, 	firela, 	firela, 	car, 		FIRETRUK, 	SALEFT,   	truck,	ignore,		10,	0,	0,		-1, 1.0, 1.0,		-1
+545, 	hustler, 	hustler, 	car, 		MANANA, 	SALEFT,   	null,	normal,		4, 	0,	0,		-1, 0.7, 0.7,		0
+546, 	intruder, 	intruder, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+547, 	primo, 		primo, 		car, 		ADMIRAL,	 	SALEFT, 		null,	normal,		10, 	0,	0,		-1, 0.7, 0.7,		0
+548, 	huey, 		huey, 		heli, 		HUEY, 	HUEY, 		null,	ignore,		5,	0,	0,		-1, 0.4, 0.4,		-1
+549,	idaho,		idaho,		car,		IDAHO,		IDAHO,		null,	poorfamily,	10, 	0,	0,		-1, 0.684, 0.684,	0
+550, 	sunrise, 	sunrise, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		10, 	0,	0,		-1, 0.76, 0.76,		0
+551, 	merit, 		merit, 		car, 		ADMIRAL,	 	SALEFT, 		null,	richfamily,	10, 	0,	0,		-1, 0.75, 0.75,		0
+552, 	utility,	utility,	car, 		BENSON, 	SALEFT,   	van,	worker,		5, 	0,	0,		-1, 0.84, 0.84,		-1
+553, 	nevada, 	nevada, 	plane, 		BIPLANE, 	SALEFT,		nevada,	ignore,		4,	0,	0,		-1, 0.85, 0.4,		-1
+554,	yosemite, 	yosemite, 	car, 		BENSON,	SALEFT,   	null,	normal, 	10,	0,	0,		-1, 0.84, 0.84,		-1
+555,	windsor,	windsor,	car, 		VIRGO, 	SALEFT,   	null,	executive, 	4, 	0,	0,		-1, 0.7, 0.7,		0
+556,	monstera, 	monstera, 	mtruck,		MONSTER, 	SALEFT,   	truck,	ignore,		1,	0,	0,		-1, 1.5, 1.5,		-1
+557,	monsterb, 	monsterb, 	mtruck,		MONSTER, 	SALEFT,   	truck,	ignore,		1,	0,	0,		-1, 1.5, 1.5,		-1
+558,	uranus,		uranus,		car, 		COMET, 	SALEFT,   	null,	richfamily, 	7, 	0,	0,		-1, 0.7, 0.7,		1
+559,	jester,		jester,		car, 		TURBO, 	SALEFT,   	null,	richfamily, 	7, 	0,	0,		-1, 0.7, 0.7,		1
+560,	pimp,		pimp,		car, 		PIMP,	 	PIMP, 		null,	richfamily, 	7, 	0,	0,		-1, 0.78, 0.78,		1
+561,	stratum,	stratum,	car, 		PIMP, 	SALEFT,   	null,	richfamily, 	7, 	0,	0,		-1, 0.7, 0.7,		1
+562,	elegy,		elegy,		car, 		TURBO,	 	SALEFT, 		null,	richfamily, 	7, 	0,	0,		-1, 0.68, 0.68,		1
+563, 	autogyro, 	autogyro, 	heli, 		AUTOGYRO, 	AUTOGYR, 	null,	ignore,		6,	0,	0,		-1, 0.1, 0.1,		-1
+564, 	rctiger, 	rctiger, 	car, 		BOBO, 	SALEFT,   	null,	ignore,		1, 	0,	0,		-1, 0.25, 0.25,		-1
+565,	flash,		flash,		car, 		TURBO,	 	SALEFT, 		null,	richfamily, 	7, 	0,	0,		-1, 0.64, 0.64,		1
+566,	fbicar,		fbicar,		car, 		FBICAR, 	FBICAR, 	null,	ignore, 	0, 	7,	0,		-1, 0.68, 0.68,		0
+567, 	savanna, 	savanna, 	car, 		ADMIRAL, 	SALEFT,   	null,	poorfamily,	7, 	0,	2ff0,		-1, 0.7, 0.7,		2
+568, 	bandito, 	bandito, 	car, 		BFINJECT, 	SALEFT,   	null,	ignore,		4,	0,	0,		-1, 0.55, 0.7,		-1
+569, 	freiflat,	freiflat,	train, 		ADMIRAL,	SALEFT,		null,	ignore,	 	10,	0,	0,		-1, 1.06, 1.06,		-1
+570, 	streakc,	streakc,	train, 		ADMIRAL,	SALEFT,   	coach,	ignore,	 	10,	0,	0,		-1, 1.06, 1.06,		-1
+571, 	kart, 		kart, 		car, 		BOBO, 		SALEFT,		KART,	ignore,		4,	0,	0,		-1, 0.26, 0.26,		-1
+572,	mower, 		mower, 		car, 		BOBO,	 	SALEFT,		null,	ignore,		4,	0,	0,		-1, 0.48, 0.56,		-1
+573,	duneride, 	duneride, 	mtruck,		MONSTER,	 	SALEFT, 		truck,	ignore,		4,	0,	0,		-1, 1.14, 1.14,		-1
+574,	sweeper, 	sweeper, 	car, 		SWEEPER, 	SWEEPER,	null,	worker,		4,	0,	0,		-1, 0.5, 0.5,		-1
+575,	tug, 		tug, 		car, 		BAGGAGE, 	TUG,		null,	normal,		4,	0,	0,		-1, 0.66, 0.75,		-1
+576, 	tornado, 	tornado, 	car, 		VOODOO, 	SALEFT,   	null,	poorfamily,	7, 	0,	2ff0,		-1, 0.7, 0.7,		2
+577, 	at400, 		at400, 		plane, 		BIPLANE,	 	SALEFT,		coach,	ignore,		10,	0,	0,		-1, 1.12, 1.12,		-1
+578, 	dft30,		dft30,		car, 		LINERUN,	 	SALEFT, 		truck,	worker,		10, 	0,	4fff,		-1, 1, 1,		-1
+579,	gangbur, 	gangbur, 	car,		GANGBUR, 	GANGBUR, 	null,	richfamily,		6,	7,	0,	-1, 0.90, 0.90,		0
+580, 	stafford, 	stafford, 	car, 		ADMIRAL, 	SALEFT,   	null,	normal,		4, 	0,	0,		-1, 0.78, 0.78,		0
+581,	streetfi,	streetfi,	bike,		STREETFI,	STREETF,	bikes,	motorbike,		10,	0,	3f341210,		16, 0.65, 0.65,		-1
+582,	newsvan,	newsvan,	car,		NEWSVAN,	VCNNWS,	van,	normal,		4,	0,	0,		-1, 0.77, 0.77,		-1
+583,	6atv, 		6atv, 		car, 		6ATV, 		6WEELAT,	null,	ignore,		4,	0,	0,		-1, 0.73, 0.73,		-1
+584, 	petrotr, 	petrotr, 	trailer,	LINERUN, 	SALEFT,   	null,	ignore,	 	6,	0,	0,		-1, 1.12, 1.12,		-1
+585,	sentxs,		sentxs, 	car, 		SENTXS, 	SENTXS, 	null,	executive,		10, 	0,	0,		-1, 0.74, 0.74,		0
+586,	electrag,	electrag,	bike,		ELECTRAG,	ELECTRA,	bikeh,	motorbike,	6,	0,	0,		23, 0.654, 0.654,	-1
+587, 	stinger,	stinger,	car, 		STINGER,	STINGER, 	null,	executive, 	10, 	0,	0,		-1, 0.7, 0.7,		0
+588, 	hotdog, 	hotdog, 	car, 		HOTDOG,		HOTDOG, 	van,	worker, 	4, 	0,	0,		-1, 0.86, 0.86,		-1
+589,	mop50, 		mop50, 		bike,		MOPED,		MOPED,		bikev,	moped,		10,	0,	0,		16, 0.55, 0.55,	-1
+590, 	freibox,	freibox,	train, 		ADMIRAL,	SALEFT,		null,	ignore,	 	10,	0,	0,		-1, 1.06, 1.06,		-1
+591, 	artict3, 	artict3, 	trailer,	ADMIRAL, 	SALEFT,   	null,	ignore,	 	10, 	0,	0,		-1, 0.74, 0.74,		0
+592, 	androm, 	androm, 	plane, 		BIPLANE, 	SALEFT,		null,	ignore,		4,	0,	0,		-1, 0.95, 0.95,		-1
+593,	dodo		dodo, 		plane, 		DODO,	 	DODO,		van,	ignore,		10,	0,	0,		-1, 0.56, 0.56,		-1
+594, 	bobo, 		bobo, 		car, 		BOBO,	 	BOBO, 		null,	ignore,		1, 	0,	0,		-1, 0.3, 0.3,		-1
+595, 	jetski, 	jetski, 	boat,		JETSKI,		JETSKI, 	null,	ignore,	7,	0, 	0
+
+596, 	copcarla, 	copcarla, 	car, 		ADMIRAL, 	SALEFT,	null,	ignore,		10,	0,	0,		-1, 0.7, 0.7,	-1
+597, 	policem, 	policem, 	car, 		POLICEM, 	POLICEM,	null,	ignore,		10,	0,	0,		-1, 0.7, 0.7,	-1
+598, 	copcarvg,	copcarvg,	car, 		ADMIRAL, 	SALEFT,   	null,	ignore,		10,	0,	0,		-1, 0.7, 0.7,	-1
+599, 	copcarru,	copcarru,	car, 		ADMIRAL, 	SALEFT,		null,	ignore,		10,	0,	0,		-1, 0.95, 0.95,	-1
+
+600,	angel,		angel,		bike,		ANGEL,		ANGEL,		bikeh,	ignore,	 	10,	0,	0,		23, 0.654, 0.654,	-1
+601, 	swatvan, 	swatvan, 	car, 		RANCHER, 	SALEFT,   	van,	big,	 	4, 	0,	0,		-1, 1.366, 1.366,	-1
+602,	deluxo,		deluxo,		car, 		DELUXO,		DELUXO, 	null,	ignore, 	10, 	0,	0,		-1, 0.7, 0.7,		0
+603, 	phoenix, 	phoenix, 	car, 		PHOENIX, 	PHOENIX, 	null,	normal,		7, 	0,	0,		-1, 0.7, 0.7,		0
+604, 	zebra,	 	zebra,	 	car, 		CABBIE, 	ZEBRA,	 	null,	ignore,	 	10, 	0,	1f10,		-1, 0.7, 0.7,		0
+605,	sadlshit,	sadlshit,	car, 		BOBCAT,	 	SALEFT,   	null,	normal, 	10, 	0,	0,		-1, 0.7, 0.7,		-1
+606, 	bagboxa, 	bagboxa, 	trailer,	ADMIRAL, 	SALEFT,   	null,	ignore,	 	4,	0,	0,		-1, 0.6, 0.6,		-1
+end
+
+txdp
+vehshare_bike, vehshare
+end
