@@ -708,7 +708,7 @@ h_cabel05,h_cabel05,h_stuff,h_cabel05,450,2097228,true,nil
 oceandrv_a7,oceandrv_a7,oceandrv_a,oceandrv_a7,450,2097156,true,nil
 LODbridgesupp04,LODbridgesupp04,lod_docks,LODbridgesupp04,3000,256,true,nil
 mall_m3,mall_m3,mall_m,mall_m3,450,0,true,nil
-dN_partX,dN_partX,dN_partM,dN_partX,450,0,true,LODpartX
+dN_partX,dN_partX,dN_partM_fix,dN_partX,450,0,true,LODpartX
 prawn_A9,prawn_A9,prawn_all,prawn_A9,450,0,true,nil
 LODy_barrack4,LODy_barrack4,apN_LOD,LODy_barrack4,1500,0,true,nil
 washintS_buildH06a,washintS_buildH06a,wshS_build03,washintS_buildH06a,450,2097284,true,nil

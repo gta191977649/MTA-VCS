@@ -62,7 +62,6 @@
 	<file src="Content/textures/wshN_other.txd" type="client" />
 	<file src="Content/textures/temp_stinger.txd" type="client" />
 	<file src="Content/textures/jetDX.txd" type="client" />
-	<file src="Content/textures/dN_partG.txd" type="client" />
 	<file src="Content/textures/mineX.txd" type="client" />
 	<file src="Content/textures/ap_buildings2.txd" type="client" />
 	<file src="Content/textures/dockfence1.txd" type="client" />
@@ -84,7 +83,7 @@
 	<file src="Content/textures/DAVE_DOOR_2b.txd" type="client" />
 	<file src="Content/textures/ap_viceairport.txd" type="client" />
 	<file src="Content/textures/dN_partA35.txd" type="client" />
-	<file src="Content/textures/ndc_redballoon.txd" type="client" />
+	<file src="Content/textures/dN_partM_fix.txd" type="client" />
 	<file src="Content/textures/nbeach_b.txd" type="client" />
 	<file src="Content/textures/freezrX.txd" type="client" />
 	<file src="Content/textures/BREAK_ROAD.txd" type="client" />
@@ -290,7 +289,7 @@
 	<file src="Content/textures/doccrane.txd" type="client" />
 	<file src="Content/textures/roadsign.txd" type="client" />
 	<file src="Content/textures/gta_tree_boak.txd" type="client" />
-	<file src="Content/textures/breifcase.txd" type="client" />
+	<file src="Content/textures/mansion_a.txd" type="client" />
 	<file src="Content/textures/mall_n.txd" type="client" />
 	<file src="Content/textures/BREAK_S_bins.txd" type="client" />
 	<file src="Content/textures/triaddrsx.txd" type="client" />
@@ -304,8 +303,9 @@
 	<file src="Content/textures/dN_partA20.txd" type="client" />
 	<file src="Content/textures/hN_neons.txd" type="client" />
 	<file src="Content/textures/icons9.txd" type="client" />
-	<file src="Content/textures/nonox.txd" type="client" />
 	<file src="Content/textures/DYN_VEGAS.txd" type="client" />
+	<file src="Content/textures/nonox.txd" type="client" />
+	<file src="Content/textures/ndc_redballoon.txd" type="client" />
 	<file src="Content/textures/dN_partL.txd" type="client" />
 	<file src="Content/textures/dN_partA26.txd" type="client" />
 	<file src="Content/textures/gtatreeshi9.txd" type="client" />
@@ -383,7 +383,7 @@
 	<file src="Content/textures/jt_doorbX.txd" type="client" />
 	<file src="Content/textures/mafcasX.txd" type="client" />
 	<file src="Content/textures/imrancomp_kmb.txd" type="client" />
-	<file src="Content/textures/ap_runsigns1.txd" type="client" />
+	<file src="Content/textures/verdiext.txd" type="client" />
 	<file src="Content/textures/mansion_g.txd" type="client" />
 	<file src="Content/textures/CJ_till_break.txd" type="client" />
 	<file src="Content/textures/lift_drX.txd" type="client" />
@@ -396,12 +396,12 @@
 	<file src="Content/textures/hN_ground.txd" type="client" />
 	<file src="Content/textures/golfground.txd" type="client" />
 	<file src="Content/textures/dN_partY.txd" type="client" />
-	<file src="Content/textures/dolphin.txd" type="client" />
+	<file src="Content/textures/dock_ships.txd" type="client" />
 	<file src="Content/textures/wshS_buildD.txd" type="client" />
 	<file src="Content/textures/wshS_ammu.txd" type="client" />
 	<file src="Content/textures/LODairport.txd" type="client" />
 	<file src="Content/textures/alleyprop.txd" type="client" />
-	<file src="Content/textures/wa_tool2.txd" type="client" />
+	<file src="Content/textures/lithawaste.txd" type="client" />
 	<file src="Content/textures/newstand.txd" type="client" />
 	<file src="Content/textures/lou_int.txd" type="client" />
 	<file src="Content/textures/downtowS_r.txd" type="client" />
@@ -412,7 +412,7 @@
 	<file src="Content/textures/gunbox.txd" type="client" />
 	<file src="Content/textures/CJ_exp_Props.txd" type="client" />
 	<file src="Content/textures/mine.txd" type="client" />
-	<file src="Content/textures/striplights.txd" type="client" />
+	<file src="Content/textures/dk_houses1.txd" type="client" />
 	<file src="Content/textures/kb_ctdoorX.txd" type="client" />
 	<file src="Content/textures/scarinterior.txd" type="client" />
 	<file src="Content/textures/rcbomb.txd" type="client" />
@@ -433,7 +433,7 @@
 	<file src="Content/textures/escstep.txd" type="client" />
 	<file src="Content/textures/sjl_learjet_near.txd" type="client" />
 	<file src="Content/textures/int_shopstruct.txd" type="client" />
-	<file src="Content/textures/hav_police.txd" type="client" />
+	<file src="Content/textures/BREAK_GARDEN.txd" type="client" />
 	<file src="Content/textures/dyn_trash.txd" type="client" />
 	<file src="Content/textures/keypad.txd" type="client" />
 	<file src="Content/textures/benches_cj.txd" type="client" />
@@ -463,13 +463,13 @@
 	<file src="Content/textures/kmb_offdoorX.txd" type="client" />
 	<file src="Content/textures/mobile93a.txd" type="client" />
 	<file src="Content/textures/Roadside.txd" type="client" />
-	<file src="Content/textures/cemenX.txd" type="client" />
+	<file src="Content/textures/wshS_build01.txd" type="client" />
 	<file src="Content/textures/hN_build3k.txd" type="client" />
 	<file src="Content/textures/wshS_pier.txd" type="client" />
 	<file src="Content/textures/k_militX.txd" type="client" />
 	<file src="Content/textures/gta_proc_grassland.txd" type="client" />
 	<file src="Content/textures/a51_labdoor.txd" type="client" />
-	<file src="Content/textures/nbeachbt_s.txd" type="client" />
+	<file src="Content/textures/imy_trx.txd" type="client" />
 	<file src="Content/textures/moregenroofstuff.txd" type="client" />
 	<file src="Content/textures/prawn_LOD.txd" type="client" />
 	<file src="Content/textures/ciggyX.txd" type="client" />
@@ -486,7 +486,7 @@
 	<file src="Content/textures/wshxrefhse.txd" type="client" />
 	<file src="Content/textures/dyncones.txd" type="client" />
 	<file src="Content/textures/wngdishx.txd" type="client" />
-	<file src="Content/textures/fire_brX.txd" type="client" />
+	<file src="Content/textures/dockgrass.txd" type="client" />
 	<file src="Content/textures/nfpedcX.txd" type="client" />
 	<file src="Content/textures/CJ_MONEY_BAGS.txd" type="client" />
 	<file src="Content/textures/cr_slotsX.txd" type="client" />
@@ -494,7 +494,7 @@
 	<file src="Content/textures/bjmptX.txd" type="client" />
 	<file src="Content/textures/munchyX.txd" type="client" />
 	<file src="Content/textures/bridge_r.txd" type="client" />
-	<file src="Content/textures/BREAK_GARDEN.txd" type="client" />
+	<file src="Content/textures/wastebin.txd" type="client" />
 	<file src="Content/textures/DB_AMMO.txd" type="client" />
 	<file src="Content/textures/new_palm.txd" type="client" />
 	<file src="Content/textures/h_ground.txd" type="client" />
@@ -528,7 +528,7 @@
 	<file src="Content/textures/kmb_waredoorX.txd" type="client" />
 	<file src="Content/textures/CJ_NOODLE_1.txd" type="client" />
 	<file src="Content/textures/ctgtxx.txd" type="client" />
-	<file src="Content/textures/wshS_build01.txd" type="client" />
+	<file src="Content/textures/ct_ventx.txd" type="client" />
 	<file src="Content/textures/gimp_drX.txd" type="client" />
 	<file src="Content/textures/cntdrrkx.txd" type="client" />
 	<file src="Content/textures/gta_procdesert.txd" type="client" />
@@ -539,30 +539,31 @@
 	<file src="Content/textures/gtatreesh.txd" type="client" />
 	<file src="Content/textures/jellyfish2.txd" type="client" />
 	<file src="Content/textures/oceandn_b.txd" type="client" />
+	<file src="Content/textures/cemenX.txd" type="client" />
 	<file src="Content/textures/submarine.txd" type="client" />
 	<file src="Content/textures/dts_bbX.txd" type="client" />
-	<file src="Content/textures/neons2.txd" type="client" />
-	<file src="Content/textures/gtatreeshi.txd" type="client" />
 	<file src="Content/textures/temproadtxd.txd" type="client" />
+	<file src="Content/textures/gtatreeshi.txd" type="client" />
+	<file src="Content/textures/wa_tool2.txd" type="client" />
 	<file src="Content/textures/stripback.txd" type="client" />
-	<file src="Content/textures/lithawaste.txd" type="client" />
+	<file src="Content/textures/breifcase.txd" type="client" />
 	<file src="Content/textures/VCSRoads.txd" type="client" />
-	<file src="Content/textures/nbw_alphavegs.txd" type="client" />
+	<file src="Content/textures/fire_brX.txd" type="client" />
 	<file src="Content/textures/haiti_LOD.txd" type="client" />
 	<file src="Content/textures/kmb_keypadX.txd" type="client" />
 	<file src="Content/textures/cargo_rear.txd" type="client" />
 	<file src="Content/textures/nbeachbt_LOD.txd" type="client" />
 	<file src="Content/textures/foodKarts.txd" type="client" />
-	<file src="Content/textures/dockgrass.txd" type="client" />
+	<file src="Content/textures/nbeachbt_s.txd" type="client" />
 	<file src="Content/textures/smash_bxX.txd" type="client" />
 	<file src="Content/textures/hN_objalpha.txd" type="client" />
 	<file src="Content/textures/ext_doors2.txd" type="client" />
-	<file src="Content/textures/imy_trx.txd" type="client" />
 	<file src="Content/textures/icons3.txd" type="client" />
+	<file src="Content/textures/hN_builground.txd" type="client" />
 	<file src="Content/textures/dN_partA21.txd" type="client" />
 	<file src="Content/textures/tree3.txd" type="client" />
 	<file src="Content/textures/BREAK_BAR.txd" type="client" />
-	<file src="Content/textures/hN_builground.txd" type="client" />
+	<file src="Content/textures/dyn_keycard.txd" type="client" />
 	<file src="Content/textures/oceandrv_veg.txd" type="client" />
 	<file src="Content/textures/Army_HM128.txd" type="client" />
 	<file src="Content/textures/golfvegealpha.txd" type="client" />
@@ -571,36 +572,36 @@
 	<file src="Content/textures/imy_skylX.txd" type="client" />
 	<file src="Content/textures/hN_roads.txd" type="client" />
 	<file src="Content/textures/ttrailers.txd" type="client" />
-	<file src="Content/textures/dyn_keycard.txd" type="client" />
 	<file src="Content/textures/crate1.txd" type="client" />
-	<file src="Content/textures/dN_partF.txd" type="client" />
 	<file src="Content/textures/totoie.txd" type="client" />
+	<file src="Content/textures/dN_partF.txd" type="client" />
+	<file src="Content/textures/dN_partZ.txd" type="client" />
 	<file src="Content/textures/nbw_fairgroundX.txd" type="client" />
 	<file src="Content/textures/dead_mantxd.txd" type="client" />
 	<file src="Content/textures/ap_fuelstation.txd" type="client" />
-	<file src="Content/textures/dN_partZ.txd" type="client" />
+	<file src="Content/textures/dolphin.txd" type="client" />
 	<file src="Content/textures/dN_partK.txd" type="client" />
-	<file src="Content/textures/dock_ships.txd" type="client" />
+	<file src="Content/textures/striplights.txd" type="client" />
 	<file src="Content/textures/Cart.txd" type="client" />
 	<file src="Content/textures/tree2.txd" type="client" />
-	<file src="Content/textures/mansion_a.txd" type="client" />
 	<file src="Content/textures/kmb_rckX.txd" type="client" />
-	<file src="Content/textures/dk_houses1.txd" type="client" />
-	<file src="Content/textures/docks08_intAA.txd" type="client" />
+	<file src="Content/textures/hav_police.txd" type="client" />
 	<file src="Content/textures/gen_petrol.txd" type="client" />
-	<file src="Content/textures/dt_stadium.txd" type="client" />
-	<file src="Content/textures/dN_partA34.txd" type="client" />
-	<file src="Content/textures/continX.txd" type="client" />
 	<file src="Content/textures/ap_airstuff1.txd" type="client" />
+	<file src="Content/textures/dN_partA34.txd" type="client" />
+	<file src="Content/textures/dt_stadium.txd" type="client" />
+	<file src="Content/textures/continX.txd" type="client" />
+	<file src="Content/textures/nbw_alphavegs.txd" type="client" />
 	<file src="Content/textures/lithablk9.txd" type="client" />
+	<file src="Content/textures/ap_runsigns1.txd" type="client" />
 	<file src="Content/textures/dynbuket.txd" type="client" />
 	<file src="Content/textures/dk_safecrack.txd" type="client" />
 	<file src="Content/textures/fanani.txd" type="client" />
-	<file src="Content/textures/verdiext.txd" type="client" />
+	<file src="Content/textures/neons2.txd" type="client" />
 	<file src="Content/textures/dk_midbuilds.txd" type="client" />
 	<file src="Content/textures/a51jdrX.txd" type="client" />
-	<file src="Content/textures/hN_build2k.txd" type="client" />
-	<file src="Content/textures/ct_ventx.txd" type="client" />
+	<file src="Content/textures/dN_partG.txd" type="client" />
+	<file src="Content/textures/docks08_intAA.txd" type="client" />
 	<file src="Content/textures/gta_tree_oldpine.txd" type="client" />
 	<file src="Content/textures/ap_roads.txd" type="client" />
 	<file src="Content/textures/gta_cactus.txd" type="client" />
@@ -609,11 +610,11 @@
 	<file src="Content/textures/maintLiteTriangle.txd" type="client" />
 	<file src="Content/textures/oceandrv_lod.txd" type="client" />
 	<file src="Content/textures/kfenceX.txd" type="client" />
-	<file src="Content/textures/wastebin.txd" type="client" />
-	<file src="Content/textures/hN_stuff.txd" type="client" />
 	<file src="Content/textures/paracx.txd" type="client" />
-	<file src="Content/textures/icons5.txd" type="client" />
+	<file src="Content/textures/hN_stuff.txd" type="client" />
 	<file src="Content/textures/ingame.txd" type="client" />
+	<file src="Content/textures/icons5.txd" type="client" />
+	<file src="Content/textures/smashbarr.txd" type="client" />
 	<file src="Content/textures/genroofbits.txd" type="client" />
 	<file src="Content/textures/icons1.txd" type="client" />
 	<file src="Content/textures/DAVE_DOOR_2a.txd" type="client" />
@@ -626,19 +627,19 @@
 	<file src="Content/textures/star_LOD.txd" type="client" />
 	<file src="Content/textures/lithablk22.txd" type="client" />
 	<file src="Content/textures/stuffgen.txd" type="client" />
-	<file src="Content/textures/smashbarr.txd" type="client" />
+	<file src="Content/textures/mansion_m.txd" type="client" />
 	<file src="Content/textures/dN_partA41.txd" type="client" />
 	<file src="Content/textures/ph_warehouse.txd" type="client" />
-	<file src="Content/textures/dN_stadium.txd" type="client" />
 	<file src="Content/textures/ap_terminal1.txd" type="client" />
+	<file src="Content/textures/dN_stadium.txd" type="client" />
 	<file src="Content/textures/dN_partA19.txd" type="client" />
 	<file src="Content/textures/vegtresshi9b.txd" type="client" />
 	<file src="Content/textures/dockroads1.txd" type="client" />
 	<file src="Content/textures/targets.txd" type="client" />
 	<file src="Content/textures/petrol.txd" type="client" />
-	<file src="Content/textures/mansion_m.txd" type="client" />
 	<file src="Content/textures/BREAK_FEN_mesh2.txd" type="client" />
 	<file src="Content/textures/gta_tree_bevhills.txd" type="client" />
+	<file src="Content/textures/hN_build2k.txd" type="client" />
 	<file src="Content/textures/hN_philplace.txd" type="client" />
 	<file src="Content/textures/dN_dirtrack.txd" type="client" />
 	<file src="Content/textures/tree1prc.txd" type="client" />
