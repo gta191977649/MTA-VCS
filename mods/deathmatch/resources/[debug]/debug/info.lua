@@ -61,3 +61,4 @@ addEventHandler( "onClientElementStreamOut", root,
 --setFarClipDistance( 9999 ) 
 
 setWaterDrawnLast(true)
+

@@ -164,6 +164,7 @@ function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, 
     engineRemoveShaderFromWorldTexture ( click_myShader, "*" )
     if clickedElement and  getElementType ( clickedElement ) == "object"  then
         local name = getElementID(clickedElement)
+        textures = engineGetModelTextures(getElementModel(clickedElement))
         engineApplyShaderToWorldTexture ( click_myShader, "*",clickedElement )
         setClipboard( name )
         outputChatBox(name)
@@ -171,3 +172,4 @@ function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, 
     end
 end
 addEventHandler ( "onClientClick", root, addLabelOnClick )
+

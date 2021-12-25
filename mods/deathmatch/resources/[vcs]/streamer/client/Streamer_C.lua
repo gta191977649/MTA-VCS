@@ -86,13 +86,13 @@ function loadModel(data,resourceName)
 		table.insert(resource[resourceName],cache)
 
 		-- load txd
-		local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
+		path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
 		local texture,cache = requestTextureArchive(path,data.texture)
 		engineImportTXD(texture,id)
 		table.insert(resource[resourceName],cache)
 
 		-- load dff
-		local path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
+		path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
 		local model,cache = requestModel(path,data.model)
 		engineReplaceModel(model,id,isTransparentFlag(data.flag))
 		table.insert(resource[resourceName],cache)
@@ -169,16 +169,14 @@ function loadMap(ipls,ides,mapname)
 		loadObject(data) 
 	end
 
-
-	local dataToLoad = {}
-	for i,v in pairs(ides) do
-		table.insert(dataToLoad,v)
+	local total = 0
+	for _,v in pairs(ides) do
+		total = total + 1
 	end
 
-	ides = {}
 
 	Async:setPriority(100, 1000);
-	Async:foreach(dataToLoad, function(data) 
+	Async:forkey(ides, function(key,data) 
 		-- load model
 		if model_cache[data.model] == nil and data.flag ~= "SA_PROP"then
 			loadModel(data,mapname)
@@ -187,11 +185,11 @@ function loadMap(ipls,ides,mapname)
 		end
 
 		loaded = loaded + 1
-		local debugMsg = string.format("Request: %s | %d OF %d remain.\n",data.model,loaded,#dataToLoad)
+		local debugMsg = string.format("Request: %s | %d OF %d remain.\n",data.model,loaded,total)
 		print(debugMsg)
 		DEBUG:addDebugMessage(debugMsg)
 
-		if loaded >= #dataToLoad then 
+		if loaded >= total then 
 			vegitationElementReload()
 			engineRestreamWorld()
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")

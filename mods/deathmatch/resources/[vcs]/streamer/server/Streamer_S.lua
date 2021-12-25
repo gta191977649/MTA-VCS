@@ -233,9 +233,11 @@ function definePlacement(dTable,resourceName)
 
 	local model,int,dim,x,y,z,rx,ry,rz= unpack(dTable)
 	-- find model id
+	--[[
 	if getModelFromID(model) then
 		blackList(model)
 	end
+	]]
 	
 	local modelInfo = getData(model)
 	if not modelInfo then 
