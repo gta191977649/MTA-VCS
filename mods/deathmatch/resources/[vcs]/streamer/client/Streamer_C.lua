@@ -1,7 +1,7 @@
 DEBUG = exports.DEBUG
 
 debug.sethook(nil)
-setWaterDrawnLast(true)
+
 -- Tables --
 cache = {}
 resource = {}
@@ -193,7 +193,6 @@ function loadMap(ipls,ides,mapname)
 
 		if loaded >= #dataToLoad then 
 			vegitationElementReload()
-			engineStreamingFreeUpMemory(104857600)
 			engineRestreamWorld()
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
 			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
@@ -211,8 +210,8 @@ function loadedFunction (resourceName)
 	local endTickCount = getTickCount ()-startTickCount
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
-
-	cache = {} -- clearn the cache
+	setWaterDrawnLast(true)
+	--cache = {} -- clearn the cache
 end
 
 function requestTextureArchive(path)
