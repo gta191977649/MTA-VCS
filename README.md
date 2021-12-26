@@ -7,7 +7,7 @@ A Total Convetion of VCS Map to MTASA
   * Objects Fix
     * Aplha Blending Textures
     * Breakble Objects
-    * Time Object
+    * ~~Time Object~~
     * UV Animation
     * Txds (Needs custom implmention fix txdp flag)
 * Vehicle
@@ -15,13 +15,13 @@ A Total Convetion of VCS Map to MTASA
 * Weapons
 * HUD/UI
   * Game Texts
-    * Radio
+    * ~Radio~
     * Vehicle Name
     * Zone Name
   * HUD
     * Weapon
-    * Health 
-    * Armour
-    * Oxygen (In Water)
-    * Cash
-* Radio Stations
+    * ~Health~ 
+    * ~Armour~
+    * ~Oxygen (In Water)~
+    * ~Cash~
+* ~Radio Stations~
