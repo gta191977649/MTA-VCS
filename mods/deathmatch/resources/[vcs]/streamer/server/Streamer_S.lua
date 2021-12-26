@@ -195,6 +195,7 @@ function loadMap (resource)																				 -- // Load the map
 	local endTick = getTickCount()
 	print(resourceName,'Loaded In : '..tonumber(endTick-tickCount),'Milisecounds')
 	print(string.format("TOTAL OBJS: %d, LODS: %d SA_OBJS: %d",system.objs,system.lods,system.sa_objs))
+	print(string.format("%d Custom Models in total.",system.objs+system.lods))
 
 end
 
@@ -202,6 +203,9 @@ function defineDefintion(dTable,resourceName) -- Define defintion stuff
 	local ID,model,texture,collision,draw,flag,backface,lod,turnOn,turnOff = unpack(dTable)
 	--data.resourceData[resourceName][ID] = {model,texture,collision,draw,flag,toBoolean(backface),lod,turnOn,turnOff,getFreeID(ID),resourceName} -- # If SA model exists using same ID then this will be re proccessed!
 	-- check sa_props
+	if flag == "SA_PROP" and getModelFromID(model) then
+		blackList(model)
+	end
 
 	data.resourceData[resourceName][ID] = {
 		id = flag == "SA_PROP" and getModelFromID(model) or getFreeID(ID),

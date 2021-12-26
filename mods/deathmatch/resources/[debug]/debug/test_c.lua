@@ -168,6 +168,7 @@ function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, 
         engineApplyShaderToWorldTexture ( click_myShader, "*",clickedElement )
         setClipboard( name )
         outputChatBox(name)
+        outputChatBox(getElementModel(clickedElement))
         showCursor(false)
     end
 end
