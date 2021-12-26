@@ -5,7 +5,7 @@ A Total Convetion of VCS Map to MTASA
   * Interiors
   * Empire Buildings
   * Objects Fix
-    * Aplha Blending Textures
+    * ~~Aplha Blending Textures~~
     * Breakble Objects
     * ~~Time Object~~
     * UV Animation
@@ -15,13 +15,19 @@ A Total Convetion of VCS Map to MTASA
 * Weapons
 * HUD/UI
   * Game Texts
-    * ~Radio~
+    * ~~Radio~~
     * Vehicle Name
     * Zone Name
   * HUD
     * Weapon
-    * ~Health~ 
-    * ~Armour~
-    * ~Oxygen (In Water)~
-    * ~Cash~
+    * ~~Health~~
+    * ~~Armour~~
+    * ~~Oxygen (In Water)~~
+    * ~~Cash~~
 * ~Radio Stations~
+    * ~~Flash FM~~
+    * ~~Emotion~~
+    * ~~Wave 103~~
+    * ~~Praradise~~
+    * ~~Fresh FM~~
+    * ~~VCFL~~
