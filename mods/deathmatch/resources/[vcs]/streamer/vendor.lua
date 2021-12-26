@@ -2,7 +2,7 @@
 function isTransparentFlag(flag) 
     --0x8
     local transparentFlags = {
-        0x4,2097388
+        0x4,2097388,2097228
     }
     for i,mask in ipairs(transparentFlags) do
         if bitAnd(flag,mask) ~= 0 then 

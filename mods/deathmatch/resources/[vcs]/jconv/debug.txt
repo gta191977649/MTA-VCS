@@ -1,6 +1,4 @@
 
-ERROR - Model:dr_dts_winsb Missing DFF
-ERROR - IPL:dr_dts_winsb Missing IDE
 ERROR - IPL:ebprop_cashreg Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE
 ERROR - IPL:ebprop_clothesrail Missing IDE
