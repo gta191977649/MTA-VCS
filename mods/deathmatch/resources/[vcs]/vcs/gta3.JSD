@@ -155,7 +155,7 @@ LODhintN_road03,LODhintN_road03,wshN_LOD,LODhintN_road03,1500,2097152,true,nil
 LODach_g8,LODach_g8,nbeach_LOD,LODach_g8,1500,0,true,nil
 nbeach_b12,nbeach_b12,nbeach_b,nbeach_b12,450,0,true,LODach_b12
 LODandrv_b21,LODandrv_b21,oceandrv_LOD,LODandrv_b21,1500,0,true,nil
-bridge_a5,bridge_a5,bridge_a,bridge_a5,450,2097156,true,nil
+bridge_a5,bridge_a5,bridge_a,bridge_a5,450,0,true,nil
 docks08_intA,docks08_intA,docks08_intA,docks08_intA,100,0,true,nil
 nbeachbt_a29,nbeachbt_a29,nbeachbt_a,nbeachbt_a29,450,2097156,true,nil
 nbeach_g9,nbeach_g9,nbeach_g,nbeach_g9,450,0,true,LODach_g9
@@ -428,7 +428,7 @@ LODhintS_buildH07,LODhintS_buildH07,wshS_LOD,LODhintS_buildH07,1500,2097152,true
 chunder_partF02,chunder_partF02,nbw_fairgroundY,chunder_partF02,449,2097228,true,nil
 LODroadsect6,LODroadsect6,apN_LOD,LODroadsect6,1500,0,true,nil
 chunder_partK04,chunder_partK04,nbw_fairgroundZ,chunder_partK04,450,2097152,true,nil
-bridge_r5,bridge_r5,bridge_r,bridge_r5,450,2097153,true,LODdge_r5
+bridge_r5,bridge_r5,bridge_r,bridge_r5,450,0,true,LODdge_r5
 dk_struct08,dk_struct08,doccrane1,dk_struct08,440,12,true,nil
 LODloan_1_C,LODloan_1_C,business,LODloan_1_C,1000,0,true,nil
 nbeach_n10,nbeach_n10,neons2,nbeach_n10,1500,2097228,true,nil,20,6
@@ -503,7 +503,7 @@ washintS_road13,washintS_road13,wshS_road,washintS_road13,450,1,true,LODhintS_ro
 oceandrv_s6,oceandrv_s6,oceandrv_s,oceandrv_s6,450,0,true,nil
 dock_camjones,dock_camjones,dk_safecrack,dock_camjones,380,0,true,LODk_camjones
 nbeachbt_r5,nbeachbt_r5,nbeachbt_r,nbeachbt_r5,450,1,true,LODachbt_r5
-bridge_r2,bridge_r2,bridge_r,bridge_r2,450,2097153,true,LODdge_r2
+bridge_r2,bridge_r2,bridge_r,bridge_r2,450,0,true,LODdge_r2
 ap_newesca_01,ap_newesca_01,airstuff2,ap_newesca_01,360,0,true,nil
 kingknuts_intA,kingknuts_intA,hN_kingknuts,kingknuts_intA,100,2097228,true,nil
 wglasssmash2,wglasssmash2,vegepart_wS,wglasssmash2,450,2098180,true,nil
@@ -717,7 +717,7 @@ dN_partA25,dN_partA25,dN_partA25,dN_partA25,450,0,true,LODpartA25
 oceandrv_s12,oceandrv_s12,oceandrv_s,oceandrv_s12,450,0,true,LODandrv_s12
 lh_nitelites1,lh_nitelites1,ap_neons,lh_nitelites1,1500,236,true,nil,20,6
 oceandrv_fanA,oceandrv_fanA,oceandrv_f,oceandrv_fanA,450,4,true,nil
-bridge_a1,bridge_a1,bridge_a,bridge_a1,450,2097156,true,nil
+bridge_a1,bridge_a1,bridge_a,bridge_a1,450,0,true,nil
 lh_crushers09,lh_crushers09,junkjard,lh_crushers09,450,0,true,nil
 hN_safehouse1-ext,hN_safehouse1-ext,hN_philplace,hN_safehouse1-ext,450,2097152,true,nil
 oceandrv_s13,oceandrv_s13,oceandrv_s,oceandrv_s13,450,0,true,LODandrv_s13
@@ -950,9 +950,9 @@ ap_wallfence4A,ap_wallfence4A,apN_roads,ap_wallfence4A,450,12,true,nil
 fidl,fidl,fidl,fidl,80,2097152,true,nil
 nbeachw_road06,nbeachw_road06,nbw_roads,nbeachw_road06,450,1,true,LODachw_road06
 LODhintS_buildE02,LODhintS_buildE02,wshS_LOD,LODhintS_buildE02,1500,2097152,true,nil
-bridge_r4,bridge_r4,bridge_r,bridge_r4,450,2097153,true,LODdge_r4
+bridge_r4,bridge_r4,bridge_r,bridge_r4,450,0,true,LODdge_r4
 LODtistation01,LODtistation01,haiti_LOD,LODtistation01,1500,2097152,true,nil
-bridge_r10,bridge_r10,bridge_r,bridge_r10,450,2097153,true,LODdge_r10
+bridge_r10,bridge_r10,bridge_r,bridge_r10,450,0,true,LODdge_r10
 washintN_build26,washintN_build26,wshN_buildings01,washintN_build26,450,2097152,true,LODhintN_build26
 LODks92,LODks92,lod_docks,LODks92,3000,128,true,nil
 LODntowS_m13,LODntowS_m13,downtowS_LOD,LODntowS_m13,3000,0,true,nil
@@ -1322,7 +1322,7 @@ washintS_buildF04b,washintS_buildF04b,wshS_build01,washintS_buildF04b,450,209728
 LODitsnip,LODitsnip,haiti_LOD,LODitsnip,1500,2097152,true,nil
 oceandn_a1,oceandn_a1,oceandn_a,oceandn_a1,450,2097156,true,nil
 dtn_stadspacesB,dtn_stadspacesB,dt_stadium,dtn_stadspacesB,260,76,true,nil
-bridge_a2,bridge_a2,bridge_a,bridge_a2,450,2097156,true,nil
+bridge_a2,bridge_a2,bridge_a,bridge_a2,450,0,true,nil
 LODterminA2_01,LODterminA2_01,LODairport,LODterminA2_01,1500,0,true,nil
 downtowS_m6,downtowS_m6,downtowS_m,downtowS_m6,450,0,true,LODntowS_m6
 hN_objalpha13,hN_objalpha13,hN_objalpha,hN_objalpha13,450,2097164,true,nil
@@ -1381,7 +1381,7 @@ wshN_window02,wshN_window02,neons1,wshN_window02,1500,2097156,true,nil,20,6
 parkbench1,parkbench1,benches_cj,parkbench1,55,SA_PROP,true,nil
 chunder_partB03,chunder_partB03,nbw_fairgroundX,chunder_partB03,450,2097152,true,nil
 oceandrv_a13,oceandrv_a13,oceandrv_a,oceandrv_a13,450,2097156,true,nil
-bridge_r8,bridge_r8,bridge_r,bridge_r8,450,2097153,true,LODdge_r8
+bridge_r8,bridge_r8,bridge_r,bridge_r8,450,0,true,LODdge_r8
 dk_struct20,dk_struct20,dockfence1,dk_struct20,450,12,true,nil
 mall_i23,mall_i23,mall_i,mall_i23,450,0,true,nil
 ap_fence1A,ap_fence1A,ap_roads,ap_fence1A,450,0,true,nil
@@ -1487,7 +1487,7 @@ ap_tower,ap_tower,ap_buildings2,ap_tower,450,0,true,LODtower
 LODachbt_b26,LODachbt_b26,nbeachbt_LOD,LODachbt_b26,3000,0,true,nil
 nbw_veges09,nbw_veges09,nbw_alphavegs,nbw_veges09,450,2097156,true,nil
 oceandrv_veg1,oceandrv_veg1,oceandrv_veg,oceandrv_veg1,450,2097156,true,nil
-bridge_a4,bridge_a4,bridge_a,bridge_a4,450,2097156,true,nil
+bridge_a4,bridge_a4,bridge_a,bridge_a4,450,0,true,nil
 docks46,docks46,dk_houses1,docks46,445,0,true,LODks46
 oceandn_m8,oceandn_m8,oceandn_m,oceandn_m8,450,0,true,nil
 washintN_build24,washintN_build24,wshN_buildings01,washintN_build24,450,0,true,LODhintN_build24
@@ -1518,7 +1518,7 @@ bin1,bin1,metal,bin1,45,SA_PROP,true,nil
 dN_part13_a,dN_part13_a,dN_partA13,dN_part13_a,450,4,true,nil
 wshS_fence05,wshS_fence05,wshS_port,wshS_fence05,450,2097284,true,nil
 hN_partB01,hN_partB01,hN_philplace,hN_partB01,450,2097152,true,LODpartB01
-bridge_a7,bridge_a7,bridge_a,bridge_a7,450,2097156,true,nil
+bridge_a7,bridge_a7,bridge_a,bridge_a7,450,0,true,nil
 nbw_veges05,nbw_veges05,nbw_alphavegs,nbw_veges05,450,2097156,true,nil
 seabed03,seabed03,underworld,seabed03,3000,256,true,nil
 nbeachbt_r11,nbeachbt_r11,nbeachbt_r,nbeachbt_r11,450,1,true,LODachbt_r11
@@ -1650,6 +1650,7 @@ oceandrv_m8,oceandrv_m8,oceandrv_m,oceandrv_m8,450,0,true,nil
 downtowS_r5,downtowS_r5,downtowS_r,downtowS_r5,450,1,true,LODntowS_r5
 LODvroad1,LODvroad1,lh_LOD,LODvroad1,1500,0,true,nil
 LODf_road03,LODf_road03,golf_LOD,LODf_road03,1500,2097152,true,nil
+vcs_savehouse_beach,vcs_savehouse_beach,vcs_savehouse_beach,vcs_savehouse_beach,450,0,true,nil
 LODachbt_b3,LODachbt_b3,nbeachbt_LOD,LODachbt_b3,3000,0,true,nil
 LODr_A27,LODr_A27,star_LOD,LODr_A27,3000,0,true,nil
 ap_adv2,ap_adv2,airstuff2,ap_adv2,450,0,true,nil
@@ -1792,7 +1793,7 @@ pc_scene19,pc_scene19,pc_stadium01,pc_scene19,450,2097152,true,nil
 downtowS_a30,downtowS_a30,downtowS_a,downtowS_a30,450,2097156,true,nil
 ap_terminA2_01,ap_terminA2_01,ap_terminal1,ap_terminA2_01,450,0,true,LODterminA2_01
 nbeach_s5,nbeach_s5,nbeachbt_s,nbeach_s5,450,0,true,nil
-bridge_r3,bridge_r3,bridge_r,bridge_r3,450,2097153,true,LODdge_r3
+bridge_r3,bridge_r3,bridge_r,bridge_r3,450,0,true,LODdge_r3
 apN_neon,apN_neon,ap_neons,apN_neon,1500,236,true,nil,20,6
 lh_adv05,lh_adv05,lh_struct,lh_adv05,435,0,true,nil
 LODpartA11,LODpartA11,downtowN_LOD,LODpartA11,3000,0,true,nil
@@ -2013,7 +2014,7 @@ LODhintN_road23,LODhintN_road23,wshN_LOD,LODhintN_road23,1500,2097152,true,nil
 wshN_window01,wshN_window01,neons1,wshN_window01,1500,2097156,true,nil,20,6
 LODpartA42,LODpartA42,downtowN_LOD,LODpartA42,3000,0,true,nil
 seabed36,seabed36,underworld,seabed36,3000,256,true,nil
-bridge_r9,bridge_r9,bridge_r,bridge_r9,450,2097153,true,LODdge_r9
+bridge_r9,bridge_r9,bridge_r,bridge_r9,450,0,true,LODdge_r9
 veg_palmkb14,veg_palmkb14,new_palm,veg_palmkb14,40,2097284,true,nil
 golf_partB07,golf_partB07,golf_txd,golf_partB07,450,2097152,true,nil
 havbit01,havbit01,lhgardens,havbit01,420,0,true,LODbit01
@@ -2055,7 +2056,7 @@ nbeachw_alpha02,nbeachw_alpha02,nbw_alphavegs,nbeachw_alpha02,450,2097228,true,n
 LODk_camjones,LODk_camjones,lod_docks,LODk_camjones,3000,128,true,nil
 downtowS_a20,downtowS_a20,downtowS_a,downtowS_a20,450,2097156,true,nil
 aptunel_light,aptunel_light,apN_roads,aptunel_light,450,0,true,nil
-bridge_a3,bridge_a3,bridge_a,bridge_a3,450,2097156,true,nil
+bridge_a3,bridge_a3,bridge_a,bridge_a3,450,0,true,nil
 oceandn_s14,oceandn_s14,oceandn_s,oceandn_s14,450,0,true,LODandn_s14
 ap_roadsect3b,ap_roadsect3b,VCSRoads,ap_roadsect3b,450,1,true,LODroadsect3b
 downtowS_g8,downtowS_g8,downtowS_g,downtowS_g8,450,0,true,LODntowS_g8
@@ -2561,7 +2562,7 @@ LODhintS_pierA01,LODhintS_pierA01,wshS_LOD,LODhintS_pierA01,1500,2097152,true,ni
 billbd_struct02,billbd_struct02,apN_stuff,billbd_struct02,450,0,true,nil
 LODachw_partA11,LODachw_partA11,nbeachw_LOD,LODachw_partA11,1500,2097152,true,nil
 sjmhafinrd,sjmhafinrd,h_roads,sjmhafinrd,450,0,true,LODhafinrd
-bridge_r6,bridge_r6,bridge_r,bridge_r6,450,2097153,true,LODdge_r6
+bridge_r6,bridge_r6,bridge_r,bridge_r6,450,0,true,LODdge_r6
 LODhintS_pier01,LODhintS_pier01,wshS_LOD,LODhintS_pier01,1500,2097152,true,nil
 oceandrv_b22,oceandrv_b22,oceandrv_b,oceandrv_b22,450,0,true,LODandrv_b22
 dN_partA9,dN_partA9,dN_dirtrack,dN_partA9,450,0,true,LODpartA9
@@ -3240,7 +3241,7 @@ dk_rdsignsn,dk_rdsignsn,dockroads,dk_rdsignsn,405,128,true,nil
 mansion_g8,mansion_g8,mansion_g,mansion_g8,450,0,true,nil
 miamiland041,miamiland041,lh_roads1,miamiland041,380,5,true,LODmiland041
 ap_wallfence3,ap_wallfence3,apN_roads,ap_wallfence3,450,0,true,nil
-bridge_r7,bridge_r7,bridge_r,bridge_r7,450,2097153,true,LODdge_r7
+bridge_r7,bridge_r7,bridge_r,bridge_r7,450,0,true,LODdge_r7
 seabed14,seabed14,underworld,seabed14,3000,256,true,nil
 pw_groundplane,pw_groundplane,h_ground,pw_groundplane,450,0,true,LODgroundplane
 oceandn_a3,oceandn_a3,oceandn_a,oceandn_a3,450,2097156,true,nil
@@ -3463,7 +3464,7 @@ LODy_main,LODy_main,apN_LOD,LODy_main,1500,0,true,nil
 BinNt09_LA,BinNt09_LA,LABins01_LA,BinNt09_LA,70,SA_PROP,true,nil
 LODach_b18,LODach_b18,nbeach_LOD,LODach_b18,1500,0,true,nil
 cp_element01,cp_element01,cp_trailers,cp_element01,420,0,true,nil
-bridge_r1,bridge_r1,bridge_r,bridge_r1,450,2097153,true,LODdge_r1
+bridge_r1,bridge_r1,bridge_r,bridge_r1,450,0,true,LODdge_r1
 mc_shed02,mc_shed02,army_base,mc_shed02,450,0,true,nil
 wshN_vegepart03,wshN_vegepart03,wshN_vegalph,wshN_vegepart03,500,2097156,true,nil
 LODpartC04,LODpartC04,haitiN_LOD,LODpartC04,1500,2097152,true,nil
@@ -3488,7 +3489,7 @@ LODhintN_road09,LODhintN_road09,wshN_LOD,LODhintN_road09,1500,2097152,true,nil
 ap_dockstairs1,ap_dockstairs1,ap_seasplane,ap_dockstairs1,450,0,true,nil
 ap_runsign10_03,ap_runsign10_03,ap_runsigns1,ap_runsign10_03,450,0,true,nil
 LOD_house04,LOD_house04,haiti_LOD,LOD_house04,1500,2097152,true,nil
-bridge_a6,bridge_a6,bridge_a,bridge_a6,450,2097156,true,nil
+bridge_a6,bridge_a6,bridge_a,bridge_a6,450,0,true,nil
 bussign1,bussign1,signs,bussign1,50,SA_PROP,true,nil
 newstandnew1,newstandnew1,newstand,newstandnew1,50,SA_PROP,true,nil
 downtowS_m17,downtowS_m17,downtowS_m,downtowS_m17,450,0,true,nil

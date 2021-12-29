@@ -2,23 +2,23 @@
 # 18/11/2014
 #id from 2741 to ###
 objs
-2741, bridge_r1, bridge_r, 450, 2097153
-2742, bridge_r2, bridge_r, 450, 2097153
-2743, bridge_r3, bridge_r, 450, 2097153
-2744, bridge_r4, bridge_r, 450, 2097153
-2745, bridge_r5, bridge_r, 450, 2097153
-2746, bridge_r6, bridge_r, 450, 2097153
-2747, bridge_r7, bridge_r, 450, 2097153
-2748, bridge_r8, bridge_r, 450, 2097153
-2749, bridge_r9, bridge_r, 450, 2097153
-2750, bridge_r10, bridge_r, 450, 2097153
-2751, bridge_a1, bridge_a, 450, 2097156
-2752, bridge_a2, bridge_a, 450, 2097156
-2753, bridge_a3, bridge_a, 450, 2097156
-2754, bridge_a4, bridge_a, 450, 2097156
-2755, bridge_a5, bridge_a, 450, 2097156
-2756, bridge_a6, bridge_a, 450, 2097156
-2757, bridge_a7, bridge_a, 450, 2097156
+2741, bridge_r1, bridge_r, 450, 0
+2742, bridge_r2, bridge_r, 450, 0
+2743, bridge_r3, bridge_r, 450, 0
+2744, bridge_r4, bridge_r, 450, 0
+2745, bridge_r5, bridge_r, 450, 0
+2746, bridge_r6, bridge_r, 450, 0
+2747, bridge_r7, bridge_r, 450, 0
+2748, bridge_r8, bridge_r, 450, 0
+2749, bridge_r9, bridge_r, 450, 0
+2750, bridge_r10, bridge_r, 450,0
+2751, bridge_a1, bridge_a, 450, 0
+2752, bridge_a2, bridge_a, 450, 0
+2753, bridge_a3, bridge_a, 450, 0
+2754, bridge_a4, bridge_a, 450, 0
+2755, bridge_a5, bridge_a, 450, 0
+2756, bridge_a6, bridge_a, 450, 0
+2757, bridge_a7, bridge_a, 450, 0
 2758, LODdge_r1, LODdge_r, 3000, 0
 2759, LODdge_r2, LODdge_r, 3000, 0
 2760, LODdge_r3, LODdge_r, 3000, 0
