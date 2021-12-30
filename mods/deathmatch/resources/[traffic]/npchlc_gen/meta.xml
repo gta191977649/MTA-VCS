@@ -1,0 +1,6 @@
+<meta>
+    <script src="byte_data.lua"/>
+    <script src="common.lua"/>
+    <script src="parser.lua"/>
+    <script src="test.lua"/>
+</meta>

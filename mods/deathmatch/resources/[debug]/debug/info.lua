@@ -55,10 +55,8 @@ addEventHandler( "onClientElementStreamOut", root,
         end
     end
 )
+setCloudsEnabled(false)
+setFarClipDistance( 9999 ) 
+setFogDistance(9999)
 ]]
---setCloudsEnabled(false)
-
---setFarClipDistance( 9999 ) 
-
-setWaterDrawnLast(true)
 

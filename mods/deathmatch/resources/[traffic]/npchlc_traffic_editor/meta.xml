@@ -1,0 +1,25 @@
+<meta>
+	<info author="CrystalMV" version="1.0" name="NPC traffic editor" description="Edit paths for NPC traffic" type="script"/>
+
+	<script src="editor_s.lua"		type="server"/>
+	<script src="editor_c.lua"		type="client"/>
+	<script src="editor.lua"		type="server"/>
+	<script src="editor.lua"		type="client"/>
+	
+	<script src="nodes_c.lua"		type="client"/>
+	<script src="conns_c.lua"		type="client"/>
+	<script src="forbs_c.lua"		type="client"/>
+
+	<script src="draw_c.lua"		type="client"/>
+	<script src="render_c.lua"		type="client"/>
+
+	<script src="gui_s.lua"			type="server"/>
+	<script src="gui_c.lua"			type="client"/>
+
+	<script src="save_load_s.lua"	type="server"/>
+	<script src="bytedata.lua"		type="server"/>
+
+	<script src="fake_elements.lua"	type="server"/>
+	<script src="fake_elements.lua"	type="client"/>
+</meta>
+
