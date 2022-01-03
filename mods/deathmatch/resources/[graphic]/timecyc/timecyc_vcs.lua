@@ -30,7 +30,6 @@ end
 function start() 
     function updateTimecyc ()
         local hour,min = getTime()
-       
         if min ~= lastMin then --save a bit processing power
             applyWeatherMapping(Weather.id) 
             setWeatherFromTimecyc(Weather.id,hour,min)
@@ -42,7 +41,7 @@ function start()
     setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
     --resetColorFilter()
     updateTimecyc()
-    addEventHandler ( "onClientPreRender", root, updateTimecyc )
+    addEventHandler ( "onClientRender", root, updateTimecyc )
 end
 
 
