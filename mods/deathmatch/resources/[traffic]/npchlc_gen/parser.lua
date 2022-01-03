@@ -28,8 +28,7 @@ function readNodeSection(sectionFlag,data)
                 if #line == 12 then -- it's the section data
                     local NodeType, NextNode, IsCrossRoad, XAbs, YAbs, ZAbs, Median, LeftLanes, RightLanes, SpeedLimit, Flags, SpawnRate = unpack(line)
                     if NodeType ~= "0" then
-                        
-                        table.insert(PATH.node_block[currentGroupType],{XAbs / 16, YAbs/ 16, ZAbs / 16,0,0})
+                        table.insert(PATH.node_block[currentGroupType],{XAbs / 16, YAbs/ 16, ZAbs / 16,1,1})
                     end
                 end
            
