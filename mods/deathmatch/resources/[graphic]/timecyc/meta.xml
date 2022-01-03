@@ -3,5 +3,6 @@
     <file src="timecyc_vcs.dat" type="client"/>
     <file src="timecyc.dat" type="client"/>
 
+    <export function="setTimecycWeather" type="shared"/>
     <include resource="ps2"/>
 </meta>

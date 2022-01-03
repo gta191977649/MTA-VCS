@@ -2,7 +2,7 @@ UI = exports.ui
 LANG = exports.language
 DGS = exports.dgs
 CAM = exports.freecam
-
+WEA = exports.timecyc
 addCommandHandler("sound",function(cmd,id) 
     outputChatBox( id )
     playSoundFrontEnd ( id )   
@@ -119,6 +119,12 @@ addCommandHandler("dev",
     function()
         setDevelopmentMode(true)
         UI:showTextBox("Dev mode on",3000)
+    end
+)
+addCommandHandler("wea",
+    function(_,id)
+        WEA:setTimecycWeather(id)
+        UI:showTextBox("Weather Set.",3000)
     end
 )
 addCommandHandler("anim",function() 

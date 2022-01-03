@@ -15,7 +15,7 @@
     <file src="fx/tex_names.fx" type="client" />
 
     <export function="addDebugMessage" type="client"/>
-
+    <include resource="timecyc"/>
 
     <min_mta_version client="1.5.8-9.20797"></min_mta_version>
 </meta>

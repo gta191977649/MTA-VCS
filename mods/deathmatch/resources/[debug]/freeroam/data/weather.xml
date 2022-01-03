@@ -1,0 +1,10 @@
+<catalog type="weather">
+	<weather id="0" name="Sunny" />
+	<weather id="1" name="Cloudy" />
+	<weather id="2" name="Rain" />
+	<weather id="3" name="Foggy" />
+	<weather id="4" name="Extra Sunny" />
+	<weather id="5" name="Extra Cloudy" />
+	<weather id="6" name="Interior" />
+
+</catalog>

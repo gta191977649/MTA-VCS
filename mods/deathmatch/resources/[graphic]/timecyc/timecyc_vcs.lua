@@ -9,15 +9,31 @@ Weather = {
     blend = false,
     blendTime = 1, -- 1 hour interval for blend weather
 }
+WeatherMapping ={ --deal with sa weather special effect
+    -- vcs_id, sa_id
+    [0] = 1, -- SUNNY
+    [1] = 15, -- CLOUDY
+    [2] = 8, -- RANING
+    [3] = 9, -- FOGGY
+    [4] = 17, --EXTRA SUNNY
+    [5] = 4, --EXTRA CLOUD
+    [6] = 22, --INTERIOR
+}
+
 Timecyc = {}
 
 local _,lastMin = getTime()
+function applyWeatherMapping(vcs_id) 
+    vcs_id = WeatherMapping[vcs_id] and vcs_id or 0
+    setWeather(WeatherMapping[vcs_id])
+end
 function start() 
     function updateTimecyc ()
         local hour,min = getTime()
-        local weatherid = getWeather()
+       
         if min ~= lastMin then --save a bit processing power
-            setWeatherFromTimecyc(weatherid,hour,min)
+            applyWeatherMapping(Weather.id) 
+            setWeatherFromTimecyc(Weather.id,hour,min)
         end
     end
     resetWaterColor()
@@ -208,5 +224,15 @@ function blendWeatherFromTimecyc(weather_id)
     local fromWeatherId = Weather.id
     local toWeatherId = weather_id
 
+end
+
+function setTimecycWeather(id) 
+    id = tonumber(id)
+    if Timecyc[id] then
+        Weather.id = id
+    else
+        Weather.id = 0
+        outputChatBox("Invaild Weather ID!")
+    end
 end
 loadTimeCycle("timecyc_vcs.dat")
