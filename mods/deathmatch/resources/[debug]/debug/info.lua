@@ -16,7 +16,7 @@ formatLabel(build_info)
 formatLabel(debug_info,tocolor(209, 157, 0,255))
 formatLabel(pos_info,tocolor(209, 157, 0,255))
 
-local debug_memo = DGS:dgsCreateMemo(0.5,0.3,0.45,0.5,"SPARROW DEBUG TERMIAL.\nReady.",true,Window)
+local debug_memo = DGS:dgsCreateMemo(0.5,0.3,0.45,0.5,"",true,Window)
 DGS:dgsSetProperty(debug_memo,"font","sans")
 DGS:dgsSetProperty(debug_memo,"textSize",{1.2,1.2})
 DGS:dgsSetProperty(debug_memo,"bgColor",tocolor(209, 157, 0,0))
