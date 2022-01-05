@@ -12,9 +12,8 @@ bool sDisableNormals = false;
 //------------------------------------------------------------------------------------------
 //#define GENERATE_NORMALS      // Uncomment for normals to be generated
 #include "mta-helper.fx"
-#define surfAmb 0.4
+#define surfAmb 0.35
 #define ambient 1.0
-
 //------------------------------------------------------------------------------------------
 // Render targets
 //------------------------------------------------------------------------------------------

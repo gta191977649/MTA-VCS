@@ -1,12 +1,15 @@
-
+SHADER = exports["dl_core"]
 function initModels() 
     -- generic txd fix (for vcs)
     for idx,txd in pairs(IMG_GENERIC) do 
+        --[[
         local shader = dxCreateShader( "shader/replace.fx",{},1)
         local texture = dxCreateTexture(txd.path)
         dxSetShaderValue (shader, "Tex0",texture)
         engineApplyShaderToWorldTexture(shader,txd.name)
-
+        --]]
+        local texture = dxCreateTexture(txd.path)
+        SHADER:applyTextureReplaceToVehicle(txd.name,texture)
     end
 
     for key,val in pairs(IMG_PED) do 

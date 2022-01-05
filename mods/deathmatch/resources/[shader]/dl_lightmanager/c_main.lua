@@ -83,7 +83,7 @@ function lightFuncTable.create(lType,posX,posY,posZ,colorR,colorG,colorB,colorA,
 	end
 	
 	
-	outputDebugString('Created Light TYPE: '..lightType..' ID:'..w)
+	------outputDebugString('Created Light TYPE: '..lightType..' ID:'..w)
 	lightTable.isInNrChanged = true
 	return w
 end
@@ -93,10 +93,10 @@ function lightFuncTable.destroy(w)
 		lightTable.inputLights[w].enabled = false
 		lightTable.isInNrChanged = true
 		destroyElement(lightTable.entity[w])
-		outputDebugString('Destroyed Light ID:'..w)
+		----outputDebugString('Destroyed Light ID:'..w)
 		return true
 	else
-		outputDebugString('Have Not Destroyed Light ID:'..w)
+		----outputDebugString('Have Not Destroyed Light ID:'..w)
 		return false 
 	end
 end
@@ -106,7 +106,7 @@ end
 ---------------------------------------------------------------------------------------------------
 local thisPos, distFromCam
 
-addEventHandler("onClientPedsProcessed", root, function()
+addEventHandler("onClientRender", root, function()
 	if #lightTable.inputLights == 0 then return end
 	lightTable.thisLight = 0
 	
@@ -165,7 +165,7 @@ function switchDebugLights(switch)
 	if switch then
 		addEventHandler("onClientRender", root, renderDebugLights)
 	else
-		outputDebugString('LightDebug mode: OFF')
+		----outputDebugString('LightDebug mode: OFF')
 		removeEventHandler("onClientRender", root, renderDebugLights)
 	end
 	return switch

@@ -1,0 +1,9 @@
+<root>
+		<face file="color_wings.dds" name="Color wings" />
+		<face file="flower.dds" name="Flower"/>
+		<face file="skull.dds" name="Skull"/>
+		<face file="spider.dds" name="Spider"/>
+		<face file="stars.dds" name="Stars"/>
+		<face file="super.dds" name="Super"/>
+		<face file="wings.dds" name="Wings"/>
+</root>

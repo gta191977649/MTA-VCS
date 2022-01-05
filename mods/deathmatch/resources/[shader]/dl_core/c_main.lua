@@ -296,9 +296,6 @@ function functionTable.removeShaderFromList(myShader, myList)
 	for _,removeMatch in ipairs(myList) do
 		engineRemoveShaderFromWorldTexture(myShader, removeMatch)	
 	end
-
-
-
 end
 
 

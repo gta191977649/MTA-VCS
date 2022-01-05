@@ -1,0 +1,27 @@
+<meta>
+    <info name="dl_neons" author="Ren712" version="0.1.2" type="script" />
+    <min_mta_version client="1.5.7-9.19626"></min_mta_version>
+    <settings>
+        <setting name="*ForcePlayer" value="true" />
+    </settings>
+    <oop>true</oop>
+    <file src="colorpicker/palette.png" type="client" />
+    <file src="colorpicker/alpha.png" type="client" />
+    <script src="colorpicker/colorpicker.lua" type="client" />
+    
+    <script src="c_neon.lua" type="client" />
+    <script src="c_common.lua" type="client" />
+    <script src="s_neon.lua" type="server" />
+    <config src="neons.xml" type="client" />
+    <file src="fx/primitive2D_fixZBuffer.fx" type="client" />
+    <file src="fx/primitive3D_projectedTexture2vec.fx" type="client" />
+    <file src="fx/primitive3D_projectedTexture2vec_dl.fx" type="client" />
+    
+    <file src="img/color_wings.dds" type="client" />
+    <file src="img/flower.dds" type="client" />
+    <file src="img/skull.dds" type="client" />
+    <file src="img/spider.dds" type="client" />
+    <file src="img/stars.dds" type="client" />
+    <file src="img/super.dds" type="client" />
+    <file src="img/wings.dds" type="client" />
+</meta>

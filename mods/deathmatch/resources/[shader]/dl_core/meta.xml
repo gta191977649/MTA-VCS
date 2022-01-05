@@ -1,11 +1,11 @@
 <meta>
 	<info name="dl_core" author="Ren712" version="0.1.7" type="script" />
 	<min_mta_version client="1.5.7-9.20157" />
-	<script src="c_main.lua" type="client" />
 	<script src="c_common.lua" type="client" />
 	<script src="c_exports.lua" type="client" />
 	<script src="c_switch.lua" type="client" />
-	
+	<script src="c_main.lua" type="client" />
+
 	<file src="txd_exclude.txt" type="client"/>
 	<file src="fx/mta-helper.fx" />
 	<file src="fx/RTinput_car_paint.fx" />

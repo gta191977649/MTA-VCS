@@ -26,7 +26,7 @@ function applyLightShadowPatch(object,modelname)
 
             if light ~= nil then
                 LIGHT:setLightDistFade(light,FADE_DIST,FADE_DIST*0.6)
-                LIGHT:attachLightToElement(light,object,0,0,v[7] or 0)
+                --LIGHT:attachLightToElement(light,object,0,0,v[7] or 0)
                 LIGHT_OBJS[object] = {
                     light = light,
                     isdamage = false,
@@ -79,6 +79,7 @@ function lightSwitch(toogle)
         end
     else
         for k,v in pairs(LIGHT_OBJS) do 
+            --LIGHT:destroyLight(v.light)
             LIGHT:setLightColor(v.light,0,0,0,0)
         end
         
