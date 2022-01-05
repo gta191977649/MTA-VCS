@@ -1,5 +1,5 @@
 DEBUG = exports.DEBUG
-
+FX = exports["2dfx"]
 debug.sethook(nil)
 
 -- Tables --
@@ -128,7 +128,9 @@ function loadObject(data)
 	if cull then
 		setElementDoubleSided(object,true)
 	end
-	
+	if flag ~= "SA_PROP" then 
+		setElementFrozen(object,true)
+	end
 	--[[
 	if flag and tonumber(flag) ~= 0 then 
 		setElementFlagProperty(object,data.flag)
@@ -150,6 +152,7 @@ function loadObject(data)
 
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
+			setElementFrozen(lowLOD,true)
 		end
 	else
 		setLowLODElement(object,false)
@@ -208,7 +211,7 @@ function loadedFunction (resourceName)
 	local endTickCount = getTickCount ()-startTickCount
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
-	setWaterDrawnLast(true)
+	FX:init()
 	--cache = {} -- clearn the cache
 end
 

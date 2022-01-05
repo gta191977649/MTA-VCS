@@ -1459,7 +1459,7 @@ oceandrv_veg4,oceandrv_veg4,oceandrv_veg,oceandrv_veg4,450,2097156,true,nil
 lithawaste2_fence,lithawaste2_fence,lh_struct,lithawaste2_fence,435,12,true,nil
 nbeachbt_r10,nbeachbt_r10,nbeachbt_r,nbeachbt_r10,450,1,true,LODachbt_r10
 wshN_stuff15d,wshN_stuff15d,wshN_vegalph,wshN_stuff15d,450,2097156,true,nil
-lamproad3,lamproad3,dynsigns,lamproad3,450,4096,true,nil
+lamproad3,lamproad3,dynsigns,lamproad3,450,SA_PROP,true,nil
 LODhintN_road27,LODhintN_road27,wshN_LOD,LODhintN_road27,1500,2097152,true,nil
 LODntowS_b11,LODntowS_b11,downtowS_LOD,LODntowS_b11,3000,0,true,nil
 oceandrv_s10,oceandrv_s10,oceandrv_s,oceandrv_s10,450,0,true,LODandrv_s10
@@ -3381,7 +3381,7 @@ chunder_partJ04,chunder_partJ04,nbw_fairgroundZ,chunder_partJ04,449,2097152,true
 docks40,docks40,docfactories1,docks40,445,0,true,LODks40
 dk_struct19,dk_struct19,docks1,dk_struct19,445,0,true,nil
 chunder_partE06,chunder_partE06,nbw_fairgroundY,chunder_partE06,450,2097228,true,nil
-lamppost3,lamppost3,dynsigns,lamppost3,75,SA_PROP,true,nil
+lamppost3,lamppost3,dynsigns,lamppost3,75,262272,true,nil
 golf_partA09,golf_partA09,golf_txd,golf_partA09,450,2097152,true,LODf_partA09
 mansion_a6,mansion_a6,mansion_a,mansion_a6,450,2097156,true,nil
 LODrland06,LODrland06,LODairport,LODrland06,3000,0,true,nil

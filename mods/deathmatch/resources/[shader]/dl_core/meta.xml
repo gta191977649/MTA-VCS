@@ -1,0 +1,47 @@
+<meta>
+	<info name="dl_core" author="Ren712" version="0.1.7" type="script" />
+	<min_mta_version client="1.5.7-9.20157" />
+	<script src="c_main.lua" type="client" />
+	<script src="c_common.lua" type="client" />
+	<script src="c_exports.lua" type="client" />
+	<script src="c_switch.lua" type="client" />
+	
+	<file src="txd_exclude.txt" type="client"/>
+	<file src="fx/mta-helper.fx" />
+	<file src="fx/RTinput_car_paint.fx" />
+	<file src="fx/RTinput_car_paint_texReplace.fx" />
+	<file src="fx/RTinput_world.fx" />
+	<file src="fx/RTinput_world_vcs.fx" />
+	<file src="fx/RTinput_world_texReplace.fx" />
+	<file src="fx/RTinput_world_refAnim.fx" />
+	<file src="fx/RTinput_world_noZWrite.fx" />
+	<file src="fx/RTinput_world_emissiveAdd.fx" />
+	<file src="fx/RTinput_world_emissive.fx" />
+	<file src="fx/RTinput_world_normal.fx" />
+	<file src="fx/RTinput_water.fx" />
+	<file src="fx/RTinput_water_detail.fx" />
+	<file src="fx/RTinput_grass.fx" />
+	<file src="fx/RTinput_ped.fx" />
+	<file src="fx/RTinput_ped_texReplace.fx" />
+	<file src="fx/RTinput_ped_normal.fx" />
+	<file src="fx/RTinput_ped_noVS.fx" />
+	<file src="fx/RTOutput_blurH.fx" type="client" />
+	<file src="fx/RTOutput_blurV.fx" type="client" />
+	<file src="fx/RTOutput_brightPass.fx" type="client" />
+	<file src="fx/RTOutput_addBlend.fx" type="client" />
+	<file src="fx/primitive2D_fixZBuffer.fx" />
+	
+	<export function="getRenderTargets" type="client" />
+	<export function="passGTASAObjectNormals" type="client" />
+	<export function="applyEmissiveEffectToWorld" type="client" />
+	<export function="applyEmissiveTextureToWorld" type="client" />
+	<export function="setEmissivePostEffectEnabled" type="client" />
+	<export function="setEmissiveTextureBlurIntensity" type="client" />
+	<export function="setEmissiveTextureBrightnessAdd" type="client" />
+	<export function="applyNormalTextureToPed" type="client" />
+	<export function="applyNormalTextureToWorld" type="client" />
+	<export function="setNormalStrength" type="client" />
+	<export function="applyTextureReplaceToWorld" type="client" />
+	<export function="applyTextureReplaceToPed" type="client" />
+	<export function="applyTextureReplaceToVehicle" type="client" />
+</meta>

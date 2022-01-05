@@ -4,7 +4,7 @@ function enablePs2Effect()
     enableVehiclePipe()
     enableRotorPs2Fix()
     enableBloom()
-    enableDiffuse()
+    --enableDiffuse() -- did in 2dfx instead
 end
 function disablePs2Effect()
     disableSunShader()
@@ -12,7 +12,7 @@ function disablePs2Effect()
     disableVehiclePipe()
     disableRotorPs2Fix()
     disableBloom()
-    disableDiffuse()
+    --disableDiffuse()
 end
 enablePs2Effect()
 --enableDiffuse()

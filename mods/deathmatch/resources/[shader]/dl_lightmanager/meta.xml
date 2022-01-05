@@ -1,0 +1,53 @@
+<meta>
+    <info name="dl_lightManager" version="0.1.2" type="script" author="Ren712" />
+    <min_mta_version client="1.5.7-9.20157" />
+    <oop>true</oop>
+    <include resource="dl_core" />
+    
+    <file src="fx/primitive3D_pointLight.fx" type="client" />
+    <file src="fx/primitive3D_pointLight_normalGen.fx" type="client" />
+    <file src="fx/primitive3D_spotLight.fx" type="client" />
+    <file src="fx/primitive3D_spotLight_normalGen.fx" type="client" />
+    
+    <script src="c_common.lua" type="client" />
+    <script src="c_main.lua" type="client" />
+    <script src="c_exports.lua" type="client" />
+    <script src="c_attach.lua" type="client" />
+    <script src="c_test.lua" type="client" />
+    
+    <export function="createPointLight" type="client" />
+    <export function="createSpotLight" type="client" />
+    <export function="destroyLight" type="client" />
+    <export function="getLightType" type="client" />
+    <export function="setLightDimension" type="client" />
+    <export function="setLightInterior" type="client" />
+    <export function="setLightDistFade" type="client" />
+    <export function="getLightDistFade" type="client" />
+    <export function="setLightDirection" type="client" />
+    <export function="setLightRotation" type="client" />
+    <export function="setLightPosition" type="client" />
+    <export function="setLightColor" type="client" />
+    <export function="setLightBlend" type="client" />
+    <export function="setLightAttenuation" type="client" />
+    <export function="setLightAttenuationPower" type="client" />
+    <export function="setLightFalloff" type="client" />
+    <export function="setLightTheta" type="client" />
+    <export function="setLightPhi" type="client" />
+    
+    <export function="getLightDimension" type="client" />
+    <export function="getLightInterior" type="client" />
+    <export function="getLightDirection" type="client" />
+    <export function="getLightRotation" type="client" />
+    <export function="getLightPosition" type="client" />
+    <export function="getLightColor" type="client" />
+    <export function="getLightBlend" type="client" />
+    <export function="getLightAttenuation" type="client" />
+    <export function="getLightAttenuationPower" type="client" />
+    <export function="getLightFalloff" type="client" />
+    <export function="getLightTheta" type="client" />
+    <export function="getLightPhi" type="client" />
+
+    <export function="attachLightToElement" type="client" />
+    <export function="detachLight" type="client" />
+    <export function="detachFromElement" type="client" />
+</meta>

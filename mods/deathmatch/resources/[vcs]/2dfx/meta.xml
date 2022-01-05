@@ -1,0 +1,5 @@
+<meta>
+    <script src="main.lua" type="client"/>
+    <export function="init" type="client" />
+    <include resource="dl_lightmanager"/>
+</meta>
