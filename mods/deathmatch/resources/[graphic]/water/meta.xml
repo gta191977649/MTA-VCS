@@ -2,10 +2,7 @@
     <min_mta_version client="1.5.4" server="1.5.4" />
 
     <script src="water.lua" type="client"/>
-    <script src="fx.lua" type="client"/>
-    <file src="fx/water_vc.fx" type="client" cache="false"/>
-    <file src="images/waterclear256.png" type="client"/>
-    <file src="images/waterwake.png" type="client"/>
+
     <!-- 
     <script src="c_main.lua" type="client"/>
     <script src="c_switch.lua" type="client"/>

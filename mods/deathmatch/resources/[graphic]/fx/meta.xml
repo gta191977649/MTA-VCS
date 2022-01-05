@@ -3,4 +3,17 @@
     <file src="texreplace.fx" type="client"/>
     <!-- FX -->
     <file src="src/coronastar.png" type="client"/>
+    <file src="src/cloud1.png" type="client"/>
+    <file src="src/cloud2.png" type="client"/>
+    <file src="src/cloud3.png" type="client"/>
+    <file src="src/cloudhilit.png" type="client"/>
+    <file src="src/cloudmasked.png" type="client"/>
+    <file src="src/collisionsmoke.png" type="client"/>
+    <file src="src/waterclear256.png" type="client"/>
+    <file src="src/waterwake.png" type="client"/>
+    <file src="src/waterreflection2.png" type="client"/>
+    <file src="src/collisionsmoke.png" type="client"/>
+    <file src="src/pointlight.png" type="client"/>
+    <file src="src/smoke.png" type="client"/>
+    <file src="src/waterspark_16.png" type="client"/>
 </meta>
