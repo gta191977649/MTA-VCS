@@ -76,7 +76,7 @@ end
 function setEffectVariables()
     local v = Settings.var
     -- Bloom
-    v.cutoff = 0.4
+    v.cutoff = 0.5
     v.power = 1
 	v.blur = 0.1
     v.bloom = 3
