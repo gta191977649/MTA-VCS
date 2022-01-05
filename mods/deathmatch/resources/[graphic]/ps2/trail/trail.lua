@@ -8,7 +8,7 @@ local Settings = {
     ["intens"] = 0.002,
     ["blur"] = 0.2,
     ["choke"] =0,
-    ["maxAlpha"] = 125,
+    ["maxAlpha"] = 110,
 }
 
 function applyEsotropiaH( Src, blur, propX, propY, pSpeed, pChoke, strenght )
