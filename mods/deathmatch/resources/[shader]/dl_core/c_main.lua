@@ -112,20 +112,21 @@ function functionTable.enableCore()
 		engineRemoveShaderFromWorldTexture(shaderTable.RTinput.SHWorld, "unnamed")
 		
 		functionTable.applyShaderToList(shaderTable.RTinput.SHWorldRefAnim, textureListTable.ApplySpecial)
-	
 		functionTable.applyShaderToList(shaderTable.RTinput.SHWorldNoZWrite, textureListTable.ZDisableApply)
 		dxSetShaderValue(shaderTable.RTinput.SHWorldNoZWrite, "sWorldZBias", 0.005)		
 
+	
 		functionTable.applyShaderToList(shaderTable.RTinput.SHVehPaint, textureListTable.TextureGrun)		
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHVehPaint, "vehiclegeneric256")
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHVehPaint, "*")
 		engineRemoveShaderFromWorldTexture(shaderTable.RTinput.SHVehPaint, "unnamed")
 
+
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHPed, "*")	
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHGrass, "tx*")
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHWater, "water*")
 		engineRemoveShaderFromWorldTexture(shaderTable.RTinput.SHWater, "waterwake")
-		
+
 		engineApplyShaderToWorldTexture(shaderTable.RTinput.SHWaterWake, "waterwake")
 		dxSetShaderValue(shaderTable.RTinput.SHWaterWake, "sWorldZBias", 0.45)
 		
@@ -141,6 +142,7 @@ function functionTable.enableCore()
 			txd = string.gsub(txd,"\r","")
 			engineRemoveShaderFromWorldTexture(shaderTable.RTinput.SHWorld, txd)
 		end
+		fileClose(f)
 	end
 end
 

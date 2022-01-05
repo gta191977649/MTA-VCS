@@ -88,10 +88,11 @@ PSInput VertexShaderFunction(VSInput VS)
     PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
 
     //Process VCS Building Pipeline
-    PS.Position = mul(VS.Position, gWorldViewProjection);
 	PS.TexCoord = mul(Identity, float4(VS.TexCoord, 0.0, 1.0)).xy;
 	PS.Diffuse = PS.Diffuse*PS.Diffuse;
 	PS.Diffuse.rgb += ambient*surfAmb * 128.0/255.0;
+
+    
     return PS;
 }
 
@@ -121,7 +122,8 @@ Pixel PixelShaderFunction(PSInput PS)
     
     //finalColor = tex2D(Sampler0, PS.Texcoord0.xy)*PS.Diffuse * 255.0/128.0;
 
-    output.World = saturate(finalColor);
+    //output.World = saturate(finalColor);
+    output.World = finalColor;
 	
     // Compare with current pixel depth
     // Color render target

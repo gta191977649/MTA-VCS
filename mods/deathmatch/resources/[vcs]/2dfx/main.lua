@@ -10,6 +10,8 @@ LIGHT_OBJ_NAMES = {
     ["doublestreetlght1"] = {"point",109,201,201,255,15},
 }
 LIGHT_OBJS = {}
+IS_NIGHT = false
+local h,m = getTime()
 function applyLightShadowPatch(object,modelname) 
     for k,v in pairs(LIGHT_OBJ_NAMES) do
         if string.find(modelname,k) then 
@@ -23,20 +25,29 @@ function applyLightShadowPatch(object,modelname)
             end
 
             if light ~= nil then
-                LIGHT:setLightDistFade(light,FADE_DIST,FADE_DIST*0.5)
+                LIGHT:setLightDistFade(light,FADE_DIST,FADE_DIST*0.6)
                 LIGHT:attachLightToElement(light,object,0,0,v[7] or 0)
+                LIGHT_OBJS[object] = {
+                    light = light,
+                    isdamage = false,
+                    accu = v[6],
+                    color = {v[2],v[3],v[4],v[5]}
+                }
                 addEventHandler("onClientObjectBreak", object,function()
-                    if LIGHT_OBJS[source] ~= "damaged" then
-                        LIGHT:destroyLight(LIGHT_OBJS[source])
-                        LIGHT_OBJS[object] = "damaged"
+                    if not LIGHT_OBJS[object].isdamage then
+                        --LIGHT:destroyLight(LIGHT_OBJS[source])
+                        LIGHT:setLightColor(LIGHT_OBJS[source].light,0,0,0,0)
+                        LIGHT_OBJS[object].isdamage = true
                     end
                 end)
-                LIGHT_OBJS[object] = light
             end
             
         end
     end
 end
+
+
+
 function init() 
     for k,v in ipairs(getElementsByType("object")) do
         local name = getElementID(v)
@@ -44,15 +55,81 @@ function init()
     end
 end
 
+
 addEventHandler( "onClientElementStreamIn", root,
     function ( )
+        if not IS_NIGHT then return end -- skip if is day
         if getElementType( source ) == "object" and LIGHT_OBJS[source] ~= nil then
-            if LIGHT_OBJS[source] == "damaged" then -- recreate damaged light
-                local name = getElementID(source)
-                applyLightShadowPatch(source,name) 
+            if LIGHT_OBJS[source].isdamage then -- recreate damaged light
+                local r,g,b,a = unpack(LIGHT_OBJS[source].color)
+                LIGHT:setLightColor(LIGHT_OBJS[source].light,r,g,b,a)
+                LIGHT_OBJS[source].isdamage = false
             end
         end
     end
 );
+
+
+
+function lightSwitch(toogle) 
+    if toogle then 
+        for k,v in pairs(LIGHT_OBJS) do 
+            local r,g,b,a = unpack(v.color)
+            LIGHT:setLightColor(v.light,r,g,b,a)
+        end
+    else
+        for k,v in pairs(LIGHT_OBJS) do 
+            LIGHT:setLightColor(v.light,0,0,0,0)
+        end
+        
+    end
+end
+-- light timer
+
+addEventHandler("onClientRender",root,function() 
+    newh,newm = getTime()
+    if m ~= newm then
+        h,m = newh,newm
+        if h > 7 and h < 21 then -- day
+            if IS_NIGHT then 
+                lightSwitch(false)
+                IS_NIGHT = false
+
+            end
+        else
+            if not IS_NIGHT then 
+                lightSwitch(true)
+                IS_NIGHT = true
+            end
+        end
+       
+    end
+end)
+--[[
+setTimer(function()
+    h,m = getTime()
+    if h > 7 and h < 21 then -- day
+        if not IS_NIGHT then 
+
+            lightSwitch(false)
+            print("turn on light")
+            IS_NIGHT = true
+        end
+    else
+        if IS_NIGHT then 
+            lightSwitch(true)
+            print("turn off light")
+            IS_NIGHT = false
+        end
+    end
+end,1000,0)
+]]
+init()
+addCommandHandler("lightoff",function() 
+    lightSwitch(false)
+end)
+addCommandHandler("lighton",function() 
+    lightSwitch(true)
+end)
 
 --addEventHandler("onClientResourceStart", resourceRoot,init)

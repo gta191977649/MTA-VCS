@@ -7,6 +7,7 @@
     <script src="parser.lua" type="shared"/>
     <script src="generator.lua" type="server"/>
 
+    <file src="shader/mta-helper.fx" type="client"/>
     <file src="shader/replace.fx" type="client"/>
     <!-- vcs generic txd fix -->
     <file src="src/generic/backplate.png" type="client"/>
