@@ -9,11 +9,31 @@ LIGHT_OBJ_NAMES = {
     ["bollardlight"] = {"point",255,255,255,180,10},
     ["doublestreetlght1"] = {"point",109,201,201,255,15},
 }
+LIGHT_TRAFFIC_NAMES = {
+    ["MTraffic1"] = {}
+}
 LIGHT_OBJS = {}
+TRAFFIC_OBJS = {}
 TOTAL = 0
 RENDERED = 0
 IS_NIGHT = false
 local h,m = getTime()
+function applyTrafficLightPatch(object,modelname) 
+    for k,v in pairs(LIGHT_TRAFFIC_NAMES) do
+        if string.find(modelname,k) then 
+            local x,y,z = getElementPosition(object)
+            local _,_,rz = getElementRotation(object)
+            TRAFFIC_OBJS[object] = {
+                pos = {x,y,z},
+                rot = rz,
+                light = nil,
+                isdamage = false,
+            }
+            TOTAL = TOTAL + 1
+            return
+        end
+    end
+end
 function applyLightShadowPatch(object,modelname) 
     for k,v in pairs(LIGHT_OBJ_NAMES) do
         if string.find(modelname,k) then 
