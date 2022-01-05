@@ -6,17 +6,17 @@ A Total Convetion of VCS Map to MTASA
   * Empire Buildings
   * Objects Fix
     * ~~Aplha Blending Textures~~
-    * Breakble Objects
+    * ~~Breakble Objects~~
     * ~~Time Object~~
     * UV Animation
     * Txds (Needs custom implmention fix txdp flag)
-* Vehicle
+* Vehicle (Partially done)
 * Peds
 * Weapons
 * HUD/UI
   * Game Texts
     * ~~Radio~~
-    * Vehicle Name
+    * ~~Vehicle Name~~
     * Zone Name
   * HUD
     * Weapon
