@@ -384,7 +384,6 @@ AvaliableIDS[377] = {1223,"lampost_coast"}
 AvaliableIDS[378] = {1224,"woodenbox"}
 AvaliableIDS[379] = {1225,"barrel4"}
 AvaliableIDS[380] = {1226,"lamppost3"}
-AvaliableIDS[380] = {1226,"lamproad3"}
 AvaliableIDS[381] = {1227,"dump1"}
 AvaliableIDS[382] = {1228,"roadworkbarrier1"}
 AvaliableIDS[383] = {1229,"bussign1"}

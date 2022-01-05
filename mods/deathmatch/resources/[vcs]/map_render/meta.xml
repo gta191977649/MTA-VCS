@@ -1,7 +1,0 @@
-<meta>
-    <script src="vendor.lua" type="shared"/>
-    <!-- 
-    <script src="generate.lua"/>
-    -->
-    <script src="loader_c.lua" type="client"/>
-</meta>
