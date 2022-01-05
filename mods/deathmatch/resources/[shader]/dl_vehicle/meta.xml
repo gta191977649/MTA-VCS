@@ -1,0 +1,8 @@
+<meta>
+	<info name="dl_vehicles" author="Ren712" version="0.0.1" type="script" />
+	<min_mta_version client="1.5.7-9.20157" />
+	<script src="c_vehicleLight.lua" type="client" />
+	<file src="shaders/null.fx" type="client" />
+	<include resource="dl_lightmanager" />
+	<include resource="dl_core" />
+</meta>
