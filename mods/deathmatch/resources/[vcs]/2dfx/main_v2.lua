@@ -6,7 +6,7 @@ LIGHT_OBJ_NAMES = {
     ["high_lampost"] = {"point",255,255,255,180,10,-6},
     ["lamppost"] = {"point",255,215,123,180,15},
     ["Streetlamp"] = {"point",255,255,255,180,10},
-    ["bollardlight"] = {"point",255,255,255,180,10},
+    ["bollardlight"] = {"point",255,255,255,180,5},
     ["doublestreetlght1"] = {"point",109,201,201,255,15},
 }
 LIGHT_TRAFFIC_NAMES = {
