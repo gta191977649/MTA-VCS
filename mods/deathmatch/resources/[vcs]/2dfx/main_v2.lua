@@ -1,6 +1,6 @@
 DGS = exports.dgs
 FADE_DIST = 100
-DEBUG = true
+DEBUG = false
 LIGHT = exports.dl_lightmanager
 
 LIGHT_OBJ_NAMES = {
@@ -17,9 +17,9 @@ LIGHT_TRAFFIC_NAMES = {
 LIGHT_OBJS = {}
 TRAFFIC_OBJS = {}
 TRAFFIC_LIGHT_COLORS = {
-    ["YELLOW"] = {255,234,0,180},
-    ["RED"] = {255,0,0,180},
-    ["GREEN"] = {0,255,0,180},
+    ["YELLOW"] = {255,234,0,30},
+    ["RED"] = {255,0,0,30},
+    ["GREEN"] = {0,255,0,30},
 }
 TRAFFIC_LIGHT_COLOR_MAPPING = {
     ["NS"] = {
@@ -83,7 +83,7 @@ function applyTrafficLightPatch(object,modelname)
                 isdamage = false,
                 color = {255,0,0,180},
             }
-            if debug then 
+            if DEBUG then 
                 local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[LIGHT_OBJS[object].rot][traffic_status])
                 LIGHT_OBJS[object].label = DGS:dgsCreate3DText(x,y,z,getTrafficLightDirection(rz) ,tocolor(r,g,b,a))
                 attachElements(LIGHT_OBJS[object].label,object)
@@ -159,8 +159,17 @@ function forceDestory()
         end
     end
 end
-function updateTrafficLights() 
-    
+function updateTrafficLights(status) 
+    local objects = getElementsByType("object",root,true) 
+    for k,v in ipairs(objects) do 
+        if LIGHT_OBJS[v] and LIGHT_OBJS[v].type == "Traffic" and LIGHT_OBJS[v].light then 
+            local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[LIGHT_OBJS[v].rot][status])
+            LIGHT:setLightColor(LIGHT_OBJS[v].light,r,g,b,a)
+            if DEBUG then 
+                DGS:dgsSetProperty(LIGHT_OBJS[v].label,"color",tocolor(r,g,b,a))
+            end
+        end
+    end
 end 
 function init() 
     for k,v in ipairs(getElementsByType("object")) do
@@ -227,12 +236,14 @@ addEventHandler("onClientRender",root,function()
                 IS_NIGHT = true
             end
         end
-        -- traffic light direction 
-        local new_status = getTrafficLightState()
-        if traffic_status ~= new_status then
-            print(new_status)
-            traffic_status = new_status
-        end
+    end
+
+    -- traffic light direction 
+    local new_status = getTrafficLightState()
+    if traffic_status ~= new_status then
+        print(new_status)
+        updateTrafficLights(new_status)
+        traffic_status = new_status           
     end
 end)
 

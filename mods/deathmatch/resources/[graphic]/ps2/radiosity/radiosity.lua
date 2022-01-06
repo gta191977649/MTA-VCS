@@ -78,7 +78,7 @@ function setEffectVariables()
     -- Bloom
     v.cutoff = 0.5
     v.power = 1
-	v.blur = 0.1
+	v.blur = 0.3
     v.bloom = 3
     v.blendR = 204
     v.blendG = 153
