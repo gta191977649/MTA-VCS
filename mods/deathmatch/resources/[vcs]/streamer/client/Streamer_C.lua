@@ -1,79 +1,18 @@
 DEBUG = exports.DEBUG
 FX = exports["2dfx"]
 debug.sethook(nil)
-
+-- Config -- 
+USE_LODS = true -- if disabled, we will use the model itself as lod.
 -- Tables --
 cache = {}
 resource = {}
+mapdata = {}
 model_cache = {}
 function onResourceStart(resourcea)
 	triggerServerEvent ( "onResourceLoad", root, getResourceName(resourcea))
 end
 addEventHandler( "onClientResourceStart", root,onResourceStart)
 
---[[
-function loadModel ( Proccessed,resourceName )
-	setGameSpeed(0)
-	setElementPosition(localPlayer,3000,3000,10)
-	
-	startTickCount = getTickCount ()
-	resource[resourceName] = {}
-	
-	local dataToLoad = {}
-	for i,v in pairs(Proccessed) do
-		table.insert(dataToLoad,v)
-	end
-	local loaded = 0
-	Async:setPriority("high")
-	Async:foreach(dataToLoad, function(data)
-		--iprint(data)
-		if data ~= nil then
-			if data.flag ~= "SA_PROP" then
-				
-				print(string.format("request: %s",data.model))
-				
-				-- load txd
-				local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
-				local texture,cache = requestTextureArchive(path,data.texture)
-				engineImportTXD(texture,data.id)
-				table.insert(resource[resourceName],cache)
-	
-				-- load dff
-				local path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
-				local model,cache = requestModel(path,data.model)
-				engineReplaceModel(model,data.id,isTransparentFlag(data.flag))
-				table.insert(resource[resourceName],cache)
-
-				-- load col
-				local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
-				local collision,cache = requestCollision(path,data.collision)
-				engineReplaceCOL(collision,data.id)
-				table.insert(resource[resourceName],cache)
-
-				if tonumber(data.turnOn) and tonumber(data.turnOff) then
-					engineSetModelVisibleTime(data.id,data.turnOn,data.turnOff)
-					addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
-				end
-				-- deal with common flags properties, e.g. breakable
-				--setElementFlagProperty(data.object,data.flag)
-				engineSetModelLODDistance(data.id,data.draw)
-			end
-			
-		end
-
-		loaded = loaded + 1
-		DEBUG:addDebugMessage(string.format("%d OF %d remain.\n",loaded,#dataToLoad))
-		if loaded >= #dataToLoad then 
-			engineRestreamWorld()
-			vegitationElementReload()
-			loadedFunction(resourceName)
-			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
-			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
-			setGameSpeed(1)
-		end
-	end)
-end
--]]
 
 function loadModel(data,resourceName) 
 	if data and data.flag ~= "SA_PROP" then
@@ -112,8 +51,16 @@ function loadModel(data,resourceName)
 		return id
 	end
 end
-
+function getLODInfo(lodname) 
+	for i,v in ipairs(mapdata.ipls) do 
+		if v.model == lodname then 
+			return v
+		end
+	end
+	return false 
+end
 function loadObject(data) 
+	if data.flag == "LOD" then return end -- we skip lod, it will created later manually
 	local cull,lod,id,drawdist,flag = data.info.cull,data.info.lod,data.info.id,data.info.draw,data.info.flag
 	local x,y,z = unpack(data.pos)
 	local xr,yr,zr = unpack(data.rot)
@@ -138,27 +85,43 @@ function loadObject(data)
 	]]
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 then
-		if flag ~= "SA_PROP" then -- we don't want mess with sa models
+		if flag ~= "SA_PROP" then
+			local lodinfo = getLODInfo(lod) 
+			if USE_LODS then -- do it when it enabled
+				if lodinfo then
+					-- get lod info
+					x,y,z = unpack(lodinfo.pos)
+					xr,yr,zr = unpack(lodinfo.rot)
+					id = lodinfo.id
+					model = lodinfo.model
+				else
+					local debugMsg = string.format("LOD ERROR: Requested: %s Not Found! Will Use itself as Lod.\n",model)
+					DEBUG:addDebugMessage(debugMsg)
+				end
+			end
+			-- create lod
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-			setLowLODElement(lowLOD, false)
-			setLowLODElement (object,lowLOD)
 			setElementID(lowLOD,model)	
 			setElementData(lowLOD,'id',model)
 			setElementCollisionsEnabled(lowLOD,false)
 
+			setElementFrozen(lowLOD,true)
+			setLowLODElement(lowLOD, false)
+			setLowLODElement (object,lowLOD)
+
 			if cull then 
 				setElementDoubleSided(lowLOD,true)
 			end
-
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
-			setElementFrozen(lowLOD,true)
+			engineSetModelLODDistance(id,data.info.draw)
+		else
+			local debugMsg = string.format("LOD ERROR: Requested: %s Parent Model is SA_PROP, Skipped.\n",model)
+			DEBUG:addDebugMessage(debugMsg)
 		end
 	else
 		setLowLODElement(object,false)
 	end
-	return object
-
 end
 function loadMap(ipls,ides,mapname) 
 	startTickCount = getTickCount ()
@@ -167,8 +130,12 @@ function loadMap(ipls,ides,mapname)
 	setGameSpeed(0)
 	setElementPosition(localPlayer,3000,3000,10)
 
+	mapdata = {
+		ipls = ipls,
+		ides = ides,
+	}
 	-- create object
-	for i,data in ipairs(ipls) do 
+	for _,data in ipairs(ipls) do 
 		loadObject(data) 
 	end
 
@@ -188,10 +155,7 @@ function loadMap(ipls,ides,mapname)
 		end
 
 		loaded = loaded + 1
-		local debugMsg = string.format("Request: %s | %d OF %d remain.\n",data.model,loaded,total)
-		print(debugMsg)
-		DEBUG:addDebugMessage(debugMsg)
-
+		
 		if loaded >= total then 
 			vegitationElementReload()
 			engineRestreamWorld()

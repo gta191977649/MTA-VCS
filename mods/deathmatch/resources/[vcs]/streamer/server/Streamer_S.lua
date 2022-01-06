@@ -1,4 +1,3 @@
-USE_ORIGINAL_LODS = false
 debug.sethook(nil)
 -- initial setup --
 for i = 550, 20000 do
@@ -182,10 +181,6 @@ function loadMap (resource)																				 -- // Load the map
 						if not isError then
 							definePlacement(SplitB,resourceName)
 						end
-						--[[
-							we do it in client instead
-						local object = streamObject(SplitB[1],tonumber(SplitB[4])+XA,tonumber(SplitB[5])+YA,tonumber(SplitB[6])+ZA,tonumber(SplitB[7]),tonumber(SplitB[8]),tonumber(SplitB[9]),resourceName,tonumber(SplitB[3]),tonumber(SplitB[2]))  -- ## 
-						]]
 					end
 				end
 			end
@@ -235,7 +230,7 @@ end
 function definePlacement(dTable,resourceName) 
 
 
-	local model,int,dim,x,y,z,rx,ry,rz= unpack(dTable)
+	local model,int,dim,x,y,z,rx,ry,rz,flag= unpack(dTable)
 	-- find model id
 	--[[
 	if getModelFromID(model) then
@@ -250,6 +245,7 @@ function definePlacement(dTable,resourceName)
 	end
 	local id = modelInfo.id
 
+
 	table.insert(data.placementData[resourceName], {
 		id = id,
 		model = model,
@@ -257,8 +253,10 @@ function definePlacement(dTable,resourceName)
 		dim = dim,
 		pos = {x,y,z},
 		rot = {rx,ry,rz},
-		info = modelInfo
+		info = modelInfo,
+		flag = flag:gsub('\r', ''),
 	})
+
 end
 
 function getData(name)
@@ -283,78 +281,6 @@ function setElementFlag(element,flag)
 		end,
 	}
 	if flagTable[flag] then flagTable[flag]() end
-end
-
-function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
-	--[[
-	if getModelFromID(model) then
-		blackList(model)
-	end
-	]]
-	local modelInfo = getData(model)
-	if not modelInfo then 
-		print(model.." not found")
-		return
-	end
-	local cull,lod,id,drawdist,flag = modelInfo.cull,modelInfo.lod,modelInfo.id,modelInfo.draw ,modelInfo.flag
-
-	if flag == "SA_PROP" then -- deal with sa object
-		id = getModelFromID(model)
-		print("sa prop")
-	end
-	
-	if tonumber(id) then
-		local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
-	
-		setElementID(object,model)	
-		setElementData(object,'id',model)
-		if cull then
-			setElementDoubleSided(object,true)
-		end
-		
-		if flag and tonumber(flag) ~= 0 then 
-			setElementFlag(object,flag)
-		end
-		-- deal with lods
-		if lod or drawdist and tonumber(drawdist) > 999 then
-			if flag ~= "SA_PROP" then -- we don't want mess with sa models
-				local lowLOD
-				if USE_ORIGINAL_LODS then
-					lowLOD = createObject (getFreeID(lod),x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-					setLowLODElement (object,lowLOD)
-					setElementID(lowLOD,lod)	
-					setElementData(lowLOD,'id',lod)
-				else
-					lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-					setElementID(lowLOD,model)	
-					setElementData(lowLOD,'id',model)
-				end
-				--setElementCollisionsEnabled(lowLOD,false)
-
-				setElementInterior(lowLOD,int >= 0 and int or 0)
-				setElementDimension(lowLOD,dim or -1)
-				if flag then 
-					setElementFlag(lowLOD,flag)
-				end
-				if cull then 
-					setElementDoubleSided(lowLOD,true)
-				end
-				if resource then
-					table.insert(data.resourceObjects[resource],lowLOD)
-					data.globalData[model].object_lod = lowLOD
-				end
-				system.lods = system.lods + 1
-			end
-		end
-		
-		if resource then
-			table.insert(data.resourceObjects[resource],object)
-			data.globalData[model].object = object
-		end
-		system.objs = system.objs + 1
-
-		return object
-	end
 end
 
 function changeObjectModel(name,newModel)

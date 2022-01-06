@@ -12,8 +12,9 @@ for i,v in pairs(IPLList) do
 	local XR = removeSpace(v[6])
 	local YR = removeSpace(v[7])
 	local ZR = removeSpace(v[8])
+	local FLAG = removeSpace(v[9])
 
-	table.insert(Map,model..','..Interior..',-1,'..X..','..Y..','..Z..','..XR..','..YR..','..ZR)
+	table.insert(Map,model..','..Interior..',-1,'..X..','..Y..','..Z..','..XR..','..YR..','..ZR..','..FLAG)
 end
 
 

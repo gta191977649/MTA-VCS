@@ -131,12 +131,14 @@ for i,v in pairs(IPLTable) do
 			if (string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1) then
 				if IDEList1[Model] or Defaults[Model] or Defaults2[Model] then -- If it doesn't exist ignore it
 					IPLList2[Model] = true
-					table.insert(IPLList,{Model,Interior,PosX,PosY,PosZ,xr,yr,zr,LOD})
+					table.insert(IPLList,{Model,Interior,PosX,PosY,PosZ,xr,yr,zr,"OBJ"})
 				else
 					if string.count(Model,"LOD") < 1 and string.count(Model,"lod") < 1	then
 						OutPutDebug2("IPL:"..Model.." Missing IDE")
 					end
 				end
+			else
+				table.insert(IPLList,{Model,Interior,PosX,PosY,PosZ,xr,yr,zr,"LOD"})
 			end
 		end
 	end
