@@ -9,6 +9,7 @@ resource = {}
 mapdata = {}
 model_cache = {}
 function onResourceStart(resourcea)
+	setOcclusionsEnabled(false)
 	triggerServerEvent ( "onResourceLoad", root, getResourceName(resourcea))
 end
 addEventHandler( "onClientResourceStart", root,onResourceStart)
@@ -86,7 +87,6 @@ function loadObject(data)
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 then
 		if flag ~= "SA_PROP" then
-			engineSetModelLODDistance(id,300) 
 			local lodinfo = getLODInfo(lod) 
 			if USE_LODS then -- do it when it enabled
 				if lodinfo then
