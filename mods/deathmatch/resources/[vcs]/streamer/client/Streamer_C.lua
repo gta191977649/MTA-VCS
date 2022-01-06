@@ -44,10 +44,11 @@ function loadModel(data,resourceName)
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
 		-- clamp
-		local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
-		--local drawdist = tonumber(data.draw)
+		local drawdist = tonumber(data.draw)
+		if data.flag == "OBJ" then 
+			drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
+		end
 		engineSetModelLODDistance(id,drawdist)
-
 		model_cache[data.model] = id
 		return id
 	end
