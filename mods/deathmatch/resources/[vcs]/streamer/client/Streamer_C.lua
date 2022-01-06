@@ -44,17 +44,18 @@ function loadModel(data,resourceName)
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
 		-- clamp
-		--local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
-		local drawdist = tonumber(data.draw)
+		local drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
+		--local drawdist = tonumber(data.draw)
 		engineSetModelLODDistance(id,drawdist)
 
 		model_cache[data.model] = id
 		return id
 	end
 end
-function getLODInfo(lodname) 
+function getLODInfo(lodname,x,y) 
 	for i,v in ipairs(mapdata.ipls) do 
-		if v.model == lodname then 
+		-- shit approach better to consider alternative
+		if v.model == lodname and  getDistanceBetweenPoints2D(x,y,v.pos[1],v.pos[2]) < 10 then 
 			return v
 		end
 	end
@@ -87,7 +88,7 @@ function loadObject(data)
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 then
 		if flag ~= "SA_PROP" then
-			local lodinfo = getLODInfo(lod) 
+			local lodinfo = getLODInfo(lod,x,y,z) 
 			if USE_LODS then -- do it when it enabled
 				if lodinfo then
 					-- get lod info
