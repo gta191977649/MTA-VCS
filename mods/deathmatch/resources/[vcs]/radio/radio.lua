@@ -53,6 +53,8 @@ Player = {
 		["SELECTED"] = tocolor(74,153,205,255),
 	}
 }
+RADIO_PLAYING = false
+
 -- UI
 label = dgsCreateLabel(0,0,1, 0.18, "text", true)
 dgsSetFont(label,FONT:getDxFont("RADIO"))
@@ -72,11 +74,14 @@ function playRadio(station_id)
 	if not STATIONS[station_id].type then
 		playRadioInTimeCycle(Player.sound)
 	end
+	RADIO_PLAYING = true
+
 end
 function stopRadio() 
 	if isElement(Player.sound) then 
 		destroyElement(Player.sound)
 	end
+	RADIO_PLAYING = false
 end
 function turnToRadio(station_id) 
 	Player.select = station_id
