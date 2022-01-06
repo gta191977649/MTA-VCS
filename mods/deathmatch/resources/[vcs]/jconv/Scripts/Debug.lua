@@ -9,3 +9,4 @@ fileClose(file) -- done
 
 
 
+setOcclusionsEnabled(false)

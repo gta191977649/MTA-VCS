@@ -71,13 +71,13 @@ function loadObject(data)
 	setElementData(object,'id',model)
 	setElementInterior(object,int >= 0 and int or 0)
 	setElementDimension(object,dim or -1)
-	
 	if cull then
 		setElementDoubleSided(object,true)
 	end
 	if flag ~= "SA_PROP" then 
 		setElementFrozen(object,true)
 	end
+
 	--[[
 	if flag and tonumber(flag) ~= 0 then 
 		setElementFlagProperty(object,data.flag)
@@ -86,6 +86,7 @@ function loadObject(data)
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 then
 		if flag ~= "SA_PROP" then
+			engineSetModelLODDistance(id,300) 
 			local lodinfo = getLODInfo(lod) 
 			if USE_LODS then -- do it when it enabled
 				if lodinfo then
@@ -103,24 +104,18 @@ function loadObject(data)
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 			setElementID(lowLOD,model)	
 			setElementData(lowLOD,'id',model)
-			setElementCollisionsEnabled(lowLOD,false)
-
+			--setElementCollisionsEnabled(lowLOD,false)
 			setElementFrozen(lowLOD,true)
-			setLowLODElement(lowLOD, false)
 			setLowLODElement (object,lowLOD)
-
 			if cull then 
 				setElementDoubleSided(lowLOD,true)
 			end
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
-			engineSetModelLODDistance(id,data.info.draw)
 		else
 			local debugMsg = string.format("LOD ERROR: Requested: %s Parent Model is SA_PROP, Skipped.\n",model)
 			DEBUG:addDebugMessage(debugMsg)
 		end
-	else
-		setLowLODElement(object,false)
 	end
 end
 function loadMap(ipls,ides,mapname) 
@@ -155,13 +150,9 @@ function loadMap(ipls,ides,mapname)
 		end
 
 		loaded = loaded + 1
-		
 		if loaded >= total then 
 			vegitationElementReload()
-			engineRestreamWorld()
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
-			setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
-			setGameSpeed(1)
 			loadedFunction(mapname)
 		end
 	end)
@@ -175,8 +166,15 @@ function loadedFunction (resourceName)
 	local endTickCount = getTickCount ()-startTickCount
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
+	mapdata = {}
+	resource = {}
+	cache = {}
 	FX:init()
-	--cache = {} -- clearn the cache
+	engineStreamingFreeUpMemory (104857600)
+	engineRestreamWorld ()
+
+	setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
+	setGameSpeed(1)
 end
 
 function requestTextureArchive(path)

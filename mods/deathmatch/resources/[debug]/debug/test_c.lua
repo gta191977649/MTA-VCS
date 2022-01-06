@@ -179,4 +179,3 @@ function addLabelOnClick ( button, state, absoluteX, absoluteY, worldX, worldY, 
     end
 end
 addEventHandler ( "onClientClick", root, addLabelOnClick )
-
