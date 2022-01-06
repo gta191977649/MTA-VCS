@@ -81,7 +81,7 @@ function applyTrafficLightPatch(object,modelname)
                 rot = getTrafficLightDirection(rz),
                 light = nil,
                 isdamage = false,
-                color = {255,0,0,180},
+                color = {255,234,0,30},
             }
             if DEBUG then 
                 local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[LIGHT_OBJS[object].rot][traffic_status])
