@@ -15,7 +15,7 @@ function SunShader:constructor()
 	self.lensFlareDirt = dxCreateTexture("txd/lensflare_dirt.png")
 	self.lensFlareChroma = dxCreateTexture("txd/lensflare_chroma.png")
 	
-	self.viewDistance = 0.00005
+	self.viewDistance = 0.000005
 	
 	self.sunColorInner = {0.9, 0.7, 0.6, 1}
 	self.sunColorOuter = {0.85, 0.65, 0.55, 1}
@@ -235,9 +235,9 @@ function SunShader:update()
 				dxSetShaderValue(self.lensFlareShader, "screenSize", {self.screenWidth, self.screenHeight})
 				
 				--dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.bwShader)
-				--dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.sunShader)
-				--dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.godRayBaseShader)
-				--dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.godRayShader)
+				dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.sunShader)
+				dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.godRayBaseShader)
+				dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.godRayShader)
 				dxDrawImage(0, 0, self.screenWidth, self.screenHeight, self.lensFlareShader)
 			
 			end

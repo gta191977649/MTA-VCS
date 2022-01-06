@@ -184,7 +184,7 @@ function setWeatherFromTimecyc(weather_id,hour,min)
 
     -- sun 
     local sunColor = getGradientInterpolationValue({WT_S[22],WT_S[23],WT_S[24]},{WT_E[22],WT_E[23],WT_E[24]},hour,min) 
-    setSunColor(sunColor[1],sunColor[2],sunColor[3])
+    --setSunColor(sunColor[1],sunColor[2],sunColor[3])
     --iprint(sunColor)
 
     local sunSize = getInterpolationValue(WT_S[28],WT_E[28],hour,min)
