@@ -253,6 +253,7 @@ function dgsMemoGetTextBoundingBox(memo,excludePadding)
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],eleData.font or systemFont)
 	if eleData.wordWrap then
 		local textTable = eleData.wordWrapMapText
+		if eleData.rebuildMapTableNextFrame then dgsMemoRebuildWordWrapMapTable(memo) end
 		if excludePadding then
 			return eleData.absSize[1],#textTable*fontHeight
 		else
@@ -1027,7 +1028,8 @@ end
 
 function dgsMemoClearText(memo)
 	if dgsGetType(memo) ~= "dgs-dxmemo" then error(dgsGenAsrt(memo,"dgsMemoClearText",1,"dgs-dxmemo")) end
-	dgsElementData[memo].text = {{[-1]=0,[0]=""}}
+	local eleData = dgsElementData[memo]
+	eleData.text = {{[-1]=0,[0]=""}}
 	dgsSetData(memo,"caretPos",{0,1})
 	dgsSetData(memo,"wordWrapMapText",{})
 	dgsSetData(memo,"wordWrapShowLine",{1,1,1})

@@ -1,4 +1,3 @@
-local loadstring = loadstring
 addEventHandler("onClientResourceStart",resourceRoot,function()
 ------------Full demo
 function createFullDemo()
@@ -236,6 +235,7 @@ function EditAutoCompleteText()
 	edit = dgsCreateEdit(0.3,0.6,0.2,0.05,"123123",true)
 	dgsEditAddAutoComplete(edit,{"start","resource"},false,true)
 end
+createFullDemo()
 --[[
 local arabicUnicode = {{0x0600,0x06FF},{0x08A0,0x08FF},{0x0750,0x077F},{0xFB50,0xFDFF},{0xFE70,0xFEFF},{0x1EE00,0x1EEFF}}
 local arabicPattern = ""

@@ -707,11 +707,26 @@ function dgsGridListSetColumnFont(gridlist,c,font,affectRow)
 	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnFont",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
 	local c = c-c%1
 	if not (fontBuiltIn[font] or dgsGetType(font) == "dx-font") then error(dgsGenAsrt(font,"dgsGridListSetColumnFont",3,"dx-font/string",_,"invalid font")) end
+	--Multilingual
+	if type(font) == "table" then
+		cData[c]._translationFont = font
+		font = dgsGetTranslationFont(gridlist,font,sourceResource)
+	else
+		cData[c]._translationFont = nil
+	end
 	cData[c][9] = font
 	if affectRow then
 		local rData = eleData.rowData
-		for i=1,#rData do
-			rData[i][c][6] = font
+		for r=1,#rData do
+			--Multilingual
+			if type(font) == "table" then
+				rData[r][c]._translationFont = font
+				font = dgsGetTranslationFont(gridlist,font,sourceResource)
+			else
+				rData[r][c]._translationFont = nil
+			end
+
+			rData[r][c][6] = font
 		end
 	end
 	return true
@@ -1034,6 +1049,8 @@ function dgsGridListClearColumn(gridlist,notResetSelected,notResetScrollBar)
  	local scrollbars = dgsElementData[gridlist].scrollbars
 	local rowData = dgsElementData[gridlist].rowData
 	if not notResetScrollBar then
+		dgsSetData(gridlist,"columnMoveOffset",0)
+		dgsSetData(gridlist,"columnMoveOffsetTemp",0)
 		dgsSetData(scrollbars[2],"length",{0,true})
 		dgsSetData(scrollbars[2],"position",0)
 		dgsSetVisible(scrollbars[2],false)
@@ -1152,7 +1169,7 @@ function dgsGridListAddRows(gridlist,r,t,isRawData)
 					colorcoded,
 					scale[1],
 					scale[2],
-					font,
+					nil,	--Font
 				}
 			end
 			tableInsert(rowData,r+i,rowTable)
@@ -1393,6 +1410,8 @@ function dgsGridListClearRow(gridlist,notResetSelected,notResetScrollBar)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListClearRow",1,"dgs-dxgridlist")) end
  	local scrollbars = dgsElementData[gridlist].scrollbars
 	if not notResetScrollBar then
+		dgsSetData(gridlist,"rowMoveOffset",0)
+		dgsSetData(gridlist,"rowMoveOffsetTemp",0)
 		dgsSetData(scrollbars[1],"length",{0,true})
 		dgsSetData(scrollbars[1],"position",0)
 		dgsSetVisible(scrollbars[1],false)
@@ -1457,9 +1476,18 @@ function dgsGridListSetItemFont(gridlist,r,c,font)
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
 	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemFont",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
 	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemFont",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	if not (fontBuiltIn[font] or dgsGetType(font) == "dx-font") then error(dgsGenAsrt(font,"dgsGridListSetItemFont",4,"dx-font/string",_,"invalid font")) end
+	local fontType = dgsGetType(font) 
+	if not (fontBuiltIn[font] or fontType == "dx-font" or fontType == "table") then error(dgsGenAsrt(font,"dgsGridListSetItemFont",4,"dx-font/string/table",_,"invalid font")) end
 	local c,r = c-c%1,r-r%1
 	if rData[r][c] then
+		--Multilingual
+		if type(font) == "table" then
+			rData[r][c]._translationFont = font
+			font = dgsGetTranslationFont(gridlist,font,sourceResource)
+		else
+			rData[r][c]._translationFont = nil
+		end
+		
 		rData[r][c][6] = font
 		return true
 	end
@@ -2385,7 +2413,7 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 	if bgImage then
 		dxDrawImage(x,y+columnHeight,w,h-columnHeight,bgImage,0,0,0,bgColor,isPostGUI,rndtgt)
 	else
-		dxDrawRectangle(x,y+columnHeight,w,h-columnHeight,bgColor,isPostGUI,true)
+		dxDrawRectangle(x,y+columnHeight,w,h-columnHeight,bgColor,isPostGUI)
 	end
 	local columnData,rowData = eleData.columnData,eleData.rowData
 	local columnCount,rowCount = #columnData,#rowData
@@ -2397,7 +2425,6 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 		end
 	end
 	local columnTextColor = eleData.columnTextColor
-	local columnRelt = eleData.columnRelative
 	local rowHeight = eleData.rowHeight
 	local rowTextPosOffset = eleData.rowTextPosOffset
 	local columnTextPosOffset = eleData.columnTextPosOffset
@@ -2457,7 +2484,7 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 	if columnImage then
 		dxDrawImage(x,y,w,columnHeight,columnImage,0,0,0,columnColor,isPostGUI,rndtgt)
 	else
-		dxDrawRectangle(x,y,w,columnHeight,columnColor,isPostGUI,true)
+		dxDrawRectangle(x,y,w,columnHeight,columnColor,isPostGUI)
 	end
 	if not eleData.mode then
 
@@ -2465,7 +2492,7 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 
 		dxSetRenderTarget(eleData.columnTextRT,true)
 		dxSetBlendMode("modulate_add")
-		local multiplier = columnRelt and (w-scbThickV) or 1
+		local multiplier = eleData.columnRelative and (w-scbThickV) or 1
 		local tempColumnOffset = columnMoveOffset+columnOffset
 		local mouseColumnPos = mx-cx
 		local mouseSelectColumn = -1
@@ -2707,7 +2734,7 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 		local whichColumnToStart,whichColumnToEnd = -1,-1
 		local _rowMoveOffset = (1-eleData.FromTo[1])*rowHeightLeadingTemp
 		local cpos = {}
-		local multiplier = columnRelt and (w-scbThickV) or 1
+		local multiplier = eleData.columnRelative and (w-scbThickV) or 1
 		local ypcolumn = cy+columnHeight
 		local _y,_sx = ypcolumn+_rowMoveOffset,cx+w-scbThickV
 		local column_x = columnOffset

@@ -1,3 +1,6 @@
+loadstring(exports.dgs:dgsImportFunction())() --Import functions before
+loadstring(exports.dgs:dgsG2DLoadHooker())()  --Load G2D Hooker
+
 local CONTROL_MARGIN_RIGHT = 5
 local LINE_MARGIN = 5
 local LINE_HEIGHT = 16
