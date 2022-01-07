@@ -15,7 +15,11 @@ Currently, many things are still working in progress, if you find any issue or y
     * ~~Breakble Objects~~
     * ~~Time Object~~
     * UV Animation
-    * Txds (Needs custom implmention fix txdp flag)
+    * Incorrect Objects Roatation
+    * ~~Txds Mapping (Needs custom implmention fix txdp flag)~~
+   * 2DFX Lighting Fix - Done
+     * ~~Street Lamp (Done)~~
+     * ~~Traffic Light (Done)~~ 
 * Vehicle (Partially done)
 * Peds
 * Weapons
@@ -30,7 +34,7 @@ Currently, many things are still working in progress, if you find any issue or y
     * ~~Armour~~
     * ~~Oxygen (In Water)~~
     * ~~Cash~~
-* ~Radio Stations~
+* ~Radio Stations~ - Done
     * ~~Flash FM~~
     * ~~Emotion~~
     * ~~Wave 103~~
