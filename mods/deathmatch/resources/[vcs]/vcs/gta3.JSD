@@ -122,7 +122,7 @@ star_A14,star_A14,starisl,star_A14,450,0,true,LODr_A14
 LODachbt_g2,LODachbt_g2,nbeachbt_LOD,LODachbt_g2,3000,0,true,nil
 kb_planter+bush,kb_planter+bush,veg_leavesplnt,kb_planter+bush,40,2097284,true,nil
 LODandrv_b4,LODandrv_b4,oceandrv_LOD,LODandrv_b4,1500,0,true,nil
-oceandrv_b41,oceandrv_b41,oceandrv_b,oceandrv_b41,450,2097152,true,LODandrv_b41
+oceandrv_b41,oceandrv_b41,oceandrv_b,oceandrv_b41,450,0,true,LODandrv_b41
 washintN_road22,washintN_road22,wshN_roads,washintN_road22,450,1,true,LODhintN_road22
 LODntowS_r2,LODntowS_r2,downtowS_LOD,LODntowS_r2,3000,0,true,nil
 ap_pipe6,ap_pipe6,ap_fuelstation,ap_pipe6,450,0,true,nil
@@ -891,7 +891,7 @@ ap_shadow2,ap_shadow2,airport,ap_shadow2,350,2097220,true,nil
 nbeachbt_r3,nbeachbt_r3,nbeachbt_r,nbeachbt_r3,450,1,true,LODachbt_r3
 oceandrv_veg2,oceandrv_veg2,oceandrv_veg,oceandrv_veg2,450,2097156,true,nil
 oceandrv_n10,oceandrv_n10,neons2,oceandrv_n10,1500,2097228,true,nil,20,6
-oceandrv_b40,oceandrv_b40,oceandrv_b,oceandrv_b40,450,2097152,true,LODandrv_b40
+oceandrv_b40,oceandrv_b40,oceandrv_b,oceandrv_b40,450,0,true,LODandrv_b40
 nbeachbt_a19,nbeachbt_a19,nbeachbt_a,nbeachbt_a19,450,2097156,true,nil
 quube,quube,apN_stuff,quube,700,0,true,nil
 docks30,docks30,dockgrnd1,docks30,445,0,true,LODks30

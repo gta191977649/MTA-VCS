@@ -44,9 +44,28 @@ function loadModel(data,resourceName)
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
 		-- clamp
+		--[[
+		// fLodDistanceUnscaled values:
+		//
+		// With the draw distance setting in GTA SP options menu set to maximum:
+		//      0 - 170     roughly correlates to a LOD distance of 0 - 300 game units
+		//      170 - 480   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
+		//      490 - 1e7   sets the LOD distance to 300 game units and removes the alpha fade-in completely
+		//
+		// With the draw distance setting in GTA SP options menu set to minimum:
+		//      0 - 325     roughly correlates to a LOD distance of 0 - 300 game units
+		//      340 - 960   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
+		//      1000 - 1e7  sets the LOD distance to 300 game units and removes the alpha fade-in completely
+		//
+		// So, to ensure the maximum draw distance with a working alpha fade-in, fLodDistanceUnscaled has to be
+		// no more than: 325 - (325-170) * draw_distance_setting -> 170 * draw_distance_setting
+		//
+		--]]
 		local drawdist = tonumber(data.draw)
-		if data.flag == "OBJ" then 
-			drawdist = tonumber(data.draw) > 300 and 300 or tonumber(data.draw)
+		if drawdist >= 1000 then -- should be lods
+			drawdist = drawdist > 300 and 300 or drawdist
+		else -- if is normal obj
+			drawdist = drawdist > 170 and 170 or drawdist -- from MTA Source
 		end
 		engineSetModelLODDistance(id,drawdist)
 		model_cache[data.model] = id
@@ -62,6 +81,7 @@ function getLODInfo(lodname,x,y)
 	end
 	return false 
 end
+
 function loadObject(data) 
 	if data.flag == "LOD" then return end -- we skip lod, it will created later manually
 	local cull,lod,id,drawdist,flag = data.info.cull,data.info.lod,data.info.id,data.info.draw,data.info.flag
@@ -74,11 +94,10 @@ function loadObject(data)
 	setElementData(object,'id',model)
 	setElementInterior(object,int >= 0 and int or 0)
 	setElementDimension(object,dim or -1)
-	if cull then
-		setElementDoubleSided(object,true)
-	end
+	setElementDoubleSided(object,true)
 	if flag ~= "SA_PROP" then 
 		setElementFrozen(object,true)
+		setObjectBreakable(object,false)
 	end
 
 	--[[
@@ -106,12 +125,11 @@ function loadObject(data)
 			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
 			setElementID(lowLOD,model)	
 			setElementData(lowLOD,'id',model)
-			--setElementCollisionsEnabled(lowLOD,false)
+			setElementCollisionsEnabled(lowLOD,false)
+			setObjectBreakable(lowLOD,false)
 			setElementFrozen(lowLOD,true)
 			setLowLODElement (object,lowLOD)
-			if cull then 
-				setElementDoubleSided(lowLOD,true)
-			end
+			setElementDoubleSided(lowLOD,true)
 			setElementInterior(lowLOD,int >= 0 and int or 0)
 			setElementDimension(lowLOD,dim or -1)
 		else
