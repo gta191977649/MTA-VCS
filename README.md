@@ -1,6 +1,9 @@
-# Multi Theft Auto: Vice City Stories Freeroam 
-A Total Convetion of VCS Map to MTASA
-# To do
+# Multi Theft Auto: Vice City Stories Map 
+A Total Convention of VCS Map to MTASA, of original VCS atmosphere.
+The goal of this project is to provide a boilerplate for you further develop.
+This resource includes VCs styled map, hud, vehicles, weapons, peds, weather, etc.
+Currently, many things are still working in progress, if you find any issue or you want to contribute, you're welcome!
+# Progress
 * Map
   * Interiors
   * Empire Buildings
