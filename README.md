@@ -2,7 +2,7 @@
 ![Screen_1](screens/2.png)
 
 
-A Total Convention of VCS Map to MTASA, of original VCS atmosphere.
+A Total Convention of VCS Map to MTASA with original game atmosphere.
 The goal of this project is to provide a boilerplate for you further develop.
 This resource includes VCs styled map, hud, vehicles, weapons, peds, weather, etc.
 Currently, many things are still working in progress, if you find any issue or you want to contribute, you're welcome!
