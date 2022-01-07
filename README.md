@@ -54,7 +54,7 @@ Currently, many things are still working in progress, if you find any issue or y
       * ~~Timecyc~~ (Note Some parameter is not supported by mta yet, but all supported have been correctly ported) 
       * ~~Color filter~~
     * Particle FX
-      * ~~Water (Only the texture is ported) ~~
+      * ~~Water (Only the texture is ported)~~
       * ~~Clouds~~
       * Explosion FX
       * Fire
