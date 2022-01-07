@@ -1,4 +1,7 @@
 # Multi Theft Auto: Vice City Stories Map 
+![Screen_1](screens/2.png)
+
+
 A Total Convention of VCS Map to MTASA, of original VCS atmosphere.
 The goal of this project is to provide a boilerplate for you further develop.
 This resource includes VCs styled map, hud, vehicles, weapons, peds, weather, etc.
