@@ -93,7 +93,12 @@ function setEffectVariables()
 
 
 end
-
+function setRadiosityBlendColor(r,g,b,a) 
+	Settings.var.blendR = r
+    Settings.var.blendG = g
+    Settings.var.blendB = b
+    Settings.var.blendA = a
+end
 function setRadiosity(intensity) 
 	--Settings.var.cutoff = limit * 0.7
 	Settings.var.bloom = 5 * (intensity/50)

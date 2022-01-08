@@ -172,6 +172,7 @@ function loadMap(ipls,ides,mapname)
 		loaded = loaded + 1
 		if loaded >= total then 
 			vegitationElementReload()
+			setWaterDrawnLast(true)
 			outputChatBox ("Used memory by the GTA streamer: "..engineStreamingGetUsedMemory ()..".")
 			loadedFunction(mapname)
 		end

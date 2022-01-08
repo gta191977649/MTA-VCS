@@ -19,8 +19,30 @@ WeatherMapping ={ --deal with sa weather special effect
     [5] = 4, --EXTRA CLOUD
     [6] = 22, --INTERIOR
 }
+T = {
+    ambR = 1, ambG = 2, ambB = 3,
+    ambR_obj = 4, ambG_obj = 5, ambB_obj = 6,
+    ambR_bl = 7, ambG_bl = 8, ambB_bl = 9,
+    ambR_obj_bl = 10, ambG_obj_bl = 11, ambB_obj_bl = 12,
+    dirR = 13, dirG = 14, dirB = 15,
+    skyTopR = 16, skyTopG = 17, skyTopB = 18,
+    skyBotR = 19, skyBotG = 20, skyBotB = 21,
+    sunCoreR = 22, sunCoreG = 23, sunCoreB = 24,
+    sunCoronaR = 25, sunCoronaG = 26, sunCoronaB = 27,
+    sunSz = 28, sprSz = 29, sprBght = 30,
+    shad = 31, lightShad = 32, poleShad = 33,
+    farClp = 34, fogSt = 35, radiosityIntensity = 36, radiosityLimit = 37, lightGnd = 38,
+    cloudR = 39, cloudG = 40, cloudB = 41,
+    fluffyTopR = 42, fluffyTopG = 43, fluffyTopB = 44,
+    fluffyBotR = 45, fluffyBotG = 46, fluffyBotB = 47,
+    blurR = 48, blurG = 49, blurB = 50,
+    waterR = 51, waterG = 52, waterB = 53, waterA = 54,
+    blurAlpha = 55, blurOffset = 56,
+}
 
 Timecyc = {}
+
+
 
 local _,lastMin = getTime()
 function applyWeatherMapping(vcs_id) 
@@ -42,6 +64,7 @@ function start()
     --resetColorFilter()
     updateTimecyc()
     addEventHandler ( "onClientRender", root, updateTimecyc )
+
 end
 
 
@@ -58,15 +81,17 @@ function loadTimeCycle(filename)
             Timecyc[weather_id] = {}
         end
         
-        local data = split(lines[i]," ")
-        if #data == 57 then --dataline
+        
+        local data = split(lines[i]:gsub("\r","")," ")
+
+        if #data == 56 then --dataline
             table.insert(Timecyc[weather_id],data)
-     
         end
     end
-    iprint(#Timecyc[7])
+
 
     start()
+
 end
  
 function getTimeIntervalIndex(hour,min)
@@ -173,34 +198,39 @@ function setWeatherFromTimecyc(weather_id,hour,min)
     local WT_S = Timecyc[weather_id][intervalIndex]
     local endTntervalIndex = intervalIndex + 1 > #Timecyc[weather_id] and 1 or intervalIndex + 1
     local WT_E = Timecyc[weather_id][endTntervalIndex]
-    -- color filter 48
-    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3],30)
-
     -- sky gradient
     local skyTopGradient = getGradientInterpolationValue({WT_S[16],WT_S[17],WT_S[18]},{WT_E[16],WT_E[17],WT_E[18]},hour,min) -- SkytopGradient
     local skyBottomGradient = getGradientInterpolationValue({WT_S[19],WT_S[20],WT_S[21]},{WT_E[19],WT_E[20],WT_E[21]},hour,min) -- SkyBottomGradient
-
     setSkyGradient(skyTopGradient[1],skyTopGradient[2],skyTopGradient[3],skyBottomGradient[1],skyBottomGradient[2],skyBottomGradient[3])
-
     -- sun 
-    local sunColor = getGradientInterpolationValue({WT_S[22],WT_S[23],WT_S[24]},{WT_E[22],WT_E[23],WT_E[24]},hour,min) 
+    --local sunColor = getGradientInterpolationValue({WT_S[T["sunCoreR"]],WT_S[T["sunCoreG"]],WT_S[T["sunCoreB"]]},{WT_E[T["sunCoreR"]],WT_E[T["sunCoreG"]],WT_E[T["sunCoreB"]]},hour,min) 
     --setSunColor(sunColor[1],sunColor[2],sunColor[3])
     --iprint(sunColor)
-
-    local sunSize = getInterpolationValue(WT_S[28],WT_E[28],hour,min)
+    local sunSize = getInterpolationValue(WT_S[T["sunSz"]],WT_E[T["sunSz"]],hour,min)
     setSunSize(sunSize )
-    --  water
-    --local waterColor = getGradientInterpolationValue({WT_S[51],WT_S[52],WT_S[53]},{WT_E[51],WT_E[52],WT_E[53]},hour,min) 
-    --local waterAlpha = getInterpolationValue(WT_S[54],WT_E[54],hour,min)
-    --setWaterColor(waterColor[1],waterColor[2],waterColor[3],waterAlpha)
-    -- environmental effect
 
-    setFarClipDistance(getInterpolationValue(WT_S[34],WT_E[34],hour,min))
-    setFogDistance(getInterpolationValue(WT_S[35],WT_E[35],hour,min))
+    -- environmental effect
+    setFarClipDistance(getInterpolationValue(WT_S[T["farClp"]],WT_E[T["farClp"]],hour,min))
+    setFogDistance(getInterpolationValue(WT_S[T["fogSt"]],WT_E[T["fogSt"]],hour,min))
 
     -- radiosity
     --print("set radio")
-    PS2:setRadiosity(getInterpolationValue(WT_S[36],WT_E[36],hour,min))
+    PS2:setRadiosity(getInterpolationValue(WT_S[T["radiosityIntensity"]],WT_E[T["radiosityIntensity"]],hour,min))
+
+    --local blurRGB = getGradientInterpolationValue({WT_S[T["blurR"]],WT_S[T["blurG"]],WT_S[T["blurB"]]},{WT_E[T["blurR"]],WT_E[T["blurG"]],WT_E[T["blurB"]]},hour,min) 
+    --local blurA = getInterpolationValue(WT_S[T["blurAlpha"]],WT_E[T["blurAlpha"]],hour,min)
+    --PS2:setRadiosityBlendColor(blurRGB[1],blurRGB[2],blurRGB[3],100)
+    -- color filter 48
+    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3],30)
+    -- total 57
+    
+    --  water
+   
+    --local waterColor = getGradientInterpolationValue({WT_S[T["waterR"]],WT_S[T["waterG"]],WT_S[T["waterB"]]},{WT_E[T["waterR"]],WT_E[T["waterG"]],WT_E[T["waterB"]]},hour,min) 
+    --local waterAlpha = getInterpolationValue(WT_S[T["waterA"]],WT_E[T["waterA"]],hour,min)
+    --setWaterColor(waterColor[1],waterColor[2],waterColor[3],waterAlpha)
+    
+    --setColorFilter (WT_S[T["blurR"]], WT_S[T["blurG"]], WT_S[T["blurB"]],WT_S[T["blurAlpha"]], WT_S[T["blurR"]], WT_S[T["blurG"]], WT_S[T["blurB"]], WT_S[T["blurAlpha"]])
 end
 --[[
 function setWeatherFromTimecyc(weather_id,hour,min) 
