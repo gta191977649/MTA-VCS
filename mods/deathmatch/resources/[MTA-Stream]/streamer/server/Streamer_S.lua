@@ -187,6 +187,9 @@ function loadMap (resource)																				 -- // Load the map
 		end
 	end
 	
+
+
+
 	local endTick = getTickCount()
 	print(resourceName,'Loaded In : '..tonumber(endTick-tickCount),'Milisecounds')
 	print(string.format("TOTAL OBJS: %d, LODS: %d SA_OBJS: %d",system.objs,system.lods,system.sa_objs))
@@ -254,10 +257,58 @@ function definePlacement(dTable,resourceName)
 		pos = {x,y,z},
 		rot = {rx,ry,rz},
 		info = modelInfo,
-		flag = flag:gsub('\r', ''),
+		flag = flag and flag:gsub('\r', '') or "OBJ",
 	})
 
 end
+
+function streamObject(model,x,y,z,xr,yr,zr,resource,dim,int)
+	if getModelFromID(model) then
+		blackList(model)
+	end
+	
+	local cull,lod,id,custom = getData(model)
+	
+	if tonumber(id) then
+		local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
+		if not isElement(object) then
+			print(id,model)
+		end
+		
+		setElementID(object,model)	
+		setElementData(object,'id',model)
+		if resource then
+			table.insert(data.resourceObjects[resource],object)
+		end
+		
+		if custom then
+			setElementFrozen(object,true)
+		end
+		
+		local lowLOD = lod and createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+		if lowLOD then
+			setLowLODElement ( object, lowLOD ) -- # If the element has a low LOD then assign it.
+			if resource then
+				table.insert(data.resourceObjects[resource],lowLOD)
+			end
+			setElementCollisionsEnabled(lowLOD,false)
+			setElementID(lowLOD,model)	
+			setElementData(lowLOD,'id',model)
+	
+			setElementInterior(lowLOD,int or 0)
+			setElementDimension(lowLOD,dim or -1)
+		end
+		
+		if cull then
+			setElementDoubleSided(object,true)
+			if lowLOD then
+				setElementDoubleSided(lowLOD,true)
+			end
+		end
+		return object
+	end
+end
+
 
 function getData(name)
 	if data.globalData[name] then
@@ -301,10 +352,14 @@ function changeObjectModel(name,newModel)
 end
 
 function onResourceLoad ( resource )
+
 	local resource = getResourceFromName(resource)
 	if getResourceInfo ( resource, 'Streamer') or getResourceInfo ( resource, 'cStream') then
 		local name = getResourceName(resource)
-		triggerClientEvent("MTAStream_Client",client,data.placementData[name],data.resourceData[name],name)
+		if AUTO_LOAD[name] then
+			loadmap(client,name)
+		end
+		print(string.format("[Streamer]: map %s is ready",name))
 	end
 end
 addEvent( "onResourceLoad", true )
@@ -369,3 +424,17 @@ function getMapElements(map)
 	return data.resourceObjects[map]
 end
 
+function loadmap (player, map)
+	if data.resourceData[map] then
+		triggerClientEvent("MTAStream_ClientLoad",player,data.placementData[map],data.resourceData[map],map)
+		outputChatBox(string.format("[Streamer]: map %s start load for %s",map,getPlayerName(player)))
+	else
+		outputChatBox("map "..map.." does not exist!",player)
+	end
+end
+function unloadAllMap (player)
+	triggerClientEvent("MTAStream_ClientUnLoadAll",player)
+end
+function setMapDimenstion (player,map,dim)
+	triggerClientEvent("MTAStream_ClientSetDim",player,map,dim)
+end

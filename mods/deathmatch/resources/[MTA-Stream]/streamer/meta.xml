@@ -3,6 +3,7 @@
 	
 	<script type="client" src="async.lua" />
 	<script type="shared" src="vendor.lua" />
+	<script type="shared" src="config.lua"/>
 	<script type="client" src="client/Streamer_C.lua" />
 	<script type="client" src="client/WindsHandler_C.lua" />
 	<script type="client" src="client/NightHandler_C.lua" />
@@ -12,6 +13,8 @@
 	<script type="server" src="async.lua" />
 	<script type="server" src="server/ID Handler_S.lua" />
 	<script type="server" src="server/Streamer_S.lua" />
+	<script type="server" src="server/debug.lua" />
+	<script type="client" src="client/debug_c.lua"/>
 	
 	<export function="getMaps" type="client"/>
 	
@@ -20,6 +23,10 @@
 	<export function="changeObjectModel" type="server"/>
 	<export function="getMapElements" type="server"/>
 	<export function="blackList" type="server"/>
+	<export function="loadmap" type="server"/>
+	<export function="unloadAllMap" type="server"/>
+	<export function="setMapDimenstion" type="server"/>
+
 	
 
 </meta>
