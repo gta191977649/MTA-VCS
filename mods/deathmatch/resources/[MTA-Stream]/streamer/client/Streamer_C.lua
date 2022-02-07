@@ -43,7 +43,7 @@ function loadModel(data,resourceName)
 		table.insert(resource[resourceName],cache)
 
 		if data.turnOn and tonumber(data.turnOn) and data.turnOff and tonumber(data.turnOff) then
-			engineSetModelVisibleTime(id,data.turnOn,data.turnOff)
+			engineSetModelVisibleTime(id,tonumber(data.turnOn),tonumber(data.turnOff))
 			addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
 		end
 		-- deal with common flags properties, e.g. breakable
@@ -203,12 +203,13 @@ function loadedFunction (resourceName)
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
 	cache = {}
-	--FX:init()
+	
 	engineStreamingFreeUpMemory (104857600)
 	engineRestreamWorld ()
 
 	setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
 	setGameSpeed(1)
+	FX:init()
 end
 
 function setClientMapDimension(map,dim) 
