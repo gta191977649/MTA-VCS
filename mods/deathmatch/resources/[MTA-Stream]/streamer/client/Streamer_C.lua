@@ -40,7 +40,6 @@ function loadModel(data,resourceName)
 		engineReplaceModel(model,id,isTransparentFlag(data.flag))
 		table.insert(resource[resourceName],cache)
 
-
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
 		-- clamp
@@ -204,12 +203,13 @@ function loadedFunction (resourceName)
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
 	cache = {}
-	--FX:init()
+	
 	engineStreamingFreeUpMemory (104857600)
 	engineRestreamWorld ()
 
 	setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
 	setGameSpeed(1)
+	FX:init()
 end
 
 function setClientMapDimension(map,dim) 
