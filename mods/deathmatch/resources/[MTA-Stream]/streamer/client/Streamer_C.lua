@@ -16,11 +16,9 @@ function loadModel(data,resourceName)
 	if data and data.flag ~= "SA_PROP" then
 		print(string.format("request: %s",data.model))
 		local id = data.id
-		if USE_REQUEST_MODEL then
+		if USE_REQUEST_MODEL == true then
 			id = engineRequestModel("object")
 			mapdata[resourceName].mapping[data.id] = id
-
-			print(id)
 		end
 
 		
@@ -42,10 +40,7 @@ function loadModel(data,resourceName)
 		engineReplaceModel(model,id,isTransparentFlag(data.flag))
 		table.insert(resource[resourceName],cache)
 
-		if data.turnOn and tonumber(data.turnOn) and data.turnOff and tonumber(data.turnOff) then
-			engineSetModelVisibleTime(id,data.turnOn,data.turnOff)
-			addNightElement(data.model,tonumber(data.turnOn),tonumber(data.turnOff))
-		end
+
 		-- deal with common flags properties, e.g. breakable
 		--setElementFlagProperty(data.object,data.flag)
 		-- clamp
@@ -68,7 +63,7 @@ function loadModel(data,resourceName)
 		--]]
 		local drawdist = MAX_DRAW_DIST and 1000 or tonumber(data.draw)
 		if drawdist >= 1000 then -- should be lods
-			drawdist = drawdist > 300 and 300 or drawdist
+			drawdist = drawdist > 325 and 325 or drawdist
 		else -- if is normal obj
 			drawdist = drawdist > 170 and 170 or drawdist -- from MTA Source
 		end
@@ -112,6 +107,12 @@ function loadObject(data,mapname)
 		setElementFrozen(object,true)
 		setObjectBreakable(object,false)
 	end
+	-- deal with night obj
+	if flag ~= "SA_PROP" and data.info.turnOn ~= nil then
+		engineSetModelVisibleTime(id,data.info.turnOn,data.info.turnOff)
+		addNightElement(data.model,object,tonumber(data.info.turnOn),tonumber(data.info.turnOff))
+	end
+
 
 	-- deal with lods
 	if lod or tonumber(data.info.draw) >= 1000 or FORCE_LODS then

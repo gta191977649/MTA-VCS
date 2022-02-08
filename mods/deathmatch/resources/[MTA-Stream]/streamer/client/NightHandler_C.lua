@@ -4,14 +4,17 @@ nightElements = {}
 switchTimes = {}
 
 -- Functions --
-function addNightElement(name,ona,offa)
+function addNightElement(name,model,ona,offa)
 	nightElements[name] = nightElements[name] or {}
 	switchTimes[name] = {on=ona,off=offa}
+	table.insert(nightElements[name],model)
+	--[[
 	for i,v in pairs(getElementsByType('object')) do
 		if getElementData(v,'id') == name then
 			table.insert(nightElements[name],v)
 		end
 	end
+	]]
 end
 
 function isWithinTimeRange(start,stop)
