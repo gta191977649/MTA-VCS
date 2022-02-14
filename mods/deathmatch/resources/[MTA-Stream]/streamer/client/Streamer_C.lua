@@ -1,5 +1,5 @@
 DEBUG = exports.DEBUG
---FX = exports["2dfx"]
+FX = exports["2dfx"]
 -- Tables --
 cache = {}
 resource = {}
