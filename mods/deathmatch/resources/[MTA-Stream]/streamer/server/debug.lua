@@ -7,3 +7,4 @@ end)
 addCommandHandler("unloadall",function(player,cmd,mapname) 
     unloadAllMap(player)
 end)
+

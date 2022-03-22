@@ -1,10 +1,13 @@
 debug.sethook(nil)
--- initial setup --
-for i = 550, 20000 do
-	removeWorldModel(i,10000,0,0,0)
+
+if CLEAN_SA_MAP then 
+	-- initial setup --
+	for i = 550, 20000 do
+		removeWorldModel(i,10000,0,0,0)
+	end
+	setWaterLevel(-5000)
+	setOcclusionsEnabled(false)
 end
-setWaterLevel(-5000)
-setOcclusionsEnabled(false)
 -- Events --
 events = {'onPlayerLoad','onElementBreak','onPlayerFailedLoad','fetchID','prepOriginals'}
 for i = 1,#events do
@@ -105,7 +108,7 @@ function loadMap (resource)																				 -- // Load the map
 	data.resourceObjects[resourceName] = {}
 	data.resourceData[resourceName] = {}
 	data.placementData[resourceName] = {}
-	
+	data.offset = {0,0,0}
 	for _,suffix in pairs(suffixList) do
 		local File = fetchPlacement(resourceName,suffix)
 		
@@ -168,6 +171,7 @@ function loadMap (resource)																				 -- // Load the map
 				if (iA == 1) then -- deal with offset
 					local x,y,z = split(vA,",")[1],split(vA,",")[2],split(vA,",")[3]
 					XA,YA,ZA = tonumber(x),tonumber(y),tonumber(z)
+					data.offset = {XA,YA,ZA}
 				else
 					local SplitB = split(vA,",")
 					if not (SplitB[1] == '!') then -- If the first character is equal to # then ignore, used for debugging.
@@ -234,13 +238,7 @@ function definePlacement(dTable,resourceName)
 
 
 	local model,int,dim,x,y,z,rx,ry,rz,flag= unpack(dTable)
-	-- find model id
-	--[[
-	if getModelFromID(model) then
-		blackList(model)
-	end
-	]]
-	
+
 	local modelInfo = getData(model)
 	if not modelInfo then 
 		print(model.." id not found")
@@ -367,6 +365,7 @@ addEventHandler( "onResourceLoad", resourceRoot, onResourceLoad )
 
 function playerLoaded ( loadTime,resource )
 	print(getPlayerName(client),'Loaded '..resource..' In : '..(tonumber(loadTime)*0.01),'Secounds')
+	setElementPosition(client,-653.271484,592.206055,11.027187)
 end
 addEventHandler( "onPlayerLoad", resourceRoot, playerLoaded )
 
@@ -426,7 +425,7 @@ end
 
 function loadmap (player, map)
 	if data.resourceData[map] then
-		triggerClientEvent("MTAStream_ClientLoad",player,data.placementData[map],data.resourceData[map],map)
+		triggerClientEvent("MTAStream_ClientLoad",player,data.placementData[map],data.resourceData[map],data.offset,map)
 		outputChatBox(string.format("[Streamer]: map %s start load for %s",map,getPlayerName(player)))
 	else
 		outputChatBox("map "..map.." does not exist!",player)

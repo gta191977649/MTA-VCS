@@ -1,10 +1,10 @@
-DEBUG = exports.DEBUG
-FX = exports["2dfx"]
+--FX = exports["2dfx"]
 -- Tables --
 cache = {}
 resource = {}
 mapdata = {}
 model_cache = {}
+
 function onResourceStart(resourcea)
 	setOcclusionsEnabled(false)
 	triggerServerEvent ( "onResourceLoad", root, getResourceName(resourcea))
@@ -14,60 +14,65 @@ addEventHandler( "onClientResourceStart", root,onResourceStart)
 
 function loadModel(data,resourceName) 
 	if data and data.flag ~= "SA_PROP" then
-		print(string.format("request: %s",data.model))
+		if not USE_LODS and string.find(data.model,"LOD") or not USE_LODS and string.find(data.model,"lod") then 
+			print("SKIP LOD..")
+			return false
+		end
 		local id = data.id
 		if USE_REQUEST_MODEL == true then
-			id = engineRequestModel("object")
+			id = engineRequestModel("object",2796)
 			mapdata[resourceName].mapping[data.id] = id
 		end
+		if id ~= false then -- do it on id is avaiable
+			-- load txd
+			local path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
+			local texture = requestTextureArchive(path)
+			engineImportTXD(texture,id,true)
 
-		
-		-- load col
-		local path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
-		local collision,cache = requestCollision(path,data.collision)
-		engineReplaceCOL(collision,id)
-		table.insert(resource[resourceName],cache)
+			-- load dff
+			path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
+			local model = requestModel(path)
+			engineReplaceModel(model,id,isTransparentFlag(data.flag))
 
-		-- load txd
-		path = ':'..resourceName..'/Content/textures/'..data.texture..'.txd'
-		local texture,cache = requestTextureArchive(path,data.texture)
-		engineImportTXD(texture,id)
-		table.insert(resource[resourceName],cache)
-
-		-- load dff
-		path = ':'..resourceName..'/Content/models/'..data.model..'.dff'
-		local model,cache = requestModel(path,data.model)
-		engineReplaceModel(model,id,isTransparentFlag(data.flag))
-		table.insert(resource[resourceName],cache)
-
-		-- deal with common flags properties, e.g. breakable
-		--setElementFlagProperty(data.object,data.flag)
-		-- clamp
-		--[[
-		// fLodDistanceUnscaled values:
-		//
-		// With the draw distance setting in GTA SP options menu set to maximum:
-		//      0 - 170     roughly correlates to a LOD distance of 0 - 300 game units
-		//      170 - 480   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
-		//      490 - 1e7   sets the LOD distance to 300 game units and removes the alpha fade-in completely
-		//
-		// With the draw distance setting in GTA SP options menu set to minimum:
-		//      0 - 325     roughly correlates to a LOD distance of 0 - 300 game units
-		//      340 - 960   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
-		//      1000 - 1e7  sets the LOD distance to 300 game units and removes the alpha fade-in completely
-		//
-		// So, to ensure the maximum draw distance with a working alpha fade-in, fLodDistanceUnscaled has to be
-		// no more than: 325 - (325-170) * draw_distance_setting -> 170 * draw_distance_setting
-		//
-		--]]
-		local drawdist = MAX_DRAW_DIST and 1000 or tonumber(data.draw)
-		if drawdist >= 1000 then -- should be lods
-			drawdist = drawdist > 325 and 325 or drawdist
-		else -- if is normal obj
-			drawdist = drawdist > 170 and 170 or drawdist -- from MTA Source
+			-- load col
+			path = ':'..resourceName..'/Content/coll/'..data.collision..'.col'
+			local collision = requestCollision(path)
+			engineReplaceCOL(collision,id)
+			
+			-- deal with common flags properties, e.g. breakable
+			--setElementFlagProperty(data.object,data.flag)
+			-- clamp
+			--[[
+			// fLodDistanceUnscaled values:
+			//
+			// With the draw distance setting in GTA SP options menu set to maximum:
+			//      0 - 170     roughly correlates to a LOD distance of 0 - 300 game units
+			//      170 - 480   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
+			//      490 - 1e7   sets the LOD distance to 300 game units and removes the alpha fade-in completely
+			//
+			// With the draw distance setting in GTA SP options menu set to minimum:
+			//      0 - 325     roughly correlates to a LOD distance of 0 - 300 game units
+			//      340 - 960   sets the LOD distance to 300 game units and has a negative effect on the alpha fade-in
+			//      1000 - 1e7  sets the LOD distance to 300 game units and removes the alpha fade-in completely
+			//
+			// So, to ensure the maximum draw distance with a working alpha fade-in, fLodDistanceUnscaled has to be
+			// no more than: 325 - (325-170) * draw_distance_setting -> 170 * draw_distance_setting
+			//
+			--]]
+			local drawdist = MAX_DRAW_DIST and 1000 or tonumber(data.draw)
+			if drawdist >= 1000 then -- should be lods
+				drawdist = drawdist > 300 and 300 or drawdist
+			else -- if is normal obj
+				drawdist = drawdist > 170 and 170 or drawdist -- from MTA Source
+			end
+			engineSetModelLODDistance(id,drawdist)
+			model_cache[data.model] = id
+		else
+			local debugMsg = string.format("NO MORE FREE ID ERROR FOR %s !\n",data.model)
+			outputChatBox(debugMsg)
+			return nil
 		end
-		engineSetModelLODDistance(id,drawdist)
-		model_cache[data.model] = id
+
 		return id
 	end
 end
@@ -88,74 +93,81 @@ function loadObject(data,mapname)
 	local xr,yr,zr = unpack(data.rot)
 	local int, dim = tonumber(data.int), tonumber(data.dim)
 	local model = data.model
+	-- append offset
+	local ox,oy,oz = unpack(mapdata[mapname].offset)
+	x = x + tonumber(ox)
+	y = y + tonumber(oy)
+	z = z + tonumber(oz)
+
 
 	-- when use request model method
-	if USE_REQUEST_MODEL then 
+	if USE_REQUEST_MODEL and flag ~= "SA_PROP" then 
 		id = mapdata[mapname].mapping[id]
 	end
+	if id then -- skip the object that's excueed limit
+		-- create objects
+		local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
+		setElementID(object,model)	
+		setElementData(object,'id',model)
+		setElementInterior(object,int >= 0 and int or 0)
+		setElementDimension(object,dim or -1)
+		setElementDoubleSided(object,true)
+		setElementParent(object,mapdata[mapname].map)
+		if flag ~= "SA_PROP" then 
+			setElementFrozen(object,true)
+			setObjectBreakable(object,false)
+		end
+		-- deal with night obj
+		if flag ~= "SA_PROP" and data.info.turnOn ~= nil then
+			engineSetModelVisibleTime(id,data.info.turnOn,data.info.turnOff)
+			addNightElement(data.model,object,tonumber(data.info.turnOn),tonumber(data.info.turnOff))
+		end
 
-	-- create objects
-	local object = createObject(id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0)
-	setElementID(object,model)	
-	setElementData(object,'id',model)
-	setElementInterior(object,int >= 0 and int or 0)
-	setElementDimension(object,dim or -1)
-	setElementDoubleSided(object,true)
-	setElementParent(object,mapdata[mapname].map)
-	if flag ~= "SA_PROP" then 
-		setElementFrozen(object,true)
-		setObjectBreakable(object,false)
-	end
-	-- deal with night obj
-	if flag ~= "SA_PROP" and data.info.turnOn ~= nil then
-		engineSetModelVisibleTime(id,data.info.turnOn,data.info.turnOff)
-		addNightElement(data.model,object,tonumber(data.info.turnOn),tonumber(data.info.turnOff))
-	end
 
-
-	-- deal with lods
-	if lod or tonumber(data.info.draw) >= 1000 or FORCE_LODS then
-		if flag ~= "SA_PROP" then
-			local lodinfo = getLODInfo(mapname,lod,x,y,z) 
-			if USE_LODS then -- do it when it enabled
-				if lodinfo then
-					-- get lod info
-					x,y,z = unpack(lodinfo.pos)
-					xr,yr,zr = unpack(lodinfo.rot)
-					id = lodinfo.id
-					model = lodinfo.model
-				else
-					local debugMsg = string.format("LOD ERROR: Requested: %s Not Found! Will Use itself as Lod.\n",model)
-					DEBUG:addDebugMessage(debugMsg)
+		-- deal with lods
+		if lod or tonumber(data.info.draw) >= 1000 or FORCE_LODS then
+			if flag ~= "SA_PROP" then
+				local lodinfo = getLODInfo(mapname,lod,x,y,z) 
+				if USE_LODS then -- do it when it enabled
+					if lodinfo then
+						-- get lod info
+						x,y,z = unpack(lodinfo.pos)
+						xr,yr,zr = unpack(lodinfo.rot)
+						id = lodinfo.id
+						model = lodinfo.model
+					else
+						local debugMsg = string.format("LOD ERROR: Requested: %s Not Found! Will Use itself as Lod.\n",model)
+						print(debugMsg)
+					end
 				end
+				-- create lod
+				local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
+				setElementID(lowLOD,model)	
+				setElementData(lowLOD,'id',model)
+				setElementCollisionsEnabled(lowLOD,false)
+				setObjectBreakable(lowLOD,false)
+				setElementFrozen(lowLOD,true)
+				setLowLODElement (object,lowLOD)
+				setElementDoubleSided(lowLOD,true)
+				setElementInterior(lowLOD,int >= 0 and int or 0)
+				setElementDimension(lowLOD,dim or -1)
+				setElementParent(lowLOD,object)
+			else
+				local debugMsg = string.format("LOD ERROR: Requested: %s Parent Model is SA_PROP, Skipped.\n",model)
+				print(debugMsg)
 			end
-			-- create lod
-			local lowLOD = createObject (id,x or 0,y or 0,z or 0,xr or 0,yr or 0,zr or 0,true)
-			setElementID(lowLOD,model)	
-			setElementData(lowLOD,'id',model)
-			setElementCollisionsEnabled(lowLOD,false)
-			setObjectBreakable(lowLOD,false)
-			setElementFrozen(lowLOD,true)
-			setLowLODElement (object,lowLOD)
-			setElementDoubleSided(lowLOD,true)
-			setElementInterior(lowLOD,int >= 0 and int or 0)
-			setElementDimension(lowLOD,dim or -1)
-			setElementParent(lowLOD,object)
-		else
-			local debugMsg = string.format("LOD ERROR: Requested: %s Parent Model is SA_PROP, Skipped.\n",model)
-			DEBUG:addDebugMessage(debugMsg)
 		end
 	end
 end
-function loadMap(ipls,ides,mapname) 
+function loadMap(ipls,ides,offset,mapname) 
 	startTickCount = getTickCount ()
 	resource[mapname] = {}
 	mapdata[mapname] = {}
 	loaded = 0
-	setGameSpeed(0)
 	--setElementPosition(localPlayer,3000,3000,10)
 
 	mapdata[mapname] = {
+		offset = offset,
 		ipls = ipls,
 		ides = ides,
 		mapping = {},
@@ -170,13 +182,12 @@ function loadMap(ipls,ides,mapname)
 
 
 	--Async:setPriority(100, 1000);
-	Async:setPriority("normal");
 	Async:forkey(ides, function(key,data) 
 		-- load model
 		if model_cache[data.model] == nil and data.flag ~= "SA_PROP" then
 			loadModel(data,mapname)
 		else
-			DEBUG:addDebugMessage(string.format("Exist: %s has already loaded or is a SA Prop, skipping...\n",data.model))
+			print(string.format("Exist: %s has already loaded or is a SA Prop, skipping...\n",data.model))
 		end
 
 		loaded = loaded + 1
@@ -185,13 +196,13 @@ function loadMap(ipls,ides,mapname)
 			for _,data in ipairs(ipls) do 
 				loadObject(data,mapname) 
 			end
-
 			vegitationElementReload()
-			setWaterDrawnLast(true)
-			outputChatBox (string.format("[Streamer]: Map %s loaded, memory: %d",mapname,engineStreamingGetUsedMemory ()))
 			loadedFunction(mapname)
+			outputChatBox (string.format("[Streamer]: Map %s loaded, memory: %d",mapname,engineStreamingGetUsedMemory()))
+			
 		end
 	end)
+
 
 end
 addEvent( "MTAStream_ClientLoad", true )
@@ -203,13 +214,8 @@ function loadedFunction (resourceName)
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
 	cache = {}
-	
-	engineStreamingFreeUpMemory (104857600)
-	engineRestreamWorld ()
-
-	setElementPosition(localPlayer,-1389.450195,-882.062622,20.855408)
-	setGameSpeed(1)
 	FX:init()
+	engineRestreamWorld ()
 end
 
 function setClientMapDimension(map,dim) 
@@ -243,22 +249,22 @@ addEventHandler( "resourceStop", localPlayer, onResourceStop )
 
 function requestTextureArchive(path)
 	if path then
-		cache[path] = cache[path] or engineLoadTXD(path)
-		return cache[path],path
+		cache[md5(path)] = cache[md5(path)] or engineLoadTXD(path,true)
+		return cache[md5(path)],path
 	end
 end
 
 function requestCollision(path)
 	if path then
-		cache[path] = cache[path] or engineLoadCOL(path)
-		return cache[path],path
+		cache[md5(path)] = cache[md5(path)] or engineLoadCOL(path)
+		return cache[md5(path)],path
 	end
 end
 
 function requestModel(path)
 	if path then
-		cache[path] = cache[path] or engineLoadDFF(path)
-		return cache[path],path
+		cache[md5(path)] = cache[md5(path)] or engineLoadDFF(path)
+		return cache[md5(path)],path
 	end
 end
 
