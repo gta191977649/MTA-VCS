@@ -1,0 +1,476 @@
+0767: set_zone 'MARKST' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'UNITY' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'LAIR1' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'LAIR2A' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'LAIR2B' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'LBAG1' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'LBAG2' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'LBAG3' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'BLUF1A' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'BLUF2' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'SUN1' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'SUN1' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'SUN3A' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'SUN3B' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'SUN3C' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'SUN4' popcycle_group_for_peds_and_cars_to 2 
+076C: set_zone 'SUN1' gang 1 density_to 30 
+076C: set_zone 'SUN1' gang 1 density_to 30 
+076C: set_zone 'SUN3A' gang 1 density_to 30 
+076C: set_zone 'SUN3B' gang 1 density_to 30 
+076C: set_zone 'SUN3C' gang 1 density_to 30 
+076C: set_zone 'SUN4' gang 1 density_to 30 
+0767: set_zone 'COM1A' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'COM1B' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'COM2' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'COM3' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'COM4' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'PER1' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'CHC1A' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'CHC1B' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'CHC2A' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'CHC2B' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'CHC3' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'CHC4A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'CHC4B' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'CHC1A' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC1B' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC2A' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC2B' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC3' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC4A' popcycle_group_for_peds_to 9 
+0874: set_zone 'CHC4B' popcycle_group_for_peds_to 9 
+076C: set_zone 'CHC1A' gang 2 density_to 40 
+076C: set_zone 'CHC1B' gang 2 density_to 40 
+076C: set_zone 'CHC2A' gang 2 density_to 40 
+076C: set_zone 'CHC2B' gang 2 density_to 40 
+076C: set_zone 'CHC3' gang 2 density_to 40 
+076C: set_zone 'CHC4A' gang 2 density_to 40 
+076C: set_zone 'CHC4B' gang 2 density_to 40 
+076A: set_zone 'CHC1A' dealer_density_to 4 
+076A: set_zone 'CHC1B' dealer_density_to 4 
+076A: set_zone 'CHC2A' dealer_density_to 4 
+076A: set_zone 'CHC2B' dealer_density_to 4 
+076A: set_zone 'CHC3' dealer_density_to 4 
+076A: set_zone 'CHC4A' dealer_density_to 4 
+076A: set_zone 'CHC4B' dealer_density_to 4 
+0767: set_zone 'CONF1A' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'CONF1B' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'THALL1' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDOC1A' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC1B' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC2' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC3A' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC3B' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC3C' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDOC4' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LDT1A' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT1B' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT1C' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT3' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT4' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'LDT5' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT6' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDT7' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'EBE1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'EBE2A' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'EBE2B' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'EBE3C' popcycle_group_for_peds_and_cars_to 8 
+076C: set_zone 'EBE1' gang 2 density_to 30 
+076C: set_zone 'EBE2A' gang 2 density_to 30 
+076C: set_zone 'EBE2B' gang 2 density_to 30 
+076C: set_zone 'EBE3C' gang 2 density_to 30 
+076A: set_zone 'EBE1' dealer_density_to 2 
+076A: set_zone 'EBE2A' dealer_density_to 2 
+076A: set_zone 'EBE2B' dealer_density_to 2 
+076A: set_zone 'EBE3C' dealer_density_to 2 
+0767: set_zone 'ELCO1' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'ELCO2' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'ELCO1' popcycle_group_for_peds_to 9 
+0874: set_zone 'ELCO2' popcycle_group_for_peds_to 9 
+076C: set_zone 'ELCO1' gang 7 density_to 40 
+076C: set_zone 'ELCO2' gang 7 density_to 40 
+0767: set_zone 'GAN1' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'GAN2' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'GAN1' popcycle_group_for_peds_to 1 
+0874: set_zone 'GAN2' popcycle_group_for_peds_to 1 
+076C: set_zone 'GAN1' gang 1 density_to 25 
+076C: set_zone 'GAN2' gang 1 density_to 25 
+09B7: set_zone 'GAN1' disable_footcops 1 
+0767: set_zone 'GLN1' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'GLN2A' popcycle_group_for_peds_and_cars_to 7 
+076C: set_zone 'GLN1' gang 0 density_to 40 
+076C: set_zone 'GLN2A' gang 0 density_to 40 
+076A: set_zone 'GLN1' dealer_density_to 6 
+076A: set_zone 'GLN2A' dealer_density_to 2 
+0767: set_zone 'LIND1A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'LIND1B' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LIND2A' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LIND2B' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LIND3' popcycle_group_for_peds_and_cars_to 11 
+076C: set_zone 'LIND1A' gang 0 density_to 20 
+076C: set_zone 'LIND1B' gang 0 density_to 20 
+076C: set_zone 'LIND2A' gang 0 density_to 20 
+076C: set_zone 'LIND2B' gang 0 density_to 20 
+076C: set_zone 'LIND3' gang 0 density_to 20 
+0767: set_zone 'IWD1' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'IWD2' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'IWD3A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'IWD3B' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'IWD4' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'IWD5' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'IWD1' popcycle_group_for_peds_to 1 
+0874: set_zone 'IWD2' popcycle_group_for_peds_to 1 
+0874: set_zone 'IWD3A' popcycle_group_for_peds_to 1 
+0874: set_zone 'IWD3B' popcycle_group_for_peds_to 1 
+0874: set_zone 'IWD4' popcycle_group_for_peds_to 1 
+0874: set_zone 'IWD5' popcycle_group_for_peds_to 1 
+076C: set_zone 'IWD1' gang 0 density_to 20 
+076C: set_zone 'IWD2' gang 0 density_to 20 
+076C: set_zone 'IWD3A' gang 0 density_to 20 
+076C: set_zone 'IWD3B' gang 0 density_to 20 
+076C: set_zone 'IWD4' gang 0 density_to 10 
+076C: set_zone 'IWD5' gang 0 density_to 20 
+076A: set_zone 'IWD1' dealer_density_to 2 
+076A: set_zone 'IWD2' dealer_density_to 2 
+076A: set_zone 'IWD3A' dealer_density_to 2 
+076A: set_zone 'IWD3B' dealer_density_to 2 
+076A: set_zone 'IWD4' dealer_density_to 2 
+076A: set_zone 'IWD5' dealer_density_to 2 
+0767: set_zone 'JEF1A' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JEF1B' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JEF2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JEF3A' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JEF3B' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JEF3C' popcycle_group_for_peds_and_cars_to 5 
+076C: set_zone 'JEF1A' gang 0 density_to 40 
+076C: set_zone 'JEF1B' gang 0 density_to 40 
+076C: set_zone 'JEF2' gang 0 density_to 40 
+076C: set_zone 'JEF3B' gang 0 density_to 40 
+076C: set_zone 'JEF3C' gang 0 density_to 40 
+076A: set_zone 'JEF1A' dealer_density_to 6 
+076A: set_zone 'JEF1B' dealer_density_to 6 
+076A: set_zone 'JEF2' dealer_density_to 6 
+076A: set_zone 'JEF3B' dealer_density_to 6 
+076A: set_zone 'JEF3C' dealer_density_to 6 
+0767: set_zone 'LFL1A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'LFL1B' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'LFL1A' popcycle_group_for_peds_to 9 
+0874: set_zone 'LFL1B' popcycle_group_for_peds_to 9 
+076C: set_zone 'LFL1A' gang 2 density_to 40 
+076C: set_zone 'LFL1B' gang 2 density_to 40 
+076A: set_zone 'LFL1A' dealer_density_to 4 
+076A: set_zone 'LFL1B' dealer_density_to 4 
+0767: set_zone 'LMEX1A' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'LMEX1B' popcycle_group_for_peds_and_cars_to 5 
+076C: set_zone 'LMEX1A' gang 7 density_to 30 
+076C: set_zone 'LMEX1B' gang 7 density_to 30 
+0767: set_zone 'ELS1A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'ELS1B' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'ELS2' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'ELS3A' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'ELS3B' popcycle_group_for_peds_and_cars_to 7 
+0767: set_zone 'ELS4' popcycle_group_for_peds_and_cars_to 7 
+0874: set_zone 'ELS1A' popcycle_group_for_peds_to 10 
+0874: set_zone 'ELS1B' popcycle_group_for_peds_to 10 
+0874: set_zone 'ELS2' popcycle_group_for_peds_to 10 
+0874: set_zone 'ELS3A' popcycle_group_for_peds_to 10 
+0874: set_zone 'ELS3B' popcycle_group_for_peds_to 10 
+0874: set_zone 'ELS4' popcycle_group_for_peds_to 10 
+076C: set_zone 'ELS1A' gang 0 density_to 30 
+076C: set_zone 'ELS1B' gang 0 density_to 30 
+076C: set_zone 'ELS2' gang 0 density_to 30 
+076C: set_zone 'ELS3A' gang 0 density_to 30 
+076C: set_zone 'ELS3B' gang 0 density_to 30 
+076C: set_zone 'ELS4' gang 0 density_to 30 
+076A: set_zone 'ELS1A' dealer_density_to 2 
+076A: set_zone 'ELS1B' dealer_density_to 2 
+076A: set_zone 'ELS2' dealer_density_to 2 
+076A: set_zone 'ELS3A' dealer_density_to 2 
+076A: set_zone 'ELS3B' dealer_density_to 2 
+076A: set_zone 'ELS4' dealer_density_to 2 
+0767: set_zone 'MAR1' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'MAR2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'MAR3' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'MKT1' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'MKT2' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'MKT3' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'MKT4' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'MUL1A' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL1B' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL1C' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL2A' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'MUL2B' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'MUL3' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'MUL4' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL5A' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL5B' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL5C' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL6' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL7A' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'MUL7B' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'PLS' popcycle_group_for_peds_and_cars_to 8 
+076C: set_zone 'PLS' gang 1 density_to 10 
+0767: set_zone 'RIH1A' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'RIH1B' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'RIH2' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'RIH3A' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'RIH3B' popcycle_group_for_peds_and_cars_to 15 
+0767: set_zone 'RIH4' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'RIH5A' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'RIH6B' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'RIH5A' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'RIH6B' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'ROD1A' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD1B' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD1C' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD2A' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD2B' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD3A' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD3B' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD4A' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD4B' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD4C' popcycle_group_for_peds_and_cars_to 14 
+0767: set_zone 'ROD5A' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'ROD5B' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'SMB1' popcycle_group_for_peds_and_cars_to 8 
+0767: set_zone 'SMB2' popcycle_group_for_peds_and_cars_to 8 
+076C: set_zone 'SMB1' gang 1 density_to 10 
+076C: set_zone 'SMB2' gang 1 density_to 10 
+0767: set_zone 'VIN2' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'VIN3' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'VIN1A' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'VIN1B' popcycle_group_for_peds_and_cars_to 2 
+076C: set_zone 'VIN2' gang 1 density_to 10 
+0767: set_zone 'VERO1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'VERO2' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'VERO3' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'VERO4A' popcycle_group_for_peds_and_cars_to 8 
+0767: set_zone 'VERO4B' popcycle_group_for_peds_and_cars_to 8 
+076C: set_zone 'VERO1' gang 0 density_to 10 
+076C: set_zone 'VERO2' gang 0 density_to 10 
+076C: set_zone 'VERO3' gang 0 density_to 10 
+076C: set_zone 'VERO4A' gang 0 density_to 10 
+076C: set_zone 'VERO4B' gang 0 density_to 10 
+076A: set_zone 'VERO1' dealer_density_to 2 
+076A: set_zone 'VERO2' dealer_density_to 2 
+076A: set_zone 'VERO3' dealer_density_to 2 
+076A: set_zone 'VERO4A' dealer_density_to 2 
+076A: set_zone 'VERO4B' dealer_density_to 2 
+0767: set_zone 'CRANB' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'CALT' popcycle_group_for_peds_and_cars_to 5 
+076C: set_zone 'CALT' gang 6 density_to 10 
+0767: set_zone 'SUNMA' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'SUNNN' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'BATTP' popcycle_group_for_peds_and_cars_to 2 
+076C: set_zone 'BATTP' gang 3 density_to 25 
+0767: set_zone 'ESPN1' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'ESPN2' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'ESPN3' popcycle_group_for_peds_and_cars_to 9 
+076C: set_zone 'ESPN1' gang 4 density_to 10 
+076C: set_zone 'ESPN2' gang 4 density_to 10 
+076C: set_zone 'ESPN3' gang 4 density_to 10 
+0767: set_zone 'BAYV' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'PARA' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'JUNIHO' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JUNIHI' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'CIVI' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'CHINA' popcycle_group_for_peds_and_cars_to 9 
+0874: set_zone 'CHINA' popcycle_group_for_peds_to 6 
+076C: set_zone 'CHINA' gang 6 density_to 40 
+0767: set_zone 'SFDWT1' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SFDWT2' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SFDWT3' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SFDWT4' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'SFDWT5' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'SFDWT6' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'FINA' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'CITYS' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'WESTP1' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'WESTP2' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'WESTP3' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'THEA1' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'THEA2' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'THEA3' popcycle_group_for_peds_and_cars_to 2 
+076C: set_zone 'THEA1' gang 6 density_to 10 
+076C: set_zone 'THEA3' gang 3 density_to 10 
+0767: set_zone 'GARC' popcycle_group_for_peds_and_cars_to 7 
+076C: set_zone 'GARC' gang 3 density_to 40 
+0767: set_zone 'HASH' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'OCEAF1' popcycle_group_for_peds_and_cars_to 8 
+0767: set_zone 'OCEAF2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'OCEAF3' popcycle_group_for_peds_and_cars_to 8 
+0767: set_zone 'DOH1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'DOH2' popcycle_group_for_peds_and_cars_to 5 
+076C: set_zone 'DOH2' gang 3 density_to 10 
+0767: set_zone 'CUNTC1' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'CUNTC2' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'CUNTC3' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'SFGLF1' popcycle_group_for_peds_and_cars_to 17 
+0767: set_zone 'SFGLF2' popcycle_group_for_peds_and_cars_to 17 
+0767: set_zone 'SFGLF3' popcycle_group_for_peds_and_cars_to 17 
+0767: set_zone 'SFGLF4' popcycle_group_for_peds_and_cars_to 17 
+0767: set_zone 'HILLP' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'SILLY1' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SILLY2' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SILLY3' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SILLY4' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'SFAIR1' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'SFAIR2' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'SFAIR3' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'SFAIR4' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'SFAIR5' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'SFBAG1' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'SFBAG2' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'SFBAG3' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'EASB1' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'EASB2' popcycle_group_for_peds_and_cars_to 11 
+076C: set_zone 'EASB1' gang 4 density_to 40 
+076C: set_zone 'EASB2' gang 4 density_to 40 
+0767: set_zone 'ESPE1' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'ESPE2' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'ESPE3' popcycle_group_for_peds_and_cars_to 9 
+076C: set_zone 'EASB1' gang 4 density_to 10 
+076C: set_zone 'EASB2' gang 4 density_to 10 
+0767: set_zone 'LINDEN' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'YELLOW' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'BFC1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'BFC2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'RIE' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'LDM' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'RSW1' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'RSW2' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'RSE' popcycle_group_for_peds_and_cars_to 6 
+0767: set_zone 'LDS' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'SRY' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTS1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTS2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'LVA1' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LVA2' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'LVA3' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'LVA4' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'VAIR1' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'VAIR2' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'VAIR3' popcycle_group_for_peds_and_cars_to 16 
+0767: set_zone 'LVBAG' popcycle_group_for_peds_and_cars_to 19 
+0767: set_zone 'GGC1' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'GGC2' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'BFLD1' popcycle_group_for_peds_and_cars_to 10 
+0767: set_zone 'BFLD2' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'WWE' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'WWE1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'PINT' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'YBELL2' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'YBELL1' popcycle_group_for_peds_and_cars_to 17 
+0767: set_zone 'JTW1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTW2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN3' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN4' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN5' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN6' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN7' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTN8' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTE1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTE2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTE3' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'JTE4' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'HGP' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'SPIN' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'BINT1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'BINT2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'BINT3' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'BINT4' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'PRP1' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'PRP2' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'PRP3' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'PRP4' popcycle_group_for_peds_and_cars_to 4 
+0767: set_zone 'REDE1' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'REDE2' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'REDE3' popcycle_group_for_peds_and_cars_to 2 
+0767: set_zone 'REDW1' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'REDW2' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'REDW3' popcycle_group_for_peds_and_cars_to 11 
+0767: set_zone 'REDW4' popcycle_group_for_peds_and_cars_to 5 
+0767: set_zone 'ROCE1' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'ROCE2' popcycle_group_for_peds_and_cars_to 0 
+0767: set_zone 'OVS' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'CREE' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'STRIP1' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'STRIP2' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'STRIP3' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'STRIP4' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'PILL1' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'PILL2' popcycle_group_for_peds_and_cars_to 9 
+0767: set_zone 'RING' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'ISLE' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'STAR1' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'STAR2' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'ROY' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'CAM' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'LOT' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'PIRA' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'VISA1' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'VISA2' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'CALI1' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'CALI2' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'DRAG' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'PINK' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'HIGH' popcycle_group_for_peds_and_cars_to 12 
+0767: set_zone 'CONST1' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'ANGPI' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'SHACA' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BACKO' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BEACO' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'FARM' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'PALO' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MONT' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MONT1' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MTCHI1' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MTCHI2' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MTCHI3' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MTCHI4' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'HBARNS' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'DILLI' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'TOPFA' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BLUEB' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BLUEB1' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'PANOP' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BLUAC' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'CREEK' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'CREEK1' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'MAKO' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'TOPFA' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'FERN' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'NROCK' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'HANKY' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'LEAFY' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'RED' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'FLINTC' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'WHET' popcycle_group_for_peds_and_cars_to 3 
+0767: set_zone 'BIGE' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ELQUE' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'BARRA' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'CARSO' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'PAYAS' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'PROBE' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ELCA' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'FLINTR' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ARCO' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'VALLE' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'FLINTI' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'MONINT' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ROBINT' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'TOM' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ALDEA' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'BRUJA' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'ROBAD' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'BONE' popcycle_group_for_peds_and_cars_to 1 
+0767: set_zone 'HAUL' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'QUARY' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'OCTAN' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'PALMS' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'EBAY' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'EBAY2' popcycle_group_for_peds_and_cars_to 18 
+0767: set_zone 'DAM' popcycle_group_for_peds_and_cars_to 18 

@@ -1,7 +1,7 @@
 local PATH = {
     node_block = {
-        car = {},
         ped = {},
+        car = {},
         boat = {},
     },
 }
@@ -46,18 +46,30 @@ function writeFile(filename)
     local node_block = PATH.node_block
     --write header
     local f = fileCreate(filename)
-    fileWrite(f,dataToBytes("3i",#node_block.car,0,0))
-    
-    -- write nodes
+    --[[
+    -- write nodes (only vehicles)
     for node_index,node in ipairs(node_block.car) do 
         local x,y,z,rx,ry = unpack(node)
         x,y,z = math.floor(x*1000),math.floor(y*1000),math.floor(z*1000)
 		rx,ry = math.floor(rx*1000),math.floor(ry*1000)
         fileWrite(f,dataToBytes("3i2s",x,y,z,rx,ry))
     end
+    --]]
+    -- this will write all type of nodes
+    fileWrite(f,dataToBytes("3i",(#node_block.car + #node_block.ped + #node_block.boat),0,0))
+
+    for key,blocks in pairs(node_block) do 
+        for node_index,node in ipairs(blocks) do 
+            local x,y,z,rx,ry = unpack(node)
+            x,y,z = math.floor(x*1000),math.floor(y*1000),math.floor(z*1000)
+            rx,ry = math.floor(rx*1000),math.floor(ry*1000)
+            fileWrite(f,dataToBytes("3i2s",x,y,z,rx,ry))
+        end
+        print(key.." Processed, total "..#blocks)
+    end
 
     fileClose(f)
-    print(string.format("path write!, Total %d cars",#node_block.car))
+    print(string.format("path write!, Total %d peds, %d cars, %d boats",#node_block.ped,#node_block.car,#node_block.boat))
 end
 
 function convert(path) 

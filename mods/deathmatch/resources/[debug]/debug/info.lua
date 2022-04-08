@@ -34,6 +34,8 @@ end,100,0)
 function addDebugMessage(msg)
     DGS:dgsMemoInsertText(debug_memo,0,1,msg)
 end
+
+DGS:dgsSetVisible(debug_memo,false)
 setWaveHeight(1)
 -- Stream debug
 --[[

@@ -1,0 +1,1 @@
+DGS = exports.dgs
