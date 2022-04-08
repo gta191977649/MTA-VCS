@@ -1,0 +1,60 @@
+<meta>
+    <oop>true</oop>
+    <info author="CrystalMV" version="0.1" name="NPC high-level control" description="Higher level control over peds" type="script" />
+    <min_mta_version server="1.5.5-9.14060"></min_mta_version>
+    <script src="vendor/math.lua" type="shared" cache="false"/>
+    <script src="vendor/const.lua" type="server"  cache="false"/>
+    <script src="vendor/const.lua" type="client" cache="false"/>
+    <script src="vendor/common.lua" type="shared" cache="false"/>
+    <script src="vendor/async.lua" type="shared" cache="false"/>
+    <script src="vendor/ped.lua" type="shared" cache="false"/>
+    <script src="function/npc_hlc_s.lua" type="server" />
+    <script src="function/npc_hlc_c.lua" type="client" cache="false"/>
+    <script src="function/npc_functions_s.lua" type="server" />
+    <script src="function/npc_functions.lua" type="client" cache="false"/>
+    <script src="control/control_npc_s.lua" type="server" />
+    <script src="control/control_npc_ai_c.lua" type="client" cache="false"/>
+    <script src="control/control_npc_c.lua" type="client" cache="false"/>
+    <script src="task/valid_tasks_s.lua" type="server" />
+    <script src="task/tasks_s.lua" type="server"  cache="false"/>
+    <script src="task/tasks_c.lua" type="client" cache="false"/>
+    <script src="action/actions_s.lua" type="server" />
+    <script src="action/action_sensor.lua" type="client" cache="false"/>
+    <script src="action/action_vehicle_c.lua" type="client" cache="false"/>
+    <script src="action/action_boat_c.lua" type="client" cache="false"/>
+    <script src="action/action_heli_c.lua" type="client" cache="false"/>
+    <script src="action/actions_c.lua" type="client" cache="false"/>
+    <script src="event/event_c.lua" type="client" cache="false"/>
+    <script src="event/event_s.lua" type="server" cache="false"/>
+
+    <!--    
+        <script src="sync/sync_c.lua" type="client" cache="false"/>
+        <script src="sync/sync_s.lua" type="server" cache="false"/>
+        <script src="actions_c_v2bak.lua" type="client" />
+    
+    -->
+    <export function="enableHLCForNPC" type="server" http="false" />
+    <export function="disableHLCForNPC" type="server" http="false" />
+    <export function="isHLCEnabled" type="server" http="false" />
+    <export function="isHLCEnabled" type="client" http="false" />
+    <export function="setNPCWalkSpeed" type="server" http="false" />
+    <export function="getNPCWalkSpeed" type="server" http="false" />
+    <export function="getNPCWalkSpeed" type="client" http="false" />
+    <export function="setNPCWeaponAccuracy" type="server" http="false" />
+    <export function="getNPCWeaponAccuracy" type="server" http="false" />
+    <export function="getNPCWeaponAccuracy" type="client" http="false" />
+    <export function="setNPCDriveSpeed" type="server" http="false" />
+    <export function="getNPCDriveSpeed" type="server" http="false" />
+    <export function="getNPCDriveSpeed" type="client" http="false" />
+    <export function="setNPCAvoidCrash" type="server" http="false" />
+    <export function="getNPCDriveStyle" type="shared" http="false" />
+    <export function="setNPCDriveStyle" type="shared" http="false" />
+    <export function="addNPCTask" type="server" http="false" />
+    <export function="clearNPCTasks" type="server" http="false" />
+    <export function="setNPCTask" type="server" http="false" />
+    <export function="getNPCTask" type="server" http="false" />
+    
+    <settings>
+        <setting name="*server_colchecking" value="false" />
+    </settings>
+</meta>
