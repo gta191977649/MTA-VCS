@@ -1,24 +1,16 @@
---[[
-    Open Timecyc Parser (Vice City Stories Version)
-    (C) Project Sparrow 2021
-    By: Nurupo
-]]
-PS2 = exports.ps2
+local getWeatherSA = getWeather
+local setWeatherSA = setWeather
+Timecyc = {}
 Weather = {
-    id = 0,
-    blend = false,
-    blendTime = 1, -- 1 hour interval for blend weather
+    interpolationLength = 1, -- 1 hour
+    interpolateStart = 0,
+    numHours = 24,-- for vcs timecyc.dat 
+    old = getWeatherSA(),
+    new = getWeatherSA(),
+    interpolation = 1,
+    data ={},
 }
-WeatherMapping ={ --deal with sa weather special effect
-    -- vcs_id, sa_id
-    [0] = 1, -- SUNNY
-    [1] = 15, -- CLOUDY
-    [2] = 8, -- RANING
-    [3] = 9, -- FOGGY
-    [4] = 17, --EXTRA SUNNY
-    [5] = 4, --EXTRA CLOUD
-    [6] = 22, --INTERIOR
-}
+-- VCS Timecyc.dat mapping
 T = {
     ambR = 1, ambG = 2, ambB = 3,
     ambR_obj = 4, ambG_obj = 5, ambB_obj = 6,
@@ -40,228 +32,207 @@ T = {
     blurAlpha = 55, blurOffset = 56,
 }
 
-Timecyc = {}
-
-
-
-local _,lastMin = getTime()
-function applyWeatherMapping(vcs_id) 
-    vcs_id = WeatherMapping[vcs_id] and vcs_id or 0
-    setWeather(WeatherMapping[vcs_id])
-end
-function start() 
-    function updateTimecyc ()
-        local hour,min = getTime()
-        if min ~= lastMin then --save a bit processing power
-            applyWeatherMapping(Weather.id) 
-            setWeatherFromTimecyc(Weather.id,hour,min)
-        end
-    end
-    resetWaterColor()
-    resetSunColor()
-    resetSunSize()
-    setColorFilter (0, 0, 0, 0, 0, 0, 0, 0)
-    --resetColorFilter()
-    updateTimecyc()
-    addEventHandler ( "onClientRender", root, updateTimecyc )
-
-end
-
-
-
 function loadTimeCycle(filename) 
     local f = fileOpen(filename)
     local lines = fileRead(f,fileGetSize(f))
-    lines = split(lines,'\n')
+    lines = split(lines:gsub("\r",""),'\n')
     fileClose(f)
     local weather_id = 0
     for i=1,#lines do 
-        if string.find(lines[i],"///////////////////////////////////////////") then -- new line
-            weather_id =  weather_id + 1
-            Timecyc[weather_id] = {}
+        if string.find(lines[i],"///////////////////////////////////////////") then
+            weather_id = weather_id + 1
         end
-        
-        
-        local data = split(lines[i]:gsub("\r","")," ")
-
-        if #data == 56 then --dataline
+        if lines[i]:sub(1, 1) ~= '/' and lines[i]:sub(2, 1) ~= '/' then
+            local data = split(lines[i]:gsub("\t"," ")," ")
+            if Timecyc[weather_id] == nil then
+                Timecyc[weather_id] = {}
+            end
             table.insert(Timecyc[weather_id],data)
+            --iprint(data)
+        end 
+    end
+    print("Total: ",weather_id)
+end
+-- timecyc interpolation shits from here
+-- shits port from aap's euryopa.exe
+function interpolateValue(a,b,fa,fb) 
+    return fa * a + fb * b
+end
+
+function interpolateRGB(a1,b1,fa,fb) 
+    local r = fa * a1[1] + fb * b1[1]
+    local g = fa * a1[2] + fb * b1[2]
+    local b = fa * a1[3] + fb * b1[3]
+    return {r,g,b}
+end
+
+function interpolateRGBA(a1,b1,fa,fb) 
+    local r = fa * a1[1] + fb * b1[1]
+    local g = fa * a1[2] + fb * b1[2]
+    local b = fa * a1[3] + fb * b1[3]
+    local a = fa * a1[4] + fb * b1[4]
+    return {r,g,b,a}
+end
+
+function interpolate(a,b,fa,fb,isCurrent)
+    isCurrent = isCurrent or false
+    local weather = {}
+    if not isCurrent then -- interpolate direct from timecyc data
+        weather.amb = interpolateRGB({a[T["ambR"]],a[T["ambG"]],a[T["ambB"]]}, {b[T["ambR"]],b[T["ambG"]],b[T["ambB"]]}, fa, fb)
+        weather.amb_obj = interpolateRGB({a[T["ambR_obj"]],a[T["ambG_obj"]],b[T["ambB_obj"]]},{b[T["ambR_obj"]],b[T["ambG_obj"]],b[T["ambB_obj"]]}, fa, fb)
+        weather.sky_top = interpolateRGB({a[T["skyTopR"]],a[T["skyTopG"]],a[T["skyTopB"]]}, {b[T["skyTopR"]],b[T["skyTopG"]],b[T["skyTopB"]]}, fa, fb)
+        weather.sky_bot = interpolateRGB({a[T["skyBotR"]],a[T["skyBotG"]],a[T["skyBotB"]]}, {b[T["skyBotR"]],b[T["skyBotG"]],b[T["skyBotB"]]}, fa, fb)
+        weather.sun_core = interpolateRGB({a[T["sunCoreR"]],a[T["sunCoreG"]],a[T["sunCoreB"]]}, {b[T["sunCoreR"]],b[T["sunCoreG"]],b[T["sunCoreB"]]}, fa, fb)
+        weather.sun_corona = interpolateRGB({a[T["sunCoronaR"]],a[T["sunCoronaG"]],a[T["sunCoronaB"]]}, {b[T["sunCoronaR"]],b[T["sunCoronaG"]],b[T["sunCoronaB"]]}, fa, fb)
+        weather.sun_size = interpolateValue(a[T["sunSz"]], b[T["sunSz"]], fa, fb)
+        weather.postfx1 =  interpolateRGBA({a[T["fluffyTopR"]],a[T["fluffyTopG"]],a[T["fluffyTopB"]],a[T["blurAlpha"]]}, {b[T["fluffyTopR"]],b[T["fluffyTopG"]],b[T["fluffyTopB"]],b[T["blurAlpha"]]}, fa, fb)
+        weather.postfx2 = interpolateRGBA({a[T["fluffyBotR"]],a[T["fluffyBotG"]],a[T["fluffyBotB"]],a[T["blurAlpha"]]}, {b[T["fluffyBotR"]],b[T["fluffyBotG"]],b[T["fluffyBotB"]],b[T["blurAlpha"]]}, fa, fb)
+        --weather.dirMult = interpolateValue(a[T["lightShad"]],b[T["lightShad"]],fa,fb)
+        weather.dirMult = 1
+        weather.fogSt = interpolateValue(a[T["fogSt"]],b[T["fogSt"]],fa,fb)
+        weather.farClp = interpolateValue(a[T["farClp"]],b[T["farClp"]],fa,fb)
+        weather.radiosityLimit = interpolateValue(a[T["radiosityLimit"]],b[T["radiosityLimit"]],fa,fb)
+
+    else -- interpolate from exiting
+        weather.amb = interpolateRGB(a.amb, b.amb, fa, fb)
+        weather.amb_obj = interpolateRGB(a.amb_obj, b.amb_obj, fa, fb)
+        weather.sky_top = interpolateRGB(a.sky_top, b.sky_top, fa, fb)
+        weather.sky_bot = interpolateRGB(a.sky_bot, b.sky_bot, fa, fb)
+        weather.sun_core = interpolateRGB(a.sun_core, b.sun_core, fa, fb)
+        weather.sun_corona = interpolateRGB(a.sun_corona, b.sun_corona, fa, fb)
+        weather.sun_size = interpolateValue(a.sun_size, b.sun_size, fa, fb)
+        weather.postfx1 = interpolateRGBA(a.postfx1, b.postfx1, fa, fb)
+        weather.postfx2 = interpolateRGBA(a.postfx2, b.postfx2, fa, fb)
+        --weather.dirMult = interpolateValue(a.dirMult, b.dirMult, fa,fb)
+        weather.dirMult = 1
+        weather.fogSt = interpolateValue(a.fogSt, b.fogSt, fa,fb)
+        weather.farClp = interpolateValue(a.farClp, b.farClp, fa,fb)
+        weather.radiosityLimit = interpolateValue(a.radiosityLimit, b.radiosityLimit, fa,fb)
+    end
+    
+    --[[
+	dst->sprSz = fa * a->sprSz + fb * b->sprSz;
+	dst->sprBght = fa * a->sprBght + fb * b->sprBght;
+	dst->shdw = fa * a->shdw + fb * b->shdw;
+	dst->lightShd = fa * a->lightShd + fb * b->lightShd;
+	dst->poleShd = fa * a->poleShd + fb * b->poleShd;
+	dst->farClp = fa * a->farClp + fb * b->farClp;
+	dst->lightOnGround = fa * a->lightOnGround + fb * b->lightOnGround;
+	Interpolate(&dst->lowCloud, &a->lowCloud, &b->lowCloud, fa, fb);
+	Interpolate(&dst->fluffyCloudTop, &a->fluffyCloudTop, &b->fluffyCloudTop, fa, fb);
+	Interpolate(&dst->fluffyCloudBottom, &a->fluffyCloudBottom, &b->fluffyCloudBottom, fa, fb);
+	Interpolate(&dst->water, &a->water, &b->water, fa, fb);
+	Interpolate(&dst->postfx1, &a->postfx1, &b->postfx1, fa, fb);
+	Interpolate(&dst->postfx2, &a->postfx2, &b->postfx2, fa, fb);
+	dst->cloudAlpha = fa * a->cloudAlpha + fb * b->cloudAlpha;
+	dst->radiosityLimit = fa * a->radiosityLimit + fb * b->radiosityLimit;
+	dst->radiosityIntensity = fa * a->radiosityIntensity + fb * b->radiosityIntensity;
+	dst->waterFogAlpha = fa * a->waterFogAlpha + fb * b->waterFogAlpha;
+	dst->dirMult = fa * a->dirMult + fb * b->dirMult;
+	dst->lightMapIntensity = fa * a->lightMapIntensity + fb * b->lightMapIntensity;
+    ]]
+    return weather
+end
+
+
+function getColourSet(h,s) 
+    --h = h == 8 and 1 or h
+    return Timecyc[s][h] 
+end
+function updateSA(weather_id,currentHour,currentMinute) 
+    Weather.old = weather_id
+
+    local hours = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}
+    local time = currentHour + currentMinute/60.0;
+
+    local curHour = 0 local nextHour = 0
+	local curHourSel = 1 local nextHourSel = 1
+
+    -- find current time in hour index
+    while(time >= hours[curHourSel+1]) do
+        curHourSel = curHourSel + 1
+    end
+    curHourSel = curHourSel == 0 and 1 or curHourSel
+    
+    nextHourSel = (curHourSel + 1) % Weather.numHours
+    nextHourSel = nextHourSel == 0 and 1 or nextHourSel
+
+	curHour = hours[curHourSel]
+	nextHour = hours[curHourSel+1]
+
+    local timeInterp = (time - curHour) / (nextHour - curHour)
+    local curOld = getColourSet(curHourSel,Weather.old+1)
+    local curNew = getColourSet(curHourSel, Weather.new+1)
+	local nextOld = getColourSet(nextHourSel, Weather.old+1)
+	local nextNew = getColourSet(nextHourSel, Weather.new+1)
+
+    --interpolation
+    local oldInterp = interpolate(curOld,nextOld, 1.0-timeInterp, timeInterp)
+	local newInterp = interpolate(curNew,nextNew, 1.0-timeInterp, timeInterp)
+	local currentColours = interpolate(oldInterp,newInterp, 1.0-Weather.interpolation, Weather.interpolation,true)
+
+    -- more accurate gradient from https://github.com/GTAmodding/timecycle24/blob/master/src/TimeCycle.cpp
+    -- thanks to aap's help
+    --[[
+    currentColours.sky_top[1] = currentColours.sky_top[1] * currentColours.dirMult
+    currentColours.sky_top[1] = currentColours.sky_top[1] > 0xFF and 0xFF or currentColours.sky_top[1]
+    currentColours.sky_top[2] = currentColours.sky_top[2] * currentColours.dirMult
+    currentColours.sky_top[2] = currentColours.sky_top[2] > 0xFF and 0xFF or currentColours.sky_top[2]
+    currentColours.sky_top[3] = currentColours.sky_top[3] * currentColours.dirMult
+    currentColours.sky_top[3] = currentColours.sky_top[3] > 0xFF and 0xFF or currentColours.sky_top[3]
+    currentColours.sky_bot[1] = currentColours.sky_top[1] * currentColours.dirMult
+    currentColours.sky_bot[1] = currentColours.sky_bot[1] > 0xFF and 0xFF or currentColours.sky_bot[1]
+    currentColours.sky_bot[2] = currentColours.sky_top[2] * currentColours.dirMult
+    currentColours.sky_bot[2] = currentColours.sky_bot[2] > 0xFF and 0xFF or currentColours.sky_bot[2]
+    currentColours.sky_bot[3] = currentColours.sky_top[3] * currentColours.dirMult
+    currentColours.sky_bot[3] = currentColours.sky_bot[3] > 0xFF and 0xFF or currentColours.sky_bot[3]
+    --]]
+    --sky 
+    setSkyGradient(currentColours.sky_top[1],currentColours.sky_top[2],currentColours.sky_top[3],currentColours.sky_bot[1],currentColours.sky_bot[2],currentColours.sky_bot[3])
+    --sun
+    setSunColor(currentColours.sun_core[1],currentColours.sun_core[2],currentColours.sun_core[3],currentColours.sun_corona[1],currentColours.sun_corona[2],currentColours.sun_corona[3])
+    setSunSize(currentColours.sun_size)
+    -- fog
+    setFogDistance(currentColours.fogSt)
+    setFarClipDistance(currentColours.farClp)
+    Weather.data = currentColours
+
+    -- update interpolation
+    if Weather.interpolateStart ~= 0 then 
+        if Weather.interpolation < 1 then 
+            local endTime =  (Weather.interpolationLength * 60000)
+            Weather.interpolation = (getTickCount() - Weather.interpolateStart) / endTime
+        else -- stop weather interpolation
+            Weather.old = Weather.new
+            setWeatherSA(Weather.new)
+            Weather.interpolateStart = 0 -- stop interpolation
         end
     end
-
-
-    start()
-
+end 
+function getTimeCycleValue(key) 
+    --local h,m = getTime()
+    --local time = clampTimeIndex(h)
+    --return tonumber(Timecyc[weather_id+1][time][offset])
+    return Weather.data[key]
 end
- 
-function getTimeIntervalIndex(hour,min)
-    --[[
-        Time Range: 
-            0,5,6,7,12,19,20,22
-    ]]
-    --[[
-    if hour >= 0 and hour < 5 and min >= 0 and min <= 59 then -- from 0 -> 4:59
-        return 1
-    elseif hour >= 5 and hour < 6 and min >= 0 and min <= 59 then -- from 5 -> 5:59
-        return 2
-    elseif hour >= 6 and hour < 7 and min >= 0 and min <= 59 then -- from 6 -> 6:59
-        return 3
-    elseif hour >= 7 and hour < 12 and min >= 0 and min <= 59 then -- from 7 -> 11:59
-        return 4
-    elseif hour >= 12 and hour < 19 and min >= 0 and min <= 59 then -- from 12 -> 18:59
-        return 5
-    elseif hour >= 19 and hour < 20 and min >= 0 and min <= 59 then -- from 19 -> 19:59
-        return 6
-    elseif hour >= 20 and hour < 22 and min >= 0 and min <= 59 then -- from 20 -> 21:59
-        return 7
-    elseif hour >= 22 then -- from 22 -> 23:59
-        return 8
-    end
-    ]]
-    hour = hour == 0 and 1 or hour
-    return hour+1
+function setWeatherBlended(wea) 
+    Weather.new = wea
+    Weather.interpolateStart = getTickCount()
+    Weather.interpolation = 0
 end
-function getTimeIntervalLength(hour,min)
-    --[[
-        Time Range: 
-            0,5,6,7,12,19,20,22
-    ]]
-    if hour >= 0 and hour < 5 and min >= 0 and min <= 59 then -- from 0 -> 4:59
-        return 5
-    elseif hour >= 5 and hour < 6 and min >= 0 and min <= 59 then -- from 5 -> 5:59
-        return 1
-    elseif hour >= 6 and hour < 7 and min >= 0 and min <= 59 then -- from 6 -> 6:59
-        return 1
-    elseif hour >= 7 and hour < 12 and min >= 0 and min <= 59 then -- from 7 -> 11:59
-        return 5
-    elseif hour >= 12 and hour < 19 and min >= 0 and min <= 59 then -- from 12 -> 18:59
-        return 7
-    elseif hour >= 19 and hour < 20 and min >= 0 and min <= 59 then -- from 19 -> 19:59
-        return 1
-    elseif hour >= 20 and hour < 22 and min >= 0 and min <= 59 then -- from 20 -> 21:59
-        return 2
-    elseif hour >= 22 then -- from 22 -> 23:59
-        return 2
-    end
+function setWeather(wea) 
+    Weather.old =wea
 end
-function getTimeIntervalLengthFromIndex(index)
-    --[[
-        Time Range: 
-            0,5,6,7,12,19,20,22
-    ]]
-    local lengthMapping = {
-        5,1,1,5,7,1,2,2
-    }
-    local length = 0
-    for i = 1,index-1 do 
-        --length = length + lengthMapping[i]
-        length = length + 1
-    end
-    return length
+function getWeather() 
+    return Weather.old,Weather.interpolation < 1 and Weather.new or nil
 end
-
-function getInterpolationValue(a,b,hour,min) 
-    a = tonumber(a)
-    b = tonumber(b)
-
-    --local length = getTimeIntervalLength(hour,min) -- hour as unit
-
-    local length = 1
-    local intervalIndex = getTimeIntervalIndex(hour,min)
-
-    local current = min/60 
-    local progress = current/length -- get time escapted percentage & normalized to 0-1 range
-
-    if b > a then 
-        return a + ((b - a) * progress)
-    else
-        return a - ((a - b) * progress)
-    end
-	
-end
-
-function getGradientInterpolationValue(startGrident,endGradient,hour,min)
-    local s_r,s_g,s_b = unpack(startGrident)
-    local e_r,e_g,e_b = unpack(endGradient)
-    local r = getInterpolationValue(s_r,e_r,hour,min)
-    local g = getInterpolationValue(s_g,e_g,hour,min)
-    local b = getInterpolationValue(s_b,e_b,hour,min)
-    return {math.floor(r),math.floor(g),math.floor(b)}
-end
-function setWeatherFromTimecyc(weather_id,hour,min) 
-    weather_id = weather_id + 1 -- due to sa weather start from 0
-    if not Timecyc[weather_id] then 
-        weather_id = 1
-    end
-    local intervalIndex = getTimeIntervalIndex(hour,min)
-
-    local WT_S = Timecyc[weather_id][intervalIndex]
-    local endTntervalIndex = intervalIndex + 1 > #Timecyc[weather_id] and 1 or intervalIndex + 1
-    local WT_E = Timecyc[weather_id][endTntervalIndex]
-    -- sky gradient
-    local skyTopGradient = getGradientInterpolationValue({WT_S[16],WT_S[17],WT_S[18]},{WT_E[16],WT_E[17],WT_E[18]},hour,min) -- SkytopGradient
-    local skyBottomGradient = getGradientInterpolationValue({WT_S[19],WT_S[20],WT_S[21]},{WT_E[19],WT_E[20],WT_E[21]},hour,min) -- SkyBottomGradient
-    setSkyGradient(skyTopGradient[1],skyTopGradient[2],skyTopGradient[3],skyBottomGradient[1],skyBottomGradient[2],skyBottomGradient[3])
-    -- sun 
-    --local sunColor = getGradientInterpolationValue({WT_S[T["sunCoreR"]],WT_S[T["sunCoreG"]],WT_S[T["sunCoreB"]]},{WT_E[T["sunCoreR"]],WT_E[T["sunCoreG"]],WT_E[T["sunCoreB"]]},hour,min) 
-    --setSunColor(sunColor[1],sunColor[2],sunColor[3])
-    --iprint(sunColor)
-    local sunSize = getInterpolationValue(WT_S[T["sunSz"]],WT_E[T["sunSz"]],hour,min)
-    setSunSize(sunSize )
-
-    -- environmental effect
-    setFarClipDistance(getInterpolationValue(WT_S[T["farClp"]],WT_E[T["farClp"]],hour,min))
-    setFogDistance(getInterpolationValue(WT_S[T["fogSt"]],WT_E[T["fogSt"]],hour,min))
-
-    -- radiosity
-    --print("set radio")
-    PS2:setRadiosity(getInterpolationValue(WT_S[T["radiosityIntensity"]],WT_E[T["radiosityIntensity"]],hour,min))
-
-    --local blurRGB = getGradientInterpolationValue({WT_S[T["blurR"]],WT_S[T["blurG"]],WT_S[T["blurB"]]},{WT_E[T["blurR"]],WT_E[T["blurG"]],WT_E[T["blurB"]]},hour,min) 
-    --local blurA = getInterpolationValue(WT_S[T["blurAlpha"]],WT_E[T["blurAlpha"]],hour,min)
-    --PS2:setRadiosityBlendColor(blurRGB[1],blurRGB[2],blurRGB[3],100)
-    -- color filter 48
-    setColorFilter (WT_S[1], WT_S[2], WT_S[3],30, WT_S[1], WT_S[2], WT_S[3],30)
-    -- total 57
-    
-    --  water
-   
-    --local waterColor = getGradientInterpolationValue({WT_S[T["waterR"]],WT_S[T["waterG"]],WT_S[T["waterB"]]},{WT_E[T["waterR"]],WT_E[T["waterG"]],WT_E[T["waterB"]]},hour,min) 
-    --local waterAlpha = getInterpolationValue(WT_S[T["waterA"]],WT_E[T["waterA"]],hour,min)
-    --setWaterColor(waterColor[1],waterColor[2],waterColor[3],waterAlpha)
-    
-    --setColorFilter (WT_S[T["blurR"]], WT_S[T["blurG"]], WT_S[T["blurB"]],WT_S[T["blurAlpha"]], WT_S[T["blurR"]], WT_S[T["blurG"]], WT_S[T["blurB"]], WT_S[T["blurAlpha"]])
-end
---[[
-function setWeatherFromTimecyc(weather_id,hour,min) 
-    local WT = Timecyc[weather_id][time]
-    setSkyGradient(WT[10],WT[11],WT[12],WT[13],WT[14],WT[15])
-    setSunColor(WT[16],WT[17],WT[18],WT[19],WT[20],WT[21])
-    setSunSize(WT[22])
-    setWaterColor(WT[37],WT[38],WT[39],WT[40])
-    setFarClipDistance(WT[28])
-    setFogDistance(WT[29])
-end
-]]
-
-function setBlendWeatherFromTimecyc(weather_id) 
-    local from = Weather.blendData.from_weather
-    local to = Weather.blendData.to_weather
-    
-end
-function blendWeatherFromTimecyc(weather_id) 
-    local fromWeatherId = Weather.id
-    local toWeatherId = weather_id
-
-end
-
-function setTimecycWeather(id) 
-    id = tonumber(id)
-    if Timecyc[id] then
-        Weather.id = id
-    else
-        Weather.id = 0
-        outputChatBox("Invaild Weather ID!")
-    end
-end
-loadTimeCycle("timecyc_vcs.dat")
+addEventHandler( "onClientResourceStart",resourceRoot,function ()
+    loadTimeCycle("timecyc_vcs.dat")
+    addEventHandler("onClientRender",root,function()
+        local h,m = getTime()
+        local wea = getWeather()
+        updateSA(wea,h,m)
+    end,false,"low")
+end)
+--setWeather(1) 
+--setWeatherBlended(8) 

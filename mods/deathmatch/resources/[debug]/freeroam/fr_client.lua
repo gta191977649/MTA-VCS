@@ -1914,7 +1914,8 @@ function applyWeather(leaf)
 		end
 	end
 	--setWeather(leaf.id)
-	WEA:setTimecycWeather(leaf.id)
+	WEA:setWeather(leaf.id)
+	print(leaf.id)
 	closeWindow(wndWeather)
 	freezeTimeWeather = leaf.id
 end

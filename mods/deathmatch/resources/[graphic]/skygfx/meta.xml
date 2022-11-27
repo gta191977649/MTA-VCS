@@ -1,7 +1,69 @@
 <meta>
-    <script src="radiosity.lua" type="client"/>
-    <script src="main.lua" type="client"/>
+    <include resource="timecyc"/>
+    <include resource="custom_coronas"/>
+    
+    <oop>true</oop>
+    <script src="config.lua" type="client" cache="false"/>
+    <script src="lib.lua" type="client" cache="false"/>
+    <script src="math.lua" type="client" cache="false"/>
+    <script src="matrix.lua" type="client" cache="false"/>
+    <script src="rtpool.lua" type="client" cache="false"/>
+    <script src="fx/vehiclefx.lua" type="client" cache="false"/>
+    <script src="fx/rubbish.lua" type="client" cache="false"/>
+	<script src="fx/rotor/rotor_v2.lua" type="client" cache="false"/>
+    <script src="pipeline/utils.lua" type="client" cache="false"/>
+    <script src="pipeline/building.lua" type="client" cache="false"/>
+    <script src="pipeline/buildingSimplePS.lua" type="client" cache="false"/>
+    <script src="pipeline/vehiclePipe.lua" type="client" cache="false"/>
+    <script src="pipeline/postfx.lua" type="client" cache="false"/>
+    <script src="pipeline/worldPipe.lua" type="client" cache="false"/>
+    <script src="debug.lua" type="client" cache="false"/>
+    <script src="main.lua" type="client" cache="false"/>
+    <script src="export.lua" type="client" cache="false"/>
+	
+	
+    <file src="neo/CarReflectionMask.png" type="client"/>
+    <file src="txd/gameleaf01_64.png" type="client"/>
+    <file src="txd/gameleaf02_64.png" type="client"/>
+    <file src="txd/newspaper01_64.png" type="client"/>
+    <file src="txd/newspaper02_64.png" type="client"/>
+    <file src="txd/vehicleenvmap128.png" type="client"/>
+    <file src="txd/vehiclespecdot64.png" type="client"/>
+    <file src="txd/xvehicleenv128.png" type="client"/>
+    <file src="txd/coronaheadlightline.png" type="client"/>
+    <file src="txd/coronastar.png" type="client"/>
+    <file src="shader/mta-helper.fx" type="client"/>
+    <file src="shader/ps2CarFxVS.fx" type="client"/>
+    <file src="shader/ps2CarFxVSPS.fx" type="client"/>
+    <file src="shader/ps2CarFxVSPSEnv.fx" type="client"/>
+    <file src="shader/envCarPS.fx" type="client"/>
+    <file src="shader/grass.fx" type="client"/>
+    <file src="shader/gradingPS.fx" type="client"/>
+    <file src="shader/buildingSimplePS.fx" type="client"/>
+    <file src="shader/buildingSimplePSDual.fx" type="client"/>
+    <file src="shader/simpleStochasticPS.fx" type="client"/>
+    <file src="shader/ztest.fx" type="client"/>
+    <file src="shader/ps2BuildingVS.fx" type="client"/>
+    <file src="shader/ps2BuildingFxVS.fx" type="client"/>
+    <file src="shader/ps2BuildingVSDual.fx" type="client"/>
+    <file src="shader/blurPS.fx" type="client"/>
+    <file src="shader/radiosity.fx" type="client"/>
+    <file src="shader/addblend.fx" type="client"/>
+    <file src="shader/colorFilterPS.fx" type="client"/>
+    <file src="shader/ps2ColorBlend.fx" type="client"/>
+    <file src="shader/simplePS.fx" type="client"/>
+    <file src="shader/replace.fx" type="client"/>
+    <file src="shader/sun.fx" type="client"/>
+	<!-- mise fix -->
+	<file src="fx/rotor/model/rotor_gen_main.dff" type="client"/>
+    <file src="fx/rotor/model/rotor_gen_side.dff" type="client"/>
+    <file src="fx/rotor/model/rotor.txd" type="client"/>
+    <file src="fx/rotor/model/black64aa.dds" type="client"/>
+	<file src="fx/rotor/rotor.fx" cache="false"/>
+	<file src="models/texdb.txt" cache="false"/>
+	
+	
+    <export function="start" type="client"/>
+    <export function="stop" type="client"/>
 
-    <file src="radiosity.fx" type="client"/>
-    <file src="addBlend.fx" type="client"/>
 </meta>
