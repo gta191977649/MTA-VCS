@@ -92,6 +92,7 @@ function interpolate(a,b,fa,fb,isCurrent)
         weather.fogSt = interpolateValue(a[T["fogSt"]],b[T["fogSt"]],fa,fb)
         weather.farClp = interpolateValue(a[T["farClp"]],b[T["farClp"]],fa,fb)
         weather.radiosityLimit = interpolateValue(a[T["radiosityLimit"]],b[T["radiosityLimit"]],fa,fb)
+        weather.radiosityIntensity = interpolateValue(a[T["radiosityIntensity"]],b[T["radiosityIntensity"]],fa,fb)
 
     else -- interpolate from exiting
         weather.amb = interpolateRGB(a.amb, b.amb, fa, fb)
@@ -108,6 +109,7 @@ function interpolate(a,b,fa,fb,isCurrent)
         weather.fogSt = interpolateValue(a.fogSt, b.fogSt, fa,fb)
         weather.farClp = interpolateValue(a.farClp, b.farClp, fa,fb)
         weather.radiosityLimit = interpolateValue(a.radiosityLimit, b.radiosityLimit, fa,fb)
+        weather.radiosityIntensity = interpolateValue(a.radiosityIntensity, b.radiosityIntensity, fa,fb)
     end
     
     --[[
