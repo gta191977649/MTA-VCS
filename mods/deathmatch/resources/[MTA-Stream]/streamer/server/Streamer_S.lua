@@ -1,5 +1,6 @@
 debug.sethook(nil)
 
+SPAWN_POS = Vector3(-1403.518555,-835.960938,14.840349,46.146027)
 if CLEAN_SA_MAP then 
 	-- initial setup --
 	for i = 550, 20000 do
@@ -365,7 +366,7 @@ addEventHandler( "onResourceLoad", resourceRoot, onResourceLoad )
 
 function playerLoaded ( loadTime,resource )
 	print(getPlayerName(client),'Loaded '..resource..' In : '..(tonumber(loadTime)*0.01),'Secounds')
-	setElementPosition(client,-653.271484,592.206055,11.027187)
+	setElementPosition(client,SPAWN_POS)
 end
 addEventHandler( "onPlayerLoad", resourceRoot, playerLoaded )
 
