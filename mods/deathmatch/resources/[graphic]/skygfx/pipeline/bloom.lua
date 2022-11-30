@@ -79,9 +79,9 @@ function setEffectVariables()
     local v = Settings.var
     -- Bloom
     v.cutoff = 0.08
-    v.power = 1.88
-	v.blur = 0.9
-    v.bloom = 1.7
+    v.power = 2.5
+	v.blur = 0.5
+    --v.bloom = 1.5
     v.blendR = 204
     v.blendG = 153
     v.blendB = 130
@@ -89,9 +89,9 @@ function setEffectVariables()
 
 	-- Debugging
     v.PreviewEnable=0
-    v.PreviewPosY=0
+    v.PreviewPosY=100
     v.PreviewPosX=100
-    v.PreviewSize=70
+    v.PreviewSize=140
 end
 
 -----------------------------------------------------------------------------------
@@ -103,7 +103,9 @@ addEventHandler( "onClientHUDRender", root,
 		local v = Settings.var	
 		
         v.bloom = 1+(TIMECYC:getTimeCycleValue("radiosityIntensity") / 50)
-        print(v.bloom)
+        v.cutoff =(TIMECYC:getTimeCycleValue("radiosityLimit") / 200)
+        --print(v.bloom)
+        --print(v.cutoff)
         
 		-- Reset render target pool
 		RTPool.frameStart()

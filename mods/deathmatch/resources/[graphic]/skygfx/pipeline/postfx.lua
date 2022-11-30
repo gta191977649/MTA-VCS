@@ -56,7 +56,7 @@ function doRadiosity(intensityLimit,filterPasses,renderPasses,intensity)
 
     -- do radiosity    
     intensityLimit = intensityLimit/255.0;
-    intensity = intensity/255.0;
+    intensity = intensity /255.0;
     dxSetShaderValue( shaderRadiosityPS, "limit", intensityLimit )
     dxSetShaderValue( shaderRadiosityPS, "intensity", intensity )
     dxSetShaderValue( shaderRadiosityPS, "passes", renderPasses )
@@ -86,8 +86,11 @@ function doRadiosity(intensityLimit,filterPasses,renderPasses,intensity)
     dxDrawImage( 0,  0,  w, h, shaderRadiosityPS)
     rt = rt_radiosity
     dxSetRenderTarget()
-    dxSetShaderValue(shaderAddblend,"src",rt_radiosity)
-    dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,SKYGFX.radiosityIntensity))
+    dxSetBlendMode("modulate_add")
+    dxSetShaderValue(shaderAddblend,"src",rt)
+    --dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,SKYGFX.radiosityIntensity))
+    dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,intensity*255))
+    dxSetBlendMode("blend")
 end
 
 function MODULATE2X(r,g,b,a) 
@@ -107,8 +110,8 @@ function doColorFilter(pipeline,rgba1,rgba2)
     local r1,g1,b1,a1 = unpack(rgba1)
     local r2,g2,b2,a2 = unpack(rgba2)
     if pipeline == "PS2" then
-        --r1,g1,b1,a1 = MODULATE2X(r1,g1,b1,a1)
-        --r2,g2,b2,a2 = MODULATE2X(r2,g2,b2,a2)
+        -- r1,g1,b1,a1 = MODULATE2X(r1,g1,b1,a1)
+        -- r2,g2,b2,a2 = MODULATE2X(r2,g2,b2,a2)
     end
     --setColorFilter(r1,g1,b1,1,r2,g2,b2,1)
     --shaderColorFilterPS
@@ -170,7 +173,9 @@ function doColorGrading()
 end
 
 function initPostFx() 
-    resetColorFilter()
+    -- skip if not enabled trails effect
+    if not SKYGFX.trails then return end
+    initBloom()
     if SKYGFX.colorFilter ~= "PS2" then return end
     shaderBlurPS = dxCreateShader("shader/blurPS.fx", 0, 0, false)
     shaderRadiosityPS = dxCreateShader("shader/radiosity.fx", 0, 0, false)
@@ -183,7 +188,6 @@ function initPostFx()
     screenSource = dxCreateScreenSource ( width, height ) 
     screenSource_2 = dxCreateScreenSource ( width, height ) 
     screenSource_3 = dxCreateScreenSource ( width, height ) 
-    --resetColorFilter()
     setColorFilter(0,0,0,0,0,0,0,0)
     local offset_x = math.abs(SKYGFX.blurLeft + SKYGFX.blurRight) / 2
     local offset_y = math.abs(SKYGFX.blurTop + SKYGFX.blurBottom) / 2
@@ -229,8 +233,11 @@ function renderPostFX()
     RTPool.frameStart()
     DebugResults.frameStart()
     if SKYGFX.doRadiosity == true then
-        local radiosityIntensityLimit = SKYGFX.radiosityIntensityLimit == 0 and TIMECYC:getTimeCycleValue("radiosityLimit") or SKYGFX.radiosityIntensityLimit
-        doRadiosity(radiosityIntensityLimit,SKYGFX.radiosityFilterPasses,SKYGFX.radiosityRenderPasses,SKYGFX.radiosityIntensity)
+        --local radiosityIntensityLimit = SKYGFX.radiosityIntensityLimit == 0 and TIMECYC:getTimeCycleValue("radiosityLimit") or SKYGFX.radiosityIntensityLimit
+        --doRadiosity(radiosityIntensityLimit,SKYGFX.radiosityFilterPasses,SKYGFX.radiosityRenderPasses,SKYGFX.radiosityIntensity)
+        local radiosityIntensity = TIMECYC:getTimeCycleValue("radiosityIntensity")
+        local radiosityIntensityLimit = TIMECYC:getTimeCycleValue("radiosityLimit")
+        doRadiosity(radiosityIntensityLimit,SKYGFX.radiosityFilterPasses,SKYGFX.radiosityRenderPasses,radiosityIntensity)
     end
     
     

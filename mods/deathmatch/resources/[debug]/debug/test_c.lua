@@ -121,9 +121,18 @@ addCommandHandler("dev",
         UI:showTextBox("Dev mode on",3000)
     end
 )
+
+cor = 0
+addCommandHandler("cor",
+    function()
+        cor = cor == 0 and 2 or 0
+        setCoronaReflectionsEnabled(cor)
+        UI:showTextBox("Corona: "..cor,3000)
+    end
+)
 addCommandHandler("wea",
     function(_,id)
-        WEA:setTimecycWeather(id)
+        WEA:setWeather(id)
         UI:showTextBox("Weather Set.",3000)
     end
 )

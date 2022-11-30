@@ -71,9 +71,7 @@ function SKYGFX.start()
     initVehiclePiple()
     initPostFx()
     initWorldMiscFx()
-    if SKYGFX.trails then
-        initBloom()
-    end
+    
     if SKYGFX.fixRotor then 
         enableRotorPs2Fix()
     end

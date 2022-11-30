@@ -14,7 +14,7 @@ function doSunFX()
     local h,m = getTime()
     if h >= 5 and h <= 19 then
         local c1r, c1g, c1b, c2r, c2g, c2b = getSunColor()
-        local sunSize = getSunSize()
+        local sunSize = getSunSize() 
         dxSetShaderValue( sunShader, "sSunColor1", c1r / 255, c1g / 255, c1b / 255, 0  )
         dxSetShaderValue( sunShader, "sSunColor2", c2r / 255, c2g / 255, c2b / 255, 1  )
         dxSetShaderValue( sunShader, "sSunSize", sunSize  )

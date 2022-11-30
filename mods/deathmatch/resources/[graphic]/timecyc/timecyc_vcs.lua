@@ -48,8 +48,9 @@ function loadTimeCycle(filename)
                 Timecyc[weather_id] = {}
             end
             table.insert(Timecyc[weather_id],data)
-            --iprint(data)
+            print("hour",#Timecyc[weather_id])
         end 
+        
     end
     print("Total: ",weather_id)
 end
@@ -224,6 +225,7 @@ function setWeatherBlended(wea)
 end
 function setWeather(wea) 
     Weather.old =wea
+    Weather.new = wea
 end
 function getWeather() 
     return Weather.old,Weather.interpolation < 1 and Weather.new or nil
