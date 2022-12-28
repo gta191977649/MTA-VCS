@@ -202,7 +202,6 @@ function updateSA(weather_id,currentHour,currentMinute)
     setFogDistance(currentColours.fogSt)
     setFarClipDistance(currentColours.farClp)
     setWaterColor(currentColours.water[1],currentColours.water[2],currentColours.water[3],currentColours.water[4])
-    print(currentColours.water[4])
     Weather.data = currentColours
 
     -- update interpolation
