@@ -78,9 +78,9 @@ end
 function setEffectVariables()
     local v = Settings.var
     -- Bloom
-    v.cutoff = 0.08
-    v.power = 2.5
-	v.blur = 0.5
+    v.cutoff = 0.5
+    v.power = 2
+	v.blur = 0.8
     --v.bloom = 1.5
     v.blendR = 204
     v.blendG = 153
@@ -88,7 +88,7 @@ function setEffectVariables()
     v.blendA = 100
 
 	-- Debugging
-    v.PreviewEnable=0
+    v.PreviewEnable= SKYGFX.debugBloom
     v.PreviewPosY=100
     v.PreviewPosX=100
     v.PreviewSize=140
@@ -103,7 +103,7 @@ addEventHandler( "onClientHUDRender", root,
 		local v = Settings.var	
 		
         v.bloom = 1+(TIMECYC:getTimeCycleValue("radiosityIntensity") / 50)
-        v.cutoff =(TIMECYC:getTimeCycleValue("radiosityLimit") / 200)
+        --v.cutoff =1-(TIMECYC:getTimeCycleValue("radiosityLimit") / 200)
         --print(v.bloom)
         --print(v.cutoff)
         

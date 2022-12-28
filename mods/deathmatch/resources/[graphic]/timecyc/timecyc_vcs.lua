@@ -76,6 +76,7 @@ function interpolateRGBA(a1,b1,fa,fb)
 end
 
 function interpolate(a,b,fa,fb,isCurrent)
+   
     isCurrent = isCurrent or false
     local weather = {}
     if not isCurrent then -- interpolate direct from timecyc data
@@ -94,7 +95,8 @@ function interpolate(a,b,fa,fb,isCurrent)
         weather.farClp = interpolateValue(a[T["farClp"]],b[T["farClp"]],fa,fb)
         weather.radiosityLimit = interpolateValue(a[T["radiosityLimit"]],b[T["radiosityLimit"]],fa,fb)
         weather.radiosityIntensity = interpolateValue(a[T["radiosityIntensity"]],b[T["radiosityIntensity"]],fa,fb)
-
+        weather.water = interpolateRGBA({a[T["waterR"]],a[T["waterG"]],a[T["waterB"]],a[T["waterA"]]}, {b[T["waterR"]],b[T["waterG"]],b[T["waterB"]],b[T["waterA"]]}, fa, fb)
+      
     else -- interpolate from exiting
         weather.amb = interpolateRGB(a.amb, b.amb, fa, fb)
         weather.amb_obj = interpolateRGB(a.amb_obj, b.amb_obj, fa, fb)
@@ -111,6 +113,7 @@ function interpolate(a,b,fa,fb,isCurrent)
         weather.farClp = interpolateValue(a.farClp, b.farClp, fa,fb)
         weather.radiosityLimit = interpolateValue(a.radiosityLimit, b.radiosityLimit, fa,fb)
         weather.radiosityIntensity = interpolateValue(a.radiosityIntensity, b.radiosityIntensity, fa,fb)
+        weather.water = interpolateRGBA(a.water, b.water, fa, fb)
     end
     
     --[[
@@ -198,6 +201,8 @@ function updateSA(weather_id,currentHour,currentMinute)
     -- fog
     setFogDistance(currentColours.fogSt)
     setFarClipDistance(currentColours.farClp)
+    setWaterColor(currentColours.water[1],currentColours.water[2],currentColours.water[3],currentColours.water[4])
+    print(currentColours.water[4])
     Weather.data = currentColours
 
     -- update interpolation

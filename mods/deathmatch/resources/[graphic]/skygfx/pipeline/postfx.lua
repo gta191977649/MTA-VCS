@@ -88,7 +88,7 @@ function doRadiosity(intensityLimit,filterPasses,renderPasses,intensity)
     dxSetRenderTarget()
     dxSetBlendMode("modulate_add")
     dxSetShaderValue(shaderAddblend,"src",rt)
-    --dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,SKYGFX.radiosityIntensity))
+    --dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,50))
     dxDrawImage( 0,  0,  w, h, shaderAddblend,0,0,0,tocolor(255,255,255,intensity*255))
     dxSetBlendMode("blend")
 end
@@ -175,7 +175,7 @@ end
 function initPostFx() 
     -- skip if not enabled trails effect
     if not SKYGFX.trails then return end
-    initBloom()
+    
     if SKYGFX.colorFilter ~= "PS2" then return end
     shaderBlurPS = dxCreateShader("shader/blurPS.fx", 0, 0, false)
     shaderRadiosityPS = dxCreateShader("shader/radiosity.fx", 0, 0, false)
@@ -225,7 +225,7 @@ function initPostFx()
     dxSetShaderValue( shaderGradingPS, "redGrade",r)
     dxSetShaderValue( shaderGradingPS, "greenGrade",g)
     dxSetShaderValue( shaderGradingPS, "blueGrade",b)
-    
+    initBloom()
 end
 
 function renderPostFX() 

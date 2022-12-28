@@ -117,6 +117,8 @@ SKYGFX = {
     stochastic = true, 
     building_dist = 100,
     trails = true, -- toogle trails effect, e.g. bloom
+    -- debug bloom
+    debugBloom = 0
    
 }
 w, h = guiGetScreenSize()
