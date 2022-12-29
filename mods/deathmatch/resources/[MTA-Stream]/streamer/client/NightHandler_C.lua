@@ -3,11 +3,16 @@ off = {}
 nightElements = {}
 switchTimes = {}
 
+night_shader = dxCreateShader( "client/nightobject.fx" ) 
 -- Functions --
 function addNightElement(name,model,ona,offa)
 	nightElements[name] = nightElements[name] or {}
 	switchTimes[name] = {on=ona,off=offa}
 	table.insert(nightElements[name],model)
+	if night_shader then
+		engineApplyShaderToWorldTexture(night_shader, name)
+	end
+	
 	--[[
 	for i,v in pairs(getElementsByType('object')) do
 		if getElementData(v,'id') == name then

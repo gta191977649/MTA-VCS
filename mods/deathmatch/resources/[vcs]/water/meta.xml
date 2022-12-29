@@ -2,22 +2,7 @@
     <min_mta_version client="1.5.4" server="1.5.4" />
 
     <script src="water.lua" type="client"/>
-
-    <!-- 
-    <script src="c_main.lua" type="client"/>
-    <script src="c_switch.lua" type="client"/>
-    
-    <file src="images/waterClear_NRM.dds" type="client"/>
-    <file src="images/cube_env256.dds" type="client"/>
-    <file src="images/water.png" type="client"/>
-    
-    <file src="fx/img_refract_MRT_DB.fx" type="client" />
-	<file src="fx/img_refract_NoMRT_DB.fx" type="client" />
-	<file src="fx/img_refract_MRT_NoDB.fx" type="client" />
-	<file src="fx/img_refract_NoMRT_NoDB.fx" type="client" />
-	<file src="fx/tex_water_MRT_DB.fx" type="client" />
-	<file src="fx/tex_water_NoMRT_DB.fx" type="client" />
-	<file src="fx/tex_water_MRT_NoDB.fx" type="client" />
-	<file src="fx/tex_water_NoMRT_NoDB.fx" type="client" />
-    -->
+	<file src="fx/water.fx" type="client" />
+	<file src="waterclear256.png" type="client" />
+   
 </meta>

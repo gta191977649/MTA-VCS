@@ -4,10 +4,10 @@ cache = {}
 resource = {}
 mapdata = {}
 model_cache = {}
-
 function onResourceStart(resourcea)
 	setOcclusionsEnabled(false)
 	triggerServerEvent ( "onResourceLoad", root, getResourceName(resourcea))
+	
 end
 addEventHandler( "onClientResourceStart", root,onResourceStart)
 
@@ -61,7 +61,7 @@ function loadModel(data,resourceName)
 			--]]
 			local drawdist = MAX_DRAW_DIST and 1000 or tonumber(data.draw)
 			if drawdist >= 1000 then -- should be lods
-				drawdist = drawdist > 300 and 300 or drawdist
+				drawdist = 300
 			else -- if is normal obj
 				drawdist = drawdist > 170 and 170 or drawdist -- from MTA Source
 			end

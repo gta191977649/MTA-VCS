@@ -9,6 +9,7 @@
 	<script type="client" src="client/NightHandler_C.lua" />
 	<script type="client" src="client/WindowHandler_C.lua" />
 	<file type="client" src="client/WindowHandler_C.fx" />
+	<file type="client" src="client/nightobject.fx" />
 	
 	<script type="server" src="async.lua" />
 	<script type="server" src="server/ID Handler_S.lua" />
