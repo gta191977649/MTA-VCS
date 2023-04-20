@@ -49,6 +49,7 @@ end
 
 
 function init() 
+    print("2dfx initlization")
     for k,v in ipairs(getElementsByType("object")) do
         local name = getElementID(v)
         applyLightShadowPatch(v,name) 
@@ -106,26 +107,11 @@ addEventHandler("onClientRender",root,function()
        
     end
 end)
---[[
-setTimer(function()
-    h,m = getTime()
-    if h > 7 and h < 21 then -- day
-        if not IS_NIGHT then 
 
-            lightSwitch(false)
-            print("turn on light")
-            IS_NIGHT = true
-        end
-    else
-        if IS_NIGHT then 
-            lightSwitch(true)
-            print("turn off light")
-            IS_NIGHT = false
-        end
-    end
-end,1000,0)
-]]
-init()
+addEventHandler( "MTAStream_onClientLoaded", root, function() 
+    outputChatBox("2dfx load.")
+    init() 
+end)
 addCommandHandler("lightoff",function() 
     lightSwitch(false)
 end)

@@ -120,6 +120,7 @@ function loadObject(data,mapname)
 		-- deal with night obj
 		if flag ~= "SA_PROP" and data.info.turnOn ~= nil then
 			engineSetModelVisibleTime(id,data.info.turnOn,data.info.turnOff)
+			engineSetModelFlag(id,"addictive",true)
 			addNightElement(data.model,object,tonumber(data.info.turnOn),tonumber(data.info.turnOff))
 		end
 
@@ -206,6 +207,7 @@ function loadMap(ipls,ides,offset,mapname)
 
 end
 addEvent( "MTAStream_ClientLoad", true )
+addEvent( "MTAStream_onClientLoaded", true )
 addEventHandler( "MTAStream_ClientLoad", localPlayer, loadMap )
 
 
@@ -214,8 +216,8 @@ function loadedFunction (resourceName)
 	triggerServerEvent ( "onPlayerLoad", root, tostring(endTickCount),resourceName )
 	createTrayNotification( 'You have finished loading : '..resourceName, "info" )
 	cache = {}
-	FX:init()
 	engineRestreamWorld ()
+	triggerClientEvent("MTAStream_onClientLoaded",root)
 end
 
 function setClientMapDimension(map,dim) 

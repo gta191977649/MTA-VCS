@@ -1,0 +1,9 @@
+<meta>
+	<info type="script" name="MTA-Stream" author="Wolfe" description="MTA-Stream map loading system" version="1.0" />
+	
+	<script type="client" src="timeobj.lua" />
+    <file type="client" src="mta-helper.fx" />
+    <file type="client" src="nightobject.fx" />
+	
+
+</meta>

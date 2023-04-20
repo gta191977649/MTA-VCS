@@ -3,15 +3,18 @@ off = {}
 nightElements = {}
 switchTimes = {}
 
-night_shader = dxCreateShader( "client/nightobject.fx" ) 
+--night_shader = dxCreateShader( "client/nightobject.fx" ) 
 -- Functions --
 function addNightElement(name,model,ona,offa)
 	nightElements[name] = nightElements[name] or {}
 	switchTimes[name] = {on=ona,off=offa}
 	table.insert(nightElements[name],model)
-	if night_shader then
-		engineApplyShaderToWorldTexture(night_shader, name)
-	end
+	-- if night_shader then
+	-- 	local model_name = "*".. name.."*"
+	-- 	engineApplyShaderToWorldTexture(night_shader,model_name,nil,false)
+	-- 	outputChatBox(model_name)
+	-- end
+	
 	
 	--[[
 	for i,v in pairs(getElementsByType('object')) do
@@ -22,6 +25,15 @@ function addNightElement(name,model,ona,offa)
 	]]
 end
 
+addCommandHandler("fixnight",function() 
+	local shader = dxCreateShader( "client/nightobject.fx" ) 
+	for k,v in pairs(nightElements) do 
+		local model_name = "*".. k.."*"
+		engineApplyShaderToWorldTexture(shader,model_name)
+		outputChatBox(model_name)
+	end
+	
+end)
 function isWithinTimeRange(start,stop)
 	hour = getTime()
 
