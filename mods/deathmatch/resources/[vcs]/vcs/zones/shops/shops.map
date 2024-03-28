@@ -1,0 +1,32 @@
+<map>
+	<object id="int_shop" model="8585" posX="-1733.14" posY="633.409" posZ="1151.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="mal_viento" model="8585" posX="-1733.23" posY="633.16" posZ="1151.703" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="viento_shad" model="8585" posX="-1733.23" posY="633.16" posZ="1151.703" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="shop_shad" model="8585" posX="-1733.23" posY="633.16" posZ="1151.79" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="int_shop" model="8585" posX="-1733.14" posY="633.409" posZ="1161.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="shop_shad" model="8585" posX="-1733.23" posY="633.16" posZ="161.79" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="nalgas_shad" model="8585" posX="-1733.2" posY="632.928" posZ="1161.703" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="nalgas_granders" model="8585" posX="-1733.17" posY="632.927" posZ="1161.703" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="int_shop01" model="8585" posX="-1733.57" posY="635.442" posZ="1171.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="verdi" model="8585" posX="-1733.86" posY="635.697" posZ="1171.703" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="verdi_shad" model="8585" posX="-1733.86" posY="635.697" posZ="1171.683" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="shop_shad01" model="8585" posX="-1733.57" posY="635.442" posZ="1171.804" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="shop_shad01" model="8585" posX="-1733.57" posY="635.442" posZ="1181.804" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="2" dimension="-1"></object>
+	<object id="int_shop01" model="8585" posX="-1733.57" posY="635.442" posZ="1181.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="2" dimension="-1"></object>
+	<object id="electric_shad" model="8585" posX="-1733.9" posY="635.652" posZ="1181.695" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="2" dimension="-1"></object>
+	<object id="electric_boulevard" model="8585" posX="-1733.9" posY="635.652" posZ="1181.701" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="2" dimension="-1"></object>
+	<object id="shop_shad01" model="8585" posX="-1733.57" posY="635.442" posZ="1191.804" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+	<object id="int_shop01" model="8585" posX="-1733.57" posY="635.442" posZ="1191.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+	<object id="mal_viento01" model="8585" posX="-1733.32" posY="635.799" posZ="1191.693" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+	<object id="viento01_shad" model="8585" posX="-1733.32" posY="635.799" posZ="1191.693" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+	<object id="int_shop02" model="8585" posX="-1730.88" posY="638.845" posZ="1201.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="5" dimension="-1"></object>
+	<object id="shop_shad02" model="8585" posX="-1730.88" posY="638.844" posZ="1201.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="5" dimension="-1"></object>
+	<object id="fidl_shad" model="8585" posX="-1731.03" posY="639.578" posZ="1201.837" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="5" dimension="-1"></object>
+	<object id="fidl" model="8585" posX="-1731.03" posY="639.578" posZ="1201.837" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="5" dimension="-1"></object>
+	<object id="hermit" model="8585" posX="-1732.01" posY="639.052" posZ="1211.86" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="6" dimension="-1"></object>
+	<object id="hermit_shad" model="8585" posX="-1732.01" posY="639.052" posZ="1211.86" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="6" dimension="-1"></object>
+	<object id="int_shop02" model="8585" posX="-1731.87" posY="638.845" posZ="1211.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="6" dimension="-1"></object>
+	<object id="shop_shad02" model="8585" posX="-1731.87" posY="638.844" posZ="1211.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="6" dimension="-1"></object>
+	<object id="int_ammu-nation" model="8585" posX="-676.803" posY="1205.12" posZ="12.9437" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+	<object id="int_ammu-nationA" model="8585" posX="-676.803" posY="1205.12" posZ="12.9437" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
+</map>

@@ -1,0 +1,123 @@
+<zoneDefinitions>
+	<definition id="trashcan" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_white" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_orange" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_yellow" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_green" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_blue" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="drug_red" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="keycard" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="pizzabox" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_gun2" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_gun1" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_civ2" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_civ1" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_frame" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_top" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_upright" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_upleft" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_downleft" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tar_downright" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="plc_stinger" zone="multiobj" dff="plc_stinger" col="plc_stinger" txd="plc_stinger" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="chairsntable" zone="multiobj" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="satdishbig" zone="multiobj" default="true" lod="nil" lodDistance="140" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="satdishsml" zone="multiobj" default="true" lod="nil" lodDistance="140" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="cntrlrsac1" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="beachball" zone="multiobj" dff="beachball" col="beachball" txd="beachball" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="fish1single" zone="multiobj" dff="fish1single" col="fish1single" txd="fish1" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="fish2single" zone="multiobj" dff="fish2single" col="fish2single" txd="fish2" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="fish3s" zone="multiobj" dff="fish3s" col="fish3s" txd="fish3" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="jellyfish" zone="multiobj" dff="jellyfish" col="jellyfish" txd="jellyfish1" lod="nil" lodDistance="40" flags="140" doubleSided="true" breakable="false"></definition>
+	<definition id="jellyfish01" zone="multiobj" dff="jellyfish01" col="jellyfish01" txd="jellyfish2" lod="nil" lodDistance="40" flags="140" doubleSided="true" breakable="false"></definition>
+	<definition id="fish3single" zone="multiobj" dff="fish3single" col="fish3single" txd="fish3" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="fish1s" zone="multiobj" dff="fish1s" col="fish1s" txd="fish1" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="fish2s" zone="multiobj" dff="fish2s" col="fish2s" txd="fish2" lod="nil" lodDistance="40" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="dolphin" zone="multiobj" dff="dolphin" col="dolphin" txd="dolphin" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="shark" zone="multiobj" dff="shark" col="shark" txd="shark" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="turtle" zone="multiobj" dff="turtle" col="turtle" txd="turtle" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="sandcastle1" zone="multiobj" default="true" lod="nil" lodDistance="20" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="sandcastle2" zone="multiobj" default="true" lod="nil" lodDistance="20" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="submarine" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_firehose_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_alarm1_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_alarm2_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_securecam1_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_aircon1_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_aircon1_02" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_vent1_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_vent2_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_vent3_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_securecam2_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_aircon3_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox1_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox2_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox3_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_alarm3_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox4_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox5_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_cablebox6_01" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="waterjump2" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="waterjump1" zone="multiobj" default="true" lod="nil" lodDistance="240" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="landjump" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="landjump2" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_aircon1dbl" zone="multiobj" default="true" lod="nil" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="rcbomb" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="od_pat_hutb" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="od_pat_hut" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="od_vbnet" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="beachtowel04" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="beachtowel03" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="beachtowel02" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="beachtowel01" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lotion" zone="multiobj" default="true" lod="nil" lodDistance="10" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lounge_wood_up" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lounge_towel_up" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lounge_wood_dn" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="od_groyne01" zone="multiobj" default="true" lod="nil" lodDistance="200" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wglasssmash" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="1028" doubleSided="true" breakable="false"></definition>
+	<definition id="petrolcanm" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="od_copwindows" zone="multiobj" default="true" lod="nil" lodDistance="30" flags="516" doubleSided="true" breakable="false"></definition>
+	<definition id="fencehaiti" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="fencehaitism" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="dynamite" zone="multiobj" default="true" lod="nil" lodDistance="40" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="waterjumpx2" zone="multiobj" default="true" lod="nil" lodDistance="240" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Esc_step" zone="multiobj" default="true" lod="nil" lodDistance="15" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="ramp" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="nt_roadblockCI" zone="multiobj" default="true" lod="nil" lodDistance="145" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="swivelchair_B" zone="multiobj" default="true" lod="nil" lodDistance="35" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propwinebotl2" zone="multiobj" dff="propwinebotl2" col="propwinebotl2" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propashtray1" zone="multiobj" dff="propashtray1" col="propashtray1" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propbeerglass1" zone="multiobj" dff="propbeerglass1" col="propbeerglass1" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propwineglass1" zone="multiobj" dff="propwineglass1" col="propwineglass1" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propvodkabotl1" zone="multiobj" dff="propvodkabotl1" col="propvodkabotl1" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propwinebotl1" zone="multiobj" dff="propwinebotl1" col="propwinebotl1" txd="propbarstuff" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="propcollecttable" zone="multiobj" default="true" lod="nil" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="swivelchair_A" zone="multiobj" default="true" lod="nil" lodDistance="35" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Gasgrenade" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roadsign" zone="multiobj" default="true" lod="nil" lodDistance="120" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="lodxrefhse1" zone="multiobj" dff="lodxrefhse1" col="lodxrefhse1" txd="wshxreflod" lod="nil" lodDistance="700" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wshxrefhse1" zone="multiobj" default="true" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="washgaspump" zone="multiobj" default="true" lod="nil" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wshxrefhse2" zone="multiobj" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="lodxrefhse2" zone="multiobj" dff="lodxrefhse2" col="lodxrefhse2" txd="wshxreflod" lod="nil" lodDistance="700" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="chairsntableml" zone="multiobj" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="LODjumbo_01" zone="multiobj" dff="LODjumbo_01" col="LODjumbo_01" txd="ap_LODbit" lod="nil" lodDistance="900" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_learjet1_01" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_jumbo_01" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="portakabin" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="blockpallet" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="petrolpumpnew" zone="multiobj" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roofbit1" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roofbit2" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roofbit3" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roofbit4" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roofbit5" zone="multiobj" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff18" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff12" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff13" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff14" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff15" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roofstuff16" zone="multiobj" default="true" lod="nil" lodDistance="76" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Esc_step8" zone="multiobj" default="true" lod="nil" lodDistance="15" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_redballoon" zone="multiobj" dff="ndc_redballoon" col="ndc_redballoon" txd="ndc_redballoon" lod="nil" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

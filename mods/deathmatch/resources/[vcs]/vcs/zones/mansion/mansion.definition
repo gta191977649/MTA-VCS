@@ -1,0 +1,31 @@
+<zoneDefinitions>
+	<definition id="mansion_a1" zone="mansion" dff="mansion_a1" col="mansion_a1" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a2" zone="mansion" dff="mansion_a2" col="mansion_a2" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a3" zone="mansion" dff="mansion_a3" col="mansion_a3" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a4" zone="mansion" dff="mansion_a4" col="mansion_a4" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a5" zone="mansion" dff="mansion_a5" col="mansion_a5" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a6" zone="mansion" dff="mansion_a6" col="mansion_a6" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a7" zone="mansion" dff="mansion_a7" col="mansion_a7" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a8" zone="mansion" dff="mansion_a8" col="mansion_a8" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_a9" zone="mansion" dff="mansion_a9" col="mansion_a9" txd="mansion_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_b1" zone="mansion" dff="mansion_b1" col="mansion_b1" txd="mansion_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_b2" zone="mansion" dff="mansion_b2" col="mansion_b2" txd="mansion_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_b3" zone="mansion" dff="mansion_b3" col="mansion_b3" txd="mansion_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_b4" zone="mansion" dff="mansion_b4" col="mansion_b4" txd="mansion_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g1" zone="mansion" dff="mansion_g1" col="mansion_g1" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g2" zone="mansion" dff="mansion_g2" col="mansion_g2" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g3" zone="mansion" dff="mansion_g3" col="mansion_g3" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g4" zone="mansion" dff="mansion_g4" col="mansion_g4" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g5" zone="mansion" dff="mansion_g5" col="mansion_g5" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g6" zone="mansion" dff="mansion_g6" col="mansion_g6" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g7" zone="mansion" dff="mansion_g7" col="mansion_g7" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_g8" zone="mansion" dff="mansion_g8" col="mansion_g8" txd="mansion_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_m1" zone="mansion" dff="mansion_m1" col="mansion_m1" txd="mansion_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_m2" zone="mansion" dff="mansion_m2" col="mansion_m2" txd="mansion_m" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_m3" zone="mansion" dff="mansion_m3" col="mansion_m3" txd="mansion_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_veg1" zone="mansion" dff="mansion_veg1" col="mansion_veg1" txd="mansion_veg" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_veg2" zone="mansion" dff="mansion_veg2" col="mansion_veg2" txd="mansion_veg" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_veg3" zone="mansion" dff="mansion_veg3" col="mansion_veg3" txd="mansion_veg" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_veg4" zone="mansion" dff="mansion_veg4" col="mansion_veg4" txd="mansion_veg" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="mansion_veg5" zone="mansion" dff="mansion_veg5" col="mansion_veg5" txd="mansion_veg" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

@@ -1,0 +1,249 @@
+<zoneDefinitions>
+	<definition id="budka" zone="dynamic2" dff="budka" col="budka" txd="SHIT" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ramp_new" zone="dynamic2" dff="ramp_new" col="ramp_new" txd="ramp2" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="junk_tyre" zone="dynamic2" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt10_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt13_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt14_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt01_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt02_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt03_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt04_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt05_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt06_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt07_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt08_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="BinNt09_LA" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="chillidogcart" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="icescart_prop" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="noodlecart_prop" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dumpster3" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dumpster2" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dumpster" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_PHONE_KIOSK2" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_WASTEBIN" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_O2Tanks" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_SHTROLLY" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_TRAFFIC_LIGHT4" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="32768" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_TRAFFIC_LIGHT5" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="32768" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_TRAFFIC_LIGHT3" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_AIRCON" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_AIRCON_FAN" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FRUITCRATE1" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FRUITCRATE2" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FRUITCRATE3" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_SKIP_Rubbish" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BIN1" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BUSH_PROP3" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BUSH_PROP2" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FIREBIN_(L0)" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_PHONE_KIOSK" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BUSH_PROP" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BIG_SKIP1" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FIREHYDRANT" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_POSTBOX" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BLOCKER_BENCH" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_WHEELCHAIR1" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_FLAME_Drum_(F)" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_HIPPO_BIN" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dump2_LOW" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="traincross1" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="traincross2" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="tramstop_SF" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="ContainerCrane_03" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ContainerCrane_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ContainerCrane_04" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="MagnoCrane_02" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="MagnoCrane_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="MagnoCrane_04" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="MagnoCrane_03" zone="dynamic2" dff="MagnoCrane_03" col="MagnoCrane_03" txd="Cranes_DYN2_CJ" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_M_04" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_M_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_M_02" zone="dynamic2" dff="TwrCrane_M_02" col="TwrCrane_M_02" txd="Cranes_DYN2" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ContainerCrane_02" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_M_03" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_S_04" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_S_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_S_02" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_S_03" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_L_04" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_L_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_L_02" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="TwrCrane_L_03" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtainerCrane_04" zone="dynamic2" dff="LODtainerCrane_04" col="LODtainerCrane_04" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtainerCrane_03" zone="dynamic2" dff="LODtainerCrane_03" col="LODtainerCrane_03" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_01" zone="dynamic2" dff="LODnoCrane_01" col="LODnoCrane_01" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_02" zone="dynamic2" dff="LODnoCrane_02" col="LODnoCrane_02" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_03" zone="dynamic2" dff="LODnoCrane_03" col="LODnoCrane_03" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_S_03" zone="dynamic2" dff="LODCrane_S_03" col="LODCrane_S_03" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_S_04" zone="dynamic2" dff="LODCrane_S_04" col="LODCrane_S_04" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_M_01" zone="dynamic2" dff="LODCrane_M_01" col="LODCrane_M_01" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_M_04" zone="dynamic2" dff="LODCrane_M_04" col="LODCrane_M_04" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_L_03" zone="dynamic2" dff="LODCrane_L_03" col="LODCrane_L_03" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_L_02" zone="dynamic2" dff="LODCrane_L_02" col="LODCrane_L_02" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_R_WOOD_1" zone="dynamic2" dff="DYN_F_R_WOOD_1" col="DYN_F_R_WOOD_1" txd="BREAK_F_w" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_WOOD_2" zone="dynamic2" dff="DYN_F_WOOD_2" col="DYN_F_WOOD_2" txd="BREAK_FENCE1" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dump1_LOW" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_R_WOOD_1b" zone="dynamic2" dff="DYN_F_R_WOOD_1b" col="DYN_F_R_WOOD_1b" txd="BREAK_F_w" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_MESH_1" zone="dynamic2" dff="DYN_MESH_1" col="DYN_MESH_1" txd="BREAK_FEN_mesh2" lod="nil" lodDistance="65" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_MESH_2" zone="dynamic2" dff="DYN_MESH_2" col="DYN_MESH_2" txd="BREAK_FEN_mesh" lod="nil" lodDistance="75" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_MESH_3" zone="dynamic2" dff="DYN_MESH_3" col="DYN_MESH_3" txd="BREAK_F_mesh" lod="nil" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_COR_SHEET" zone="dynamic2" dff="DYN_COR_SHEET" col="DYN_COR_SHEET" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_DUMPSTER" zone="dynamic2" dff="DYN_DUMPSTER" col="DYN_DUMPSTER" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_UNIT" zone="dynamic2" dff="DYN_UNIT" col="DYN_UNIT" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_CUPBOARD" zone="dynamic2" dff="DYN_CUPBOARD" col="DYN_CUPBOARD" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_WOOD_3" zone="dynamic2" dff="DYN_F_WOOD_3" col="DYN_F_WOOD_3" txd="BREAK_F_w" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_IRON_1" zone="dynamic2" dff="DYN_F_IRON_1" col="DYN_F_IRON_1" txd="BREAK_FENCE3" lod="nil" lodDistance="60" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_AIRCON" zone="dynamic2" dff="DYN_AIRCON" col="DYN_AIRCON" txd="CJ_street_Props" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BOXES" zone="dynamic2" dff="DYN_BOXES" col="DYN_BOXES" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_5" zone="dynamic2" dff="DYN_ROADBARRIER_5" col="DYN_ROADBARRIER_5" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_4" zone="dynamic2" dff="DYN_ROADBARRIER_4" col="DYN_ROADBARRIER_4" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_2" zone="dynamic2" dff="DYN_ROADBARRIER_2" col="DYN_ROADBARRIER_2" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_3" zone="dynamic2" dff="DYN_ROADBARRIER_3" col="DYN_ROADBARRIER_3" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD" zone="dynamic2" dff="DYN_SCAFFOLD" col="DYN_SCAFFOLD" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_ROADBARRIER" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_LADDER" zone="dynamic2" dff="DYN_LADDER" col="DYN_LADDER" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_TV" zone="dynamic2" dff="DYN_TV" col="DYN_TV" txd="BREAK_STREET1" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_Dump1_LOW01" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BOX_PILE" zone="dynamic2" dff="DYN_BOX_PILE" col="DYN_BOX_PILE" txd="BREAK_S_BOX" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_TABLE_2" zone="dynamic2" dff="DYN_TABLE_2" col="DYN_TABLE_2" txd="BREAK_S_bins" lod="nil" lodDistance="50" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_TABLE_1" zone="dynamic2" dff="DYN_TABLE_1" col="DYN_TABLE_1" txd="BREAK_S_bins" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_5a" zone="dynamic2" dff="DYN_ROADBARRIER_5a" col="DYN_ROADBARRIER_5a" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_5b" zone="dynamic2" dff="DYN_ROADBARRIER_5b" col="DYN_ROADBARRIER_5b" txd="BREAK_ROAD" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_2" zone="dynamic2" dff="DYN_SCAFFOLD_2" col="DYN_SCAFFOLD_2" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_LADDER_2" zone="dynamic2" dff="DYN_LADDER_2" col="DYN_LADDER_2" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BOX_PILE_2" zone="dynamic2" dff="DYN_BOX_PILE_2" col="DYN_BOX_PILE_2" txd="BREAK_S_BOX" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_DUMPSTER_1" zone="dynamic2" dff="DYN_DUMPSTER_1" col="DYN_DUMPSTER_1" txd="CJ_BINS2" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BOX_PILE_3" zone="dynamic2" dff="DYN_BOX_PILE_3" col="DYN_BOX_PILE_3" txd="BREAK_S_BOX" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BOX_PILE_4" zone="dynamic2" dff="DYN_BOX_PILE_4" col="DYN_BOX_PILE_4" txd="BREAK_S_BOX" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_FIREBIN0" zone="dynamic2" dff="DYN_FIREBIN0" col="DYN_FIREBIN0" txd="CJ_BINS" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_STREET_SIGN_1" zone="dynamic2" dff="DYN_STREET_SIGN_1" col="DYN_STREET_SIGN_1" txd="BREAK_S_fillers" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_STREET_SIGN_2" zone="dynamic2" dff="DYN_STREET_SIGN_2" col="DYN_STREET_SIGN_2" txd="BREAK_S_sf" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_FF_STAND" zone="dynamic2" dff="DYN_FF_STAND" col="DYN_FF_STAND" txd="BREAK_S_fillers" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_R_WOOD_4" zone="dynamic2" dff="DYN_F_R_WOOD_4" col="DYN_F_R_WOOD_4" txd="BREAK_FENCE1" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_MESH_4" zone="dynamic2" dff="DYN_MESH_4" col="DYN_MESH_4" txd="BREAK_F_mesh" lod="nil" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_CRATE_1" zone="dynamic2" dff="DYN_CRATE_1" col="DYN_CRATE_1" txd="BREAK_Pallet" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_CRATE_2" zone="dynamic2" dff="DYN_CRATE_2" col="DYN_CRATE_2" txd="BREAK_Pallet" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_CRATE_3" zone="dynamic2" dff="DYN_CRATE_3" col="DYN_CRATE_3" txd="BREAK_Pallet" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_COUP" zone="dynamic2" dff="DYN_COUP" col="DYN_COUP" txd="BREAK_STREET2" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_OUTHOUSE" zone="dynamic2" dff="DYN_OUTHOUSE" col="DYN_OUTHOUSE" txd="BREAK_STREET2" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_H_BALE1" zone="dynamic2" dff="DYN_H_BALE1" col="DYN_H_BALE1" txd="BREAK_FARM" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_H_BALE2" zone="dynamic2" dff="DYN_H_BALE2" col="DYN_H_BALE2" txd="BREAK_FARM" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GLASS" zone="dynamic2" dff="DYN_GLASS" col="DYN_GLASS" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_R_WOOD_2" zone="dynamic2" dff="DYN_F_R_WOOD_2" col="DYN_F_R_WOOD_2" txd="B_FEN_WOOD" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_OUTHOUSE_2" zone="dynamic2" dff="DYN_OUTHOUSE_2" col="DYN_OUTHOUSE_2" txd="BREAK_STREET2" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_CART" zone="dynamic2" dff="DYN_CART" col="DYN_CART" txd="Cart" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ROADBARRIER_6" zone="dynamic2" dff="DYN_ROADBARRIER_6" col="DYN_ROADBARRIER_6" txd="BREAK_ROAD_WS" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_F_R_WOOD_3" zone="dynamic2" dff="DYN_F_R_WOOD_3" col="DYN_F_R_WOOD_3" txd="B_FEN_WOOD" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_LIFE_P" zone="dynamic2" dff="DYN_LIFE_P" col="DYN_LIFE_P" txd="BREAK_S_fillers" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_woodpile" zone="dynamic2" dff="DYN_woodpile" col="DYN_woodpile" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WOODPILE2" zone="dynamic2" dff="DYN_WOODPILE2" col="DYN_WOODPILE2" txd="BREAK_FARM" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_3" zone="dynamic2" dff="DYN_SCAFFOLD_3" col="DYN_SCAFFOLD_3" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_4" zone="dynamic2" dff="DYN_SCAFFOLD_4" col="DYN_SCAFFOLD_4" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_5" zone="dynamic2" dff="DYN_SCAFFOLD_5" col="DYN_SCAFFOLD_5" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_3b" zone="dynamic2" dff="DYN_SCAFFOLD_3b" col="DYN_SCAFFOLD_3b" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_MESH_05" zone="dynamic2" dff="DYN_MESH_05" col="DYN_MESH_05" txd="BREAK_FEN_mesh" lod="nil" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFFOLD_4b" zone="dynamic2" dff="DYN_SCAFFOLD_4b" col="DYN_SCAFFOLD_4b" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_3" zone="dynamic2" dff="DYN_PORCH_3" col="DYN_PORCH_3" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_2" zone="dynamic2" dff="DYN_PORCH_2" col="DYN_PORCH_2" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_1" zone="dynamic2" dff="DYN_PORCH_1" col="DYN_PORCH_1" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_1b" zone="dynamic2" dff="DYN_PORCH_1b" col="DYN_PORCH_1b" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_2b" zone="dynamic2" dff="DYN_PORCH_2b" col="DYN_PORCH_2b" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_3b" zone="dynamic2" dff="DYN_PORCH_3b" col="DYN_PORCH_3b" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_4" zone="dynamic2" dff="DYN_PORCH_4" col="DYN_PORCH_4" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_PORCH_4b" zone="dynamic2" dff="DYN_PORCH_4b" col="DYN_PORCH_4b" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_post_box" zone="dynamic2" dff="DYN_post_box" col="DYN_post_box" txd="BREAK_GARDEN" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GAZ_1" zone="dynamic2" dff="DYN_GAZ_1" col="DYN_GAZ_1" txd="gazebo" lod="nil" lodDistance="80" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GAZ_2" zone="dynamic2" dff="DYN_GAZ_2" col="DYN_GAZ_2" txd="gazebo" lod="nil" lodDistance="80" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BAR_B_Q" zone="dynamic2" dff="DYN_BAR_B_Q" col="DYN_BAR_B_Q" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GARRAGE1" zone="dynamic2" dff="DYN_GARRAGE1" col="DYN_GARRAGE1" txd="gazebo" lod="nil" lodDistance="80" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GARRAGE2" zone="dynamic2" dff="DYN_GARRAGE2" col="DYN_GARRAGE2" txd="BREAK_STREET2" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BEAR_BOTTLE" zone="dynamic2" dff="CJ_BEAR_BOTTLE" col="CJ_BEAR_BOTTLE" txd="PLAYER_PROPS" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_CIGGY" zone="dynamic2" dff="CJ_CIGGY" col="CJ_CIGGY" txd="PLAYER_PROPS" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_BEER_1" zone="dynamic2" dff="DYN_BEER_1" col="DYN_BEER_1" txd="BREAK_BAR" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_1" zone="dynamic2" dff="DYN_WINE_1" col="DYN_WINE_1" txd="BREAK_BAR" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SPIRIT_1" zone="dynamic2" dff="DYN_SPIRIT_1" col="DYN_SPIRIT_1" txd="DYN_OBJECTS" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SALE_POST" zone="dynamic2" dff="DYN_SALE_POST" col="DYN_SALE_POST" txd="BREAK_STREET2" lod="nil" lodDistance="1" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_01" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorINT01" zone="dynamic2" dff="Gen_doorINT01" col="Gen_doorINT01" txd="int_doors" lod="nil" lodDistance="50" flags="32" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorINT02" zone="dynamic2" dff="Gen_doorINT02" col="Gen_doorINT02" txd="int_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorSHOP01" zone="dynamic2" dff="Gen_doorSHOP01" col="Gen_doorSHOP01" txd="SHOP_doors" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorINT03" zone="dynamic2" dff="Gen_doorINT03" col="Gen_doorINT03" txd="int_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT01" zone="dynamic2" dff="Gen_doorEXT01" col="Gen_doorEXT01" txd="ext_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorSHOP02" zone="dynamic2" dff="Gen_doorSHOP02" col="Gen_doorSHOP02" txd="int_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT02" zone="dynamic2" dff="Gen_doorEXT02" col="Gen_doorEXT02" txd="ext_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT03" zone="dynamic2" dff="Gen_doorEXT03" col="Gen_doorEXT03" txd="ext_doors_old" lod="nil" lodDistance="50" flags="32" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorINT05" zone="dynamic2" dff="Gen_doorINT05" col="Gen_doorINT05" txd="int_doors(CJ)" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT05" zone="dynamic2" dff="Gen_doorEXT05" col="Gen_doorEXT05" txd="SHOP_doors" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT04" zone="dynamic2" dff="Gen_doorEXT04" col="Gen_doorEXT04" txd="ext_doors_old" lod="nil" lodDistance="80" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorINT04" zone="dynamic2" dff="Gen_doorINT04" col="Gen_doorINT04" txd="int_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_RAMP" zone="dynamic2" dff="DYN_RAMP" col="DYN_RAMP" txd="RAMP1" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT06" zone="dynamic2" dff="Gen_doorEXT06" col="Gen_doorEXT06" txd="ext_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT07" zone="dynamic2" dff="Gen_doorEXT07" col="Gen_doorEXT07" txd="ext_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT08" zone="dynamic2" dff="Gen_doorEXT08" col="Gen_doorEXT08" txd="ext_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT09" zone="dynamic2" dff="Gen_doorEXT09" col="Gen_doorEXT09" txd="ext_doors" lod="nil" lodDistance="50" flags="160" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_GARAGE_DOOR" zone="dynamic2" dff="DYN_GARAGE_DOOR" col="DYN_GARAGE_DOOR" txd="DYN_GARAGE" lod="nil" lodDistance="100" flags="2176" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_3" zone="dynamic2" dff="DYN_WINE_3" col="DYN_WINE_3" txd="BREAK_BAR" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_ASHTRY" zone="dynamic2" dff="DYN_ASHTRY" col="DYN_ASHTRY" txd="DYN_OBJECTS" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SPIRIT_02" zone="dynamic2" dff="DYN_SPIRIT_02" col="DYN_SPIRIT_02" txd="DYN_OBJECTS" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_03" zone="dynamic2" dff="DYN_WINE_03" col="DYN_WINE_03" txd="BREAK_BAR" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SWEETIE_TRAY" zone="dynamic2" dff="DYN_SWEETIE_TRAY" col="DYN_SWEETIE_TRAY" txd="DYN_OBJECTS" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_FF_TILL" zone="dynamic2" dff="DYN_FF_TILL" col="DYN_FF_TILL" txd="CJ_till_break" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SLOT_PROP" zone="dynamic2" dff="DYN_SLOT_PROP" col="DYN_SLOT_PROP" txd="dsfs" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_TABLE_03" zone="dynamic2" dff="DYN_TABLE_03" col="DYN_TABLE_03" txd="BREAK_S_bins" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_BREAK" zone="dynamic2" dff="DYN_WINE_BREAK" col="DYN_WINE_BREAK" txd="BREAK_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_TV_2" zone="dynamic2" dff="DYN_TV_2" col="DYN_TV_2" txd="DYN_ELEC" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFF_cover" zone="dynamic2" dff="DYN_SCAFF_cover" col="DYN_SCAFF_cover" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_BOUNCE" zone="dynamic2" dff="DYN_WINE_BOUNCE" col="DYN_WINE_BOUNCE" txd="BREAK_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_SCAFF2_cover" zone="dynamic2" dff="DYN_SCAFF2_cover" col="DYN_SCAFF2_cover" txd="BREAK_scaffold" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorSHOP3" zone="dynamic2" dff="Gen_doorSHOP3" col="Gen_doorSHOP3" txd="SHOP_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT10" zone="dynamic2" dff="Gen_doorEXT10" col="Gen_doorEXT10" txd="SHOP_INT_D" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_front" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_kilo" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_rifa" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_rollin" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_seville" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_temple" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_vagos" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="tag_azteca" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="1048580" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT11" zone="dynamic2" dff="Gen_doorEXT11" col="Gen_doorEXT11" txd="SHOP_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT12" zone="dynamic2" dff="Gen_doorEXT12" col="Gen_doorEXT12" txd="NEW_SHOP_door" lod="nil" lodDistance="50" flags="2097184" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_WIN_POP2" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT14" zone="dynamic2" dff="Gen_doorEXT14" col="Gen_doorEXT14" txd="ext_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT15" zone="dynamic2" dff="Gen_doorEXT15" col="Gen_doorEXT15" txd="ext_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT16" zone="dynamic2" dff="Gen_doorEXT16" col="Gen_doorEXT16" txd="NEW_SHOP_door" lod="nil" lodDistance="50" flags="2097184" doubleSided="true" breakable="false"></definition>
+	<definition id="sl_dtdoor1" zone="dynamic2" dff="sl_dtdoor1" col="sl_dtdoor1" txd="SHOP_doors2" lod="nil" lodDistance="50" flags="164" doubleSided="true" breakable="false"></definition>
+	<definition id="lamotsig1_LACJ" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="vegasmotsignCJ" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BEER_TAPS_1" zone="dynamic2" dff="CJ_BEER_TAPS_1" col="CJ_BEER_TAPS_1" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BEER_TAPS_2" zone="dynamic2" dff="CJ_BEER_TAPS_2" col="CJ_BEER_TAPS_2" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BEER_B_2" zone="dynamic2" dff="CJ_BEER_B_2" col="CJ_BEER_B_2" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_BEER_B_1" zone="dynamic2" dff="CJ_BEER_B_1" col="CJ_BEER_B_1" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_B_OPTIC1" zone="dynamic2" dff="CJ_B_OPTIC1" col="CJ_B_OPTIC1" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_PINT_GLASS" zone="dynamic2" dff="CJ_PINT_GLASS" col="CJ_PINT_GLASS" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_B_PISH_T" zone="dynamic2" dff="CJ_B_PISH_T" col="CJ_B_PISH_T" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_DRIP_TRAY" zone="dynamic2" dff="CJ_DRIP_TRAY" col="CJ_DRIP_TRAY" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_ASHTRAY_b" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_MONEY_BAG" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WINE_BIG" zone="dynamic2" dff="DYN_WINE_BIG" col="DYN_WINE_BIG" txd="CJ_BAR" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="vegasmashfnce" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="vegasmashfnce_Gate" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_WATER_BARRIER" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT17" zone="dynamic2" dff="Gen_doorEXT17" col="Gen_doorEXT17" txd="DAVE_DOOR_2c" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT18" zone="dynamic2" dff="Gen_doorEXT18" col="Gen_doorEXT18" txd="DAVE_DOOR_2a" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT19" zone="dynamic2" dff="Gen_doorEXT19" col="Gen_doorEXT19" txd="DAVE_DOOR_2b" lod="nil" lodDistance="30" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_CARDBRD_PICKUP" zone="dynamic2" default="true" lod="nil" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT7_11L" zone="dynamic2" dff="Gen_doorEXT7_11L" col="Gen_doorEXT7_11L" txd="7_11_door" lod="nil" lodDistance="50" flags="2097184" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_doorEXT7_11R" zone="dynamic2" dff="Gen_doorEXT7_11R" col="Gen_doorEXT7_11R" txd="7_11_door" lod="nil" lodDistance="50" flags="2097184" doubleSided="true" breakable="false"></definition>
+	<definition id="ab_jetseat" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ab_jetseat_hrest" zone="dynamic2" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ab_jetLiteGlass" zone="dynamic2" dff="ab_jetLiteGlass" col="ab_jetLiteGlass" txd="ab_jetlite" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ab_jetLite" zone="dynamic2" dff="ab_jetLite" col="ab_jetLite" txd="ab_jetlite" lod="nil" lodDistance="30" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_WS_DOOR" zone="dynamic2" dff="CJ_WS_DOOR" col="CJ_WS_DOOR" txd="WS_D1" lod="nil" lodDistance="50" flags="2097184" doubleSided="true" breakable="false"></definition>
+	<definition id="Gen_wardrobe" zone="dynamic2" default="true" lod="nil" lodDistance="50" flags="32" doubleSided="true" breakable="false"></definition>
+	<definition id="chinalamp_sf" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ADAM_V_DOOR" zone="dynamic2" dff="ADAM_V_DOOR" col="ADAM_V_DOOR" txd="adam_v_doort" lod="nil" lodDistance="60" flags="32" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_NOODLE_3" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_NOODLE_1" zone="dynamic2" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CJ_AIR_TROLLY" zone="dynamic2" default="true" lod="nil" lodDistance="30" flags="2097284" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

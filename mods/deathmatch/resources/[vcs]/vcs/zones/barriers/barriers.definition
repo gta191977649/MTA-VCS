@@ -1,0 +1,38 @@
+<zoneDefinitions>
+	<definition id="bar_gatebar01" zone="barriers" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_gatebox01" zone="barriers" dff="bar_gatebox01" col="bar_gatebox01" txd="CJ_BARR_SET_1" lod="nil" lodDistance="60" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="barrierturn" zone="barriers" default="true" lod="nil" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Electricgate" zone="barriers" default="true" lod="nil" lodDistance="101" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="fencesmallb" zone="barriers" default="true" lod="nil" lodDistance="52" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="subwaygate" zone="barriers" default="true" lod="nil" lodDistance="60" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="tunnelentrance" zone="barriers" default="true" lod="nil" lodDistance="250" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="sub_roadbarrier" zone="barriers" default="true" lod="nil" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="tall_fence" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="Columbiangate" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="phils_compnd_gate" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="newtowerdoor1" zone="barriers" dff="newtowerdoor1" col="newtowerdoor1" txd="towerdoor" lod="nil" lodDistance="290" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="sub_roadright" zone="barriers" default="true" lod="nil" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="sub_roadleft" zone="barriers" default="true" lod="nil" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="airportgate" zone="barriers" default="true" lod="nil" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="helix_barrier" zone="barriers" default="true" lod="nil" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="fenceshit" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="fenceshit3" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="fenceshit2" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="gate_autoR" zone="barriers" default="true" lod="nil" lodDistance="200" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="gate_autoL" zone="barriers" default="true" lod="nil" lodDistance="200" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="elecfence_BAR" zone="barriers" default="true" lod="nil" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_apgate" zone="barriers" default="true" lod="nil" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ac_apgate" zone="barriers" default="true" lod="nil" lodDistance="50" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_barrier12" zone="barriers" default="true" lod="nil" lodDistance="200" flags="2101252" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_barriergate1" zone="barriers" default="true" lod="nil" lodDistance="61" flags="4100" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_barrier10b" zone="barriers" default="true" lod="nil" lodDistance="49" flags="4100" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_barrier10" zone="barriers" default="true" lod="nil" lodDistance="73" flags="4100" doubleSided="true" breakable="false"></definition>
+	<definition id="lhouse_barrier2" zone="barriers" default="true" lod="nil" lodDistance="56" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="bar_barrier16" zone="barriers" default="true" lod="nil" lodDistance="56" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="lhouse_barrier1" zone="barriers" default="true" lod="nil" lodDistance="56" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="lhouse_barrier3" zone="barriers" default="true" lod="nil" lodDistance="56" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="Gdyn_barrier17" zone="barriers" dff="Gdyn_barrier17" col="Gdyn_barrier17" txd="metalbarrier_CJ" lod="nil" lodDistance="56" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="ED_BLOCKDOCKS" zone="barriers" dff="ED_BLOCKDOCKS" col="ED_BLOCKDOCKS" txd="vcs_roadblocks" lod="nil" lodDistance="280" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ED_BLOCKGOLF" zone="barriers" dff="ED_BLOCKGOLF" col="ED_BLOCKGOLF" txd="vcs_roadblocks" lod="nil" lodDistance="280" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ED_BLOCKPRAWN" zone="barriers" dff="ED_BLOCKPRAWN" col="ED_BLOCKPRAWN" txd="vcs_roadblocks" lod="nil" lodDistance="280" flags="0" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>
