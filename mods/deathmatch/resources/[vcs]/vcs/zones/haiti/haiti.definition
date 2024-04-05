@@ -1,14 +1,14 @@
 <zoneDefinitions>
 	<definition id="lou_int" zone="haiti" dff="lou_int" col="lou_int" txd="lou_int" lod="nil" lodDistance="300" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="lou_intA" zone="haiti" dff="lou_intA" col="lou_intA" txd="lou_intalpha" lod="nil" lodDistance="300" flags="2097388" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house06" zone="haiti" dff="LOD_house06" col="LOD_house06" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house07" zone="haiti" dff="LOD_house07" col="LOD_house07" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house08" zone="haiti" dff="LOD_house08" col="LOD_house08" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house09" zone="haiti" dff="LOD_house09" col="LOD_house09" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtistation01" zone="haiti" dff="LODtistation01" col="LODtistation01" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house03" zone="haiti" dff="LOD_house03" col="LOD_house03" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house04" zone="haiti" dff="LOD_house04" col="LOD_house04" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house05" zone="haiti" dff="LOD_house05" col="LOD_house05" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house06" zone="haiti" dff="LOD_house06" col="LOD_house06" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house07" zone="haiti" dff="LOD_house07" col="LOD_house07" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house08" zone="haiti" dff="LOD_house08" col="LOD_house08" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house09" zone="haiti" dff="LOD_house09" col="LOD_house09" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtistation01" zone="haiti" dff="LODtistation01" col="LODtistation01" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house03" zone="haiti" dff="LOD_house03" col="LOD_house03" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house04" zone="haiti" dff="LOD_house04" col="LOD_house04" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house05" zone="haiti" dff="LOD_house05" col="LOD_house05" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="lh_crushers09" zone="haiti" dff="lh_crushers09" col="lh_crushers09" txd="junkjard" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="lh_crushers08" zone="haiti" dff="lh_crushers08" col="lh_crushers08" txd="junkjard" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="junk_fence01" zone="haiti" dff="junk_fence01" col="junk_fence01" txd="junkjard" lod="nil" lodDistance="450" flags="2097228" doubleSided="true" breakable="false"></definition>
@@ -105,47 +105,47 @@
 	<definition id="wh_prop04" zone="haiti" dff="wh_prop04" col="wh_prop04" txd="ph_warehouse" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="ph_wh_int" zone="haiti" dff="ph_wh_int" col="ph_wh_int" txd="ph_warehouse" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="ph_wh_alpha" zone="haiti" dff="ph_wh_alpha" col="ph_wh_alpha" txd="ph_warehouse" lod="nil" lodDistance="450" flags="2097228" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcoast04" zone="haiti" dff="LODcoast04" col="LODcoast04" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtlehacoast05" zone="haiti" dff="LODtlehacoast05" col="LODtlehacoast05" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODhafinrd" zone="haiti" dff="LODhafinrd" col="LODhafinrd" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODti1rd" zone="haiti" dff="LODti1rd" col="LODti1rd" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODti2rd" zone="haiti" dff="LODti2rd" col="LODti2rd" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODharoada6" zone="haiti" dff="LODharoada6" col="LODharoada6" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODharoada9" zone="haiti" dff="LODharoada9" col="LODharoada9" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODharoada8" zone="haiti" dff="LODharoada8" col="LODharoada8" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODroadnew" zone="haiti" dff="LODroadnew" col="LODroadnew" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlhaitibuilding07" zone="haiti" dff="LODlhaitibuilding07" col="LODlhaitibuilding07" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODita1" zone="haiti" dff="LODita1" col="LODita1" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODssbitsjm" zone="haiti" dff="LODssbitsjm" col="LODssbitsjm" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODer2" zone="haiti" dff="LODer2" col="LODer2" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtiroadbuild" zone="haiti" dff="LODtiroadbuild" col="LODtiroadbuild" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtibuilding01" zone="haiti" dff="LODtibuilding01" col="LODtibuilding01" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_shop" zone="haiti" dff="LOD_shop" col="LOD_shop" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtipaynspray" zone="haiti" dff="LODtipaynspray" col="LODtipaynspray" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODgstoreext" zone="haiti" dff="LODgstoreext" col="LODgstoreext" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtiskyt" zone="haiti" dff="LODtiskyt" col="LODtiskyt" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODnd04" zone="haiti" dff="LODnd04" col="LODnd04" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODticent" zone="haiti" dff="LODticent" col="LODticent" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlhaitibuilding09" zone="haiti" dff="LODlhaitibuilding09" col="LODlhaitibuilding09" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODhitbuild1a" zone="haiti" dff="LODhitbuild1a" col="LODhitbuild1a" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODhitbuild1aa" zone="haiti" dff="LODhitbuild1aa" col="LODhitbuild1aa" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODprintworks" zone="haiti" dff="LODprintworks" col="LODprintworks" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODgroundplane" zone="haiti" dff="LODgroundplane" col="LODgroundplane" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcoastfirst" zone="haiti" dff="LODcoastfirst" col="LODcoastfirst" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODwh_ext" zone="haiti" dff="LODwh_ext" col="LODwh_ext" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcoast1" zone="haiti" dff="LODcoast1" col="LODcoast1" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlhaitibuilding02" zone="haiti" dff="LODlhaitibuilding02" col="LODlhaitibuilding02" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODitsnip" zone="haiti" dff="LODitsnip" col="LODitsnip" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODhaiblockc1" zone="haiti" dff="LODhaiblockc1" col="LODhaiblockc1" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcoast2" zone="haiti" dff="LODcoast2" col="LODcoast2" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcrushbn" zone="haiti" dff="LODcrushbn" col="LODcrushbn" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcrushju" zone="haiti" dff="LODcrushju" col="LODcrushju" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcrushmnf" zone="haiti" dff="LODcrushmnf" col="LODcrushmnf" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcrushers14" zone="haiti" dff="LODcrushers14" col="LODcrushers14" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODcrushers08" zone="haiti" dff="LODcrushers08" col="LODcrushers08" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODti_bridge" zone="haiti" dff="LODti_bridge" col="LODti_bridge" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODti_adv01" zone="haiti" dff="LODti_adv01" col="LODti_adv01" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LODti_adv02" zone="haiti" dff="LODti_adv02" col="LODti_adv02" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house01" zone="haiti" dff="LOD_house01" col="LOD_house01" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="LOD_house02" zone="haiti" dff="LOD_house02" col="LOD_house02" txd="haiti_LOD" lod="nil" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcoast04" zone="haiti" dff="LODcoast04" col="LODcoast04" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtlehacoast05" zone="haiti" dff="LODtlehacoast05" col="LODtlehacoast05" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODhafinrd" zone="haiti" dff="LODhafinrd" col="LODhafinrd" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODti1rd" zone="haiti" dff="LODti1rd" col="LODti1rd" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODti2rd" zone="haiti" dff="LODti2rd" col="LODti2rd" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODharoada6" zone="haiti" dff="LODharoada6" col="LODharoada6" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODharoada9" zone="haiti" dff="LODharoada9" col="LODharoada9" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODharoada8" zone="haiti" dff="LODharoada8" col="LODharoada8" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODroadnew" zone="haiti" dff="LODroadnew" col="LODroadnew" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlhaitibuilding07" zone="haiti" dff="LODlhaitibuilding07" col="LODlhaitibuilding07" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODita1" zone="haiti" dff="LODita1" col="LODita1" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODssbitsjm" zone="haiti" dff="LODssbitsjm" col="LODssbitsjm" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODer2" zone="haiti" dff="LODer2" col="LODer2" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtiroadbuild" zone="haiti" dff="LODtiroadbuild" col="LODtiroadbuild" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtibuilding01" zone="haiti" dff="LODtibuilding01" col="LODtibuilding01" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_shop" zone="haiti" dff="LOD_shop" col="LOD_shop" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtipaynspray" zone="haiti" dff="LODtipaynspray" col="LODtipaynspray" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODgstoreext" zone="haiti" dff="LODgstoreext" col="LODgstoreext" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtiskyt" zone="haiti" dff="LODtiskyt" col="LODtiskyt" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnd04" zone="haiti" dff="LODnd04" col="LODnd04" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODticent" zone="haiti" dff="LODticent" col="LODticent" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlhaitibuilding09" zone="haiti" dff="LODlhaitibuilding09" col="LODlhaitibuilding09" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODhitbuild1a" zone="haiti" dff="LODhitbuild1a" col="LODhitbuild1a" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODhitbuild1aa" zone="haiti" dff="LODhitbuild1aa" col="LODhitbuild1aa" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODprintworks" zone="haiti" dff="LODprintworks" col="LODprintworks" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODgroundplane" zone="haiti" dff="LODgroundplane" col="LODgroundplane" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcoastfirst" zone="haiti" dff="LODcoastfirst" col="LODcoastfirst" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODwh_ext" zone="haiti" dff="LODwh_ext" col="LODwh_ext" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcoast1" zone="haiti" dff="LODcoast1" col="LODcoast1" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlhaitibuilding02" zone="haiti" dff="LODlhaitibuilding02" col="LODlhaitibuilding02" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODitsnip" zone="haiti" dff="LODitsnip" col="LODitsnip" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODhaiblockc1" zone="haiti" dff="LODhaiblockc1" col="LODhaiblockc1" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcoast2" zone="haiti" dff="LODcoast2" col="LODcoast2" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcrushbn" zone="haiti" dff="LODcrushbn" col="LODcrushbn" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcrushju" zone="haiti" dff="LODcrushju" col="LODcrushju" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcrushmnf" zone="haiti" dff="LODcrushmnf" col="LODcrushmnf" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcrushers14" zone="haiti" dff="LODcrushers14" col="LODcrushers14" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODcrushers08" zone="haiti" dff="LODcrushers08" col="LODcrushers08" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODti_bridge" zone="haiti" dff="LODti_bridge" col="LODti_bridge" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODti_adv01" zone="haiti" dff="LODti_adv01" col="LODti_adv01" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LODti_adv02" zone="haiti" dff="LODti_adv02" col="LODti_adv02" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house01" zone="haiti" dff="LOD_house01" col="LOD_house01" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="LOD_house02" zone="haiti" dff="LOD_house02" col="LOD_house02" txd="haiti_LOD" lod="true" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

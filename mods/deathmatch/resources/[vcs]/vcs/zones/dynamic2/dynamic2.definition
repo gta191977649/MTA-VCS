@@ -70,17 +70,17 @@
 	<definition id="TwrCrane_L_01" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="TwrCrane_L_02" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
 	<definition id="TwrCrane_L_03" zone="dynamic2" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtainerCrane_04" zone="dynamic2" dff="LODtainerCrane_04" col="LODtainerCrane_04" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODtainerCrane_03" zone="dynamic2" dff="LODtainerCrane_03" col="LODtainerCrane_03" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODnoCrane_01" zone="dynamic2" dff="LODnoCrane_01" col="LODnoCrane_01" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODnoCrane_02" zone="dynamic2" dff="LODnoCrane_02" col="LODnoCrane_02" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODnoCrane_03" zone="dynamic2" dff="LODnoCrane_03" col="LODnoCrane_03" txd="LODcranes_DYN2_CJ" lod="nil" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_S_03" zone="dynamic2" dff="LODCrane_S_03" col="LODCrane_S_03" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_S_04" zone="dynamic2" dff="LODCrane_S_04" col="LODCrane_S_04" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_M_01" zone="dynamic2" dff="LODCrane_M_01" col="LODCrane_M_01" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_M_04" zone="dynamic2" dff="LODCrane_M_04" col="LODCrane_M_04" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_L_03" zone="dynamic2" dff="LODCrane_L_03" col="LODCrane_L_03" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODCrane_L_02" zone="dynamic2" dff="LODCrane_L_02" col="LODCrane_L_02" txd="LODcranes_DYN2" lod="nil" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtainerCrane_04" zone="dynamic2" dff="LODtainerCrane_04" col="LODtainerCrane_04" txd="LODcranes_DYN2_CJ" lod="true" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODtainerCrane_03" zone="dynamic2" dff="LODtainerCrane_03" col="LODtainerCrane_03" txd="LODcranes_DYN2_CJ" lod="true" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_01" zone="dynamic2" dff="LODnoCrane_01" col="LODnoCrane_01" txd="LODcranes_DYN2_CJ" lod="true" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_02" zone="dynamic2" dff="LODnoCrane_02" col="LODnoCrane_02" txd="LODcranes_DYN2_CJ" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODnoCrane_03" zone="dynamic2" dff="LODnoCrane_03" col="LODnoCrane_03" txd="LODcranes_DYN2_CJ" lod="true" lodDistance="700" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_S_03" zone="dynamic2" dff="LODCrane_S_03" col="LODCrane_S_03" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_S_04" zone="dynamic2" dff="LODCrane_S_04" col="LODCrane_S_04" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_M_01" zone="dynamic2" dff="LODCrane_M_01" col="LODCrane_M_01" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_M_04" zone="dynamic2" dff="LODCrane_M_04" col="LODCrane_M_04" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_L_03" zone="dynamic2" dff="LODCrane_L_03" col="LODCrane_L_03" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODCrane_L_02" zone="dynamic2" dff="LODCrane_L_02" col="LODCrane_L_02" txd="LODcranes_DYN2" lod="true" lodDistance="700" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="DYN_F_R_WOOD_1" zone="dynamic2" dff="DYN_F_R_WOOD_1" col="DYN_F_R_WOOD_1" txd="BREAK_F_w" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="DYN_F_WOOD_2" zone="dynamic2" dff="DYN_F_WOOD_2" col="DYN_F_WOOD_2" txd="BREAK_FENCE1" lod="nil" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="CJ_Dump1_LOW" zone="dynamic2" default="true" lod="nil" lodDistance="70" flags="0" doubleSided="true" breakable="false"></definition>

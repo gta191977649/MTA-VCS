@@ -101,7 +101,7 @@
 	<definition id="wshxrefhse2" zone="multiobj" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="lodxrefhse2" zone="multiobj" dff="lodxrefhse2" col="lodxrefhse2" txd="wshxreflod" lod="nil" lodDistance="700" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="chairsntableml" zone="multiobj" default="true" lod="nil" lodDistance="70" flags="128" doubleSided="true" breakable="false"></definition>
-	<definition id="LODjumbo_01" zone="multiobj" dff="LODjumbo_01" col="LODjumbo_01" txd="ap_LODbit" lod="nil" lodDistance="900" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODjumbo_01" zone="multiobj" dff="LODjumbo_01" col="LODjumbo_01" txd="ap_LODbit" lod="true" lodDistance="900" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="ap_learjet1_01" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="ap_jumbo_01" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="portakabin" zone="multiobj" default="true" lod="nil" lodDistance="150" flags="2097152" doubleSided="true" breakable="false"></definition>

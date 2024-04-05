@@ -67,14 +67,14 @@
 	<definition id="Mpostbox1" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="2097280" doubleSided="true" breakable="false"></definition>
 	<definition id="BillBd1" zone="dynamic" default="true" lod="nil" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="BillBd3" zone="dynamic" default="true" lod="nil" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlBd2" zone="dynamic" dff="LODlBd2" col="LODlBd2" txd="BillBrd" lod="nil" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd2" zone="dynamic" dff="LODlBd2" col="LODlBd2" txd="BillBrd" lod="true" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
 	<definition id="MTraffic4" zone="dynamic" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="MTraffic3" zone="dynamic" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="BlackBag1" zone="dynamic" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="BlackBag2" zone="dynamic" default="true" lod="nil" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlBd3" zone="dynamic" dff="LODlBd3" col="LODlBd3" txd="BillBrd" lod="nil" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd3" zone="dynamic" dff="LODlBd3" col="LODlBd3" txd="BillBrd" lod="true" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
 	<definition id="BillBd2" zone="dynamic" default="true" lod="nil" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlBd1" zone="dynamic" dff="LODlBd1" col="LODlBd1" txd="BillBrd" lod="nil" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd1" zone="dynamic" dff="LODlBd1" col="LODlBd1" txd="BillBrd" lod="true" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
 	<definition id="parkingmeter" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="parkingmeterg" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="gunbox" zone="dynamic" default="true" lod="nil" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
@@ -132,7 +132,7 @@
 	<definition id="ws_roadwarning_02" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="ws_roadwarning_03" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="ws_roadwarning_04" zone="dynamic" default="true" lod="nil" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODlBrd" zone="dynamic" dff="LODlBrd" col="LODlBrd" txd="BillBrd" lod="nil" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBrd" zone="dynamic" dff="LODlBrd" col="LODlBrd" txd="BillBrd" lod="true" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
 	<definition id="cj_ext_sprunk" zone="dynamic" dff="cj_ext_sprunk" col="cj_ext_sprunk" txd="cj_ext_vend" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="cj_ext_candy" zone="dynamic" dff="cj_ext_candy" col="cj_ext_candy" txd="cj_ext_vend2" lod="nil" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="cj_juice_can" zone="dynamic" dff="cj_juice_can" col="cj_juice_can" txd="juice" lod="nil" lodDistance="36" flags="0" doubleSided="true" breakable="false"></definition>

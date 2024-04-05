@@ -25,23 +25,23 @@
 	<definition id="star_A25" zone="starisl" dff="star_A25" col="star_A25" txd="starisl" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="star_A26" zone="starisl" dff="star_A26" col="star_A26" txd="starisl" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
 	<definition id="star_A27" zone="starisl" dff="star_A27" col="star_A27" txd="starisl" lod="nil" lodDistance="450" flags="2097157" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A1" zone="starisl" dff="LODr_A1" col="LODr_A1" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A2" zone="starisl" dff="LODr_A2" col="LODr_A2" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A3" zone="starisl" dff="LODr_A3" col="LODr_A3" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A4" zone="starisl" dff="LODr_A4" col="LODr_A4" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A5" zone="starisl" dff="LODr_A5" col="LODr_A5" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A6" zone="starisl" dff="LODr_A6" col="LODr_A6" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A7" zone="starisl" dff="LODr_A7" col="LODr_A7" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A8" zone="starisl" dff="LODr_A8" col="LODr_A8" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A17" zone="starisl" dff="LODr_A17" col="LODr_A17" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A19" zone="starisl" dff="LODr_A19" col="LODr_A19" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A26" zone="starisl" dff="LODr_A26" col="LODr_A26" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A12" zone="starisl" dff="LODr_A12" col="LODr_A12" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A13" zone="starisl" dff="LODr_A13" col="LODr_A13" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A14" zone="starisl" dff="LODr_A14" col="LODr_A14" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A22" zone="starisl" dff="LODr_A22" col="LODr_A22" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A27" zone="starisl" dff="LODr_A27" col="LODr_A27" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODr_A21" zone="starisl" dff="LODr_A21" col="LODr_A21" txd="star_LOD" lod="nil" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A1" zone="starisl" dff="LODr_A1" col="LODr_A1" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A2" zone="starisl" dff="LODr_A2" col="LODr_A2" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A3" zone="starisl" dff="LODr_A3" col="LODr_A3" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A4" zone="starisl" dff="LODr_A4" col="LODr_A4" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A5" zone="starisl" dff="LODr_A5" col="LODr_A5" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A6" zone="starisl" dff="LODr_A6" col="LODr_A6" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A7" zone="starisl" dff="LODr_A7" col="LODr_A7" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A8" zone="starisl" dff="LODr_A8" col="LODr_A8" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A17" zone="starisl" dff="LODr_A17" col="LODr_A17" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A19" zone="starisl" dff="LODr_A19" col="LODr_A19" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A26" zone="starisl" dff="LODr_A26" col="LODr_A26" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A12" zone="starisl" dff="LODr_A12" col="LODr_A12" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A13" zone="starisl" dff="LODr_A13" col="LODr_A13" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A14" zone="starisl" dff="LODr_A14" col="LODr_A14" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A22" zone="starisl" dff="LODr_A22" col="LODr_A22" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A27" zone="starisl" dff="LODr_A27" col="LODr_A27" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODr_A21" zone="starisl" dff="LODr_A21" col="LODr_A21" txd="star_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="star_A21_alpha" zone="starisl" dff="star_A21_alpha" col="star_A21_alpha" txd="starisl" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="star_A28" zone="starisl" dff="star_A28" col="star_A28" txd="starisl" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
 	<definition id="star_A29" zone="starisl" dff="star_A29" col="star_A29" txd="starisl" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>

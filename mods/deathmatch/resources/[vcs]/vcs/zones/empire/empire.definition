@@ -35,12 +35,12 @@
 	<definition id="eb_prot_3_B" zone="empire" dff="eb_prot_3_B" col="eb_prot_3_B" txd="business" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="eb_rob_3_B" zone="empire" dff="eb_rob_3_B" col="eb_rob_3_B" txd="business" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="eb_smug_3_B" zone="empire" dff="eb_smug_3_B" col="eb_smug_3_B" txd="business" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpros_1_C" zone="empire" dff="LODpros_1_C" col="LODpros_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdrug_1_C" zone="empire" dff="LODdrug_1_C" col="LODdrug_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODloan_1_C" zone="empire" dff="LODloan_1_C" col="LODloan_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODrob_1_C" zone="empire" dff="LODrob_1_C" col="LODrob_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODsmug_1_C" zone="empire" dff="LODsmug_1_C" col="LODsmug_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODprot_1_C" zone="empire" dff="LODprot_1_C" col="LODprot_1_C" txd="business" lod="nil" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpros_1_C" zone="empire" dff="LODpros_1_C" col="LODpros_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdrug_1_C" zone="empire" dff="LODdrug_1_C" col="LODdrug_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODloan_1_C" zone="empire" dff="LODloan_1_C" col="LODloan_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODrob_1_C" zone="empire" dff="LODrob_1_C" col="LODrob_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODsmug_1_C" zone="empire" dff="LODsmug_1_C" col="LODsmug_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODprot_1_C" zone="empire" dff="LODprot_1_C" col="LODprot_1_C" txd="business" lod="true" lodDistance="1000" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="eb_pros_1_A_int" zone="empire" dff="eb_pros_1_A_int" col="eb_pros_1_A_int" txd="eb_small-time" lod="nil" lodDistance="250" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="eb_prot_1_A_int" zone="empire" dff="eb_prot_1_A_int" col="eb_prot_1_A_int" txd="eb_small-time" lod="nil" lodDistance="250" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="eb_loan_1_A_int" zone="empire" dff="eb_loan_1_A_int" col="eb_loan_1_A_int" txd="eb_small-time" lod="nil" lodDistance="250" flags="2097152" doubleSided="true" breakable="false"></definition>
