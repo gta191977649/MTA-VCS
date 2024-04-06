@@ -14,6 +14,7 @@ timeTable           = {}
 definitionZones     = {}
 idObjectProperties  = {}
 lodAttach 			= {}
+lodCache 			= {} -- use it to store lod related positions
 lodAttach['tram']   = true
 
 failed              = {}
@@ -70,7 +71,8 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 							useLODs[data.id] = (data.lodID or data.id)
 						end
 					end
-					
+
+
 					if data.flags then
 						getFlags(data)
 					end
