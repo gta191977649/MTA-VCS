@@ -245,7 +245,8 @@ function streamObject(id,x,y,z,xr,yr,zr)
 	local x = x or 0
 	local y = y or 0
 	local z = z or 0
-	local obj = createObject(1337,x,y,z,xr,yr,zr)
+	--local obj = createObject(1337,x,y,z,xr,yr,zr)
+	local obj = createBuilding(1337, x,y,z,xr,yr,zr)
 	changeObjectModel(obj,id,true)
 	setElementID(obj,id)
 	return obj
