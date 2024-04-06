@@ -1,164 +1,164 @@
 <zoneDefinitions>
-	<definition id="nbeach_r1" zone="nbeach" dff="nbeach_r1" col="nbeach_r1" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r2" zone="nbeach" dff="nbeach_r2" col="nbeach_r2" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r3" zone="nbeach" dff="nbeach_r3" col="nbeach_r3" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r4" zone="nbeach" dff="nbeach_r4" col="nbeach_r4" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r5" zone="nbeach" dff="nbeach_r5" col="nbeach_r5" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r6" zone="nbeach" dff="nbeach_r6" col="nbeach_r6" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r7" zone="nbeach" dff="nbeach_r7" col="nbeach_r7" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r8" zone="nbeach" dff="nbeach_r8" col="nbeach_r8" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r9" zone="nbeach" dff="nbeach_r9" col="nbeach_r9" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r10" zone="nbeach" dff="nbeach_r10" col="nbeach_r10" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r11" zone="nbeach" dff="nbeach_r11" col="nbeach_r11" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r12" zone="nbeach" dff="nbeach_r12" col="nbeach_r12" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r13" zone="nbeach" dff="nbeach_r13" col="nbeach_r13" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r14" zone="nbeach" dff="nbeach_r14" col="nbeach_r14" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r15" zone="nbeach" dff="nbeach_r15" col="nbeach_r15" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r16" zone="nbeach" dff="nbeach_r16" col="nbeach_r16" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_r17" zone="nbeach" dff="nbeach_r17" col="nbeach_r17" txd="nbeach_r" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s1" zone="nbeach" dff="nbeach_s1" col="nbeach_s1" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s2" zone="nbeach" dff="nbeach_s2" col="nbeach_s2" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s3" zone="nbeach" dff="nbeach_s3" col="nbeach_s3" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s4" zone="nbeach" dff="nbeach_s4" col="nbeach_s4" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s5" zone="nbeach" dff="nbeach_s5" col="nbeach_s5" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g1" zone="nbeach" dff="nbeach_g1" col="nbeach_g1" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g2" zone="nbeach" dff="nbeach_g2" col="nbeach_g2" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g3" zone="nbeach" dff="nbeach_g3" col="nbeach_g3" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g4" zone="nbeach" dff="nbeach_g4" col="nbeach_g4" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g5" zone="nbeach" dff="nbeach_g5" col="nbeach_g5" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g6" zone="nbeach" dff="nbeach_g6" col="nbeach_g6" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g7" zone="nbeach" dff="nbeach_g7" col="nbeach_g7" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g8" zone="nbeach" dff="nbeach_g8" col="nbeach_g8" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g9" zone="nbeach" dff="nbeach_g9" col="nbeach_g9" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g10" zone="nbeach" dff="nbeach_g10" col="nbeach_g10" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g11" zone="nbeach" dff="nbeach_g11" col="nbeach_g11" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g12" zone="nbeach" dff="nbeach_g12" col="nbeach_g12" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g13" zone="nbeach" dff="nbeach_g13" col="nbeach_g13" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g14" zone="nbeach" dff="nbeach_g14" col="nbeach_g14" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g15" zone="nbeach" dff="nbeach_g15" col="nbeach_g15" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b1" zone="nbeach" dff="nbeach_b1" col="nbeach_b1" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b2" zone="nbeach" dff="nbeach_b2" col="nbeach_b2" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b3" zone="nbeach" dff="nbeach_b3" col="nbeach_b3" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b4" zone="nbeach" dff="nbeach_b4" col="nbeach_b4" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b5" zone="nbeach" dff="nbeach_b5" col="nbeach_b5" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b6" zone="nbeach" dff="nbeach_b6" col="nbeach_b6" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b7" zone="nbeach" dff="nbeach_b7" col="nbeach_b7" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b8" zone="nbeach" dff="nbeach_b8" col="nbeach_b8" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b9" zone="nbeach" dff="nbeach_b9" col="nbeach_b9" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b10" zone="nbeach" dff="nbeach_b10" col="nbeach_b10" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b11" zone="nbeach" dff="nbeach_b11" col="nbeach_b11" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b12" zone="nbeach" dff="nbeach_b12" col="nbeach_b12" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b13" zone="nbeach" dff="nbeach_b13" col="nbeach_b13" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g16" zone="nbeach" dff="nbeach_g16" col="nbeach_g16" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g17" zone="nbeach" dff="nbeach_g17" col="nbeach_g17" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g18" zone="nbeach" dff="nbeach_g18" col="nbeach_g18" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g19" zone="nbeach" dff="nbeach_g19" col="nbeach_g19" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_gr1" zone="nbeach" dff="nbeach_gr1" col="nbeach_gr1" txd="nbeach_gr" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_gr2" zone="nbeach" dff="nbeach_gr2" col="nbeach_gr2" txd="nbeach_gr" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_gr3" zone="nbeach" dff="nbeach_gr3" col="nbeach_gr3" txd="nbeach_gr" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_gr4" zone="nbeach" dff="nbeach_gr4" col="nbeach_gr4" txd="nbeach_gr" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_gr5" zone="nbeach" dff="nbeach_gr5" col="nbeach_gr5" txd="nbeach_gr" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b14" zone="nbeach" dff="nbeach_b14" col="nbeach_b14" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b15" zone="nbeach" dff="nbeach_b15" col="nbeach_b15" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b16" zone="nbeach" dff="nbeach_b16" col="nbeach_b16" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b17" zone="nbeach" dff="nbeach_b17" col="nbeach_b17" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_b18" zone="nbeach" dff="nbeach_b18" col="nbeach_b18" txd="nbeach_b" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a1" zone="nbeach" dff="nbeach_a1" col="nbeach_a1" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a2" zone="nbeach" dff="nbeach_a2" col="nbeach_a2" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a3" zone="nbeach" dff="nbeach_a3" col="nbeach_a3" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a4" zone="nbeach" dff="nbeach_a4" col="nbeach_a4" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a5" zone="nbeach" dff="nbeach_a5" col="nbeach_a5" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a6" zone="nbeach" dff="nbeach_a6" col="nbeach_a6" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a7" zone="nbeach" dff="nbeach_a7" col="nbeach_a7" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a8" zone="nbeach" dff="nbeach_a8" col="nbeach_a8" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a9" zone="nbeach" dff="nbeach_a9" col="nbeach_a9" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a10" zone="nbeach" dff="nbeach_a10" col="nbeach_a10" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a11" zone="nbeach" dff="nbeach_a11" col="nbeach_a11" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a12" zone="nbeach" dff="nbeach_a12" col="nbeach_a12" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a13" zone="nbeach" dff="nbeach_a13" col="nbeach_a13" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a14" zone="nbeach" dff="nbeach_a14" col="nbeach_a14" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a15" zone="nbeach" dff="nbeach_a15" col="nbeach_a15" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a16" zone="nbeach" dff="nbeach_a16" col="nbeach_a16" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a17" zone="nbeach" dff="nbeach_a17" col="nbeach_a17" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a18" zone="nbeach" dff="nbeach_a18" col="nbeach_a18" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a19" zone="nbeach" dff="nbeach_a19" col="nbeach_a19" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a20" zone="nbeach" dff="nbeach_a20" col="nbeach_a20" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a21" zone="nbeach" dff="nbeach_a21" col="nbeach_a21" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a22" zone="nbeach" dff="nbeach_a22" col="nbeach_a22" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a23" zone="nbeach" dff="nbeach_a23" col="nbeach_a23" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a24" zone="nbeach" dff="nbeach_a24" col="nbeach_a24" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a25" zone="nbeach" dff="nbeach_a25" col="nbeach_a25" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a26" zone="nbeach" dff="nbeach_a26" col="nbeach_a26" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_a27" zone="nbeach" dff="nbeach_a27" col="nbeach_a27" txd="nbeach_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_g20" zone="nbeach" dff="nbeach_g20" col="nbeach_g20" txd="nbeach_g" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m1" zone="nbeach" dff="nbeach_m1" col="nbeach_m1" txd="nbeach_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m2" zone="nbeach" dff="nbeach_m2" col="nbeach_m2" txd="nbeach_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m3" zone="nbeach" dff="nbeach_m3" col="nbeach_m3" txd="nbeach_m" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m4" zone="nbeach" dff="nbeach_m4" col="nbeach_m4" txd="nbeach_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m5" zone="nbeach" dff="nbeach_m5" col="nbeach_m5" txd="nbeach_m" lod="nil" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m6" zone="nbeach" dff="nbeach_m6" col="nbeach_m6" txd="nbeach_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_m7" zone="nbeach" dff="nbeach_m7" col="nbeach_m7" txd="nbeach_m" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_s1" zone="nbeach" dff="LODach_s1" col="LODach_s1" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_s2" zone="nbeach" dff="LODach_s2" col="LODach_s2" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_s3" zone="nbeach" dff="LODach_s3" col="LODach_s3" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_s4" zone="nbeach" dff="LODach_s4" col="LODach_s4" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r1" zone="nbeach" dff="LODach_r1" col="LODach_r1" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r2" zone="nbeach" dff="LODach_r2" col="LODach_r2" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r3" zone="nbeach" dff="LODach_r3" col="LODach_r3" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r4" zone="nbeach" dff="LODach_r4" col="LODach_r4" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r5" zone="nbeach" dff="LODach_r5" col="LODach_r5" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r6" zone="nbeach" dff="LODach_r6" col="LODach_r6" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r7" zone="nbeach" dff="LODach_r7" col="LODach_r7" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r8" zone="nbeach" dff="LODach_r8" col="LODach_r8" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r9" zone="nbeach" dff="LODach_r9" col="LODach_r9" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r10" zone="nbeach" dff="LODach_r10" col="LODach_r10" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r11" zone="nbeach" dff="LODach_r11" col="LODach_r11" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r12" zone="nbeach" dff="LODach_r12" col="LODach_r12" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r13" zone="nbeach" dff="LODach_r13" col="LODach_r13" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r14" zone="nbeach" dff="LODach_r14" col="LODach_r14" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r15" zone="nbeach" dff="LODach_r15" col="LODach_r15" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r16" zone="nbeach" dff="LODach_r16" col="LODach_r16" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_r17" zone="nbeach" dff="LODach_r17" col="LODach_r17" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g1" zone="nbeach" dff="LODach_g1" col="LODach_g1" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g2" zone="nbeach" dff="LODach_g2" col="LODach_g2" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g3" zone="nbeach" dff="LODach_g3" col="LODach_g3" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g4" zone="nbeach" dff="LODach_g4" col="LODach_g4" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g5" zone="nbeach" dff="LODach_g5" col="LODach_g5" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g6" zone="nbeach" dff="LODach_g6" col="LODach_g6" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g7" zone="nbeach" dff="LODach_g7" col="LODach_g7" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g8" zone="nbeach" dff="LODach_g8" col="LODach_g8" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g9" zone="nbeach" dff="LODach_g9" col="LODach_g9" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g10" zone="nbeach" dff="LODach_g10" col="LODach_g10" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g11" zone="nbeach" dff="LODach_g11" col="LODach_g11" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g12" zone="nbeach" dff="LODach_g12" col="LODach_g12" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g13" zone="nbeach" dff="LODach_g13" col="LODach_g13" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g14" zone="nbeach" dff="LODach_g14" col="LODach_g14" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g15" zone="nbeach" dff="LODach_g15" col="LODach_g15" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g16" zone="nbeach" dff="LODach_g16" col="LODach_g16" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g17" zone="nbeach" dff="LODach_g17" col="LODach_g17" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g18" zone="nbeach" dff="LODach_g18" col="LODach_g18" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g19" zone="nbeach" dff="LODach_g19" col="LODach_g19" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_g20" zone="nbeach" dff="LODach_g20" col="LODach_g20" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b1" zone="nbeach" dff="LODach_b1" col="LODach_b1" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b2" zone="nbeach" dff="LODach_b2" col="LODach_b2" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b3" zone="nbeach" dff="LODach_b3" col="LODach_b3" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b4" zone="nbeach" dff="LODach_b4" col="LODach_b4" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b5" zone="nbeach" dff="LODach_b5" col="LODach_b5" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b6" zone="nbeach" dff="LODach_b6" col="LODach_b6" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b7" zone="nbeach" dff="LODach_b7" col="LODach_b7" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b8" zone="nbeach" dff="LODach_b8" col="LODach_b8" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b9" zone="nbeach" dff="LODach_b9" col="LODach_b9" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b10" zone="nbeach" dff="LODach_b10" col="LODach_b10" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b11" zone="nbeach" dff="LODach_b11" col="LODach_b11" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b12" zone="nbeach" dff="LODach_b12" col="LODach_b12" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b13" zone="nbeach" dff="LODach_b13" col="LODach_b13" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b14" zone="nbeach" dff="LODach_b14" col="LODach_b14" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b15" zone="nbeach" dff="LODach_b15" col="LODach_b15" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b16" zone="nbeach" dff="LODach_b16" col="LODach_b16" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b17" zone="nbeach" dff="LODach_b17" col="LODach_b17" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_b18" zone="nbeach" dff="LODach_b18" col="LODach_b18" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODach_gr5" zone="nbeach" dff="LODach_gr5" col="LODach_gr5" txd="nbeach_LOD" lod="true" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s6" zone="nbeach" dff="nbeach_s6" col="nbeach_s6" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s7" zone="nbeach" dff="nbeach_s7" col="nbeach_s7" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="nbeach_s8" zone="nbeach" dff="nbeach_s8" col="nbeach_s8" txd="nbeachbt_s" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r1" zone="nbeach" dff="nbeach_r1" col="nbeach_r1" txd="nbeach_r" lod="true" lodID= "LODach_r1" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r2" zone="nbeach" dff="nbeach_r2" col="nbeach_r2" txd="nbeach_r" lod="true" lodID= "LODach_r2" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r3" zone="nbeach" dff="nbeach_r3" col="nbeach_r3" txd="nbeach_r" lod="true" lodID= "LODach_r3" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r4" zone="nbeach" dff="nbeach_r4" col="nbeach_r4" txd="nbeach_r" lod="true" lodID= "LODach_r4" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r5" zone="nbeach" dff="nbeach_r5" col="nbeach_r5" txd="nbeach_r" lod="true" lodID= "LODach_r5" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r6" zone="nbeach" dff="nbeach_r6" col="nbeach_r6" txd="nbeach_r" lod="true" lodID= "LODach_r6" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r7" zone="nbeach" dff="nbeach_r7" col="nbeach_r7" txd="nbeach_r" lod="true" lodID= "LODach_r7" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r8" zone="nbeach" dff="nbeach_r8" col="nbeach_r8" txd="nbeach_r" lod="true" lodID= "LODach_r8" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r9" zone="nbeach" dff="nbeach_r9" col="nbeach_r9" txd="nbeach_r" lod="true" lodID= "LODach_r9" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r10" zone="nbeach" dff="nbeach_r10" col="nbeach_r10" txd="nbeach_r" lod="true" lodID= "LODach_r10" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r11" zone="nbeach" dff="nbeach_r11" col="nbeach_r11" txd="nbeach_r" lod="true" lodID= "LODach_r11" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r12" zone="nbeach" dff="nbeach_r12" col="nbeach_r12" txd="nbeach_r" lod="true" lodID= "LODach_r12" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r13" zone="nbeach" dff="nbeach_r13" col="nbeach_r13" txd="nbeach_r" lod="true" lodID= "LODach_r13" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r14" zone="nbeach" dff="nbeach_r14" col="nbeach_r14" txd="nbeach_r" lod="true" lodID= "LODach_r14" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r15" zone="nbeach" dff="nbeach_r15" col="nbeach_r15" txd="nbeach_r" lod="true" lodID= "LODach_r15" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r16" zone="nbeach" dff="nbeach_r16" col="nbeach_r16" txd="nbeach_r" lod="true" lodID= "LODach_r16" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_r17" zone="nbeach" dff="nbeach_r17" col="nbeach_r17" txd="nbeach_r" lod="true" lodID= "LODach_r17" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s1" zone="nbeach" dff="nbeach_s1" col="nbeach_s1" txd="nbeachbt_s" lod="true" lodID= "LODach_s1" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s2" zone="nbeach" dff="nbeach_s2" col="nbeach_s2" txd="nbeachbt_s" lod="true" lodID= "LODach_s2" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s3" zone="nbeach" dff="nbeach_s3" col="nbeach_s3" txd="nbeachbt_s" lod="true" lodID= "LODach_s3" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s4" zone="nbeach" dff="nbeach_s4" col="nbeach_s4" txd="nbeachbt_s" lod="true" lodID= "LODach_s4" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s5" zone="nbeach" dff="nbeach_s5" col="nbeach_s5" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g1" zone="nbeach" dff="nbeach_g1" col="nbeach_g1" txd="nbeach_g" lod="true" lodID= "LODach_g1" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g2" zone="nbeach" dff="nbeach_g2" col="nbeach_g2" txd="nbeach_g" lod="true" lodID= "LODach_g2" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g3" zone="nbeach" dff="nbeach_g3" col="nbeach_g3" txd="nbeach_g" lod="true" lodID= "LODach_g3" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g4" zone="nbeach" dff="nbeach_g4" col="nbeach_g4" txd="nbeach_g" lod="true" lodID= "LODach_g4" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g5" zone="nbeach" dff="nbeach_g5" col="nbeach_g5" txd="nbeach_g" lod="true" lodID= "LODach_g5" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g6" zone="nbeach" dff="nbeach_g6" col="nbeach_g6" txd="nbeach_g" lod="true" lodID= "LODach_g6" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g7" zone="nbeach" dff="nbeach_g7" col="nbeach_g7" txd="nbeach_g" lod="true" lodID= "LODach_g7" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g8" zone="nbeach" dff="nbeach_g8" col="nbeach_g8" txd="nbeach_g" lod="true" lodID= "LODach_g8" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g9" zone="nbeach" dff="nbeach_g9" col="nbeach_g9" txd="nbeach_g" lod="true" lodID= "LODach_g9" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g10" zone="nbeach" dff="nbeach_g10" col="nbeach_g10" txd="nbeach_g" lod="true" lodID= "LODach_g10" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g11" zone="nbeach" dff="nbeach_g11" col="nbeach_g11" txd="nbeach_g" lod="true" lodID= "LODach_g11" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g12" zone="nbeach" dff="nbeach_g12" col="nbeach_g12" txd="nbeach_g" lod="true" lodID= "LODach_g12" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g13" zone="nbeach" dff="nbeach_g13" col="nbeach_g13" txd="nbeach_g" lod="true" lodID= "LODach_g13" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g14" zone="nbeach" dff="nbeach_g14" col="nbeach_g14" txd="nbeach_g" lod="true" lodID= "LODach_g14" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g15" zone="nbeach" dff="nbeach_g15" col="nbeach_g15" txd="nbeach_g" lod="true" lodID= "LODach_g15" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b1" zone="nbeach" dff="nbeach_b1" col="nbeach_b1" txd="nbeach_b" lod="true" lodID= "LODach_b1" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b2" zone="nbeach" dff="nbeach_b2" col="nbeach_b2" txd="nbeach_b" lod="true" lodID= "LODach_b2" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b3" zone="nbeach" dff="nbeach_b3" col="nbeach_b3" txd="nbeach_b" lod="true" lodID= "LODach_b3" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b4" zone="nbeach" dff="nbeach_b4" col="nbeach_b4" txd="nbeach_b" lod="true" lodID= "LODach_b4" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b5" zone="nbeach" dff="nbeach_b5" col="nbeach_b5" txd="nbeach_b" lod="true" lodID= "LODach_b5" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b6" zone="nbeach" dff="nbeach_b6" col="nbeach_b6" txd="nbeach_b" lod="true" lodID= "LODach_b6" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b7" zone="nbeach" dff="nbeach_b7" col="nbeach_b7" txd="nbeach_b" lod="true" lodID= "LODach_b7" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b8" zone="nbeach" dff="nbeach_b8" col="nbeach_b8" txd="nbeach_b" lod="true" lodID= "LODach_b8" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b9" zone="nbeach" dff="nbeach_b9" col="nbeach_b9" txd="nbeach_b" lod="true" lodID= "LODach_b9" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b10" zone="nbeach" dff="nbeach_b10" col="nbeach_b10" txd="nbeach_b" lod="true" lodID= "LODach_b10" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b11" zone="nbeach" dff="nbeach_b11" col="nbeach_b11" txd="nbeach_b" lod="true" lodID= "LODach_b11" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b12" zone="nbeach" dff="nbeach_b12" col="nbeach_b12" txd="nbeach_b" lod="true" lodID= "LODach_b12" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b13" zone="nbeach" dff="nbeach_b13" col="nbeach_b13" txd="nbeach_b" lod="true" lodID= "LODach_b13" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g16" zone="nbeach" dff="nbeach_g16" col="nbeach_g16" txd="nbeach_g" lod="true" lodID= "LODach_g16" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g17" zone="nbeach" dff="nbeach_g17" col="nbeach_g17" txd="nbeach_g" lod="true" lodID= "LODach_g17" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g18" zone="nbeach" dff="nbeach_g18" col="nbeach_g18" txd="nbeach_g" lod="true" lodID= "LODach_g18" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g19" zone="nbeach" dff="nbeach_g19" col="nbeach_g19" txd="nbeach_g" lod="true" lodID= "LODach_g19" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_gr1" zone="nbeach" dff="nbeach_gr1" col="nbeach_gr1" txd="nbeach_gr" lod="false" lodID= "false" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_gr2" zone="nbeach" dff="nbeach_gr2" col="nbeach_gr2" txd="nbeach_gr" lod="false" lodID= "false" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_gr3" zone="nbeach" dff="nbeach_gr3" col="nbeach_gr3" txd="nbeach_gr" lod="false" lodID= "false" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_gr4" zone="nbeach" dff="nbeach_gr4" col="nbeach_gr4" txd="nbeach_gr" lod="false" lodID= "false" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_gr5" zone="nbeach" dff="nbeach_gr5" col="nbeach_gr5" txd="nbeach_gr" lod="true" lodID= "LODach_gr5" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b14" zone="nbeach" dff="nbeach_b14" col="nbeach_b14" txd="nbeach_b" lod="true" lodID= "LODach_b14" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b15" zone="nbeach" dff="nbeach_b15" col="nbeach_b15" txd="nbeach_b" lod="true" lodID= "LODach_b15" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b16" zone="nbeach" dff="nbeach_b16" col="nbeach_b16" txd="nbeach_b" lod="true" lodID= "LODach_b16" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b17" zone="nbeach" dff="nbeach_b17" col="nbeach_b17" txd="nbeach_b" lod="true" lodID= "LODach_b17" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_b18" zone="nbeach" dff="nbeach_b18" col="nbeach_b18" txd="nbeach_b" lod="true" lodID= "LODach_b18" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a1" zone="nbeach" dff="nbeach_a1" col="nbeach_a1" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a2" zone="nbeach" dff="nbeach_a2" col="nbeach_a2" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a3" zone="nbeach" dff="nbeach_a3" col="nbeach_a3" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a4" zone="nbeach" dff="nbeach_a4" col="nbeach_a4" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a5" zone="nbeach" dff="nbeach_a5" col="nbeach_a5" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a6" zone="nbeach" dff="nbeach_a6" col="nbeach_a6" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a7" zone="nbeach" dff="nbeach_a7" col="nbeach_a7" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a8" zone="nbeach" dff="nbeach_a8" col="nbeach_a8" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a9" zone="nbeach" dff="nbeach_a9" col="nbeach_a9" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a10" zone="nbeach" dff="nbeach_a10" col="nbeach_a10" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a11" zone="nbeach" dff="nbeach_a11" col="nbeach_a11" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a12" zone="nbeach" dff="nbeach_a12" col="nbeach_a12" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a13" zone="nbeach" dff="nbeach_a13" col="nbeach_a13" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a14" zone="nbeach" dff="nbeach_a14" col="nbeach_a14" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a15" zone="nbeach" dff="nbeach_a15" col="nbeach_a15" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a16" zone="nbeach" dff="nbeach_a16" col="nbeach_a16" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a17" zone="nbeach" dff="nbeach_a17" col="nbeach_a17" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a18" zone="nbeach" dff="nbeach_a18" col="nbeach_a18" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a19" zone="nbeach" dff="nbeach_a19" col="nbeach_a19" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a20" zone="nbeach" dff="nbeach_a20" col="nbeach_a20" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a21" zone="nbeach" dff="nbeach_a21" col="nbeach_a21" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a22" zone="nbeach" dff="nbeach_a22" col="nbeach_a22" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a23" zone="nbeach" dff="nbeach_a23" col="nbeach_a23" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a24" zone="nbeach" dff="nbeach_a24" col="nbeach_a24" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a25" zone="nbeach" dff="nbeach_a25" col="nbeach_a25" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a26" zone="nbeach" dff="nbeach_a26" col="nbeach_a26" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_a27" zone="nbeach" dff="nbeach_a27" col="nbeach_a27" txd="nbeach_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_g20" zone="nbeach" dff="nbeach_g20" col="nbeach_g20" txd="nbeach_g" lod="true" lodID= "LODach_g20" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m1" zone="nbeach" dff="nbeach_m1" col="nbeach_m1" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m2" zone="nbeach" dff="nbeach_m2" col="nbeach_m2" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m3" zone="nbeach" dff="nbeach_m3" col="nbeach_m3" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m4" zone="nbeach" dff="nbeach_m4" col="nbeach_m4" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m5" zone="nbeach" dff="nbeach_m5" col="nbeach_m5" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m6" zone="nbeach" dff="nbeach_m6" col="nbeach_m6" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_m7" zone="nbeach" dff="nbeach_m7" col="nbeach_m7" txd="nbeach_m" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_s1" zone="nbeach" dff="LODach_s1" col="LODach_s1" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_s2" zone="nbeach" dff="LODach_s2" col="LODach_s2" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_s3" zone="nbeach" dff="LODach_s3" col="LODach_s3" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_s4" zone="nbeach" dff="LODach_s4" col="LODach_s4" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r1" zone="nbeach" dff="LODach_r1" col="LODach_r1" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r2" zone="nbeach" dff="LODach_r2" col="LODach_r2" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r3" zone="nbeach" dff="LODach_r3" col="LODach_r3" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r4" zone="nbeach" dff="LODach_r4" col="LODach_r4" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r5" zone="nbeach" dff="LODach_r5" col="LODach_r5" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r6" zone="nbeach" dff="LODach_r6" col="LODach_r6" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r7" zone="nbeach" dff="LODach_r7" col="LODach_r7" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r8" zone="nbeach" dff="LODach_r8" col="LODach_r8" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r9" zone="nbeach" dff="LODach_r9" col="LODach_r9" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r10" zone="nbeach" dff="LODach_r10" col="LODach_r10" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r11" zone="nbeach" dff="LODach_r11" col="LODach_r11" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r12" zone="nbeach" dff="LODach_r12" col="LODach_r12" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r13" zone="nbeach" dff="LODach_r13" col="LODach_r13" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r14" zone="nbeach" dff="LODach_r14" col="LODach_r14" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r15" zone="nbeach" dff="LODach_r15" col="LODach_r15" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r16" zone="nbeach" dff="LODach_r16" col="LODach_r16" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_r17" zone="nbeach" dff="LODach_r17" col="LODach_r17" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g1" zone="nbeach" dff="LODach_g1" col="LODach_g1" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g2" zone="nbeach" dff="LODach_g2" col="LODach_g2" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g3" zone="nbeach" dff="LODach_g3" col="LODach_g3" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g4" zone="nbeach" dff="LODach_g4" col="LODach_g4" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g5" zone="nbeach" dff="LODach_g5" col="LODach_g5" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g6" zone="nbeach" dff="LODach_g6" col="LODach_g6" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g7" zone="nbeach" dff="LODach_g7" col="LODach_g7" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g8" zone="nbeach" dff="LODach_g8" col="LODach_g8" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g9" zone="nbeach" dff="LODach_g9" col="LODach_g9" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g10" zone="nbeach" dff="LODach_g10" col="LODach_g10" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g11" zone="nbeach" dff="LODach_g11" col="LODach_g11" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g12" zone="nbeach" dff="LODach_g12" col="LODach_g12" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g13" zone="nbeach" dff="LODach_g13" col="LODach_g13" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g14" zone="nbeach" dff="LODach_g14" col="LODach_g14" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g15" zone="nbeach" dff="LODach_g15" col="LODach_g15" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g16" zone="nbeach" dff="LODach_g16" col="LODach_g16" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g17" zone="nbeach" dff="LODach_g17" col="LODach_g17" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g18" zone="nbeach" dff="LODach_g18" col="LODach_g18" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g19" zone="nbeach" dff="LODach_g19" col="LODach_g19" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_g20" zone="nbeach" dff="LODach_g20" col="LODach_g20" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b1" zone="nbeach" dff="LODach_b1" col="LODach_b1" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b2" zone="nbeach" dff="LODach_b2" col="LODach_b2" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b3" zone="nbeach" dff="LODach_b3" col="LODach_b3" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b4" zone="nbeach" dff="LODach_b4" col="LODach_b4" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b5" zone="nbeach" dff="LODach_b5" col="LODach_b5" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b6" zone="nbeach" dff="LODach_b6" col="LODach_b6" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b7" zone="nbeach" dff="LODach_b7" col="LODach_b7" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b8" zone="nbeach" dff="LODach_b8" col="LODach_b8" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b9" zone="nbeach" dff="LODach_b9" col="LODach_b9" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b10" zone="nbeach" dff="LODach_b10" col="LODach_b10" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b11" zone="nbeach" dff="LODach_b11" col="LODach_b11" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b12" zone="nbeach" dff="LODach_b12" col="LODach_b12" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b13" zone="nbeach" dff="LODach_b13" col="LODach_b13" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b14" zone="nbeach" dff="LODach_b14" col="LODach_b14" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b15" zone="nbeach" dff="LODach_b15" col="LODach_b15" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b16" zone="nbeach" dff="LODach_b16" col="LODach_b16" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b17" zone="nbeach" dff="LODach_b17" col="LODach_b17" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_b18" zone="nbeach" dff="LODach_b18" col="LODach_b18" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODach_gr5" zone="nbeach" dff="LODach_gr5" col="LODach_gr5" txd="nbeach_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s6" zone="nbeach" dff="nbeach_s6" col="nbeach_s6" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s7" zone="nbeach" dff="nbeach_s7" col="nbeach_s7" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_s8" zone="nbeach" dff="nbeach_s8" col="nbeach_s8" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

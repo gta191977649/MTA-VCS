@@ -16,16 +16,6 @@
 	<object id="bridge_a5" model="8585" posX="-322.169" posY="42.4495" posZ="-2.40767" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="bridge_a6" model="8585" posX="-436.102" posY="32.4866" posZ="-2.40767" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="bridge_a7" model="8585" posX="-681.699" posY="27.3008" posZ="-2.89664" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r1" model="8585" posX="-719.616" posY="28.7143" posZ="5.963" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r2" model="8585" posX="-681.745" posY="27.3074" posZ="-2.89804" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r3" model="8585" posX="-607.883" posY="26.1114" posZ="-2.40897" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r4" model="8585" posX="-534.195" posY="27.1724" posZ="-2.40896" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r5" model="8585" posX="-436.118" posY="32.4954" posZ="-2.40767" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r6" model="8585" posX="-322.138" posY="42.4414" posZ="-2.40887" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r7" model="8585" posX="-241.124" posY="52.7734" posZ="-2.41041" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r8" model="8585" posX="-176.541" posY="63.1344" posZ="-2.40896" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r9" model="8585" posX="-102.795" posY="76.9224" posZ="-2.48407" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdge_r10" model="8585" posX="-68.2689" posY="87.8014" posZ="8.13753" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="lamppost2" model="1290" posX="-489.33" posY="28.6692" posZ="31.3566" rotX="0.0" rotY="-0.0" rotZ="-87.49999109759408" interior="0" dimension="-1"></object>
 	<object id="lamppost2" model="1290" posX="-489.33" posY="28.6692" posZ="31.3566" rotX="0.0" rotY="-0.0" rotZ="-87.49999109759408" interior="0" dimension="-1"></object>
 	<object id="lamppost2" model="1290" posX="-669.572" posY="26.7932" posZ="28.5236" rotX="0.0" rotY="-0.0" rotZ="-92.00003340729259" interior="0" dimension="-1"></object>

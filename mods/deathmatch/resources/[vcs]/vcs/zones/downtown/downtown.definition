@@ -1,173 +1,173 @@
 <zoneDefinitions>
-	<definition id="dt_carpsaces13" zone="downtown" dff="dt_carpsaces13" col="dt_carpsaces13" txd="dt_stadium" lod="nil" lodDistance="70" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dt_carpsaces14" zone="downtown" dff="dt_carpsaces14" col="dt_carpsaces14" txd="dt_stadium" lod="nil" lodDistance="70" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dt_carpsaces15" zone="downtown" dff="dt_carpsaces15" col="dt_carpsaces15" txd="dt_stadium" lod="nil" lodDistance="25" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dtoon62_spaces" zone="downtown" dff="dtoon62_spaces" col="dtoon62_spaces" txd="dt_stadium" lod="nil" lodDistance="120" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dtn_stadspacesB" zone="downtown" dff="dtn_stadspacesB" col="dtn_stadspacesB" txd="dt_stadium" lod="nil" lodDistance="260" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA28" zone="downtown" dff="dN_partA28" col="dN_partA28" txd="dN_partA26" lod="nil" lodDistance="280" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA" zone="downtown" dff="dN_partA" col="dN_partA" txd="dN_partA" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partB" zone="downtown" dff="dN_partB" col="dN_partB" txd="dN_partB" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partC" zone="downtown" dff="dN_partC" col="dN_partC" txd="dN_partC" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partD" zone="downtown" dff="dN_partD" col="dN_partD" txd="dN_partD" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partE" zone="downtown" dff="dN_partE" col="dN_partE" txd="dN_partE" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partF" zone="downtown" dff="dN_partF" col="dN_partF" txd="dN_partF" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partG" zone="downtown" dff="dN_partG" col="dN_partG" txd="dN_partG" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partH" zone="downtown" dff="dN_partH" col="dN_partH" txd="dN_partH" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partI" zone="downtown" dff="dN_partI" col="dN_partI" txd="dN_partI" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partJ" zone="downtown" dff="dN_partJ" col="dN_partJ" txd="dN_dirtrack" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partK" zone="downtown" dff="dN_partK" col="dN_partK" txd="dN_partK" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partL" zone="downtown" dff="dN_partL" col="dN_partL" txd="dN_partL" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partM" zone="downtown" dff="dN_partM" col="dN_partM" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partN" zone="downtown" dff="dN_partN" col="dN_partN" txd="dN_partN" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partO" zone="downtown" dff="dN_partO" col="dN_partO" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partP" zone="downtown" dff="dN_partP" col="dN_partP" txd="dN_partP" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partQ" zone="downtown" dff="dN_partQ" col="dN_partQ" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partR" zone="downtown" dff="dN_partR" col="dN_partR" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partS" zone="downtown" dff="dN_partS" col="dN_partS" txd="dN_partM" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partT" zone="downtown" dff="dN_partT" col="dN_partT" txd="dN_partT" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partU" zone="downtown" dff="dN_partU" col="dN_partU" txd="dN_partP" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partV" zone="downtown" dff="dN_partV" col="dN_partV" txd="dN_partV" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partV2" zone="downtown" dff="dN_partV2" col="dN_partV2" txd="dN_partV" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partW" zone="downtown" dff="dN_partW" col="dN_partW" txd="dN_partW" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partX" zone="downtown" dff="dN_partX" col="dN_partX" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partY" zone="downtown" dff="dN_partY" col="dN_partY" txd="dN_partY" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partZ" zone="downtown" dff="dN_partZ" col="dN_partZ" txd="dN_partZ" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_dirtrack" zone="downtown" dff="dN_dirtrack" col="dN_dirtrack" txd="dN_dirtrack" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_dirtrack_traces" zone="downtown" dff="dN_dirtrack_traces" col="dN_dirtrack_traces" txd="dN_dirtrack" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA1" zone="downtown" dff="dN_partA1" col="dN_partA1" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA2" zone="downtown" dff="dN_partA2" col="dN_partA2" txd="dN_partA2" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA3" zone="downtown" dff="dN_partA3" col="dN_partA3" txd="dN_partA2" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA4" zone="downtown" dff="dN_partA4" col="dN_partA4" txd="dN_partA4" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA5" zone="downtown" dff="dN_partA5" col="dN_partA5" txd="dN_partA4" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA6" zone="downtown" dff="dN_partA6" col="dN_partA6" txd="dN_partA6" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA7" zone="downtown" dff="dN_partA7" col="dN_partA7" txd="dN_partA7" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA8" zone="downtown" dff="dN_partA8" col="dN_partA8" txd="dN_dirtrack" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA9" zone="downtown" dff="dN_partA9" col="dN_partA9" txd="dN_dirtrack" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA10" zone="downtown" dff="dN_partA10" col="dN_partA10" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA11" zone="downtown" dff="dN_partA11" col="dN_partA11" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA12" zone="downtown" dff="dN_partA12" col="dN_partA12" txd="dN_partA12" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA13" zone="downtown" dff="dN_partA13" col="dN_partA13" txd="dN_partA13" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA14" zone="downtown" dff="dN_partA14" col="dN_partA14" txd="dN_partA13" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA15" zone="downtown" dff="dN_partA15" col="dN_partA15" txd="dN_partA13" lod="nil" lodDistance="450" flags="516" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA16" zone="downtown" dff="dN_partA16" col="dN_partA16" txd="dN_partA16" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA17" zone="downtown" dff="dN_partA17" col="dN_partA17" txd="dN_partA17" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA18" zone="downtown" dff="dN_partA18" col="dN_partA18" txd="dN_partA17" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA19" zone="downtown" dff="dN_partA19" col="dN_partA19" txd="dN_partA19" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA20" zone="downtown" dff="dN_partA20" col="dN_partA20" txd="dN_partA20" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA21" zone="downtown" dff="dN_partA21" col="dN_partA21" txd="dN_partA21" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA22" zone="downtown" dff="dN_partA22" col="dN_partA22" txd="dN_partA21" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA23" zone="downtown" dff="dN_partA23" col="dN_partA23" txd="dN_partA23" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA24" zone="downtown" dff="dN_partA24" col="dN_partA24" txd="dN_partA24" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA25" zone="downtown" dff="dN_partA25" col="dN_partA25" txd="dN_partA25" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA26" zone="downtown" dff="dN_partA26" col="dN_partA26" txd="dN_partA26" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA27" zone="downtown" dff="dN_partA27" col="dN_partA27" txd="dN_partA27" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA29" zone="downtown" dff="dN_partA29" col="dN_partA29" txd="dN_partM" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA30" zone="downtown" dff="dN_partA30" col="dN_partA30" txd="dN_partA30" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA31" zone="downtown" dff="dN_partA31" col="dN_partA31" txd="dN_partA30" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA32" zone="downtown" dff="dN_partA32" col="dN_partA32" txd="dN_stadium" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA33" zone="downtown" dff="dN_partA33" col="dN_partA33" txd="dN_stadium" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA34" zone="downtown" dff="dN_partA34" col="dN_partA34" txd="dN_partA34" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA35" zone="downtown" dff="dN_partA35" col="dN_partA35" txd="dN_partA35" lod="nil" lodDistance="450" flags="5" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA36" zone="downtown" dff="dN_partA36" col="dN_partA36" txd="dN_partA36" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA37" zone="downtown" dff="dN_partA37" col="dN_partA37" txd="dN_partA36" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA38" zone="downtown" dff="dN_partA38" col="dN_partA38" txd="dN_stadium" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA39" zone="downtown" dff="dN_partA39" col="dN_partA39" txd="dN_stadium" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA40" zone="downtown" dff="dN_partA40" col="dN_partA40" txd="dN_stadium" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dtn_stadspacesA" zone="downtown" dff="dtn_stadspacesA" col="dtn_stadspacesA" txd="dt_stadium" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA41" zone="downtown" dff="dN_partA41" col="dN_partA41" txd="dN_partA41" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA42" zone="downtown" dff="dN_partA42" col="dN_partA42" txd="dN_partA42" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA43" zone="downtown" dff="dN_partA43" col="dN_partA43" txd="dN_partM" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA44" zone="downtown" dff="dN_partA44" col="dN_partA44" txd="dN_partA44" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA45" zone="downtown" dff="dN_partA45" col="dN_partA45" txd="dN_partA44" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA46" zone="downtown" dff="dN_partA46" col="dN_partA46" txd="dN_partA44" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA47" zone="downtown" dff="dN_partA47" col="dN_partA47" txd="dN_partA47" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA48" zone="downtown" dff="dN_partA48" col="dN_partA48" txd="dN_partA47" lod="nil" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA49" zone="downtown" dff="dN_partA49" col="dN_partA49" txd="dN_partA49" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA50" zone="downtown" dff="dN_partA50" col="dN_partA50" txd="dN_partA49" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dt_stadiumalfa2" zone="downtown" dff="dt_stadiumalfa2" col="dt_stadiumalfa2" txd="dt_stadium" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partB_a" zone="downtown" dff="dN_partB_a" col="dN_partB_a" txd="dN_partB" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partM_a" zone="downtown" dff="dN_partM_a" col="dN_partM_a" txd="dN_partM" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA21_a" zone="downtown" dff="dN_partA21_a" col="dN_partA21_a" txd="dN_partA21" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_part13_a" zone="downtown" dff="dN_part13_a" col="dN_part13_a" txd="dN_partA13" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dirttrack_fence" zone="downtown" dff="dirttrack_fence" col="dirttrack_fence" txd="dN_partA30" lod="nil" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA36_a" zone="downtown" dff="dN_partA36_a" col="dN_partA36_a" txd="dN_partA36" lod="nil" lodDistance="450" flags="12" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA38_a" zone="downtown" dff="dN_partA38_a" col="dN_partA38_a" txd="dN_stadium" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA49_a" zone="downtown" dff="dN_partA49_a" col="dN_partA49_a" txd="dN_partA21" lod="nil" lodDistance="299" flags="76" doubleSided="true" breakable="false"></definition>
-	<definition id="dk_newrampvcs" zone="downtown" dff="dk_newrampvcs" col="dk_newrampvcs" txd="docfactories1" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA24_b" zone="downtown" dff="dN_partA24_b" col="dN_partA24_b" txd="dt_bluebuild" lod="nil" lodDistance="299" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA35" zone="downtown" dff="LODpartA35" col="LODpartA35" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA14" zone="downtown" dff="LODpartA14" col="LODpartA14" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartZ" zone="downtown" dff="LODpartZ" col="LODpartZ" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA9" zone="downtown" dff="LODpartA9" col="LODpartA9" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA8" zone="downtown" dff="LODpartA8" col="LODpartA8" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartJ" zone="downtown" dff="LODpartJ" col="LODpartJ" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA50" zone="downtown" dff="LODpartA50" col="LODpartA50" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdirtrack" zone="downtown" dff="LODdirtrack" col="LODdirtrack" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA12" zone="downtown" dff="LODpartA12" col="LODpartA12" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA45" zone="downtown" dff="LODpartA45" col="LODpartA45" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA20" zone="downtown" dff="LODpartA20" col="LODpartA20" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA43" zone="downtown" dff="LODpartA43" col="LODpartA43" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartX" zone="downtown" dff="LODpartX" col="LODpartX" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA40" zone="downtown" dff="LODpartA40" col="LODpartA40" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA33" zone="downtown" dff="LODpartA33" col="LODpartA33" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA32" zone="downtown" dff="LODpartA32" col="LODpartA32" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODparta10" zone="downtown" dff="LODparta10" col="LODparta10" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA30" zone="downtown" dff="LODpartA30" col="LODpartA30" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartR" zone="downtown" dff="LODpartR" col="LODpartR" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA39" zone="downtown" dff="LODpartA39" col="LODpartA39" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA38" zone="downtown" dff="LODpartA38" col="LODpartA38" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA41" zone="downtown" dff="LODpartA41" col="LODpartA41" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA18" zone="downtown" dff="LODpartA18" col="LODpartA18" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartE" zone="downtown" dff="LODpartE" col="LODpartE" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartD" zone="downtown" dff="LODpartD" col="LODpartD" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA6" zone="downtown" dff="LODpartA6" col="LODpartA6" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartT" zone="downtown" dff="LODpartT" col="LODpartT" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA" zone="downtown" dff="LODpartA" col="LODpartA" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA42" zone="downtown" dff="LODpartA42" col="LODpartA42" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA31" zone="downtown" dff="LODpartA31" col="LODpartA31" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartY" zone="downtown" dff="LODpartY" col="LODpartY" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA48" zone="downtown" dff="LODpartA48" col="LODpartA48" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA27" zone="downtown" dff="LODpartA27" col="LODpartA27" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA17" zone="downtown" dff="LODpartA17" col="LODpartA17" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA16" zone="downtown" dff="LODpartA16" col="LODpartA16" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartN" zone="downtown" dff="LODpartN" col="LODpartN" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA25" zone="downtown" dff="LODpartA25" col="LODpartA25" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA19" zone="downtown" dff="LODpartA19" col="LODpartA19" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA21" zone="downtown" dff="LODpartA21" col="LODpartA21" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA23" zone="downtown" dff="LODpartA23" col="LODpartA23" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartK" zone="downtown" dff="LODpartK" col="LODpartK" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartP" zone="downtown" dff="LODpartP" col="LODpartP" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartL" zone="downtown" dff="LODpartL" col="LODpartL" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartU" zone="downtown" dff="LODpartU" col="LODpartU" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA26" zone="downtown" dff="LODpartA26" col="LODpartA26" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA44" zone="downtown" dff="LODpartA44" col="LODpartA44" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA49" zone="downtown" dff="LODpartA49" col="LODpartA49" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA24" zone="downtown" dff="LODpartA24" col="LODpartA24" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA46" zone="downtown" dff="LODpartA46" col="LODpartA46" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA5" zone="downtown" dff="LODpartA5" col="LODpartA5" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartF" zone="downtown" dff="LODpartF" col="LODpartF" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA4" zone="downtown" dff="LODpartA4" col="LODpartA4" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartW" zone="downtown" dff="LODpartW" col="LODpartW" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartV" zone="downtown" dff="LODpartV" col="LODpartV" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODparta36" zone="downtown" dff="LODparta36" col="LODparta36" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA7" zone="downtown" dff="LODpartA7" col="LODpartA7" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartQ" zone="downtown" dff="LODpartQ" col="LODpartQ" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA1" zone="downtown" dff="LODpartA1" col="LODpartA1" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartB" zone="downtown" dff="LODpartB" col="LODpartB" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartM" zone="downtown" dff="LODpartM" col="LODpartM" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartO" zone="downtown" dff="LODpartO" col="LODpartO" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA11" zone="downtown" dff="LODpartA11" col="LODpartA11" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartI" zone="downtown" dff="LODpartI" col="LODpartI" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartG" zone="downtown" dff="LODpartG" col="LODpartG" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartC" zone="downtown" dff="LODpartC" col="LODpartC" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartA34" zone="downtown" dff="LODpartA34" col="LODpartA34" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODpartH" zone="downtown" dff="LODpartH" col="LODpartH" txd="downtowN_LOD" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partP_stuff" zone="downtown" dff="dN_partP_stuff" col="dN_partP_stuff" txd="dN_partP" lod="nil" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA26_alpha" zone="downtown" dff="dN_partA26_alpha" col="dN_partA26_alpha" txd="dN_partA26" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partW_alpha" zone="downtown" dff="dN_partW_alpha" col="dN_partW_alpha" txd="dN_partW" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA41_alpha" zone="downtown" dff="dN_partA41_alpha" col="dN_partA41_alpha" txd="dN_partA41" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA24_alpha" zone="downtown" dff="dN_partA24_alpha" col="dN_partA24_alpha" txd="dN_partA24" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_8balldoor" zone="downtown" dff="dN_8balldoor" col="dN_8balldoor" txd="haiwash" lod="nil" lodDistance="450" flags="2048" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partS2" zone="downtown" dff="dN_partS2" col="dN_partS2" txd="dN_partM" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
-	<definition id="dN_partA29A" zone="downtown" dff="dN_partA29A" col="dN_partA29A" txd="dN_partM" lod="nil" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dt_carpsaces13" zone="downtown" dff="dt_carpsaces13" col="dt_carpsaces13" txd="dt_stadium" lod="false" lodID= "false" lodDistance="70" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dt_carpsaces14" zone="downtown" dff="dt_carpsaces14" col="dt_carpsaces14" txd="dt_stadium" lod="false" lodID= "false" lodDistance="70" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dt_carpsaces15" zone="downtown" dff="dt_carpsaces15" col="dt_carpsaces15" txd="dt_stadium" lod="false" lodID= "false" lodDistance="25" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dtoon62_spaces" zone="downtown" dff="dtoon62_spaces" col="dtoon62_spaces" txd="dt_stadium" lod="false" lodID= "false" lodDistance="120" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dtn_stadspacesB" zone="downtown" dff="dtn_stadspacesB" col="dtn_stadspacesB" txd="dt_stadium" lod="false" lodID= "false" lodDistance="260" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA28" zone="downtown" dff="dN_partA28" col="dN_partA28" txd="dN_partA26" lod="false" lodID= "false" lodDistance="280" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA" zone="downtown" dff="dN_partA" col="dN_partA" txd="dN_partA" lod="true" lodID= "LODpartA" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partB" zone="downtown" dff="dN_partB" col="dN_partB" txd="dN_partB" lod="true" lodID= "LODpartB" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partC" zone="downtown" dff="dN_partC" col="dN_partC" txd="dN_partC" lod="true" lodID= "LODpartC" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partD" zone="downtown" dff="dN_partD" col="dN_partD" txd="dN_partD" lod="true" lodID= "LODpartD" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partE" zone="downtown" dff="dN_partE" col="dN_partE" txd="dN_partE" lod="true" lodID= "LODpartE" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partF" zone="downtown" dff="dN_partF" col="dN_partF" txd="dN_partF" lod="true" lodID= "LODpartF" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partG" zone="downtown" dff="dN_partG" col="dN_partG" txd="dN_partG" lod="true" lodID= "LODpartG" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partH" zone="downtown" dff="dN_partH" col="dN_partH" txd="dN_partH" lod="true" lodID= "LODpartH" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partI" zone="downtown" dff="dN_partI" col="dN_partI" txd="dN_partI" lod="true" lodID= "LODpartI" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partJ" zone="downtown" dff="dN_partJ" col="dN_partJ" txd="dN_dirtrack" lod="true" lodID= "LODpartJ" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partK" zone="downtown" dff="dN_partK" col="dN_partK" txd="dN_partK" lod="true" lodID= "LODpartK" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partL" zone="downtown" dff="dN_partL" col="dN_partL" txd="dN_partL" lod="true" lodID= "LODpartL" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partM" zone="downtown" dff="dN_partM" col="dN_partM" txd="dN_partM" lod="true" lodID= "LODpartM" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partN" zone="downtown" dff="dN_partN" col="dN_partN" txd="dN_partN" lod="true" lodID= "LODpartN" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partO" zone="downtown" dff="dN_partO" col="dN_partO" txd="dN_partM" lod="true" lodID= "LODpartO" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partP" zone="downtown" dff="dN_partP" col="dN_partP" txd="dN_partP" lod="true" lodID= "LODpartP" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partQ" zone="downtown" dff="dN_partQ" col="dN_partQ" txd="dN_partM" lod="true" lodID= "LODpartQ" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partR" zone="downtown" dff="dN_partR" col="dN_partR" txd="dN_partM" lod="true" lodID= "LODpartR" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partS" zone="downtown" dff="dN_partS" col="dN_partS" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partT" zone="downtown" dff="dN_partT" col="dN_partT" txd="dN_partT" lod="true" lodID= "LODpartT" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partU" zone="downtown" dff="dN_partU" col="dN_partU" txd="dN_partP" lod="true" lodID= "LODpartU" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partV" zone="downtown" dff="dN_partV" col="dN_partV" txd="dN_partV" lod="true" lodID= "LODpartV" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partV2" zone="downtown" dff="dN_partV2" col="dN_partV2" txd="dN_partV" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partW" zone="downtown" dff="dN_partW" col="dN_partW" txd="dN_partW" lod="true" lodID= "LODpartW" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partX" zone="downtown" dff="dN_partX" col="dN_partX" txd="dN_partM" lod="true" lodID= "LODpartX" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partY" zone="downtown" dff="dN_partY" col="dN_partY" txd="dN_partY" lod="true" lodID= "LODpartY" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partZ" zone="downtown" dff="dN_partZ" col="dN_partZ" txd="dN_partZ" lod="true" lodID= "LODpartZ" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_dirtrack" zone="downtown" dff="dN_dirtrack" col="dN_dirtrack" txd="dN_dirtrack" lod="true" lodID= "LODdirtrack" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_dirtrack_traces" zone="downtown" dff="dN_dirtrack_traces" col="dN_dirtrack_traces" txd="dN_dirtrack" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA1" zone="downtown" dff="dN_partA1" col="dN_partA1" txd="dN_partM" lod="true" lodID= "LODpartA1" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA2" zone="downtown" dff="dN_partA2" col="dN_partA2" txd="dN_partA2" lod="true" lodID= "LODpartA2" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA3" zone="downtown" dff="dN_partA3" col="dN_partA3" txd="dN_partA2" lod="true" lodID= "LODpartA3" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA4" zone="downtown" dff="dN_partA4" col="dN_partA4" txd="dN_partA4" lod="true" lodID= "LODpartA4" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA5" zone="downtown" dff="dN_partA5" col="dN_partA5" txd="dN_partA4" lod="true" lodID= "LODpartA5" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA6" zone="downtown" dff="dN_partA6" col="dN_partA6" txd="dN_partA6" lod="true" lodID= "LODpartA6" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA7" zone="downtown" dff="dN_partA7" col="dN_partA7" txd="dN_partA7" lod="true" lodID= "LODpartA7" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA8" zone="downtown" dff="dN_partA8" col="dN_partA8" txd="dN_dirtrack" lod="true" lodID= "LODpartA8" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA9" zone="downtown" dff="dN_partA9" col="dN_partA9" txd="dN_dirtrack" lod="true" lodID= "LODpartA9" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA10" zone="downtown" dff="dN_partA10" col="dN_partA10" txd="dN_partM" lod="true" lodID= "LODpartA10" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA11" zone="downtown" dff="dN_partA11" col="dN_partA11" txd="dN_partM" lod="true" lodID= "LODpartA11" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA12" zone="downtown" dff="dN_partA12" col="dN_partA12" txd="dN_partA12" lod="true" lodID= "LODpartA12" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA13" zone="downtown" dff="dN_partA13" col="dN_partA13" txd="dN_partA13" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA14" zone="downtown" dff="dN_partA14" col="dN_partA14" txd="dN_partA13" lod="true" lodID= "LODpartA14" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA15" zone="downtown" dff="dN_partA15" col="dN_partA15" txd="dN_partA13" lod="false" lodID= "false" lodDistance="450" flags="516" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA16" zone="downtown" dff="dN_partA16" col="dN_partA16" txd="dN_partA16" lod="true" lodID= "LODpartA16" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA17" zone="downtown" dff="dN_partA17" col="dN_partA17" txd="dN_partA17" lod="true" lodID= "LODpartA17" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA18" zone="downtown" dff="dN_partA18" col="dN_partA18" txd="dN_partA17" lod="true" lodID= "LODpartA18" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA19" zone="downtown" dff="dN_partA19" col="dN_partA19" txd="dN_partA19" lod="true" lodID= "LODpartA19" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA20" zone="downtown" dff="dN_partA20" col="dN_partA20" txd="dN_partA20" lod="true" lodID= "LODpartA20" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA21" zone="downtown" dff="dN_partA21" col="dN_partA21" txd="dN_partA21" lod="true" lodID= "LODpartA21" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA22" zone="downtown" dff="dN_partA22" col="dN_partA22" txd="dN_partA21" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA23" zone="downtown" dff="dN_partA23" col="dN_partA23" txd="dN_partA23" lod="true" lodID= "LODpartA23" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA24" zone="downtown" dff="dN_partA24" col="dN_partA24" txd="dN_partA24" lod="true" lodID= "LODpartA24" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA25" zone="downtown" dff="dN_partA25" col="dN_partA25" txd="dN_partA25" lod="true" lodID= "LODpartA25" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA26" zone="downtown" dff="dN_partA26" col="dN_partA26" txd="dN_partA26" lod="true" lodID= "LODpartA26" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA27" zone="downtown" dff="dN_partA27" col="dN_partA27" txd="dN_partA27" lod="true" lodID= "LODpartA27" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA29" zone="downtown" dff="dN_partA29" col="dN_partA29" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA30" zone="downtown" dff="dN_partA30" col="dN_partA30" txd="dN_partA30" lod="true" lodID= "LODpartA30" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA31" zone="downtown" dff="dN_partA31" col="dN_partA31" txd="dN_partA30" lod="true" lodID= "LODpartA31" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA32" zone="downtown" dff="dN_partA32" col="dN_partA32" txd="dN_stadium" lod="true" lodID= "LODpartA32" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA33" zone="downtown" dff="dN_partA33" col="dN_partA33" txd="dN_stadium" lod="true" lodID= "LODpartA33" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA34" zone="downtown" dff="dN_partA34" col="dN_partA34" txd="dN_partA34" lod="true" lodID= "LODpartA34" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA35" zone="downtown" dff="dN_partA35" col="dN_partA35" txd="dN_partA35" lod="true" lodID= "LODpartA35" lodDistance="450" flags="5" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA36" zone="downtown" dff="dN_partA36" col="dN_partA36" txd="dN_partA36" lod="true" lodID= "LODpartA36" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA37" zone="downtown" dff="dN_partA37" col="dN_partA37" txd="dN_partA36" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA38" zone="downtown" dff="dN_partA38" col="dN_partA38" txd="dN_stadium" lod="true" lodID= "LODpartA38" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA39" zone="downtown" dff="dN_partA39" col="dN_partA39" txd="dN_stadium" lod="true" lodID= "LODpartA39" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA40" zone="downtown" dff="dN_partA40" col="dN_partA40" txd="dN_stadium" lod="true" lodID= "LODpartA40" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dtn_stadspacesA" zone="downtown" dff="dtn_stadspacesA" col="dtn_stadspacesA" txd="dt_stadium" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA41" zone="downtown" dff="dN_partA41" col="dN_partA41" txd="dN_partA41" lod="true" lodID= "LODpartA41" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA42" zone="downtown" dff="dN_partA42" col="dN_partA42" txd="dN_partA42" lod="true" lodID= "LODpartA42" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA43" zone="downtown" dff="dN_partA43" col="dN_partA43" txd="dN_partM" lod="true" lodID= "LODpartA43" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA44" zone="downtown" dff="dN_partA44" col="dN_partA44" txd="dN_partA44" lod="true" lodID= "LODpartA44" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA45" zone="downtown" dff="dN_partA45" col="dN_partA45" txd="dN_partA44" lod="true" lodID= "LODpartA45" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA46" zone="downtown" dff="dN_partA46" col="dN_partA46" txd="dN_partA44" lod="true" lodID= "LODpartA46" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA47" zone="downtown" dff="dN_partA47" col="dN_partA47" txd="dN_partA47" lod="false" lodID= "false" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA48" zone="downtown" dff="dN_partA48" col="dN_partA48" txd="dN_partA47" lod="true" lodID= "LODpartA48" lodDistance="450" flags="1" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA49" zone="downtown" dff="dN_partA49" col="dN_partA49" txd="dN_partA49" lod="true" lodID= "LODpartA49" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA50" zone="downtown" dff="dN_partA50" col="dN_partA50" txd="dN_partA49" lod="true" lodID= "LODpartA50" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dt_stadiumalfa2" zone="downtown" dff="dt_stadiumalfa2" col="dt_stadiumalfa2" txd="dt_stadium" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partB_a" zone="downtown" dff="dN_partB_a" col="dN_partB_a" txd="dN_partB" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partM_a" zone="downtown" dff="dN_partM_a" col="dN_partM_a" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA21_a" zone="downtown" dff="dN_partA21_a" col="dN_partA21_a" txd="dN_partA21" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_part13_a" zone="downtown" dff="dN_part13_a" col="dN_part13_a" txd="dN_partA13" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dirttrack_fence" zone="downtown" dff="dirttrack_fence" col="dirttrack_fence" txd="dN_partA30" lod="false" lodID= "false" lodDistance="450" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA36_a" zone="downtown" dff="dN_partA36_a" col="dN_partA36_a" txd="dN_partA36" lod="false" lodID= "false" lodDistance="450" flags="12" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA38_a" zone="downtown" dff="dN_partA38_a" col="dN_partA38_a" txd="dN_stadium" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA49_a" zone="downtown" dff="dN_partA49_a" col="dN_partA49_a" txd="dN_partA21" lod="false" lodID= "false" lodDistance="299" flags="76" doubleSided="true" breakable="false"></definition>
+	<definition id="dk_newrampvcs" zone="downtown" dff="dk_newrampvcs" col="dk_newrampvcs" txd="docfactories1" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA24_b" zone="downtown" dff="dN_partA24_b" col="dN_partA24_b" txd="dt_bluebuild" lod="false" lodID= "false" lodDistance="299" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA35" zone="downtown" dff="LODpartA35" col="LODpartA35" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA14" zone="downtown" dff="LODpartA14" col="LODpartA14" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartZ" zone="downtown" dff="LODpartZ" col="LODpartZ" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA9" zone="downtown" dff="LODpartA9" col="LODpartA9" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA8" zone="downtown" dff="LODpartA8" col="LODpartA8" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartJ" zone="downtown" dff="LODpartJ" col="LODpartJ" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA50" zone="downtown" dff="LODpartA50" col="LODpartA50" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdirtrack" zone="downtown" dff="LODdirtrack" col="LODdirtrack" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA12" zone="downtown" dff="LODpartA12" col="LODpartA12" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA45" zone="downtown" dff="LODpartA45" col="LODpartA45" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA20" zone="downtown" dff="LODpartA20" col="LODpartA20" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA43" zone="downtown" dff="LODpartA43" col="LODpartA43" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartX" zone="downtown" dff="LODpartX" col="LODpartX" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA40" zone="downtown" dff="LODpartA40" col="LODpartA40" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA33" zone="downtown" dff="LODpartA33" col="LODpartA33" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA32" zone="downtown" dff="LODpartA32" col="LODpartA32" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODparta10" zone="downtown" dff="LODparta10" col="LODparta10" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA30" zone="downtown" dff="LODpartA30" col="LODpartA30" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartR" zone="downtown" dff="LODpartR" col="LODpartR" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA39" zone="downtown" dff="LODpartA39" col="LODpartA39" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA38" zone="downtown" dff="LODpartA38" col="LODpartA38" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA41" zone="downtown" dff="LODpartA41" col="LODpartA41" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA18" zone="downtown" dff="LODpartA18" col="LODpartA18" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartE" zone="downtown" dff="LODpartE" col="LODpartE" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartD" zone="downtown" dff="LODpartD" col="LODpartD" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA6" zone="downtown" dff="LODpartA6" col="LODpartA6" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartT" zone="downtown" dff="LODpartT" col="LODpartT" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA" zone="downtown" dff="LODpartA" col="LODpartA" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA42" zone="downtown" dff="LODpartA42" col="LODpartA42" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA31" zone="downtown" dff="LODpartA31" col="LODpartA31" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartY" zone="downtown" dff="LODpartY" col="LODpartY" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA48" zone="downtown" dff="LODpartA48" col="LODpartA48" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA27" zone="downtown" dff="LODpartA27" col="LODpartA27" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA17" zone="downtown" dff="LODpartA17" col="LODpartA17" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA16" zone="downtown" dff="LODpartA16" col="LODpartA16" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartN" zone="downtown" dff="LODpartN" col="LODpartN" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA25" zone="downtown" dff="LODpartA25" col="LODpartA25" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA19" zone="downtown" dff="LODpartA19" col="LODpartA19" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA21" zone="downtown" dff="LODpartA21" col="LODpartA21" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA23" zone="downtown" dff="LODpartA23" col="LODpartA23" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartK" zone="downtown" dff="LODpartK" col="LODpartK" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartP" zone="downtown" dff="LODpartP" col="LODpartP" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartL" zone="downtown" dff="LODpartL" col="LODpartL" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartU" zone="downtown" dff="LODpartU" col="LODpartU" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA26" zone="downtown" dff="LODpartA26" col="LODpartA26" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA44" zone="downtown" dff="LODpartA44" col="LODpartA44" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA49" zone="downtown" dff="LODpartA49" col="LODpartA49" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA24" zone="downtown" dff="LODpartA24" col="LODpartA24" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA46" zone="downtown" dff="LODpartA46" col="LODpartA46" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA5" zone="downtown" dff="LODpartA5" col="LODpartA5" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartF" zone="downtown" dff="LODpartF" col="LODpartF" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA4" zone="downtown" dff="LODpartA4" col="LODpartA4" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartW" zone="downtown" dff="LODpartW" col="LODpartW" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartV" zone="downtown" dff="LODpartV" col="LODpartV" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODparta36" zone="downtown" dff="LODparta36" col="LODparta36" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA7" zone="downtown" dff="LODpartA7" col="LODpartA7" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartQ" zone="downtown" dff="LODpartQ" col="LODpartQ" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA1" zone="downtown" dff="LODpartA1" col="LODpartA1" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartB" zone="downtown" dff="LODpartB" col="LODpartB" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartM" zone="downtown" dff="LODpartM" col="LODpartM" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartO" zone="downtown" dff="LODpartO" col="LODpartO" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA11" zone="downtown" dff="LODpartA11" col="LODpartA11" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartI" zone="downtown" dff="LODpartI" col="LODpartI" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartG" zone="downtown" dff="LODpartG" col="LODpartG" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartC" zone="downtown" dff="LODpartC" col="LODpartC" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartA34" zone="downtown" dff="LODpartA34" col="LODpartA34" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODpartH" zone="downtown" dff="LODpartH" col="LODpartH" txd="downtowN_LOD" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partP_stuff" zone="downtown" dff="dN_partP_stuff" col="dN_partP_stuff" txd="dN_partP" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA26_alpha" zone="downtown" dff="dN_partA26_alpha" col="dN_partA26_alpha" txd="dN_partA26" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partW_alpha" zone="downtown" dff="dN_partW_alpha" col="dN_partW_alpha" txd="dN_partW" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA41_alpha" zone="downtown" dff="dN_partA41_alpha" col="dN_partA41_alpha" txd="dN_partA41" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA24_alpha" zone="downtown" dff="dN_partA24_alpha" col="dN_partA24_alpha" txd="dN_partA24" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_8balldoor" zone="downtown" dff="dN_8balldoor" col="dN_8balldoor" txd="haiwash" lod="false" lodID= "false" lodDistance="450" flags="2048" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partS2" zone="downtown" dff="dN_partS2" col="dN_partS2" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_partA29A" zone="downtown" dff="dN_partA29A" col="dN_partA29A" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

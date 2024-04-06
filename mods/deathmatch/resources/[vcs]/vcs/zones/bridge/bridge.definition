@@ -1,29 +1,29 @@
 <zoneDefinitions>
-	<definition id="bridge_r1" zone="bridge" dff="bridge_r1" col="bridge_r1" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r2" zone="bridge" dff="bridge_r2" col="bridge_r2" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r3" zone="bridge" dff="bridge_r3" col="bridge_r3" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r4" zone="bridge" dff="bridge_r4" col="bridge_r4" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r5" zone="bridge" dff="bridge_r5" col="bridge_r5" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r6" zone="bridge" dff="bridge_r6" col="bridge_r6" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r7" zone="bridge" dff="bridge_r7" col="bridge_r7" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r8" zone="bridge" dff="bridge_r8" col="bridge_r8" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r9" zone="bridge" dff="bridge_r9" col="bridge_r9" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_r10" zone="bridge" dff="bridge_r10" col="bridge_r10" txd="bridge_r" lod="nil" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a1" zone="bridge" dff="bridge_a1" col="bridge_a1" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a2" zone="bridge" dff="bridge_a2" col="bridge_a2" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a3" zone="bridge" dff="bridge_a3" col="bridge_a3" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a4" zone="bridge" dff="bridge_a4" col="bridge_a4" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a5" zone="bridge" dff="bridge_a5" col="bridge_a5" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a6" zone="bridge" dff="bridge_a6" col="bridge_a6" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="bridge_a7" zone="bridge" dff="bridge_a7" col="bridge_a7" txd="bridge_a" lod="nil" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r1" zone="bridge" dff="LODdge_r1" col="LODdge_r1" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r2" zone="bridge" dff="LODdge_r2" col="LODdge_r2" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r3" zone="bridge" dff="LODdge_r3" col="LODdge_r3" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r4" zone="bridge" dff="LODdge_r4" col="LODdge_r4" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r5" zone="bridge" dff="LODdge_r5" col="LODdge_r5" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r6" zone="bridge" dff="LODdge_r6" col="LODdge_r6" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r7" zone="bridge" dff="LODdge_r7" col="LODdge_r7" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r8" zone="bridge" dff="LODdge_r8" col="LODdge_r8" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r9" zone="bridge" dff="LODdge_r9" col="LODdge_r9" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
-	<definition id="LODdge_r10" zone="bridge" dff="LODdge_r10" col="LODdge_r10" txd="LODdge_r" lod="true" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r1" zone="bridge" dff="bridge_r1" col="bridge_r1" txd="bridge_r" lod="true" lodID= "LODdge_r1" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r2" zone="bridge" dff="bridge_r2" col="bridge_r2" txd="bridge_r" lod="true" lodID= "LODdge_r2" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r3" zone="bridge" dff="bridge_r3" col="bridge_r3" txd="bridge_r" lod="true" lodID= "LODdge_r3" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r4" zone="bridge" dff="bridge_r4" col="bridge_r4" txd="bridge_r" lod="true" lodID= "LODdge_r4" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r5" zone="bridge" dff="bridge_r5" col="bridge_r5" txd="bridge_r" lod="true" lodID= "LODdge_r5" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r6" zone="bridge" dff="bridge_r6" col="bridge_r6" txd="bridge_r" lod="true" lodID= "LODdge_r6" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r7" zone="bridge" dff="bridge_r7" col="bridge_r7" txd="bridge_r" lod="true" lodID= "LODdge_r7" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r8" zone="bridge" dff="bridge_r8" col="bridge_r8" txd="bridge_r" lod="true" lodID= "LODdge_r8" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r9" zone="bridge" dff="bridge_r9" col="bridge_r9" txd="bridge_r" lod="true" lodID= "LODdge_r9" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_r10" zone="bridge" dff="bridge_r10" col="bridge_r10" txd="bridge_r" lod="true" lodID= "LODdge_r10" lodDistance="450" flags="2097153" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a1" zone="bridge" dff="bridge_a1" col="bridge_a1" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a2" zone="bridge" dff="bridge_a2" col="bridge_a2" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a3" zone="bridge" dff="bridge_a3" col="bridge_a3" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a4" zone="bridge" dff="bridge_a4" col="bridge_a4" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a5" zone="bridge" dff="bridge_a5" col="bridge_a5" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a6" zone="bridge" dff="bridge_a6" col="bridge_a6" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="bridge_a7" zone="bridge" dff="bridge_a7" col="bridge_a7" txd="bridge_a" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r1" zone="bridge" dff="LODdge_r1" col="LODdge_r1" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r2" zone="bridge" dff="LODdge_r2" col="LODdge_r2" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r3" zone="bridge" dff="LODdge_r3" col="LODdge_r3" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r4" zone="bridge" dff="LODdge_r4" col="LODdge_r4" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r5" zone="bridge" dff="LODdge_r5" col="LODdge_r5" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r6" zone="bridge" dff="LODdge_r6" col="LODdge_r6" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r7" zone="bridge" dff="LODdge_r7" col="LODdge_r7" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r8" zone="bridge" dff="LODdge_r8" col="LODdge_r8" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r9" zone="bridge" dff="LODdge_r9" col="LODdge_r9" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODdge_r10" zone="bridge" dff="LODdge_r10" col="LODdge_r10" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

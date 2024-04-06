@@ -116,7 +116,7 @@
 	<object id="cp_trailer04" model="8585" posX="-920.268" posY="-880.44" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="cp_trailer04" model="8585" posX="-941.611" posY="-896.618" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-8.999985966008722" interior="0" dimension="-1"></object>
 	<object id="cp_trailer04" model="8585" posX="-950.736" posY="-923.948" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-110.00000719134971" interior="0" dimension="-1"></object>
-	<object id="cp_trailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.299998141209876" interior="0" dimension="-1"></object>
+	<object id="cp_trailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.29999814120988" interior="0" dimension="-1"></object>
 	<object id="cp_trailer05" model="8585" posX="-931.195" posY="-837.13" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
 	<object id="cp_element01" model="8585" posX="-942.354" posY="-914.824" posZ="12.55" rotX="0.0" rotY="-0.0" rotZ="55.000061138955694" interior="0" dimension="-1"></object>
 	<object id="cp_element01" model="8585" posX="-921.176" posY="-860.621" posZ="12.66" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -226,102 +226,6 @@
 	<object id="stonewall_a" model="8585" posX="-1154.81" posY="-704.315" posZ="11.9828" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="28" dimension="-1"></object>
 	<object id="vcs_egg1" model="8585" posX="-917.69" posY="-842.24" posZ="12.9931" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="fan06" model="8585" posX="-934.304" posY="-851.39" posZ="13.7703" rotX="0.0" rotY="-0.0" rotZ="-90.00003546022141" interior="0" dimension="-1"></object>
-	<object id="LODawasteb3" model="8585" posX="-908.353" posY="-986.258" posZ="11.4649" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODawasteb1" model="8585" posX="-957.956" posY="-839.054" posZ="11.6835" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LOD_car_show_out" model="8585" posX="-1022.3" posY="-850.735" posZ="9.15542" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODawasteb2" model="8585" posX="-1061.2" posY="-776.452" posZ="11.9674" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland180" model="8585" posX="-1053.93" posY="-694.066" posZ="18.003" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODhahousebk2" model="8585" posX="-943.997" posY="-696.599" posZ="15.3024" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODhawaste2" model="8585" posX="-871.023" posY="-786.26" posZ="12.0209" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrnda1" model="8585" posX="-867.339" posY="-903.453" posZ="10.9351" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbuild" model="8585" posX="-899.436" posY="-1029.04" posZ="26.7977" rotX="0.0" rotY="-0.0" rotZ="-166.0000316076428" interior="0" dimension="-1"></object>
-	<object id="LODshine03" model="8585" posX="-1043.85" posY="-790.564" posZ="13.4445" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODshine01" model="8585" posX="-1069.38" posY="-774.104" posZ="15.437" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODshine02" model="8585" posX="-1080.78" posY="-750.922" posZ="14.7813" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtleha_hardware" model="8585" posX="-969.989" posY="-694.358" posZ="14.5944" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODhotel" model="8585" posX="-853.249" posY="-775.971" posZ="27.3234" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODuild034" model="8585" posX="-849.924" posY="-866.697" posZ="18.62" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.299998141209876" interior="0" dimension="-1"></object>
-	<object id="LODtrailer02" model="8585" posX="-920.496" posY="-918.625" posZ="12.7058" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtariler01" model="8585" posX="-919.823" posY="-897.726" posZ="12.8698" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer04" model="8585" posX="-920.268" posY="-880.44" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer02" model="8585" posX="-918.757" posY="-862.214" posZ="12.8458" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer04" model="8585" posX="-919.314" posY="-841.775" posZ="12.7822" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer02" model="8585" posX="-921.02" posY="-816.823" posZ="12.8458" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer04" model="8585" posX="-950.736" posY="-923.948" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-109.99997508664913" interior="0" dimension="-1"></object>
-	<object id="LODtariler01" model="8585" posX="-939.982" posY="-913.54" posZ="12.8698" rotX="0.0" rotY="-0.0" rotZ="55.000061138955694" interior="0" dimension="-1"></object>
-	<object id="LODtrailer04" model="8585" posX="-941.611" posY="-896.618" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-8.999997530482347" interior="0" dimension="-1"></object>
-	<object id="LODtrailer03" model="8585" posX="-938.084" posY="-879.397" posZ="12.7466" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
-	<object id="LODtariler01" model="8585" posX="-931.322" posY="-868.398" posZ="12.8698" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer05" model="8585" posX="-931.195" posY="-837.13" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtariler01" model="8585" posX="-935.653" posY="-795.603" posZ="13.0098" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer03" model="8585" posX="-933.631" posY="-782.986" posZ="12.7866" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer02" model="8585" posX="-964.609" posY="-915.396" posZ="12.8658" rotX="0.0" rotY="-0.0" rotZ="144.77474081647134" interior="0" dimension="-1"></object>
-	<object id="LODtrailer03" model="8585" posX="-940.89" posY="-836.279" posZ="12.7466" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer04" model="8585" posX="-947.213" posY="-809.875" posZ="12.8322" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="LODhavroad3" model="8585" posX="-804.665" posY="-573.426" posZ="-6.09556" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtlharoadgg2" model="8585" posX="-841.956" posY="-405.592" posZ="5.28614" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtlehabroad" model="8585" posX="-802.967" posY="-775.927" posZ="-6.20507" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODboat" model="8585" posX="-755.2" posY="-805.076" posZ="11.0976" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland041" model="8585" posX="-787.71" posY="-500.381" posZ="-5.6198" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODvroad2" model="8585" posX="-913.7" posY="-656.941" posZ="10.2843" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland178" model="8585" posX="-1056.84" posY="-676.383" posZ="10.8253" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland177" model="8585" posX="-1163.03" posY="-641.361" posZ="10.58" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland176" model="8585" posX="-1080.18" posY="-553.091" posZ="10.26" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadab" model="8585" posX="-937.391" posY="-442.791" posZ="9.98461" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODvroad1" model="8585" posX="-984.553" posY="-585.794" posZ="10.1513" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland039" model="8585" posX="-1028.92" posY="-419.11" posZ="9.837" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoadc4" model="8585" posX="-1136.35" posY="-345.118" posZ="9.805" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoadc2" model="8585" posX="-1197.99" posY="-418.266" posZ="9.81246" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoadc1" model="8585" posX="-1139.57" posY="-496.126" posZ="9.92775" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoadc3" model="8585" posX="-1101.94" posY="-416.658" posZ="9.93329" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODpital" model="8585" posX="-888.717" posY="-473.339" posZ="24.8743" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODasket" model="8585" posX="-941.045" posY="-429.283" posZ="11.4786" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODallbit" model="8585" posX="-912.68" posY="-372.396" posZ="12.341" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoastsky1" model="8585" posX="-885.717" posY="-400.708" posZ="55.0689" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODoastsky2" model="8585" posX="-940.613" posY="-333.057" posZ="73.9165" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland174" model="8585" posX="-982.272" posY="-395.63" posZ="15.4731" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODuild1b" model="8585" posX="-1003.98" posY="-331.881" posZ="13.7174" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODdi_exterior" model="8585" posX="-857.671" posY="-627.503" posZ="12.6983" rotX="0.0" rotY="-0.0" rotZ="-170.99999055336235" interior="0" dimension="-1"></object>
-	<object id="LODicecream01" model="8585" posX="-872.417" posY="-570.139" posZ="14.2834" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtlehacoast02" model="8585" posX="-896.363" posY="-572.083" posZ="18.53" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland175" model="8585" posX="-950.078" posY="-581.941" posZ="22.0519" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland174A" model="8585" posX="-956.372" posY="-483.592" posZ="13.99" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland179A" model="8585" posX="-1155.01" posY="-707.425" posZ="12.6694" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland179" model="8585" posX="-1185.49" posY="-661.411" posZ="16.082" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbit03" model="8585" posX="-1163.68" posY="-557.714" posZ="16.0181" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland170" model="8585" posX="-1108.5" posY="-540.074" posZ="18.56" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbackbit" model="8585" posX="-1228.7" posY="-459" posZ="0.31" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland172" model="8585" posX="-1217.21" posY="-348.1" posZ="16.21" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland173" model="8585" posX="-1104.19" posY="-320.6" posZ="12.98" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbit01" model="8585" posX="-1151.61" posY="-422.999" posZ="11.3" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODsho_ext1" model="8585" posX="-1168.41" posY="-612.28" posZ="16.18" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODmiland037" model="8585" posX="-1115.29" posY="-635.936" posZ="17.57" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbuildingw1" model="8585" posX="-1028.5" posY="-621.908" posZ="14.91" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbuildingg1" model="8585" posX="-1038.19" posY="-534" posZ="18" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbuildingg3" model="8585" posX="-1050.81" posY="-457.41" posZ="16.37" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODbuildingg2" model="8585" posX="-1059.33" posY="-374.85" posZ="20.32" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1137" posY="-520.008" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="98.30007172926275" interior="0" dimension="-1"></object>
-	<object id="LODanahouse03" model="8585" posX="-1161.99" posY="-519.423" posZ="13.6202" rotX="0.0" rotY="-0.0" rotZ="98.00006785770233" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1208.87" posY="-497.398" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="13.999957727009994" interior="0" dimension="-1"></object>
-	<object id="LODanahouse02" model="8585" posX="-1219.19" posY="-479.695" posZ="13.856" rotX="0.0" rotY="-0.0" rotZ="16.50003853510712" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1224.19" posY="-457.587" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="9.900000295580867" interior="0" dimension="-1"></object>
-	<object id="LODanahouse02" model="8585" posX="-1224.02" posY="-434.735" posZ="13.8736" rotX="0.0" rotY="-0.0" rotZ="5.79999332976696" interior="0" dimension="-1"></object>
-	<object id="LODanahouse02" model="8585" posX="-1225.57" posY="-416.612" posZ="13.8736" rotX="0.0" rotY="-0.0" rotZ="4.000001068653297" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1229.5" posY="-391.5" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="3.600006275538436" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1117.12" posY="-472.598" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="7.000008367081024" interior="0" dimension="-1"></object>
-	<object id="LODanahouse02" model="8585" posX="-1142.1" posY="-474.634" posZ="13.856" rotX="0.0" rotY="-0.0" rotZ="-81.89997448621182" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1167.28" posY="-476.59" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="-170.00000256356608" interior="0" dimension="-1"></object>
-	<object id="LODanahouse02" model="8585" posX="-1173.68" posY="-451.041" posZ="13.856" rotX="0.0" rotY="-0.0" rotZ="-175.19999716399028" interior="0" dimension="-1"></object>
-	<object id="LODanahouse03" model="8585" posX="-1179.99" posY="-421.323" posZ="13.6704" rotX="0.0" rotY="-0.0" rotZ="-176.00000169694772" interior="0" dimension="-1"></object>
-	<object id="LODanahouse04" model="8585" posX="-1183.04" posY="-395.281" posZ="15.7106" rotX="0.0" rotY="-0.0" rotZ="-176.00000169694772" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1186.33" posY="-371.841" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="-174.99998383590173" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1160.97" posY="-372.296" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="94.9999471065444" interior="0" dimension="-1"></object>
-	<object id="LODmiland171" model="8585" posX="-1131.74" posY="-361.312" posZ="15.1099" rotX="0.0" rotY="-0.0" rotZ="-1.999999871289356" interior="0" dimension="-1"></object>
-	<object id="LODanahouse01" model="8585" posX="-1127.37" posY="-390.165" posZ="14.5416" rotX="0.0" rotY="-0.0" rotZ="4.999988856797724" interior="0" dimension="-1"></object>
-	<object id="LODanahouse05" model="8585" posX="-1123.65" posY="-422.819" posZ="13.7319" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="1" dimension="-1"></object>
-	<object id="LODanahouse04" model="8585" posX="-1120.87" posY="-449.614" posZ="14.9209" rotX="0.0" rotY="-0.0" rotZ="3.499999913327294" interior="0" dimension="-1"></object>
-	<object id="LODstruct04" model="8585" posX="-1214.82" posY="-456.739" posZ="11.2322" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="BlackBag1" model="1264" posX="-998.521" posY="-560.63" posZ="10.3321" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="BlackBag2" model="1265" posX="-999.253" posY="-560.579" posZ="10.3056" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="bussign1" model="1229" posX="-905.78" posY="-662.434" posZ="11.3778" rotX="0.0" rotY="-0.0" rotZ="-90.00003546022141" interior="0" dimension="-1"></object>
@@ -523,10 +427,10 @@
 	<object id="veg_palm01" model="648" posX="-819.911" posY="-311.634" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="45.792413518377344" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-814.791" posY="-371.31" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="108.58124706239727" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-814.791" posY="-371.31" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="108.58124706239727" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.264757115201945" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.264757115201945" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.58998486078968" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.58998486078968" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.26475711520195" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.26475711520195" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.5899848607897" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.5899848607897" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1111.54" posY="-731.752" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="102.50009130886676" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1111.54" posY="-731.752" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="102.50009130886676" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1113.77422414" posY="-431.669279563" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>

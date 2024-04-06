@@ -26,22 +26,6 @@
 	<object id="prawn_A6" model="8585" posX="11.7465" posY="1074.22" posZ="15.9107" rotX="0.0" rotY="-0.0" rotZ="-6.222963159304063" interior="0" dimension="-1"></object>
 	<object id="prawn_A4" model="8585" posX="-43.4641" posY="1113.34" posZ="18.2142" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="prawn_A12" model="8585" posX="-12.2862" posY="861.165" posZ="15.302" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A5" model="8585" posX="-50.5724" posY="1115.59" posZ="24.891" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
-	<object id="LODwn_A2" model="8585" posX="18.1956" posY="1165.65" posZ="28.0429" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A7" model="8585" posX="75.1646" posY="1105.07" posZ="25.3804" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A1" model="8585" posX="9.32862" posY="1126.71" posZ="7.984" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A10" model="8585" posX="37.8366" posY="936.814" posZ="3.78221" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A11" model="8585" posX="56.7246" posY="942.056" posZ="15.2828" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A8" model="8585" posX="-58.7984" posY="968.812" posZ="2.59753" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A20" model="8585" posX="-5.43353" posY="1000.57" posZ="16.194" rotX="0.0" rotY="-0.0" rotZ="0.3399743101574772" interior="0" dimension="-1"></object>
-	<object id="LODwn_A21" model="8585" posX="-33.0355" posY="1008.4" posZ="16.194" rotX="0.0" rotY="-0.0" rotZ="0.3399743101574772" interior="0" dimension="-1"></object>
-	<object id="LODwn_A18" model="8585" posX="-84.7935" posY="932.766" posZ="16.194" rotX="0.0" rotY="-0.0" rotZ="105.99992053989591" interior="0" dimension="-1"></object>
-	<object id="LODwn_A14" model="8585" posX="-100.463" posY="899.578" posZ="15.8447" rotX="0.0" rotY="-0.0" rotZ="-90.00003546022141" interior="0" dimension="-1"></object>
-	<object id="LODwn_A24" model="8585" posX="-90.0495" posY="967.818" posZ="16.85" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A22" model="8585" posX="-69.3535" posY="1029.31" posZ="21.7811" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A23" model="8585" posX="-98.9265" posY="997.973" posZ="10.6847" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A15" model="8585" posX="-38.3005" posY="918.673" posZ="15.289" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwn_A16" model="8585" posX="-2.77752" posY="930.923" posZ="14.3299" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="prawn_A32" model="8585" posX="3.52178" posY="1165.21" posZ="21.192" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="prawn_A30" model="8585" posX="48.5299" posY="1077.11" posZ="13.913" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="prawn_A33" model="8585" posX="26.0939" posY="1144.79" posZ="19.1466" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>

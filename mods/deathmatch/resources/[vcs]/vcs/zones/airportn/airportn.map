@@ -360,43 +360,4 @@
 	<object id="veg_palwee02" model="624" posX="-1303.16" posY="-437.23" posZ="7.0667" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1298.75" posY="-431.332" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1298.75" posY="-431.332" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland15" model="8585" posX="-1827.21" posY="-208.354" posZ="-4.66657" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground2" model="8585" posX="-1687.8" posY="-34.2439" posZ="-4.66642" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground3" model="8585" posX="-1529.58" posY="-174.004" posZ="-3.97852" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground4" model="8585" posX="-1389.03" posY="-239.484" posZ="-3.97852" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground5" model="8585" posX="-1298.57" posY="-430.069" posZ="-4.33564" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground1" model="8585" posX="-1700.33" posY="-195.744" posZ="13.4888" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODterminalB1" model="8585" posX="-1706.61" posY="-498.58" posZ="31.2346" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODterminalB2" model="8585" posX="-1601.47" posY="-498.58" posZ="31.1395" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODy_main" model="8585" posX="-1733.18" posY="-195.224" posZ="23.5554" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODy_barrack2" model="8585" posX="-1622.74" posY="-283.924" posZ="21.685" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODhangar02" model="8585" posX="-1617.69" posY="-174.763" posZ="18.1514" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODshed03" model="8585" posX="-1583.06" posY="-233.914" posZ="15.5831" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODwall" model="8585" posX="-1684.53" posY="-195.344" posZ="16.1901" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LOD_bridge" model="8585" posX="-1294.18" posY="-318.303" posZ="10.1141" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LOD_terminal" model="8585" posX="-1845.51" posY="-750.307" posZ="8.21229" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODy_barrack4" model="8585" posX="-1685.43" posY="-281.764" posZ="21.5995" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODy_barrack1" model="8585" posX="-1623.24" posY="-109.172" posZ="21.8495" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODhangar01" model="8585" posX="-1617.69" posY="-224.116" posZ="18.1514" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtower01" model="8585" posX="-1776.21" posY="-299.42" posZ="21.8151" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland14" model="8585" posX="-1856.1" posY="-450.404" posZ="-4.99989" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland13" model="8585" posX="-1791.23" posY="-661.363" posZ="-5.4625" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland12" model="8585" posX="-1629.62" posY="-674.339" posZ="13.1459" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland10" model="8585" posX="-1419.54" posY="-736.978" posZ="13.4227" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODground6" model="8585" posX="-1273.54" posY="-658.283" posZ="16.5531" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland11" model="8585" posX="-1419.49" posY="-598.682" posZ="13.4227" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland16" model="8585" posX="-1470.29" posY="-440.357" posZ="13.0176" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODrland17" model="8585" posX="-1699.64" posY="-439.553" posZ="12.8681" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect14" model="8585" posX="-1823.42" posY="-411.445" posZ="13.2962" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect12" model="8585" posX="-1760.03" posY="-599.619" posZ="8.53022" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect13" model="8585" posX="-1730.97" posY="-719.076" posZ="9.96068" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect10" model="8585" posX="-1590.13" posY="-738.82" posZ="9.81056" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect11" model="8585" posX="-1594.82" posY="-605.328" posZ="8.55944" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect9" model="8585" posX="-1377.28" posY="-807.913" posZ="13.1707" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect5" model="8585" posX="-1352.35" posY="-731.196" posZ="13.4992" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect6" model="8585" posX="-1367.01" posY="-608.688" posZ="9.88794" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect7" model="8585" posX="-1352.23" posY="-428.209" posZ="9.86952" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect8" model="8585" posX="-1453.56" posY="-319.385" posZ="11.828" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODroadsect4" model="8585" posX="-1673.46" posY="-317.133" posZ="13.3814" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODcarpark01" model="8585" posX="-1633.84" posY="-640.352" posZ="13.0947" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 </map>
