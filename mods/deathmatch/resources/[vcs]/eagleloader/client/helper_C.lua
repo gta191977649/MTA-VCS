@@ -2,6 +2,9 @@ function isStringTrue (str)
 	return (str == 'true')
 end
 
+function startsWithLOD(str)
+    return string.sub(str, 1, 3) == "LOD"
+end
 
 streamTimes = {}
 streamTimeObj = {}
