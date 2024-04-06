@@ -1,0 +1,24 @@
+<zoneDefinitions>
+	<definition id="int_shop" zone="shops" dff="int_shop" col="int_shop" txd="int_shopstruct" lod="false" lodID= "false" lodDistance="100" flags="32768" doubleSided="true" breakable="false"></definition>
+	<definition id="mal_viento" zone="shops" dff="mal_viento" col="mal_viento" txd="mal_viento02" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="viento_shad" zone="shops" dff="viento_shad" col="viento_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="shop_shad" zone="shops" dff="shop_shad" col="shop_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="nalgas_shad" zone="shops" dff="nalgas_shad" col="nalgas_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="nalgas_granders" zone="shops" dff="nalgas_granders" col="nalgas_granders" txd="nalgas_granders" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="int_shop01" zone="shops" dff="int_shop01" col="int_shop01" txd="int_shopstruct" lod="false" lodID= "false" lodDistance="100" flags="32768" doubleSided="true" breakable="false"></definition>
+	<definition id="verdi" zone="shops" dff="verdi" col="verdi" txd="verdi" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="verdi_shad" zone="shops" dff="verdi_shad" col="verdi_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="shop_shad01" zone="shops" dff="shop_shad01" col="shop_shad01" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="electric_boulevard" zone="shops" dff="electric_boulevard" col="electric_boulevard" txd="electric_boulevard" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="electric_shad" zone="shops" dff="electric_shad" col="electric_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="mal_viento01" zone="shops" dff="mal_viento01" col="mal_viento01" txd="mal_viento" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="viento01_shad" zone="shops" dff="viento01_shad" col="viento01_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="int_shop02" zone="shops" dff="int_shop02" col="int_shop02" txd="int_shopstruct" lod="false" lodID= "false" lodDistance="100" flags="32768" doubleSided="true" breakable="false"></definition>
+	<definition id="shop_shad02" zone="shops" dff="shop_shad02" col="shop_shad02" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="fidl" zone="shops" dff="fidl" col="fidl" txd="fidl" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="fidl_shad" zone="shops" dff="fidl_shad" col="fidl_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="hermit" zone="shops" dff="hermit" col="hermit" txd="hermit" lod="false" lodID= "false" lodDistance="80" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="hermit_shad" zone="shops" dff="hermit_shad" col="hermit_shad" txd="shops_shad" lod="false" lodID= "false" lodDistance="50" flags="2097220" doubleSided="true" breakable="false"></definition>
+	<definition id="int_ammu-nation" zone="shops" dff="int_ammu-nation" col="int_ammu-nation" txd="ammu-nation" lod="false" lodID= "false" lodDistance="150" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="int_ammu-nationA" zone="shops" dff="int_ammu-nationA" col="int_ammu-nationA" txd="ammu-nation" lod="false" lodID= "false" lodDistance="150" flags="2097220" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

@@ -1,0 +1,28 @@
+<map>
+	<object id="eb_loan_1_A" model="8585" posX="-933.378" posY="-1102.33" posZ="13.828" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="eb_prot_1_A" model="8585" posX="-1208.72" posY="-649.096" posZ="10.711" rotX="0.0" rotY="-0.0" rotZ="96.94800544456587" interior="0" dimension="-1"></object>
+	<object id="eb_prot_1_A" model="8585" posX="-928.958" posY="-686.54" posZ="10.203" rotX="0.0" rotY="-0.0" rotZ="-174.99998383590173" interior="0" dimension="-1"></object>
+	<object id="eb_prot_1_A" model="8585" posX="-964.11" posY="-540.0" posZ="9.95" rotX="0.0" rotY="-0.0" rotZ="-83.32399499690675" interior="0" dimension="-1"></object>
+	<object id="eb_smug_1_A" model="8585" posX="-1151.63" posY="-271.01" posZ="10.317" rotX="0.0" rotY="-0.0" rotZ="3.056988731348219" interior="0" dimension="-1"></object>
+	<object id="eb_loan_1_A" model="8585" posX="-886.72" posY="-221.04" posZ="10.033" rotX="0.0" rotY="-0.0" rotZ="88.4169265486829" interior="0" dimension="-1"></object>
+	<object id="eb_prot_1_A" model="8585" posX="-1201.9" posY="-103.45" posZ="10.406" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
+	<object id="eb_pros_1_A" model="8585" posX="-962.183" posY="194.58" posZ="8.703" rotX="0.0" rotY="-0.0" rotZ="-5.915000266434811" interior="0" dimension="-1"></object>
+	<object id="eb_pros_2_A" model="8585" posX="-704.54" posY="616.4" posZ="10.051" rotX="0.0" rotY="-0.0" rotZ="83.60500117571051" interior="0" dimension="-1"></object>
+	<object id="eb_drug_1_A" model="8585" posX="-420.463" posY="868.52" posZ="10.031" rotX="0.0" rotY="-0.0" rotZ="-112.68696674914167" interior="0" dimension="-1"></object>
+	<object id="eb_rob_1_A" model="8585" posX="-973.636" posY="1036.17" posZ="10.045" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
+	<object id="eb_smug_1_A" model="8585" posX="-657.55" posY="1091.24" posZ="10.061" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="eb_loan_2_A" model="8585" posX="-648.04" posY="1491.71" posZ="10.921" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="eb_drug_2_A" model="8585" posX="-397.81" posY="1400.65" posZ="10.031" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
+	<object id="LODloan_1_C" model="8585" posX="-933.378" posY="-1102.33" posZ="13.828" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="LODprot_1_C" model="8585" posX="-1208.72" posY="-649.096" posZ="10.711" rotX="0.0" rotY="-0.0" rotZ="96.94800544456587" interior="0" dimension="-1"></object>
+	<object id="LODprot_1_C" model="8585" posX="-928.958" posY="-686.54" posZ="10.203" rotX="0.0" rotY="-0.0" rotZ="-174.99998383590173" interior="0" dimension="-1"></object>
+	<object id="LODprot_1_C" model="8585" posX="-964.11" posY="-540.0" posZ="9.95" rotX="0.0" rotY="-0.0" rotZ="-83.32399499690675" interior="0" dimension="-1"></object>
+	<object id="LODsmug_1_C" model="8585" posX="-1151.63" posY="-271.01" posZ="10.317" rotX="0.0" rotY="-0.0" rotZ="3.056988731348219" interior="0" dimension="-1"></object>
+	<object id="LODloan_1_C" model="8585" posX="-886.72" posY="-221.04" posZ="10.033" rotX="0.0" rotY="-0.0" rotZ="88.4169265486829" interior="0" dimension="-1"></object>
+	<object id="LODprot_1_C" model="8585" posX="-1201.9" posY="-103.45" posZ="10.406" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
+	<object id="LODpros_1_C" model="8585" posX="-962.183" posY="194.58" posZ="8.703" rotX="0.0" rotY="-0.0" rotZ="-5.915000266434811" interior="0" dimension="-1"></object>
+	<object id="LODdrug_1_C" model="8585" posX="-420.463" posY="868.52" posZ="10.031" rotX="0.0" rotY="-0.0" rotZ="-112.68696674914167" interior="0" dimension="-1"></object>
+	<object id="LODrob_1_C" model="8585" posX="-973.636" posY="1036.17" posZ="10.045" rotX="0.0" rotY="-0.0" rotZ="90.00003546022141" interior="0" dimension="-1"></object>
+	<object id="LODsmug_1_C" model="8585" posX="-657.55" posY="1091.24" posZ="10.061" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="eb_pros_1_A_int" model="8585" posX="-1729.02" posY="630.456" posZ="2157.55" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="10" dimension="-1"></object>
+</map>

@@ -2,6 +2,7 @@
 -- Tables --
 resource		    = {}
 resourceModels 	 	= {}
+resourceMaps		= {}
 
 streamingDistances  = {}
 
@@ -154,6 +155,24 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 	end)
 end
 
+function loadMapPlacements( resourceName,mapPlacements,last)
+	resourceMaps[resourceName] = {}
+	
+	Async:setPriority("medium")
+	Async:foreach(mapPlacements, function(data) 
+		local isLOD = startsWithLOD(data.id)
+		local obj = nil
+		if isLOD then
+			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ,isLOD)
+		else
+			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
+			--obj = createBuilding(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
+		end
+		setElementID(obj,data.id)
+
+	end)
+end
+
 function loaded(resourceName)
 	loadedFunction (resourceName)
 	initializeObjects()
@@ -215,10 +234,12 @@ function changeObjectModel (object,newModel,streamNew,inital)
 			local lodID = useLODs[newModel] or (getElementData(object,'lodID'))
 			
 			if idCache[lodID] then -- // Create new LOD if this model has a LOD assigned to it
-				
+				--[[
 				local x,y,z,xr,yr,zr = getElementPosition (object)
 				local xr,yr,zr = getElementRotation (object)
 				local nObject = createObject (idCache[lodID],x,y,z,xr,yr,zr,true)
+				--]]
+				local nObject = getElementByID(lodID)
 				local cull,dimension,interior = isElementDoubleSided(object),getElementDimension(object),getElementInterior(object)
 				setElementData(nObject,'Zone',definitionZones[lodID])
 				setElementDoubleSided(nObject,cull)
