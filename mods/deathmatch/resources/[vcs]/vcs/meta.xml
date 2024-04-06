@@ -4,10 +4,10 @@
 	<map src="zones/airportn/airportn.map" type="server" />
 	<map src="zones/littleha/littleha.map" type="server" />
 	<map src="zones/docks/docks.map" type="server" />
-	<file src="zones/airportn/airportn.definition" type="client" />
-	<file src="zones/airport/airport.definition" type="client" />
-	<file src="zones/littleha/littleha.definition" type="client" />
-	<file src="zones/docks/docks.definition" type="client" />
+	<file src="zones/airportn/airportn.def" type="client" />
+	<file src="zones/airport/airport.def" type="client" />
+	<file src="zones/littleha/littleha.def" type="client" />
+	<file src="zones/docks/docks.def" type="client" />
 	<file src="zones/airportn/dff/jm_brks_gate.dff" type="client" />
 	<file src="zones/airportn/txd/Army_HM128.txd" type="client" />
 	<file src="zones/airportn/col/jm_brks_gate.col" type="client" />

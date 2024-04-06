@@ -116,7 +116,7 @@
 	<object id="cp_trailer04" model="8585" posX="-920.268" posY="-880.44" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="cp_trailer04" model="8585" posX="-941.611" posY="-896.618" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-8.999985966008722" interior="0" dimension="-1"></object>
 	<object id="cp_trailer04" model="8585" posX="-950.736" posY="-923.948" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-110.00000719134971" interior="0" dimension="-1"></object>
-	<object id="cp_trailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.29999814120988" interior="0" dimension="-1"></object>
+	<object id="cp_trailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.299998141209876" interior="0" dimension="-1"></object>
 	<object id="cp_trailer05" model="8585" posX="-931.195" posY="-837.13" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
 	<object id="cp_element01" model="8585" posX="-942.354" posY="-914.824" posZ="12.55" rotX="0.0" rotY="-0.0" rotZ="55.000061138955694" interior="0" dimension="-1"></object>
 	<object id="cp_element01" model="8585" posX="-921.176" posY="-860.621" posZ="12.66" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -241,7 +241,7 @@
 	<object id="LODtleha_hardware" model="8585" posX="-969.989" posY="-694.358" posZ="14.5944" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="LODhotel" model="8585" posX="-853.249" posY="-775.971" posZ="27.3234" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="LODuild034" model="8585" posX="-849.924" posY="-866.697" posZ="18.62" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="LODtrailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.29999814120988" interior="0" dimension="-1"></object>
+	<object id="LODtrailer05" model="8585" posX="-921.13" posY="-937.008" posZ="12.6652" rotX="0.0" rotY="-0.0" rotZ="-48.299998141209876" interior="0" dimension="-1"></object>
 	<object id="LODtrailer02" model="8585" posX="-920.496" posY="-918.625" posZ="12.7058" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="LODtariler01" model="8585" posX="-919.823" posY="-897.726" posZ="12.8698" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="LODtrailer04" model="8585" posX="-920.268" posY="-880.44" posZ="12.7322" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -400,8 +400,8 @@
 	<object id="veg_palm01" model="648" posX="-796.92" posY="-622.396" posZ="9.41542" rotX="0.0" rotY="-0.0" rotZ="-62.87672970744244" interior="0" dimension="-1"></object>
 	<object id="veg_palm01" model="648" posX="-819.911" posY="-311.634" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="45.792413518377344" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-814.791" posY="-371.31" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="108.58124706239727" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.26475711520195" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.5899848607897" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-791.634" posY="-669.065" posZ="9.7312" rotX="0.0" rotY="-0.0" rotZ="-46.264757115201945" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="621" posX="-801.27" posY="-591.208" posZ="9.7313" rotX="0.0" rotY="-0.0" rotZ="67.58998486078968" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1111.54" posY="-731.752" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="102.50009130886676" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-1113.77422414" posY="-431.669279563" posZ="6.98087" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palm02" model="621" posX="-814.937" posY="-388.726" posZ="9.6313" rotX="0.0" rotY="-0.0" rotZ="-84.45452527155007" interior="0" dimension="-1"></object>
