@@ -42,8 +42,8 @@
 	<object id="doc_shedbig30" model="8585" posX="-1161.04" posY="-1381.6" posZ="21.7238" rotX="0.0" rotY="-0.0" rotZ="-21.49998775454429" interior="0" dimension="-1"></object>
 	<object id="dock_camjones" model="8585" posX="-841.841" posY="-906.237" posZ="14.7134" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="dock_grassarea" model="8585" posX="-842.392" posY="-1178.17" posZ="13.4021" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="13" dimension="-1"></object>
-	<object id="dockcranescale" model="8585" posX="-859.486" posY="-1517.69" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.50004152425786" interior="0" dimension="-1"></object>
-	<object id="dockcranescale" model="8585" posX="-974.356" posY="-1461.54" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.50004152425786" interior="0" dimension="-1"></object>
+	<object id="dockcranescale" model="8585" posX="-859.486" posY="-1517.69" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.500041524257856" interior="0" dimension="-1"></object>
+	<object id="dockcranescale" model="8585" posX="-974.356" posY="-1461.54" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.500041524257856" interior="0" dimension="-1"></object>
 	<object id="dockfuel02" model="8585" posX="-1036.32" posY="-1466.53" posZ="18.4252" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="dockfuel07" model="8585" posX="-660.324" posY="-1537.34" posZ="18.0688" rotX="0.0" rotY="-0.0" rotZ="-113.49998528229314" interior="0" dimension="-1"></object>
 	<object id="dockgate01" model="8585" posX="-719.555" posY="-1268.2" posZ="13.6086" rotX="0.0" rotY="-0.0" rotZ="114.00006626625779" interior="0" dimension="-1"></object>
@@ -113,56 +113,86 @@
 	<object id="LODwaretank" model="8585" posX="-838.05" posY="-1498.14" posZ="14.3379" rotX="0.0" rotY="-0.0" rotZ="-21.999996838915923" interior="0" dimension="-1"></object>
 	<object id="high_lampost" model="8585" posX="-679.027807363" posY="-1576.60763523" posZ="24.5778" rotX="0.0" rotY="-0.0" rotZ="-168.9999881877224" interior="0" dimension="-1"></object>
 	<object id="roadsign" model="1673" posX="-804.362" posY="-894.729" posZ="14.2058" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="roadsign" model="1673" posX="-804.362" posY="-894.729" posZ="14.2058" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="roadsign" model="1673" posX="-814.546" posY="-895.605" posZ="14.2058" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
-	<object id="veg_palm01" model="648" posX="-770.447" posY="-1106.59" posZ="9.57278" rotX="0.0" rotY="-0.0" rotZ="-99.74799065173735" interior="0" dimension="-1"></object>
-	<object id="veg_palm01" model="648" posX="-778.147" posY="-1060.08" posZ="9.68854" rotX="0.0" rotY="-0.0" rotZ="-175.73166457050894" interior="0" dimension="-1"></object>
-	<object id="veg_palm01" model="648" posX="-768.189" posY="-1117.78" posZ="9.57278" rotX="0.0" rotY="-0.0" rotZ="-138.81513623928842" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-775.747" posY="-1076.92" posZ="9.64342" rotX="0.0" rotY="-0.0" rotZ="35.223205132159606" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-781.344" posY="-942.506" posZ="9.16087" rotX="0.0" rotY="-0.0" rotZ="37.810000237708266" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-782.033" posY="-1036.97" posZ="9.67457" rotX="0.0" rotY="-0.0" rotZ="170.73275847772314" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-772.588512394" posY="-952.515282186" posZ="9.05727" rotX="0.0" rotY="-0.0" rotZ="-51.18998614712682" interior="0" dimension="-1"></object>
-	<object id="veg_palm02" model="621" posX="-785.71" posY="-998.663" posZ="9.75722" rotX="0.0" rotY="-0.0" rotZ="-139.1900345975879" interior="0" dimension="-1"></object>
-	<object id="veg_palm04" model="620" posX="-778.8" posY="-1050.26" posZ="9.91734" rotX="0.0" rotY="-0.0" rotZ="-157.27415697967902" interior="0" dimension="-1"></object>
-	<object id="veg_palm04" model="620" posX="-970.69" posY="-1399" posZ="11.2055" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="veg_palm04" model="620" posX="-751.883" posY="-1179.73" posZ="9.70418" rotX="0.0" rotY="-0.0" rotZ="-92.02428460568179" interior="0" dimension="-1"></object>
+	<object id="roadsign" model="1673" posX="-814.546" posY="-895.605" posZ="14.2058" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="veg_palm01" model="8585" posX="-770.447" posY="-1106.59" posZ="9.57278" rotX="0.0" rotY="-0.0" rotZ="-99.74799065173735" interior="0" dimension="-1"></object>
+	<object id="veg_palm01" model="8585" posX="-778.147" posY="-1060.08" posZ="9.68854" rotX="0.0" rotY="-0.0" rotZ="-175.73166457050894" interior="0" dimension="-1"></object>
+	<object id="veg_palm01" model="8585" posX="-768.189" posY="-1117.78" posZ="9.57278" rotX="0.0" rotY="-0.0" rotZ="-138.81513623928842" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="8585" posX="-775.747" posY="-1076.92" posZ="9.64342" rotX="0.0" rotY="-0.0" rotZ="35.223205132159606" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="8585" posX="-781.344" posY="-942.506" posZ="9.16087" rotX="0.0" rotY="-0.0" rotZ="37.810000237708266" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="8585" posX="-782.033" posY="-1036.97" posZ="9.67457" rotX="0.0" rotY="-0.0" rotZ="170.73275847772314" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="8585" posX="-772.588512394" posY="-952.515282186" posZ="9.05727" rotX="0.0" rotY="-0.0" rotZ="-51.189986147126824" interior="0" dimension="-1"></object>
+	<object id="veg_palm02" model="8585" posX="-785.71" posY="-998.663" posZ="9.75722" rotX="0.0" rotY="-0.0" rotZ="-139.1900345975879" interior="0" dimension="-1"></object>
+	<object id="veg_palm04" model="8585" posX="-778.8" posY="-1050.26" posZ="9.91734" rotX="0.0" rotY="-0.0" rotZ="-157.27415697967902" interior="0" dimension="-1"></object>
+	<object id="veg_palm04" model="8585" posX="-970.69" posY="-1399" posZ="11.2055" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palm04" model="8585" posX="-751.883" posY="-1179.73" posZ="9.70418" rotX="0.0" rotY="-0.0" rotZ="-92.02428460568179" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb1" model="625" posX="-844.915" posY="-1042.77" posZ="21.1434" rotX="0.0" rotY="-0.0" rotZ="-51.99997763909185" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb1" model="625" posX="-844.915" posY="-1042.77" posZ="21.1434" rotX="0.0" rotY="-0.0" rotZ="-51.99997763909185" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb1" model="625" posX="-846.66" posY="-1029.29" posZ="21.1434" rotX="0.0" rotY="-0.0" rotZ="-51.99997763909185" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb1" model="625" posX="-846.66" posY="-1029.29" posZ="21.1434" rotX="0.0" rotY="-0.0" rotZ="-51.99997763909185" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb2" model="626" posX="-848.972" posY="-995.818" posZ="22.4985" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb2" model="626" posX="-848.972" posY="-995.818" posZ="22.4985" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb2" model="626" posX="-847.839" posY="-1022.8" posZ="22.4985" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb2" model="626" posX="-847.839" posY="-1022.8" posZ="22.4985" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb3" model="627" posX="-848.507" posY="-997.18" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb3" model="627" posX="-848.507" posY="-997.18" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb3" model="627" posX="-848.507" posY="-1013.58" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb3" model="627" posX="-848.507" posY="-1013.58" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb3" model="627" posX="-849.586" posY="-1011.68" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb3" model="627" posX="-849.586" posY="-1011.68" posZ="22.2492" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="veg_palmkb4" model="628" posX="-848.469" posY="-1007.84" posZ="22.4439" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="veg_palwee01" model="623" posX="-718.352" posY="-1262.17" posZ="5.65671" rotX="44.2838617654246" rotY="-8.984442470375157" rotZ="-122.2408523470558" interior="0" dimension="-1"></object>
-	<object id="veg_palwee01" model="623" posX="-830.48" posY="-1457.38" posZ="10.822" rotX="44.283779399491294" rotY="-8.98443198023861" rotZ="12.75908230049228" interior="0" dimension="-1"></object>
-	<object id="veg_palwee01" model="623" posX="-707.796" posY="-1254.23" posZ="9.44338" rotX="44.283779399491294" rotY="-8.98443198023861" rotZ="12.75908230049228" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-835.155" posY="-947.311" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-838.902" posY="-1013.51" posZ="7.22089" rotX="0.0" rotY="-0.0" rotZ="-139.9422081595806" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-721.94" posY="-1238.11" posZ="8.89154" rotX="0.0" rotY="-0.0" rotZ="-32.44223774574702" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-835.969" posY="-1041.8" posZ="7.22089" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-725.996" posY="-1216.24" posZ="8.72645" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-839.323" posY="-995.386" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-748.852" posY="-1142.17" posZ="9.1637" rotX="0.0" rotY="-0.0" rotZ="12.55776564754673" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-838.205" posY="-1023.87" posZ="6.85274" rotX="0.0" rotY="-0.0" rotZ="-37.44222294930619" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-876.514" posY="-921.674" posZ="9.03369" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-796.479" posY="-1234.49" posZ="9.01789" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-785.645" posY="-1237.66" posZ="9.52007" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-838.325" posY="-973.39" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-833.246" posY="-929.245" posZ="9.27522" rotX="0.0" rotY="-0.0" rotZ="102.55778450652244" interior="0" dimension="-1"></object>
-	<object id="veg_palwee02" model="624" posX="-864.283" posY="-921.45" posZ="9.20817" rotX="0.0" rotY="-0.0" rotZ="102.55778450652244" interior="0" dimension="-1"></object>
-	<object id="veg_palwee03" model="619" posX="-746.873" posY="-1167.82" posZ="9.8299" rotX="0.0" rotY="-0.0" rotZ="-135.10297336660494" interior="0" dimension="-1"></object>
+	<object id="veg_palmkb4" model="628" posX="-848.469" posY="-1007.84" posZ="22.4439" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
+	<object id="veg_palwee01" model="8585" posX="-718.352" posY="-1262.17" posZ="5.65671" rotX="44.28386176542459" rotY="-8.984442470375157" rotZ="-122.2408523470558" interior="0" dimension="-1"></object>
+	<object id="veg_palwee01" model="8585" posX="-830.48" posY="-1457.38" posZ="10.822" rotX="44.283779399491294" rotY="-8.98443198023861" rotZ="12.75908230049228" interior="0" dimension="-1"></object>
+	<object id="veg_palwee01" model="8585" posX="-707.796" posY="-1254.23" posZ="9.44338" rotX="44.283779399491294" rotY="-8.98443198023861" rotZ="12.75908230049228" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-835.155" posY="-947.311" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-838.902" posY="-1013.51" posZ="7.22089" rotX="0.0" rotY="-0.0" rotZ="-139.9422081595806" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-721.94" posY="-1238.11" posZ="8.89154" rotX="0.0" rotY="-0.0" rotZ="-32.44223774574702" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-835.969" posY="-1041.8" posZ="7.22089" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-725.996" posY="-1216.24" posZ="8.72645" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-839.323" posY="-995.386" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-748.852" posY="-1142.17" posZ="9.1637" rotX="0.0" rotY="-0.0" rotZ="12.55776564754673" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-838.205" posY="-1023.87" posZ="6.85274" rotX="0.0" rotY="-0.0" rotZ="-37.44222294930619" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-876.514" posY="-921.674" posZ="9.03369" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-796.479" posY="-1234.49" posZ="9.01789" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-785.645" posY="-1237.66" posZ="9.52007" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-838.325" posY="-973.39" posZ="8.79493" rotX="0.0" rotY="-0.0" rotZ="57.5578094745865" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-833.246" posY="-929.245" posZ="9.27522" rotX="0.0" rotY="-0.0" rotZ="102.55778450652244" interior="0" dimension="-1"></object>
+	<object id="veg_palwee02" model="8585" posX="-864.283" posY="-921.45" posZ="9.20817" rotX="0.0" rotY="-0.0" rotZ="102.55778450652244" interior="0" dimension="-1"></object>
+	<object id="veg_palwee03" model="8585" posX="-746.873" posY="-1167.82" posZ="9.8299" rotX="0.0" rotY="-0.0" rotZ="-135.10297336660494" interior="0" dimension="-1"></object>
 	<object id="dockgate" model="8585" posX="-831.9" posY="-1194.99" posZ="12.0495" rotX="-0.00014340693542339367" rotY="0.00020254156627783082" rotZ="-160.5998163865517" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-826.483230231" posY="-1059.89671473" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="-167.99985809645497" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-826.483230231" posY="-1059.89671473" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="-167.99985809645497" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-812.827" posY="-1117.36" posZ="14.4752" rotX="-0.0001468588842318584" rotY="0.00019139018034272065" rotZ="-165.0000126698963" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-812.827" posY="-1117.36" posZ="14.4752" rotX="-0.0001468588842318584" rotY="0.00019139018034272065" rotZ="-165.0000126698963" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-794.821350318" posY="-1171.48616374" posZ="14.4752" rotX="-0.0001419411141251124" rotY="0.0002065255341056819" rotZ="-159.0000177379359" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-794.821350318" posY="-1171.48616374" posZ="14.4752" rotX="-0.0001419411141251124" rotY="0.0002065255341056819" rotZ="-159.0000177379359" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-754.710780179" posY="-1199.87910712" posZ="14.4752" rotX="0.00014194125870841992" rotY="9.75538339844016e-05" rotZ="20.99983022261808" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-754.710780179" posY="-1199.87910712" posZ="14.4752" rotX="0.00014194125870841992" rotY="9.75538339844016e-05" rotZ="20.99983022261808" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-778.348" posY="-1134.41" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="19.600287523607044" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-778.348" posY="-1134.41" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="19.600287523607044" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-793.376290252" posY="-1080.80754894" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="12.000293943020223" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-793.376290252" posY="-1080.80754894" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="12.000293943020223" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-832.237" posY="-1009.96" posZ="14.4752" rotX="-0.0001518311312258349" rotY="0.00015999662139892638" rotZ="-177.0000025339842" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-832.237" posY="-1009.96" posZ="14.4752" rotX="-0.0001518311312258349" rotY="0.00015999662139892638" rotZ="-177.0000025339842" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-830.652988286" posY="-961.581959895" posZ="14.4752" rotX="-0.00015120652451268424" rotY="0.00013614625176957957" rotZ="173.99970098896952" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-830.652988286" posY="-961.581959895" posZ="14.4752" rotX="-0.00015120652451268424" rotY="0.00013614625176957957" rotZ="173.99970098896952" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-798.913256321" posY="-938.832875076" posZ="14.1752" rotX="0.0" rotY="-0.0" rotZ="-8.999992398024112" interior="0" dimension="-1"></object>
-	<object id="mlamppost" model="1294" posX="-804.298" posY="-992.036" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="-1.7999984796039483" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-798.913256321" posY="-938.832875076" posZ="14.1752" rotX="0.0" rotY="-0.0" rotZ="-8.999992398024112" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-804.298" posY="-992.036" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="-1.7999984796039479" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-804.298" posY="-992.036" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="-1.7999984796039479" interior="0" dimension="-1"></object>
 	<object id="mlamppost" model="1294" posX="-801.372829723" posY="-1038.14103359" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="9.000296477012" interior="0" dimension="-1"></object>
+	<object id="mlamppost" model="1294" posX="-801.372829723" posY="-1038.14103359" posZ="14.4752" rotX="0.0" rotY="-0.0" rotZ="9.000296477012" interior="0" dimension="-1"></object>
+	<object id="CJ_Dumpster2" model="1344" posX="-702.988056989" posY="-1570.70919105" posZ="12.245" rotX="-0.00013297637953664558" rotY="7.832863665660561e-05" rotZ="150.9997204162042" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-699.058" posY="-1576.57" posZ="16" rotX="0.0" rotY="-0.0" rotZ="-22.499980995125668" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-701.488515317" posY="-1575.55935007" posZ="16" rotX="0.0" rotY="-0.0" rotZ="-22.499980995125668" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-705.880487845" posY="-1566.88322838" posZ="17.3" rotX="0.0" rotY="-0.0" rotZ="-22.499980995125668" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-708.532794386" posY="-1565.78684349" posZ="17.3" rotX="0.0" rotY="-0.0" rotZ="-22.499980995125668" interior="0" dimension="-1"></object>
+	<object id="Fan2" model="8585" posX="-728.576" posY="-1533.95" posZ="16.5713" rotX="-1.116400970030203e-09" rotY="-2.1700387199418144e-10" rotZ="68.0002466419172" interior="0" dimension="-1"></object>
+	<object id="Fan2" model="8585" posX="-732.346" posY="-1543.27" posZ="16.5713" rotX="0.0" rotY="-0.0" rotZ="68.0002466419172" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-695.034" posY="-1549.605" posZ="14.07" rotX="0.0" rotY="-0.0" rotZ="157.5001710445005" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-692.202017069" posY="-1550.75037146" posZ="14.07" rotX="0.0" rotY="-0.0" rotZ="157.5001710445005" interior="0" dimension="-1"></object>
 	<object id="docks09" model="8585" posX="-803.441" posY="-1207.71" posZ="11.6356" rotX="0.0" rotY="-0.0" rotZ="17.539949126765812" interior="0" dimension="-1"></object>
 	<object id="docks09" model="8585" posX="-819.928" posY="-1155.82" posZ="12.1473" rotX="0.0" rotY="-0.0" rotZ="17.540289263534053" interior="13" dimension="-1"></object>
 	<object id="docks08" model="8585" posX="-811.747" posY="-1181.69" posZ="12.4588" rotX="0.0" rotY="-0.0" rotZ="17.96502418923778" interior="0" dimension="-1"></object>
@@ -196,8 +226,8 @@
 	<object id="dk_boat01" model="8585" posX="-677.54" posY="-1295.53" posZ="13.5753" rotX="0.0" rotY="-0.0" rotZ="-156.5000103046866" interior="0" dimension="-1"></object>
 	<object id="dk_boat01" model="8585" posX="-673.088" posY="-1305.83" posZ="13.5753" rotX="0.0" rotY="-0.0" rotZ="-156.5000103046866" interior="0" dimension="-1"></object>
 	<object id="dk_boat01" model="8585" posX="-739.49" posY="-1187.41" posZ="10.4105" rotX="4.744823930023478e-06" rotY="-29.700024571624855" rotZ="-43.0235631205867" interior="0" dimension="-1"></object>
-	<object id="dk_support01" model="8585" posX="-647.226" posY="-1294.4" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="23.50004152425786" interior="0" dimension="-1"></object>
-	<object id="dk_support01" model="8585" posX="-651.673" posY="-1284.11" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="23.50004152425786" interior="0" dimension="-1"></object>
+	<object id="dk_support01" model="8585" posX="-647.226" posY="-1294.4" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="23.500041524257856" interior="0" dimension="-1"></object>
+	<object id="dk_support01" model="8585" posX="-651.673" posY="-1284.11" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="23.500041524257856" interior="0" dimension="-1"></object>
 	<object id="dk_support01" model="8585" posX="-676.949" posY="-1295.18" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="-156.49994223321926" interior="0" dimension="-1"></object>
 	<object id="dk_support01" model="8585" posX="-672.497" posY="-1305.48" posZ="13.7101" rotX="0.0" rotY="-0.0" rotZ="-156.49994223321926" interior="0" dimension="-1"></object>
 	<object id="dk_newramp01" model="8585" posX="-738.653" posY="-1186.32" posZ="11.3133" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -244,11 +274,11 @@
 	<object id="trucktrailer" model="8585" posX="-1071.79" posY="-1241.03" posZ="10.2585" rotX="0.0" rotY="-0.0" rotZ="-106.76147092866557" interior="0" dimension="-1"></object>
 	<object id="trucktrailer" model="8585" posX="-1096.75" posY="-1303.23" posZ="10.2925" rotX="0.0" rotY="-0.0" rotZ="-24.600184323259047" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1081.95" posY="-1310.2" posZ="10.2925" rotX="0.0" rotY="-0.0" rotZ="-27.064658916997278" interior="0" dimension="-1"></object>
-	<object id="redtrailer" model="8585" posX="-1115.72" posY="-1257.06" posZ="8.8893" rotX="0.0" rotY="-0.0" rotZ="137.61405511732713" interior="0" dimension="-1"></object>
+	<object id="redtrailer" model="8585" posX="-1115.72" posY="-1257.06" posZ="8.8893" rotX="0.0" rotY="-0.0" rotZ="137.6140551173271" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1054.21" posY="-1337.59" posZ="11.8496" rotX="0.0" rotY="-0.0" rotZ="-27.100148982774567" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1074.21" posY="-1313.85" posZ="10.2925" rotX="0.0" rotY="-0.0" rotZ="-27.064658916997278" interior="0" dimension="-1"></object>
-	<object id="redtrailer" model="8585" posX="-1097.09525852" posY="-1372.95807339" posZ="12.204" rotX="0.0" rotY="-0.0" rotZ="-35.75609251063496" interior="0" dimension="-1"></object>
-	<object id="redtrailer" model="8585" posX="-1098.1" posY="-1372.28" posZ="9.2797" rotX="0.0" rotY="-0.0" rotZ="-35.75609251063496" interior="0" dimension="-1"></object>
+	<object id="redtrailer" model="8585" posX="-1097.09525852" posY="-1372.95807339" posZ="12.204" rotX="0.0" rotY="-0.0" rotZ="-35.756092510634964" interior="0" dimension="-1"></object>
+	<object id="redtrailer" model="8585" posX="-1098.1" posY="-1372.28" posZ="9.2797" rotX="0.0" rotY="-0.0" rotZ="-35.756092510634964" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1101.62" posY="-1326.95" posZ="10.4043" rotX="0.0" rotY="-0.0" rotZ="66.12054439887594" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1089.92" posY="-1306.45" posZ="10.2925" rotX="0.0" rotY="-0.0" rotZ="-27.064658916997278" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-731.189" posY="-1334.8" posZ="8.7009" rotX="0.0" rotY="-0.0" rotZ="106.38272388569077" interior="0" dimension="-1"></object>
@@ -258,7 +288,7 @@
 	<object id="redtrailer" model="8585" posX="-714.495" posY="-1342.35" posZ="8.7377" rotX="0.0" rotY="-0.0" rotZ="24.058390714354186" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-745.475" posY="-1346.42" posZ="10.0535" rotX="0.0" rotY="-0.0" rotZ="106.38272388569077" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-731.929" posY="-1332.19" posZ="10.0535" rotX="0.0" rotY="-0.0" rotZ="106.38272388569077" interior="0" dimension="-1"></object>
-	<object id="redtrailer" model="8585" posX="-1096.02429063" posY="-1373.75642971" posZ="9.2797" rotX="0.0" rotY="-0.0" rotZ="-35.75609251063496" interior="0" dimension="-1"></object>
+	<object id="redtrailer" model="8585" posX="-1096.02429063" posY="-1373.75642971" posZ="9.2797" rotX="0.0" rotY="-0.0" rotZ="-35.756092510634964" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1107.98" posY="-1400.57" posZ="10.6073" rotX="0.0" rotY="-0.0" rotZ="-115.10426836632573" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1083.96" posY="-1335.03" posZ="10.4043" rotX="0.0" rotY="-0.0" rotZ="64.42053176697061" interior="0" dimension="-1"></object>
 	<object id="redtrailer" model="8585" posX="-1128.36" posY="-1386.84" posZ="11.9228" rotX="0.0" rotY="-0.0" rotZ="155.49995906038436" interior="0" dimension="-1"></object>
@@ -300,11 +330,13 @@
 	<object id="dk_struct05" model="8585" posX="-945.272" posY="-1340.02" posZ="29.4068" rotX="0.0" rotY="-0.0" rotZ="157.09994951893083" interior="0" dimension="-1"></object>
 	<object id="dk_struct05" model="8585" posX="-972.002" posY="-1276.89" posZ="27.9546" rotX="0.0" rotY="-0.0" rotZ="66.00000560614308" interior="0" dimension="-1"></object>
 	<object id="dk_struct05" model="8585" posX="-974.937" posY="-1275.61" posZ="27.9546" rotX="0.0" rotY="-0.0" rotZ="66.00000560614308" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-1112.63" posY="-1307.17" posZ="14.8" rotX="0.0" rotY="-0.0" rotZ="-26.299977785365336" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-1114.32767041" posY="-1306.32345098" posZ="14.8" rotX="0.0" rotY="-0.0" rotZ="-26.299977785365336" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1040.9" posY="-1305.83" posZ="10.9287" rotX="0.0" rotY="-0.0" rotZ="-23.81941801745299" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1041.4" posY="-1305.48" posZ="11.7349" rotX="0.0" rotY="-0.0" rotZ="-23.81941801745299" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1043.14" posY="-1304.79" posZ="10.9287" rotX="0.0" rotY="-0.0" rotZ="-23.81941801745299" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1114.55" posY="-1243.12" posZ="10.8463" rotX="0.0" rotY="-0.0" rotZ="-111.82447017877898" interior="0" dimension="-1"></object>
-	<object id="dockscar01" model="8585" posX="-1106.77" posY="-1247.96" posZ="10.8463" rotX="0.0" rotY="-0.0" rotZ="-136.79136461637452" interior="0" dimension="-1"></object>
+	<object id="dockscar01" model="8585" posX="-1106.77" posY="-1247.96" posZ="10.8463" rotX="0.0" rotY="-0.0" rotZ="-136.79136461637455" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1114.55" posY="-1243.12" posZ="11.7002" rotX="0.0" rotY="-0.0" rotZ="-111.82447017877898" interior="0" dimension="-1"></object>
 	<object id="dockscar01" model="8585" posX="-1047.55" posY="-1318.59" posZ="12.241" rotX="0.0" rotY="-0.0" rotZ="-13.016811125883969" interior="0" dimension="-1"></object>
 	<object id="LODship01" model="8585" posX="-678.556" posY="-1256.9" posZ="19.5633" rotX="0.0" rotY="-0.0" rotZ="-156.5000103046866" interior="0" dimension="-1"></object>
@@ -312,8 +344,8 @@
 	<object id="dk_graffiti02" model="8585" posX="-712.17" posY="-1467.8" posZ="11.4125" rotX="0.0" rotY="-0.0" rotZ="-2.98022748270359e-09" interior="0" dimension="-1"></object>
 	<object id="dk_struct06" model="8585" posX="-695.979" posY="-1583.86" posZ="13.7933" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="dockfence" model="8585" posX="-680.885" posY="-1479.73" posZ="10.722" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="dk_struct07" model="8585" posX="-974.356" posY="-1461.54" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.50004152425786" interior="0" dimension="-1"></object>
-	<object id="dk_struct07" model="8585" posX="-859.486" posY="-1517.69" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.50004152425786" interior="0" dimension="-1"></object>
+	<object id="dk_struct07" model="8585" posX="-974.356" posY="-1461.54" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.500041524257856" interior="0" dimension="-1"></object>
+	<object id="dk_struct07" model="8585" posX="-859.486" posY="-1517.69" posZ="34.0159" rotX="0.0" rotY="-0.0" rotZ="-23.500041524257856" interior="0" dimension="-1"></object>
 	<object id="dk_struct08" model="8585" posX="-876.956" posY="-1478.08" posZ="77.1107" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="dk_struct09" model="8585" posX="-1036.32" posY="-1466.53" posZ="18.4252" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="dk_struct10" model="8585" posX="-935.299" posY="-1414.61" posZ="5.19969" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -339,7 +371,9 @@
 	<object id="dk_newramp03" model="8585" posX="-1111.37" posY="-1254.23" posZ="13.6278" rotX="0.0" rotY="-0.0" rotZ="28.48765998518389" interior="0" dimension="-1"></object>
 	<object id="dk_toi" model="8585" posX="-1112.9" posY="-1232.28" posZ="11.5115" rotX="0.0" rotY="-0.0" rotZ="-114.78502250138543" interior="0" dimension="-1"></object>
 	<object id="LODks60" model="8585" posX="-781.328" posY="-973.897" posZ="-0.169723" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
-	<object id="veg_palwee03" model="619" posX="-800.798050633" posY="-1177.08072409" posZ="9.8299" rotX="-0.00015203949571866224" rotY="0.00015203949571866227" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="veg_palwee03" model="8585" posX="-800.798050633" posY="-1177.08072409" posZ="9.8299" rotX="-0.00015203949571866224" rotY="0.00015203949571866227" rotZ="-180.0" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-836.458779942" posY="-1201.77648015" posZ="16.87" rotX="-0.000145550384529777" rotY="0.00019598370832446058" rotZ="-163.20001419025894" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-833.614681174" posY="-1200.91676893" posZ="16.87" rotX="-0.000145550384529777" rotY="0.00019598370832446058" rotZ="-163.20001419025894" interior="0" dimension="-1"></object>
 	<object id="jm_dks_bhdoor" model="8585" posX="-811.43" posY="-1550.75" posZ="8.04" rotX="0.0" rotY="-0.0" rotZ="-22.499955262370396" interior="0" dimension="-1"></object>
 	<object id="LOD_dockwareold01" model="8585" posX="-692.353" posY="-1539.34" posZ="16.1308" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
 	<object id="LOD_dockwareold01" model="8585" posX="-681.895" posY="-1514.91" posZ="16.0716" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="0" dimension="-1"></object>
@@ -349,6 +383,7 @@
 	<object id="LODks04" model="8585" posX="-1126.63" posY="-1419.46" posZ="15.0942" rotX="0.0" rotY="-0.0" rotZ="67.22123550594934" interior="0" dimension="-1"></object>
 	<object id="LODks05" model="8585" posX="-1133.31" posY="-1333.09" posZ="14.589" rotX="0.0" rotY="-0.0" rotZ="-25.60005353691917" interior="0" dimension="-1"></object>
 	<object id="LODks06" model="8585" posX="-1122.95" posY="-1311.48" posZ="14.589" rotX="0.0" rotY="-0.0" rotZ="-25.60005353691917" interior="0" dimension="-1"></object>
+	<object id="Fan1" model="8585" posX="-668.659" posY="-1486.05" posZ="16.47" rotX="-0.00014145993977297778" rotY="9.631612810941125e-05" rotZ="158.4997140812114" interior="0" dimension="-1"></object>
 	<object id="high_lampost" model="8585" posX="-679.027807363" posY="-1576.60763523" posZ="24.5778" rotX="0.0" rotY="-0.0" rotZ="-168.9999881877224" interior="0" dimension="-1"></object>
 	<object id="high_lampost" model="8585" posX="-721.328" posY="-1262.71" posZ="24.1778" rotX="0.0" rotY="-0.0" rotZ="21.000286341039054" interior="0" dimension="-1"></object>
 	<object id="high_lampost" model="8585" posX="-768.291" posY="-1272.76" posZ="24.2378" rotX="0.00014287054551441082" rotY="0.00010003934684579186" rotZ="19.99983106726344" interior="0" dimension="-1"></object>

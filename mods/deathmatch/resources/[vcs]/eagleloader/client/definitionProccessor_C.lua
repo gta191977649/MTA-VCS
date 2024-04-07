@@ -166,7 +166,6 @@ function loadMapPlacements( resourceName,mapPlacements,last)
 			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ,isLOD)
 		else
 			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
-			--obj = createBuilding(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
 		end
 		setElementID(obj,data.id)
 
@@ -181,8 +180,17 @@ end
 					
 
 function initializeObjects()
+	-- local buildings = getElementsByType("building")
+	-- local objects = getElementsByType("object")
+
+	-- -- Merge `objects` into `buildings`
+	-- for _, object in ipairs(objects) do
+	-- 	table.insert(buildings, object)
+	-- end
+
+
 	Async:setPriority("medium")
-	Async:foreach(getElementsByType("object"), function(object)
+	Async:foreach( getElementsByType("object"), function(object)
 	
 		local id = getElementID(object)
 		
@@ -235,9 +243,9 @@ function changeObjectModel (object,newModel,streamNew,inital)
 			
 			if idCache[lodID] then -- // Create new LOD if this model has a LOD assigned to it
 				--[[
-				local x,y,z,xr,yr,zr = getElementPosition (object)
-				local xr,yr,zr = getElementRotation (object)
-				local nObject = createObject (idCache[lodID],x,y,z,xr,yr,zr,true)
+					local x,y,z,xr,yr,zr = getElementPosition (object)
+					local xr,yr,zr = getElementRotation (object)
+					local nObject = createObject (idCache[lodID],x,y,z,xr,yr,zr,true)
 				--]]
 				local nObject = getElementByID(lodID)
 				local cull,dimension,interior = isElementDoubleSided(object),getElementDimension(object),getElementInterior(object)

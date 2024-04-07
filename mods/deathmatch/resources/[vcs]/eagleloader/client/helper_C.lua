@@ -31,7 +31,7 @@ end
 setTimer(function()
     local hours = getTime()
 	for obj,_ in pairs(timeTable) do
-		if streamTimes[getElementModel(obj)] then
+		if isElement(obj) and streamTimes[getElementModel(obj)] then
 			local sIn,sOut = unpack(streamTimes[getElementModel(obj)])
 			
 			if sIn and sOut then

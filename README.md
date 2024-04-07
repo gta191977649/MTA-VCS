@@ -7,7 +7,7 @@ The goal of this project is to provide a boilerplate for your further gamemode d
 This resource includes VCS styled map, hud, vehicles, weapons, peds, weather, etc.
 Currently, many things are still working in progress, if you find any issue or you want to contribute, you're welcome!
 # Bug and Issue
-* ~~sWrong LODs position and rotation for some objects~~s: resolved!
+* Wrong LODs position and rotation for some objects (LODs with duplicated objects not working)
 * Timed Object are missing
 
 # Progress

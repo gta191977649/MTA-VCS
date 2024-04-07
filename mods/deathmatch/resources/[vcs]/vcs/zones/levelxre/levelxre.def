@@ -1,0 +1,238 @@
+<zoneDefinitions>
+	<definition id="sjl_learjet_near" zone="levelxre" dff="sjl_learjet_near" col="sjl_learjet_near" txd="sjl_learjet_near" lod="false" lodID= "false" lodDistance="299" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="xref_garagedoor" zone="levelxre" dff="xref_garagedoor" col="xref_garagedoor" txd="factory_door" lod="false" lodID= "false" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="sec_keypad" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_spotbulb" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="140" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_spothousing" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="140" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_spotbase" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="140" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_skip" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_packet" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_stinger" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_ramp" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_rhymesbook" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="fun_flower_law" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="casket_law" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="funtarp_law" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="funturf_law" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_stinger2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_cardbox" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_marijuana" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_smokecan" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_parachute" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="warehouse_door1" zone="levelxre" dff="warehouse_door1" col="warehouse_door1" txd="kmb_metaldoorX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_deadleg" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_deadarm" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_deadtorso" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_deadhead" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_frontgate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_road" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="250" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_petroldoor" zone="levelxre" dff="kmb_petroldoor" col="kmb_petroldoor" txd="xre_petdoor" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_crate1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_bpress" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_rcflag" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_dumbbell2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_dumbbell" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_crane" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_mine" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_holdall" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="police_barrier" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="59" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_cam" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="34" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_keypad" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bottle_bank" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_crash3door" zone="levelxre" dff="kmb_crash3door" col="kmb_crash3door" txd="crash3doorX" lod="false" lodID= "false" lodDistance="299" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dyno_box_B" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dyno_box_A" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_blastdoorR" zone="levelxre" dff="a51_blastdoorR" col="a51_blastdoorR" txd="a51_imy" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_intdoor" zone="levelxre" dff="a51_intdoor" col="a51_intdoor" txd="a51_imy" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_blastdoorL" zone="levelxre" dff="a51_blastdoorL" col="a51_blastdoorL" txd="a51_imy" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="chinaTgate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_jump1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_container_blue" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="pol_comp_gate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_container_red" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_container_yel" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_rock" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_plank" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="shutter_vegas" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ramp_bot" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ramp_top" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="temp_till" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_atm1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_atm2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="freight_SFW_door" zone="levelxre" dff="freight_SFW_door" col="freight_SFW_door" txd="bigSHAPX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_netting" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_door_03" zone="levelxre" dff="cr_door_03" col="cr_door_03" txd="sw_doors" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_door_01" zone="levelxre" dff="cr_door_01" col="cr_door_01" txd="sw_doors" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_door_02" zone="levelxre" dff="cr_door_02" col="cr_door_02" txd="sw_doors" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_lockeddoor" zone="levelxre" dff="kmb_lockeddoor" col="kmb_lockeddoor" txd="kmb_lockdoortxd" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_2A" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_labdoor" zone="levelxre" dff="a51_labdoor" col="a51_labdoor" txd="a51_labdoor" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_gimpdoor" zone="levelxre" dff="kmb_gimpdoor" col="kmb_gimpdoor" txd="gimp_drX" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_paper_code" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_ot" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="20" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_compin" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="299" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="immmcran" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="chinaTgarageDoor" zone="levelxre" dff="chinaTgarageDoor" col="chinaTgarageDoor" txd="kb_ctdoorX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cutscene_beer" zone="levelxre" dff="cutscene_beer" col="cutscene_beer" txd="cut_beer" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="rider1_door" zone="levelxre" dff="rider1_door" col="rider1_door" txd="rider1dr" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_beam" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="fire_break" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="fire_break_glass" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="freezer_door" zone="levelxre" dff="freezer_door" col="freezer_door" txd="freezrX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_pooltablesm" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_pooltriangle01" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="mobile1993b" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mobile1993a" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cm_box" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="level_ammobox" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="dts_bbdoor" zone="levelxre" dff="dts_bbdoor" col="dts_bbdoor" txd="dts_bbX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_smashboxes" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_cargo4" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_cargo2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_cargo1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_cargo3" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="green_gloop" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmilitary_crate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmilitary_base" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="reel02" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_bandit10" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="reel03" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="64" doubleSided="true" breakable="false"></definition>
+	<definition id="reel01" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="will_valve" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="portaloo" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="180" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="minigun_base" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lxr_motelvent" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="lxr_motel_doorsim" zone="levelxre" dff="lxr_motel_doorsim" col="lxr_motel_doorsim" txd="imy_moteX" lod="false" lodID= "false" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="comp_wood_gate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_skylight" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="wongs_gate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_bbox" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="roulette_marker" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_goflag" zone="levelxre" dff="kmb_goflag" col="kmb_goflag" txd="GOflagx" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_trolley" zone="levelxre" dff="kmb_trolley" col="kmb_trolley" txd="troleX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp01" zone="levelxre" dff="k_poolballstp01" col="k_poolballstp01" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp02" zone="levelxre" dff="k_poolballstp02" col="k_poolballstp02" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp03" zone="levelxre" dff="k_poolballstp03" col="k_poolballstp03" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp04" zone="levelxre" dff="k_poolballstp04" col="k_poolballstp04" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp05" zone="levelxre" dff="k_poolballstp05" col="k_poolballstp05" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp06" zone="levelxre" dff="k_poolballstp06" col="k_poolballstp06" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballstp07" zone="levelxre" dff="k_poolballstp07" col="k_poolballstp07" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt01" zone="levelxre" dff="k_poolballspt01" col="k_poolballspt01" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballcue" zone="levelxre" dff="k_poolballcue" col="k_poolballcue" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolq2" zone="levelxre" dff="k_poolq2" col="k_poolq2" txd="k_pool" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="smash_box_stay" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="smash_box_brk" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_torso" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_armR" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_armL" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_legR" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_legL" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="chopcop_head" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="131072" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_ammobox" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="80" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_guncrate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="80" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_cratestack" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="60" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cr_ammobox_nonbrk" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="80" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="arch_plans" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_rleg" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_lleg" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_ltorso" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_rtorso" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_rarm" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_larm" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_head" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="target_frame" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="para_pack" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ciggy" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Katana_LHand" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="cr1_door" zone="levelxre" dff="cr1_door" col="cr1_door" txd="cr1_drX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="wongs_erection" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="wong_dish" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bd_window_shatter" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="md_lockdoor" zone="levelxre" dff="md_lockdoor" col="md_lockdoor" txd="mdlckdX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bd_window" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="1024" doubleSided="true" breakable="false"></definition>
+	<definition id="tmp_bin" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_gatexr" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="warehouse_door2b" zone="levelxre" dff="warehouse_door2b" col="warehouse_door2b" txd="kmb_waredoorX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_lanterns" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_stall1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_stall2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_table" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ct_vent" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_container_open" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="CIGAR" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CIGAR_glow" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_barrel" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="120" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="jet_baggage_Door" zone="levelxre" dff="jet_baggage_Door" col="jet_baggage_Door" txd="jetDX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cement_in_hole" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="des_quarrygate" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="des_quarrygate2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lift_dr" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="db_ammo" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="DYN_WREKING_BALL" zone="levelxre" dff="DYN_WREKING_BALL" col="DYN_WREKING_BALL" txd="BREAK_ballX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_shutter" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mini_magnet" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_barrel_exp" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="storm_drain_cover" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="70" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_shash_wall" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="para_collision" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ad_flatdoor" zone="levelxre" dff="ad_flatdoor" col="ad_flatdoor" txd="addoorX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="container_door" zone="levelxre" dff="container_door" col="container_door" txd="continX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_3A" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_1A" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BBALL_col" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ammotrn_obj" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_atm3" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cargo_rear" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="d9_ramp" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_goggles" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_dumbbell_R" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_dumbbell_L" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="kmb_container_broke" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="d9_runway" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="impexp_door" zone="levelxre" dff="impexp_door" col="impexp_door" txd="impexpX" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ad_roadmark1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="nf_blackboard" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ad_finish" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ad_roadmark2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ad_jump" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="240" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="fake_mule_col" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ammo_capsule" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="md_poster" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="trdcsgrgdoor_lvs" zone="levelxre" dff="trdcsgrgdoor_lvs" col="trdcsgrgdoor_lvs" txd="triaddrsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="nf_list_1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="wanted_cross_off" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="nf_list_2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="nf_list_3" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="ab_casdorLok" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nf_ped_coll" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_track_barrier" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="dead_tied_cop" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cuntgirldoor" zone="levelxre" dff="cuntgirldoor" col="cuntgirldoor" txd="cntdrrkx" lod="false" lodID= "false" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_pooltableb" zone="levelxre" dff="k_pooltableb" col="k_pooltableb" txd="k_pool" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_jetdoor" zone="levelxre" dff="a51_jetdoor" col="a51_jetdoor" txd="a51jdrX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="bb_pickup" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_2B" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_1B" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="BREAK_WALL_3B" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt02" zone="levelxre" dff="k_poolballspt02" col="k_poolballspt02" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt03" zone="levelxre" dff="k_poolballspt03" col="k_poolballspt03" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt04" zone="levelxre" dff="k_poolballspt04" col="k_poolballspt04" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt05" zone="levelxre" dff="k_poolballspt05" col="k_poolballspt05" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt06" zone="levelxre" dff="k_poolballspt06" col="k_poolballspt06" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolballspt07" zone="levelxre" dff="k_poolballspt07" col="k_poolballspt07" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="k_poolball8" zone="levelxre" dff="k_poolball8" col="k_poolball8" txd="pool_blsx" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wongs_erection2" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="200" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="basejump_target" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="350" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="imy_la_door" zone="levelxre" dff="imy_la_door" col="imy_la_door" txd="imyladrX" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="md_billbolaeb" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="st_arch_plan" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="TriMainLite" zone="levelxre" dff="TriMainLite" col="TriMainLite" txd="maintLiteTriangle" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CARRIER_DOOR_SFSE" zone="levelxre" dff="CARRIER_DOOR_SFSE" col="CARRIER_DOOR_SFSE" txd="carrierXr" lod="false" lodID= "false" lodDistance="300" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CARRIER_LIFT2_SFSE" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="140" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="CARRIER_LIFT1_SFSE" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="acwinch1" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="a51_ventcoverb" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cs_ry_props" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="quarry_barrel" zone="levelxre" default="true" lod="false" lodID= "false" lodDistance="120" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="cat2_safe_col" zone="levelxre" dff="cat2_safe_col" col="cat2_safe_col" txd="kbmiscfrn1" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

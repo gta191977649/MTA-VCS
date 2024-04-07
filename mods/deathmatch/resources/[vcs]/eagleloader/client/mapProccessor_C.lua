@@ -65,18 +65,21 @@ end
 
 function loadPlacement(resourceName,zone)
 	local path = ':'..resourceName..'/zones/'..zone..'/'..zone..'.map'
-	local zoneDefinitions = xmlLoadFile(path)
-	print(path)
-	print(zoneDefinitions)
-	local sDefintions = xmlNodeGetChildren(zoneDefinitions)
-	local newTable = {}
-	
-	for _,definiton in pairs (sDefintions) do
-		local attributes = xmlNodeGetAttributes(definiton)
-		table.insert(newTable,attributes)
+	if fileExists(path) then
+		local zoneDefinitions = xmlLoadFile(path)
+		print(path)
+		print(zoneDefinitions)
+		local sDefintions = xmlNodeGetChildren(zoneDefinitions)
+		local newTable = {}
+		
+		for _,definiton in pairs (sDefintions) do
+			local attributes = xmlNodeGetAttributes(definiton)
+			table.insert(newTable,attributes)
+		end
+		
+		xmlUnloadFile(zoneDefinitions)
+		return newTable
 	end
-	
-	xmlUnloadFile(zoneDefinitions)
-	return newTable
+	return {}
 end
 

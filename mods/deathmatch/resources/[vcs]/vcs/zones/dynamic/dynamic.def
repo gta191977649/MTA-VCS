@@ -1,0 +1,142 @@
+<zoneDefinitions>
+	<definition id="isd1_bike01" zone="dynamic" dff="isd1_bike01" col="isd1_bike01" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="isd1_bike02" zone="dynamic" dff="isd1_bike02" col="isd1_bike02" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="isd1_bike03" zone="dynamic" dff="isd1_bike03" col="isd1_bike03" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="isd1_car01" zone="dynamic" dff="isd1_car01" col="isd1_car01" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="isd1_car02" zone="dynamic" dff="isd1_car02" col="isd1_car02" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="isd1_car03" zone="dynamic" dff="isd1_car03" col="isd1_car03" txd="genericvcs" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_bikerampNarrow" zone="dynamic" dff="ndc_bikerampNarrow" col="ndc_bikerampNarrow" txd="genericvcs" lod="false" lodID= "false" lodDistance="400" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="gd_cratePile" zone="dynamic" dff="gd_cratePile" col="gd_cratePile" txd="genericvcs" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wh_debris" zone="dynamic" dff="wh_debris" col="wh_debris" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_debrisa" zone="dynamic" dff="ndc_debrisa" col="ndc_debrisa" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_debrisb" zone="dynamic" dff="ndc_debrisb" col="ndc_debrisb" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_debrisc" zone="dynamic" dff="ndc_debrisc" col="ndc_debrisc" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="me_boomshine_dr" zone="dynamic" dff="me_boomshine_dr" col="me_boomshine_dr" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ndc_boomstack" zone="dynamic" dff="ndc_boomstack" col="ndc_boomstack" txd="genericvcs" lod="false" lodID= "false" lodDistance="150" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="tiny_rock" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="washer" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="vendmach" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="44" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="briefcase" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="fire_hydrant" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Money" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="40" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="mine" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bollard" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bollardlight" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="phonebooth1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="barrel2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="barrel1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="palette" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="cardboardbox2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="cardboardbox4" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="barrel3" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="lampost_coast" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="60" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="woodenbox" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="barrel4" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2162816" doubleSided="true" breakable="false"></definition>
+	<definition id="lamppost3" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="75" flags="262272" doubleSided="true" breakable="false"></definition>
+	<definition id="dump1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="roadworkbarrier1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="75" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bussign1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="cardboardbox" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="Streetlamp2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="60" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="Streetlamp1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="60" flags="262272" doubleSided="true" breakable="false"></definition>
+	<definition id="noparkingsign1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="phonesign" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="wastebin" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="rcyclbank01" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="strtbarrier01" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="80" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="trafficcone" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="info" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="health" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="adrenaline" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bodyarmour" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bouy" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="220" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="petrolpump" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="80" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="newramp" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="line" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bribe" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bonus" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="faketarget" zone="dynamic" dff="faketarget" col="faketarget" txd="fktarget" lod="false" lodID= "false" lodDistance="10" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="smashbarpost" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="smashbar" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="barrelexpos" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="camerapickup" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="killfrenzy" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="lounger" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="Stonebench1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="262272" doubleSided="true" breakable="false"></definition>
+	<definition id="bustopm" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="70" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="Mpostbox1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="BillBd1" zone="dynamic" default="true" lod="true" lodID= "LODlBd1" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BillBd3" zone="dynamic" default="true" lod="true" lodID= "LODlBd3" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd2" zone="dynamic" dff="LODlBd2" col="LODlBd2" txd="BillBrd" lod="false" lodID= "false" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="MTraffic4" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="MTraffic3" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BlackBag1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="BlackBag2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd3" zone="dynamic" dff="LODlBd3" col="LODlBd3" txd="BillBrd" lod="false" lodID= "false" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="BillBd2" zone="dynamic" default="true" lod="true" lodID= "LODlBd2" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBd1" zone="dynamic" dff="LODlBd1" col="LODlBd1" txd="BillBrd" lod="false" lodID= "false" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="parkingmeter" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="parkingmeterg" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="gunbox" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="property_locked" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="property_fsale" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bigdollar" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="clothesp" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="package1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="35" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="pickupsave" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="sub_floodlite" zone="dynamic" dff="sub_floodlite" col="sub_floodlite" txd="docklight" lod="false" lodID= "false" lodDistance="180" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="craigpackage" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="80" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="parkbench1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="parktable1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="55" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="Barrierm" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="MTraffic1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="95" flags="295040" doubleSided="true" breakable="false"></definition>
+	<definition id="MTraffic2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="95" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="newstandnew5" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="newstandnew4" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="newstandnew3" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="newstandnew2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="newstandnew1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="lamppost2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="180" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="postbox1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="4096" doubleSided="true" breakable="false"></definition>
+	<definition id="postbox1_d" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="papermachn01" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="262272" doubleSided="true" breakable="false"></definition>
+	<definition id="mlamppost" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="65" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="doublestreetlght1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="80" flags="32900" doubleSided="true" breakable="false"></definition>
+	<definition id="doublestreetlght1_d" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="80" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="lamppost1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="75" flags="295040" doubleSided="true" breakable="false"></definition>
+	<definition id="lamppost1_d" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="75" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="smashboxpile" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="bin1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="heli_magnet" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="vendmachfd" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="dyn_quarryrock03" zone="dynamic" dff="dyn_quarryrock03" col="dyn_quarryrock03" txd="dynquarryrock" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="dyn_quarryrock02" zone="dynamic" dff="dyn_quarryrock02" col="dyn_quarryrock02" txd="dynquarryrock" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="dyn_quarryrock01" zone="dynamic" dff="dyn_quarryrock01" col="dyn_quarryrock01" txd="dynquarryrock" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="tlgraphpolegen" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="32900" doubleSided="true" breakable="false"></definition>
+	<definition id="telgrphpoleall" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="telgrphpole02" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="BigBillBrd" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="110" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="pikupparachute" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roadsign1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="150" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="gen_roadsign2" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="150" flags="32896" doubleSided="true" breakable="false"></definition>
+	<definition id="rampagecompleted" zone="dynamic" dff="rampagecompleted" col="rampagecompleted" txd="rampagecompleted" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="twoplayer" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+	<definition id="trafficlight1" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="75" flags="2130048" doubleSided="true" breakable="false"></definition>
+	<definition id="hoop" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cylinder" zone="dynamic" dff="cylinder" col="cylinder" txd="ingame" lod="false" lodID= "false" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="arrow" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="diamond_3" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_ref_bollard" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_roadwarning_05" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_roadwarning_01" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_roadwarning_02" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_roadwarning_03" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ws_roadwarning_04" zone="dynamic" default="true" lod="false" lodID= "false" lodDistance="50" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="LODlBrd" zone="dynamic" dff="LODlBrd" col="LODlBrd" txd="BillBrd" lod="false" lodID= "false" lodDistance="400" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="cj_ext_sprunk" zone="dynamic" dff="cj_ext_sprunk" col="cj_ext_sprunk" txd="cj_ext_vend" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cj_ext_candy" zone="dynamic" dff="cj_ext_candy" col="cj_ext_candy" txd="cj_ext_vend2" lod="false" lodID= "false" lodDistance="30" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="cj_juice_can" zone="dynamic" dff="cj_juice_can" col="cj_juice_can" txd="juice" lod="false" lodID= "false" lodDistance="36" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="Fan1" zone="dynamic" dff="Fan1" col="Fan1" txd="Particle_HM128" lod="false" lodID= "false" lodDistance="299" flags="12" doubleSided="true" breakable="false"></definition>
+	<definition id="Fan2" zone="dynamic" dff="Fan2" col="Fan2" txd="Particle_HM128" lod="false" lodID= "false" lodDistance="299" flags="12" doubleSided="true" breakable="false"></definition>
+	<definition id="unlockableicon" zone="dynamic" dff="unlockableicon" col="unlockableicon" txd="unlockableicon" lod="false" lodID= "false" lodDistance="100" flags="128" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>

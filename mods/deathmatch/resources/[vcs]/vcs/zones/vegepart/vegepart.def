@@ -1,0 +1,173 @@
+<zoneDefinitions>
+	<definition id="veg_tree3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_treea1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="200" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_treeb1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="200" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_treea3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="200" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palwee03" zone="vegepart" dff="veg_palwee03" col="veg_palwee03" txd="new_palm" lod="false" lodID= "false" lodDistance="200" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palm04" zone="vegepart" dff="veg_palm04" col="veg_palm04" txd="new_palm" lod="false" lodID= "false" lodDistance="250" flags="2113668" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palm02" zone="vegepart" dff="veg_palm02" col="veg_palm02" txd="new_palm" lod="false" lodID= "false" lodDistance="200" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palm03" zone="vegepart" dff="veg_palm03" col="veg_palm03" txd="new_palm" lod="false" lodID= "false" lodDistance="250" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palwee01" zone="vegepart" dff="veg_palwee01" col="veg_palwee01" txd="new_palm" lod="false" lodID= "false" lodDistance="200" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palwee02" zone="vegepart" dff="veg_palwee02" col="veg_palwee02" txd="new_palm" lod="false" lodID= "false" lodDistance="200" flags="2113668" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb4" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb5" zone="vegepart" dff="veg_palmkb5" col="veg_palmkb5" txd="new_palm" lod="false" lodID= "false" lodDistance="60" flags="2113540" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb8" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb9" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb7" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb10" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkbb11" zone="vegepart" dff="veg_palmkbb11" col="veg_palmkbb11" txd="new_palm" lod="false" lodID= "false" lodDistance="80" flags="2113668" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_fern_balcny_kb1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_fern_balcny_kb2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_planterbox" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="40" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_planter+bush" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="40" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_ivy_balcny_kb3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="45" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_planter+bush2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb13" zone="vegepart" dff="veg_palmkb13" col="veg_palmkb13" txd="new_palm" lod="false" lodID= "false" lodDistance="80" flags="2113668" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_canopy_test" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="30" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_chr_tbl_test" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="30" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="pot_02" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="60" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmbig14" zone="vegepart" dff="veg_palmbig14" col="veg_palmbig14" txd="new_palm" lod="false" lodID= "false" lodDistance="220" flags="2113668" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palmkb14" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="40" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="new_bushsm" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="100" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_palm01" zone="vegepart" dff="veg_palm01" col="veg_palm01" txd="new_palm" lod="false" lodID= "false" lodDistance="250" flags="32964" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmpalm" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="100" flags="2113536" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmcacti2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="59" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmcacti1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmpalmbig" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2113540" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmcacti03" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree08" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree06" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree05" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree02" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree04" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2129924" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree01" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree03" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="pinetree07" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="firtree2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2129924" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree4" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_firtallded" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bushytree" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree5" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bevhiltree" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_josh_lrg1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="josh_ball" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="35" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_josh_sml1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="70" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_agave1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="80" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_agave2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="80" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_cact_bsh" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="80" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_josh_lrg2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_josh_sm2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="70" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_cactflr" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="80" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_group" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_log02" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_scabby" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_dead" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_scabg" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_copse1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_copse2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree4_big" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_bush1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="25" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_redwood_" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_redwoodgrp" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_scabtg" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_scabt" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_tall" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_firtbshg" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree6" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_tumblewd48p" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_tumbleweed" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree7_big" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="bg_fir_dead" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree7vbig" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_vegvbbig" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bushvbig" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_veg_tree4_vbig" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_vegvbbigbrn" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="vgs_palm01" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2129924" doubleSided="true" breakable="false"></definition>
+	<definition id="vgs_palm02" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="vgs_palm03" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_bevtree1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_bevtree2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138244" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_bevtree3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmpalmbigpv" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bevhiltreepv" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="vgs_palm04" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs07" zone="vegepart" default="true" lod="true" lodID= "LOD_largefurs07" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs01" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs02" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs03" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs04" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs05" zone="vegepart" default="true" lod="true" lodID= "LOD_largefurs05" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="veg_largefurs06" zone="vegepart" default="true" lod="true" lodID= "LOD_largefurs06" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly19" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly04" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly06" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly07" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly08" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly09" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly10" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly11" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2105348" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly14" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="tree_hipoly09b" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="ceasertree01_lvs" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="aw_streettree3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2105476" doubleSided="true" breakable="false"></definition>
+	<definition id="aw_streettree2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2109572" doubleSided="true" breakable="false"></definition>
+	<definition id="sjmpalmtall" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2146308" doubleSided="true" breakable="false"></definition>
+	<definition id="vgs_palmvtall" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2146308" doubleSided="true" breakable="false"></definition>
+	<definition id="pot_01" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="35" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="pot_03" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="35" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="kb_pot_1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="35" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrub_rock4" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrub_rock5" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrub_rock2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrub_rock3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrb_grp1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrb_column3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrb_column2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrb_column1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_cunt_rock1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_descactiigrpb" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_cactiigrp" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_pcklypr3" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_pcklypr2" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="75" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_des_pcklypr1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="59" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_scrub_rock6" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="99" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bush_large_1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_bush_small_1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_drybrush_sm1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="50" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="new_bushtest" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="200" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="Ash1_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Cedar3_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Cedar2_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="120" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Cedar1_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmtreegrn_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmtreegrn2_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Locust_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Pinebg_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="sprucetree_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2129924" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmred_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmdead_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmsparse_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmwee_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Hazelweetree_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Hazeltall_hi" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2129924" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmred_hism" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Pinebg_hism" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmsparse_hism" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmwee_hism" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="Elmtreegrn_hism" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_vegvbbigbrn" zone="vegepart" dff="lod_vegvbbigbrn" col="lod_vegvbbigbrn" txd="lod_veg" lod="true" lodID= "LOD_vegvbbigbrn" lodDistance="600" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_redwoodgrp" zone="vegepart" dff="lod_redwoodgrp" col="lod_redwoodgrp" txd="lod_veg" lod="true" lodID= "LOD_redwoodgrp" lodDistance="600" flags="2097284" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_vbg_fir_co" zone="vegepart" dff="lod_vbg_fir_co" col="lod_vbg_fir_co" txd="lod_veg" lod="true" lodID= "LOD_vbg_fir_co" lodDistance="600" flags="2130048" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_largefurs06" zone="vegepart" dff="lod_largefurs06" col="lod_largefurs06" txd="lod_veg" lod="true" lodID= "LOD_largefurs06" lodDistance="600" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_largefurs07" zone="vegepart" dff="lod_largefurs07" col="lod_largefurs07" txd="lod_veg" lod="true" lodID= "LOD_largefurs07" lodDistance="600" flags="2097280" doubleSided="true" breakable="false"></definition>
+	<definition id="lod_largefurs05" zone="vegepart" dff="lod_largefurs05" col="lod_largefurs05" txd="lod_veg" lod="true" lodID= "LOD_largefurs05" lodDistance="600" flags="2130048" doubleSided="true" breakable="false"></definition>
+	<definition id="hashburytree4sfs" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="132" doubleSided="true" breakable="false"></definition>
+	<definition id="sm_fir_tallgroup" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2138116" doubleSided="true" breakable="false"></definition>
+	<definition id="vbg_fir_copse" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="299" flags="2130052" doubleSided="true" breakable="false"></definition>
+	<definition id="aw_streettree1" zone="vegepart" default="true" lod="false" lodID= "false" lodDistance="150" flags="2109572" doubleSided="true" breakable="false"></definition>
+</zoneDefinitions>
