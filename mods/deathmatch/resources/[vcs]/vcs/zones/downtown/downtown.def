@@ -170,4 +170,13 @@
 	<definition id="dN_8balldoor" zone="downtown" dff="dN_8balldoor" col="dN_8balldoor" txd="haiwash" lod="false" lodID= "false" lodDistance="450" flags="2048" doubleSided="true" breakable="false"></definition>
 	<definition id="dN_partS2" zone="downtown" dff="dN_partS2" col="dN_partS2" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="dN_partA29A" zone="downtown" dff="dN_partA29A" col="dN_partA29A" txd="dN_partM" lod="false" lodID= "false" lodDistance="450" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light1" zone="downtown" dff="dN_light1" col="dN_light1" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light2" zone="downtown" dff="dN_light2" col="dN_light2" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light3" zone="downtown" dff="dN_light3" col="dN_light3" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light4" zone="downtown" dff="dN_light4" col="dN_light4" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light5" zone="downtown" dff="dN_light5" col="dN_light5" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light6" zone="downtown" dff="dN_light6" col="dN_light6" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light7" zone="downtown" dff="dN_light7" col="dN_light7" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light8" zone="downtown" dff="dN_light8" col="dN_light8" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="dN_light9" zone="downtown" dff="dN_light9" col="dN_light9" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

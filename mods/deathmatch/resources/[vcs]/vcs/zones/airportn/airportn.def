@@ -126,4 +126,5 @@
 	<definition id="LODroadsect8" zone="airportn" dff="LODroadsect8" col="LODroadsect8" txd="apN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODroadsect4" zone="airportn" dff="LODroadsect4" col="LODroadsect4" txd="apN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODcarpark01" zone="airportn" dff="LODcarpark01" col="LODcarpark01" txd="apN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="apN_neon" zone="airportn" dff="apN_neon" col="apN_neon" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

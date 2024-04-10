@@ -238,4 +238,17 @@
 	<definition id="LODanahouse05" zone="littleha" dff="LODanahouse05" col="LODanahouse05" txd="lh_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODmiland171" zone="littleha" dff="LODmiland171" col="LODmiland171" txd="lh_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODstruct04" zone="littleha" dff="LODstruct04" col="LODstruct04" txd="lh_LOD" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon01" zone="littleha" dff="lh_neon01" col="lh_neon01" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon02" zone="littleha" dff="lh_neon02" col="lh_neon02" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon03" zone="littleha" dff="lh_neon03" col="lh_neon03" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon04" zone="littleha" dff="lh_neon04" col="lh_neon04" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon05" zone="littleha" dff="lh_neon05" col="lh_neon05" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon06" zone="littleha" dff="lh_neon06" col="lh_neon06" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon07" zone="littleha" dff="lh_neon07" col="lh_neon07" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon08" zone="littleha" dff="lh_neon08" col="lh_neon08" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon09" zone="littleha" dff="lh_neon09" col="lh_neon09" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_nitelites1" zone="littleha" dff="lh_nitelites1" col="lh_nitelites1" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_nitelites2" zone="littleha" dff="lh_nitelites2" col="lh_nitelites2" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_nitelites3" zone="littleha" dff="lh_nitelites3" col="lh_nitelites3" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="lh_neon10" zone="littleha" dff="lh_neon10" col="lh_neon10" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

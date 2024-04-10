@@ -28,10 +28,11 @@ function isTimeBetween(startTimeHour, startTimeMinute, endTimeHour, endTimeMinut
     end
 end
 
+
 setTimer(function()
     local hours = getTime()
 	for obj,_ in pairs(timeTable) do
-		if isElement(obj) and streamTimes[getElementModel(obj)] then
+		if streamTimes[getElementModel(obj)] then
 			local sIn,sOut = unpack(streamTimes[getElementModel(obj)])
 			
 			if sIn and sOut then
@@ -40,7 +41,7 @@ setTimer(function()
 						streamTimeObj[obj] = 1
 						setObjectScale(obj,1)
 						if streamingDistances[getElementModel(obj)] then
-							engineSetModelLODDistance (getElementModel(obj),streamingDistances[getElementModel(obj)])
+							engineSetModelLODDistance (getElementModel(obj),300)
 						else
 							engineResetModelLODDistance(getElementModel(obj))
 						end
@@ -55,7 +56,8 @@ setTimer(function()
 			end
 		end
 	end
-end, 500, 0)
+end, 1000, 0)
+
 
 local flagsTableNew = {}
 

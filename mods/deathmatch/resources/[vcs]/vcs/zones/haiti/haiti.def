@@ -148,4 +148,7 @@
 	<definition id="LODti_adv02" zone="haiti" dff="LODti_adv02" col="LODti_adv02" txd="haiti_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LOD_house01" zone="haiti" dff="LOD_house01" col="LOD_house01" txd="haiti_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LOD_house02" zone="haiti" dff="LOD_house02" col="LOD_house02" txd="haiti_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="h_neon02" zone="haiti" dff="h_neon02" col="h_neon02" txd="h_buildings" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="h_neon01" zone="haiti" dff="h_neon01" col="h_neon01" txd="h_buildings" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="haiti_nitelites" zone="haiti" dff="haiti_nitelites" col="haiti_nitelites" txd="h_stuff" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

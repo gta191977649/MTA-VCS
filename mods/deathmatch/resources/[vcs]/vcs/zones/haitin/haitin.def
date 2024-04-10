@@ -144,4 +144,9 @@
 	<definition id="LODpartD05" zone="haitin" dff="LODpartD05" col="LODpartD05" txd="haitiN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LODpartE04" zone="haitin" dff="LODpartE04" col="LODpartE04" txd="haitiN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LODpartE05" zone="haitin" dff="LODpartE05" col="LODpartE05" txd="haitiN_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="hN_anim01" zone="haitin" dff="hN_anim01" col="hN_anim01" txd="hN_neons" timeIn="6" timeOut="20" lod="false" lodID= "false" lodDistance="6" flags="20" doubleSided="true" breakable="false"></definition>
+	<definition id="hN_anim02" zone="haitin" dff="hN_anim02" col="hN_anim02" txd="hN_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="hN_neon01" zone="haitin" dff="hN_neon01" col="hN_neon01" txd="hN_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="hN_neon02" zone="haitin" dff="hN_neon02" col="hN_neon02" txd="hN_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="hN_night01" zone="haitin" dff="hN_night01" col="hN_night01" txd="hN_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

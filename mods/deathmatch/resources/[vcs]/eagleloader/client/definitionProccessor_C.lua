@@ -142,6 +142,7 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 					end
 					
 					if tonumber(data.timeIn) and tonumber(data.timeOut) then
+						--outputChatBox(modelID)
 						setModelStreamTime (modelID, tonumber(data.timeIn), tonumber(data.timeOut))
 						timeTableID[data.id] = true
 					end
@@ -167,6 +168,8 @@ function loadMapPlacements( resourceName,mapPlacements,last)
 		else
 			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
 		end
+		setElementInterior(obj,data.interior)
+		setElementDimension(obj,data.dimension)
 		setElementID(obj,data.id)
 
 	end)
@@ -230,8 +233,14 @@ function changeObjectModel (object,newModel,streamNew,inital)
 			
 			if timeTableID[newModel] then
 				timeTable[object] = true
-			else
-				timeTable[object] = false
+				-- Also set the lod for timed object
+				local x,y,z = getElementPosition (object)
+				local xr,yr,zr = getElementRotation (object)
+				local nObject = createObject(idCache[newModel],x,y,z,xr,yr,zr,true)
+				--setLowLODElement(object,nObject)
+				engineSetModelLODDistance (idCache[newModel],300) 
+				timeTable[nObject] = true
+
 			end
 			
 			local LOD = getLowLODElement(object)
@@ -256,11 +265,7 @@ function changeObjectModel (object,newModel,streamNew,inital)
 				setElementID(nObject,lodID)
 				setLowLODElement(object,nObject)
 				
-				if timeTableID[lodID] then
-					timeTable[nObject] = true
-				else
-					timeTable[nObject] = false
-				end
+				
 				if lodAttach[lodID] then
 					attachElements(nObject,object)
 				end

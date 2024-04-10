@@ -155,4 +155,9 @@
 	<definition id="LODntowS_a4" zone="downtows" dff="LODntowS_a4" col="LODntowS_a4" txd="downtowS_LOD" lod="false" lodID= "false" lodDistance="3000" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="LODntowS_a5" zone="downtows" dff="LODntowS_a5" col="LODntowS_a5" txd="downtowS_LOD" lod="false" lodID= "false" lodDistance="3000" flags="4" doubleSided="true" breakable="false"></definition>
 	<definition id="LODntowS_a6" zone="downtows" dff="LODntowS_a6" col="LODntowS_a6" txd="downtowS_LOD" lod="false" lodID= "false" lodDistance="3000" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="downtowS_n1" zone="downtows" dff="downtowS_n1" col="downtowS_n1" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="downtowS_n2" zone="downtows" dff="downtowS_n2" col="downtowS_n2" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="downtowS_n3" zone="downtows" dff="downtowS_n3" col="downtowS_n3" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="downtowS_n4" zone="downtows" dff="downtowS_n4" col="downtowS_n4" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="downtowS_n5" zone="downtows" dff="downtowS_n5" col="downtowS_n5" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

@@ -240,4 +240,11 @@
 	<definition id="LODachw_ground08" zone="nbeachw" dff="LODachw_ground08" col="LODachw_ground08" txd="nbeachw_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LODachw_ground09" zone="nbeachw" dff="LODachw_ground09" col="LODachw_ground09" txd="nbeachw_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
 	<definition id="LODachw_ground10" zone="nbeachw" dff="LODachw_ground10" col="LODachw_ground10" txd="nbeachw_LOD" lod="false" lodID= "false" lodDistance="1500" flags="2097152" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_neon01" zone="nbeachw" dff="nbw_neon01" col="nbw_neon01" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_neon02" zone="nbeachw" dff="nbw_neon02" col="nbw_neon02" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_neon03" zone="nbeachw" dff="nbw_neon03" col="nbw_neon03" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_windows01" zone="nbeachw" dff="nbw_windows01" col="nbw_windows01" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_windows02" zone="nbeachw" dff="nbw_windows02" col="nbw_windows02" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_windows03" zone="nbeachw" dff="nbw_windows03" col="nbw_windows03" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbw_neon04" zone="nbeachw" dff="nbw_neon04" col="nbw_neon04" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

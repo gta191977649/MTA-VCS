@@ -299,15 +299,21 @@
 	<object id="mall_m37" model="8585" posX="466.82" posY="1017.97" posZ="1223.62" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
 	<object id="mall_m37" model="8585" posX="448.266" posY="1009.3" posZ="1223.62" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
 	<object id="mall_m38" model="8585" posX="414.043" posY="1127.32" posZ="1235.92" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n1" model="8585" posX="384.533" posY="1027.5" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n2" model="8585" posX="443.675" posY="1053.84" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n3" model="8585" posX="443.792" posY="1226.46" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n4" model="8585" posX="390.578" posY="1198.51" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n5" model="8585" posX="360.241" posY="1098.38" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
+	<object id="mall_n6" model="8585" posX="462.395" posY="1152.62" posZ="1225.39" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
 	<object id="mall_m39" model="8585" posX="461.784" posY="1052.11" posZ="1221.56" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
 	<object id="mall_m40" model="8585" posX="460.791" posY="1052.07" posZ="1221.56" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="3" dimension="-1"></object>
 	<object id="mall_m41" model="8585" posX="459.836" posY="1051.53" posZ="1221.52" rotX="0.0" rotY="-0.0" rotZ="-180.0" interior="3" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="429.686" posY="1170.35" posZ="1216.41" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="397.6" posY="1170.34" posZ="1215.66" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="397.858" posY="1080.51" posZ="1216.6" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="448.76" posY="1227.77" posZ="1216.32" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="430.321" posY="1080.83" posZ="1215.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="380.02" posY="1028.49" posZ="1217.71" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="413.946" posY="1051.07" posZ="1216.33" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
-	<object id="veg_palmbig14" model="8585" posX="413.486" posY="1203.09" posZ="1215.97" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="429.686" posY="1170.35" posZ="1216.41" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="397.6" posY="1170.34" posZ="1215.66" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="397.858" posY="1080.51" posZ="1216.6" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="448.76" posY="1227.77" posZ="1216.32" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="430.321" posY="1080.83" posZ="1215.8" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="380.02" posY="1028.49" posZ="1217.71" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="413.946" posY="1051.07" posZ="1216.33" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
+	<object id="veg_palmbig14" model="645" posX="413.486" posY="1203.09" posZ="1215.97" rotX="0.0" rotY="-0.0" rotZ="-0.0" interior="4" dimension="-1"></object>
 </map>

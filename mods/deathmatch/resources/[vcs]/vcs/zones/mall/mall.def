@@ -91,4 +91,10 @@
 	<definition id="mall_m39" zone="mall" dff="mall_m39" col="mall_m39" txd="mall_x" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="mall_m40" zone="mall" dff="mall_m40" col="mall_m40" txd="mall_x" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="mall_m41" zone="mall" dff="mall_m41" col="mall_m41" txd="mall_x" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n1" zone="mall" dff="mall_n1" col="mall_n1" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n2" zone="mall" dff="mall_n2" col="mall_n2" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n3" zone="mall" dff="mall_n3" col="mall_n3" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n4" zone="mall" dff="mall_n4" col="mall_n4" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n5" zone="mall" dff="mall_n5" col="mall_n5" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="mall_n6" zone="mall" dff="mall_n6" col="mall_n6" txd="mall_n" timeIn="21" timeOut="6" lod="false" lodID= "false" lodDistance="21" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

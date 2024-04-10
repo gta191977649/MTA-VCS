@@ -26,4 +26,12 @@
 	<definition id="LODdge_r8" zone="bridge" dff="LODdge_r8" col="LODdge_r8" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODdge_r9" zone="bridge" dff="LODdge_r9" col="LODdge_r9" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODdge_r10" zone="bridge" dff="LODdge_r10" col="LODdge_r10" txd="LODdge_r" lod="false" lodID= "false" lodDistance="3000" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="0x109B" zone="bridge" dff="0x109B" col="0x109B" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x109C" zone="bridge" dff="0x109C" col="0x109C" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x109D" zone="bridge" dff="0x109D" col="0x109D" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x109E" zone="bridge" dff="0x109E" col="0x109E" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x109F" zone="bridge" dff="0x109F" col="0x109F" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x10A0" zone="bridge" dff="0x10A0" col="0x10A0" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x10A1" zone="bridge" dff="0x10A1" col="0x10A1" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
+	<definition id="0x10A2" zone="bridge" dff="0x10A2" col="0x10A2" txd="neons1" timeIn="19" timeOut="7" lod="false" lodID= "false" lodDistance="19" flags="7" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

@@ -161,4 +161,15 @@
 	<definition id="nbeach_s6" zone="nbeach" dff="nbeach_s6" col="nbeach_s6" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="nbeach_s7" zone="nbeach" dff="nbeach_s7" col="nbeach_s7" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="nbeach_s8" zone="nbeach" dff="nbeach_s8" col="nbeach_s8" txd="nbeachbt_s" lod="false" lodID= "false" lodDistance="450" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n1" zone="nbeach" dff="nbeach_n1" col="nbeach_n1" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n2" zone="nbeach" dff="nbeach_n2" col="nbeach_n2" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n3" zone="nbeach" dff="nbeach_n3" col="nbeach_n3" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n4" zone="nbeach" dff="nbeach_n4" col="nbeach_n4" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n5" zone="nbeach" dff="nbeach_n5" col="nbeach_n5" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n6" zone="nbeach" dff="nbeach_n6" col="nbeach_n6" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n7" zone="nbeach" dff="nbeach_n7" col="nbeach_n7" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n8" zone="nbeach" dff="nbeach_n8" col="nbeach_n8" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n9" zone="nbeach" dff="nbeach_n9" col="nbeach_n9" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n10" zone="nbeach" dff="nbeach_n10" col="nbeach_n10" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="nbeach_n11" zone="nbeach" dff="nbeach_n11" col="nbeach_n11" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

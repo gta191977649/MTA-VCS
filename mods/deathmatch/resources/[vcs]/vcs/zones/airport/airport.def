@@ -191,4 +191,8 @@
 	<definition id="LODtermAintfloor2" zone="airport" dff="LODtermAintfloor2" col="LODtermAintfloor2" txd="LODairport" lod="false" lodID= "false" lodDistance="1600" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODterm2" zone="airport" dff="LODterm2" col="LODterm2" txd="LODairport" lod="false" lodID= "false" lodDistance="1600" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODtermAintfloor2b" zone="airport" dff="LODtermAintfloor2b" col="LODtermAintfloor2b" txd="LODairport" lod="false" lodID= "false" lodDistance="1600" flags="0" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_neon01" zone="airport" dff="ap_neon01" col="ap_neon01" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_neon02" zone="airport" dff="ap_neon02" col="ap_neon02" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_neon03" zone="airport" dff="ap_neon03" col="ap_neon03" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="ap_neon04" zone="airport" dff="ap_neon04" col="ap_neon04" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

@@ -216,4 +216,5 @@
 	<definition id="LODcargoshp40" zone="docks" dff="LODcargoshp40" col="LODcargoshp40" txd="lod_docks2" lod="false" lodID= "false" lodDistance="500" flags="256" doubleSided="true" breakable="false"></definition>
 	<definition id="LODse_pierfence" zone="docks" dff="LODse_pierfence" col="LODse_pierfence" txd="lod_docks" lod="false" lodID= "false" lodDistance="750" flags="128" doubleSided="true" breakable="false"></definition>
 	<definition id="dockgrass" zone="docks" dff="dockgrass" col="dockgrass" txd="dockgrass" lod="false" lodID= "false" lodDistance="445" flags="4" doubleSided="true" breakable="false"></definition>
+	<definition id="dk_neon" zone="docks" dff="dk_neon" col="dk_neon" txd="ap_neons" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

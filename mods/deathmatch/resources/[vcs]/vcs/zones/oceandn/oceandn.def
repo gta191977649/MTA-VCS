@@ -136,4 +136,9 @@
 	<definition id="LODandn_s19" zone="oceandn" dff="LODandn_s19" col="LODandn_s19" txd="oceandn_lod" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="LODandn_s20" zone="oceandn" dff="LODandn_s20" col="LODandn_s20" txd="oceandn_lod" lod="false" lodID= "false" lodDistance="1500" flags="0" doubleSided="true" breakable="false"></definition>
 	<definition id="oceandn_n6" zone="oceandn" dff="oceandn_n6" col="oceandn_n6" txd="neons2" lod="false" lodID= "false" lodDistance="1500" flags="2097228" doubleSided="true" breakable="false"></definition>
+	<definition id="oceandn_n1" zone="oceandn" dff="oceandn_n1" col="oceandn_n1" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="oceandn_n2" zone="oceandn" dff="oceandn_n2" col="oceandn_n2" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="oceandn_n3" zone="oceandn" dff="oceandn_n3" col="oceandn_n3" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="oceandn_n4" zone="oceandn" dff="oceandn_n4" col="oceandn_n4" txd="neons2" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
+	<definition id="oceandn_n5" zone="oceandn" dff="oceandn_n5" col="oceandn_n5" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>

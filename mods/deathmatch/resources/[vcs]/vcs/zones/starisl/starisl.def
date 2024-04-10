@@ -52,4 +52,5 @@
 	<definition id="comgate2closed" zone="starisl" dff="comgate2closed" col="comgate2closed" txd="starisl" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
 	<definition id="STARBLOCKER02" zone="starisl" dff="STARBLOCKER02" col="STARBLOCKER02" txd="starisl" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
 	<definition id="STARBLOCKER1" zone="starisl" dff="STARBLOCKER1" col="STARBLOCKER1" txd="starisl" lod="false" lodID= "false" lodDistance="450" flags="2097156" doubleSided="true" breakable="false"></definition>
+	<definition id="star_n1" zone="starisl" dff="star_n1" col="star_n1" txd="neons1" timeIn="20" timeOut="6" lod="false" lodID= "false" lodDistance="20" flags="6" doubleSided="true" breakable="false"></definition>
 </zoneDefinitions>
