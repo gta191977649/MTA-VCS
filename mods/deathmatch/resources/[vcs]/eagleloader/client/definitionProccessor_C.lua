@@ -168,8 +168,8 @@ function loadMapPlacements( resourceName,mapPlacements,last)
 		else
 			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
 		end
-		setElementInterior(obj,data.interior)
-		setElementDimension(obj,data.dimension)
+		setElementInterior(obj,tonumber(data.interior))
+		--setElementDimension(obj,data.dimension)
 		setElementID(obj,data.id)
 
 	end)
