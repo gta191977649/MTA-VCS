@@ -46,10 +46,9 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 
 		if not (data.default == 'true') then
 			--iprint(data)
-			local modelID,new = requestModelID(data.id,true)
+			local modelID,new = requestModelID(data.id)
 
 			if modelID then
-				
 				
 				if new then
 					resourceModels[resourceName][modelID] = true
@@ -69,7 +68,7 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 						
 					if LOD then
 						if (LOD == 'true') then
-							useLODs[data.id] = (data.lodID or data.id)
+							useLODs[data.id] = (LODID or data.id)
 						end
 					end
 
@@ -160,11 +159,11 @@ function loadMapPlacements( resourceName,mapPlacements,last)
 	resourceMaps[resourceName] = {}
 	
 	Async:setPriority("medium")
-	Async:foreach(mapPlacements, function(data) 
+	Async:foreach(mapPlacements, function(data)
 		local isLOD = startsWithLOD(data.id)
 		local obj = nil
 		if isLOD then
-			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ,isLOD)
+			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ,true)
 		else
 			obj = createObject(data.model,data.posX,data.posY,data.posZ,data.rotX,data.rotY,data.rotZ)
 		end
@@ -256,18 +255,30 @@ function changeObjectModel (object,newModel,streamNew,inital)
 					local xr,yr,zr = getElementRotation (object)
 					local nObject = createObject (idCache[lodID],x,y,z,xr,yr,zr,true)
 				--]]
-				local nObject = getElementByID(lodID)
-				local cull,dimension,interior = isElementDoubleSided(object),getElementDimension(object),getElementInterior(object)
-				setElementData(nObject,'Zone',definitionZones[lodID])
-				setElementDoubleSided(nObject,cull)
-				setElementInterior(nObject,interior)
-				setElementDimension(nObject,dimension)
-				setElementID(nObject,lodID)
-				setLowLODElement(object,nObject)
+				--local nObject = getElementByID(lodID)
 				
-				
-				if lodAttach[lodID] then
-					attachElements(nObject,object)
+				local x,y,z = getElementPosition (object)
+				local nObject = nil
+				local nearByObjects = getElementsWithinRange(x, y, z, 100, "object")
+				for i,v in ipairs(nearByObjects) do
+					if v and isElement(v) and isElementLowLOD(v) and getElementID(v) == lodID then
+						nObject = v
+						break
+					end
+				end
+				if nObject then
+					local cull,dimension,interior = isElementDoubleSided(object),getElementDimension(object),getElementInterior(object)
+					setElementData(nObject,'Zone',definitionZones[lodID])
+					setElementDoubleSided(nObject,cull)
+					setElementInterior(nObject,interior)
+					setElementDimension(nObject,dimension)
+					setElementID(nObject,lodID)
+					setLowLODElement(object,nObject)
+					
+					if lodAttach[lodID] then
+						attachElements(nObject,object)
+					end
+
 				end
 			end
 		end

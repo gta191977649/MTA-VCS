@@ -25,18 +25,17 @@ function onResourceStart(resourceThatStarted)
 			end
 		end
 	end
-	
-
-	local last = definitionList[#definitionList]
-	if last then
-		local lastID = last.id
-		loadMapDefinitions(resourceName,definitionList,lastID)
-	end
 
 	local last_placement = placementList[#placementList]
 	if last_placement then
 		local lastID = last_placement.id
 		loadMapPlacements(resourceName,placementList,lastID)
+	end
+	
+	local last = definitionList[#definitionList]
+	if last then
+		local lastID = last.id
+		loadMapDefinitions(resourceName,definitionList,lastID)
 	end
 
 
