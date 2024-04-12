@@ -61,6 +61,7 @@ function loadMapDefinitions ( resourceName,mapDefinitions,last)
 					definitionZones[modelID] = zone
 					
 					engineSetModelLODDistance (modelID,(tonumber(data.lodDistance or 200)))
+					engineSetModelFlags(modelID,tonumber(data.flags))
 					streamingDistances[modelID] = (tonumber(data.lodDistance or 200))
 
 					local LOD = data.lod
@@ -170,7 +171,7 @@ function loadMapPlacements( resourceName,mapPlacements,last)
 		setElementInterior(obj,tonumber(data.interior))
 		--setElementDimension(obj,data.dimension)
 		setElementID(obj,data.id)
-
+		
 	end)
 end
 

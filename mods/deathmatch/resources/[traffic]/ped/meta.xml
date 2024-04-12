@@ -1,5 +1,0 @@
-<meta>
-    <script src="ped_anim.lua" type="server"/>
-    <script src="ped.lua" type="server"/>
-    <export function="setPedWalkingSAStyle"/>
-</meta>
