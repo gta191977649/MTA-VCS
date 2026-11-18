@@ -1,18 +1,59 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxmemo","dgsBasic","dgsType2D")
+dgsRegisterProperties("dgs-dxmemo",{
+	allowCopy = 					{	PArg.Bool	},
+	bgColor =  						{	PArg.Color	},
+	bgColorBlur = 					{	PArg.Color	},
+	bgImage =  						{	PArg.Material+PArg.Nil	},
+	bgImageBlur =  					{	PArg.Material+PArg.Nil	},
+	caretColor = 					{	PArg.Color	},
+	caretHeight = 					{	PArg.Number	},
+	caretOffset = 					{	PArg.Number	},
+	caretPos = 						{	{ PArg.Number, PArg.Number }	},
+	caretStyle = 					{	PArg.Number	},
+	caretThick = 					{	PArg.Number	},
+	font =	 						{	PArg.Font+PArg.String	},
+	maxLength = 					{	PArg.Number	},
+	padding = 						{	{ PArg.Number, PArg.Number }	},
+	placeHolder = 					{	PArg.String	},
+	placeHolderColor = 				{	PArg.Color	},
+	placeHolderColorCoded = 		{	PArg.Bool	},
+	placeHolderFont = 				{	PArg.Font	},
+	placeHolderIgnoreRenderTarget = {	PArg.Bool	},
+	placeHolderOffset = 			{	{ PArg.Number, PArg.Number }	},
+	placeHolderVisibleWhenFocus = 	{	PArg.Bool	},
+	readOnly = 						{	PArg.Bool	},
+	readOnlyCaretShow =				{	PArg.Bool	},
+	scrollBarState = 				{	{ PArg.Bool+PArg.Nil, PArg.Bool+PArg.Nil }	},
+	scrollBarAlignment = 			{	{ PArg.String, PArg.String }	},
+	scrollBarThick = 				{	PArg.Number	},
+	scrollBarLength = 				{	{ { PArg.Number, PArg.Bool }, { PArg.Number, PArg.Bool } }, { PArg.Nil, PArg.Nil }	},
+	scrollSize = 					{	PArg.Number	},
+	selectColor = 					{	PArg.Color	},
+	selectColorBlur = 				{	PArg.Color	},
+	selectVisible = 				{	PArg.Bool	},
+	shadow = 						{	{ PArg.Number, PArg.Number, PArg.Color, PArg.Number+PArg.Bool+PArg.Nil, PArg.Font+PArg.Nil }, PArg.Nil	},
+	--text = 							{	PArg.String	},
+	textColor = 					{	PArg.Color	},
+	textSize = 						{	{ PArg.Number, PArg.Number }	},
+	typingSound = 					{	PArg.String	},
+	typingSoundVolume = 			{	PArg.Number	},
+	wordWrap = 						{	PArg.Bool+PArg.Number	},
+})
 --Dx Functions
 local dxDrawLine = dxDrawLine
-local dxDrawImage = dxDrawImageExt
-local dxDrawText = dxDrawText
+local dxDrawImage = dxDrawImage
+local dgsDrawText = dgsDrawText
 local dxGetFontHeight = dxGetFontHeight
 local dxDrawRectangle = dxDrawRectangle
 local dxSetShaderValue = dxSetShaderValue
 local dxGetPixelsSize = dxGetPixelsSize
 local dxGetPixelColor = dxGetPixelColor
 local dxSetRenderTarget = dxSetRenderTarget
-local dxCreateRenderTarget = dxCreateRenderTarget
+local dgsCreateRenderTarget = dgsCreateRenderTarget
 local dxGetTextWidth = dxGetTextWidth
 local dxSetBlendMode = dxSetBlendMode
-local _dxDrawImageSection = _dxDrawImageSection
-local _dxGetTextWidth = dxGetTextWidth
+local __dxDrawImageSection = __dxDrawImageSection
 --DGS Functions
 local dgsSetType = dgsSetType
 local dgsGetType = dgsGetType
@@ -25,7 +66,7 @@ local dgsAttachToAutoDestroy = dgsAttachToAutoDestroy
 local calculateGuiPositionSize = calculateGuiPositionSize
 local dgsCreateTextureFromStyle = dgsCreateTextureFromStyle
 --Utilities
-local triggerEvent = triggerEvent
+local dgsTriggerEvent = dgsTriggerEvent
 local addEventHandler = addEventHandler
 local createElement = createElement
 local isElement = isElement
@@ -38,16 +79,59 @@ local tableSort = table.sort
 local tableInsert = table.insert
 local tableRemove = table.remove
 local mathFloor = math.floor
-local mathClamp = math.restrict
+local mathClamp = math.clamp
 local utf8Sub = utf8.sub
 local utf8Gsub = utf8.gsub
 local utf8Len = utf8.len
 local utf8Insert = utf8.insert
 local utf8Byte = utf8.byte
-GlobalMemoParent = guiCreateLabel(-1,0,0,0,"",true)
-GlobalMemo = guiCreateMemo(-1,0,0,0,"",true,GlobalMemoParent)
-addEventHandler("onClientGUIBlur",GlobalMemo,GlobalEditMemoBlurCheck,false)
-dgsSetData(GlobalMemo,"linkedDxMemo",nil)
+
+----Initialize
+function dgsGlobalMemoDestroyDetector(oldGlobalEdit)
+	outputDebugString("DGS Global Memo has been destroyed by external resource ("..(sourceResource and getResourceName(sourceResource) or "Unknown").."), recreating",1)
+	local dgsMemo = dgsElementData[GlobalMemo].linkedDxMemo
+	dgsInitializeGlobalMemo()
+	dgsElementData[GlobalMemo].linkedDxMemo = dgsMemo
+end
+
+function dgsInitializeGlobalMemo()
+	if not isElement(GlobalMemoParent) then
+		GlobalMemoParent = guiCreateLabel(-1,0,0,0,"",true)
+	end
+	if not isElement(GlobalMemo) then
+		GlobalMemo = guiCreateMemo(-1,0,0,0,"",true,GlobalMemoParent)
+		dgsSetData(GlobalMemo,"linkedDxMemo",nil)
+		addEventHandler("onClientGUIBlur",GlobalMemo,function()
+			local dgsMemo = dgsElementData[source].linkedDxMemo
+			if isElement(dgsMemo) and dgsIsFocused(dgsMemo) then
+				dgsBlur(dgsMemo)
+			end
+		end,false)
+		addEventHandler("onClientGUIChanged",GlobalMemo,function()
+			if not dgsElementData[GlobalMemo] then return end
+			if getElementType(GlobalMemo) == "gui-memo" then
+				local dxMemo = dgsElementData[GlobalMemo].linkedDxMemo
+				if isElement(dxMemo) then
+					local text = guiGetText(GlobalMemo)
+					local cool = dgsElementData[dxMemo].CoolTime
+					if text ~= "\n" then
+						if not cool and not dgsElementData[dxMemo].readOnly then
+							local caretPos = dgsElementData[dxMemo].caretPos
+							local selectFrom = dgsElementData[dxMemo].selectFrom
+							dgsMemoDeleteText(dxMemo,caretPos[1],caretPos[2],selectFrom[1],selectFrom[2])
+							handleDxMemoText(dxMemo,utf8Sub(text,1,utf8Len(text)-1),true)
+						end
+						dgsElementData[dxMemo].CoolTime = true
+						guiSetText(GlobalMemo,"")
+						dgsElementData[dxMemo].CoolTime = false
+					end
+				end
+			end
+		end,false)
+		addEventHandler("onClientElementDestroy",GlobalMemo,dgsGlobalMemoDestroyDetector,false)
+	end
+end
+dgsInitializeGlobalMemo()
 --[[
 ---------------In Normal Mode------------------
 Text Table Structure:
@@ -76,6 +160,7 @@ Map Table Structure:
 }
 ]]
 function dgsCreateMemo(...)
+	local sRes = sourceResource or resource
 	local x,y,w,h,text,relative,parent,textColor,scaleX,scaleY,bgImage,bgColor
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
@@ -98,31 +183,38 @@ function dgsCreateMemo(...)
 	if not(type(y) == "number") then error(dgsGenAsrt(y,"dgsCreateMemo",2,"number")) end
 	if not(type(w) == "number") then error(dgsGenAsrt(w,"dgsCreateMemo",3,"number")) end
 	if not(type(h) == "number") then error(dgsGenAsrt(h,"dgsCreateMemo",4,"number")) end
+	if relative then 
+		if x > 100 or x < -100 then error(dgsGenAsrt(x,"dgsCreateMemo",1,"float between [0, 1]")) end
+		if y > 100 or y < -100 then error(dgsGenAsrt(y,"dgsCreateMemo",2,"float between [0, 1]")) end
+		if w > 10 or w < -10 then error(dgsGenAsrt(w,"dgsCreateMemo",3,"float between [0, 1]")) end
+		if h > 10 or h < -10 then error(dgsGenAsrt(h,"dgsCreateMemo",4,"float between [0, 1]")) end
+	end
 	text = tostring(text or "")
 	local memo = createElement("dgs-dxmemo")
 	dgsSetType(memo,"dgs-dxmemo")
-	dgsSetParent(memo,parent,true,true)
-	
-	local res = sourceResource or "global"
+
+	local res = sRes ~= resource and sRes or "global"
 	local style = styleManager.styles[res]
 	local using = style.using
 	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	style = style.memo
-	local textSizeX,textSizeY = tonumber(scaleX) or style.textSize[1], tonumber(scaleY) or style.textSize[2]
+
+	local sStyle = style.memo
+	local textSizeX,textSizeY = tonumber(scaleX) or sStyle.textSize[1], tonumber(scaleY) or sStyle.textSize[2]
 	dgsElementData[memo] = {
-		renderBuffer = {},
-		bgColor = bgColor or style.bgColor,
-		bgImage = bgImage or dgsCreateTextureFromStyle(using,res,style.bgImage),
-		bgColorBlur = style.bgColorBlur,
+		renderBuffer = {
+			placeHolderState = false,
+			parentAlphaLast = false,
+			isFocused = false,
+		},
+		bgColor = bgColor or sStyle.bgColor,
+		bgImage = bgImage or dgsCreateTextureFromStyle(using,res,sStyle.bgImage),
+		bgColorBlur = sStyle.bgColorBlur,
 		bgImageBlur = bgImageBlur,
-		font = style.font or systemFont,
 		text = {},
 		wordWrap = false,
 		wordWrapShowLine = {1,1,1},
 		wordWrapMapText = {},
-		textColor = textColor or style.textColor,
+		textColor = textColor or sStyle.textColor,
 		textSize = {textSizeX,textSizeY},
 		caretPos = {0,1},
 		selectForm = {0,1},
@@ -131,12 +223,12 @@ function dgsCreateMemo(...)
 		scrollSize = 3,
 		showPos = 0,
 		showLine = 1,
-		caretStyle = style.caretStyle,
-		caretThick = style.caretThick,
-		caretOffest = style.caretOffest,
-		caretColor = style.caretColor,
-		caretHeight = style.caretHeight,
-		scrollBarThick = style.scrollBarThick,
+		caretStyle = sStyle.caretStyle,
+		caretThick = sStyle.caretThick,
+		caretOffset = sStyle.caretOffset,
+		caretColor = sStyle.caretColor,
+		caretHeight = sStyle.caretHeight,
+		scrollBarThick = sStyle.scrollBarThick,
 		allowCopy = true,
 		readOnly = false,
 		readOnlyCaretShow = false,
@@ -145,89 +237,141 @@ function dgsCreateMemo(...)
 		enableRedoUndoRecord = true,
 		undoHistory = {},
 		redoHistory = {},
-		padding = style.padding,
-		typingSound = style.typingSound,
-		typingSoundVolume = style.typingSoundVolume,
-		selectColor = style.selectColor,
-		selectColorBlur = style.selectColorBlur,
-		selectVisible = style.selectVisible,
-		configNextFrame = false,
-		rebuildMapTableNextFrame = false,
+		padding = sStyle.padding,
+		placeHolder = sStyle.placeHolder,
+		placeHolderVisibleWhenFocus = false,
+		placeHolderColor = sStyle.placeHolderColor,
+		placeHolderColorCoded = sStyle.placeHolderColorCoded,
+		placeHolderOffset = sStyle.placeHolderOffset,
+		placeHolderTextSize = sStyle.placeHolderTextSize,
+		placeHolderIgnoreRenderTarget = sStyle.placeHolderIgnoreRenderTarget,
+		typingSound = sStyle.typingSound,
+		typingSoundVolume = sStyle.typingSoundVolume,
+		selectColor = sStyle.selectColor,
+		selectColorBlur = sStyle.selectColorBlur,
+		selectVisible = sStyle.selectVisible,
+		configNextFrame = nil,
+		rebuildMapTableNextFrame = nil,
 		maxLength = 0x3FFFFFFF,
 		scrollBarLength = {},
+		scrollBarAlignment = {"right","bottom"},
 		multiClickCounter = {false,false,0},
-		colorcoded = true,
+		colorCoded = true,
 		textRenderBuffer = {},
-		updateTextRTNextFrame = false,
+		updateRTNextFrame = nil,
 	}
+	dgsSetParent(memo,parent,true,true)
 	calculateGuiPositionSize(memo,x,y,relative or false,w,h,relative or false,true)
+	dgsApplyGeneralProperties(memo,sRes)	--This event should be called before child element attachment, to make sure every property is ready
 	local abx,aby = dgsElementData[memo].absSize[1],dgsElementData[memo].absSize[2]
 	local scrollbar1 = dgsCreateScrollBar(abx-20,0,20,aby-20,false,false,memo)
 	local scrollbar2 = dgsCreateScrollBar(0,aby-20,abx-20,20,true,false,memo)
-	dgsSetVisible(scrollbar1,false)
-	dgsSetData(scrollbar1,"length",{0,true})
-	dgsSetData(scrollbar2,"length",{0,true})
+	dgsSetData(scrollbar1,"cursorLength",{0,true})
+	dgsSetData(scrollbar2,"cursorLength",{0,true})
 	dgsSetData(scrollbar1,"multiplier",{1,true})
 	dgsSetData(scrollbar2,"multiplier",{1,true})
 	dgsSetData(scrollbar1,"minLength",10)
 	dgsSetData(scrollbar2,"minLength",10)
 	dgsAddEventHandler("onDgsElementScroll",scrollbar1,"checkMemoScrollBar",false)
 	dgsAddEventHandler("onDgsElementScroll",scrollbar2,"checkMemoScrollBar",false)
-	local padding = dgsElementData[memo].padding
-	local sizex,sizey = abx-padding[1]*2,abx-padding[2]*2
-	sizex,sizey = sizex-sizex%1,sizey-sizey%1
-	local bgRT,err = dxCreateRenderTarget(sizex,sizey,true,memo)
-	if bgRT ~= false then
-		dgsAttachToAutoDestroy(bgRT,memo,-1)
-	else
-		outputDebugString(err,2)
-	end
-	dgsElementData[memo].bgRT = bgRT
-	local textRT,err = dxCreateRenderTarget(sizex,sizey,true,memo)
-	if textRT ~= false then
-		dgsAttachToAutoDestroy(textRT,memo,-2)
-	else
-		outputDebugString(err,2)
-	end
-	dgsElementData[memo].textRT = textRT
 	dgsElementData[memo].scrollbars = {scrollbar1,scrollbar2}
 	handleDxMemoText(memo,text,false,true)
 	dgsAddEventHandler("onDgsMouseMultiClick",memo,"dgsMemoMultiClickCheck",false)
-	triggerEvent("onDgsCreate",memo,sourceResource)
+	dgsAddEventHandler("onDgsFocus",memo,"dgsMemoFocus",false)
+	dgsAddEventHandler("onDgsBlur",memo,"dgsMemoBlur",false)
+	dgsMemoRecreateRenderTarget(memo,true)
+	onDGSElementCreate(memo,sRes)
 	return memo
+end
+
+function dgsMemoRecreateRenderTarget(memo,lateAlloc)
+	local eleData = dgsElementData[memo]
+	if isElement(eleData.bgRT) then destroyElement(eleData.bgRT) end
+	if lateAlloc then
+		dgsSetData(memo,"retrieveRT",true)
+	else
+		local padding = eleData.padding
+		local sizex,sizey = eleData.absSize[1]-padding[1]*2,eleData.absSize[2]-padding[2]*2
+		sizex,sizey = sizex-sizex%1,sizey-sizey%1
+		local scbThick = eleData.scrollBarThick
+		local scrollbar = eleData.scrollbars
+		local scbThickV,scbThickH = dgsElementData[scrollbar[1]].visible and scbThick or 0,dgsElementData[scrollbar[2]].visible and scbThick or 0
+		local bgRT,err = dgsCreateRenderTarget(sizex-scbThickV,sizey-scbThickH,true,memo)
+		if bgRT ~= false then
+			dgsAttachToAutoDestroy(bgRT,memo,-1)
+		else
+			outputDebugString(err,2)
+		end
+		dgsSetData(memo,"bgRT",bgRT)
+		dgsSetData(memo,"retrieveRT",nil)
+	end
+end
+
+function dgsMemoFocus()
+	resetTimer(MouseData.EditMemoTimer)
+	MouseData.EditMemoCursor = true
+	guiFocus(GlobalMemo)
+	dgsElementData[GlobalMemo].linkedDxMemo = source
+end
+
+function dgsMemoBlur()
+	guiBlur(GlobalMemo)
+	if not dgsElementData[GlobalMemo] then dgsElementData[GlobalMemo] = {} end
+	dgsElementData[GlobalMemo].linkedDxMemo = nil
+end
+
+function dgsMemoFocusFnc(source)
+	resetTimer(MouseData.EditMemoTimer)
+	MouseData.EditMemoCursor = true
+	guiFocus(GlobalMemo)
+	dgsElementData[GlobalMemo].linkedDxMemo = source
+end
+
+function dgsMemoBlurFnc(source)
+	guiBlur(GlobalMemo)
+	if not dgsElementData[GlobalMemo] then dgsElementData[GlobalMemo] = {} end
+	dgsElementData[GlobalMemo].linkedDxMemo = nil
 end
 
 function dgsMemoMultiClickCheck(button,state,x,y,times)
 	if state == "down" then
-		local pos,line,side = searchMemoMousePosition(source,x,y)
-		eleData = dgsElementData[source]
-		if button == "left" then
-			if not eleData.multiClickCounter[1] then
-				eleData.multiClickCounter = {pos,line,times-1}
-			elseif eleData.multiClickCounter[1] ~= pos or eleData.multiClickCounter[2] ~= line then
-				eleData.multiClickCounter = {pos,line,times-1}
+		local eleData = dgsElementData[source]
+		local mouseButtons = eleData.mouseButtons
+		local mouseClicked
+		if mouseButtons then
+			if button == "left" then
+				mouseClicked = mouseButtons[1]
+			elseif button == "middle" then
+				mouseClicked = mouseButtons[2]
+			elseif button == "right" then
+				mouseClicked = mouseButtons[3]
 			end
+		else
+			mouseClicked = button == "left"
 		end
+		if not mouseClicked then return end
+
+		local pos,line,side = searchMemoMousePosition(source,x,y)
+		if not eleData.multiClickCounter[1] then
+			eleData.multiClickCounter = {pos,line,times-1}
+		elseif eleData.multiClickCounter[1] ~= pos or eleData.multiClickCounter[2] ~= line then
+			eleData.multiClickCounter = {pos,line,times-1}
+		end
+
 		local t = times-eleData.multiClickCounter[3]
 		if t == 1 then
-			if button ~= "middle" then
-				local shift = getKeyState("lshift") or getKeyState("rshift")
-				dgsMemoSetCaretPosition(source,pos,line,shift)
-			end
+			local shift = getKeyState("lshift") or getKeyState("rshift")
+			dgsMemoSetCaretPosition(source,pos,line,shift)
 		elseif t == 2 then
-			if button == "left" then
-				local textTable = dgsElementData[source].text
-				local text = textTable[line][0]
-				local s,e = dgsSearchFullWordType(text,pos,side)
-				dgsMemoSetCaretPosition(source,s,line)
-				dgsMemoSetCaretPosition(source,e,line,true)
-			end
+			local textTable = dgsElementData[source].text
+			local text = textTable[line][0]
+			local s,e = dgsSearchFullWordType(text,pos,side)
+			dgsMemoSetCaretPosition(source,s,line)
+			dgsMemoSetCaretPosition(source,e,line,true)
 		elseif t == 3 then
-			if button == "left" then
-				dgsMemoSetCaretPosition(source,_,line)
-				dgsMemoMoveCaret(source,1,0)
-				dgsMemoSetCaretPosition(source,0,line,true)
-			end
+			dgsMemoSetCaretPosition(source,_,line)
+			dgsMemoMoveCaret(source,1,0)
+			dgsMemoSetCaretPosition(source,0,line,true)
 		end
 	end
 end
@@ -235,6 +379,7 @@ end
 function dgsMemoGetLineCount(memo,strongLineOnly)
 	if dgsGetType(memo) ~= "dgs-dxmemo" then error(dgsGenAsrt(memo,"dgsMemoGetLineCount",1,"dgs-dxmemo")) end
 	if not strongLineOnly and dgsElementData[memo].wordWrap then
+		if dgsElementData[memo].rebuildMapTableNextFrame then dgsMemoRebuildWordWrapMapTable(memo) end
 		return #dgsElementData[memo].wordWrapMapText
 	end
 	return #dgsElementData[memo].text
@@ -243,17 +388,15 @@ end
 function dgsMemoGetTextBoundingBox(memo,excludePadding)
 	if dgsGetType(memo) ~= "dgs-dxmemo" then error(dgsGenAsrt(memo,"dgsMemoGetTextBoundingBox",1,"dgs-dxmemo")) end
 	local eleData = dgsElementData[memo]
-	
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-			
-	local fontHeight = dxGetFontHeight(eleData.textSize[2],eleData.font or systemFont)
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
+	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
 	if eleData.wordWrap then
-		local textTable = eleData.wordWrapMapText
 		if eleData.rebuildMapTableNextFrame then dgsMemoRebuildWordWrapMapTable(memo) end
+		local textTable = eleData.wordWrapMapText
 		if excludePadding then
 			return eleData.absSize[1],#textTable*fontHeight
 		else
@@ -283,7 +426,11 @@ function dgsMemoMoveCaret(memo,indexOffset,lineOffset,noselect,noMoveLine)
 	local eleData = dgsElementData[memo]
 	local index = eleData.caretPos[1]
 	local line = eleData.caretPos[2]
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local size = eleData.absSize
 	local padding = eleData.padding
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
@@ -318,11 +465,12 @@ function dgsMemoMoveCaret(memo,indexOffset,lineOffset,noselect,noMoveLine)
 		end
 	else
 		local text = (textTable[line] or {[0]=""})[0]
-		local pos,line = dgsMemoSeekPosition(textTable,index+mathFloor(indexOffset),line+mathFloor(lineOffset),noMoveLine)
+		local pos
+		pos,line = dgsMemoSeekPosition(textTable,index+mathFloor(indexOffset),line+mathFloor(lineOffset),noMoveLine)
 		local showLine = eleData.showLine
 		local targetLine = line-showLine
 		local showPos = eleData.showPos
-		local nowLen = _dxGetTextWidth(utf8Sub(text,0,pos),eleData.textSize[1],font)
+		local nowLen = dxGetTextWidth(utf8Sub(text,0,pos),eleData.textSize[1],font)
 		local targetLen = nowLen-showPos
 		if targetLen > size[1]-padding[1]*2-scbTakes[1] then
 			dgsSetData(memo,"showPos",-(size[1]-padding[1]*2-scbTakes[1]-nowLen))
@@ -353,7 +501,7 @@ function dgsMemoMoveCaret(memo,indexOffset,lineOffset,noselect,noMoveLine)
 end
 
 function dgsMemoSeekPosition(textTable,pos,line,noMoveLine)
-	local line = (line < 1 and 1) or (line > #textTable and #textTable) or line
+	line = (line < 1 and 1) or (line > #textTable and #textTable) or line
 	local text = (textTable[line] or {[0]=""})[0]
 	local strCount = utf8Len(text)
 	if not noMoveLine then
@@ -404,7 +552,11 @@ function dgsMemoSetCaretPosition(memo,tpos,tline,doSelect,noSeekPosition)
 	local index,line
 	local isWordWrap = eleData.wordWrap
 	local showLine = eleData.showLine
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
 	local padding = eleData.padding
 	local size = eleData.absSize
@@ -451,7 +603,7 @@ function dgsMemoSetCaretPosition(memo,tpos,tline,doSelect,noSeekPosition)
 			index,line = dgsMemoSeekPosition(textTable,tpos,tline)
 		end
 		local showPos = eleData.showPos
-		local nowLen = _dxGetTextWidth(utf8Sub(text,0,index),eleData.textSize[1],font)
+		local nowLen = dxGetTextWidth(utf8Sub(text,0,index),eleData.textSize[1],font)
 		local targetLen = nowLen-showPos
 		if targetLen > size[1]-padding[1]*2-scbTakes[1] then
 			dgsSetData(memo,"showPos",-(size[1]-padding[1]*2-scbTakes[1]-nowLen))
@@ -460,7 +612,7 @@ function dgsMemoSetCaretPosition(memo,tpos,tline,doSelect,noSeekPosition)
 			dgsSetData(memo,"showPos",nowLen)
 			syncScrollBars(memo,2)
 		end
-		local targetLine = tline-showLine+1
+		local targetLine = line-showLine+1
 		if targetLine >= canHold then
 			dgsSetData(memo,"showLine",line-canHold+1)
 			syncScrollBars(memo,1)
@@ -522,10 +674,18 @@ function dgsMemoGetReadOnly(memo)
 end
 
 function resetMemo(x,y)
-	if dgsGetType(MouseData.focused) == "dgs-dxmemo" then
-		if MouseData.focused == MouseData.clickl then
-			local pos,line = searchMemoMousePosition(MouseData.focused,MouseData.cursorPos[1] or x*sW, MouseData.cursorPos[2] or y*sH)
-			dgsMemoSetCaretPosition(MouseData.focused,pos,line,true)
+	local dgsMemo = MouseData.focused
+	if dgsGetType(dgsMemo) == "dgs-dxmemo" then
+		local mouseButtons = dgsElementData[dgsMemo].mouseButtons
+		local clickedEle
+		if mouseButtons and not mouseButtons[1] then
+			clickedEle = (mouseButtons[2] and MouseData.click.right) or (mouseButtons[3] and MouseData.click.middle)
+		else
+			clickedEle = MouseData.click.left
+		end
+		if dgsMemo == clickedEle then
+			local pos,line = searchMemoMousePosition(dgsMemo,MouseData.cursorPos[1] or x*sW, MouseData.cursorPos[2] or y*sH)
+			dgsMemoSetCaretPosition(dgsMemo,pos,line,true)
 		end
 	end
 end
@@ -533,14 +693,11 @@ addEventHandler("onClientCursorMove",root,resetMemo)
 
 function searchMemoMousePosition(memo,posx,posy)
 	local eleData = dgsElementData[memo]
-	
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	local font = eleData.font or systemFont
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local txtSizX = eleData.textSize[1]
 	local padding = eleData.padding
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
@@ -557,29 +714,29 @@ function searchMemoMousePosition(memo,posx,posy)
 	for i=1,sto do
 		stoSfrom_Half = (sto+sfrom)*0.5
 		local stoSfrom_Half = stoSfrom_Half-stoSfrom_Half%1
-		local strlen = _dxGetTextWidth(utf8Sub(text,sfrom+1,stoSfrom_Half),txtSizX,font)
+		local strlen = dxGetTextWidth(utf8Sub(text,sfrom+1,stoSfrom_Half),txtSizX,font)
 		local len1 = strlen+templen
 		if pos < len1 then
 			sto = stoSfrom_Half
 		elseif pos > len1 then
 			sfrom = stoSfrom_Half
-			templen = _dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
+			templen = dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
 			start = len1
 		elseif pos == len1 then
 			start = len1
 			sfrom = stoSfrom_Half
 			sto = sfrom
-			templen = _dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
+			templen = dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
 		end
 		if sto-sfrom <= 10 then break end
 	end
-	local start = _dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
+	local start = dxGetTextWidth(utf8Sub(text,0,sfrom),txtSizX,font)
 	local resultIndex,resultLine,resultOffset = 0,1,1
 	for i=sfrom,sto do
-		local poslen1 = _dxGetTextWidth(utf8Sub(text,sfrom+1,i),txtSizX,font)+start
-		local theNext = _dxGetTextWidth(utf8Sub(text,i+1,i+1),txtSizX,font)*0.5
+		local poslen1 = dxGetTextWidth(utf8Sub(text,sfrom+1,i),txtSizX,font)+start
+		local theNext = dxGetTextWidth(utf8Sub(text,i+1,i+1),txtSizX,font)*0.5
 		local offsetR = theNext+poslen1
-		local theLast = _dxGetTextWidth(utf8Sub(text,i,i),txtSizX,font)*0.5
+		local theLast = dxGetTextWidth(utf8Sub(text,i,i),txtSizX,font)*0.5
 		local offsetL = poslen1-theLast
 		if i <= sfrom and pos <= offsetL then
 			resultIndex,resultLine,resultOffset = sfrom,selLine,1
@@ -618,27 +775,27 @@ function searchTextFromPosition(text,font,textSizeX,pos)
 	for i=1,sto do
 		stoSfrom_Half = (sto+sfrom)*0.5
 		stoSfrom_Half = stoSfrom_Half-stoSfrom_Half%1
-		len1 = _dxGetTextWidth(utf8Sub(text,sfrom+1,stoSfrom_Half),textSizeX,font)+templen
+		len1 = dxGetTextWidth(utf8Sub(text,sfrom+1,stoSfrom_Half),textSizeX,font)+templen
 		if pos < len1 then
 			sto = stoSfrom_Half
 		elseif pos > len1 then
 			sfrom = stoSfrom_Half
-			templen = _dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
+			templen = dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
 			start = len1
 		elseif pos == len1 then
 			start = len1
 			sfrom = stoSfrom_Half-1
 			sto = sfrom
-			templen = _dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
+			templen = dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
 		end
 		if sto-sfrom <= 10 then
 			break
 		end
 	end
-	local start = _dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
+	local start = dxGetTextWidth(utf8Sub(text,1,sfrom),textSizeX,font)
 	local current
 	for i=sfrom,sto do
-		current = _dxGetTextWidth(utf8Sub(text,i+1,i+1),textSizeX,font)
+		current = dxGetTextWidth(utf8Sub(text,i+1,i+1),textSizeX,font)
 		if start+current >= pos then return i end
 		start = start+current
 	end
@@ -654,8 +811,7 @@ wordArea = {
 function dgsMemoWordSplit(text,maxWidth,textWidth,font,textSizeX,isSplitByWord)
 	local splitTable = {}
 
-	local textSizeX = textSizeX or 1
-	local textWidth = textWidth or _dxGetTextWidth(text,textSizeX,font)
+	textSizeX,textWidth = textSizeX or 1,textWidth or dxGetTextWidth(text,textSizeX,font)
 	if maxWidth > textWidth then
 		return {text},1
 	end
@@ -677,8 +833,8 @@ function dgsMemoWordSplit(text,maxWidth,textWidth,font,textSizeX,isSplitByWord)
 					for i=index,1,-1 do
 						local checkCharByte = utf8Byte(text,i,i)
 						local isContinue = false
-						for i=1,#wordArea do
-							if checkCharByte >= wordArea[i][1] and checkCharByte <= wordArea[i][2] then
+						for i2=1,#wordArea do
+							if checkCharByte >= wordArea[i2][1] and checkCharByte <= wordArea[i2][2] then
 								isContinue = true
 								break
 							end
@@ -706,7 +862,6 @@ function dgsMemoWordSplit(text,maxWidth,textWidth,font,textSizeX,isSplitByWord)
 		end
 		return splitTable,cnt-1
 	end
-	return false,false
 end
 
 function dgsMemoGetInsertLine(textTable,mapTable,theLine)
@@ -802,34 +957,36 @@ function handleDxMemoText(memo,text,noclear,noAffectCaret,index,line)
 	local textTable = eleData.text or {}
 	local maxLength = eleData.maxLength
 	if not noclear then
-		eleData.text = {{[-1]=0,[0]="",[1]={}}}
+		eleData.text = {{[-1]=0,[0]=""}}
 		textTable = eleData.text
 		dgsSetData(memo,"caretPos",{0,1})
 		dgsSetData(memo,"selectFrom",{0,1})
 		dgsSetData(memo,"rightLength",{0,1})
+		if eleData.wordWrap then
+			dgsSetData(memo,"wordWrapMapText",{})
+			dgsSetData(memo,"wordWrapShowLine",{1,1,1})
+			dgsMemoRebuildWordWrapMapTable(memo)
+		end
 		configMemo(memo)
+
+		eleData.updateRTNextFrame = true
 	end
-	
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	local font = eleData.font or systemFont
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local textSize = eleData.textSize
 	local _index,_line = dgsMemoGetCaretPosition(memo,true)
-	local index,line = index or _index,line or _line
+	index,line = index or _index,line or _line
 	local fixed = utf8Gsub(text,splitChar,splitChar2)
-	local fixed = " "..utf8Gsub(fixed,"	"," ").." "
+	fixed = " "..utf8Gsub(fixed,"	"," ").." "
 	local tab = string.split(fixed,splitChar2)
 	tab[1] = utf8Sub(tab[1],2)
 	tab[#tab] = utf8Sub(tab[#tab],1,utf8Len(tab[#tab])-1)
-	local text = dgsGetText(memo)
+	text = dgsGetText(memo)
 	local textLen = utf8Len(text)
-	if (textLen >= maxLength) then
-	return false
-	end
+	if textLen >= maxLength then return false end
 	local isWordWrap = eleData.wordWrap
 	local mapTable = eleData.wordWrapMapText or {}
 	local size = eleData.absSize
@@ -853,8 +1010,8 @@ function handleDxMemoText(memo,text,noclear,noAffectCaret,index,line)
 			offset = offset+utf8Len(tab[i])+1
 			theline = line+i-1
 			if i ~= 1 and i ~= newTextLines then
-				local textLen = _dxGetTextWidth(tab[i],textSize[1],font)
-				local text = tab[i]
+				textLen = dxGetTextWidth(tab[i],textSize[1],font)
+				text = tab[i]
 				tableInsert(textTable,theline,{[-1]=textLen,[0]=text})
 			else
 				if i == 1 then
@@ -863,12 +1020,12 @@ function handleDxMemoText(memo,text,noclear,noAffectCaret,index,line)
 					textRear = utf8Sub(textTable[theline][0],index+1) or ""
 					local isAppendRear = newTextLines == 1 and textRear or ""
 					textTable[theline][0] = textFront..tab[1]..isAppendRear
-					textTable[theline][-1] = _dxGetTextWidth(textTable[theline][0],textSize[1],font)
+					textTable[theline][-1] = dxGetTextWidth(textTable[theline][0],textSize[1],font)
 				end
 				if i == newTextLines and i ~= 1 then
-					local text = {}
+					text = {}
 					text[0] = (tab[i] or "")..textRear
-					text[-1] = _dxGetTextWidth(text[0],textSize[1],font)
+					text[-1] = dxGetTextWidth(text[0],textSize[1],font)
 					tableInsert(textTable,theline,text)
 				end
 			end
@@ -887,7 +1044,7 @@ function handleDxMemoText(memo,text,noclear,noAffectCaret,index,line)
 		eleData.text = textTable
 		local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
 		local scbTakes = {dgsElementData[scrollbars[1]].visible and scbThick or 0,dgsElementData[scrollbars[2]].visible and scbThick or 0}
-		local canHold = mathFloor((size[2]-padding[2]*2-scbTakes[2])/fontHeight)
+		canHold = mathFloor((size[2]-padding[2]*2-scbTakes[2])/fontHeight)
 		if dgsElementData[scrollbars[1]].visible or eleData.rightLength[1] > size[1]-padding[1]*2-scbTakes[1] or dgsElementData[scrollbars[2]].visible or #textTable > canHold then
 			configMemo(memo)
 		end
@@ -896,8 +1053,8 @@ function handleDxMemoText(memo,text,noclear,noAffectCaret,index,line)
 				dgsMemoSetCaretPosition(memo,index+offset-1,line)
 			end
 		end
-		eleData.updateTextRTNextFrame = true
-		triggerEvent("onDgsTextChange",memo)
+		eleData.updateRTNextFrame = true
+		dgsTriggerEvent("onDgsTextChange",memo)
 	end
 end
 
@@ -926,14 +1083,11 @@ function dgsMemoDeleteText(memo,fromIndex,fromLine,toIndex,toLine,noAffectCaret)
 	local eleData = dgsElementData[memo]
 	local textTable = eleData.text
 	local mapTable = eleData.wordWrapMapText
-		
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	local font = eleData.font or systemFont
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local textSize = eleData.textSize
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
 	local size = eleData.absSize
@@ -956,14 +1110,14 @@ function dgsMemoDeleteText(memo,fromIndex,fromLine,toIndex,toLine,noAffectCaret)
 		local _to = toIndex < fromIndex and fromIndex or toIndex
 		local _from = fromIndex > toIndex and toIndex or fromIndex
 		textTable[toLine][0] = utf8Sub(textTable[toLine][0],0,_from)..utf8Sub(textTable[toLine][0],_to+1)
-		textTable[toLine][-1] = _dxGetTextWidth(textTable[toLine][0],textSize[1],font)
+		textTable[toLine][-1] = dxGetTextWidth(textTable[toLine][0],textSize[1],font)
 		if isWordWrap then
 			insertLine,lineCnt = dgsMemoGetInsertLine(textTable,mapTable,fromLine)
 			dgsMemoRemoveMapTable(mapTable,insertLine,lineCnt)
 		end
 	else
 		textTable[fromLine][0] = utf8Sub(textTable[fromLine][0],0,fromIndex)..utf8Sub(textTable[toLine][0],toIndex+1)
-		textTable[fromLine][-1] = _dxGetTextWidth(textTable[fromLine][0],textSize[1],font)
+		textTable[fromLine][-1] = dxGetTextWidth(textTable[fromLine][0],textSize[1],font)
 		insertLine,lineCnt = dgsMemoGetInsertLine(textTable,mapTable,fromLine)
 		dgsMemoRemoveMapTable(mapTable,insertLine,lineCnt)
 		for i=fromLine+1,toLine do
@@ -979,7 +1133,6 @@ function dgsMemoDeleteText(memo,fromIndex,fromLine,toIndex,toLine,noAffectCaret)
 	if isWordWrap then
 		local splitedText,splitedTextLine = dgsMemoWordSplit(textTable[fromLine][0],size[1]-padding[2]*2-scbTakes[1],textTable[fromLine][-1],font,textSize[1],isWordWrap)
 		textTable[fromLine][1] = dgsMemoInsertMapTable(mapTable,insertLine,splitedText,textTable[fromLine])
-		insertLine = insertLine + splitedTextLine
 	end
 	eleData.text = textTable
 	local line,len = seekMaxLengthLine(memo)
@@ -995,9 +1148,9 @@ function dgsMemoDeleteText(memo,fromIndex,fromLine,toIndex,toLine,noAffectCaret)
 			dgsMemoSetCaretPosition(memo,fromIndex,fromLine)
 		end
 	end
-	local textTable = eleData.text
+	textTable = eleData.text
 	if isWordWrap then
-		local mapTable = eleData.wordWrapMapText
+		mapTable = eleData.wordWrapMapText
 		local mapTableCnt = #mapTable
 		local wordWrapShowLine = eleData.wordWrapShowLine
 		if mapTableCnt> canHold and wordWrapShowLine[3]-1+canHold > mapTableCnt then
@@ -1018,12 +1171,12 @@ function dgsMemoDeleteText(memo,fromIndex,fromLine,toIndex,toLine,noAffectCaret)
 			wordWrapShowLine[2] = startWeakLine
 		end
 	else
-		if #textTable > canHold and eleData.showLine-1+canHold > #textTable then
+		if #textTable >= canHold and eleData.showLine-1+canHold > #textTable then
 			eleData.showLine = 1-canHold+#textTable
 		end
 	end
-	eleData.updateTextRTNextFrame = true
-	triggerEvent("onDgsTextChange",memo)
+	eleData.updateRTNextFrame = true
+	dgsTriggerEvent("onDgsTextChange",memo)
 end
 
 function dgsMemoClearText(memo)
@@ -1031,13 +1184,16 @@ function dgsMemoClearText(memo)
 	local eleData = dgsElementData[memo]
 	eleData.text = {{[-1]=0,[0]=""}}
 	dgsSetData(memo,"caretPos",{0,1})
-	dgsSetData(memo,"wordWrapMapText",{})
-	dgsSetData(memo,"wordWrapShowLine",{1,1,1})
 	dgsSetData(memo,"selectFrom",{0,1})
 	dgsSetData(memo,"rightLength",{0,1})
+	if eleData.wordWrap then
+		dgsSetData(memo,"wordWrapMapText",{})
+		dgsSetData(memo,"wordWrapShowLine",{1,1,1})
+		dgsMemoRebuildWordWrapMapTable(memo)
+	end
 	configMemo(memo)
-	eleData.updateTextRTNextFrame = true
-	triggerEvent("onDgsTextChange",memo)
+	eleData.updateRTNextFrame = true
+	dgsTriggerEvent("onDgsTextChange",memo)
 	return true
 end
 
@@ -1186,17 +1342,22 @@ function configMemo(memo)
 	else
 		textCnt = #eleData.text			--Strong Line for no word Wrap
 	end
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local textSize = eleData.textSize
 	local fontHeight = dxGetFontHeight(eleData.textSize[2],font)
 	local scbThick = eleData.scrollBarThick
-	local scbStateV,scbStateH = false,false
+	local scbAlign = eleData.scrollBarAlignment
+	local scbStateH = false
 	if not eleData.wordWrap then
 		scbStateH = eleData.rightLength[1] > size[1]-padding[1]*2
 	end
 	local scbTakes2 = scbStateH and scbThick or 0
 	local canHold = mathFloor((size[2]-padding[2]*2-scbTakes2)/fontHeight)
-	scbStateV = textCnt > canHold
+	local scbStateV = textCnt > canHold
 	local scbTakes1 = scbStateV and scbThick or 0
 	if not eleData.wordWrap then
 		scbStateH = eleData.rightLength[1] > size[1]-padding[1]*2-scbTakes1
@@ -1206,51 +1367,40 @@ function configMemo(memo)
 	if forceState[2] ~= nil then scbStateH = forceState[2] end
 	dgsSetVisible(scrollbar[1],scbStateV and true or false)
 	dgsSetVisible(scrollbar[2],scbStateH and true or false)
-	local scbTakes1 = scbStateV and scbThick or 0
-	local scbTakes2 = scbStateH and scbThick or 0
-	dgsSetPosition(scrollbar[1],size[1]-scbThick,0,false)
-	dgsSetPosition(scrollbar[2],0,size[2]-scbThick,false)
-	dgsSetSize(scrollbar[1],scbThick,size[2]-padding[2]*2-scbTakes2,false)
-	dgsSetSize(scrollbar[2],size[1]-padding[1]*2-scbTakes1,scbThick,false)
+	scbTakes1 = scbStateV and scbThick or 0
+	scbTakes2 = scbStateH and scbThick or 0
+	if scbAlign[1] == "right" then
+		dgsSetPosition(scrollbar[1],size[1]-scbThick,0,false)
+	elseif scbAlign[1] == "left" then
+		dgsSetPosition(scrollbar[1],0,0,false)
+	end
+	if scbAlign[2] == "bottom" then
+		dgsSetPosition(scrollbar[2],0,size[2]-scbThick,false)
+	elseif scbAlign[2] == "top" then
+		dgsSetPosition(scrollbar[2],0,0,false)
+	end
+	dgsSetSize(scrollbar[1],scbThick,size[2]-scbTakes2,false)
+	dgsSetSize(scrollbar[2],size[1]-scbTakes1,scbThick,false)
 
 	local scbLengthVrt = eleData.scrollBarLength[1]
 	local higLen = 1-(textCnt-canHold)/textCnt
-	higLen = higLen >= 0.95 and 0.95 or higLen
-	dgsSetData(scrollbar[1],"length",scbLengthVrt or {higLen,true})
+	higLen = higLen >= 1 and 1 or higLen
+	dgsSetData(scrollbar[1],"cursorLength",scbLengthVrt or {higLen,true})
 	local verticalScrollSize = eleData.scrollSize/(textCnt-canHold)
 	dgsSetData(scrollbar[1],"multiplier",{verticalScrollSize,true})
 
 	local scbLengthHoz = eleData.scrollBarLength[2]
 	local widLen = 1-(eleData.rightLength[1]-size[1]+scbTakes1+padding[1]*2)/eleData.rightLength[1]
-	widLen = widLen >= 0.95 and 0.95 or widLen
-	dgsSetData(scrollbar[2],"length",scbLengthHoz or {widLen,true})
+	widLen = widLen >= 1 and 1 or widLen
+	dgsSetData(scrollbar[2],"cursorLength",scbLengthHoz or {widLen,true})
 	local horizontalScrollSize = eleData.scrollSize*5/(eleData.rightLength[1]-size[1]+scbTakes1+padding[1]*2)
 	dgsSetData(scrollbar[2],"multiplier",{horizontalScrollSize,true})
-	local scrollBarAfter = {dgsElementData[scrollbar[1]].visible,dgsElementData[scrollbar[2]].visible}
-	if scrollBarAfter[1] ~= scrollBarBefore[1] or scrollBarAfter[2] ~= scrollBarBefore[2] then
+	if dgsElementData[scrollbar[1]].visible ~= scrollBarBefore[1] or dgsElementData[scrollbar[2]].visible ~= scrollBarBefore[2] then
 		dgsSetData(memo,"rebuildMapTableNextFrame",true)
 	end
-	local padding = eleData.padding
-	local sizex,sizey = size[1]-padding[1]*2,size[2]-padding[2]*2
-	sizex,sizey = sizex-sizex%1,sizey-sizey%1
-	if isElement(eleData.bgRT) then destroyElement(eleData.bgRT) end
-	if isElement(eleData.textRT) then destroyElement(eleData.textRT) end
-	local bgRT,err = dxCreateRenderTarget(sizex-scbTakes1,sizey-scbTakes2,true,memo)
-	if bgRT ~= false then
-		dgsAttachToAutoDestroy(bgRT,memo,-1)
-	else
-		outputDebugString(err,2)
-	end
-	dgsSetData(memo,"bgRT",bgRT)
-	local textRT,err = dxCreateRenderTarget(sizex-scbTakes1,sizey-scbTakes2,true,memo)
-	if textRT ~= false then
-		dgsAttachToAutoDestroy(textRT,memo,-2)
-	else
-		outputDebugString(err,2)
-	end
-	dgsSetData(memo,"textRT",textRT)
-	dgsSetData(memo,"configNextFrame",false)
-	dgsElementData[memo].updateTextRTNextFrame = true
+	dgsMemoRecreateRenderTarget(memo,true)
+	dgsSetData(memo,"configNextFrame",nil)
+	dgsElementData[memo].updateRTNextFrame = true
 end
 
 function checkMemoScrollBar(source,new,old)
@@ -1260,7 +1410,11 @@ function checkMemoScrollBar(source,new,old)
 	local size = eleData.absSize
 	local padding = eleData.padding
 	local scbThick = eleData.scrollBarThick
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local textSize = eleData.textSize
 	local isWordWrap = eleData.wordWrap
 	local textTable = eleData.text
@@ -1291,6 +1445,7 @@ function checkMemoScrollBar(source,new,old)
 			wordWrapShowLine[2] = startWeakLine
 		else
 			local temp = mathFloor((#textTable-canHold)*new*0.01)+1
+			if temp <= 1 then temp = 1 end
 			dgsSetData(memo,"showLine",temp)
 		end
 	elseif source == scrollbars[2] then
@@ -1298,7 +1453,7 @@ function checkMemoScrollBar(source,new,old)
 		local temp = new*canHold
 		dgsSetData(memo,"showPos",temp)
 	end
-	eleData.updateTextRTNextFrame = true
+	eleData.updateRTNextFrame = true
 end
 
 function syncScrollBars(memo,which)
@@ -1307,7 +1462,11 @@ function syncScrollBars(memo,which)
 	local size = eleData.absSize
 	local padding = eleData.padding
 	local scbThick = eleData.scrollBarThick
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local textSize = eleData.textSize
 	local isWordWrap = eleData.wordWrap
 	local scbTakes1,scbTakes2 = dgsElementData[scrollbars[1]].visible and scbThick+2 or 4,dgsElementData[scrollbars[2]].visible and scbThick or 0
@@ -1392,44 +1551,19 @@ function dgsMemoSetVerticalScrollPosition(memo,vertical)
 	return dgsScrollBarSetScrollPosition(scb[1],vertical)
 end
 
-addEventHandler("onClientGUIChanged",GlobalMemo,function()
-	if not dgsElementData[source] then return end
-	if getElementType(source) == "gui-memo" then
-		local dxMemo = dgsElementData[source].linkedDxMemo
-		if isElement(dxMemo) then
-			local text = guiGetText(source)
-			local cool = dgsElementData[dxMemo].CoolTime
-			if text ~= "\n" then
-				if not cool and not dgsElementData[dxMemo].readOnly then
-					local caretPos = dgsElementData[dxMemo].caretPos
-					local selectFrom = dgsElementData[dxMemo].selectFrom
-					dgsMemoDeleteText(dxMemo,caretPos[1],caretPos[2],selectFrom[1],selectFrom[2])
-					handleDxMemoText(dxMemo,utf8Sub(text,1,utf8Len(text)-1),true)
-				end
-				dgsElementData[dxMemo].CoolTime = true
-				guiSetText(source,"")
-				dgsElementData[dxMemo].CoolTime = false
-			end
-		end
-	end
-end,false)
-
 function dgsMemoRebuildWordWrapMapTable(memo)
-	dgsSetData(memo,"rebuildMapTableNextFrame",false)
+	dgsSetData(memo,"rebuildMapTableNextFrame",nil)
 	local eleData = dgsElementData[memo]
 	local isWordWrap = eleData.wordWrap
 	if isWordWrap then
 		local textTable = eleData.text
 		local size = eleData.absSize
 		local padding = eleData.padding
-			
-		local res = eleData.resource or "global"
-		local style = styleManager.styles[res]
-		local using = style.using
-		style = style.loaded[using]
-		local systemFont = style.systemFontElement
+
+		local style = styleManager.styles[eleData.resource or "global"]
+		style = style.loaded[style.using]
+		local font = eleData.font or style.memo.font or style.systemFontElement
 		
-		local font = eleData.font or systemFont
 		local textSizeX = eleData.textSize[1]
 		local scbThick = eleData.scrollBarThick
 		local scrollbars = eleData.scrollbars
@@ -1452,10 +1586,14 @@ function dgsMemoRebuildTextTable(memo)
 	local eleData = dgsElementData[memo]
 	local textTable = eleData.text
 	local textSize = eleData.textSize
-	local font = eleData.font
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	for i=1,#textTable do
 		local text = textTable[i][0]
-		textTable[i][-1] = _dxGetTextWidth(text,textSize[1],font)
+		textTable[i][-1] = dxGetTextWidth(text,textSize[1],font)
 		if eleData.rightLength[1] < textTable[i][-1] then
 			eleData.rightLength = {textTable[i][-1],i}
 		end
@@ -1464,80 +1602,165 @@ function dgsMemoRebuildTextTable(memo)
 end
 
 ----------------------------------------------------------------
+---------------------OnMouseScrollAction------------------------
+----------------------------------------------------------------
+dgsOnMouseScrollAction["dgs-dxmemo"] = function(dgsEle,isWheelDown)
+	local scrollbar = dgsElementData[dgsEle].scrollbars[1]
+	if dgsGetVisible(scrollbar) then
+		dgsSetData(scrollbar,"moveType","slow")
+		scrollScrollBar(scrollbar,isWheelDown)
+	end
+end
+
+----------------------------------------------------------------
+-----------------------PropertyListener-------------------------
+----------------------------------------------------------------
+function dgsMemoUpdateRTNextFrame(dgsEle)
+	dgsElementData[dgsEle].updateRTNextFrame = true
+end
+
+dgsOnPropertyChange["dgs-dxmemo"] = {
+	text = function(dgsEle,key,value,oldValue)
+		return handleDxMemoText(dgsEle,value)
+	end,
+	scrollBarThick = configMemo,
+	scrollBarState = configMemo,
+	scrollBarAlignment = configMemo,
+	textSize = function(dgsEle,key,value,oldValue)
+		dgsMemoRebuildTextTable(dgsEle)
+		dgsElementData[dgsEle].updateRTNextFrame = true
+	end,
+	textColor = dgsMemoUpdateRTNextFrame,
+	font = function(dgsEle,key,value,oldValue)
+		--Multilingual
+		if type(value) == "table" then
+			dgsElementData[dgsEle]._translation_font = value
+			value = dgsGetTranslationFont(dgsEle,value,sourceResource)
+		else
+			dgsElementData[dgsEle]._translation_font = nil
+		end
+		dgsElementData[dgsEle].font = value
+
+		dgsMemoRebuildTextTable(dgsEle)
+		dgsElementData[dgsEle].updateRTNextFrame = true
+	end,
+	wordWrap = function(dgsEle,key,value,oldValue)
+		if value then
+			dgsMemoRebuildWordWrapMapTable(dgsEle)
+		end
+		dgsElementData[dgsEle].updateRTNextFrame = true
+	end,
+	showPos = dgsMemoUpdateRTNextFrame,
+	selectFrom = dgsMemoUpdateRTNextFrame,
+	caretPos = dgsMemoUpdateRTNextFrame,
+	padding = configMemo,
+}
+
+----------------------------------------------------------------
+---------------------Translation Updater------------------------
+----------------------------------------------------------------
+dgsOnTranslationUpdate["dgs-dxmemo"] = function(dgsEle,key,value)
+	local text = dgsElementData[dgsEle]._translation_placeHolderText
+	if text then
+		if key then text[key] = value end
+		dgsSetData(dgsEle,"placeHolder",text)
+	end
+	local font = dgsElementData[dgsEle]._translation_placeHolderFont
+	if font then
+		dgsSetData(dgsEle,"placeHolderFont",font)
+	end
+	dgsElementData[dgsEle].updateRTNextFrame = true
+end
+
+----------------------------------------------------------------
+-----------------------VisibilityManage-------------------------
+----------------------------------------------------------------
+dgsOnVisibilityChange["dgs-dxmemo"] = function(dgsElement,selfVisibility,inheritVisibility)
+	if not selfVisibility or not inheritVisibility then
+		dgsMemoRecreateRenderTarget(dgsElement,true)
+	end
+end
+----------------------------------------------------------------
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------
 dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited,enabledSelf,eleData,parentAlpha,isPostGUI,rndtgt)
+	local renderBuffer = eleData.renderBuffer
 	if MouseData.hit == source and MouseData.focused == source then
 		MouseData.topScrollable = source
 	end
 	if eleData.configNextFrame then
 		configMemo(source)
 	end
+	if eleData.retrieveRT then
+		dgsMemoRecreateRenderTarget(source)
+		eleData.updateRTNextFrame = true
+	end
 	local bgColor = applyColorAlpha(eleData.bgColor,parentAlpha)
 	local caretColor = applyColorAlpha(eleData.caretColor,parentAlpha)
-	if MouseData.focused == source then
+	local isFocused = MouseData.focused
+	if isFocused then
 		if isConsoleActive() or isMainMenuActive() or isChatBoxInputActive() then
 			MouseData.focused = false
 		end
 	end
+	if isFocused ~= renderBuffer.isFocused then
+		renderBuffer.isFocused = isFocused
+		eleData.updateRTNextFrame = true
+	end
+
+	local shadow = eleData.shadow
 	local text = eleData.text
 	local caretPos = eleData.caretPos
 	local selectFro = eleData.selectFrom
-	local selectColor = MouseData.focused == source and eleData.selectColor or eleData.selectColorBlur
-	
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	local font = eleData.font or systemFont
+	local selectColor = applyColorAlpha(MouseData.focused == source and eleData.selectColor or eleData.selectColorBlur,parentAlpha)
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.memo.font or style.systemFontElement
+
 	local txtSizX,txtSizY = eleData.textSize[1],eleData.textSize[2]
 	local fontHeight = dxGetFontHeight(txtSizY,font)
 	local scbThick = eleData.scrollBarThick
 	local scrollbars = eleData.scrollbars
 	local selectVisible = eleData.selectVisible
-	local finalcolor
-	if not enabledInherited and not enabledSelf then
-		if type(eleData.disabledColor) == "number" then
-			finalcolor = eleData.disabledColor
-		elseif eleData.disabledColor == true then
-			local r,g,b,a = fromcolor(bgColor,true)
-			local average = (r+g+b)/3*eleData.disabledColorPercent
-			finalcolor = tocolor(average,average,average,a)
-		else
-			finalcolor = bgColor
-		end
-	else
-		finalcolor = bgColor
-	end
 	local padding = eleData.padding
 	local sidelength,sideheight = padding[1]-padding[1]%1,padding[2]-padding[2]%1
 	local px,py,pw,ph = x+sidelength,y+sideheight,w-sidelength*2,h-sideheight*2
 	local textRenderBuffer = eleData.textRenderBuffer
 	textRenderBuffer.count = 0
-	if eleData.bgImage then
-		dxDrawImage(x,y,w,h,eleData.bgImage,0,0,0,finalcolor,isPostGUI,rndtgt)
-	else
-		dxDrawRectangle(x,y,w,h,finalcolor,isPostGUI)
+	local textColor = eleData.textColor
+
+	local isPlaceHolderShown = (#text == 1 and text[1][0] == "") and placeHolder ~= "" and (MouseData.focused ~= source or eleData.placeHolderVisibleWhenFocus)
+	if renderBuffer.placeHolderState ~= isPlaceHolderShown then
+		renderBuffer.placeHolderState = isPlaceHolderShown
+		eleData.updateRTNextFrame = true
 	end
+	if renderBuffer.parentAlphaLast ~= parentAlpha then
+		renderBuffer.parentAlphaLast = parentAlpha
+		eleData.updateRTNextFrame = true
+	end
+	local placeHolder = eleData.placeHolder
+	local placeHolderIgnoreRndTgt = eleData.placeHolderIgnoreRenderTarget
+	local placeHolderOffset = eleData.placeHolderOffset
+
 	if eleData.wordWrap then
 		if eleData.rebuildMapTableNextFrame then
 			dgsMemoRebuildWordWrapMapTable(source)
 		end
 		local allLines = #eleData.wordWrapMapText
-		local textColor = eleData.textColor
 		local wordWrapShowLine = eleData.wordWrapShowLine
 		local caretHeight = eleData.caretHeight-1
 		local canHoldLines = mathFloor((h-4)/fontHeight)
 		canHoldLines = canHoldLines > allLines and allLines or canHoldLines
 		local showPos = eleData.showPos
 		local caretRltHeight = fontHeight*caretHeight
-		local caretDrawPos
 		local selPosStart,selPosEnd,selStart,selEnd
-		if eleData.bgRT then
+		if renderBuffer.parentAlphaLast ~= parentAlpha then
+			renderBuffer.parentAlphaLast = parentAlpha
+			eleData.updateRTNextFrame = true
+		end
+		if eleData.bgRT and (eleData.updateRTNextFrame or dgsRenderInfo.RTRestoreNeed) then
 			dxSetRenderTarget(eleData.bgRT,true)
-			dxSetBlendMode("modulate_add")
 			if allLines > 0 then
 				if selectFro[2] > caretPos[2] then
 					selStart,selEnd = caretPos[2],selectFro[2]
@@ -1556,9 +1779,9 @@ dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited
 				local lineCnt = 0
 				local rndLine,rndPos,totalLine = eleData.wordWrapShowLine[1],eleData.wordWrapShowLine[2],eleData.wordWrapShowLine[3]
 				if rndLine <= 1 then rndLine = 1 end
-				local weakLinePos,nextWeakLineLen,yPos,renderingText
+				local weakLinePos,yPos,renderingText
 				for a=rndLine,#text do
-					weakLinePos,nextWeakLineLen = 0,0
+					weakLinePos = 0
 					for b=1,#text[a][1] do
 						weakLineLen = text[a][1][b][3]
 						if b >= rndPos then
@@ -1601,7 +1824,7 @@ dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited
 							if caretPos[2] == a then
 								if caretPos[1] >= weakLinePos and caretPos[1] <= weakLinePos+weakLineLen then
 									local indexInWeakLine = caretPos[1]-weakLinePos
-									caretDrawPos = {px-showPos-2,py+yPos,utf8Sub(renderingText,1,indexInWeakLine),utf8Sub(renderingText,indexInWeakLine+1,indexInWeakLine+1)}
+									renderBuffer.caretDrawPos = {px-showPos-2,py+yPos,utf8Sub(renderingText,1,indexInWeakLine),utf8Sub(renderingText,indexInWeakLine+1,indexInWeakLine+1)}
 								end
 							end
 							textRenderBuffer.count = textRenderBuffer.count+1
@@ -1611,7 +1834,7 @@ dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited
 							textRenderBuffer[textRenderBuffer.count][3] = yPos
 							textRenderBuffer[textRenderBuffer.count][4] = -showPos
 							textRenderBuffer[textRenderBuffer.count][5] = fontHeight+yPos
-							textRenderBuffer[textRenderBuffer.count][6] = textColor
+							textRenderBuffer[textRenderBuffer.count][6] = applyColorAlpha(textColor,parentAlpha)
 							textRenderBuffer[textRenderBuffer.count][7] = txtSizX
 							textRenderBuffer[textRenderBuffer.count][8] = txtSizY
 							textRenderBuffer[textRenderBuffer.count][9] = font
@@ -1624,84 +1847,111 @@ dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited
 					if lineCnt > canHoldLines then break end
 				end
 			end
-		end
-		if eleData.textRT and eleData.updateTextRTNextFrame then
-			eleData.updateTextRTNextFrame = false
-			dxSetRenderTarget(eleData.textRT,true)
-			dxSetBlendMode("modulate_add")
-			local tRB
-			if shadow then
-				local shadowoffx,shadowoffy,shadowc,shadowIsOutline,shadowfont = shadow[1],shadow[2],shadow[3],shadow[4],shadow[5] or font
-				if shadowoffx and shadowoffy and shadowc then
-					local shadowc = applyColorAlpha(shadowc,parentAlpha)
-					for i=1,textRenderBuffer.count do
-						tRB = textRenderBuffer[i]
-						local shadowText = colorcoded and tRB[1]:gsub('#%x%x%x%x%x%x','') or tRB[1]
-						dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]+shadowoffy,tRB[4]+shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						if shadowIsOutline == true or shadowIsOutline == 1 then
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]+shadowoffy,tRB[4]-shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]-shadowoffy,tRB[4]-shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]-shadowoffy,tRB[4]+shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						elseif shadowIsOutline == 2 then
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]+shadowoffy,tRB[4]-shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]-shadowoffy,tRB[4]-shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]-shadowoffy,tRB[4]+shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
 
-							dxDrawText(shadowText,tRB[2],tRB[3]+shadowoffy,tRB[4],tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3],tRB[4]-shadowoffx,tRB[5],shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2],tRB[3]-shadowoffy,tRB[4],tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3],tRB[4]+shadowoffx,tRB[5],shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						end
+			eleData.updateRTNextFrame = nil
+			dxSetBlendMode("modulate_add")
+
+			if not placeHolderIgnoreRndTgt then
+				if isPlaceHolderShown then
+					local pColor = applyColorAlpha(eleData.placeHolderColor,parentAlpha)
+					local pFont = eleData.placeHolderFont or font
+					local pColorCoded = eleData.placeHolderColorCoded
+					local pHolderTextSizeX,pHolderTextSizeY
+					local placeHolderTextSize = eleData.placeHolderTextSize
+					if placeHolderTextSize then
+						pHolderTextSizeX,pHolderTextSizeY = placeHolderTextSize[1],placeHolderTextSize[2]
+					else
+						pHolderTextSizeX,pHolderTextSizeY = txtSizX,txtSizY
 					end
+					dgsDrawText(placeHolder,0+placeHolderOffset[1],0+placeHolderOffset[2],pw+placeHolderOffset[1],fontHeight+placeHolderOffset[2],pColor,pHolderTextSizeX,pHolderTextSizeY,pFont,"left","top",false,false,false,pColorcoded)
 				end
+			end
+
+			local tRB
+			local shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont
+			if shadow then
+				shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont = shadow[1],shadow[2],shadow[3],shadow[4],shadow[5]
+				shadowColor = applyColorAlpha(shadowColor or white,parentAlpha)
 			end
 			for i=1,textRenderBuffer.count do
 				tRB = textRenderBuffer[i]
-				dxDrawText(tRB[1],tRB[2],tRB[3],tRB[4],tRB[5],tRB[6],tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
+				dgsDrawText(tRB[1],tRB[2],tRB[3],tRB[4],tRB[5],tRB[6],tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false,subPixelPos,0,0,0,0,shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont)
 			end
 		end
 		dxSetRenderTarget(rndtgt)
 		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
+		local finalcolor = bgColor
+		if not enabledInherited and not enabledSelf then
+			if type(eleData.disabledColor) == "number" then
+				finalcolor = eleData.disabledColor
+			elseif eleData.disabledColor == true then
+				local r,g,b,a = fromcolor(bgColor)
+				local average = (r+g+b)/3*eleData.disabledColorPercent
+				finalcolor = tocolor(average,average,average,a)
+			end
+		end
+		dxDrawImage(x,y,w,h,eleData.bgImage,0,0,0,finalcolor,isPostGUI,rndtgt)
+		dxSetBlendMode(rndtgt and "modulate_add" or "add")
 
 		local scbTakes1,scbTakes2 = dgsElementData[scrollbars[1]].visible and scbThick or 0,dgsElementData[scrollbars[2]].visible and scbThick or 0
 		if eleData.bgRT then
-			_dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.bgRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
+			__dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.bgRT,0,0,0,white,isPostGUI)
 		end
-		if eleData.textRT then
-			_dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.textRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
+		if placeHolderIgnoreRndTgt then
+			if isPlaceHolderShown then
+				local pColor = applyColorAlpha(eleData.placeHolderColor,parentAlpha)
+				local pFont = eleData.placeHolderFont or font
+				local pColorCoded = eleData.placeHolderColorCoded
+				local pHolderTextSizeX,pHolderTextSizeY
+				local placeHolderTextSize = eleData.placeHolderTextSize
+				if placeHolderTextSize then
+					pHolderTextSizeX,pHolderTextSizeY = placeHolderTextSize[1],placeHolderTextSize[2]
+				else
+					pHolderTextSizeX,pHolderTextSizeY = txtSizX,txtSizY
+				end
+				dgsDrawText(placeHolder,px+placeHolderOffset[1],py+placeHolderOffset[2],px+pw+placeHolderOffset[1],py+fontHeight+placeHolderOffset[2],pColor,pHolderTextSizeX,pHolderTextSizeY,pFont,"left","top",false,false,false,pColorcoded)
+			end
 		end
+
+		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
+
 		if MouseData.focused == source and MouseData.EditMemoCursor then
 			local CaretShow = true
 			if eleData.readOnly then
 				CaretShow = eleData.readOnlyCaretShow
 			end
+			local caretDrawPos = renderBuffer.caretDrawPos
 			if CaretShow and caretDrawPos then
 				local caretStyle = eleData.caretStyle
 				local caretRenderX = caretDrawPos[1]+dxGetTextWidth(caretDrawPos[3],txtSizX,font)+1
 				if caretStyle == 0 then
-					dxDrawLine(caretRenderX,caretDrawPos[2],caretRenderX,caretDrawPos[2]+fontHeight*(1-caretHeight),caretColor,eleData.caretThick,isPostGUI)
+					local caretOffset = eleData.caretOffset
+					dxDrawLine(caretRenderX,caretDrawPos[2]-caretOffset,caretRenderX,caretDrawPos[2]+fontHeight*(1-caretHeight)-caretOffset,caretColor,eleData.caretThick,isPostGUI)
 				elseif caretStyle == 1 then
 					local cursorWidth = dxGetTextWidth(caretDrawPos[4],txtSizX,font)
 					if cursorWidth == 0 then
 						cursorWidth = txtSizX*8
 					end
-					local caretRenderY = caretDrawPos[2]+fontHeight*(1-caretHeight)*0.85+eleData.caretOffset-2
+					local caretOffset = eleData.caretOffset
+					local caretRenderY = caretDrawPos[2]+fontHeight*(1-caretHeight)*0.85-caretOffset-2
 					dxDrawLine(caretRenderX,caretRenderY,caretRenderX+cursorWidth,caretRenderY,caretColor,eleData.caretThick,isPostGUI)
 				end
 			end
 		end
 	else
 		local allLine = #text
-		local textColor = eleData.textColor
 		local showLine = eleData.showLine
 		local caretHeight = eleData.caretHeight-1
 		local canHoldLines = mathFloor((h-4)/fontHeight)
 		canHoldLines = canHoldLines > allLine and allLine or canHoldLines
 		local selPosStart,selPosEnd,selStart,selEnd
 		local showPos = eleData.showPos
-		if eleData.bgRT then
+		if renderBuffer.parentAlphaLast ~= parentAlpha then
+			renderBuffer.parentAlphaLast = parentAlpha
+			eleData.updateRTNextFrame = true
+		end
+		if eleData.bgRT and (eleData.updateRTNextFrame or dgsRenderInfo.RTRestoreNeed) then
 			dxSetRenderTarget(eleData.bgRT,true)
-			dxSetBlendMode("blend")
 			if allLine > 0 then
 				local toShowLine = showLine+canHoldLines
 				toShowLine = toShowLine > allLine and allLine or toShowLine
@@ -1748,80 +1998,107 @@ dgsRenderer["dgs-dxmemo"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited
 					textRenderBuffer[textRenderBuffer.count][3] = yPos
 					textRenderBuffer[textRenderBuffer.count][4] = -showPos
 					textRenderBuffer[textRenderBuffer.count][5] = fontHeight+yPos
-					textRenderBuffer[textRenderBuffer.count][6] = textColor
+					textRenderBuffer[textRenderBuffer.count][6] = applyColorAlpha(textColor,parentAlpha)
 					textRenderBuffer[textRenderBuffer.count][7] = txtSizX
 					textRenderBuffer[textRenderBuffer.count][8] = txtSizY
 					textRenderBuffer[textRenderBuffer.count][9] = font
 				end
 			end
-		end
-		if eleData.textRT and (eleData.updateTextRTNextFrame or dgsRenderInfo.RTRestoreNeed) then
-			eleData.updateTextRTNextFrame = false
-			dxSetRenderTarget(eleData.textRT,true)
-			dxSetBlendMode("modulate_add")
-			local tRB
-			local shadow = eleData.shadow
-			if shadow then
-				local shadowoffx,shadowoffy,shadowc,shadowIsOutline,shadowfont = shadow[1],shadow[2],shadow[3],shadow[4],shadow[5] or font
-				if shadowoffx and shadowoffy and shadowc then
-					local shadowc = applyColorAlpha(shadowc,parentAlpha)
-					for i=1,textRenderBuffer.count do
-						tRB = textRenderBuffer[i]
-						local shadowText = colorcoded and tRB[1]:gsub('#%x%x%x%x%x%x','') or tRB[1]
-						dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]+shadowoffy,tRB[4]+shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						if shadowIsOutline == true or shadowIsOutline == 1 then
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]+shadowoffy,tRB[4]-shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]-shadowoffy,tRB[4]-shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]-shadowoffy,tRB[4]+shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						elseif shadowIsOutline == 2 then
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]+shadowoffy,tRB[4]-shadowoffx,tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3]-shadowoffy,tRB[4]-shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3]-shadowoffy,tRB[4]+shadowoffx,tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
 
-							dxDrawText(shadowText,tRB[2],tRB[3]+shadowoffy,tRB[4],tRB[5]+shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]-shadowoffx,tRB[3],tRB[4]-shadowoffx,tRB[5],shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2],tRB[3]-shadowoffy,tRB[4],tRB[5]-shadowoffy,shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-							dxDrawText(shadowText,tRB[2]+shadowoffx,tRB[3],tRB[4]+shadowoffx,tRB[5],shadowc,tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
-						end
+			eleData.updateRTNextFrame = nil
+			dxSetBlendMode("modulate_add")
+
+			if not placeHolderIgnoreRndTgt then
+				if isPlaceHolderShown then
+					local pColor = applyColorAlpha(eleData.placeHolderColor,parentAlpha)
+					local pFont = eleData.placeHolderFont or font
+					local pColorCoded = eleData.placeHolderColorCoded
+					local pHolderTextSizeX,pHolderTextSizeY
+					local placeHolderTextSize = eleData.placeHolderTextSize
+					if placeHolderTextSize then
+						pHolderTextSizeX,pHolderTextSizeY = placeHolderTextSize[1],placeHolderTextSize[2]
+					else
+						pHolderTextSizeX,pHolderTextSizeY = txtSizX,txtSizY
 					end
+					dgsDrawText(placeHolder,0+placeHolderOffset[1],0+placeHolderOffset[2],pw+placeHolderOffset[1],fontHeight+placeHolderOffset[2],pColor,pHolderTextSizeX,pHolderTextSizeY,pFont,"left","top",false,false,false,pColorcoded)
 				end
+			end
+
+			local tRB
+			local shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont
+			if shadow then
+				shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont = shadow[1],shadow[2],shadow[3],shadow[4],shadow[5]
+				shadowColor = applyColorAlpha(shadowColor or white,parentAlpha)
 			end
 			for i=1,textRenderBuffer.count do
 				tRB = textRenderBuffer[i]
-				dxDrawText(tRB[1],tRB[2],tRB[3],tRB[4],tRB[5],tRB[6],tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false)
+				dgsDrawText(tRB[1],tRB[2],tRB[3],tRB[4],tRB[5],tRB[6],tRB[7],tRB[8],tRB[9],"left","top",false,false,false,false,subPixelPos,0,0,0,0,shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont)
 			end
 		end
 		dxSetRenderTarget(rndtgt)
+
 		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
+		local finalcolor = bgColor
+		if not enabledInherited and not enabledSelf then
+			if type(eleData.disabledColor) == "number" then
+				finalcolor = eleData.disabledColor
+			elseif eleData.disabledColor == true then
+				local r,g,b,a = fromcolor(bgColor)
+				local average = (r+g+b)/3*eleData.disabledColorPercent
+				finalcolor = tocolor(average,average,average,a)
+			end
+		end
+		dxDrawImage(x,y,w,h,eleData.bgImage,0,0,0,finalcolor,isPostGUI,rndtgt)
+
+		dxSetBlendMode(rndtgt and "modulate_add" or "add")
 		local scbTakes1,scbTakes2 = dgsElementData[scrollbars[1]].visible and scbThick or 0,dgsElementData[scrollbars[2]].visible and scbThick or 0
 		if eleData.bgRT then
-			_dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.bgRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
+			__dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.bgRT,0,0,0,white,isPostGUI)
 		end
-		if eleData.textRT then
-			_dxDrawImageSection(px,py,pw-scbTakes1,ph-scbTakes2,0,0,pw-scbTakes1,ph-scbTakes2,eleData.textRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
-		end
-		if MouseData.focused == source and MouseData.EditMemoCursor then
-			local CaretShow = true
-			if eleData.readOnly then
-				CaretShow = eleData.readOnlyCaretShow
+
+		if placeHolderIgnoreRndTgt then
+			if isPlaceHolderShown then
+				local pColor = applyColorAlpha(eleData.placeHolderColor,parentAlpha)
+				local pFont = eleData.placeHolderFont or font
+				local pColorCoded = eleData.placeHolderColorCoded
+				local pHolderTextSizeX,pHolderTextSizeY
+				local placeHolderTextSize = eleData.placeHolderTextSize
+				if placeHolderTextSize then
+					pHolderTextSizeX,pHolderTextSizeY = placeHolderTextSize[1],placeHolderTextSize[2]
+				else
+					pHolderTextSizeX,pHolderTextSizeY = txtSizX,txtSizY
+				end
+				dgsDrawText(placeHolder,px+placeHolderOffset[1],py+placeHolderOffset[2],px+pw+placeHolderOffset[1],py+fontHeight+placeHolderOffset[2],pColor,pHolderTextSizeX,pHolderTextSizeY,pFont,"left","top",false,false,false,pColorcoded)
 			end
-			if CaretShow then
-				local showLine = eleData.showLine
-				local currentLine = eleData.caretPos[2]
-				if currentLine >= showLine and currentLine <= showLine+canHoldLines then
-					local lineStart = fontHeight*(currentLine-showLine)
-					local theText = (text[caretPos[2]] or {[0]=""})[0]
-					local cursorPX = caretPos[1]
-					local width = dxGetTextWidth(utf8Sub(theText,1,cursorPX),txtSizX,font)
-					if eleData.caretStyle == 0 then
-						local selStartY = py+lineStart+fontHeight*(1-caretHeight)
-						local selEndY = py+lineStart+fontHeight*caretHeight
-						dxDrawLine(px+width-showPos-1,selStartY,px+width-showPos-1,selEndY,caretColor,eleData.caretThick,isPostGUI)
-					elseif eleData.caretStyle == 1 then
-						local cursorWidth = dxGetTextWidth(utf8Sub(theText,cursorPX+1,cursorPX+1),txtSizX,font)
-						cursorWidth = cursorWidth ~= 0 and cursorWidth or txtSizX*8
-						local offset = eleData.caretOffset
-						dxDrawLine(px+width-showPos,py+ph-4+offset,px+width-showPos+cursorWidth+2,py+ph-4+offset,caretColor,eleData.caretThick,isPostGUI)
+		end
+
+		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
+		if MouseData.focused == source then
+			dgsMemoFocusFnc(source)
+			if MouseData.EditMemoCursor then
+				local CaretShow = true
+				if eleData.readOnly then
+					CaretShow = eleData.readOnlyCaretShow
+				end
+				if CaretShow then
+					showLine = eleData.showLine
+					local currentLine = eleData.caretPos[2]
+					if currentLine >= showLine and currentLine <= showLine+canHoldLines then
+						local lineStart = fontHeight*(currentLine-showLine)
+						local theText = (text[caretPos[2]] or {[0]=""})[0]
+						local cursorPX = caretPos[1]
+						local width = dxGetTextWidth(utf8Sub(theText,1,cursorPX),txtSizX,font)
+						if eleData.caretStyle == 0 then
+							local selStartY = py+lineStart+fontHeight*(1-caretHeight)
+							local selEndY = py+lineStart+fontHeight*caretHeight
+							local caretOffset = eleData.caretOffset
+							dxDrawLine(px+width-showPos-1,selStartY-caretOffset,px+width-showPos-1,selEndY-caretOffset,caretColor,eleData.caretThick,isPostGUI)
+						elseif eleData.caretStyle == 1 then
+							local cursorWidth = dxGetTextWidth(utf8Sub(theText,cursorPX+1,cursorPX+1),txtSizX,font)
+							cursorWidth = cursorWidth ~= 0 and cursorWidth or txtSizX*8
+							local caretOffset = eleData.caretOffset
+							dxDrawLine(px+width-showPos,py+ph-4-caretOffset,px+width-showPos+cursorWidth+2,py+ph-4-caretOffset,caretColor,eleData.caretThick,isPostGUI)
+						end
 					end
 				end
 			end

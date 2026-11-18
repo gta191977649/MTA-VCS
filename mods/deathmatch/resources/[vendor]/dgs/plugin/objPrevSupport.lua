@@ -1,3 +1,5 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxobjectpreviewhandle")
 -- To use dgs Object Preview support, you need to install Object Preview resource. Download Link https://community.multitheftauto.com/index.php?p=resources&s=details&id=11836
 -- !!Make sure that resource Object Preview is already running before using the following functions.!!
 objPrevResourceName = ""
@@ -48,7 +50,7 @@ function dgsCreateObjectPreviewHandle(objEle,rX,rY,rZ)
 	objPrevHandles[getElementID(objPrevEle)] = objPrevEle
 	dgsAddEventHandler("onClientElementDestroy",objEle,"destroyObjectPreviewWhenTargetElementDestroy",false)
 	dgsAddEventHandler("onClientElementDestroy",objPrevEle,"destroyObjectPreviewWhenOPElementDestroy",false)
-	triggerEvent("onDgsPluginCreate",objPrevEle,sourceResource)
+	dgsTriggerEvent("onDgsPluginCreate",objPrevEle,sourceResource)
 	return objPrevEle
 end
 
@@ -62,8 +64,14 @@ function destroyObjectPreviewWhenTargetElementDestroy()
 end
 
 function destroyObjectPreviewWhenOPElementDestroy()
-	local objEle = dgsElementData[source].renderElement
+	local objectPreview = getResourceFromName(objPrevResourceName)
+	if objectPreview and getResourceState(objectPreview) == "running" then
+		local OP = exports[objPrevResStatus.name]
+		OP:destroyObjectPreview(source)
+	end
 	objPrevHandles[getElementID(source)] = nil
+	local objEle = dgsElementData[source].renderElement
+	dgsRemoveEventHandler("onClientElementDestroy",objEle,"destroyObjectPreviewWhenTargetElementDestroy")
 	dgsElementData[objEle] = nil
 	dgsElementData[source] = nil
 end
@@ -114,7 +122,7 @@ function dgsConfigureObjectPreview()
 	return [[
 	objectPreview._drawRenderTarget = objectPreview.drawRenderTarget
 	function objectPreview.drawRenderTarget(self)
-		local resName = "]]..getResourceName(getThisResource())..[["
+		local resName = "]]..getResourceName(resource)..[["
 		local dgsRes = getResourceFromName(resName)
 		if dgsRes then
 			if getResourceState(dgsRes) == "running" then
@@ -124,6 +132,5 @@ function dgsConfigureObjectPreview()
 				end
 			end
 		end
-		--return self:_drawRenderTarget()
 	end]]
 end

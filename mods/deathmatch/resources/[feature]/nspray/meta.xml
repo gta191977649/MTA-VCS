@@ -1,0 +1,14 @@
+<meta>
+    <info name="Pay 'n' Spray" type="script" description="Vice City Stories spray shops"/>
+    <min_mta_version client="1.6.0-9.22676" server="1.6.0-9.22815"/>
+    <include resource="garage"/>
+    <include resource="frontend"/>
+    <include resource="mradar"/>
+    <script src="shops.lua" type="shared" cache="false"/>
+    <script src="server.lua" type="server"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <script src="spray_fx.lua" type="client" cache="false"/>
+    <file src="effects/spray.wav"/>
+    <file src="effects/smoke.png"/>
+    <export function="sprayGarageService" type="server"/>
+</meta>

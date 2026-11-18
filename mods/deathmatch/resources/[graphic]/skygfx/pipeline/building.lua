@@ -31,8 +31,8 @@ end
 function doSimplePS() 
     -- obtain the timecyc gradient
     --[[
-    local tr,tg,tb = unpack(TIMECYC:getTimeCycleValue("sky_top"))
-    local br,bg,bb = unpack(TIMECYC:getTimeCycleValue("sky_bot"))
+    local tr,tg,tb = unpack(getTimeCycleValue("sky_top"))
+    local br,bg,bb = unpack(getTimeCycleValue("sky_bot"))
     -- code from aap
    
     fog_r = (tr + 2*br) / 3;
@@ -56,9 +56,9 @@ function doBuildingVS()
         if(config->lightningIlluminatesWorld && CWeather__LightningFlash && !CPostEffects__IsVisionFXActive())
             buildingAmbient = { 1.0, 1.0, 1.0, 0.0 };
     ]]
-    local amb = TIMECYC:getTimeCycleValue("amb")
+    local amb = getTimeCycleValue("amb")
     if not amb then return end
-    local dirMult = TIMECYC:getTimeCycleValue("dirMult")
+    local dirMult = getTimeCycleValue("dirMult")
     if not dirMult then return end
 
     local r,g,b = unpack(amb)
@@ -82,8 +82,8 @@ function doBuildingVS()
     dxSetShaderValue(shaderBuildingVS,"colorScale",gColorScale)
     dxSetShaderValue(shaderBuildingVS,"surfAmb",1)
     --fog 
-    local fog_st = TIMECYC:getTimeCycleValue("fogSt")
-    local fog_end = TIMECYC:getTimeCycleValue("farClp")
+    local fog_st = getTimeCycleValue("fogSt")
+    local fog_end = getTimeCycleValue("farClp")
     local fog_range = math.abs(fog_st-fog_end)
     dxSetShaderValue(shaderBuildingVS,"fogStart",fog_st)
     dxSetShaderValue(shaderBuildingVS,"fogEnd",fog_end)

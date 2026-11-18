@@ -19,13 +19,30 @@ FX = {
     total = 62,
     size = 100 -- 100x100
 }
-function init() 
-    for key, val in pairs(FX.textures) do
-        local txd = dxCreateTexture(val)
-        local shader = dxCreateShader ( "texreplace.fx" )
-        dxSetShaderValue ( shader, "gTexture", txd )
-        engineApplyShaderToWorldTexture ( shader,key)
-        print(key)
+local circularReplacements = {coronastar=true, pointlight=true}
+local nativeCoronas = {"coronamoon", "coronaringa", "coronaringb"}
+
+local function init()
+    for name, path in pairs(FX.textures) do
+        local texture = dxCreateTexture(path)
+        if texture then
+            local shader = dxCreateShader("texreplace.fx")
+            if shader then
+                dxSetShaderValue(shader, "gTexture", texture)
+                engineApplyShaderToWorldTexture(shader, name, nil, false)
+            end
+            local round = circularReplacements[name] and dxCreateShader("coronaAspect.fx", 1, 0, false, "other")
+            if round then
+                dxSetShaderValue(round, "CoronaTexture", texture)
+                engineApplyShaderToWorldTexture(round, name, nil, false)
+            end
+        end
+    end
+    local native = dxCreateShader("coronaAspect.fx", {ORIGINAL_TEXTURE="1"}, 1, 0, false, "other")
+    if native then
+        for _, name in ipairs(nativeCoronas) do
+            engineApplyShaderToWorldTexture(native, name, nil, false)
+        end
     end
 end
-init() 
+init()

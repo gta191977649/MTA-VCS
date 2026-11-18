@@ -1,11 +1,19 @@
 local SunInstance = nil
 
 SunShader = {}
-resetSunSize()
-resetSunColor()
-resetSkyGradient()
-resetFarClipDistance()
-resetFogDistance()
+local function useLegacySun()
+	local skygfx = getResourceFromName("skygfx")
+	return not skygfx or getResourceState(skygfx) ~= "running"
+end
+
+local function resetLegacySun()
+	if not useLegacySun() then return end
+	resetSunSize()
+	resetSunColor()
+	resetSkyGradient()
+	resetFarClipDistance()
+	resetFogDistance()
+end
 --setCloudsEnabled(true)
 function SunShader:constructor()
 	print("PS2SUN Shader Started")
@@ -336,11 +344,7 @@ function SunShader:removeShaders()
 	end
 	
 	--setTime(12,0)
-	resetSunSize()
-	resetSunColor()
-	resetSkyGradient()
-	resetFarClipDistance()
-	resetFogDistance()
+	resetLegacySun()
 	--setCloudsEnabled(true)
 	
 	self.shadersEnabled = "false"
@@ -376,17 +380,19 @@ function(resource)
 end)
 ]]
 function enableSunShader()
+	if SunInstance or not useLegacySun() then return end
+	resetLegacySun()
 	SunInstance = new(SunShader)
 end
 function disableSunShader()
 	if SunInstance ~= nil then
+		removeEventHandler("onClientPreRender", root, SunInstance.m_Update)
+		SunInstance:removeShaders()
 		delete(SunInstance)
 		SunInstance = nil
 	end
 end
 
-resetSunSize()
-resetSunColor()
-resetSkyGradient()
-resetFarClipDistance()
-resetFogDistance()
+addEventHandler("onClientResourceStart", root, function(started)
+	if getResourceName(started) == "skygfx" then disableSunShader() end
+end)

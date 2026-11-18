@@ -1,3 +1,4 @@
+--classlib.lua
 local loadstring = loadstring
 -------OOP
 if not getElementData(root,"__DGSRes") then assert(false,"Invalid DGS Resource! Please check whether your dgs resource is started") end
@@ -24,7 +25,7 @@ local strToIntCache = {
 }
 dgsOOP = {
 	dgsClasses = {},
-	dgsInstances = {},
+	dgsInstances = setmetatable({},{__mode="kv"}),
 	eventHandler = {},
 	dgsRes = getElementData(root,"__DGSRes"),
 	dgsRoot = getResourceRootElement(getElementData(root,"__DGSRes")),
@@ -86,9 +87,11 @@ local function class(tab)
 			if newMeta.preInstantiate then
 				newInstance.dgsElement = newMeta.preInstantiate(...)	--Pre Instantiate function doesn't include meta table
 				dgsOOP.dgsInstances[newInstance.dgsElement] = newInstance
-				addEventHandler("onClientElementDestroy",newInstance.dgsElement,function()
-					dgsOOP.dgsInstances[newInstance.dgsElement] = nil
-				end,false)
+				if isElement(newInstance.dgsElement) then
+					addEventHandler("onClientElementDestroy",newInstance.dgsElement,function()
+						dgsOOP.dgsInstances[newInstance.dgsElement] = nil
+					end,false)
+				end
 			end
 			newInstance.extends = nil
 			newMeta.extends = nil
@@ -122,9 +125,9 @@ local function class(tab)
 			local newMeta = dgsOOP.deepCopy(self)
 			setmetatable(self,meta)
 			local newInstance = {extends=newMeta.extends}
-			if newMeta.preInstantiate then
-				newInstance.dgsElement = dgsElement	--For converting dgs pop element to oop instance
-				dgsOOP.dgsInstances[newInstance.dgsElement] = newInstance
+			newInstance.dgsElement = dgsElement	--For converting dgs pop element to oop instance
+			dgsOOP.dgsInstances[newInstance.dgsElement] = newInstance
+			if isElement(newInstance.dgsElement) then
 				addEventHandler("onClientElementDestroy",newInstance.dgsElement,function()
 					dgsOOP.dgsInstances[newInstance.dgsElement] = nil
 				end,false)
@@ -152,6 +155,13 @@ local function class(tab)
 			return newInstance
 		end
 	}
+	if tab.public then
+		if tab.public.ailas then
+			for name,alias in pairs(tab.public.ailas) do
+				tab.public[name] = alias
+			end
+		end
+	end
 	if tab.extends then
 		tab.public = tab.public or {}
 		if type(tab.extends) ~= "table" then
@@ -203,12 +213,26 @@ dgsOOP.genOOPFnc = function(pop,isChain)
 		end
 	end
 end
+
+dgsOOP.genOOPFncMTA = function(pop,isChain)
+	if isChain then
+		return function(self,...)
+			return _G[pop](self.dgsElement,...) and self or false
+		end
+	else
+		return function(self,...)
+			return dgsGetInstance(_G[pop](self.dgsElement,...))
+		end
+	end
+end
+
 dgsOOP.genOOPFncNonObj = function(pop,isChain)
 	return function(self,...)
 		return dgsGetInstance(call(dgsOOP.dgsRes,pop,...))
 	end
 end
 local gObjFnc = dgsOOP.genOOPFnc
+local gObjFncMTA = dgsOOP.genOOPFncMTA
 local gNObjFnc = dgsOOP.genOOPFncNonObj
 ----------------DGS 2D
 dgsOOP.position2D = {
@@ -312,14 +336,14 @@ class {
 		end
 	end;
 	default = {
-		dgsAddStyle = gNObjFnc("addStyle"),
-		dgsLoadStyle = gNObjFnc("loadStyle"),
-		dgsGetLoadedStyleList = gNObjFnc("getLoadedStyleList"),
-		dgsGetAddedStyleList = gNObjFnc("getAddedStyleList"),
-		dgsUnloadStyle = gNObjFnc("unloadStyle"),
-		dgsSetStyle = gNObjFnc("setStyle"),
-		dgsGetStyle = gNObjFnc("getStyle"),
-		dgsGetValueFromStyle = gNObjFnc("getValueFromStyle"),
+		addStyle = gNObjFnc("dgsAddStyle"),
+		loadStyle = gNObjFnc("dgsLoadStyle"),
+		getLoadedStyleList = gNObjFnc("dgsGetLoadedStyleList"),
+		getAddedStyleList = gNObjFnc("dgsGetAddedStyleList"),
+		unloadStyle = gNObjFnc("dgsUnloadStyle"),
+		setStyle = gNObjFnc("dgsSetStyle"),
+		getStyle = gNObjFnc("dgsGetStyle"),
+		getValueFromStyle = gNObjFnc("dgsGetValueFromStyle"),
 		getScreenSize = function(self) return Vector2(guiGetScreenSize()) end,
 		setInputEnabled = function(self,...) return guiSetInputEnabled(...) end,
 		getInputEnabled = function(self,...) return guiGetInputEnabled(...) end,
@@ -348,8 +372,6 @@ class {
 		setCursorColor = gNObjFnc("dgsSetCursorColor"),
 		getCursorColor = gNObjFnc("dgsGetCursorColor"),
 		getCursorType = gNObjFnc("dgsGetCursorType"),
-		getElementKeeperEnabled = gNObjFnc("dgsGetElementKeeperEnabled"),
-		setElementKeeperEnabled = gNObjFnc("dgsSetElementKeeperEnabled"),
 		RGBToHSV = gNObjFnc("dgsRGBToHSV"),
 		RGBToHSL = gNObjFnc("dgsRGBToHSL"),
 		HSLToRGB = gNObjFnc("dgsHSLToRGB"),
@@ -391,7 +413,6 @@ class {
 				end
 				return t
 			end
-			if not isElement(dgsElement) then return dgsElement end
 			local originalClass = dgsOOP.dgsInstances[dgsElement]
 			if originalClass and originalClass.dgsElement == dgsElement then
 				return originalClass
@@ -403,14 +424,35 @@ class {
 					return dgsElement
 				end
 			end
-		end
+		end,
+		dgsGetInstanceByType = function(dgsElement,instanceType,...)
+			local typ = type(dgsElement)
+			if typ ~= "table" and typ ~= "userdata" then return dgsElement,... end
+			if typ == "table" then
+				local t = {}
+				for i=1,#dgsElement do
+					t[i] = dgsRootInstance.dgsGetInstanceByType(dgsElement[i],instanceType)
+				end
+				return t
+			end
+			local originalClass = dgsOOP.dgsInstances[dgsElement]
+			if originalClass and originalClass.dgsElement == dgsElement then
+				return originalClass
+			else
+				if dgsOOP[instanceType] then
+					return dgsOOP[instanceType][dgsElement]
+				else
+					return dgsElement
+				end
+			end
+		end,
 	};
 	public = {
 		isDragNDropData = gNObjFnc("dgsIsDragNDropData"),
 		retrieveDragNDropData = gNObjFnc("dgsRetrieveDragNDropData"),
 		sendDragNDropData = gNObjFnc("dgsSendDragNDropData"),
 		on = function(self,eventName,theFnc,p)
-			local eventName = dgsOOP.transfromEventName(eventName)
+			eventName = dgsOOP.transfromEventName(eventName)
 			removeEventHandler(eventName,self.dgsElement,theFnc)
 			dgsOOP.eventHandler[eventName] = dgsOOP.eventHandler[eventName] or {}
 			dgsOOP.eventHandler[eventName][self.dgsElement] = dgsOOP.eventHandler[eventName][self.dgsElement] or {}
@@ -430,7 +472,7 @@ class {
 			return addEventHandler(eventName,self.dgsElement,callBack,p and true or false) and self or false
 		end,
 		removeOn = function(self,eventName,theFnc)
-			local eventName = dgsOOP.transfromEventName(eventName)
+			eventName = dgsOOP.transfromEventName(eventName)
 			dgsOOP.eventHandler[eventName] = dgsOOP.eventHandler[eventName] or {}
 			dgsOOP.eventHandler[eventName][self.dgsElement] = dgsOOP.eventHandler[eventName][self.dgsElement] or {}
 			if dgsOOP.eventHandler[eventName][self.dgsElement][theFnc] then
@@ -444,7 +486,6 @@ class {
 		dgsButton = function(...) return dgsOOP.dgsButton(...) end,
 		dgsCheckBox = function(...) return dgsOOP.dgsCheckBox(...) end,
 		dgsComboBox = function(...) return dgsOOP.dgsComboBox(...) end,
-		dgsCustomRenderer = function(...) return dgsOOP.dgsCustomRenderer(...) end,
 		dgsDetectArea = function(...) return dgsOOP.dgsDetectArea(...) end,
 		dgsEdit = function(...) return dgsOOP.dgsEdit(...) end,
 		dgsGridList = function(...) return dgsOOP.dgsGridList(...) end,
@@ -471,20 +512,103 @@ class {
 		----------Plugins
 		dgsColorPicker = function(...) return dgsOOP.dgsColorPicker(...) end,
 		dgsComponentSelector = function(...) return dgsOOP.dgsComponentSelector(...) end,
+		dgsSVG = function(...) return dgsOOP.dgsSVG(...) end,
+
+		--Alias
+		alias = {
+			--A = B
+			destroyWith = "attachToAutoDestroy",
+		},
 	};
 }
 
 ----------------------------------------------------------
-----------------------------------------------------DGS 2D
+-------------------------------------------------DGS Basic
 ----------------------------------------------------------
 class {
 	extends = "dgsRoot";
+	type = "dgsBasic";
+	preInstantiate = nil;
+	public = {
+		__index=function(self,key)
+			if key == "parent" then
+				local parent = dgsGetParent(self.dgsElement,key)
+				return parent and dgsGetInstance(parent) or false
+			elseif key == "children" then
+				return self:getChildren()
+			end
+			return dgsGetProperty(self.dgsElement,key)
+		end,
+		__newindex=function(self,key,value)
+			if key == "parent" then
+				local targetEle
+				if type(value) == "table" then targetEle = value.dgsElement end
+				return dgsSetParent(self.dgsElement,targetEle)
+			end
+			return dgsSetProperty(self.dgsElement,key,value) and self or false
+		end,
+		getParent = gObjFnc("dgsGetParent"),
+		setParent = function(self,parent)
+			if type(parent) == "table" and isElement(parent.dgsElement) then parent = parent.dgsElement	end
+			return dgsSetParent(self.dgsElement,parent) and self or false
+		end,
+		getChild = gObjFnc("dgsGetChild"),
+		getChildren = gObjFnc("dgsGetChildren"),
+		getType = gObjFnc("dgsGetType"),
+		getProperty = gObjFnc("dgsGetProperty"),
+		setProperty = gObjFnc("dgsSetProperty",true),
+		getProperties = function(self,...) return dgsGetProperties(self.dgsElement,...) end,
+		setProperties = gObjFnc("dgsSetProperties",true),
+		getVisible = gObjFnc("dgsGetVisible"),
+		setVisible = gObjFnc("dgsSetVisible",true),
+		getEnabled = gObjFnc("dgsGetEnabled"),
+		setEnabled = gObjFnc("dgsSetEnabled",true),
+		blur = gObjFnc("dgsBlur",true),
+		focus = gObjFnc("dgsFocus",true),
+		getAlpha = gObjFnc("dgsGetAlpha"),
+		setAlpha = gObjFnc("dgsSetAlpha",true),
+		getFont = gObjFnc("dgsGetFont"),
+		setFont = gObjFnc("dgsSetFont",true),
+		getText = gObjFnc("dgsGetText"),
+		setText = gObjFnc("dgsSetText",true),
+		simulateClick = gObjFnc("dgsSimulateClick",true),
+		animTo = gObjFnc("dgsAnimTo",true),
+		isAniming = gObjFnc("dgsIsAniming"),
+		stopAniming = gObjFnc("dgsStopAniming",true),
+		alphaTo = gObjFnc("dgsAlphaTo",true),
+		isAlphaing = gObjFnc("dgsIsAlphaing"),
+		stopAlphaing = gObjFnc("dgsStopAlphaing",true),
+		getPostGUI = gObjFnc("dgsGetPostGUI"),
+		setPostGUI = gObjFnc("dgsSetPostGUI",true),
+		destroy = function(self) return destroyElement(self.dgsElement) end;
+		isElement = gObjFnc("isElement",true);
+		getElement = function(self) return self.dgsElement end,
+		addMoveHandler = gObjFnc("dgsAddMoveHandler",true),
+		removeMoveHandler = gObjFnc("dgsRemoveMoveHandler",true),
+		isMoveHandled = gObjFnc("dgsIsMoveHandled"),
+		attachToTranslation = gObjFnc("dgsAttachToTranslation",true),
+		detachFromTranslation = gObjFnc("dgsDetachFromTranslation",true),
+		getTranslationName = gObjFnc("dgsGetTranslationName"),
+		addDragHandler = gObjFnc("dgsAddDragHandler",true),
+		removeDragHandler = gObjFnc("dgsRemoveDragHandler",true),
+		addDropHandler = gObjFnc("dgsAddDropHandler",true),
+		removeDropHandler = gObjFnc("dgsRemoveDropHandler",true),
+	};
+	default = {
+
+	};
+}
+----------------------------------------------------------
+----------------------------------------------------DGS 2D
+----------------------------------------------------------
+class {
+	extends = "dgsBasic";
 	type = "dgs2D";
 	preInstantiate = nil;
 	public = {
 		__index=function(self,key)
 			if key == "parent" then
-				local parent = call(dgsOOP.dgsRes,"dgsGetParent",self.dgsElement,key)
+				local parent = dgsGetParent(self.dgsElement,key)
 				return parent and dgsGetInstance(parent) or false
 			elseif key == "children" then
 				return self:getChildren()
@@ -493,13 +617,13 @@ class {
 			elseif key == "position" then
 				return dgsOOP.genInterface(self.dgsElement,dgsOOP.position2D)
 			end
-			return call(dgsOOP.dgsRes,"dgsGetProperty",self.dgsElement,key)
+			return dgsGetProperty(self.dgsElement,key)
 		end,
 		__newindex=function(self,key,value)
 			if key == "parent" then
 				local targetEle
 				if type(value) == "table" then targetEle = value.dgsElement end
-				return call(dgsOOP.dgsRes,"dgsSetParent",self.dgsElement,targetEle)
+				return dgsSetParent(self.dgsElement,targetEle)
 			elseif key == "size" then
 				local vType = dgsOOP.getVectorType(value)
 				if vType == "table" then
@@ -519,14 +643,14 @@ class {
 					return dgsSetPosition(self.dgsElement,value.x,value.y,rlt[1])
 				end
 			end
-			return call(dgsOOP.dgsRes,"dgsSetProperty",self.dgsElement,key,value) and self or false
+			return dgsSetProperty(self.dgsElement,key,value) and self or false
 		end,
 		getPosition = gObjFnc("dgsGetPosition"),
 		setPosition = gObjFnc("dgsSetPosition",true),
 		getParent = gObjFnc("dgsGetParent"),
 		setParent = function(self,parent)
 			if type(parent) == "table" and isElement(parent.dgsElement) then parent = parent.dgsElement	end
-			return call(dgsOOP.dgsRes,"dgsSetParent",self.dgsElement,parent) and self or false
+			return dgsSetParent(self.dgsElement,parent) and self or false
 		end,
 		getChild = gObjFnc("dgsGetChild"),
 		getChildren = gObjFnc("dgsGetChildren"),
@@ -539,7 +663,7 @@ class {
 		getCurrentLayerIndex = gObjFnc("dgsGetCurrentLayerIndex"),
 		getProperty = gObjFnc("dgsGetProperty"),
 		setProperty = gObjFnc("dgsSetProperty",true),
-		getProperties = function(self,...) return call(dgsOOP.dgsRes,"dgsGetProperties",self.dgsElement,...) end,
+		getProperties = function(self,...) return dgsGetProperties(self.dgsElement,...) end,
 		setProperties = gObjFnc("dgsSetProperties",true),
 		getVisible = gObjFnc("dgsGetVisible"),
 		setVisible = gObjFnc("dgsSetVisible",true),
@@ -574,7 +698,7 @@ class {
 		setPostGUI = gObjFnc("dgsSetPostGUI",true),
 		detachFromGridList = gObjFnc("dgsDetachFromGridList",true),
 		getAttachedGridList = gObjFnc("dgsGetAttachedGridList",true),
-		attachToGridList = gObjFnc("dgsAttachToGridList",true),
+		attachToGridList = function(self,targetGridList,...) return dgsAttachToGridList(self.dgsElement,targetGridList.dgsElement,...) and self or false end,
 		center = gObjFnc("dgsCenterElement",true),
 		destroy = function(self) return destroyElement(self.dgsElement) end;
 		isElement = gObjFnc("isElement",true);
@@ -595,6 +719,9 @@ class {
 		removeDragHandler = gObjFnc("dgsRemoveDragHandler",true),
 		addDropHandler = gObjFnc("dgsAddDropHandler",true),
 		removeDropHandler = gObjFnc("dgsRemoveDropHandler",true),
+		applyDetectArea = function(self,da) return dgsApplyDetectArea(self.dgsElement,da.dgsElement) end,
+		removeDetectArea = gObjFnc("dgsRemoveDetectArea",true),
+		getDetectArea = gObjFnc("dgsGetDetectArea",true),
 	};
 	default = {
 
@@ -607,9 +734,12 @@ class {
 	type = "dgsButton";
 	dgsType = "dgs-dxbutton";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateButton",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateButton(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
+		getTextExtent = gObjFnc("dgsButtonGetTextExtent"),
+		getFontHeight = gObjFnc("dgsButtonGetFontHeight"),
+		getTextSize = gObjFnc("dgsButtonGetTextSize"),
 	};
 }
 
@@ -619,7 +749,7 @@ class {
 	type = "dgsBrowser";
 	dgsType = "dgs-dxbrowser";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateBrowser",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateBrowser(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 	};
@@ -631,7 +761,7 @@ class {
 	type = "dgsCheckBox";
 	dgsType = "dgs-dxcheckbox";
 	preInstantiate = function(parent,x,y,w,h,text,state,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateCheckBox",x,y,w,h,text,state,rlt,parent.dgsElement,...)
+		return dgsCreateCheckBox(x,y,w,h,text,state,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getSelected = gObjFnc("dgsCheckBoxGetSelected"),
@@ -649,7 +779,7 @@ class {
 	type = "dgsComboBox";
 	dgsType = "dgs-dxcombobox";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateComboBox",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateComboBox(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		addItem = gObjFnc("dgsComboBoxAddItem"),
@@ -661,6 +791,8 @@ class {
 		getSelectedItem = gObjFnc("dgsComboBoxGetSelectedItem"),
 		setItemColor = gObjFnc("dgsComboBoxSetItemColor",true),
 		getItemColor = gObjFnc("dgsComboBoxGetItemColor"),
+		setItemData = gObjFnc("dgsComboBoxSetItemData",true),
+		getItemData = gObjFnc("dgsComboBoxGetItemData"),
 		setItemFont = gObjFnc("dgsComboBoxSetItemFont",true),
 		getItemFont = gObjFnc("dgsComboBoxGetItemFont"),
 		setItemImage = gObjFnc("dgsComboBoxSetItemImage",true),
@@ -690,7 +822,7 @@ class {
 	type = "dgsCustomRenderer";
 	dgsType = "dgs-dxcustomrenderer";
 	preInstantiate = function(parent,customFnc)
-		return call(dgsOOP.dgsRes,"dgsCreateCustomRenderer",customFnc)
+		return dgsCreateCustomRenderer(customFnc)
 	end;
 	public = {
 		setFunction = gObjFnc("dgsCustomRendererSetFunction",true),
@@ -703,7 +835,7 @@ class {
 	type = "dgsDetectArea";
 	dgsType = "dgs-dxdetectarea";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateDetectArea",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateDetectArea(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		setFunction = gObjFnc("dgsDetectAreaSetFunction",true),
@@ -718,7 +850,7 @@ class {
 	type = "dgsEdit";
 	dgsType = "dgs-dxedit";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateEdit",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateEdit(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		moveCaret = gObjFnc("dgsEditMoveCaret",true),
@@ -726,7 +858,7 @@ class {
 		getCaretPosition = gObjFnc("dgsEditGetCaretPosition"),
 		setCaretStyle = gObjFnc("dgsEditSetCaretStyle",true),
 		getCaretStyle = gObjFnc("dgsEditGetCaretStyle"),
-		setWhiteList = gObjFnc("dgsEditSetWhiteList",true),
+		setTextFilter = gObjFnc("dgsEditSetTextFilter",true),
 		setMaxLength = gObjFnc("dgsEditSetMaxLength",true),
 		getMaxLength = gObjFnc("dgsEditGetMaxLength"),
 		setReadOnly = gObjFnc("dgsEditSetReadOnly",true),
@@ -764,7 +896,7 @@ class {
 	type = "dgsGridList";
 	dgsType = "dgs-dxgridlist";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateGridList",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateGridList(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getScrollBar = gObjFnc("dgsGridListGetScrollBar"),
@@ -819,6 +951,7 @@ class {
 		setItemBackGroundImage = gObjFnc("dgsGridListSetItemBackGroundImage",true),
 		getItemBackGroundColor = gObjFnc("dgsGridListGetItemBackGroundColor"),
 		setItemBackGroundColor = gObjFnc("dgsGridListSetItemBackGroundColor",true),
+		setItemBackGroundColorTemplate = gObjFnc("dgsGridListSetItemBackGroundColorTemplate",true),
 		removeItemImage = gObjFnc("dgsGridListRemoveItemImage",true),
 		getRowBackGroundImage = gObjFnc("dgsGridListGetRowBackGroundImage"),
 		setRowBackGroundImage = gObjFnc("dgsGridListSetRowBackGroundImage",true),
@@ -868,7 +1001,8 @@ class {
 	type = "dgsImage";
 	dgsType = "dgs-dximage";
 	preInstantiate = function(parent,x,y,w,h,image,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateImage",x,y,w,h,image,rlt,parent.dgsElement,...)
+		if type(image) == "table" then image = image.dgsElement or image end
+		return dgsCreateImage(x,y,w,h,image,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		setImage = gObjFnc("dgsImageSetImage",true),
@@ -886,7 +1020,7 @@ class {
 	type = "dgsLabel";
 	dgsType = "dgs-dxlabel";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateLabel",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateLabel(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		setColor = gObjFnc("dgsLabelSetColor",true),
@@ -906,7 +1040,7 @@ class {
 	type = "dgsLine";
 	dgsType="dgs-dxline";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateLine",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateLine(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		addItem = gObjFnc("dgsLineAddItem"),
@@ -926,7 +1060,7 @@ class {
 	type = "dgsMemo";
 	dgsType = "dgs-dxmemo";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateMemo",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateMemo(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		moveCaret = gObjFnc("dgsMemoMoveCaret",true),
@@ -968,7 +1102,7 @@ class {
 	type = "dgsProgressBar";
 	dgsType = "dgs-dxprogressbar";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateProgressBar",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateProgressBar(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getProgress = gObjFnc("dgsProgressBarGetProgress"),
@@ -993,7 +1127,7 @@ class {
 	type = "dgsRadioButton";
 	dgsType = "dgs-dxradiobutton";
 	preInstantiate = function(parent,x,y,w,h,text,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateRadioButton",x,y,w,h,text,rlt,parent.dgsElement,...)
+		return dgsCreateRadioButton(x,y,w,h,text,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getSelected = gObjFnc("dgsRadioButtonGetSelected"),
@@ -1011,7 +1145,7 @@ class {
 	type = "dgsScrollBar";
 	dgsType = "dgs-dxscrollbar";
 	preInstantiate = function(parent,x,y,w,h,voh,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateScrollBar",x,y,w,h,voh,rlt,parent.dgsElement,...)
+		return dgsCreateScrollBar(x,y,w,h,voh,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		setScrollPosition = gObjFnc("dgsScrollBarSetScrollPosition",true),
@@ -1037,7 +1171,7 @@ class {
 	type = "dgsScrollPane";
 	dgsType = "dgs-dxscrollpane";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateScrollPane",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateScrollPane(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getScrollBar = gObjFnc("dgsScrollPaneGetScrollBar"),
@@ -1059,7 +1193,7 @@ class {
 	type = "dgsScalePane";
 	dgsType = "dgs-dxscalepane";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateScalePane",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateScalePane(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getScrollBar = gObjFnc("dgsScalePaneGetScrollBar"),
@@ -1079,7 +1213,7 @@ class {
 	type = "dgsSelector";
 	dgsType = "dgs-dxselector";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateSelector",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateSelector(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		addItem = gObjFnc("dgsSelectorAddItem"),
@@ -1110,7 +1244,7 @@ class {
 	type = "dgsSwitchButton";
 	dgsType = "dgs-dxswitchbutton";
 	preInstantiate = function(parent,x,y,w,h,textOn,textOff,state,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateSwitchButton",x,y,w,h,textOn,textOff,state,rlt,parent.dgsElement,...)
+		return dgsCreateSwitchButton(x,y,w,h,textOn,textOff,state,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		setState = gObjFnc("dgsSwitchButtonSetState",true),
@@ -1122,11 +1256,11 @@ class {
 
 --------------------------Tab
 class {
-	extends = "dgs2D";
+	extends = "dgsBasic";
 	type = "dgsTab";
 	dgsType = "dgs-dxtab";
 	preInstantiate = function(parent,text,...)
-		return call(dgsOOP.dgsRes,"dgsCreateTab",text,parent.dgsElement,...)
+		return dgsCreateTab(text,parent.dgsElement,...)
 	end;
 	public = {
 		delete = gObjFnc("dgsDeleteTab"),
@@ -1139,7 +1273,7 @@ class {
 	type = "dgsTabPanel";
 	dgsType = "dgs-dxtabpanel";
 	preInstantiate = function(parent,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateTabPanel",x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateTabPanel(x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getSelectedTab = gObjFnc("dgsGetSelectedTab"),
@@ -1157,7 +1291,7 @@ class {
 	type = "dgsWindow";
 	dgsType = "dgs-dxwindow";
 	preInstantiate = function(parent,...)
-		local window = call(dgsOOP.dgsRes,"dgsCreateWindow",...)
+		local window = dgsCreateWindow(...)
 		dgsSetParent(window,parent.dgsElement)
 		return window
 	end;
@@ -1176,6 +1310,9 @@ class {
 		setHorizontalAlign = gObjFnc("dgsWindowSetHorizontalAlign",true),
 		getVerticalAlign = gObjFnc("dgsWindowGetVerticalAlign"),
 		setVerticalAlign = gObjFnc("dgsWindowSetVerticalAlign",true),
+		getTextExtent = gObjFnc("dgsWindowGetTextExtent"),
+		getFontHeight = gObjFnc("dgsWindowGetFontHeight"),
+		getTextSize = gObjFnc("dgsWindowGetTextSize"),
 	};
 }
 
@@ -1227,7 +1364,7 @@ dgsOOP.position3D = {
 }
 
 class {
-	extends = "dgsRoot";
+	extends = "dgsBasic";
 	type = "dgs3D";
 	public = {
 		__index=function(self,key)
@@ -1236,7 +1373,7 @@ class {
 			elseif key == "position" then
 				return dgsOOP.genInterface(self.dgsElement,dgsOOP.position3D)
 			end
-			return call(dgsOOP.dgsRes,"dgsGetProperty",self.dgsElement,key)
+			return dgsGetProperty(self.dgsElement,key)
 		end,
 		__newindex=function(self,key,value)
 			if key == "position" then
@@ -1247,14 +1384,14 @@ class {
 					return dgsSetProperty(self.dgsElement,"position",value.x,value.y,value.z)
 				end
 			end
-			return call(dgsOOP.dgsRes,"dgsSetProperty",self.dgsElement,key,value) and self or false
+			return dgsSetProperty(self.dgsElement,key,value) and self or false
 		end,
 		getChild = gObjFnc("dgsGetChild"),
 		getChildren = gObjFnc("dgsGetChildren"),
 		getType = gObjFnc("dgsGetType"),
 		getProperty = gObjFnc("dgsGetProperty"),
 		setProperty = gObjFnc("dgsSetProperty",true),
-		getProperties = function(self,...) return call(dgsOOP.dgsRes,"dgsGetProperties",self.dgsElement,...) end,
+		getProperties = function(self,...) return dgsGetProperties(self.dgsElement,...) end,
 		setProperties = gObjFnc("dgsSetProperties",true),
 		getVisible = gObjFnc("dgsGetVisible"),
 		setVisible = gObjFnc("dgsSetVisible",true),
@@ -1281,6 +1418,12 @@ class {
 		attachToTranslation = gObjFnc("dgsAttachToTranslation",true),
 		detachFromTranslation = gObjFnc("dgsDetachFromTranslation",true),
 		getTranslationName = gObjFnc("dgsGetTranslationName"),
+		getPosition = gObjFnc("dgs3DGetPosition"),
+		setPosition = gObjFnc("dgs3DSetPosition",true),
+		getDimension = gObjFnc("dgs3DGetDimension"),
+		setDimension = gObjFnc("dgs3DSetDimension",true),
+		getInterior = gObjFnc("dgs3DGetInterior"),
+		setInterior = gObjFnc("dgs3DSetInterior",true),
 	};
 }
 
@@ -1289,26 +1432,22 @@ class {
 	type = "dgs3DInterface";
 	dgsType="dgs-dx3dinterface";
 	preInstantiate = function(parent,...)
-		return call(dgsOOP.dgsRes,"dgsCreate3DInterface",...)
+		return dgsCreate3DInterface(...)
 	end;
 	public = {
 		getBlendMode = gObjFnc("dgs3DInterfaceGetBlendMode"),
 		setBlendMode = gObjFnc("dgs3DInterfaceSetBlendMode",true),
-		getPosition = gObjFnc("dgs3DInterfaceGetPosition"),
-		setPosition = gObjFnc("dgs3DInterfaceSetPosition",true),
 		getSize = gObjFnc("dgs3DInterfaceGetSize"),
 		setSize = gObjFnc("dgs3DInterfaceSetSize",true),
 		getResolution = gObjFnc("dgs3DInterfaceGetResolution"),
 		setResolution = gObjFnc("dgs3DInterfaceSetResolution",true),
 		attachToElement = gObjFnc("dgs3DInterfaceAttachToElement",true),
 		isAttached = gObjFnc("dgs3DInterfaceIsAttached",true),
-		getResolution = gObjFnc("dgs3DInterfaceGetResolution"),
-		setResolution = gObjFnc("dgs3DInterfaceSetResolution",true),
 		detachFromElement = gObjFnc("dgs3DInterfaceDetachFromElement",true),
 		setAttachedOffsets = gObjFnc("dgs3DInterfaceSetAttachedOffsets",true),
 		getAttachedOffsets = gObjFnc("dgs3DInterfaceGetAttachedOffsets"),
-		setRotation = gObjFnc("dgs3DInterfaceSetRotation",true),
-		getRotation = gObjFnc("dgs3DInterfaceGetRotation"),
+		setRoll = gObjFnc("dgs3DInterfaceSetRoll",true),
+		getRoll = gObjFnc("dgs3DInterfaceGetRoll"),
 		setFaceTo = gObjFnc("dgs3DInterfaceSetFaceTo",true),
 		getFaceTo = gObjFnc("dgs3DInterfaceGetFaceTo"),
 	};
@@ -1319,20 +1458,14 @@ class {
 	type = "dgs3DText";
 	dgsType="dgs-dx3dtext";
 	preInstantiate = function(parent,...)
-		return call(dgsOOP.dgsRes,"dgsCreate3DText",...)
+		return dgsCreate3DText(...)
 	end;
 	public = {
-		getDimension = gObjFnc("dgs3DTextGetDimension"),
-		setDimension = gObjFnc("dgs3DTextSetDimension",true),
-		getInterior = gObjFnc("dgs3DTextGetInterior"),
-		setInterior = gObjFnc("dgs3DTextSetInterior",true),
 		attachToElement = gObjFnc("dgs3DTextAttachToElement",true),
 		detachFromElement = gObjFnc("dgs3DTextDetachFromElement",true),
 		isAttached = gObjFnc("dgs3DTextIsAttached"),
 		setAttachedOffsets = gObjFnc("dgs3DTextSetAttachedOffsets",true),
 		getAttachedOffsets = gObjFnc("dgs3DTextGetAttachedOffsets"),
-		setPosition = gObjFnc("dgs3DTextSetPosition",true),
-		getPosition = gObjFnc("dgs3DTextGetPosition"),
 		getText = gObjFnc("dgsGetText"),
 		setText = gObjFnc("dgsSetText",true),
 	};
@@ -1343,24 +1476,18 @@ class {
 	type = "dgs3DImage";
 	dgsType="dgs-dx3dimage";
 	preInstantiate = function(parent,...)
-		return call(dgsOOP.dgsRes,"dgsCreate3DImage",...)
+		return dgsCreate3DImage(...)
 	end;
 	public = {
 		getSize = gObjFnc("dgs3DImageGetSize"),
 		setSize = gObjFnc("dgs3DImageSetSize",true),
 		getImage = gObjFnc("dgs3DImageGetImage"),
 		setImage = gObjFnc("dgs3DImageSetImage",true),
-		getDimension = gObjFnc("dgs3DImageGetDimension"),
-		setDimension = gObjFnc("dgs3DImageSetDimension",true),
-		getInterior = gObjFnc("dgs3DImageGetInterior"),
-		setInterior = gObjFnc("dgs3DImageSetInterior",true),
 		attachToElement = gObjFnc("dgs3DImageAttachToElement",true),
 		detachFromElement = gObjFnc("dgs3DImageDetachFromElement",true),
 		isAttached = gObjFnc("dgs3DImageIsAttached"),
 		setAttachedOffsets = gObjFnc("dgs3DImageSetAttachedOffsets",true),
 		getAttachedOffsets = gObjFnc("dgs3DImageGetAttachedOffsets"),
-		setPosition = gObjFnc("dgs3DImageSetPosition",true),
-		getPosition = gObjFnc("dgs3DImageGetPosition"),
 	};
 }
 
@@ -1369,7 +1496,7 @@ class {
 	type = "dgs3DLine";
 	dgsType="dgs-dx3dline";
 	preInstantiate = function(parent,...)
-		return call(dgsOOP.dgsRes,"dgsCreate3DLine",...)
+		return dgsCreate3DLine(...)
 	end;
 	public = {
 		addItem = gObjFnc("dgs3DLineAddItem"),
@@ -1378,17 +1505,11 @@ class {
 		setItemWidth = gObjFnc("dgs3DLineSetItemWidth",true),
 		getItemColor = gObjFnc("dgs3DLineGetItemColor"),
 		setItemColor = gObjFnc("dgs3DLineSetItemColor",true),
-		getDimension = gObjFnc("dgs3DLineGetDimension"),
-		setDimension = gObjFnc("dgs3DLineSetDimension",true),
-		getInterior = gObjFnc("dgs3DLineGetInterior"),
-		setInterior = gObjFnc("dgs3DLineSetInterior",true),
 		attachToElement = gObjFnc("dgs3DLineAttachToElement",true),
 		detachFromElement = gObjFnc("dgs3DLineDetachFromElement",true),
 		isAttached = gObjFnc("dgs3DLineIsAttached"),
 		setAttachedOffsets = gObjFnc("dgs3DLineSetAttachedOffsets",true),
 		getAttachedOffsets = gObjFnc("dgs3DLineGetAttachedOffsets"),
-		setPosition = gObjFnc("dgs3DLineSetPosition",true),
-		getPosition = gObjFnc("dgs3DLineGetPosition"),
 		setRotation = gObjFnc("dgs3DLineSetRotation",true),
 		getRotation = gObjFnc("dgs3DLineGetRotation"),
 	};
@@ -1402,19 +1523,165 @@ class {
 	type = "dgsPlugin";
 	public = {
 		__index=function(self,key)
-			return call(dgsOOP.dgsRes,"dgsGetProperty",self.dgsElement,key)
+			return dgsGetProperty(self.dgsElement,key)
 		end,
 		__newindex=function(self,key,value)
-			return call(dgsOOP.dgsRes,"dgsSetProperty",self.dgsElement,key,value) and self or false
+			return dgsSetProperty(self.dgsElement,key,value) and self or false
 		end,
 		getPluginType = gObjFnc("dgsGetPluginType"),
 		getProperty = gObjFnc("dgsGetProperty"),
 		setProperty = gObjFnc("dgsSetProperty",true),
-		getProperties = function(self,...) return call(dgsOOP.dgsRes,"dgsGetProperties",self.dgsElement,...) end,
+		getProperties = function(self,...) return dgsGetProperties(self.dgsElement,...) end,
 		setProperties = gObjFnc("dgsSetProperties",true),
 		destroy = function(self) return destroyElement(self.dgsElement) end;
 		isElement = gObjFnc("isElement",true);
 		getElement = function(self) return self.dgsElement end,
+	};
+}
+
+--------------------------SVG
+-----------------Utils
+class {
+	type = "xmlNode";
+	dgsType = "xml-node";
+	public = {
+		getAttribute = gObjFncMTA("xmlNodeGetAttribute"),
+		getAttributes = gObjFncMTA("xmlNodeGetAttributes"),
+		getChildren = gObjFncMTA("xmlNodeGetChildren"),
+		getName = gObjFncMTA("xmlNodeGetName"),
+		getParent = gObjFncMTA("xmlNodeGetParent"),
+		getValue = gObjFncMTA("xmlNodeGetValue"),
+		setAttribute = gObjFncMTA("xmlNodeSetAttribute"),
+		setName = gObjFncMTA("xmlNodeSetName"),
+		setValue = gObjFncMTA("xmlNodeSetValue"),
+		destroy = gObjFncMTA("xmlDestroyNode"),
+		create = gObjFncMTA("xmlCreateChild"),
+	};
+}
+
+class {
+	type = "dgsSVG";
+	dgsType = "dgs-dxsvg";
+	preInstantiate = function(...)
+		return dgsCreateSVG(...)
+	end;
+	public = {
+		getDocument = function(self)
+			return dgsGetInstanceByType(dgsGetProperty(self.dgsElement,"svgDocument"),"dgs-dxsvgnode")
+		end
+	};
+}
+
+class {
+	extends = {"xmlNode"};
+	type = "dgsSVGNode";
+	dgsType = "dgs-dxsvgnode";
+	public = {
+		getAttribute = gObjFnc("dgsSVGNodeGetAttribute"),
+		setAttribute = gObjFnc("dgsSVGNodeSetAttribute",true),
+		getAttributes = gObjFnc("dgsSVGNodeGetAttributes"),
+		setAttributes = gObjFnc("dgsSVGNodeSetAttributes",true),
+		__index=function(self,key)
+			if key == "parent" then
+				return dgsGetInstanceByType(self:getParent(),"dgs-dxsvgnode")
+			elseif key == "children" then
+				return dgsGetInstanceByType(self:getChildren(),"dgs-dxsvgnode")
+			elseif key == "name" then
+				return self:getName()
+			elseif key == "value" then
+				return self:getValue()
+			else
+				local name = self:getName()
+				local fnc = self.attrFunctions[name] and self.attrFunctions[name][key] or self.attrFunctions.default[key]
+				if fnc then
+					return fnc
+				end
+			end
+			return dgsSVGNodeGetAttribute(self.dgsElement,key)
+		end,
+		__newindex=function(self,key,value)
+			if key == "name" then
+				return self:setName(value) and self or false
+			elseif key == "value" then
+				return self:setValue(value) and self or false
+			end
+			return dgsSVGNodeSetAttribute(self.dgsElement,key,value) and self or false
+		end,
+	};
+	default = {
+		attrFunctions = {
+			default = {
+				fill = function(self,...)
+					self:setAttribute("fill",...)
+					return self
+				end,
+				stroke = function(self,t)
+					if type(t) == "table" then
+						if t.width then
+							self:setAttribute("stroke-width",t.width)
+						end
+						if t.color then
+							self:setAttribute("stroke",t.color)
+						end
+					else
+						self:setAttribute("stroke",t)
+					end
+					return self
+				end,
+			},
+			svg = {
+				rect = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"rect",...),"dgs-dxsvgnode") end,
+				circle = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"circle",...),"dgs-dxsvgnode") end,
+				ellipse = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"ellipse",...),"dgs-dxsvgnode") end,
+				line = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"line",...),"dgs-dxsvgnode") end,
+				polygon = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"polygon",...),"dgs-dxsvgnode") end,
+				polyline = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"polyline",...),"dgs-dxsvgnode") end,
+				path = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"path",...),"dgs-dxsvgnode") end,
+				text = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"text",...),"dgs-dxsvgnode") end,
+			},
+			rect = {
+				move = function(self,...)
+					self:setAttribute("x",x)
+					self:setAttribute("y",y)
+					return self
+				end,
+				radius = function(self,rx,ry)
+					self:setAttribute("rx",rx)
+					self:setAttribute("ry",ry)
+					return self
+				end,
+			},
+			circle = {
+				move = function(self,x,y)
+					self:setAttribute("cx",x)
+					self:setAttribute("cy",y)
+					return self
+				end,
+				radius = function(self,r)
+					self:setAttribute("r",r)
+					return self
+				end,
+			},
+			ellipse = {
+				move = function(self,x,y)
+					self:setAttribute("cx",x)
+					self:setAttribute("cy",y)
+					return self
+				end,
+				radius = function(self,rx,ry)
+					self:setAttribute("rx",rx)
+					self:setAttribute("ry",ry)
+					return self
+				end,
+			},
+			text = {
+				text = function(self,text)
+					self:setValue(text)
+					return self
+				end,
+				tspan = function(self,...) return dgsGetInstanceByType(dgsSVGCreateNode(self.dgsElement,"tspan",...),"dgs-dxsvgnode") end,
+			}
+		}
 	};
 }
 
@@ -1424,7 +1691,7 @@ class {
 	type = "dgsColorPicker";
 	dgsType = "dgs-dxcolorpicker";
 	preInstantiate = function(parent,style,x,y,w,h,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsCreateColorPicker",style,x,y,w,h,rlt,parent.dgsElement,...)
+		return dgsCreateColorPicker(style,x,y,w,h,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getColor = gObjFnc("dgsColorPickerGetColor"),
@@ -1437,7 +1704,7 @@ class {
 	type = "dgsComponentSelector";
 	dgsType = "dgs-dxcomponentselector";
 	preInstantiate = function(parent,x,y,w,h,voh,rlt,...)
-		return call(dgsOOP.dgsRes,"dgsColorPickerCreateComponentSelector",x,y,w,h,voh,rlt,parent.dgsElement,...)
+		return dgsColorPickerCreateComponentSelector(x,y,w,h,voh,rlt,parent.dgsElement,...)
 	end;
 	public = {
 		getCursorThickness = gObjFnc("dgsComponentSelectorGetCursorThickness"),
@@ -1445,7 +1712,7 @@ class {
 		getValue = gObjFnc("dgsColorPickerGetComponentSelectorValue"),
 		setValue = gObjFnc("dgsColorPickerSetComponentSelectorValue",true),
 		bindToColorPicker = function(self,colorPicker,...)
-			return call(dgsOOP.dgsRes,"dgsBindToColorPicker",self.dgsElement,colorPicker.dgsElement,...)
+			return dgsBindToColorPicker(self.dgsElement,colorPicker.dgsElement,...)
 		end,
 		unbindFromColorPicker = gObjFnc("dgsUnbindFromColorPicker",true),
 	};
@@ -1453,7 +1720,23 @@ class {
 		dgsScrollBar = {
 			default = {
 				bindToColorPicker = function(self,colorPicker,...)
-					return call(dgsOOP.dgsRes,"dgsBindToColorPicker",self.dgsElement,colorPicker.dgsElement,...)
+					return dgsBindToColorPicker(self.dgsElement,colorPicker.dgsElement,...)
+				end,
+				unbindFromColorPicker = gObjFnc("dgsUnbindFromColorPicker",true),
+			}
+		},
+		dgsEdit = {
+			default = {
+				bindToColorPicker = function(self,colorPicker,...)
+					return dgsBindToColorPicker(self.dgsElement,colorPicker.dgsElement,...)
+				end,
+				unbindFromColorPicker = gObjFnc("dgsUnbindFromColorPicker",true),
+			}
+		},
+		dgsLabel = {
+			default = {
+				bindToColorPicker = function(self,colorPicker,...)
+					return dgsBindToColorPicker(self.dgsElement,colorPicker.dgsElement,...)
 				end,
 				unbindFromColorPicker = gObjFnc("dgsUnbindFromColorPicker",true),
 			}

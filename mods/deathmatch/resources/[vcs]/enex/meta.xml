@@ -1,9 +1,13 @@
 <meta>
+    <include resource="frontend"/>
+    <include resource="eagleLoader"/>
     <script src="lib.lua" type="client"/>
     <script src="anim.lua" type="client"/>
-    <script src="enex.lua" type="client"/>
-
-    <file src="enex.ipl" type="client" />
-
-    <include resource="hud"/>
+    <script src="ps2_portals.lua" type="client"/>
+    <script src="shop_break_audio.lua" type="client"/>
+    <file src="audio/glass_shard_1.wav" />
+    <file src="audio/glass_shard_2.wav" />
+    <file src="audio/glass_shard_3.wav" />
+    <file src="audio/glass_shard_4.wav" />
+    <file src="audio/wooden_box_smash.wav" />
 </meta>

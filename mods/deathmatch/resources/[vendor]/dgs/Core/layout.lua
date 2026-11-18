@@ -1,14 +1,17 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxlayout","dgsBasic","dgsType2D")
 builtinLayoutStyle = {
 	horizontal = {
 		onItemAdd = function(layout,item,id,updateOnly)
 			local eleData = dgsElementData[layout]
+			local layoutData = eleData.layoutData
 			local spacing = eleData.spacing
 			local alignment = eleData.alignment
 			local size = eleData.absSize
 			local itemWidth = 0
 			local itemHeight = 0
 			for i=1,id-1 do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					itemWidth = itemWidth+itemSize[1]+spacing[1]
 					if itemSize[2] > itemHeight then
@@ -30,7 +33,7 @@ builtinLayoutStyle = {
 			local itemWidth = 0
 			local itemHeight = 0
 			for i=1,id-1 do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					itemWidth = itemWidth+itemSize[1]+spacing[1]
 					if itemSize[2] > itemHeight then
@@ -39,7 +42,7 @@ builtinLayoutStyle = {
 				end
 			end
 			for i=id+1,#layoutData do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					dgsSetPosition(layoutData[i],itemWidth,0,false)
 					itemWidth = itemWidth+itemSize[1]+spacing[1]
@@ -55,13 +58,14 @@ builtinLayoutStyle = {
 	vertical = {
 		onItemAdd = function(layout,item,id)
 			local eleData = dgsElementData[layout]
+			local layoutData = eleData.layoutData
 			local spacing = eleData.spacing
 			local alignment = eleData.alignment
 			local size = eleData.absSize
 			local itemWidth = 0
 			local itemHeight = 0
 			for i=1,id-1 do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					itemHeight = itemHeight+itemSize[2]+spacing[2]
 					if itemSize[1] > itemWidth then
@@ -83,7 +87,7 @@ builtinLayoutStyle = {
 			local itemWidth = 0
 			local itemHeight = 0
 			for i=1,id-1 do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					itemHeight = itemHeight+itemSize[2]+spacing[2]
 					if itemSize[1] > itemWidth then
@@ -92,7 +96,7 @@ builtinLayoutStyle = {
 				end
 			end
 			for i=id+1,#layoutData do
-				local itemSize = dgsElementData[item].absSize
+				local itemSize = dgsElementData[layoutData[i]].absSize
 				if itemSize then
 					dgsSetPosition(layoutData[i],0,itemHeight,false)
 					itemHeight = itemHeight+itemSize[2]+spacing[2]
@@ -108,6 +112,7 @@ builtinLayoutStyle = {
 }
 
 function dgsCreateLayout(...)
+	local sRes = sourceResource or resource
 	local x,y,w,h,layoutStyle,relative,parent
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
@@ -137,10 +142,8 @@ function dgsCreateLayout(...)
 			layoutStyle = tempLayoutStyle
 		end
 	end
-	local res = sourceResource or "global"
 	local layout = createElement("dgs-dxlayout")
 	dgsSetType(layout,"dgs-dxlayout")
-	dgsSetParent(layout,parent,true,true)
 	dgsElementData[layout] = {
 		onItemAdd = layoutStyle.onItemAdd,
 		onItemRemove = layoutStyle.onItemRemove,
@@ -148,43 +151,89 @@ function dgsCreateLayout(...)
 		hideInvisible = false,
 		layoutData = {},
 		autoUpdate = true,
+		sortPriority = {},
 	}
+	dgsSetParent(layout,parent,true,true)
 	calculateGuiPositionSize(layout,x,y,relative or false,w,h,relative or false,true)
-	triggerEvent("onDgsCreate",layout,res)
-	dgsSetData(layout,"hitoutofparent",true)
+	dgsApplyGeneralProperties(layout,sRes)
+	dgsSetData(layout,"childOutsideHit",true)
 	dgsAddEventHandler("onDgsCreate",layout,"dgsLayoutChildrenCreateHandler")
 	dgsAddEventHandler("onDgsDestroy",layout,"dgsLayoutChildrenDestroyHandler")
+	onDGSElementCreate(layout,sRes)
 	return layout
 end
 
 function dgsLayoutChildrenCreateHandler()
+	if this == source then return end
 	dgsLayoutAddItem(this,source)
 end
 
 function dgsLayoutChildrenDestroyHandler()
-	if this ~= source then
-		dgsLayoutRemoveItem(this,source)
+	if this == source then return end
+	dgsLayoutRemoveItem(this,source)
+end
+
+function dgsLayoutUpdate(layout)
+	local layoutData = dgsElementData[layout].layoutData
+	local sortPriority = dgsElementData[layout].sortPriority
+	local refreshTable = {}
+	table.sort(layoutData,function(a,b)
+		return (sortPriority[a] or 0) > (sortPriority[b] or 0)
+	end)
+	local onItemAdd = dgsElementData[layout].onItemAdd
+	if onItemAdd then
+		for i=1,#layoutData do
+			onItemAdd(layout,layoutData[i],i)
+		end
 	end
 end
 
-function dgsLayoutAddItem(layout,item)
-	if dgsGetType(layout) == "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsCreateLayout",1,"dgs-dxlayout")) end
-	if dgsIsType(item) then error(dgsGenAsrt(item,"dgsCreateLayout",2,"dgs-dxelement")) end
+function dgsLayoutAddItem(layout,item,sortPriority)
+	if dgsGetType(layout) ~= "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsCreateLayout",1,"dgs-dxlayout")) end
+	if not dgsIsType(item) then error(dgsGenAsrt(item,"dgsCreateLayout",2,"dgs-dxelement")) end
+	if not (not sortPriority or type(sortPriority) == "number") then error(dgsGenAsrt(item,"dgsLayoutAddItem",1,"number/nil")) end
 	local onItemAdd = dgsElementData[layout].onItemAdd
 	local layoutData = dgsElementData[layout].layoutData
 	local itemID = #layoutData+1
-	if onItemAdd and onItemAdd(layout,item,itemID) then
-		if dgsGetParent(item) ~= layout then dgsSetParent(item,layout) end
-		layoutData = dgsElementData[layout].layoutData
-		layoutData[itemID] = item
+	if onItemAdd then
+		if not sortPriority then
+			onItemAdd(layout,item,itemID)
+			if dgsGetParent(item) ~= layout then dgsSetParent(item,layout) end
+			layoutData = dgsElementData[layout].layoutData
+			layoutData[itemID] = item
+		else
+			if dgsGetParent(item) ~= layout then dgsSetParent(item,layout) end
+			layoutData = dgsElementData[layout].layoutData
+			layoutData[itemID] = item
+			dgsLayoutSetItemSortPriority(item,sortPriority)
+		end
 		return itemID
 	end
 	return false
 end
 
+function dgsLayoutSetItemSortPriority(item,sortPriority)
+	if not dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutSetItemSortPriority",1,"dgs-dxelement")) end
+	if not (not sortPriority or type(sortPriority) == "number") then error(dgsGenAsrt(item,"dgsLayoutSetItemSortPriority",1,"number/nil")) end
+	local layout = dgsGetParent(item)
+	if dgsGetType(layout) ~= "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutSetItemSortPriority",1,"dgs-dxlayout as parent")) end
+	local sortPriorityTable = dgsElementData[layout].sortPriority
+	sortPriorityTable[item] = sortPriority
+	dgsLayoutUpdate(layout)
+	return true
+end
+
+function dgsLayoutGetItemSortPriority(item)
+	if not dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutGetItemSortPriority",1,"dgs-dxelement")) end
+	local layout = dgsGetParent(item)
+	if dgsGetType(layout) ~= "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutGetItemSortPriority",1,"dgs-dxlayout as parent")) end
+	local sortPriorityTable = dgsElementData[layout].sortPriority
+	return sortPriorityTable[item] or false
+end
+
 function dgsLayoutRemoveItem(layout,item)
-	if dgsGetType(layout) == "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutRemoveItem",1,"dgs-dxlayout")) end
-	if dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutRemoveItem",2,"dgs-dxelement")) end
+	if dgsGetType(layout) ~= "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutRemoveItem",1,"dgs-dxlayout")) end
+	if not dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutRemoveItem",2,"dgs-dxelement")) end
 	local onItemRemove = dgsElementData[layout].onItemRemove
 	local layoutData = dgsElementData[layout].layoutData
 	local itemID = table.find(layoutData,item)
@@ -200,17 +249,12 @@ function dgsLayoutRemoveItem(layout,item)
 end
 
 function dgsLayoutGetItemIndex(layout,item)
-	if dgsGetType(layout) == "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutGetItemIndex",1,"dgs-dxlayout")) end
-	if dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutGetItemIndex",2,"dgs-dxelement")) end
+	if dgsGetType(layout) ~= "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutGetItemIndex",1,"dgs-dxlayout")) end
+	if not dgsIsType(item) then error(dgsGenAsrt(item,"dgsLayoutGetItemIndex",2,"dgs-dxelement")) end
 	local layoutData = dgsElementData[layout].layoutData
 	return table.find(layoutData,item)
 end
---[[
-function dgsLayoutUpdate(layout)
-	if dgsGetType(layout) == "dgs-dxlayout" then error(dgsGenAsrt(layout,"dgsLayoutUpdate",1,"dgs-dxlayout")) end
-	local layoutData = eleData.layoutData
-	for i=1,
-end]]
+
 ----------------------------------------------------------------
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------

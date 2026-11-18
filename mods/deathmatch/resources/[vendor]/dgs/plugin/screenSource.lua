@@ -1,6 +1,10 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxscreensource")
 GlobalScreenSource = false
 GlobalScreenSourceWidthFactor = 1
 GlobalScreenSourceHeightFactor = 1
+
+DGSI_RegisterMaterialType("dgs-dxscreensource","texture")
 function dgsCreateScreenSource(uPos,vPos,uSize,vSize,relative)
 	local ss = createElement("dgs-dxscreensource")
 	dgsSetData(ss,"asPlugin","dgs-dxscreensource")
@@ -11,10 +15,12 @@ function dgsCreateScreenSource(uPos,vPos,uSize,vSize,relative)
 		dgsSetData(ss,"uvPos",{uPos,vPos,relative or false})
 		dgsSetData(ss,"uvSize",{uSize,vSize,relative or false})
 	end
-	triggerEvent("onDgsPluginCreate",ss,sourceResource)
+	dgsTriggerEvent("onDgsPluginCreate",ss,sourceResource)
 	if not isElement(GlobalScreenSource) then
 		GlobalScreenSource = dxCreateScreenSource(sW*GlobalScreenSourceWidthFactor,sH*GlobalScreenSourceHeightFactor)
 	end
+	dgsSetData(ss, "screenSourceTexture", GlobalScreenSource)
+
 	return ss
 end
 
@@ -26,7 +32,7 @@ end
 
 function dgsScreenSourceGetUVPosition(ss,relative)
 	if not(dgsGetPluginType(ss) == "dgs-dxscreensource") then error(dgsGenAsrt(ss,"dgsScreenSourceSetUVPosition",1,"dgs-dxscreensource")) end
-	local relative = relative or false
+	relative = relative or false
 	local uvPos = dgsElementData[ss].uvPos
 	if uvPos[1] and uvPos[2] then
 		if relative then
@@ -54,7 +60,7 @@ end
 
 function dgsScreenSourceGetUVSize(ss,relative)
 	if not(dgsGetPluginType(ss) == "dgs-dxscreensource") then error(dgsGenAsrt(ss,"dgsScreenSourceGetUVSize",1,"dgs-dxscreensource")) end
-	local relative = relative or false
+	relative = relative or false
 	local uvSize = dgsElementData[ss].uvSize
 	if uvSize[1] and uvSize[2] then
 		if relative then

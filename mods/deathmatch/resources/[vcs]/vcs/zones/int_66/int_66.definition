@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="dk_dockroads03" txd="knackers_ef712" lodDistance="144.00" flags="disable_backface_culling,is_road" col="dk_dockroads03" id="dk_dockroads03" sourceModelId="842" sourceModelName="dk_dockroads03" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="docks28" txd="knackers_ef712" lodDistance="150.00" flags="disable_backface_culling,dont_receive_shadows,is_road" col="docks28" id="docks28" sourceModelId="912" sourceModelName="docks28" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="docks21" txd="knackers_ef712" lodDistance="250.00" flags="disable_backface_culling,draw_last" col="docks21" id="docks21" sourceModelId="847" sourceModelName="docks21" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="vcs_model_6311" txd="knackers_ef712" lodDistance="170.00" flags="disable_backface_culling" col="vcs_model_6311" id="vcs_model_6311" sourceModelId="6311" sourceModelName="vcs_model_6311" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="vcs_model_6399" txd="knackers_ef712" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_6399" id="vcs_model_6399" sourceModelId="6399" sourceModelName="vcs_model_6399" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

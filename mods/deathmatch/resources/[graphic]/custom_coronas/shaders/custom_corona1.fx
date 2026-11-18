@@ -18,6 +18,7 @@ float fDepthBias = 1;
 float4x4 gWorld : WORLD;
 float4x4 gView : VIEW;
 float4x4 gProjection : PROJECTION;
+#include "coronaAspect.fx"
 texture gDepthBuffer : DEPTHBUFFER;
 matrix gProjectionMainScene : PROJECTION_MAIN_SCENE;
 float3 gCameraPosition : CAMERAPOSITION;
@@ -130,7 +131,8 @@ PSInput VertexShaderFunctionDB(VSInput VS)
     float4x4 gWorldFix = mul( gWorld, posMat );
 
     float4x4 worldViewMatrix = mul( gWorldFix, gView );
-    float4 worldViewPosition = float4( worldViewMatrix[3].xyz + position.xzy - fCoronaPosition.xzy , 1 );
+    float3 offset = coronaViewOffset(position.xzy - fCoronaPosition.xzy, gProjection);
+    float4 worldViewPosition = float4(worldViewMatrix[3].xyz + offset, 1);
 
     float DistFromCam = distance( gCameraPosition , fCoronaPosition.xyz ) ;
     PS.DistFade = MTAUnlerp ( gDistFade[0], gDistFade[1], DistFromCam );
@@ -159,7 +161,8 @@ PSInput VertexShaderFunction(VSInput VS)
     float4x4 gWorldFix = mul( gWorld, posMat );
 
     float4x4 worldViewMatrix = mul( gWorldFix, gView );
-    float4 worldViewPosition = float4( worldViewMatrix[3].xyz + position.xzy - fCoronaPosition.xzy , 1 );
+    float3 offset = coronaViewOffset(position.xzy - fCoronaPosition.xzy, gProjection);
+    float4 worldViewPosition = float4(worldViewMatrix[3].xyz + offset, 1);
     worldViewPosition.xyz += fDepthBias * 1.5 * mul( normalize( gCameraPosition - fCoronaPosition ), gView).xyz;
 	
     float DistFromCam = distance( gCameraPosition, fCoronaPosition.xyz );

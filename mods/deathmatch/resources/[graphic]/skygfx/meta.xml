@@ -1,9 +1,12 @@
 <meta>
-    <include resource="timecyc"/>
+    <min_mta_version client="1.3.0-9.04431" />
     <include resource="custom_coronas"/>
+    <include resource="interior"/>
     
     <oop>true</oop>
     <script src="config.lua" type="client" cache="false"/>
+    <script src="timecycle/timecyc_vcs.lua" type="client" cache="false"/>
+    <script src="timecycle/debug.lua" type="client" cache="false"/>
     <script src="lib.lua" type="client" cache="false"/>
     <script src="math.lua" type="client" cache="false"/>
     <script src="matrix.lua" type="client" cache="false"/>
@@ -18,6 +21,9 @@
     <script src="pipeline/bloom.lua" type="client" cache="false"/>
     <script src="pipeline/postfx.lua" type="client" cache="false"/>
     <script src="pipeline/worldPipe.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsSun.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsWater.lua" type="client" cache="false"/>
+    <script src="pipeline/vcs.lua" type="client" cache="false"/>
     <script src="debug.lua" type="client" cache="false"/>
     <script src="main.lua" type="client" cache="false"/>
     <script src="export.lua" type="client" cache="false"/>
@@ -33,7 +39,19 @@
     <file src="txd/xvehicleenv128.png" type="client"/>
     <file src="txd/coronaheadlightline.png" type="client"/>
     <file src="txd/coronastar.png" type="client"/>
+    <file src="txd/vcs-coronastar.png" type="client"/>
+    <file src="txd/vcs-sun-optics.png" type="client"/>
+    <file src="txd/vcs-waterclear256.png" type="client"/>
+    <file src="txd/vcs-waterreflection2.png" type="client"/>
+    <file src="txd/vcs-water-noise.png" type="client"/>
+    <file src="txd/vcs-waterwake.png" type="client"/>
     <file src="shader/mta-helper.fx" type="client"/>
+    <file src="shader/vcsWorld.fx" type="client"/>
+    <file src="shader/vcsSun.fx" type="client"/>
+    <file src="shader/vcsWater.fx" type="client"/>
+    <file src="models/vcsAlphaTextures.txt" type="client"/>
+    <file src="timecycle/timecyc_vcs.dat" type="client"/>
+    <file src="shader/vcsPost.fx" type="client"/>
     <file src="shader/ps2CarFxVS.fx" type="client"/>
     <file src="shader/ps2CarFxVSPS.fx" type="client"/>
     <file src="shader/ps2CarFxVSPSEnv.fx" type="client"/>
@@ -69,5 +87,12 @@
 	
     <export function="start" type="client"/>
     <export function="stop" type="client"/>
+    <export function="setVcsPostProcessing" type="client"/>
+    <export function="getVcsGraphicsStats" type="client"/>
+    <export function="getTimeCycleValue" type="client"/>
+    <export function="getVcsWeather" type="client"/>
+    <export function="getOutdoorWeather" type="client"/>
+    <export function="setVcsWeather" type="client"/>
+    <export function="setVcsWeatherBlended" type="client"/>
 
 </meta>

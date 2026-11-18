@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="mendez_cut_int" txd="knackers_245d1" lodDistance="250.00" flags="disable_backface_culling,draw_last" col="mendez_cut_int" id="mendez_cut_int" sourceModelId="7088" sourceModelName="mendez_cut_int" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

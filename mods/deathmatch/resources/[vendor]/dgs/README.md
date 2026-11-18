@@ -25,19 +25,21 @@ All function names refer simiularly to the original MTA:SA ones. This library us
 *(Sorry for the bad design of the default style though you are free to adjust everything with style system.)*
 
 For a full list of functions and event handlers, check the DGS wiki:
-* **English:** http://wiki.mtasa.com/wiki/dgs
-* **Arabic (العربية):** https://wiki.mtasa.com/wiki/AR/Dgs
-* **Chinese:** https://wiki.mtasa.com/wiki/ZH-CN/Dgs
+* **English:** http://wiki.mtasa.com/wiki/Resource:DGS
+* **Arabic (العربية):** https://wiki.mtasa.com/wiki/AR/Resource:DGS
+* **Chinese Simplified (简体中文):** https://wiki.mtasa.com/wiki/ZH-CN/Resource:DGS
+* **Polish (Polski):** https://wiki.mtasa.com/wiki/PL/Resource:DGS
+* **Turkish (Türkçe):** https://wiki.mtasa.com/wiki/TR/Resource:DGS
 
 To prevent bugs and issues with the resource, keep the resource name as **dgs**.
 
-The reason why I released DGS is because I am ready to leave MTA. This is my one contribution to the MTA community.
+This is my one contribution to the MTA community.
 Finally, I am glad to provide the DGS resource, and everyone is welcome to adjust the code and help make it better by editting the code, adding functions or events.
 
 # Auto Completion
 - [Notepad++](https://drive.google.com/file/d/1H_PiG2gmEz1AyXqZN4956IVgtZOjgMi6/view?usp=sharing)
 - [Sublime Text 3](https://drive.google.com/file/d/1_07WBEWjriTTucrNGI7jT-4SknALKG6B/view?usp=sharing)
-- [Visual Studio Code](https://drive.google.com/file/d/1J4qoSjzmXZz7yxHUZ2fExBu3zvCwRESn/view?usp=sharing)
+- [Visual Studio Code](https://raw.githubusercontent.com/Armisael2k/mtasa-wiki-scrapper/master/functions.json)
 
 # Commands
 all commands type it on F8 console

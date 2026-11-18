@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="254.469955" posY="-348.284119" posZ="18.819740" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="starblocks03" />
+    <object posX="239.363159" posY="-257.783997" posZ="10.668387" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="nw_nbwroad01" />
+    <object posX="229.069366" posY="-399.914490" posZ="21.113543" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="starblocks02" />
+    <object posX="242.457901" posY="-448.789948" posZ="10.845409" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="nw_nbwroad06" />
+    <object posX="299.425110" posY="-307.960602" posZ="16.962751" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="stardepot" />
+    <object posX="286.958496" posY="-266.739105" posZ="-0.000000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="vcs_model_5496" />
+    <object posX="342.189087" posY="-243.189011" posZ="36.895248" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="1" dimension="1330" id="ferris_wheel" />
+    <object posX="133.627457" posY="-108.405655" posZ="6.280472" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="gf_mainisland6b_01" />
+    <object posX="221.292557" posY="-224.871567" posZ="-2.340917" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="starbits13c" />
+    <object posX="290.805145" posY="-203.239166" posZ="13.107209" rotX="-0.000000" rotY="-0.000000" rotZ="18.612340" interior="1" dimension="1330" id="pm_fortsign" />
+    <object posX="285.673615" posY="-205.107788" posZ="12.370912" rotX="-0.000000" rotY="-0.000000" rotZ="18.612363" interior="1" dimension="1330" id="pm_forthiwall01" />
+    <object posX="251.631378" posY="-248.211502" posZ="11.218843" rotX="-0.000000" rotY="-0.000000" rotZ="65.385198" interior="1" dimension="1330" id="pm_far1_538c9" />
+    <object posX="248.016998" posY="-255.020187" posZ="11.228113" rotX="-0.000000" rotY="-0.000000" rotZ="58.594878" interior="1" dimension="1330" id="pm_far1_500e4" />
+    <object posX="243.995621" posY="-261.626617" posZ="11.293277" rotX="-0.000000" rotY="-0.000000" rotZ="58.594878" interior="1" dimension="1330" id="pm_far1_500e4" />
+    <object posX="239.974319" posY="-268.232727" posZ="11.438399" rotX="-0.000000" rotY="-0.000000" rotZ="58.594878" interior="1" dimension="1330" id="pm_far1_500e4" />
+    <object posX="233.197830" posY="-280.801849" posZ="12.092359" rotX="-0.000000" rotY="-0.000000" rotZ="65.111535" interior="1" dimension="1330" id="pm_far1_9baa2" />
+    <object posX="230.417160" posY="-288.002838" posZ="12.396176" rotX="-0.000000" rotY="-0.000000" rotZ="72.073194" interior="1" dimension="1330" id="pm_far1_1707e" />
+    <object posX="228.035797" posY="-295.412476" posZ="12.617888" rotX="-0.000000" rotY="-0.000000" rotZ="72.073194" interior="1" dimension="1330" id="pm_far1_1707e" />
+    <object posX="225.664551" posY="-302.740173" posZ="12.721871" rotX="-0.000000" rotY="-0.000000" rotZ="72.073194" interior="1" dimension="1330" id="pm_far1_1707e" />
+    <object posX="223.369446" posY="-310.138275" posZ="12.571304" rotX="-0.000000" rotY="-0.000000" rotZ="73.337439" interior="1" dimension="1330" id="pm_far1" />
+    <object posX="221.183365" posY="-317.561676" posZ="12.317475" rotX="-0.000000" rotY="-0.000000" rotZ="73.337439" interior="1" dimension="1330" id="pm_far1" />
+    <object posX="219.159241" posY="-325.031921" posZ="11.924495" rotX="-0.000000" rotY="-0.000000" rotZ="76.190604" interior="1" dimension="1330" id="pm_far1_7d980" />
+    <object posX="339.671112" posY="-243.189011" posZ="36.895248" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="1" dimension="1330" id="vcs_model_5498_689d2" />
+    <object posX="261.192413" posY="-142.008881" posZ="12.785036" rotX="0.000000" rotY="-0.000000" rotZ="-25.000001" interior="1" dimension="1330" id="pm_garsafe4" />
+    <object posX="298.066620" posY="-255.934479" posZ="12.815653" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="vcs_model_5513" />
+    <object posX="256.399170" posY="-171.182098" posZ="10.563715" rotX="-0.000000" rotY="-0.000000" rotZ="160.000013" interior="1" dimension="1330" id="nbw_sh_int" />
+    <object posX="298.066620" posY="-255.934479" posZ="12.815653" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1330" id="pm_dog_neon" forceObject="true" />
+    <object posX="152.142502" posY="-84.392044" posZ="13.032420" rotX="0.000000" rotY="-0.000000" rotZ="-32.999999" interior="1" dimension="1330" id="new_bushtest_89d90" />
+</map>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-829.893311" posY="-1406.586548" posZ="39.247536" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="114" id="dk_dockroads03" />
+    <object posX="-772.320496" posY="-1429.502441" posZ="24.602322" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="114" id="docks28" />
+    <object posX="-928.475952" posY="-1466.140015" posZ="5.199701" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="114" id="docks21" />
+    <object posX="-692.352966" posY="-1539.340942" posZ="16.130779" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="114" id="dks_range_int" />
+</map>

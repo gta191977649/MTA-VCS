@@ -44,7 +44,7 @@ function doSunFX()
 end
 function doWorldFX() 
     -- grass world amb, done by shader enmulation,not 100% accurate
-    local amb = TIMECYC:getTimeCycleValue("amb")
+    local amb = getTimeCycleValue("amb")
     --[[
         if(config->grassAddAmbient){
             col[0] += CTimeCycle_GetAmbientRed()*255;

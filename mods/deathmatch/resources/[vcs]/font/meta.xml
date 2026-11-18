@@ -1,7 +1,8 @@
 <meta>
+    <include resource="dgs"/>
     <script src="font.lua" type="client"/>
     <export function="getDxFont" type="client"/>
-    <file src="euro.ttf" type="client"/>
-    <file src="vcs.ttf" type="client"/>
-    <file src="pricedown_ui.ttf" type="client"/>
+    <export function="getHudFont" type="client"/>
+    <file src="NotoSansSC-Regular.ttf"/>
+    <file src="OFL-NotoSansCJK.txt"/>
 </meta>

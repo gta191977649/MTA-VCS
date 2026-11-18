@@ -1,0 +1,14 @@
+<meta>
+    <info name="VCS Garages" type="script" description="Garage registry, door motion and camera"/>
+    <min_mta_version client="1.6.0-9.22676" server="1.6.0-9.22815"/>
+    <include resource="vcs"/>
+    <script src="catalog.lua" type="shared" cache="false"/>
+    <script src="server.lua" type="server"/>
+    <script src="doors.lua" type="client" cache="false"/>
+    <script src="camera.lua" type="client" cache="false"/>
+    <file src="audio/shutter_move.wav"/>
+    <file src="audio/shutter_opened.wav"/>
+    <file src="audio/shutter_closed.wav"/>
+    <export function="registerGarageType" type="server"/>
+    <export function="getGarage" type="server"/>
+</meta>

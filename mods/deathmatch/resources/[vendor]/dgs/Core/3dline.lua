@@ -1,5 +1,19 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dx3dline","dgsBasic","dgsType3D","dgsTypeWorld3D")
+dgsRegisterProperties("dgs-dx3dline",{
+	color = 				{	PArg.Color		},
+	dimension = 			{	PArg.Number		},
+	fadeDistance = 			{	PArg.Number		},
+	interior = 				{	PArg.Number		},
+	maxDistance = 			{	PArg.Number		},
+	position = 				{	{ PArg.Number, PArg.Number, PArg.Number }	},
+	rotation = 				{	{ PArg.Number, PArg.Number, PArg.Number }	},
+	lineWidth = 			{	PArg.Number		},
+})
 --Dx Functions
 local dxDrawLine3D = dxDrawLine3D
+local dxDrawImage = dxDrawImage
+local dxSetShaderValue = dxSetShaderValue
 --
 local getRotationMatrix = getRotationMatrix
 local getPositionFromOffsetByRotMat = getPositionFromOffsetByRotMat
@@ -9,7 +23,8 @@ local tableInsert = table.insert
 local tableRemove = table.remove
 
 function dgsCreate3DLine(...)
-	local x,y,z,color,width,maxDistance
+	local sRes = sourceResource or resource
+	local x,y,z,color,lineWidth,maxDistance
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
 		x = argTable.x or argTable[1]
@@ -18,11 +33,11 @@ function dgsCreate3DLine(...)
 		rx = argTable.rx or argTable[4]
 		ry = argTable.ry or argTable[5]
 		rz = argTable.rz or argTable[6]
-		width = argTable.width or argTable[7]
+		lineWidth = argTable.lineWidth or argTable[7]
 		color = argTable.color or argTable[8]
 		maxDistance = argTable.maxDistance or argTable[9]
 	else
-		x,y,z,rx,ry,rz,width,color,maxDistance = ...
+		x,y,z,rx,ry,rz,lineWidth,color,maxDistance = ...
 	end
 	if not(type(x) == "number") then error(dgsGenAsrt(x,"dgsCreate3DLine",1,"number")) end
 	if not(type(y) == "number") then error(dgsGenAsrt(y,"dgsCreate3DLine",2,"number")) end
@@ -38,11 +53,26 @@ function dgsCreate3DLine(...)
 		fadeDistance = maxDistance or 80,
 		dimension = -1,
 		interior = -1,
-		width = width or 1,
+		lineWidth = lineWidth or 1,
+		lineType = "plane",
 		lineData = {},
 	}
-	triggerEvent("onDgsCreate",line3d,sourceResource)
+	dgsApplyGeneralProperties(line3d,sRes)
+	onDGSElementCreate(line3d,sRes)
 	return line3d
+end
+
+function dgs3DLineSetLineType(line,mode)
+	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineSetLineType",1,"dgs-dx3dline")) end
+	if mode == "plane" or mode == "cylinder" then
+		return dgsSetData(line,"lineType",mode)
+	end
+	return false
+end
+
+function dgs3DLineGetLineType(line)
+	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineGetLineType",1,"dgs-dx3dline")) end
+	return dgsElementData[line].lineType
 end
 
 --[[
@@ -66,7 +96,7 @@ function dgs3DLineAddItem(line,sx,sy,sz,ex,ey,ez,width,color,isRelative)
 	local lData = dgsElementData[line].lineData
 	local lIndex = #lData+1
 	lData[lIndex] = {
-		sx,sy,sz,ex,ey,ez,width or lData.width,color or lData.color,isRelative or false
+		sx,sy,sz,ex,ey,ez,width or lData.lineWidth,color or lData.color,isRelative or false
 	}
 	return lIndex
 end
@@ -145,34 +175,10 @@ function dgs3DLineGetItemColor(line,index)
 	return ilData[8]
 end
 
-function dgs3DLineGetDimension(line)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineGetDimension",1,"dgs-dx3dline")) end
-	return dgsElementData[line].dimension or -1
-end
-
-function dgs3DLineSetDimension(line,dimension)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineSetDimension",1,"dgs-dx3dline")) end
-	local inRange = dimension >= -1 and dimension <= 65535
-	if not(type(dimension) == "number" and inRange) then error(dgsGenAsrt(dimension,"dgs3DLineSetDimension",2,"number","-1~65535",inRange and "Out Of Range")) end
-	return dgsSetData(line,"dimension",dimension-dimension%1)
-end
-
-function dgs3DLineGetInterior(line)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineGetInterior",1,"dgs-dx3dline")) end
-	return dgsElementData[line].interior or -1
-end
-
-function dgs3DLineSetInterior(line,interior)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineSetInterior",1,"dgs-dx3dline")) end
-	local inRange = interior >= -1
-	if not(type(interior) == "number" and inRange) then error(dgsGenAsrt(interior,"dgs3DLineSetInterior",2,"number","-1~+∞",inRange and "Out Of Range")) end
-	return dgsSetData(line,"interior",interior-interior%1)
-end
-
 function dgs3DLineAttachToElement(line,element,offX,offY,offZ,offRX,offRY,offRZ)
 	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineAttachToElement",1,"dgs-dx3dline")) end
 	if not(isElement(element)) then error(dgsGenAsrt(element,"dgs3DLineAttachToElement",2,"element")) end
-	local offX,offY,offZ = offX or 0,offY or 0,offZ or 0
+	offX,offY,offZ = offX or 0,offY or 0,offZ or 0
 	return dgsSetData(line,"attachTo",{element,offX,offY,offZ,offRX,offRY,offRZ})
 end
 
@@ -190,8 +196,8 @@ function dgs3DLineSetAttachedOffsets(line,offX,offY,offZ,offRX,offRY,offRZ)
 	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineSetAttachedOffsets",1,"dgs-dx3dline")) end
 	local attachTable = dgsElementData[line].attachTo
 	if attachTable then
-		local offX,offY,offZ = offX or attachTable[2],offY or attachTable[3],offZ or attachTable[4]
-		local offRX,offRY,offRZ = offRX or attachTable[5],offRY or attachTable[6],offRZ or attachTable[7]
+		offX,offY,offZ = offX or attachTable[2],offY or attachTable[3],offZ or attachTable[4]
+		offRX,offRY,offRZ = offRX or attachTable[5],offRY or attachTable[6],offRZ or attachTable[7]
 		return dgsSetData(line,"attachTo",{attachTable[1],offX,offY,offZ,offRX,offRY,offRZ})
 	end
 	return false
@@ -204,20 +210,6 @@ function dgs3DLineGetAttachedOffsets(line,offX,offY,offZ,offRX,offRY,offRZ)
 		return attachTable[2],attachTable[3],attachTable[4],attachTable[5],attachTable[6],attachTable[7]
 	end
 	return false
-end
-
-function dgs3DLineSetPosition(line,x,y,z)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineSetPosition",1,"dgs-dx3dline")) end
-	if not(type(x) == "number") then error(dgsGenAsrt(x,"dgs3DLineSetPosition",2,"number")) end
-	if not(type(y) == "number") then error(dgsGenAsrt(y,"dgs3DLineSetPosition",3,"number")) end
-	if not(type(z) == "number") then error(dgsGenAsrt(z,"dgs3DLineSetPosition",4,"number")) end
-	return dgsSetData(line,"position",{x,y,z})
-end
-
-function dgs3DLineGetPosition(line)
-	if not(dgsGetType(line) == "dgs-dx3dline") then error(dgsGenAsrt(line,"dgs3DLineGetPosition",1,"dgs-dx3dline")) end
-	local pos = dgsElementData[line].position
-	return pos[1],pos[2],pos[3]
 end
 
 function dgs3DLineSetRotation(line,rx,ry,rz)
@@ -235,12 +227,113 @@ function dgs3DLineGetRotation(line)
 end
 
 ----------------------------------------------------------------
+----------------------Cylinder 3D Line--------------------------
+----------------------------------------------------------------
+local cylinderLineShaderRaw = [[
+float3x3 shapeConfig = {
+	float3(0, 0, 0),	//Start Pos
+	float3(0, 0, 0),	//End Pos
+	float3(0, 0, 0),	//Radius
+};
+float4x4 gProjectionMainScene : PROJECTION_MAIN_SCENE;
+float4x4 gViewMainScene : VIEW_MAIN_SCENE;
+#define PI 3.1415926535897932384626433832795
+#define PI2 6.283185307179586476925286766559
+
+struct VSInput{
+    float3 Position : POSITION0;
+    float2 TexCoord : TEXCOORD0;
+    float4 Diffuse : COLOR0;
+};
+
+struct PSInput{
+    float4 Position : POSITION0;
+    float2 TexCoord : TEXCOORD0;
+    float4 Diffuse : COLOR0;
+};
+
+float3 findRotation3D(float3 sPos, float3 ePos) {
+	float3 dPos = ePos-sPos;
+	float3 rot = float3(atan2(dPos.z,length(dPos.xy)),0,-atan2(dPos.x,dPos.y));
+	return rot;
+}
+
+float4x4 createWorldMatrix(float3 pos, float3 rot){
+    float3 cRot, sRot;
+    sincos(rot, sRot, cRot);
+	float4x4 eleMatrix = float4x4(
+        cRot.z * cRot.y - sRot.z * sRot.x * sRot.y, cRot.y * sRot.z + cRot.z * sRot.x * sRot.y, -cRot.x * sRot.y, 0,
+        -cRot.x * sRot.z, cRot.z * cRot.x, sRot.x, 0,
+        cRot.z * sRot.y + cRot.y * sRot.z * sRot.x, sRot.z * sRot.y - cRot.z * cRot.y * sRot.x, cRot.x * cRot.y, 0,
+		pos.x, pos.y, pos.z, 1
+	);
+    return eleMatrix;
+}
+
+float3 getCylinderPosition(float3 inPosition){
+    float3 outPosition = inPosition;
+    outPosition.z = cos(inPosition.y*PI2);
+    outPosition.y = sin(inPosition.y*PI2);
+    return outPosition;
+}
+
+PSInput VertexShaderFunction(VSInput VS){
+    PSInput PS = (PSInput)0;
+    VS.Position.xyz = float3(-0.5+VS.TexCoord.xy, 0);
+    float3 resultPos = getCylinderPosition(VS.Position.xyz);
+	float3 startPos = shapeConfig[0];
+	float3 endPos = shapeConfig[1];
+	float3 radius = shapeConfig[2];
+	resultPos.yz *= radius.x*0.00665;
+	resultPos.x *= length(endPos-startPos);
+    VS.Position.xyz = resultPos.zyx;
+	float3 rot = findRotation3D(startPos,endPos);
+	rot.x += PI/2;
+    float4x4 sWorld = createWorldMatrix((endPos+startPos)/2,rot);
+	PS.Position = mul(mul(mul(float4(VS.Position,1),sWorld),gViewMainScene),gProjectionMainScene);
+    PS.TexCoord = VS.TexCoord;
+    PS.Diffuse = VS.Diffuse;
+    return PS;
+}
+
+float4 PixelShaderFunction(PSInput PS) : COLOR0{
+    return PS.Diffuse;
+}
+
+technique dxDrawImage4D_cylinder_ap{
+  pass P0{
+    ZEnable = true;
+    ZFunc = LessEqual;
+    ZWriteEnable = true;
+    CullMode = 3;
+    ShadeMode = Gouraud;
+    AlphaBlendEnable = true;
+    SrcBlend = SrcAlpha;
+    DestBlend = 6;
+    AlphaTestEnable = true;
+    AlphaRef = 1;
+    AlphaFunc = GreaterEqual;
+    Lighting = false;
+    FogEnable = false;
+    VertexShader = compile vs_2_0 VertexShaderFunction();
+    PixelShader  = compile ps_2_0 PixelShaderFunction();
+  }
+}
+]]
+cylinderShader3DLine = dxCreateShader(cylinderLineShaderRaw)
+dxSetShaderTessellation(cylinderShader3DLine,1,16)
+cylinderLineShaderRaw = nil
+
+----------------------------------------------------------------
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------
-
-dgsRenderer["dgs-dx3dline"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited,enabledSelf,eleData,parentAlpha,isPostGUI,rndtgt)
-	return rndtgt,true,mx,my,0,0
-end
+local dgs3DLineDraw = {
+	plane = dxDrawLine3D,
+	cylinder = function(startX,startY,startZ,endX,endY,endZ,color,width)
+		dxSetShaderValue(cylinderShader3DLine,"shapeConfig",startX,startY,startZ,endX,endY,endZ,width,0,0)
+		dxDrawImage(0,0,sW,sH,cylinderShader3DLine,0,0,0,color)
+	end,
+}
 
 dgs3DRenderer["dgs-dx3dline"] = function(source)
 	local eleData = dgsElementData[source]
@@ -249,8 +342,9 @@ dgs3DRenderer["dgs-dx3dline"] = function(source)
 	local rotTable = eleData.rotation
 	local wx,wy,wz = posTable[1],posTable[2],posTable[3]
 	local wrx,wry,wrz = 0,0,0
-	local width = eleData.width
+	local lineWidth = eleData.lineWidth
 	local color = eleData.color
+	local lineType = eleData.lineType
 	local isRender = true
 	if attachTable then
 		if isElement(attachTable[1]) then
@@ -261,14 +355,8 @@ dgs3DRenderer["dgs-dx3dline"] = function(source)
 				if rx and ry and rz then
 					wrx,wry,wrz = rx+offrx,ry+offry,rz+offrz
 				end
-				eleData.position[1] = wx
-				eleData.position[2] = wy
-				eleData.position[3] = wz
-
-				eleData.rotation[1] = wrx
-				eleData.rotation[2] = wry
-				eleData.rotation[3] = wrz
-
+				eleData.position[1],eleData.position[2],eleData.position[3] = wx,wy,wz
+				eleData.rotation[1],eleData.rotation[2],eleData.rotation[3] = wrx,wry,wrz
 			else
 				isRender = false
 			end
@@ -277,9 +365,10 @@ dgs3DRenderer["dgs-dx3dline"] = function(source)
 		end
 	end
 	if isRender then
-		local camX,camY,camZ = getCameraMatrix()
 		local maxDistance = eleData.maxDistance
-		local distance = ((wx-camX)^2+(wy-camY)^2+(wz-camZ)^2)^0.5
+		local camX,camY,camZ = cameraPos[1],cameraPos[2],cameraPos[3]
+		local dx,dy,dz = camX-wx,camY-wy,camZ-wz
+		local distance = (dx*dx+dy*dy+dz*dz)^0.5
 		if distance <= maxDistance and distance > 0 then
 			local fadeDistance = eleData.fadeDistance
 			local line = eleData.line
@@ -290,11 +379,10 @@ dgs3DRenderer["dgs-dx3dline"] = function(source)
 			local lData = eleData.lineData
 			local m11,m12,m13,m21,m22,m23,m31,m32,m33 = getRotationMatrix(wrx,wry,wrz)
 			local lastex,lastey,lastez,lastRlt
+			local drawFunction = dgs3DLineDraw[lineType]
 			for i=1,#lData do
 				local lineItem = lData[i]
 				local startX,startY,startZ,endX,endY,endZ = 0,0,0,lineItem[4],lineItem[5],lineItem[6]
-				local w = lineItem[7] or width
-				local c = lineItem[8] or color
 				local isRelative = lineItem[9]
 				local startIsRelative = true
 				if lineItem[1] then
@@ -311,7 +399,7 @@ dgs3DRenderer["dgs-dx3dline"] = function(source)
 				if isRelative then
 					endX,endY,endZ = endX*m11+endY*m21+endZ*m31+wx,endX*m12+endY*m22+endZ*m32+wy,endX*m13+endY*m23+endZ*m33+wz
 				end
-				dxDrawLine3D(startX,startY,startZ,endX,endY,endZ,applyColorAlpha(c,fadeMulti),w)
+				drawFunction(startX,startY,startZ,endX,endY,endZ,applyColorAlpha(lineItem[8] or color,fadeMulti),lineItem[7] or lineWidth)
 			end
 			return true
 		end

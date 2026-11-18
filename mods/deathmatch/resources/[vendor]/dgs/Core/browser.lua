@@ -1,3 +1,10 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxbrowser","dgsBasic","dgsType2D")
+dgsRegisterProperties("dgs-dxbrowser",{
+	color = 				{	PArg.Color		},
+	isTransparent = 		{	PArg.Bool		},
+	isLocal = 				{	PArg.Bool		},
+})
 --Dx Functions
 local dxDrawImage = dxDrawImage
 --DGS Functions
@@ -15,12 +22,14 @@ local createBrowser = createBrowser
 local focusBrowser = focusBrowser
 --Utilities
 local isElement = isElement
-local triggerEvent = triggerEvent
 local addEventHandler = addEventHandler
 local assert = assert
 local type = type
 
+DGSI_RegisterMaterialType("dgs-dxbrowser","texture")
+
 function dgsCreateBrowser(...)
+	local sRes = sourceResource or resource
 	local x,y,w,h,relative,parent,isLocal,isTransparent,resX,resY,color
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
@@ -45,7 +54,6 @@ function dgsCreateBrowser(...)
 	local browser = createBrowser(1,1,isLocal and true or false,isTransparent and true or false)
 	if not isElement(browser) then error(dgsGenAsrt(browser,"dgsCreateBrowser",_,_,_,_,"Failed to create remote browser (createBrowser returns false)!")) end
 	dgsSetType(browser,"dgs-dxbrowser")
-	dgsSetParent(browser,parent,true,true)
 	dgsElementData[browser] = {
 		renderBuffer = {},
 		color = color or white,
@@ -53,19 +61,27 @@ function dgsCreateBrowser(...)
 		isLocal = isLocal and true or false,
 		requestCommand = {},
 	}
+	dgsSetParent(browser,parent,true,true)
 	calculateGuiPositionSize(browser,x,y,relative,w,h,relative,true)
+	dgsApplyGeneralProperties(browser,sRes)
 	local size = dgsElementData[browser].absSize
 	resizeBrowser(browser,resX or size[1],resY or size[2])
 	dgsElementData[browser].browserSize = {resX or size[1],resY or size[2]}
-	triggerEvent("onDgsCreate",browser,sourceResource)
-	addEventHandler("onDgsMouseMove",browser,function(x,y)
-		local size = dgsElementData[source].absSize
+	onDGSElementCreate(browser,sRes)
+	addEventHandler("onDgsMouseMove",browser,function(x2,y2)
+		local size2 = dgsElementData[source].absSize
 		local brosize = dgsElementData[source].browserSize
 		local startX,startY = dgsGetPosition(source,false,true)
-		injectBrowserMouseMove(source,(x-startX)/size[1]*brosize[1],(y-startY)/size[2]*brosize[2])
+		injectBrowserMouseMove(source,(x2-startX)/size2[1]*brosize[1],(y2-startY)/size2[2]*brosize[2])
 	end,false)
 	addEventHandler("onDgsMouseWheel",browser,function(upOrDown)
 		injectBrowserMouseWheel(source,upOrDown*40,0)
+	end,false)
+	addEventHandler("onDgsFocus",browser,function()
+		focusBrowser(source)
+	end,false)
+	addEventHandler("onDgsBlur",browser,function()
+		focusBrowser()
 	end,false)
 	addEventHandler("onDgsMouseClick",browser,function(button,state)
 		focusBrowser(source)

@@ -130,5 +130,5 @@
 					/>
 	</settings>
 	
-	<include resource="timecyc"/>
+	<include resource="skygfx"/>
 </meta>

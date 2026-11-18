@@ -1,12 +1,18 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxdetectarea","dgsBasic","dgsType2D")
+dgsRegisterProperties("dgs-dxdetectarea",{
+	checkFunctionImage = 	{	PArg.Material	},
+	debugMode = 			{	PArg.Bool	},
+})
 local loadstring = loadstring
 --Dx Functions
-local dxDrawImage = dxDrawImageExt
+local dxDrawImage = dxDrawImage
 local dxGetPixelsSize = dxGetPixelsSize
 local dxGetPixelColor = dxGetPixelColor
 local dxSetRenderTarget = dxSetRenderTarget
 local dxGetTextWidth = dxGetTextWidth
 --
-local triggerEvent = triggerEvent
+local dgsTriggerEvent = dgsTriggerEvent
 local createElement = createElement
 local dgsSetType = dgsSetType
 local dgsSetParent = dgsSetParent
@@ -14,8 +20,16 @@ local dgsSetData = dgsSetData
 local assert = assert
 local type = type
 
-detectAreaBuiltIn = {}
+detectAreaBuiltIn = {
+	default = [[
+		return true
+	]],
+	circle = [[
+		return math.sqrt((mxRlt-0.5)^2+(myRlt-0.5)^2)<0.5
+	]],
+}
 function dgsCreateDetectArea(...)
+	local sRes = sourceResource or resource
 	local x,y,w,h,relative,parent
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
@@ -31,7 +45,8 @@ function dgsCreateDetectArea(...)
 	if not x then
 		local detectarea = createElement("dgs-dxdetectarea")
 		dgsSetType(detectarea,"dgs-dxdetectarea")
-		triggerEvent("onDgsCreate",detectarea,sourceResource)
+		dgsApplyGeneralProperties(detectarea,sRes)
+		onDGSElementCreate(detectarea,sRes)
 		dgsDetectAreaSetFunction(detectarea,detectAreaBuiltIn.default)
 		dgsSetData(detectarea,"debugTextureSize",{sW/2,sH/2})
 		dgsSetData(detectarea,"debugModeAlpha",128)
@@ -47,7 +62,8 @@ function dgsCreateDetectArea(...)
 		dgsSetData(detectarea,"debugMode",false)
 		dgsSetData(detectarea,"debugModeAlpha",128)
 		calculateGuiPositionSize(detectarea,x,y,relative or false,w,h,relative or false,true)
-		triggerEvent("onDgsCreate",detectarea,sourceResource)
+		dgsApplyGeneralProperties(detectarea,sRes)
+		onDGSElementCreate(detectarea,sRes)
 		dgsDetectAreaSetFunction(detectarea,detectAreaBuiltIn.default)
 		return detectarea
 	end
@@ -55,15 +71,7 @@ end
 
 detectAreaPreDefine = [[
 	local args = {...}
-	local mxRlt,myRlt,mxAbs,myAbs = args[1],args[2],args[3],args[4]
-]]
-
-detectAreaBuiltIn.default = [[
-	return true
-]]
-
-detectAreaBuiltIn.circle = [[
-	return math.sqrt((mxRlt-0.5)^2+(myRlt-0.5)^2)<0.5
+	local mxRlt,myRlt,mx,my,x,y,w,h = args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8]
 ]]
 
 function dgsDetectAreaDefaultFunction(mxRlt,myRlt,mxAbs,myAbs)
@@ -97,6 +105,7 @@ function dgsDetectAreaSetDebugModeEnabled(detectarea,state,alpha)
 	elseif isElement(dgsElementData[detectarea].debugTexture) then
 		destroyElement(dgsElementData[detectarea].debugTexture)
 	end
+	return true
 end
 
 function dgsDetectAreaGetDebugModeEnabled(detectarea)
@@ -117,7 +126,7 @@ function dgsDetectAreaUpdateDebugView(detectarea)
 		end
 	end
 	if not isElement(dgsElementData[detectarea].debugTexture) then
-		local texture = dxCreateEmptyTexture(absSize[1],absSize[2])
+		local texture = dxCreateTexture(absSize[1],absSize[2])
 		dgsSetData(detectarea,"debugTexture",texture)
 	end
 	if type(checkFunction) == "function" then
@@ -134,29 +143,19 @@ function dgsDetectAreaUpdateDebugView(detectarea)
 	end
 	return true
 end
-
-function dgsDetectAreaAttachToElement(da,ele)
-	local fnc = function(source,mx,my,x,y,w,h)
-		if mx >= x and mx <= x+w and my >= y and my <= y+h then
-			return source
-		end
-	end
-	dgsSetData(ele,"dgsCollider",fnc)
-end
-
 ----------------------------------------------------------------
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------
 dgsRenderer["dgs-dxdetectarea"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited,enabledSelf,eleData,parentAlpha,isPostGUI,rndtgt)
 	local color = 0xFFFFFFFF
-	if enabledInherited[1] and mx then
+	if enabledInherited and mx then
 		local checkPixel = eleData.checkFunction
 		if checkPixel then
 			local _mx,_my = (mx-x)/w,(my-y)/h
 			if _mx > 0 and _my > 0 and _mx <= 1 and _my <= 1 then
 				if type(checkPixel) == "function" then
 					local checkFnc = eleData.checkFunction
-					if checkFnc((mx-x)/w,(my-y)/h,mx,my) then
+					if checkFnc(_mx,_my,mx,my,x,y,w,h) then
 						MouseData.hit = source
 						color = 0xFFFF0000
 					end

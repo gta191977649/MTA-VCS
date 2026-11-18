@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-982.108337" posY="-215.284897" posZ="9.838033" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="450" id="litharoada9" />
+    <object posX="-924.873047" posY="-234.224091" posZ="9.917061" rotX="0.104577" rotY="-0.003650" rotZ="-87.002736" interior="1" dimension="450" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02" />
+    <object posX="-887.835999" posY="-266.497986" posZ="10.063000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="450" id="louise_cut_int" />
+    <object posX="-990.428894" posY="-197.171188" posZ="17.739359" rotX="0.000000" rotY="-0.000000" rotZ="-99.999997" interior="1" dimension="450" id="vcs_model_2190" />
+    <object posX="-932.524841" posY="-236.781036" posZ="18.767302" rotX="0.000000" rotY="-0.000000" rotZ="-100.000004" interior="1" dimension="450" id="vcs_model_2191" />
+</map>

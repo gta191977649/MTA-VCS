@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-829.893311" posY="-1406.586548" posZ="39.247536" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="66" id="dk_dockroads03" />
+    <object posX="-772.320496" posY="-1429.502441" posZ="24.602322" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="66" id="docks28" />
+    <object posX="-928.475952" posY="-1466.140015" posZ="5.199701" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="66" id="docks21" />
+    <object posX="-944.049744" posY="-1337.057739" posZ="29.406807" rotX="-0.000000" rotY="-0.000000" rotZ="158.176827" interior="1" dimension="66" id="vcs_model_6311" />
+    <object posX="-945.216736" posY="-1340.038940" posZ="29.406807" rotX="-0.000000" rotY="-0.000000" rotZ="158.176827" interior="1" dimension="66" id="vcs_model_6311" />
+    <object posX="-665.226685" posY="-1287.523682" posZ="-5.140936" rotX="0.000000" rotY="0.000000" rotZ="-156.503388" interior="1" dimension="66" id="vcs_model_6399" />
+</map>

@@ -174,14 +174,25 @@ end
 function init() 
     for k,v in ipairs(getElementsByType("object")) do
         local name = getElementID(v)
-        applyLightShadowPatch(v,name) 
-        applyTrafficLightPatch(v,name) 
+        if name and not LIGHT_OBJS[v] then
+            applyLightShadowPatch(v, name)
+            applyTrafficLightPatch(v, name)
+        end
     end
     -- first render 2dfx
     if IS_NIGHT then forceRender() end
    
     print(TOTAL)
 end
+
+addEventHandler("onClientElementDestroy", root, function()
+    local entry = LIGHT_OBJS[source]
+    if not entry then return end
+    remove2dFX(source)
+    if isElement(entry.label) then destroyElement(entry.label) end
+    LIGHT_OBJS[source] = nil
+    TOTAL = TOTAL - 1
+end)
 
 addEventHandler("onClientObjectBreak", root,function()
     if LIGHT_OBJS[source] and LIGHT_OBJS[source].light ~= nil then

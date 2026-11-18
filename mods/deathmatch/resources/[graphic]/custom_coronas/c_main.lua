@@ -9,6 +9,8 @@ coronaTable = { inputCoronas = {} , outputCoronas = {} , thisCorona = 0 , isInNr
 				maxCoronas = 300, depthBias = true, sorted = 0, tempFade = 0 }
 funcTable = {}
 local img = dxCreateTexture( "textures/coronastar.png", "dxt5" )
+local coronaViewportWidth, coronaViewportHeight
+local viewportApplied = {}
 
 ---------------------------------------------------------------------------------------------------
 -- editable variables
@@ -169,6 +171,11 @@ addEventHandler("onClientPreRender", root, function()
 		return 
 	end
 	coronaTable.thisCorona = 0
+	local width, height = guiGetScreenSize()
+	if width ~= coronaViewportWidth or height ~= coronaViewportHeight then
+		coronaViewportWidth, coronaViewportHeight = width, height
+		viewportApplied = {}
+	end
 	for index,this in ipairs( coronaTable.outputCoronas ) do
 		if this.dist <= shaderSettings.gDistFade[1] and this.enabled and coronaTable.thisCorona < coronaTable.maxCoronas then
 			local isOnScrX, isOnScrY, isOnScrZ = getScreenFromWorldPosition ( this.pos[1], this.pos[2], this.pos[3], shaderSettings.edgeTolerance, true )
@@ -176,6 +183,10 @@ addEventHandler("onClientPreRender", root, function()
 				local current = nil
 				if this.material then current = this.shader else current = coronaTable.shaderType[this.cType] end
 				if current then
+					if not viewportApplied[current] then
+						dxSetShaderValue(current, "CoronaViewport", width, height)
+						viewportApplied[current] = true
+					end
 					dxSetShaderValue( current, "fCoronaPosition",this.pos[1], this.pos[2], this.pos[3])
 					if coronaTable.depthBias then
 						dxSetShaderValue( current, "fDepthBias",this.dBias)
@@ -220,11 +231,14 @@ end
 function funcTable.destroyShader(theShader,cType,nrType)
 	if cType then
 		if (nrType == 0) then
+			local shared = coronaTable.shaderType[cType]
+			if shared then viewportApplied[shared] = nil end
 			theShader = destroyElement ( coronaTable.shaderType[cType] )
 			--outputDebugString('Destroyed base shader for non material coronas type: '..cType)
 		end
 		theShader = nil
 	else	
+		if theShader then viewportApplied[theShader] = nil end
 		theShader = destroyElement ( theShader )
 		--outputDebugString('Destroyed shader for material corona')
 		theShader = nil

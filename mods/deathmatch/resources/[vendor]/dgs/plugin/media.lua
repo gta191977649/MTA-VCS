@@ -1,3 +1,5 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxmedia")
 local JS = {
 	clearelement = "clearMedia()",
 	playelement = "playMedia()",
@@ -17,6 +19,7 @@ addEvent("onDgsMediaLoaded",true)
 addEvent("onDgsMediaTimeUpdate",true)
 addEvent("onDgsMediaBrowserReturn",true)
 
+DGSI_RegisterMaterialType("dgs-dxmedia","texture")
 --Media Element won't be rendered by DGS render, so it should be set into other dgs element(Such as dgs-dximage).
 --Media Element is "cef"(browser element), but if you want to manage it well, please use the functions dgs offered.
 function dgsCreateMediaBrowser(w,h,transparent)
@@ -34,9 +37,9 @@ function dgsCreateMediaBrowser(w,h,transparent)
 	dgsSetData(media,"functionBuffer",{})
 	dgsElementData[media].duration = false
 	dgsElementData[media].current = false
-	triggerEvent("onDgsPluginCreate",media,sourceResource)
+	dgsTriggerEvent("onDgsPluginCreate",media,sourceResource)
 	addEventHandler("onClientBrowserCreated",media,function()
-		loadBrowserURL(source,"http://mta/"..getResourceName(getThisResource()).."/html/media.html")
+		loadBrowserURL(source,"http://mta/"..getResourceName(resource).."/html/media.html")
 	end,false)
 	addEventHandler("onClientBrowserDocumentReady",media,function()
 		dgsSetData(source,"started",true)
@@ -51,37 +54,48 @@ DGSMediaType = {
 	AUDIO="audio",
 	VIDEO="video",
 	IMAGE="img",
+	IMAGEDATA="img",
 }
-function dgsMediaLoadMedia(media,path,theType,sourceRes)
+function dgsMediaLoadMedia(media,pathOrData,theType,sourceRes)
 	if not(dgsGetType(media) == "dgs-dxmedia") then error(dgsGenAsrt(media,"dgsMediaLoadMedia",1,"plugin dgs-dxmedia")) end
-	if not(type(path) == "string") then error(dgsGenAsrt(path,"dgsMediaLoadMedia",2,"string")) end
-	local sR = sourceResource or sourceRes or getThisResource()
+	if not(type(pathOrData) == "string") then error(dgsGenAsrt(pathOrData,"dgsMediaLoadMedia",2,"string")) end
+	local sR = sourceResource or sourceRes or resource
 	local name = getResourceName(sR)
-	if not path:find(":") then
-		local firstOne = path:sub(1,1)
-		if firstOne == "/" then
-			path = path:sub(2)
-		end
-		path = ":"..name.."/"..path
-	end
-	if not(fileExists(path)) then error(dgsGenAsrt(path,"dgsMediaLoadMedia",2,_,_,"file doesn't exist("..path..")")) end
 	if not(type(theType) == "string") then error(dgsGenAsrt(theType,"dgsMediaLoadMedia",3,"string")) end
-	local theType = theType:upper()
-	if not(DGSMediaType[theType]) then error(dgsGenAsrt(theType,"dgsMediaLoadMedia",3,"string","Audio/Video/Image","unsupported type")) end
+	theType = theType:upper()
+	if not(DGSMediaType[theType]) then error(dgsGenAsrt(theType,"dgsMediaLoadMedia",3,"string","Audio/Video/Image/ImageData","unsupported type")) end
 	if not dgsElementData[media].started then
 		local buffer = dgsElementData[media].functionBuffer
-		table.insert(buffer,{[0]=dgsMediaLoadMedia,media,path,theType,sR})
+		table.insert(buffer,{[0]=dgsMediaLoadMedia,media,pathOrData,theType,sR})
 	else
 		dgsMediaClearMedia(media)
-		dgsSetData(media,"sourcePath",path)
 		local size = dgsElementData[media].size
 		local filled = dgsElementData[media].filled
 		local str = ""
-		if DGSMediaType[theType] == "img" then
+		if theType == "IMAGE" then
+			if not pathOrData:find(":") then
+				if pathOrData:sub(1,1) == "/" then pathOrData = pathOrData:sub(2) end
+				pathOrData = ":"..name.."/"..pathOrData
+			end
+			if not(fileExists(pathOrData)) then error(dgsGenAsrt(pathOrData,"dgsMediaLoadMedia",2,_,_,"file doesn't exist("..pathOrData..")")) end
+			dgsSetData(media,"sourcePath",pathOrData)
 			str = [[
 				var element = document.createElement("]]..DGSMediaType[theType]..[[");
 				element.id = "element";
-				element.src = "http://mta/]] ..path:sub(2).. [[";
+				element.src = "http://mta/]] ..pathOrData:sub(2).. [[";
+				element.width = ]]..size[1]..[[;
+				element.height = ]]..size[2]..[[;
+				document.body.appendChild(element);
+				createListener(element);
+				mta.triggerEvent("onDgsMediaLoaded")
+			]]
+		elseif theType == "IMAGEDATA" then
+			local format = dgsGetPixelsFormat(pathOrData)
+			if not format or not dgsIsBrowserSupportedImage(format) then error(dgsGenAsrt(_,"dgsMediaLoadMedia",2,_,"unsupported image format ("..tostring(format)..")")) end
+			str = [[
+				var element = document.createElement("]]..DGSMediaType[theType]..[[");
+				element.id = "element";
+				element.src = "]]..dgsToDataUrl(pathOrData,format)..[[";
 				element.width = ]]..size[1]..[[;
 				element.height = ]]..size[2]..[[;
 				document.body.appendChild(element);
@@ -89,6 +103,12 @@ function dgsMediaLoadMedia(media,path,theType,sourceRes)
 				mta.triggerEvent("onDgsMediaLoaded")
 			]]
 		else
+			if not pathOrData:find(":") then
+				if pathOrData:sub(1,1) == "/" then pathOrData = pathOrData:sub(2) end
+				pathOrData = ":"..name.."/"..pathOrData
+			end
+			if not(fileExists(ppathOrDataath)) then error(dgsGenAsrt(pathOrData,"dgsMediaLoadMedia",2,_,_,"file doesn't exist("..pathOrData..")")) end
+			dgsSetData(media,"sourcePath",pathOrData)
 			str = [[
 				var element = document.createElement("]]..DGSMediaType[theType]..[[");
 				element.id = "element";
@@ -97,7 +117,7 @@ function dgsMediaLoadMedia(media,path,theType,sourceRes)
 				createListener(element);
 				document.body.appendChild(element);
 				var source = document.createElement("source");
-				source.src = "http://mta/]] ..path:sub(2).. [[";
+				source.src = "http://mta/]] ..pathOrData:sub(2).. [[";
 				element.appendChild(source);
 				mta.triggerEvent("onDgsMediaLoaded")
 			]]
@@ -145,7 +165,7 @@ function dgsMediaPlay(media)
 		local buffer = dgsElementData[media].functionBuffer
 		table.insert(buffer,{[0]=dgsMediaPlay,media})
 	else
-		if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaPlay",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
+		--if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaPlay",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
 		return executeBrowserJavascript(media,JS.playelement)
 	end
 end
@@ -196,7 +216,6 @@ function dgsMediaSetFullScreen(media,state)
 		local buffer = dgsElementData[media].functionBuffer
 		table.insert(buffer,{[0]=dgsMediaSetFullScreen,media,state})
 	else
-		if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaSetFullScreen",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
 		local str = JS.setFullScreen:gsub("REP1",tostring(state))
 		dgsSetData(media,"fullscreen",state)
 		return executeBrowserJavascript(media,str)
@@ -214,7 +233,6 @@ function dgsMediaSetFilled(media,state)
 		local buffer = dgsElementData[media].functionBuffer
 		table.insert(buffer,{[0]=dgsMediaSetFilled,media,state})
 	else
-		if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaSetFilled",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
 		local str = JS.setFilled:gsub("REP1",tostring(state))
 		dgsSetData(media,"filled",state)
 		return executeBrowserJavascript(media,str)
@@ -237,7 +255,6 @@ function dgsMediaSetLooped(media,state)
 		local buffer = dgsElementData[media].functionBuffer
 		table.insert(buffer,{[0]=dgsMediaSetLooped,media,state})
 	else
-		if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaSetLooped",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
 		local str = JS.setLooped:gsub("REP1",tostring(state))
 		dgsSetData(media,"looped",state)
 		return executeBrowserJavascript(media,str)
@@ -254,8 +271,8 @@ function dgsMediaSetSize(media,w,h)
 	else
 		resizeBrowser(media,w,h)
 		local str = JS.setSize
-		local str = str:gsub("REP1",w)
-		local str = str:gsub("REP2",h)
+		str = str:gsub("REP1",w)
+		str = str:gsub("REP2",h)
 		dgsSetData(media,"size",{w,h})
 		return executeBrowserJavascript(media,str)
 	end
@@ -280,7 +297,7 @@ function dgsMediaSetCurrentPosition(media,position) --Failed to Set current posi
 	else
 		if not(dgsElementData[media].sourcePath) then error(dgsGenAsrt(media,"dgsMediaSetCurrentPosition",_,_,_,_,"no media source loaded in dgs-dxmedia")) end
 		local str = JS.setTime
-		local str = str:gsub("REP1",position)
+		str = str:gsub("REP1",position)
 		return executeBrowserJavascript(media,str)
 	end
 end

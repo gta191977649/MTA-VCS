@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="vcs_model_7719" txd="knackers_a2138" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_7719" id="vcs_model_7719" sourceModelId="7719" sourceModelName="vcs_model_7719" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="vcs_model_774_93795" txd="knackers_a2138" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_774_93795" id="vcs_model_7744_e0016" sourceModelId="7744" sourceModelName="vcs_model_7744" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="ebprop_cashreg" txd="ebprop_cashreg" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_cashreg" id="ebprop_cashreg" sourceModelId="7491" sourceModelName="ebprop_cashreg" drawDistanceUnits="world" sourceTxd="ebprop_cashreg" />
+    <definition dff="ebprop_cashre_cd791" txd="ebprop_cashreg" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_cashre_cd791" id="ebprop_cashreg_9b67f" sourceModelId="7491" sourceModelName="ebprop_cashreg" drawDistanceUnits="world" sourceTxd="ebprop_cashreg" />
+    <definition dff="ebprop_clothesrail" txd="ebprop_clothesrail" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_clothesrail" id="ebprop_clothesrail" sourceModelId="7416" sourceModelName="ebprop_clothesrail" drawDistanceUnits="world" sourceTxd="ebprop_clothesrail" />
+    <definition dff="ebprop_clothe_502c2" txd="ebprop_clothesrail" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_clothe_502c2" id="ebprop_clothesrail_de8ec" sourceModelId="7416" sourceModelName="ebprop_clothesrail" drawDistanceUnits="world" sourceTxd="ebprop_clothesrail" />
+</zoneDefinitions>

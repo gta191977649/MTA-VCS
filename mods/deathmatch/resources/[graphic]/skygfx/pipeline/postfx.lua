@@ -229,20 +229,19 @@ function initPostFx()
 end
 
 function renderPostFX() 
-    -- Reset render target pool
+    local rgba1 = getTimeCycleValue("postfx1")
+    local rgba2 = getTimeCycleValue("postfx2")
+    if type(rgba1) ~= "table" or type(rgba2) ~= "table" then return end
+
     RTPool.frameStart()
     DebugResults.frameStart()
-    if SKYGFX.doRadiosity == true then
-        --local radiosityIntensityLimit = SKYGFX.radiosityIntensityLimit == 0 and TIMECYC:getTimeCycleValue("radiosityLimit") or SKYGFX.radiosityIntensityLimit
-        --doRadiosity(radiosityIntensityLimit,SKYGFX.radiosityFilterPasses,SKYGFX.radiosityRenderPasses,SKYGFX.radiosityIntensity)
-        local radiosityIntensity = TIMECYC:getTimeCycleValue("radiosityIntensity")
-        local radiosityIntensityLimit = TIMECYC:getTimeCycleValue("radiosityLimit")
-        doRadiosity(radiosityIntensityLimit,SKYGFX.radiosityFilterPasses,SKYGFX.radiosityRenderPasses,radiosityIntensity)
+    if SKYGFX.doRadiosity then
+        local intensity = getTimeCycleValue("radiosityIntensity")
+        local limit = getTimeCycleValue("radiosityLimit")
+        if type(intensity) == "number" and type(limit) == "number" then
+            doRadiosity(limit, SKYGFX.radiosityFilterPasses, SKYGFX.radiosityRenderPasses, intensity)
+        end
     end
-    
-    
-    local rgba1 = TIMECYC:getTimeCycleValue("postfx1")
-    local rgba2 = TIMECYC:getTimeCycleValue("postfx2")
 
     -- Gotta fix alpha for effects that assume PS2 alpha range
     if SKYGFX.usePCTimecyc then 

@@ -102,8 +102,10 @@ addEventHandler( "onClientHUDRender", root,
 		if not bAllValid or not Settings.var then return end
 		local v = Settings.var	
 		
-        v.bloom = 1+(TIMECYC:getTimeCycleValue("radiosityIntensity") / 50)
-        --v.cutoff =1-(TIMECYC:getTimeCycleValue("radiosityLimit") / 200)
+        local intensity = getTimeCycleValue("radiosityIntensity")
+        if type(intensity) ~= "number" then return end
+        v.bloom = 1 + intensity / 50
+        --v.cutoff =1-(getTimeCycleValue("radiosityLimit") / 200)
         --print(v.bloom)
         --print(v.cutoff)
         

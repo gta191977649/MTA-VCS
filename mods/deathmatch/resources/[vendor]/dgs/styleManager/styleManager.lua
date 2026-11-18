@@ -1,12 +1,13 @@
+dgsLogLuaMemory()
 local loadstring = loadstring
 
 styleSecEnv = {
 	tocolor = tocolor,
 	dxCreateFont = dxCreateFont,
-	dxCreateTexture = function(path) return dxCreateTexture(path,false) end,
+	dxCreateTexture = function(path) return dxCreateTexture(path) end,
 	dxCreateScreenSource = dxCreateScreenSource,
-	dxCreateShader = function(path) return dxCreateShader(path,false) end,
-	dxCreateRenderTarget = dxCreateRenderTarget,
+	dxCreateShader = function(path) return dxCreateShader(path) end,
+	dgsCreateRenderTarget = dgsCreateRenderTarget,
 }
 
 styleManager = {
@@ -56,15 +57,22 @@ function deleteSvg()
 	end
 end
 
-function newSvg(styleName, res, svg, width, height)
-	if not isElement(svg) then
+function newSvg(styleName, res, svgPath, width, height)
+	local svg = svgPath
+	if not isElement(svgPath) then
 		svg = svgCreate(width, height, svg)
-		dgsSetData(svg, "path", svg)
-		dgsSetData(svg, "width", width)
-		dgsSetData(svg, "height", height)
-		dgsAddEventHandler("onClientElementDestroy",svg,"deleteSvg")
+		if isElement(svg) then
+			dgsSetData(svg, "path", svg)
+			dgsSetData(svg, "width", width)
+			dgsSetData(svg, "height", height)
+			dgsAddEventHandler("onClientElementDestroy",svg,"deleteSvg")
+		else
+			outputDebugString("DGS-Style WARNING: Failed to create svg in style '"..styleName.."'",4,255,128,0)
+			outputDebugString("at path '"..tostring(svgPath).."'",4,255,128,0)
+			return false
+		end
 	end
-	local res = res or "global"
+	res = res or "global"
 	styleManager.styles[res].loaded[styleName].created.svg = styleManager.styles[res].loaded[styleName].created.svg or {}
 	styleManager.styles[res].loaded[styleName].created.svg[svg] = true
 	dgsSetData(svg,"styleResource",res)
@@ -72,13 +80,20 @@ function newSvg(styleName, res, svg, width, height)
 	return svg
 end
 
-function newTexture(styleName,res,texture)
-	if not isElement(texture) then
-		texture = dxCreateTexture(texture,false)
-		dgsSetData(texture,"path",texture)
-		dgsAddEventHandler("onClientElementDestroy",texture,"deleteTexture")
+function newTexture(styleName,res,texturePath)
+	local texture = texturePath
+	if not isElement(texturePath) then
+		texture = dxCreateTexture(texturePath)
+		if isElement(texture) then
+			dgsSetData(texture,"path",texturePath)
+			dgsAddEventHandler("onClientElementDestroy",texture,"deleteTexture")
+		else
+			outputDebugString("DGS-Style WARNING: Failed to create texture in style '"..styleName.."'",4,255,128,0)
+			outputDebugString("at path '"..tostring(texturePath).."'",4,255,128,0)
+			return false
+		end
 	end
-	local res = res or "global"
+	res = res or "global"
 	styleManager.styles[res].loaded[styleName].created.texture = styleManager.styles[res].loaded[styleName].created.texture or {}
 	styleManager.styles[res].loaded[styleName].created.texture[texture] = true	--Add a texture into created list in a specific style with a specific resource
 	dgsSetData(texture,"styleResource",res)
@@ -95,12 +110,19 @@ function deleteShader()
 	end
 end
 
-function newShader(styleName,res,shader)
-	if not isElement(shader) then
-		shader = dxCreateShader(shader,false)
-		dgsAddEventHandler("onClientElementDestroy",shader,"deleteShader")
+function newShader(styleName,res,shaderPath)
+	local shader = shaderPath
+	if not isElement(shaderPath) then
+		shader = dxCreateShader(shaderPath)
+		if isElement(shader) then
+			dgsAddEventHandler("onClientElementDestroy",shader,"deleteShader")
+		else
+			outputDebugString("DGS-Style WARNING: Failed to create shader in style '"..styleName.."'",4,255,128,0)
+			outputDebugString("at path '"..tostring(shaderPath).."'",4,255,128,0)
+			return false
+		end
 	end
-	local res = res or "global"
+	res = res or "global"
 	styleManager.styles[res].loaded[styleName].created.shader = styleManager.styles[res].loaded[styleName].created.shader or {}
 	styleManager.styles[res].loaded[styleName].created.shader[shader] = true	--Add a shader into created list in a specific style with a specific resource
 	dgsSetData(shader,"styleResource",res or "global")
@@ -118,13 +140,19 @@ function deleteFont()
 	end
 end
 
-function newFont(styleName,res,font,...)
-	if not isElement(font) then
-		font = dxCreateFont(font,...)
-		dgsSetData(font,"path",texture)
-		dgsAddEventHandler("onClientElementDestroy",font,"deleteFont")
+function newFont(styleName,res,fontPath,...)
+	local font = fontPath
+	if not isElement(fontPath) then
+		font = dxCreateFont(fontPath,...)
+		if isElement(font) then
+			dgsAddEventHandler("onClientElementDestroy",font,"deleteFont")
+		else
+			outputDebugString("DGS-Style WARNING: Failed to create font in style '"..styleName.."'",4,255,128,0)
+			outputDebugString("at path '"..tostring(fontPath).."'",4,255,128,0)
+			return false
+		end
 	end
-	local res = res or "global"
+	res = res or "global"
 	styleManager.styles[res].loaded[styleName].created.font = styleManager.styles[res].loaded[styleName].created.font or {}
 	styleManager.styles[res].loaded[styleName].created.font[font] = true	--Add a font into created list in a specific style with a specific resource
 	dgsSetData(font,"styleResource",res or "global")
@@ -136,11 +164,14 @@ function getStyleFilePath(styleName,res,path)
 	res = res or sourceResource or "global"
 	styleName = styleName or "Default"
 	local testPath = styleManager.styles[res].mapper[styleName].."/"..path
-	return fileExists(testPath) and testPath or false
+	return fileExists(testPath) and testPath or path
 end
 ------------------------------------
 function dgsScanGlobalStyle()
-	local fnc,err = loadstring("return {\n"..fileGetContent("styleManager/styleMapper.lua").."\n}")
+	local handle = fileOpen("styleManager/styleMapper.lua", true)
+	local buffer = fileGetContents(handle)
+	fileClose(handle)
+	local fnc,err = loadstring("return {\n"..buffer.."\n}")
 	if not fnc then
 		error("Failed to load styleMapper ("..err..")")
 	end
@@ -161,7 +192,7 @@ function dgsCreateFontFromStyle(styleName,res,theTable)
 		res = res or sourceResource or "global"
 		local filePath,size,isBold,quality = theTable[1],theTable[2] or 9,theTable[3] or false,theTable[4] or "proof"
 		if filePath then
-			local thePath = not isElement(filePath) and getStyleFilePath(styleName,res,filePath) or filePath
+			local thePath = filePath
 			local isFontSharing = styleManager.styles[res].loaded[styleName].sharedFont
 			if isFontSharing then
 				styleManager.styles[res].loaded[styleName].shared.font = styleManager.styles[res].loaded[styleName].shared.font or {}
@@ -186,7 +217,7 @@ function dgsCreateTextureFromStyle(styleName,res,theTable)
 		local filePath,textureType,shaderSettings = theTable[1],theTable[2],theTable[3]
 		if filePath then
 			textureType = textureType or "image"
-			local thePath = not isElement(filePath) and getStyleFilePath(styleName,res,filePath) or filePath
+			local thePath = filePath
 			if textureType == "image" then
 				local isTextureSharing = styleManager.styles[res].loaded[styleName].sharedTexture
 				if isTextureSharing then
@@ -242,8 +273,8 @@ function dgsAddStyle(styleName,stylePath,res)
 		loaded = setmetatable({},{__index=styleManager.styles.global.loaded}),
 		using = "Default",
 	}
-	local stylePath = string.getPath(res,stylePath)
-	assert(fileExists(stylePath.."/styleSettings.txt"),"Bad argument @dgsAddStyle at argument 3, Failed to add resource style [ styleSetting.txt not found at '"..stylePath.."']")
+	stylePath = string.getPath(res,stylePath)
+	assert(fileExists(stylePath.."/styleSettings.txt"),"Bad argument @dgsAddStyle at argument 3, Failed to add resource style [ styleSettings.txt not found at '"..stylePath.."']")
 	styleManager.styles[res].mapper[styleName] = stylePath
 	return true
 end
@@ -257,30 +288,50 @@ function dgsLoadStyle(styleName,res)
 	if not styleManager.styles[res].loaded[styleName] then
 		local path = styleManager.styles[res].mapper[styleName]
 		assert(fileExists(path.."/styleSettings.txt"),"[DGS Style] Missing style setting ("..path.."/styleSettings.txt)")
-		local fnc,err = loadstring("return {\n"..fileGetContent(path.."/styleSettings.txt").."\n}")
+		local handle = fileOpen(path.."/styleSettings.txt", true)
+		local buffer = fileGetContents(handle)
+		fileClose(handle)
+		local fnc,err = loadstring("return {\n"..buffer.."\n}")
 		if not fnc then
 			error("Error when loading "..path.."/styleSettings.txt ("..err..")")
 		end
 		setfenv(fnc,styleSecEnv)
 		local newStyle = fnc()
-		if styleName ~= "Default" then
-			local gStyle = table.deepcopy(styleManager.styles.global.loaded.Default)
-			for dgsType,settings in pairs(gStyle) do
-				if newStyle[dgsType] then
-					if type(settings) == "table" then
-						for dgsProperty,value in pairs(settings) do
-							if newStyle[dgsType][dgsProperty] ~= nil then
-								gStyle[dgsType] = gStyle[dgsType] or {}
-								gStyle[dgsType][dgsProperty] = newStyle[dgsType][dgsProperty]
+		local gStyle
+		if styleName == "Default" then
+			gStyle = newStyle
+		else
+			gStyle = table.deepcopy(styleManager.styles.global.loaded.Default)
+		end
+		for dgsType,settings in pairs(gStyle) do
+			if newStyle[dgsType] then
+				if type(settings) == "table" then
+					for dgsProperty,value in pairs(settings) do
+						if newStyle[dgsType][dgsProperty] ~= nil then
+							gStyle[dgsType] = gStyle[dgsType] or {}
+							if type(newStyle[dgsType][dgsProperty]) == "table" then
+								for key,value2 in pairs(newStyle[dgsType][dgsProperty]) do
+									if type(newStyle[dgsType][dgsProperty][key]) == "table" then
+										if type(newStyle[dgsType][dgsProperty][key][1]) == "string" then
+											newStyle[dgsType][dgsProperty][key][1] = getStyleFilePath(styleName,res,newStyle[dgsType][dgsProperty][key][1])
+										end
+									else
+										if type(newStyle[dgsType][dgsProperty][1]) == "string" then
+											newStyle[dgsType][dgsProperty][1] = getStyleFilePath(styleName,res,newStyle[dgsType][dgsProperty][1])
+										end
+									end
+								end
 							end
+							gStyle[dgsType][dgsProperty] = newStyle[dgsType][dgsProperty]
+							
 						end
-					elseif newStyle[dgsType] ~= nil then
-						gStyle[dgsType] = newStyle[dgsType]
 					end
+				elseif newStyle[dgsType] ~= nil then
+					gStyle[dgsType] = newStyle[dgsType]
 				end
 			end
-			newStyle = gStyle
 		end
+		newStyle = gStyle
 		styleManager.styles[res].loaded[styleName] = newStyle
 		styleManager.styles[res].loaded[styleName].shared = {}
 		styleManager.styles[res].loaded[styleName].created = {}
@@ -316,8 +367,8 @@ function dgsUnloadStyle(styleName,res)
 				styleManager.styles[res].loaded[styleName] = nil
 			end
 		else
-			for styleName in pairs(styleManager.styles[res].loaded) do
-				dgsUnloadStyle(styleName,res)
+			for istyleName in pairs(styleManager.styles[res].loaded) do
+				dgsUnloadStyle(istyleName,res)
 			end
 		end
 	end
@@ -340,15 +391,6 @@ end
 
 function dgsGetLoadedStyleList(includeGlobal,res)
 	res = res or sourceResource or "global"
-	local loadedListIndex = {}
-	if includeGlobal then
-		for name,data in pairs(styleManager.styles.global.loaded) do
-			loadedListIndex[name] = true
-		end
-	end
-	for name,data in pairs(styleManager.styles[res].loaded) do
-		loadedListIndex[name] = true
-	end
 	local loadedList = {}
 	for name in pairs(loadedList) do
 		loadedList[#loadedList+1] = name
@@ -358,15 +400,6 @@ end
 
 function dgsGetAddedStyleList(includeGlobal,res)
 	res = res or sourceResource or "global"
-	local addedListIndex = {}
-	if includeGlobal then
-		for name,data in pairs(styleManager.styles.global.mapper) do
-			addedListIndex[name] = true
-		end
-	end
-	for name,data in pairs(styleManager.styles[res].mapper) do
-		addedListIndex[name] = true
-	end
 	local addedList = {}
 	for name in pairs(addedList) do
 		addedList[#addedList+1] = name
@@ -390,4 +423,4 @@ addEventHandler("onClientResourceStart",resourceRoot,function()
 	dgsLoadStyle("Default")
 	dgsLoadStyle(using)
 	dgsSetStyle(using)
-end)
+end,false,"high+9999")

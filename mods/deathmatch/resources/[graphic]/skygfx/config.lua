@@ -1,4 +1,3 @@
-TIMECYC = exports.timecyc
 COR = exports.custom_coronas
 
 -- SA Timecyc.dat mapping
@@ -59,6 +58,8 @@ textureListTable.VehiclePSApplyList = {
 textureListTable.txddb = {}
 
 SKYGFX = {
+    profile = "VCS",
+    vcsReducedEffects = false,
     -- start by default
     autoStart = true,
     -- vehicle

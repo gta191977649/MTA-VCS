@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="vcs_model_7718" txd="knackers_087be" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_7718" id="vcs_model_7718" sourceModelId="7718" sourceModelName="vcs_model_7718" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="vcs_model_7739" txd="knackers_fbaac" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_7739" id="vcs_model_7739" sourceModelId="7739" sourceModelName="vcs_model_7739" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

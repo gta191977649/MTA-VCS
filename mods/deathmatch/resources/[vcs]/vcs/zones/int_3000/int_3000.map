@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-1733.597290" posY="633.000000" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="3000" id="vcs_model_7717_25733" />
+    <object posX="-1733.597290" posY="633.000000" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="3000" id="vcs_model_7733" />
+    <object posX="-1735.689796" posY="637.614281" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="0.000000" interior="1" dimension="3000" physicsRoot="1297" simulated="false" frozen="false" breakable="true" id="ebprop_freezer_ab393" damageModel="ebprop_freezer" objectHealth="60" sourceShopMarker="39:1:D" />
+    <object posX="-1734.412788" posY="637.614281" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="0.000000" interior="1" dimension="3000" physicsRoot="1297" simulated="false" frozen="false" breakable="true" id="ebprop_freezer_ab393" damageModel="ebprop_freezer" objectHealth="60" sourceShopMarker="39:1:D" />
+    <object posX="-1732.238174" posY="632.080162" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="-89.999982" interior="1" dimension="3000" physicsRoot="1297" simulated="false" frozen="false" breakable="true" id="ebprop_delicounter_35c51" damageModel="ebprop_delicounter" objectHealth="60" sourceShopMarker="43:1:D" />
+    <object posX="-1732.238174" posY="630.039513" posZ="150.000000" rotX="0.000000" rotY="-0.000000" rotZ="-89.999982" interior="1" dimension="3000" physicsRoot="1297" simulated="false" frozen="false" breakable="true" id="ebprop_delicounter_35c51" damageModel="ebprop_delicounter" objectHealth="60" sourceShopMarker="43:1:D" />
+    <object posX="-1732.132614" posY="635.417557" posZ="151.100000" rotX="0.000000" rotY="-0.000000" rotZ="-179.999909" interior="1" dimension="3000" physicsRoot="1297" simulated="false" frozen="false" breakable="true" id="ebprop_cashreg_9b67f" damageModel="ebprop_cashreg" objectHealth="60" sourceShopMarker="40:1:D" />
+</map>

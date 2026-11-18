@@ -1,0 +1,46 @@
+<meta>
+    <info type="script" name="eagleLoader" author="Blue Eagle" description="Eagle Map Loader" version="4.02.1" />
+    <!-- engineSetModelLODDistance's extendedLod argument requires r22676. -->
+    <min_mta_version client="1.6.0-9.22676" />
+
+    <!-- Config -->
+    <config type="client" src="config.xml" />
+    <script type="client" src="config_loader.lua" />
+
+    <!-- Server Scripts -->
+    <script type="server" src="async.lua" />
+    <script type="server" src="server/server_helper.lua" />
+
+    <!-- Client Files -->
+    <file type="client" src="client/files/sa_id_list.id" />
+    <file type="client" src="client/files/sa_full_id_list.id" />
+    <file type="client" src="client/fx/alpha_fix.fx" />
+
+    <!-- Init Client -->
+    <script type="client" src="client/files/id_helper.lua" />
+    <script type="client" src="client/general_helper.lua" />
+    <script type="client" src="async.lua" />
+
+    <!-- Client Scripts -->
+    <script type="client" src="client/debug_helper.lua" />
+    <script type="client" src="client/cache_helper.lua" />
+    <script type="client" src="client/asset_loader.lua" />
+    <script type="client" src="client/element_stream.lua" />
+    <script type="client" src="client/map_loader.lua" />
+    <script type="client" src="client/water_loader.lua" />
+    <script type="client" src="client/shader_loader.lua" />
+
+    <!-- Client Exported Functions -->
+    <export function="loadMapDefinitions" type="client" />
+    <export function="unloadMapDefinitions" type="client" />
+    <export function="restoreSAWorld" type="client" />
+    <export function="streamObject" type="client" />
+    <export function="streamBuilding" type="client" />
+    <export function="setElementStream" type="client" />
+
+    <!-- Server Exported Functions -->
+    <export function="getMaps" type="server" />
+    <export function="setElementStream" type="server" />
+    <export function="streamBuilding" type="server" />
+    <export function="streamObject" type="server" />
+</meta>

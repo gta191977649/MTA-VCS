@@ -1,0 +1,31 @@
+-- Start dependencies first and stop them in reverse order.
+vcsResources = {
+    { "dgs" },
+    { "custom_coronas" },
+    { "interior" },
+    { "skygfx" },
+    { "font" },
+    { "frontend" },
+    { "mradar" },
+    { "garage" },
+    { "enex" },
+    { "nspray" },
+    { "bombshop" },
+    { "phill_concert" },
+    { "vehicle_name" },
+    { "radio" },
+    { "fx" },
+    { "debug" },
+    { "freeroam" },
+    { "play" },
+
+    -- Standalone tools and alternate renderers keep their current enabled state.
+    { "model", optional = true },
+    { "bloom", optional = true },
+    { "ps2", optional = true },
+    { "timedobj", optional = true },
+    { "drawdist", optional = true },
+    { "txd", optional = true },
+    { "water", optional = true },
+    { "jconv", optional = true },
+}

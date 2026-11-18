@@ -29,9 +29,9 @@ function doBuildingSimplePS()
 
     for _,buildingShader in ipairs(buildPipelineShaders) do
         if not isElement(buildingShader) then return end 
-        local amb = TIMECYC:getTimeCycleValue("amb")
+        local amb = getTimeCycleValue("amb")
         if not amb then return end
-        local dirMult = TIMECYC:getTimeCycleValue("dirMult") * SKYGFX.buildingExtraBrightness
+        local dirMult = getTimeCycleValue("dirMult") * SKYGFX.buildingExtraBrightness
         if not dirMult then return end
 
         local r,g,b = unpack(amb)
@@ -54,8 +54,8 @@ function doBuildingSimplePS()
         dxSetShaderValue(buildingShader,"nightparam",nightparam)
         dxSetShaderValue(buildingShader,"surfAmb",1)
         --fog 
-        local fog_st = TIMECYC:getTimeCycleValue("fogSt")
-        local fog_end = TIMECYC:getTimeCycleValue("farClp")
+        local fog_st = getTimeCycleValue("fogSt")
+        local fog_end = getTimeCycleValue("farClp")
         local fog_range = math.abs(fog_st-fog_end)
         dxSetShaderValue(buildingShader,"fogStart",fog_st)
         dxSetShaderValue(buildingShader,"fogEnd",fog_end)

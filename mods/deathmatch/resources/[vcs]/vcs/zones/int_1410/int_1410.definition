@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="forbes1_cut_int" txd="knackers_3ec98" lodDistance="250.00" flags="disable_backface_culling,draw_last" col="forbes1_cut_int" id="forbes1_cut_int" sourceModelId="6463" sourceModelName="forbes1_cut_int" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

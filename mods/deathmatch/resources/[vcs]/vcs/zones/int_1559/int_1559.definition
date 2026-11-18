@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="vcs_model_7708" txd="knackers_becdf" lodDistance="250.00" flags="disable_backface_culling" col="vcs_model_7708" id="vcs_model_7708" sourceModelId="7708" sourceModelName="vcs_model_7708" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

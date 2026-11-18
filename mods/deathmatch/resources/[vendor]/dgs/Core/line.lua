@@ -1,16 +1,11 @@
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxline","dgsBasic","dgsType2D")
+dgsRegisterProperties("dgs-dxline",{
+	color = 				{	PArg.Color		},
+	lineWidth = 			{	PArg.Number		},
+})
 --Dx Functions
 local dxDrawLine = dxDrawLine
-local dxDrawImage = dxDrawImageExt
-local dxDrawImageSection = dxDrawImageSectionExt
-local dxDrawText = dxDrawText
-local dxGetFontHeight = dxGetFontHeight
-local dxDrawRectangle = dxDrawRectangle
-local dxSetShaderValue = dxSetShaderValue
-local dxGetPixelsSize = dxGetPixelsSize
-local dxGetPixelColor = dxGetPixelColor
-local dxSetRenderTarget = dxSetRenderTarget
-local dxGetTextWidth = dxGetTextWidth
-local dxSetBlendMode = dxSetBlendMode
 --
 local assert = assert
 local type = type
@@ -18,7 +13,8 @@ local tableInsert = table.insert
 local tableRemove = table.remove
 
 function dgsCreateLine(...)
-	local x,y,z,color,width
+	local sRes = sourceResource or resource
+	local x,y,w,h,relative,parent,lineWidth,color
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
 		x = argTable.x or argTable[1]
@@ -38,14 +34,15 @@ function dgsCreateLine(...)
 	if not(type(h) == "number") then error(dgsGenAsrt(h,"dgsCreateLine",4,"number")) end
 	local line = createElement("dgs-dxline")
 	dgsSetType(line,"dgs-dxline")
-	dgsSetParent(line,parent,true,true)
 	dgsElementData[line] = {
 		color = color or 0xFFFFFFFF,
 		lineWidth = lineWidth or 1,
 		lineData = {},
 	}
+	dgsSetParent(line,parent,true,true)
 	calculateGuiPositionSize(line,x,y,relative or false,w,h,relative or false,true)
-	triggerEvent("onDgsCreate",line,sourceResource)
+	dgsApplyGeneralProperties(line,sRes)
+	onDGSElementCreate(line,sRes)
 	return line
 end
 
@@ -68,7 +65,7 @@ function dgsLineAddItem(line,sx,sy,ex,ey,width,color,isRelative)
 	local lData = dgsElementData[line].lineData
 	local lIndex = #lData+1
 	lData[lIndex] = {
-		sx,sy,ex,ey,width or lData.width,color or lData.color,isRelative or false
+		sx,sy,ex,ey,width or lData.lineWidth,color or lData.color,isRelative or false
 	}
 	return lIndex
 end
@@ -149,7 +146,6 @@ end
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------
 dgsRenderer["dgs-dxline"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited,enabledSelf,eleData,parentAlpha,isPostGUI,rndtgt)
-	local eleData = dgsElementData[source]
 	local width = eleData.lineWidth
 	local color = eleData.color
 	local line = eleData.line

@@ -59,11 +59,17 @@ end
 
 function SKYGFX.start() 
     if isStarted then return end
-    -- init shits
-    resetColorFilter()
-    resetSunColor()
-    resetSkyGradient()
-    resetSunSize()
+    if SKYGFX.profile == "VCS" then
+        VCSGraphics.start()
+        isStarted = true
+        return
+    end
+    if not VCSWeather.reloaded then
+        resetColorFilter()
+        resetSunColor()
+        resetSkyGradient()
+        resetSunSize()
+    end
     -- loadtxdDB
     loadtxdDB()
     -- start skygfx
@@ -86,12 +92,19 @@ function SKYGFX.start()
     isStarted = true
 end
 
-function SKYGFX.stop() 
+function SKYGFX.stop(reloading)
     if not isStarted then return end
-    resetColorFilter()
-    resetSunColor()
-    resetSkyGradient()
-    resetSunSize()
+    if SKYGFX.profile == "VCS" then
+        VCSGraphics.stop(reloading)
+        isStarted = false
+        return
+    end
+    if not reloading then
+        resetColorFilter()
+        resetSunColor()
+        resetSkyGradient()
+        resetSunSize()
+    end
     if SKYGFX.fixRotor then 
         disableRotorPs2Fix()
     end
@@ -107,15 +120,19 @@ end
 
 
 addEventHandler( "onClientResourceStart",resourceRoot,function ( startedRes )
+    VCSWeather.start()
     if SKYGFX.autoStart then 
         SKYGFX.start() 
     end
+    VCSWeather.reloaded = nil
     
 end)
 
 addEventHandler( "onClientResourceStop",resourceRoot,
     function (  )
-        SKYGFX.stop() 
+        local reloading = getElementData(root, "leeds_engine:reloading", false)
+        SKYGFX.stop(reloading)
+        VCSWeather.stop(reloading)
     end
 )
 

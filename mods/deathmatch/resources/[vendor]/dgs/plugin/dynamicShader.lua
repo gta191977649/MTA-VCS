@@ -1,3 +1,5 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxdynamicshader")
 dgsGlobalShaderTemplate = {}
 
 function dgsCreateDynamicShader()
@@ -13,7 +15,7 @@ function dgsCreateDynamicShader()
 	})
 	dgsSetData(dynamicShader,"regenerateNeeded",true)
 	dgsSetData(dynamicShader,"shader",false)
-	triggerEvent("onDgsPluginCreate",dynamicShader,sourceResource)
+	dgsTriggerEvent("onDgsPluginCreate",dynamicShader,sourceResource)
 	return dynamicShader
 end
 
@@ -47,6 +49,12 @@ struct PSInput{
     float4 UvToView : TEXCOORD2;
     float4 Diffuse : COLOR0;
 };
+
+struct VSInput{
+    float3 Position : POSITION0;
+    float2 TexCoord : TEXCOORD0;
+    float4 Diffuse : COLOR0;
+};
 ]]	--Default PSInput
 	for name,class in pairs(shaderData.classes) do
 		classString = classString..class.type.." "..name.."{\n"..class.data.."\n};\n\n"
@@ -56,23 +64,23 @@ struct PSInput{
 	local fncString = "//-----------Functions\n"
 	for name,fnc in pairs(shaderData.functions) do
 		if fnc.register then
-			fncString = fncString..fnc.type.." "..name.."("..fnc.argument.."):"..fnc.register.."{\n"..fnc.body.."\n};\n\n"
+			fncString = fncString..fnc.type.." "..name.."("..fnc.argument.."):"..fnc.register.."{\n"..fnc.body.."};\n\n"
 		else
-			fncString = fncString..fnc.type.." "..name.."("..fnc.argument.."){\n"..fnc.body.."\n};\n\n"
+			fncString = fncString..fnc.type.." "..name.."("..fnc.argument.."){\n"..fnc.body.."};\n\n"
 		end
 	end
 	shaderString = shaderString..fncString.."\n"
 	--Main Render (If Enabled)
 	local mainRenderFunction = shaderData.mainRenderFunction
 	if mainRenderFunction then
-		local fncString = "//-----------Main Render Function\n"
-		fncString = fncString.."float4 Main(PSInput PS):COLOR0{\n"
+		local fncMainString = "//-----------Main Render Function\n"
+		fncMainString = fncMainString.."float4 Main(PSInput PS):COLOR0{\n"
 		for index,fncName in ipairs(mainRenderFunction) do
-			fncString = fncString.."PS = "..fncName.."(PS);\n"
+			fncMainString = fncMainString.."	PS = "..fncName.."(PS);\n"
 		end
-		fncString = fncString.."return PS.Diffuse;\n"
-		fncString = fncString.."}\n"
-		shaderString = shaderString..fncString.."\n"
+		fncMainString = fncMainString.."	return PS.Diffuse;\n"
+		fncMainString = fncMainString.."}\n"
+		shaderString = shaderString..fncMainString.."\n"
 	end
 	--Techniques
 	local techniqueString = "//-----------Techniques\n"
@@ -87,11 +95,11 @@ struct PSInput{
 				RenderState = xxx
 			}
 			]]
-			passString = passString.."pass p"..pX.."{\n"
+			passString = passString.."	pass p"..pX.."{\n"
 			for index,passSentence in ipairs(passData) do
-				passString = passString..passSentence[1].." = "..passSentence[2]..";\n"
+				passString = passString.."		"..passSentence[1].." = "..passSentence[2]..";\n"
 			end
-			passString = passString.."}\n"
+			passString = passString.."	}\n"
 		end
 		techniqueString = techniqueString.."technique "..techniqueData.name.."{\n"..passString.."}"
 	end
@@ -137,6 +145,18 @@ function dgsDynamicShaderAddTechnique(dynamicShader,techniqueName)
 	return newIndex
 end
 
+function dgsDynamicShaderRemoveTechnique(dynamicShader,techniqueName)
+	local shaderData = dgsElementData[dynamicShader].shaderData
+	local techniques = shaderData.techniques
+	local id = table.find(techniques,techniqueName,"name")
+	if id then
+		table.remove(techniques,id)
+		return true
+	end
+	shaderData.regenerateNeeded = true
+	return newIndex
+end
+
 function dgsDynamicShaderSetFunction(dynamicShader,retType,functionName,args,functionBody,outputRegister)
 	local shaderData = dgsElementData[dynamicShader].shaderData
 	local functions = shaderData.functions
@@ -145,9 +165,12 @@ function dgsDynamicShaderSetFunction(dynamicShader,retType,functionName,args,fun
 	return true
 end
 
-function dgsDynamicShaderRemoveTechnique(dynamicShader,techniqueName)
-	
+function dgsDynamicShaderRemoveFunction(dynamicShader,functionName)
+	local shaderData = dgsElementData[dynamicShader].shaderData
+	local functions = shaderData.functions
+	functions[functionName] = nil
 	shaderData.regenerateNeeded = true
+	return true
 end
 
 function dgsDynamicShaderAddFunctionToMain(dynamicShader,functionName)
@@ -211,10 +234,11 @@ end
 dgsCustomTexture["dgs-dxdynamicshader"] = function(posX,posY,width,height,u,v,usize,vsize,dynamicShader,rotation,rotationX,rotationY,color,postGUI)
 	local shaderData = dgsElementData[dynamicShader].shaderData
 	if shaderData.regenerateNeeded then
-		if isElement(shaderData.shader) then
-			destroyElement(shaderData.shader)
-		end
+		if isElement(shaderData.shader) then destroyElement(shaderData.shader) end
 		shaderData.shader = dxCreateShader(dgsDynamicShaderGenerate(dynamicShader))
+		if not shaderData.shader then
+			outputDebugString("[DGS]Failed to generate dynamic shader")
+		end
 		shaderData.regenerateNeeded = false
 	end
 	if shaderData.shader then
@@ -223,14 +247,15 @@ dgsCustomTexture["dgs-dxdynamicshader"] = function(posX,posY,width,height,u,v,us
 	return true
 end
 
-
 -- local dynamicShader = dgsCreateDynamicShader()
--- dgsDynamicShaderSetFunction(dynamicShader,"PSInput","texMask1","PSInput PS",[[
+-- dgsDynamicShaderSetFunction(dynamicShader,"PSInput","texMask1","PSInput PS",
+-- [[
 	-- PS.Diffuse.r = PS.TexCoord.x;
 	-- return PS;
 -- ]])
 
--- dgsDynamicShaderSetFunction(dynamicShader,"PSInput","texMask2","PSInput PS",[[
+-- dgsDynamicShaderSetFunction(dynamicShader,"PSInput","texMask2","PSInput PS",
+-- [[
 	-- PS.Diffuse.g = 1-PS.TexCoord.x;
 	-- return PS;
 -- ]])
@@ -243,6 +268,7 @@ end
 
 -- setTimer(function()
 	-- local memo = dgsCreateMemo(300,300,500,500,dgsDynamicShaderGenerate(dynamicShader),false)
+	-- dgsSetAlpha({memo,123},1)
 	-- dgsCreateImage(100,300,200,200,dynamicShader,false)
 	-- setTimer(function()
 		-- dgsDynamicShaderRemoveFunctionFromMain(dynamicShader,"texMask1")

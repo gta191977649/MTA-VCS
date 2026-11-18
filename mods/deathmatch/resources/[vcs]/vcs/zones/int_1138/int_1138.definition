@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="dks_range_int" txd="knackers_3e1b3" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="dks_range_int" id="dks_range_int" sourceModelId="6403" sourceModelName="dks_range_int" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

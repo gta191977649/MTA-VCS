@@ -1,4 +1,3 @@
-HUD = exports.hud
 local readingFlag = false
 local HIT_COOLDOWN_TIME = 3000
 local lastHit = getTickCount()
@@ -86,14 +85,14 @@ function loadEnex(path)
             local link = Enex[source].link
             if link ~= nil and Enex[link] ~= nil then 
                 if Enex[source].flag == 6 then -- only show at entry
-                    HUD:showGameText(Enex[source].name,"LOCATION_NAME",3000)
+                    exports.frontend:showGameText(Enex[source].name, "LOCATION_NAME", 3000)
                 end
                 --fade camera
                 fadeCamera(false,0.5)
                 setTimer(teleportPlayerToLinkedInterior,500,1,source,link)
                 --teleportPlayerToLinkedInterior() 
             else
-                HUD:showGameText("Enex Pair Missing!","LOCATION_NAME",3000)
+                exports.frontend:showTextBox("Interior entrance unavailable.", 3000, false)
                 print(Enex[source].name.." link not found!")
             end
         end

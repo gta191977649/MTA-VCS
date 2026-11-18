@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-54.252388" posY="-1135.293945" posZ="10.065304" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="wshnrthroad16" />
+    <object posX="16.949974" posY="-1032.385742" posZ="9.348328" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="wshnrthroad19_e1ac6" />
+    <object posX="-67.689629" posY="-1068.979004" posZ="9.823468" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="wshnrthroad06" />
+    <object posX="-127.040680" posY="-1047.265015" posZ="49.304550" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="wash_hosp02" />
+    <object posX="-161.679565" posY="-990.122803" posZ="20.233261" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="reni_2_cut_int" />
+    <object posX="179.532501" posY="-1007.547363" posZ="20.492859" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="washotelneon1" forceObject="true" lowLOD="true" />
+    <object posX="52.589012" posY="-1164.837036" posZ="14.573130" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="washbuild025neon" forceObject="true" lowLOD="true" />
+    <object posX="50.136158" posY="-1258.883057" posZ="16.192244" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="newashneon245" forceObject="true" lowLOD="true" />
+    <object posX="-157.168610" posY="-1090.808350" posZ="20.174740" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="nrth3veg50" />
+    <object posX="-117.499352" posY="-1107.801025" posZ="14.127721" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="1" dimension="1426" id="nrth3veg59" />
+</map>

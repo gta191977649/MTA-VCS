@@ -1,12 +1,102 @@
-local loadstring = loadstring
+dgsLogLuaMemory()
+dgsRegisterType("dgs-dxgridlist","dgsBasic","dgsType2D")
+dgsRegisterProperties('dgs-dxgridlist',{
+	autoSort = 				{	PArg.Bool	},
+	bgOffset = 				{	PArg.Number	},
+	bgColor = 				{	PArg.Color	},
+	bgImage = 				{	PArg.Number	},
+	clip = 					{	PArg.Bool 	},
+	columnColor = 			{	PArg.Color	},
+	columnHeight = 			{	PArg.Number	},
+	columnImage = 			{	PArg.Material	},
+	columnOffset = 			{	PArg.Number	},
+	columnRelative = 		{	PArg.Bool	},
+	columnShadow = 			{	{ PArg.Number, PArg.Number, PArg.Color, PArg.Number+PArg.Bool+PArg.Nil, PArg.Font+PArg.Nil }, PArg.Nil	},
+	columnTextColor = 		{	PArg.Color	},
+	columnTextPosOffset = 	{	{ PArg.Number, PArg.Number }	},
+	columnTextSize = 		{	{ PArg.Number, PArg.Number }	},
+	columnWordBreak = 		{	PArg.Bool	},
+	colorCoded = 			{	PArg.Bool	},
+	defaultColumnOffset = 	{	PArg.Number	},
+	defaultSortFunctions = 	{	{ PArg.String, PArg.String }	},
+	defaultSortIcons = 		{	{ PArg.String, PArg.String }	},
+	enableNavigation = 		{	PArg.Bool	},
+	font = 					{	PArg.Font+PArg.String	},
+	leading = 				{	PArg.Number	},
+	multiSelection = 		{	PArg.Bool	},
+	moveHardness = 			{	{ PArg.Number, PArg.Number }	},
+	rowColorTemplate =		{	PArg.Table },
+	rowColor = 				{	{ PArg.Color, PArg.Color,PArg.Color }	},
+	rowHeight = 			{	PArg.Number	},
+	rowImage = 				{	{ PArg.Material, PArg.Material, PArg.Material }	},
+	rowMoveOffset= 			{	PArg.Number	},
+	rowShadow = 			{	{ PArg.Number, PArg.Number, PArg.Color, PArg.Number+PArg.Bool+PArg.Nil, PArg.Font+PArg.Nil }, PArg.Nil	},
+	rowTextColor = 			{	{ PArg.Color, PArg.Color,PArg.Color }, PArg.Color	},
+	rowTextPosOffset = 		{	{ PArg.Number, PArg.Number }	},
+	rowTextSize = 			{	{ PArg.Number, PArg.Number }	},
+	rowWordBreak = 			{	PArg.Bool	},
+	rowImageStyle = 		{	PArg.Nil+PArg.Number },
+	scrollBarState = 		{	{ PArg.Bool+PArg.Nil, PArg.Bool+PArg.Nil }	},
+	scrollBarThick = 		{	PArg.Number	},
+	scrollBarLength = 		{	{ { PArg.Number, PArg.Bool }, { PArg.Number, PArg.Bool } }, { PArg.Nil, PArg.Nil }	},
+	scrollSize = 			{	PArg.Number	},
+	sectionColumnOffset = 	{	PArg.Number	},
+	sectionFont = 			{	PArg.Font+PArg.String	},
+	selectionMode = 		{	PArg.Number	},
+	selectedColumn = 		{	PArg.Number	},
+	sortColumn = 			{	PArg.Number+PArg.Nil	},
+	sortEnabled = 			{	PArg.Bool	},
+})
+--[[Grid List Index]]
+glCol_text = 1
+glCol_width = 2
+glCol_widthSum = 3
+glCol_textAlignment = 4
+glCol_textColor = 5
+glCol_textColorCoded = 6
+glCol_textScaleX = 7
+glCol_textScaleY = 8
+glCol_textFont = 9
+
+glRow_isSection = -5
+glRow_identity = -4
+glRow_bgImage = -3
+glRow_hoverable = -2
+glRow_selectable = -1
+glRow_bgColor = 0
+
+glItem_text = 1
+glItem_textColor = 2
+glItem_textColorCoded = 3
+glItem_textScaleX = 4
+glItem_textScaleY = 5
+glItem_textFont = 6
+glItem_image = 7
+glItem_hoverable = 8
+glItem_selectable = 9
+glItem_attachedElement = 10
+glItem_textAlignment = 11
+glItem_textOffset = 12
+glItem_bgColor = 13
+glItem_bgImage = 14
+glItem_isSection = 15
+glItem_columnOffset = 16
+
+glItemImage_image = 1
+glItemImage_imageColor = 2
+glItemImage_imageX = 3
+glItemImage_imageY = 4
+glItemImage_imageW = 5
+glItemImage_imageH = 6
+glItemImage_imageRelative = 7
+
 --Dx Functions
-local dxDrawImage = dxDrawImageExt
-local dxDrawText = dxDrawText
-local dxDrawRectangle = dxDrawRectangle
+local dxDrawImage = dxDrawImage
+local dgsDrawText = dgsDrawText
 local dxSetRenderTarget = dxSetRenderTarget
 local dxGetTextWidth = dxGetTextWidth
 local dxSetBlendMode = dxSetBlendMode
-local dxCreateRenderTarget = dxCreateRenderTarget
+local dgsCreateRenderTarget = dgsCreateRenderTarget
 --DGS Functions
 local dgsSetType = dgsSetType
 local dgsGetType = dgsGetType
@@ -19,27 +109,22 @@ local dgsAttachToAutoDestroy = dgsAttachToAutoDestroy
 local calculateGuiPositionSize = calculateGuiPositionSize
 local dgsCreateTextureFromStyle = dgsCreateTextureFromStyle
 --Utilities
-local triggerEvent = triggerEvent
+local dgsTriggerEvent = dgsTriggerEvent
 local createElement = createElement
-local assert = assert
 local tonumber = tonumber
 local loadstring = loadstring
 local type = type
-local setmetatable = setmetatable
-local setfenv = setfenv
 local mathLerp = math.lerp
+local mathMin = math.min
+local mathMax = math.max
+local mathClamp = math.clamp
 local tableSort = table.sort
 local tableInsert = table.insert
 local tableRemove = table.remove
 local tableRemoveItemFromArray = table.removeItemFromArray
 local utf8Len = utf8.len
-sortFunctions = {}
+gridlistSortFunctions = {}
 self = false
-mouseButtonOrder = {
-	left=1,
-	middle=2,
-	right=3,
-}
 --[[
 Selection Mode
 1-> Row Selection
@@ -47,6 +132,7 @@ Selection Mode
 3-> Cell Selection
 ]]
 function dgsCreateGridList(...)
+	local sRes = sourceResource or resource
 	local x,y,w,h,relative,parent,columnHeight,bgColor,columnTextColor,columnColor,cColorR,hColorR,sColorR,bgImage,columnImage,nImageR,hImageR,sImageR
 	if select("#",...) == 1 and type(select(1,...)) == "table" then
 		local argTable = ...
@@ -75,81 +161,92 @@ function dgsCreateGridList(...)
 	if not(type(y) == "number") then error(dgsGenAsrt(y,"dgsCreateGridList",2,"number")) end
 	if not(type(w) == "number") then error(dgsGenAsrt(w,"dgsCreateGridList",3,"number")) end
 	if not(type(h) == "number") then error(dgsGenAsrt(h,"dgsCreateGridList",4,"number")) end
-					
-	local res = sourceResource or "global"
+	if relative then 
+		if x > 100 or x < -100 then error(dgsGenAsrt(x,"dgsCreateGridList",1,"float between [0, 1]")) end
+		if y > 100 or y < -100 then error(dgsGenAsrt(y,"dgsCreateGridList",2,"float between [0, 1]")) end
+		if w > 10 or w < -10 then error(dgsGenAsrt(w,"dgsCreateGridList",3,"float between [0, 1]")) end
+		if h > 10 or h < -10 then error(dgsGenAsrt(h,"dgsCreateGridList",4,"float between [0, 1]")) end
+	end
+
+	local res = sRes ~= resource and sRes or "global"
 	local style = styleManager.styles[res]
 	local using = style.using
 	style = style.loaded[using]
-	local systemFont = style.systemFontElement
-	
-	style = style.gridlist
-	local relative = relative or false
-	local scbThick = style.scrollBarThick
-	local columnHeight = tonumber(columnHeight) or style.columnHeight
-	local cColorR = cColorR or style.rowColor[1]
-	local hColorR = hColorR or style.rowColor[2]
-	local sColorR = sColorR or style.rowColor[3]
-	local nImageR = nImageR or dgsCreateTextureFromStyle(using,res,style.rowImage[1])
-	local hImageR = hImageR or dgsCreateTextureFromStyle(using,res,style.rowImage[2])
-	local sImageR = sImageR or dgsCreateTextureFromStyle(using,res,style.rowImage[3])
+
+	local sStyle = style.gridlist
+	relative = relative or false
+	local scbThick = sStyle.scrollBarThick
+	columnHeight = tonumber(columnHeight) or sStyle.columnHeight
+	cColorR = cColorR or sStyle.rowColor[1]
+	hColorR = hColorR or sStyle.rowColor[2]
+	sColorR = sColorR or sStyle.rowColor[3]
+	nImageR = nImageR or dgsCreateTextureFromStyle(using,res,sStyle.rowImage[1])
+	hImageR = hImageR or dgsCreateTextureFromStyle(using,res,sStyle.rowImage[2]) or nImageR
+	sImageR = sImageR or dgsCreateTextureFromStyle(using,res,sStyle.rowImage[3]) or nImageR
 	local gridlist = createElement("dgs-dxgridlist")
 	dgsSetType(gridlist,"dgs-dxgridlist")
-	dgsSetParent(gridlist,parent,true,true)
 	dgsElementData[gridlist] = {
 		autoSort = true,
-		backgroundOffset = style.backgroundOffset,
-		bgImage = bgImage or dgsCreateTextureFromStyle(using,res,style.bgImage),
-		bgColor = bgColor or style.bgColor,
-		colorcoded = false,
+		bgOffset = sStyle.bgOffset,
+		bgImage = bgImage or dgsCreateTextureFromStyle(using,res,sStyle.bgImage),
+		bgColor = bgColor or sStyle.bgColor,
+		colorCoded = false,
 		clip = true,
-		columnColor = columnColor or style.columnColor,
+		columnAlignment = {"left","center"},
+		columnWordBreak = nil,
+		columnColor = columnColor or sStyle.columnColor,
 		columnData = {},
 		columnHeight = columnHeight,
-		columnImage = columnImage or dgsCreateTextureFromStyle(using,res,style.columnImage),
+		columnImage = columnImage or dgsCreateTextureFromStyle(using,res,sStyle.columnImage),
 		columnMoveOffset = 0,
 		columnMoveOffsetTemp = 0,
-		columnTextColor = columnTextColor or style.columnTextColor,
+		columnTextColor = columnTextColor or sStyle.columnTextColor,
 		columnTextPosOffset = {0,0},
-		columnTextSize = style.columnTextSize,
-		columnOffset = style.columnOffset,
+		columnTextSize = sStyle.columnTextSize,
+		columnOffset = sStyle.columnOffset,
 		columnRelative = true,
-		columnShadow = false,
-		defaultColumnOffset = style.defaultColumnOffset,
+		columnShadow = nil,
+		defaultColumnOffset = sStyle.defaultColumnOffset,
 		enableNavigation = true,
-		font = style.font or systemFont,
 		guiCompat = false,
 		itemClick = {},
 		lastSelectedItem = {1,1},
 		leading = 0,
-		mode = false,
-		mouseSelectButton = {true,false,false},
 		moveHardness = {0.1,0.9},
 		moveType = 0,	--0 for wheel, 1 For scroll bar
 		multiSelection = false,
 		nextRenderSort = false,
 		preSelect = {-1,-1},
 		preSelectLastFrame = {-1,-1},
+		filter = nil,
+		filterLogic = "or",
+		updateFilterNextFrame = false,
 		rowColor = {cColorR,hColorR,sColorR},	--Normal/Hover/Selected
-		rowData = {},
-		rowHeight = style.rowHeight,
+		rowData = {isFiltered = false, filteredData = {}},
+		rowHeight = sStyle.rowHeight,	--_RowHeight
 		rowImage = {nImageR,hImageR,sImageR},	--Normal/Hover/Selected
 		rowMoveOffset = 0,
 		rowMoveOffsetTemp = 0,
-		rowTextSize = style.rowTextSize,
-		rowTextColor = style.rowTextColor,
+		rowTextSize = sStyle.rowTextSize,
+		rowTextColor = sStyle.rowTextColor,
 		rowTextPosOffset = {0,0},
 		rowSelect = {},
-		rowShadow = false,
+		rowShadow = nil,
+		rowWordBreak = nil,
+		rowShowUnclippedOnly = false,
+		rowAlignment = {"left","center"},
+		itemPadding = {0,0},
 		scrollBarThick = scbThick,
 		scrollBarLength = {},
 		scrollBarState = {nil,nil},
 		scrollFloor = {false,false},--move offset ->int or float
+		scrollBarAlignment = {"right","bottom"},
 		scrollSize = 60,			--60 pixels
-		sectionColumnOffset = style.sectionColumnOffset,
-		sectionFont = systemFont,
+		scrollBarCoverColumn = true,
+		sectionColumnOffset = sStyle.sectionColumnOffset,
 		selectedColumn = -1,
 		selectionMode = 1,
-		sortColumn = false,
+		sortColumn = nil,
 		sortEnabled = true,
 		defaultSortFunctions = {"greaterLower","greaterUpper"},
 		defaultSortIcons = {"▲","▼"},
@@ -160,53 +257,20 @@ function dgsCreateGridList(...)
 			elementBuffer = {},
 		},
 	}
-	dgsGridListSetSortFunction(gridlist,sortFunctions_upper)
-	dgsAttachToTranslation(gridlist,resourceTranslation[sourceResource or resource])
+	dgsSetParent(gridlist,parent,true,true)
+	dgsAttachToTranslation(gridlist,resourceTranslation[sRes or resource])
 	dgsElementData[gridlist].configNextFrame = false
 	calculateGuiPositionSize(gridlist,x,y,relative,w,h,relative,true)
-	local aSize = dgsElementData[gridlist].absSize
-	local abx,aby = aSize[1],aSize[2]
-	local columnRT,rowRT,columnTextRT,rowTextRT
-	if abx*columnHeight ~= 0 then
-		columnRT,err = dxCreateRenderTarget(abx,columnHeight,true,gridlist,sourceResource)
-		if columnRT then
-			dgsAttachToAutoDestroy(columnRT,gridlist,-1)
-		else
-			outputDebugString(err,2)
-		end
-		columnTextRT,err = dxCreateRenderTarget(abx,columnHeight,true,gridlist,sourceResource)
-		if columnTextRT then
-			dgsAttachToAutoDestroy(columnTextRT,gridlist,-2)
-		else
-			outputDebugString(err,2)
-		end
-	end
-	if abx*(aby-columnHeight-scbThick) ~= 0 then
-		rowRT,err = dxCreateRenderTarget(abx,aby-columnHeight-scbThick,true,gridlist,sourceResource)
-		if rowRT then
-			dgsAttachToAutoDestroy(rowRT,gridlist,-3)
-		else
-			outputDebugString(err,2)
-		end
-		rowTextRT,err = dxCreateRenderTarget(abx,aby-columnHeight-scbThick,true,gridlist,sourceResource)
-		if rowTextRT then
-			dgsAttachToAutoDestroy(rowTextRT,gridlist,-4)
-		else
-			outputDebugString(err,2)
-		end
-	end
-	dgsSetData(gridlist,"columnRT",columnRT)
-	dgsSetData(gridlist,"columnTextRT",columnTextRT)
-	dgsSetData(gridlist,"rowRT",rowRT)
-	dgsSetData(gridlist,"rowTextRT",rowTextRT)
-	local scrollbar1 = dgsCreateScrollBar(abx-scbThick,0,scbThick,aby-scbThick,false,false,gridlist)
+	dgsApplyGeneralProperties(gridlist,sRes)
+	local absSize = dgsElementData[gridlist].absSize
+	local scrollbar1 = dgsCreateScrollBar(absSize[1]-scbThick,0,scbThick,absSize[2]-scbThick,false,false,gridlist)
 	dgsSetData(scrollbar1,"attachedToParent",gridlist)
-	local scrollbar2 = dgsCreateScrollBar(0,aby-scbThick,abx-scbThick,scbThick,true,false,gridlist)
+	local scrollbar2 = dgsCreateScrollBar(0,absSize[2]-scbThick,absSize[1]-scbThick,scbThick,true,false,gridlist)
 	dgsSetData(scrollbar2,"attachedToParent",gridlist)
 	dgsSetVisible(scrollbar1,false)
 	dgsSetVisible(scrollbar2,false)
-	dgsSetData(scrollbar1,"length",{0,true})
-	dgsSetData(scrollbar2,"length",{0,true})
+	dgsSetData(scrollbar1,"cursorLength",{0,true})
+	dgsSetData(scrollbar2,"cursorLength",{0,true})
 	dgsSetData(scrollbar1,"multiplier",{1,false})
 	dgsSetData(scrollbar2,"multiplier",{1,false})
 	dgsSetData(scrollbar1,"minLength",10)
@@ -216,8 +280,51 @@ function dgsCreateGridList(...)
 	dgsSetData(gridlist,"scrollbars",{scrollbar1,scrollbar2})
 	dgsSetData(gridlist,"FromTo",{1,0})
 	dgsAddEventHandler("onDgsGridListSelect",gridlist,"dgsGridListCheckSelect",false)
-	triggerEvent("onDgsCreate",gridlist,sourceResource)
+	onDGSElementCreate(gridlist,sRes)
+	dgsGridListRecreateRenderTarget(gridlist,true)
 	return gridlist
+end
+
+function dgsGridListRecreateRenderTarget(gridlist,lateAlloc)
+	local eleData = dgsElementData[gridlist]
+	if isElement(eleData.columnRT) then destroyElement(eleData.columnRT) end
+	if isElement(eleData.rowRT) then destroyElement(eleData.rowRT) end
+	dgsSetData(gridlist,"columnRT",nil)
+	dgsSetData(gridlist,"rowRT",nil)
+	if lateAlloc then
+		dgsSetData(gridlist,"retrieveRT",true)
+	else
+		local res = eleData.resource
+		local columnRT,rowRT
+		local w,h = eleData.absSize[1],eleData.absSize[2]
+		local columnHeight = eleData.columnHeight
+		local scbThick = eleData.scrollBarThick
+		local scrollbar = eleData.scrollbars
+		local scbThickV,scbThickH = dgsElementData[scrollbar[1]].visible and scbThick or 0,dgsElementData[scrollbar[2]].visible and scbThick or 0
+		local scbAlignment = eleData.scrollBarAlignment
+		local scbAlignmentV,scbAlignmentH = scbAlignment[1],scbAlignment[2]
+		local relSizX,relSizY = w-(scbAlignmentV ~= "left" and scbThickV or 0),h-scbThickH
+		local rowShowRange = relSizY-columnHeight
+		if relSizX*columnHeight ~= 0 then
+			columnRT,err = dgsCreateRenderTarget(relSizX,columnHeight,true,gridlist)
+			if columnRT ~= false then
+				dgsAttachToAutoDestroy(columnRT,gridlist,-1)
+			else
+				outputDebugString(err,2)
+			end
+		end
+		if relSizX*rowShowRange ~= 0 then
+			rowRT,err = dgsCreateRenderTarget(relSizX,rowShowRange,true,gridlist)
+			if rowRT ~= false then
+				dgsAttachToAutoDestroy(rowRT,gridlist,-3)
+			else
+				outputDebugString(err,2)
+			end
+		end
+		dgsSetData(gridlist,"columnRT",columnRT)
+		dgsSetData(gridlist,"rowRT",rowRT)
+		dgsSetData(gridlist,"retrieveRT",nil)
+	end
 end
 
 function checkGridListScrollBar(scb,new,old)
@@ -225,38 +332,44 @@ function checkGridListScrollBar(scb,new,old)
 	if dgsGetType(gridlist) == "dgs-dxgridlist" then
 		local eleData = dgsElementData[gridlist]
 		local scrollbars = eleData.scrollbars
-		local sx,sy = eleData.absSize[1],eleData.absSize[2]
 		local scbThick = eleData.scrollBarThick
 		if source == scrollbars[1] then
+			local rowHeight = eleData.rowHeight
+			local leading = eleData.leading
+			local rowLength
 			local scbThickH = dgsElementData[scrollbars[2]].visible and scbThick or 0
-			local rowLength = #eleData.rowData*(eleData.rowHeight+eleData.leading)
-			local temp = -new*(rowLength-sy+scbThickH+eleData.columnHeight)/100
+			if eleData.rowData.isFiltered then	--If filter is enabled
+				if not eleData.rowData.filteredData then eleData.rowData.filteredData = {} end
+				rowLength = eleData.rowData.filteredData.count*(rowHeight+leading)--_RowHeight
+			else
+				rowLength = #eleData.rowData*(rowHeight+leading)--_RowHeight
+			end
+			local temp = -new*(rowLength-eleData.absSize[2]+scbThickH+eleData.columnHeight)/100
 			if temp <= 0 then
-				local temp = eleData.scrollFloor[1] and temp-temp%1 or temp
+				temp = eleData.scrollFloor[1] and temp-temp%1 or temp
 				dgsSetData(gridlist,"rowMoveOffset",temp)
 			end
-			triggerEvent("onDgsElementScroll",gridlist,source,new,old)
+			dgsTriggerEvent("onDgsElementScroll",gridlist,source,new,old)
 		elseif source == scrollbars[2] then
 			local scbThickV = dgsElementData[scrollbars[1]].visible and scbThick or 0
 			local columnWidth = dgsGridListGetColumnAllWidth(gridlist,#eleData.columnData)
 			local columnOffset = eleData.columnOffset
-			local temp = -new*(columnWidth-sx+scbThickV+columnOffset)/100
+			local temp = -new*(columnWidth-eleData.absSize[1]+scbThickV+columnOffset)/100
 			if temp <= 0 then
-				local temp = eleData.scrollFloor[2] and temp-temp%1 or temp
+				temp = eleData.scrollFloor[2] and temp-temp%1 or temp
 				dgsSetData(gridlist,"columnMoveOffset",temp)
 			end
-			triggerEvent("onDgsElementScroll",gridlist,source,new,old)
+			dgsTriggerEvent("onDgsElementScroll",gridlist,source,new,old)
 		end
 	end
 end
 
-
-function dgsGridListCheckSelect(rowOrTable,c,oldRowOrTable,oldColumn)
+function dgsGridListCheckSelect(rowOrTable,_,oldRowOrTable,oldColumn)
 	local lastSelected = dgsElementData[source].lastSelectedItem
 	if type(rowOrTable) == "table" then
 		local r,c = next(rowOrTable)
 		if r then
-			local c = next(c)
+			c = next(c)
 			dgsSetData(source,"lastSelectedItem",{r,c})
 		end
 	else
@@ -287,12 +400,12 @@ function dgsGridListGetMultiSelectionEnabled(gridlist)
 	return dgsElementData[gridlist].multiSelection
 end
 
-function dgsGridListGetNavigationEnabled(gridlist,state)
+function dgsGridListGetNavigationEnabled(gridlist)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetNavigationEnabled",1,"dgs-dxgridlist")) end
 	return dgsElementData[gridlist].enableNavigation
 end
 
-function dgsGridListSetNavigationEnabled(gridlist)
+function dgsGridListSetNavigationEnabled(gridlist,state)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetNavigationEnabled",1,"dgs-dxgridlist")) end
 	return dgsSetData(gridlist,"enableNavigation",state)
 end
@@ -362,6 +475,18 @@ function dgsGridListSetVerticalScrollPosition(gridlist,vertical)
 	return dgsScrollBarSetScrollPosition(scb[1],vertical)
 end
 
+function dgsGridListSetScrollBarState(gridlist,vertical,horizontal)
+	if not dgsIsType(gridlist,"dgs-dxgridlist") then error(dgsGenAsrt(gridlist,"dgsGridListSetScrollBarState",1,"dgs-dxgridlist")) end
+	dgsSetData(gridlist,"scrollBarState",{vertical,horizontal},true)
+	dgsSetData(gridlist,"configNextFrame",true)
+	return true
+end
+
+function dgsGridListGetScrollBarState(gridlist)
+	if not dgsIsType(gridlist,"dgs-dxgridlist") then error(dgsGenAsrt(gridlist,"dgsGridListGetScrollBarState",1,"dgs-dxgridlist")) end
+	return dgsElementData[gridlist].scrollBarState[1],dgsElementData[gridlist].scrollBarState[2]
+end
+
 function dgsAttachToGridList(element,gridlist,r,c)
 	if not isElement(element) then error(dgsGenAsrt(element,"dgsAttachToGridList",1,"element")) end
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsAttachToGridList",2,"dgs-dxgridlist")) end
@@ -371,14 +496,14 @@ function dgsAttachToGridList(element,gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsAttachToGridList",3,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsAttachToGridList",4,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsAttachToGridList",3,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsAttachToGridList",4,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	if rData[r][c] then
 		dgsDetachElements(element)
 		dgsSetParent(element,gridlist)
-		rData[r][c][10] = rData[r][c][10] or {}
-		tableInsert(rData[r][c][10],element)
+		rData[r][c][glItem_attachedElement] = rData[r][c][glItem_attachedElement] or {}
+		tableInsert(rData[r][c][glItem_attachedElement],element)
 		return dgsSetData(element,"attachedToGridList",{gridlist,r,c})
 	end
 	return false
@@ -400,29 +525,29 @@ function dgsDetachFromGridList(element)
 	local gridlist,r,c = attachData[1],attachData[2],attachData[3]
 	local rData = dgsElementData[gridlist].rowData
 	if rData[r] and rData[r][c] then
-		rData[r][c][10] = rData[r][c][10] or {}
-		tableRemoveItemFromArray(rData[r][c][10],element)
+		rData[r][c][glItem_attachedElement] = rData[r][c][glItem_attachedElement] or {}
+		tableRemoveItemFromArray(rData[r][c][glItem_attachedElement],element)
 	end
 	return dgsSetData(element,"attachedToGridList",nil)
 end
 -----------------------------Sort
-sortFunctions.greaterUpper = function(...)
-	local arg = {...}
+gridlistSortFunctions.greaterUpper = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	return arg[1][column][1] < arg[2][column][1]
+	return a[column][glItem_text] < b[column][glItem_text]
 end
 
-sortFunctions.greaterLower = function(...)
-	local arg = {...}
+gridlistSortFunctions.greaterLower = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	return arg[1][column][1] > arg[2][column][1]
+	return a[column][glItem_text] > b[column][glItem_text]
 end
 
-sortFunctions.numGreaterUpperNumFirst = function(...)
-	local arg = {...}
+gridlistSortFunctions.numGreaterUpperNumFirst = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	local a = tonumber(arg[1][column][1]) or arg[1][column][1]
-	local b = tonumber(arg[2][column][1]) or arg[2][column][1]
+	a = tonumber(a[column][glItem_text]) or a[column][glItem_text]
+	b = tonumber(b[column][glItem_text]) or b[column][glItem_text]
 	local aType = type(a)
 	local bType = type(b)
 	if aType == "string" and bType == "number" then
@@ -433,11 +558,11 @@ sortFunctions.numGreaterUpperNumFirst = function(...)
 	return a < b
 end
 
-sortFunctions.numGreaterLowerNumFirst = function(...)
-	local arg = {...}
+gridlistSortFunctions.numGreaterLowerNumFirst = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	local a = tonumber(arg[1][column][1]) or arg[1][column][1]
-	local b = tonumber(arg[2][column][1]) or arg[2][column][1]
+	a = tonumber(a[column][glItem_text]) or a[column][glItem_text]
+	b = tonumber(b[column][glItem_text]) or b[column][glItem_text]
 	local aType = type(a)
 	local bType = type(b)
 	if aType == "string" and bType == "number" then
@@ -448,14 +573,14 @@ sortFunctions.numGreaterLowerNumFirst = function(...)
 	return a > b
 end
 
-sortFunctions.numGreaterUpper = sortFunctions.numGreaterUpperNumFirst 
-sortFunctions.numGreaterLower = sortFunctions.numGreaterLowerNumFirst 
+gridlistSortFunctions.numGreaterUpper = gridlistSortFunctions.numGreaterUpperNumFirst
+gridlistSortFunctions.numGreaterLower = gridlistSortFunctions.numGreaterLowerNumFirst
 
-sortFunctions.numGreaterUpperStrFirst = function(...)
-	local arg = {...}
+gridlistSortFunctions.numGreaterUpperStrFirst = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	local a = tonumber(arg[1][column][1]) or arg[1][column][1]
-	local b = tonumber(arg[2][column][1]) or arg[2][column][1]
+	a = tonumber(a[column][glItem_text]) or a[column][glItem_text]
+	b = tonumber(b[column][glItem_text]) or b[column][glItem_text]
 	local aType = type(a)
 	local bType = type(b)
 	if aType == "string" and bType == "number" then
@@ -466,11 +591,11 @@ sortFunctions.numGreaterUpperStrFirst = function(...)
 	return a < b
 end
 
-sortFunctions.numGreaterLowerStrFirst = function(...)
-	local arg = {...}
+gridlistSortFunctions.numGreaterLowerStrFirst = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	local a = tonumber(arg[1][column][1]) or arg[1][column][1]
-	local b = tonumber(arg[2][column][1]) or arg[2][column][1]
+	a = tonumber(a[column][glItem_text]) or a[column][glItem_text]
+	b = tonumber(b[column][glItem_text]) or b[column][glItem_text]
 	local aType = type(a)
 	local bType = type(b)
 	if aType == "string" and bType == "number" then
@@ -481,16 +606,16 @@ sortFunctions.numGreaterLowerStrFirst = function(...)
 	return a > b
 end
 
-sortFunctions.longerUpper = function(...)
-	local arg = {...}
+gridlistSortFunctions.longerUpper = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	return utf8Len(arg[1][column][1]) < utf8Len(arg[2][column][1])
+	return utf8Len(a[column][glItem_text]) < utf8Len(b[column][glItem_text])
 end
 
-sortFunctions.longerLower = function(...)
-	local arg = {...}
+gridlistSortFunctions.longerLower = function(...)
+	local a,b = ...
 	local column = dgsElementData[self].sortColumn
-	return utf8Len(arg[1][column][1]) > utf8Len(arg[2][column][1])
+	return utf8Len(a[column][glItem_text]) > utf8Len(b[column][glItem_text])
 end
 
 function dgsGridListSetSortFunction(gridlist,str)
@@ -520,7 +645,7 @@ end
 
 function dgsGridListSetAutoSortEnabled(gridlist,state)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetAutoSortEnabled",1,"dgs-dxgridlist")) end
-	local state = state and true or false
+	state = state and true or false
 	return dgsSetData(gridlist,"autoSort",state)
 end
 
@@ -531,7 +656,7 @@ end
 
 function dgsGridListSetSortEnabled(gridlist,state)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetSortEnabled",1,"dgs-dxgridlist")) end
-	local state = state and true or false
+	state = state and true or false
 	return dgsSetData(gridlist,"sortEnabled",state)
 end
 
@@ -559,7 +684,7 @@ end
 
 function dgsGridListSort(gridlist,sortColumn)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSort",1,"dgs-dxgridlist")) end
-	local sortColumn = tonumber(sortColumn) or dgsElementData[gridlist].sortColumn
+	sortColumn = tonumber(sortColumn) or dgsElementData[gridlist].sortColumn
 	if sortColumn then
 		local rowData = dgsElementData[gridlist].rowData
 		local sortFunction = dgsElementData[gridlist].sortFunction
@@ -574,15 +699,15 @@ function dgsGridListScrollTo(gridlist,r,c,smoothMove)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListScrollTo",1,"dgs-dxgridlist")) end
 	local eleData = dgsElementData[gridlist]
 	if eleData.configNextFrame then configGridList(gridlist) end
-	if r then
+	if r and r ~= -1 then
 		local rData = eleData.rowData
 		local rLen = #rData
 		if rLen == 0 then return false end
 		local rIsNum = type(r) == "number"
 		local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-		if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListScrollTo",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
+		if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListScrollTo",2,"number","1~"..rLen,rNInRange and "row out of range")) end
 		local scb = eleData.scrollbars[2]
-		local rHeight = eleData.rowHeight
+		local rHeight = eleData.rowHeight--_RowHeight
 		local leading = eleData.leading
 		local rHeightLeadingTemp = rHeight+leading
 		local sy = eleData.absSize[2]
@@ -600,13 +725,13 @@ function dgsGridListScrollTo(gridlist,r,c,smoothMove)
 			dgsGridListSetScrollPosition(gridlist,scrollPos)
 		end
 	end
-	if c then
+	if c and c ~= -1 then
 		local cData = eleData.columnData
 		local cLen = #cData
 		if cLen == 0 then return false end
 		local cIsNum = type(c) == "number"
 		local cNInrange = cIsNum and not (c>=1 and c<=cLen)
-		if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListScrollTo",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
+		if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListScrollTo",3,"number","1~"..cLen,cNInRange and "column out of range")) end
 		local scb = eleData.scrollbars[1]
 		local sx = eleData.absSize[1]
 		local cOffset = eleData.columnOffset
@@ -624,15 +749,34 @@ function dgsGridListScrollTo(gridlist,r,c,smoothMove)
 			dgsGridListSetScrollPosition(gridlist,_,scrollPos)
 		end
 	end
+	return true
 end
 
 -----------------------------Column
 --[[
-	columnData Struct:
-	  1																2																N
-	  column1														column2															columnN
-	{{text1,Width,AllWidthFront,Alignment,color,colorcoded,sizex,sizey,font},	{text1,Width,AllWidthFront,alignment,color,colorcoded,sizex,sizey,font},	{text1,Width,AllWidthFront,alignment,color,colorcoded,sizex,sizey,font}, ...}
-
+columnData Struct:
+	{
+		text,
+		width,
+		widthSum,
+		alignment,
+		color,
+		colorCoded,
+		scaleX,
+		scaleY,
+		font
+	},
+	{
+		text,
+		width,
+		widthSum,
+		alignment,
+		color,
+		colorCoded,
+		scaleX,
+		scaleY,
+		font
+	},
 ]]
 function dgsGridListAddColumn(gridlist,name,len,c,alignment)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListAddColumn",1,"dgs-dxgridlist")) end
@@ -649,7 +793,7 @@ function dgsGridListAddColumn(gridlist,name,len,c,alignment)
 	local multiplier = eleData.columnRelative and sx-scrollBarThick or 1
 	local oldLen = 0
 	if cLen > 0 then
-		oldLen = cData[cLen][3]+cData[cLen][2]
+		oldLen = cData[cLen][glCol_widthSum]+cData[cLen][glCol_width]
 	end
 	if type(name) == "table" then
 		_name = name
@@ -660,19 +804,19 @@ function dgsGridListAddColumn(gridlist,name,len,c,alignment)
 		len,
 		oldLen,
 		HorizontalAlign[alignment] or "left",
-		_translationText = _name,
+		_translation_text = _name,
 	})
 	local cTextSize = eleData.columnTextSize
 	local cTextColor = eleData.columnTextColor
-	local colorcoded = eleData.colorcoded
+	local colorCoded = eleData.colorCoded
 	for i=c+1,cLen+1 do
 		cData[i] = {
-			cData[i][1],
-			cData[i][2],
+			cData[i][glCol_text],
+			cData[i][glCol_width],
 			dgsGridListGetColumnAllWidth(gridlist,i-1),
-			cData[i][4],
+			cData[i][glCol_textAlignment],
 			cTextColor,
-			colorcoded,
+			colorCoded,
 			cTextSize[1],
 			cTextSize[2],
 			nil, --Font
@@ -682,17 +826,22 @@ function dgsGridListAddColumn(gridlist,name,len,c,alignment)
 	local rData = eleData.rowData
 	local rTextColor = eleData.rTextColor
 	local scale = eleData.rowTextSize
+
 	for i=1,#rData do
 		rData[i][c]= {
 			"",
 			rTextColor,
-			colorcoded,
+			colorCoded,
 			scale[1],
 			scale[2],
-			font,
+			nil,
 		}
+		if rData[r][glRow_isSection] then
+			rData[r][c][glItem_isSection] = true
+		end
 	end
 	eleData.configNextFrame = true
+	eleData.updateFilterNextFrame = true
 	return c
 end
 
@@ -704,29 +853,29 @@ function dgsGridListSetColumnFont(gridlist,c,font,affectRow)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnFont",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnFont",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
 	if not (fontBuiltIn[font] or dgsGetType(font) == "dx-font") then error(dgsGenAsrt(font,"dgsGridListSetColumnFont",3,"dx-font/string",_,"invalid font")) end
 	--Multilingual
 	if type(font) == "table" then
-		cData[c]._translationFont = font
+		cData[c]._translation_font = font
 		font = dgsGetTranslationFont(gridlist,font,sourceResource)
 	else
-		cData[c]._translationFont = nil
+		cData[c]._translation_font = nil
 	end
-	cData[c][9] = font
+	cData[c][glCol_textFont] = font
 	if affectRow then
 		local rData = eleData.rowData
 		for r=1,#rData do
 			--Multilingual
 			if type(font) == "table" then
-				rData[r][c]._translationFont = font
+				rData[r][c]._translation_font = font
 				font = dgsGetTranslationFont(gridlist,font,sourceResource)
 			else
-				rData[r][c]._translationFont = nil
+				rData[r][c]._translation_font = nil
 			end
 
-			rData[r][c][6] = font
+			rData[r][c][glItem_textFont] = font
 		end
 	end
 	return true
@@ -740,9 +889,9 @@ function dgsGridListGetColumnFont(gridlist,c)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnFont",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	return cData[c][9]	--Font
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnFont",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	return cData[c][glCol_textFont]	--Font
 end
 
 function dgsGridListSetColumnAlignment(gridlist,c,align,affectRow)
@@ -754,13 +903,13 @@ function dgsGridListSetColumnAlignment(gridlist,c,align,affectRow)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnAlignment",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	cData[c][4] = align
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnAlignment",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	cData[c][glCol_textAlignment] = align
 	if affectRow then
 		local rData = eleData.rowData
 		for i=1,#rData do
-			rData[i][c][11] = nil	--Follow Column Alignment
+			rData[i][c][glItem_textAlignment] = nil	--Follow Column Alignment
 		end
 	end
 	return true
@@ -774,9 +923,9 @@ function dgsGridListGetColumnAlignment(gridlist,c)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnAlignment",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	return cData[c][4]	--Alignment
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnAlignment",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	return cData[c][glCol_textAlignment]	--Alignment
 end
 
 function dgsGridListGetColumnTextSize(gridlist,c)
@@ -787,9 +936,9 @@ function dgsGridListGetColumnTextSize(gridlist,c)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnTextSize",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	return cData[c][7],cData[c][8]
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnTextSize",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	return cData[c][glCol_textScaleX],cData[c][glCol_textScaleY]
 end
 
 function dgsGridListSetColumnTextSize(gridlist,c,sizeX,sizeY)
@@ -800,32 +949,32 @@ function dgsGridListSetColumnTextSize(gridlist,c,sizeX,sizeY)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnTextSize",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnTextSize",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
 	if not (type(sizeX) == "number") then error(dgsGenAsrt(sizeX,"dgsGridListSetColumnTextSize",3,"number")) end
-	cData[c][7] = sizeX
-	cData[c][8] = sizeY or sizeX
+	cData[c][glCol_textScaleX] = sizeX
+	cData[c][glCol_textScaleY] = sizeY or sizeX
 	return true
 end
 
 function dgsGridListSetColumnRelative(gridlist,relative,transformColumn)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetColumnRelative",1,"dgs-dxgridlist")) end
 	if not (type(relative) == "boolean") then error(dgsGenAsrt(relative,"dgsGridListSetColumnRelative",2,"bool")) end
-	local relative = relative and true or false
-	local transformColumn = transformColumn == false and true or false
+	relative = relative and true or false
+	transformColumn = transformColumn == false and true or false
 	dgsSetData(gridlist,"columnRelative",relative)
 	if transformColumn then
 		local cData = dgsElementData[gridlist].columnData
 		local w,h = dgsGetSize(v,false)
 		if relative then
 			for k,v in ipairs(cData) do
-				cData[k][2] = cData[k][2]/w
-				cData[k][3] = cData[k][3]/w
+				cData[k][glCol_width] = cData[k][glCol_width]/w
+				cData[k][glCol_widthSum] = cData[k][glCol_widthSum]/w
 			end
 		else
 			for k,v in ipairs(cData) do
-				cData[k][2] = cData[k][2]*w
-				cData[k][3] = cData[k][3]*w
+				cData[k][glCol_width] = cData[k][glCol_width]*w
+				cData[k][glCol_widthSum] = cData[k][glCol_widthSum]*w
 			end
 		end
 	end
@@ -840,16 +989,16 @@ function dgsGridListSetColumnTitle(gridlist,c,name)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnTitle",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnTitle",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
 	if cData[c] then
 		if type(name) == "table" then
-			cData[c]._translationText = name
+			cData[c]._translation_text = name
 			name = dgsTranslate(gridlist,name,sourceResource)
 		else
-			cData[c]._translationText = nil
+			cData[c]._translation_text = nil
 		end
-		cData[c][1] = name
+		cData[c][glCol_text] = name
 		dgsSetData(gridlist,"columnData",cData)
 	end
 end
@@ -862,9 +1011,52 @@ function dgsGridListGetColumnTitle(gridlist,c)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnTitle",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	return columnData[c][1]
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnTitle",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	return cData[c][glCol_text]
+end
+
+function dgsGridListSetColumnTextColor(gridlist,c,...)
+	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetColumnTextColor",1,"dgs-dxgridlist")) end
+	local eleData = dgsElementData[gridlist]
+	local cData = eleData.columnData
+	local cLen = #cData
+	if cLen == 0 then return false end
+	local cIsNum = type(c) == "number"
+	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnTextColor",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	local color
+	local args = {...}
+	if not (type(#args > 0 and args[1]) == "number") then error(dgsGenAsrt(args[1],"dgsGridListSetColumnTextColor",3,"number")) end
+	if #args == 1 then
+		color = args[1]
+	else
+		if not (type(args[2]) == "number") then error(dgsGenAsrt(args[2],"dgsGridListSetColumnTextColor",4,"number")) end
+		if not (type(args[3]) == "number") then error(dgsGenAsrt(args[3],"dgsGridListSetColumnTextColor",5,"number")) end
+		if not (not args[4] or type(args[4]) == "number") then error(dgsGenAsrt(args[4],"dgsGridListSetColumnTextColor",6,"nil/number")) end
+		color = tocolor(args[1],args[2],args[3],args[4])
+	end
+	cData[c][glCol_textColor] = color
+	return true
+end
+
+function dgsGridListGetColumnTextColor(gridlist,c,notSplitColor)
+	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetColumnTextColor",1,"dgs-dxgridlist")) end
+	local eleData = dgsElementData[gridlist]
+	local cData = eleData.columnData
+	local cLen = #cData
+	if cLen == 0 then return false end
+	local cIsNum = type(c) == "number"
+	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnTextColor",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	local color = cData[c][glCol_textColor]
+	if notSplitColor then
+		return color
+	else
+		return fromcolor(color)
+	end
 end
 
 function dgsGridListGetColumnRelative(gridlist)
@@ -885,18 +1077,20 @@ function dgsGridListRemoveColumn(gridlist,c)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListRemoveColumn",2,"number","1~"..cLen, cNInRange and "Out Of Range")) end
-	local c = c-c%1
-	local oldLen = cData[c][3]
-	tableRemove(cData,c)
-	local lastColumnLen = 0
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListRemoveColumn",2,"number","1~"..cLen, cNInRange and "column out of range")) end
+	c = c-c%1
+	local oldLen = cData[c][glCol_widthSum]
+	--local lastColumnLen = 0
 	for i=1,cLen do
 		if i >= c then
-			cData[i][3] = cData[i][3]-oldLen
-			lastColumnLen = cData[i][3]+cData[i][2]
+			cData[i][glCol_widthSum] = cData[i][glCol_widthSum]-oldLen
+			--lastColumnLen = cData[i][glCol_widthSum]+cData[i][glCol_width]
 		end
 	end
-	dgsElementData[gridlist].configNextFrame = true
+	dgsGridListSelectItem(gridlist,1,c,false)	--unselect this column
+	tableRemove(cData,c)
+	eleData.configNextFrame = true
+	eleData.updateFilterNextFrame = true
 	return true
 end
 
@@ -919,11 +1113,15 @@ function dgsGridListSetColumnWidth(gridlist,c,width,relative)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnWidth",2,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetColumnWidth",2,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c = c-c%1
 	if not (type(width) == "number") then error(dgsGenAsrt(c,"dgsGridListSetColumnWidth",3,"number")) end
 	local rlt = eleData.columnRelative
-	relative = relative == nil and rlt or false
+	if relative == nil then
+		relative = rlt
+	else
+		relative = relative and true or false
+	end
 	local scbThick = eleData.scrollBarThick
 	local columnSize = eleData.absSize[1]-scbThick
 	if rlt then
@@ -931,13 +1129,11 @@ function dgsGridListSetColumnWidth(gridlist,c,width,relative)
 	else
 		width = relative and width*columnSize or width
 	end
-	local differ = width-cData[c][2]
-	cData[c][2] = width
-	local lastColumnLen = 0
+	local differ = width-cData[c][glCol_width]
+	cData[c][glCol_width] = width
 	for i=1,cLen do
 		if i > c then
-			cData[i][3] = cData[i][3]+differ
-			lastColumnLen = cData[i][3]+cData[i][2]
+			cData[i][glCol_widthSum] = cData[i][glCol_widthSum]+differ
 		end
 	end
 	dgsElementData[gridlist].configNextFrame = true
@@ -952,31 +1148,33 @@ function dgsGridListAutoSizeColumn(gridlist,c,additionalLength,relative,isByItem
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListAutoSizeColumn",2,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListAutoSizeColumn",2,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c = c-c%1
 	if not (additionalLength == nil or type(additionalLength) == "number") then error(dgsGenAsrt(c,"dgsGridListAutoSizeColumn",3,"number")) end
 	if not additionalLength then relative = false end
+
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.gridlist.font or style.systemFontElement
+
 	if isByItem then
 		local rData = eleData.rowData
 		local maxWidth = 0
-		local colorcoded = eleData.colorcoded
-		local font = eleData.font
-		local sectionFont = eleData.sectionFont or font
+		local colorCoded = eleData.colorCoded
 		local columnSize = eleData.absSize[1]-eleData.scrollBarThick
 		for i=1,#rData do
-			local colorCoded = rData[i][c][3] == nil and colorcoded or rData[i][c][3]
-			local rowFont = rData[i][-5] and (rData[i][c][6] or sectionFont) or (rData[i][c][6] or eleData.rowFont or eleData.columnFont or font)
-			local wid = dxGetTextWidth(rData[i][c][1],rData[i][c][4],rowFont,colorCoded)
+			colorCoded = rData[i][c][glItem_textColorCoded] == nil and colorCoded or rData[i][c][glItem_textColorCoded]
+			local rowFont = rData[i][glRow_isSection] and (rData[i][c][glItem_textFont] or eleData.sectionFont) or (rData[i][c][glItem_textFont] or eleData.rowFont or eleData.columnFont or font)
+			local wid = dxGetTextWidth(rData[i][c][glItem_text],rData[i][c][glItem_textScaleX],rowFont,colorCoded)
 			if maxWidth < wid then
 				maxWidth = wid
 			end
 		end
-		local maxWidth = maxWidth+(relative and additionalLength*columnSize or (additionalLength or 0))
+		maxWidth = maxWidth+(relative and additionalLength*columnSize or (additionalLength or 0))
 		return dgsGridListSetColumnWidth(gridlist,c,maxWidth,false)
 	else
-		local font = cData[c][9] or eleData.columnFont or eleData.font
-		local wid = dxGetTextWidth(cData[c][1],cData[c][7],font)
-		local wid = wid+(relative and additionalLength*wid or (additionalLength or 0))
+		local wid = dxGetTextWidth(cData[c][glCol_text],cData[c][glCol_textScaleX],cData[c][glCol_textFont] or eleData.columnFont or eleData.font)
+		wid = wid+(relative and additionalLength*wid or (additionalLength or 0))
 		return dgsGridListSetColumnWidth(gridlist,c,wid,false)
 	end
 end
@@ -992,12 +1190,12 @@ function dgsGridListGetColumnAllWidth(gridlist,c,relative,mode)
 	if cLen == 0 then return 0 end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnAllWidth",2,"number","0~"..cLen,cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnAllWidth",2,"number","0~"..cLen,cNInRange and "column out of range")) end
+	c = c-c%1
 	local columnSize = eleData.absSize[1]-eleData.scrollBarThick
 	local rlt = eleData.columnRelative
 	if mode then
-		local data = cData[c][3]+cData[c][2]
+		local data = cData[c][glCol_widthSum]+cData[c][glCol_width]
 		if relative then
 			return rlt and data or data/columnSize
 		else
@@ -1006,7 +1204,7 @@ function dgsGridListGetColumnAllWidth(gridlist,c,relative,mode)
 	else
 		local dataLength = 0
 		for i=1,cLen do
-			dataLength = dataLength + cData[i][2]
+			dataLength = dataLength + cData[i][glCol_width]
 			if i == c then
 				if relative then
 					return rlt and dataLength or dataLength/columnSize
@@ -1027,11 +1225,11 @@ function dgsGridListGetColumnWidth(gridlist,c,relative)
 	if cLen == 0 then return false end
 	local cIsNum = type(c) == "number"
 	local cNInRange = cIsNum and not (c>=1 and c<=cLen)
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnWidth",2,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c = c-c%1
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetColumnWidth",2,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c = c-c%1
 	local columnSize = eleData.absSize[1]-eleData.scrollBarThick
 	local rlt = eleData.columnRelative
-	local data = cData[c][2]
+	local data = cData[c][glCol_width]
 	if relative then
 		return rlt and data or data/columnSize
 	else
@@ -1046,13 +1244,13 @@ end
 
 function dgsGridListClearColumn(gridlist,notResetSelected,notResetScrollBar)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListClearColumn",1,"dgs-dxgridlist")) end
- 	local scrollbars = dgsElementData[gridlist].scrollbars
+	local scrollbars = dgsElementData[gridlist].scrollbars
 	local rowData = dgsElementData[gridlist].rowData
 	if not notResetScrollBar then
 		dgsSetData(gridlist,"columnMoveOffset",0)
 		dgsSetData(gridlist,"columnMoveOffsetTemp",0)
-		dgsSetData(scrollbars[2],"length",{0,true})
-		dgsSetData(scrollbars[2],"position",0)
+		dgsSetData(scrollbars[2],"cursorLength",{0,true})
+		dgsSetData(scrollbars[2],"scrollPosition",0)
 		dgsSetVisible(scrollbars[2],false)
 	end
 	if not notResetSelected then
@@ -1070,17 +1268,103 @@ function dgsGridListClearColumn(gridlist,notResetSelected,notResetScrollBar)
 end
 
 -----------------------------Row
---[[
-	rowData Struct:
-	-5			-4					-3							-2				-1				0							1																																																														2																																	...
-	Identity,	columnOffset		bgImage						hoverable		selectable		bgColor						column1																																																													column2																																...
-{
-	{ID,		columnOffset,		{normal,hovering,selected},	true/false,		true/false,		{normal,hovering,selected},	{text,color,colorcoded,scalex,scaley,font,{image,color,imagex,imagey,imagew,imageh,relative},unhoverable,unselectable,attachedElement,alignment,{textOffsetX,textOffsetY,relative},{bgColorNormal,bgColorHovering,bgColorSelected},{bgImageNormal,bgImageHovering,bgImageSelected}},		{text,color,colorcoded,scalex,scaley,font,{image,color,imagex,imagey,imagew,imageh,relative},unhoverable,unselectable,attachedElement,alignment,{textOffsetX,textOffsetY,relative},{bgColorNormal,bgColorHovering,bgColorSelected},{bgImageNormal,bgImageHovering,bgImageSelected}},		...		},
-	{ID,		columnOffset,		{normal,hovering,selected},	true/false,		true/false,		{normal,hovering,selected},	{text,color,colorcoded,scalex,scaley,font,{image,color,imagex,imagey,imagew,imageh,relative},unhoverable,unselectable,attachedElement,alignment,{textOffsetX,textOffsetY,relative},{bgColorNormal,bgColorHovering,bgColorSelected},{bgImageNormal,bgImageHovering,bgImageSelected}},		{text,color,colorcoded,scalex,scaley,font,{image,color,imagex,imagey,imagew,imageh,relative},unhoverable,unselectable,attachedElement,alignment,{textOffsetX,textOffsetY,relative},{bgColorNormal,bgColorHovering,bgColorSelected},{bgImageNormal,bgImageHovering,bgImageSelected}},		...		},
-	{	the same as preview table																																																																																						},
-}
 
-	table[i](i<=0) isn't counted in #table
+--[[
+rowData Struct:
+{
+	/*Row Settings*/
+	[glRow_isSection] = isSection,              --Is section
+	[glRow_identity] = identity,              --Identity
+	[glRow_bgImage] = {                      --Background Image
+			normalImage,
+			hoveringImage,
+			selectedImage,
+		},
+	[glRow_hoverable] = true/false,            --Hoverable
+	[glRow_selectable] = true/false,            --Selectable
+	[glRow_bgColor] = {                       --Background Color
+		normalColor,
+		hoveringColor,
+		selectedColor,
+	},
+	/*Column 1 Data*/
+	[1] = {
+		text,
+		color,
+		colorCoded,
+		scaleX,
+		scaleY,
+		font,
+		{                         --Row Image
+			image,
+			color,
+			imageX,
+			imageY,
+			imageW,
+			imageH,
+			relative,
+		},
+		hoverDisabled,
+		selectDisabled,
+		attachedElement,
+		alignment,
+		{                         --Text Offset
+			textOffsetX,
+			textOffsetY,
+			relative,
+		},
+		{                         --Item Background Color
+			bgColorNormal,
+			bgColorHovering,
+			bgColorSelected,
+		},
+		{                         --Item Background Image
+			bgImageNormal,
+			bgImageHovering,
+			bgImageSelected,
+		},
+		isSection
+		columnOffset,          --Column Offset
+	},
+	/*Column 2 Data*/
+	[2] = {
+		text,
+		color,
+		colorCoded,
+		scaleX,
+		scaleY,
+		font,
+		{                         --Row Image
+			image,
+			color,
+			imageX,
+			imageY,
+			imageW,
+			imageH,
+			relative,
+		},
+		hoverDisabled,
+		selectDisabled,
+		attachedElement,
+		alignment,
+		{                         --Text Offset
+			textOffsetX,
+			textOffsetY,
+			relative,
+		},
+		{                         --Item Background Color
+			bgColorNormal,
+			bgColorHovering,
+			bgColorSelected,
+		},
+		{                         --Item Background Image
+			bgImageNormal,
+			bgImageHovering,
+			bgImageSelected,
+		},
+		isSection
+	},
+}
 ]]
 
 function dgsGridListAddRow(gridlist,r,...)
@@ -1093,14 +1377,13 @@ function dgsGridListAddRow(gridlist,r,...)
 	local rData = eleData.rowData
 	r = tonumber(r) or #rData+1
 	local rowTable = {
-		[-4] = eleData.defaultColumnOffset,
-		[-3] = eleData.rowImage,
-		[-2] = true,
-		[-1] = true,
-		[0] = eleData.rowColor,
+		[glRow_bgImage] = eleData.rowImage,
+		[glRow_hoverable] = true,
+		[glRow_selectable] = true,
+		[glRow_bgColor] = eleData.rowColor,
 	}
 	local rTextColor = eleData.rowTextColor
-	local colorcoded = eleData.colorcoded
+	local colorCoded = eleData.colorCoded
 	local scale = eleData.rowTextSize
 	for i=1,cLen do
 		local text,_text = args[i]
@@ -1109,10 +1392,10 @@ function dgsGridListAddRow(gridlist,r,...)
 			text = dgsTranslate(gridlist,text,sourceResource)
 		end
 		rowTable[i] = {
-			_translationText=_text,
+			_translation_text=_text,
 			tostring(text or ""),
 			rTextColor,
-			colorcoded,
+			colorCoded,
 			scale[1],
 			scale[2],
 			nil, --Font
@@ -1120,6 +1403,7 @@ function dgsGridListAddRow(gridlist,r,...)
 	end
 	tableInsert(rData,r,rowTable)
 	eleData.configNextFrame = true
+	eleData.updateFilterNextFrame = true
 	return r
 end
 
@@ -1127,7 +1411,7 @@ function dgsGridListInsertRowAfter(gridlist,r,...)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListInsertRowAfter",1,"dgs-dxgridlist")) end
 	local eleData = dgsElementData[gridlist]
 	local cData = eleData.columnData
-	assert(#cData > 0 ,"Bad argument @dgsGridListInsertRowAfter, no columns in the grid list")
+	if not (#cData > 0) then error("Bad argument @dgsGridListInsertRowAfter, no columns in the grid list") end
 	return dgsGridListAddRow(gridlist,r+1,...)
 end
 
@@ -1147,14 +1431,13 @@ function dgsGridListAddRows(gridlist,r,t,isRawData)
 	else
 		for i=1,#t do
 			local rowTable = {
-				[-4] = eleData.defaultColumnOffset,
-				[-3] = eleData.rowImage,
-				[-2] = true,
-				[-1] = true,
-				[0] = eleData.rowColor,
+				[glRow_bgImage] = eleData.rowImage,
+				[glRow_hoverable] = true,
+				[glRow_selectable] = true,
+				[glRow_bgColor] = eleData.rowColor,
 			}
 			local rTextColor = eleData.rowTextColor
-			local colorcoded = eleData.colorcoded
+			local colorCoded = eleData.colorCoded
 			local scale = eleData.rowTextSize
 			for col=1,cLen do
 				local text,_text = t[i][col]
@@ -1163,10 +1446,10 @@ function dgsGridListAddRows(gridlist,r,t,isRawData)
 					text = dgsTranslate(gridlist,text,sourceResource)
 				end
 				rowTable[col] = {
-					_translationText=_text,
+					_translation_text=_text,
 					tostring(text or ""),
 					rTextColor,
-					colorcoded,
+					colorCoded,
 					scale[1],
 					scale[2],
 					nil,	--Font
@@ -1175,7 +1458,8 @@ function dgsGridListAddRows(gridlist,r,t,isRawData)
 			tableInsert(rowData,r+i,rowTable)
 		end
 	end
-	dgsElementData[gridlist].configNextFrame = true
+	eleData.configNextFrame = true
+	eleData.updateFilterNextFrame = true
 	return true
 end
 
@@ -1187,10 +1471,10 @@ function dgsGridListSetRowID(gridlist,r,id)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowID",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowID",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if rData[r] then
-		rData[r][-5] = id
+		rData[r][glRow_identity] = id
 		return true
 	end
 	return false
@@ -1204,10 +1488,10 @@ function dgsGridListGetRowID(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowID",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowID",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if rData[r] then
-		return rData[r][-5]
+		return rData[r][glRow_identity]
 	end
 	return false
 end
@@ -1218,7 +1502,7 @@ function dgsGridListFindRowByID(gridlist,id,position)
 	local rData = eleData.rowData
 	position = position or 0
 	for i=1,#rData do
-		if id == rData[i][-5] then
+		if id == rData[i][glRow_identity] then
 			if position == 0 then
 				return i
 			end
@@ -1241,9 +1525,9 @@ function dgsGridListGetRowSelectable(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowSelectable",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
-	return rData[r] and rData[r][-1] or false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowSelectable",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
+	return rData[r] and rData[r][glRow_selectable] or false
 end
 
 function dgsGridListSetRowSelectable(gridlist,r,state)
@@ -1254,10 +1538,10 @@ function dgsGridListSetRowSelectable(gridlist,r,state)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowSelectable",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowSelectable",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if rData[r] then
-		rData[r][-1] = state and true or false
+		rData[r][glRow_selectable] = state and true or false
 		return true
 	end
 	return false
@@ -1271,9 +1555,9 @@ function dgsGridListGetRowHoverable(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowHoverable",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
-	return rData[r] and rData[r][-2] or false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowHoverable",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+    r = r-r%1
+	return rData[r] and rData[r][glRow_hoverable] or false
 end
 
 function dgsGridListSetRowHoverable(gridlist,r,state)
@@ -1284,10 +1568,10 @@ function dgsGridListSetRowHoverable(gridlist,r,state)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowHoverable",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowHoverable",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if rData[r] then
-		rData[r][-2] = state and true or false
+		rData[r][glRow_hoverable] = state and true or false
 		return true
 	end
 	return false
@@ -1301,10 +1585,10 @@ function dgsGridListGetRowBackGroundColor(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowBackGroundColor",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
-	if rData[r][0] then
-		return rData[r][0][1],rData[r][0][2],rData[r][0][3]
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowBackGroundColor",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
+	if rData[r][glRow_bgColor] then
+		return rData[r][glRow_bgColor][1],rData[r][glRow_bgColor][2],rData[r][glRow_bgColor][3]
 	end
 	return false,false,false
 end
@@ -1317,9 +1601,9 @@ function dgsGridListSetRowBackGroundColor(gridlist,r,nClr,sClr,cClr)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowBackGroundColor",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
-	rData[r][0] = {nClr or white,sClr or nClr,cClr or nClr}
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowBackGroundColor",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
+	rData[r][glRow_bgColor] = {nClr or white,sClr or nClr,cClr or nClr}
 	return true
 end
 
@@ -1331,10 +1615,10 @@ function dgsGridListGetRowBackGroundImage(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowBackGroundImage",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
-	if rData[r][-3] then
-		return rData[r][-3][1],rData[r][-3][2],rData[r][-3][3]
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetRowBackGroundImage",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
+	if rData[r][glRow_bgImage] then
+		return rData[r][glRow_bgImage][1],rData[r][glRow_bgImage][2],rData[r][glRow_bgImage][3]
 	end
 	return false,false,false
 end
@@ -1347,8 +1631,8 @@ function dgsGridListSetRowBackGroundImage(gridlist,r,nImg,sImg,cImg)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowBackGroundImage",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowBackGroundImage",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if nImg ~= nil then
 		if not isMaterial(nImg) then error(dgsGenAsrt(nImg,"dgsGridListSetRowBackGroundImage",3,"material")) end
 	end
@@ -1358,38 +1642,40 @@ function dgsGridListSetRowBackGroundImage(gridlist,r,nImg,sImg,cImg)
 	if cImg ~= nil then
 		if not isMaterial(cImg) then error(dgsGenAsrt(cImg,"dgsGridListSetRowBackGroundImage",5,"material")) end
 	end
-	rData[r][-3] = {nImg,sImg,cImg}
+	rData[r][glRow_bgImage] = {nImg,sImg,cImg}
 	return true
 end
 
 function dgsGridListSetRowAsSection(gridlist,r,enabled,enableMouseClickAndSelect)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetRowAsSection",1,"dgs-dxgridlist")) end
 	local eleData = dgsElementData[gridlist]
+	local cData = eleData.columnData
 	local rData = eleData.rowData
+	local cLen = #cData
 	local rLen = #rData
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowAsSection",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetRowAsSection",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
 	if enabled then
-		rData[r][-4] = eleData.sectionColumnOffset
 		if not enableMouseClickAndSelect then
-			rData[r][-2] = false
-			rData[r][-1] = false
+			rData[r][glRow_hoverable] = false
+			rData[r][glRow_selectable] = false
 		else
-			rData[r][-2] = true
-			rData[r][-1] = true
+			rData[r][glRow_hoverable] = true
+			rData[r][glRow_selectable] = true
 		end
 	else
-		rData[r][-4] = eleData.defaultColumnOffset
-		rData[r][-2] = true
-		rData[r][-1] = true
+		rData[r][glRow_hoverable] = true
+		rData[r][glRow_selectable] = true
 	end
-	rData[r][-5] = enabled and true or false --Enable Section Mode
+	rData[r][glRow_isSection] = enable and true or nil
+	for c = 1,cLen do
+		rData[r][c][glItem_isSection] = enabled and true or nil
+	end
 	return true
 end
-
 
 function dgsGridListRemoveRow(gridlist,r)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListRemoveRow",1,"dgs-dxgridlist")) end
@@ -1399,21 +1685,23 @@ function dgsGridListRemoveRow(gridlist,r)
 	if rLen == 0 then return false end
 	local rIsNum = type(r) == "number"
 	local rNInRange = rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListRemoveRow",2,"number","1~"..rLen, rNInRange and "Out Of Range")) end
-	local r = r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListRemoveRow",2,"number","1~"..rLen, rNInRange and "row out of range")) end
+	r = r-r%1
+	dgsGridListSelectItem(gridlist,r,1,false)	--unselect this row
 	tableRemove(rData,r)
-	dgsElementData[gridlist].configNextFrame = true
+	eleData.configNextFrame = true
+	eleData.updateFilterNextFrame = true
 	return true
 end
 
 function dgsGridListClearRow(gridlist,notResetSelected,notResetScrollBar)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListClearRow",1,"dgs-dxgridlist")) end
- 	local scrollbars = dgsElementData[gridlist].scrollbars
+	local scrollbars = dgsElementData[gridlist].scrollbars
 	if not notResetScrollBar then
 		dgsSetData(gridlist,"rowMoveOffset",0)
 		dgsSetData(gridlist,"rowMoveOffsetTemp",0)
-		dgsSetData(scrollbars[1],"length",{0,true})
-		dgsSetData(scrollbars[1],"position",0)
+		dgsSetData(scrollbars[1],"cursorLength",{0,true})
+		dgsSetData(scrollbars[1],"scrollPosition",0)
 		dgsSetVisible(scrollbars[1],false)
 	end
 	if not notResetSelected then
@@ -1433,18 +1721,16 @@ function dgsGridListSetItemData(gridlist,r,c,data,...)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemData",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemData",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemData",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemData",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	if select("#",...) == 0 then
 		rData[r][c][-1] = data
-		return true
 	else
 		rData[r][c][-2] = rData[r][c][-2] or {}
 		rData[r][c][-2][data] = ...
-		return true
 	end
-	return false
+	return true
 end
 
 function dgsGridListGetItemData(gridlist,r,c,key)
@@ -1455,15 +1741,14 @@ function dgsGridListGetItemData(gridlist,r,c,key)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemData",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemData",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemData",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemData",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	if not key then
 		return rData[r][c][-1]
 	else
 		return (rData[r][c][-2] or {})[key] or false
 	end
-	return false
 end
 
 function dgsGridListSetItemFont(gridlist,r,c,font)
@@ -1474,24 +1759,22 @@ function dgsGridListSetItemFont(gridlist,r,c,font)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemFont",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemFont",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local fontType = dgsGetType(font) 
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemFont",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemFont",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	local fontType = dgsGetType(font)
 	if not (fontBuiltIn[font] or fontType == "dx-font" or fontType == "table") then error(dgsGenAsrt(font,"dgsGridListSetItemFont",4,"dx-font/string/table",_,"invalid font")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		--Multilingual
-		if type(font) == "table" then
-			rData[r][c]._translationFont = font
-			font = dgsGetTranslationFont(gridlist,font,sourceResource)
-		else
-			rData[r][c]._translationFont = nil
-		end
-		
-		rData[r][c][6] = font
-		return true
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	--Multilingual
+	if type(font) == "table" then
+		rData[r][c]._translation_font = font
+		font = dgsGetTranslationFont(gridlist,font,sourceResource)
+	else
+		rData[r][c]._translation_font = nil
 	end
-	return false
+
+	rData[r][c][glItem_textFont] = font
+	return true
 end
 
 function dgsGridListGetItemFont(gridlist,r,c)
@@ -1502,13 +1785,11 @@ function dgsGridListGetItemFont(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemFont",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemFont",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		return rData[r][c][6]
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemFont",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemFont",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return rData[r][c][glItem_textFont]
 end
 
 function dgsGridListSetItemTextSize(gridlist,r,c,sizeX,sizeY)
@@ -1519,16 +1800,14 @@ function dgsGridListSetItemTextSize(gridlist,r,c,sizeX,sizeY)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemTextSize",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemTextSize",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemTextSize",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemTextSize",3,"number","1~"..cLen,cNInRange and "column out of range")) end
 	if not (type(sizeX) == "number") then error(dgsGenAsrt(sizeX,"dgsGridListSetItemTextSize",4,"number")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		rData[r][c][4] = sizeX
-		rData[r][c][5] = sizeY or sizeX
-		return true
-	end
-	return false
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	rData[r][c][glItem_textScaleX] = sizeX
+	rData[r][c][glItem_textScaleY] = sizeY or sizeX
+	return true
 end
 
 function dgsGridListGetItemTextSize(gridlist,r,c)
@@ -1539,13 +1818,11 @@ function dgsGridListGetItemTextSize(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemTextSize",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemTextSize",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		return rData[r][c][4],rData[r][c][5]
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemTextSize",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemTextSize",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return rData[r][c][glItem_textScaleX],rData[r][c][glItem_textScaleY]
 end
 
 function dgsGridListSetItemAlignment(gridlist,r,c,align)
@@ -1557,10 +1834,10 @@ function dgsGridListSetItemAlignment(gridlist,r,c,align)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemAlignment",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemAlignment",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	rData[r][c][11] = align
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemAlignment",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemAlignment",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	rData[r][c][glItem_textAlignment] = align
 	return true
 end
 
@@ -1572,10 +1849,10 @@ function dgsGridListGetItemAlignment(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemAlignment",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemAlignment",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	return rData[r][c][11] or cData[c][4]	--Alignment
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemAlignment",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemAlignment",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	return rData[r][c][glItem_textAlignment] or cData[c][glCol_textAlignment]	--Alignment
 end
 
 function dgsGridListSetItemSelectable(gridlist,r,c,state)
@@ -1586,14 +1863,12 @@ function dgsGridListSetItemSelectable(gridlist,r,c,state)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemSelectable",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemSelectable",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r] then
-		rData[r][c][9] = not state or nil
-		return true
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemSelectable",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemSelectable",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	rData[r][c][glItem_selectable] = state
+	return true
 end
 
 function dgsGridListGetItemSelectable(gridlist,r,c)
@@ -1604,13 +1879,11 @@ function dgsGridListGetItemSelectable(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemSelectable",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemSelectable",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r] then
-		return rData[r][c][9] == false
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemSelectable",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemSelectable",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return rData[r][c][glItem_selectable] == nil and rData[r][glRow_selectable] or rData[r][c][glItem_selectable]
 end
 
 function dgsGridListSetItemHoverable(gridlist,r,c,state)
@@ -1621,14 +1894,12 @@ function dgsGridListSetItemHoverable(gridlist,r,c,state)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemHoverable",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemHoverable",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		rData[r][c][8] = not state
-		return true
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemHoverable",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemHoverable",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	rData[r][c][glItem_hoverable] = state
+	return true
 end
 
 function dgsGridListGetItemHoverable(gridlist,r,c)
@@ -1639,20 +1910,18 @@ function dgsGridListGetItemHoverable(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemHoverable",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemHoverable",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		return rData[r][c][8] == false
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemHoverable",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemHoverable",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return rData[r][c][glItem_hoverable] == nil and rData[r][glRow_hoverable] or rData[r][c][glItem_hoverable]
 end
 
 function dgsGridListClear(gridlist,clearRow,clearColumn)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListClear",1,"dgs-dxgridlist")) end
 	clearRow = clearRow ~= false
 	clearColumn = clearColumn and true or false
- 	if clearRow then
+	if clearRow then
 		dgsGridListClearRow(gridlist)
 	end
 	if clearColumn then
@@ -1669,22 +1938,20 @@ function dgsGridListSetItemImage(gridlist,r,c,image,color,offx,offy,w,h,relative
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemImage",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemImage",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		local imageData = rData[r][c][7] or {}
-		imageData[1] = image or imageData[1] or nil
-		imageData[2] = color or imageData[2] or white
-		imageData[3] = offx or imageData[3] or 0
-		imageData[4] = offy or imageData[4] or 0
-		imageData[5] = w or imageData[5] or relative and 1 or dgsGridListGetColumnWidth(gridlist,c,false)
-		imageData[6] = h or imageData[6] or relative and 1 or eleData.rowHeight
-		imageData[7] = relative or false
-		rData[r][c][7] = imageData
-		return true
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemImage",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemImage",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	local imageData = rData[r][c][glItem_image] or {}
+	imageData[1] = image or imageData[1] or nil
+	imageData[2] = color or imageData[2] or white
+	imageData[3] = offx or imageData[3] or 0
+	imageData[4] = offy or imageData[4] or 0
+	imageData[5] = w or imageData[5] or relative and 1 or dgsGridListGetColumnWidth(gridlist,c,false)
+	imageData[6] = h or imageData[6] or relative and 1 or eleData.rowHeight--_RowHeight
+	imageData[7] = relative or false
+	rData[r][c][glItem_image] = imageData
+	return true
 end
 
 function dgsGridListRemoveItemImage(gridlist,r,c)
@@ -1695,14 +1962,12 @@ function dgsGridListRemoveItemImage(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListRemoveItemImage",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListRemoveItemImage",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		rData[r][c][7] = nil
-		return true
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListRemoveItemImage",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListRemoveItemImage",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	rData[r][c][glItem_image] = nil
+	return true
 end
 
 function dgsGridListGetItemImage(gridlist,r,c)
@@ -1713,13 +1978,38 @@ function dgsGridListGetItemImage(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemImage",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemImage",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		return unpack(rData[r][c][7] or {})
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemImage",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemImage",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return unpack(rData[r][c][glItem_image] or {})
+end
+
+function dgsGridListSetItemAsSection(gridlist,r,c,enabled)
+	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetItemAsSection",1,"dgs-dxgridlist")) end
+	local eleData = dgsElementData[gridlist]
+	local cData,rData = eleData.columnData,eleData.rowData
+	local cLen,rLen = #cData,#rData
+	if cLen == 0 or rLen == 0 then return false end
+	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
+	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemAsSection",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemAsSection",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if enabled then
+		if not enableMouseClickAndSelect then
+			rData[r][c][glItem_hoverable] = false
+			rData[r][c][glItem_selectable] = false
+		else
+			rData[r][c][glItem_hoverable] = nil
+			rData[r][c][glItem_selectable] = nil
+		end
+	else
+		rData[r][c][glItem_hoverable] = nil
+		rData[r][c][glItem_selectable] = nil
 	end
-	return false
+	rData[r][c][glItem_isSection] = enabled and true or nil --Enable Section Mode
+	return true
 end
 
 function dgsGridListSetItemText(gridlist,r,c,text,isSection)
@@ -1730,23 +2020,23 @@ function dgsGridListSetItemText(gridlist,r,c,text,isSection)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemText",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemText",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		if type(text) == "table" then
-			rData[r][c]._translationText = text
-			text = dgsTranslate(gridlist,text,sourceResource)
-		else
-			rData[r][c]._translationText = nil
-		end
-		rData[r][c][1] = tostring(text or "")
-		if isSection then
-			dgsGridListSetRowAsSection(gridlist,r,true)
-		end
-		return true
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListSetItemText",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListSetItemText",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	if type(text) == "table" then
+		rData[r][c]._translation_text = text
+		text = dgsTranslate(gridlist,text,sourceResource)
+	else
+		rData[r][c]._translation_text = nil
 	end
-	return false
+	rData[r][c][glItem_text] = tostring(text or "")
+	if isSection then
+		dgsGridListSetRowAsSection(gridlist,r,true)
+	end
+	if eleData.autoSort then eleData.nextRenderSort = true end
+	eleData.updateFilterNextFrame = true
+	return true
 end
 
 function dgsGridListGetItemText(gridlist,r,c)
@@ -1757,59 +2047,88 @@ function dgsGridListGetItemText(gridlist,r,c)
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen),rIsNum and not (r>=1 and r<=rLen)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemText",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemText",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c] then
-		return rData[r][c][1]
-	end
-	return false
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetItemText",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetItemText",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if not rData[r][c] then return false end
+	return rData[r][c][glItem_text]
 end
 
-function dgsGridListGetSelectedItem(gridlist)
+function dgsGridListGetSelectedItem(gridlist, ignoreFilter)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetSelectedItem",1,"dgs-dxgridlist")) end
+	local isFiltered = dgsElementData[gridlist].rowData.isFiltered
 	local r,data = next(dgsElementData[gridlist].rowSelect or {})
+	if isFiltered and not ignoreFilter then
+		r = dgsElementData[gridlist].rowData.filteredData[r] or -1
+	end
 	local c,bool = next(data or {})
 	return r or -1,c or -1
 end
 
-function dgsGridListGetPreselectedItem(gridlist)
+function dgsGridListGetPreselectedItem(gridlist, ignoreFilter)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetPreselectedItem",1,"dgs-dxgridlist")) end
 	local preSelect = dgsElementData[gridlist].preSelect or {}
-	return preSelect[1] or -1,preSelect[2] or -1
+	local preSelectRow,preSelectColumn = preSelect[1] or -1,preSelect[2] or -1
+	local isFiltered = dgsElementData[gridlist].rowData.isFiltered
+	if isFiltered and not ignoreFilter then
+		if preSelectRow >= 1 then
+			preSelectRow = dgsElementData[gridlist].rowData.filteredData[preSelectRow] or -1
+		end
+	end
+	return preSelectRow,preSelectColumn
 end
 
 function dgsGridListGetSelectedItems(gridlist,isOrigin)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetSelectedItems",1,"dgs-dxgridlist")) end
-	local items = dgsElementData[gridlist].rowSelect
+	local eleData = dgsElementData[gridlist]
+	local isFiltered = eleData.rowData.isFiltered
+	local items = eleData.rowSelect
 	if isOrigin then return items end
-	local selectionMode = dgsElementData[gridlist].selectionMode
-	local columndata = dgsElementData[gridlist].columnData
-	local rowData = dgsElementData[gridlist].rowData
+	local selectionMode = eleData.selectionMode
+	local columndata = eleData.columnData
+	local rowData = eleData.rowData
 	local newSelectTable = {}
 	local cnt = 0
 	if not next(items) then return {} end
 	if selectionMode == 1 then
 		for r,val in pairs(items) do
+			local rowID = r
+			if isFiltered then
+				if rowID >= 1 then
+					rowID = eleData.rowData.filteredData[rowID] or -1
+				end
+			end
 			for c=1,#columndata do
 				cnt = cnt+1
-				newSelectTable[cnt] = {row=r,column=c}
+				newSelectTable[cnt] = {row=rowID,column=c}
 			end
 		end
 		return newSelectTable
 	elseif selectionMode == 2 then
 		for r=1,#rowData do
+			local rowID = r
+			if isFiltered then
+				if rowID >= 1 then
+					rowID = eleData.rowData.filteredData[rowID] or -1
+				end
+			end
 			for c,val in pairs(items[1]) do
 				cnt = cnt+1
-				newSelectTable[cnt] = {row=r,column=c}
+				newSelectTable[cnt] = {row=rowID,column=c}
 			end
 		end
 		return newSelectTable
 	elseif selectionMode == 3 then
 		for r,val in pairs(items) do
+			local rowID = r
+			if isFiltered then
+				if rowID >= 1 then
+					rowID = eleData.rowData.filteredData[rowID] or -1
+				end
+			end
 			for c,_ in pairs(val) do
 				cnt = cnt+1
-				newSelectTable[cnt] = {row=r,column=c}
+				newSelectTable[cnt] = {row=rowID,column=c}
 			end
 		end
 		return newSelectTable
@@ -1821,9 +2140,18 @@ function dgsGridListSetSelectedItems(gridlist,tab,isOrigin)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetSelectedItems",1,"dgs-dxgridlist")) end
 	if not (type(tab) == "table") then error(dgsGenAsrt(tab,"dgsGridListSetSelectedItems",2,"table")) end
 	local originSel
+	local eleData = dgsElementData[gridlist]
+	local isFiltered = eleData.rowData.isFiltered
+	if isFiltered then
+		for index,selection in ipairs(tab) do
+			if selection.row >= 1 then
+				selection.row = eleData.rowData.filteredData[selection.row] or -1
+			end
+		end
+	end
 	if isOrigin == true then
 		originSel = {}
-		local selectionMode = dgsElementData[gridlist].selectionMode
+		local selectionMode = eleData.selectionMode
 		if selectionMode == 1 then
 			for k,v in ipairs(tab) do
 				originSel[v.row] = {true}
@@ -1841,22 +2169,22 @@ function dgsGridListSetSelectedItems(gridlist,tab,isOrigin)
 		end
 	end
 	dgsSetData(gridlist,"rowSelect",originSel or tab)
-	triggerEvent("onDgsGridListSelect",gridlist,tab,_)
+	dgsTriggerEvent("onDgsGridListSelect",gridlist,tab,_)
 	return true
 end
 
 function dgsGridListGetSelectedCount(gridlist,r,c)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListGetSelectedCount",1,"dgs-dxgridlist")) end
-	local r,c = r or -1,c or -1
+	r,c = r or -1,c or -1
 	local eleData = dgsElementData[gridlist]
 	local cData,rData = eleData.columnData,eleData.rowData
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cIsNum,rIsNum = type(c) == "number",type(r) == "number"
 	local cNInRange,rNInRange = cIsNum and not (c>=1 and c<=cLen or c == -1),rIsNum and not (r>=1 and r<=rLen or r == -1)
-	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetSelectedCount",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetSelectedCount",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if not (rIsNum and not rNInRange) then error(dgsGenAsrt(r,"dgsGridListGetSelectedCount",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if not (cIsNum and not cNInRange) then error(dgsGenAsrt(c,"dgsGridListGetSelectedCount",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	local selectedItems = dgsGridListGetSelectedItems(gridlist)
 	if r == -1 then
 		if c == -1 then
@@ -1890,17 +2218,17 @@ function dgsGridListGetSelectedCount(gridlist,r,c)
 	end
 end
 
-function dgsGridListSetSelectedItem(gridlist,r,c,scrollTo,isOrigin)
+function dgsGridListSetSelectedItem(gridlist,r,c,scrollTo)
 	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetSelectedItem",1,"dgs-dxgridlist")) end
-	local r,c = r or -1,c or -1
+	r,c = r or -1,c or -1
 	local eleData = dgsElementData[gridlist]
 	local cData,rData = eleData.columnData,eleData.rowData
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
-	local cNInRange,rNInRange = not (c>=1 and c<=cLen or c == -1),not (r>=1 and r<=rLen or r == -1)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetSelectedItem",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetSelectedItem",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	local cNInRange,rNInRange = not (tonumber(c) and c>=1 and c<=cLen or c == -1),not (tonumber(r) and r>=1 and r<=rLen or r == -1)
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetSelectedItem",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetSelectedItem",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	local old1,old2
 	if eleData.multiSelection then
 		old1 = eleData.rowSelect
@@ -1933,13 +2261,20 @@ function dgsGridListSetSelectedItem(gridlist,r,c,scrollTo,isOrigin)
 	end
 	eleData.itemClick = {r,c}
 	if eleData.multiSelection then
-		triggerEvent("onDgsGridListSelect",gridlist,r,c,old1)
+		dgsTriggerEvent("onDgsGridListSelect",gridlist,r,c,old1)
 	else
-		triggerEvent("onDgsGridListSelect",gridlist,r,c,old1 or -1,old2 or -1)
+		dgsTriggerEvent("onDgsGridListSelect",gridlist,r,c,old1 or -1,old2 or -1)
 	end
 	if scrollTo then
 		dgsGridListScrollTo(gridlist,r,c)
 	end
+	return true
+end
+
+function dgsGridListClearSelectedItem(gridlist)
+	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetSelectedItem",1,"dgs-dxgridlist")) end
+	local eleData = dgsElementData[gridlist]
+	dgsSetData(gridlist,"rowSelect",{})
 	return true
 end
 
@@ -1950,39 +2285,37 @@ function dgsGridListSelectItem(gridlist,r,c,state)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSelectItem",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSelectItem",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSelectItem",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSelectItem",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	local selectedItem = eleData.rowSelect
-	if rData[r][c] then
-		if not eleData.multiSelection then
-			selectedItem = {}
-		end
-		local selectionMode = eleData.selectionMode
-		if selectionMode == 1 then
-			selectedItem[r] = selectedItem[r] or {}
-			selectedItem[r][1] = state or nil
-			if not next(selectedItem[r]) then
-				selectedItem[r] = nil
-			end
-		elseif selectionMode == 2 then
-			selectedItem[1] = selectedItem[1] or {}
-			selectedItem[1][c] = state or nil
-			if not next(selectedItem[1]) then
-				selectedItem[1] = nil
-			end
-		elseif selectionMode == 3 then
-			selectedItem[r] = selectedItem[r] or {}
-			selectedItem[r][c] = state or nil
-			if not next(selectedItem[r]) then
-				selectedItem[r] = nil
-			end
-		end
-		triggerEvent("onDgsGridListSelect",gridlist,r,c)
-		eleData.rowSelect = selectedItem
-		return true
+	if not rData[r][c] then return false end
+	if not eleData.multiSelection then
+		selectedItem = {}
 	end
-	return false
+	local selectionMode = eleData.selectionMode
+	if selectionMode == 1 then
+		selectedItem[r] = selectedItem[r] or {}
+		selectedItem[r][1] = state or nil
+		if not next(selectedItem[r]) then
+			selectedItem[r] = nil
+		end
+	elseif selectionMode == 2 then
+		selectedItem[1] = selectedItem[1] or {}
+		selectedItem[1][c] = state or nil
+		if not next(selectedItem[1]) then
+			selectedItem[1] = nil
+		end
+	elseif selectionMode == 3 then
+		selectedItem[r] = selectedItem[r] or {}
+		selectedItem[r][c] = state or nil
+		if not next(selectedItem[r]) then
+			selectedItem[r] = nil
+		end
+	end
+	dgsTriggerEvent("onDgsGridListSelect",gridlist,r,c)
+	eleData.rowSelect = selectedItem
+	return true
 end
 
 function dgsGridListItemIsSelected(gridlist,r,c)
@@ -1992,9 +2325,9 @@ function dgsGridListItemIsSelected(gridlist,r,c)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListItemIsSelected",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListItemIsSelected",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListItemIsSelected",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListItemIsSelected",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	local selectedItem = eleData.rowSelect
 	if rData[r][c] then
 		local selectionMode = eleData.selectionMode
@@ -2019,32 +2352,31 @@ function dgsGridListSetItemTextOffset(gridlist,r,c,offsetX,offsetY,relative)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen or c == -1),not (r>=1 and r<=rLen or r == -1)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemTextOffset",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemTextOffset",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	--Deal with the color
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemTextOffset",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemTextOffset",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	if r == -1 then
 		if c == -1 then
 			for i=1,rLen do
 				for j=1,cLen do
-					rData[i][j][12] = offsetX and {offsetX,offsetY,relative} or nil
+					rData[i][j][glItem_textOffset] = offsetX and {offsetX,offsetY,relative} or nil
 				end
 			end
 		else
 			for i=1,rLen do
-				rData[i][c][12] = offsetX and {offsetX,offsetY,relative} or nil
+				rData[i][c][glItem_textOffset] = offsetX and {offsetX,offsetY,relative} or nil
 			end
 		end
 	else
 		if c == -1 then
 			for j=1,cLen do
-				rData[r][j][12] = offsetX and {offsetX,offsetY,relative} or nil
+				rData[r][j][glItem_textOffset] = offsetX and {offsetX,offsetY,relative} or nil
 			end
 		else
-			rData[r][c][12] = offsetX and {offsetX,offsetY,relative} or nil
+			rData[r][c][glItem_textOffset] = offsetX and {offsetX,offsetY,relative} or nil
 		end
 	end
-	return false
+	return true
 end
 
 function dgsGridListGetItemTextOffset(gridlist,r,c)
@@ -2054,10 +2386,10 @@ function dgsGridListGetItemTextOffset(gridlist,r,c)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemTextOffset",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemTextOffset",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	return rData[r][c][12][1],rData[r][c][12][2],rData[r][c][12][3]
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemTextOffset",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemTextOffset",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	return rData[r][c][glItem_textOffset][1],rData[r][c][glItem_textOffset][2],rData[r][c][glItem_textOffset][3]
 end
 
 function dgsGridListSetItemColor(gridlist,r,c,...)
@@ -2067,47 +2399,50 @@ function dgsGridListSetItemColor(gridlist,r,c,...)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen or c == -1),not (r>=1 and r<=rLen or r == -1)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemColor",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemColor",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemColor",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemColor",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	--Deal with the color
 	local colors
-	local argLen = select("#",...)
 	local args = {...}
-	if argLen == 0 then
-		error(dgsGenAsrt(args[1],"dgsGridListSetItemColor",2,"table/number"))
-	elseif argLen == 1 and type(args[1]) == "table" then
-		colors = args[1]
-	elseif argLen >= 3 then
-		if not (type(args[1]) == "number") then error(dgsGenAsrt(args[1],"dgsGridListSetItemColor",2,"number")) end
-		if not (type(args[2]) == "number") then error(dgsGenAsrt(args[2],"dgsGridListSetItemColor",3,"number")) end
-		if not (type(args[3]) == "number") then error(dgsGenAsrt(args[3],"dgsGridListSetItemColor",4,"number")) end
-		if not (not args[4] or type(args[4]) == "number") then error(dgsGenAsrt(args[4],"dgsGridListSetItemColor",5,"nil/number")) end
-		local clr = tocolor(...)
+	if #args == 0 then
+		error(dgsGenAsrt(args[1],"dgsGridListSetItemColor",4,"table/number"))
+	elseif #args == 1 then
+		if type(args[1]) == "table" then
+			colors = {args[1][1],args[1][2] or args[1][1],args[1][3] or args[1][1]}
+		else
+			colors = {args[1],args[1],args[1]}
+		end
+	elseif #args >= 3 then
+		if not (type(args[1]) == "number") then error(dgsGenAsrt(args[1],"dgsGridListSetItemColor",4,"number")) end
+		if not (type(args[2]) == "number") then error(dgsGenAsrt(args[2],"dgsGridListSetItemColor",5,"number")) end
+		if not (type(args[3]) == "number") then error(dgsGenAsrt(args[3],"dgsGridListSetItemColor",6,"number")) end
+		if not (not args[4] or type(args[4]) == "number") then error(dgsGenAsrt(args[4],"dgsGridListSetItemColor",7,"nil/number")) end
+		local clr = tocolor(args[1],args[2],args[3],args[4] or 255)
 		colors = {clr,clr,clr}
 	end
 	if r == -1 then
 		if c == -1 then
 			for i=1,rLen do
 				for j=1,cLen do
-					rData[i][j][2] = {colors[1],colors[2],colors[3]}
+					rData[i][j][glItem_textColor] = {colors[1],colors[2],colors[3]}
 				end
 			end
 		else
 			for i=1,rLen do
-				rData[i][c][2] = {colors[1],colors[2],colors[3]}
+				rData[i][c][glItem_textColor] = {colors[1],colors[2],colors[3]}
 			end
 		end
 	else
 		if c == -1 then
 			for j=1,cLen do
-				rData[r][j][2] = {colors[1],colors[2],colors[3]}
+				rData[r][j][glItem_textColor] = {colors[1],colors[2],colors[3]}
 			end
 		else
-			rData[r][c][2] = {colors[1],colors[2],colors[3]}
+			rData[r][c][glItem_textColor] = {colors[1],colors[2],colors[3]}
 		end
 	end
-	return false
+	return true
 end
 
 function dgsGridListGetItemColor(gridlist,r,c,notSplitColor)
@@ -2117,14 +2452,35 @@ function dgsGridListGetItemColor(gridlist,r,c,notSplitColor)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemColor",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemColor",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemColor",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemColor",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	if notSplitColor then
-		return unpack(rData[r][c][2])
+		return rData[r][c][glItem_textColor][1],rData[r][c][glItem_textColor][2],rData[r][c][glItem_textColor][3]
 	else
-		return fromColor(rData[r][c][2][1]),fromColor(rData[r][c][2][2]),fromColor(rData[r][c][2][3])
+		local dR,dG,dB,dA = fromColor(rData[r][c][glItem_textColor][1])
+		local hR,hG,hB,hA = fromColor(rData[r][c][glItem_textColor][2])
+		local cR,cG,cB,cA = fromColor(rData[r][c][glItem_textColor][3])
+		return dR,dG,dB,dA,hR,hG,hB,hA,cR,cG,cB,cA
 	end
+end
+
+function dgsGridListSetItemBackGroundColorTemplate(gridlist,template,applyToAll)
+	if dgsGetType(gridlist) ~= "dgs-dxgridlist" then error(dgsGenAsrt(gridlist,"dgsGridListSetItemBackGroundColorTemplate",1,"dgs-dxgridlist")) end
+	if not template then return dgsSetData(gridlist,"itemColorTemplate",nil) end
+	if type(template) ~= "table" then error(dgsGenAsrt(template,"dgsGridListSetItemBackGroundColorTemplate",2,"table/nil")) end
+	if #template == 0 then error(dgsGenAsrt(template,"dgsGridListSetItemBackGroundColorTemplate",2,"table","{{colors,...},...}","Bad Format")) end
+	if applyToAll then
+		local eleData = dgsElementData[gridlist]
+		local cData,rData = eleData.columnData,eleData.rowData
+		local cLen,rLen = #cData,#rData
+		for i=1,rLen do
+			for j=1,cLen do
+				rData[i][j][glItem_bgColor] = nil
+			end
+		end
+	end
+	dgsSetData(gridlist,"itemColorTemplate",template)
 end
 
 function dgsGridListSetItemBackGroundColor(gridlist,r,c,...)
@@ -2134,44 +2490,43 @@ function dgsGridListSetItemBackGroundColor(gridlist,r,c,...)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen or c == -1),not (r>=1 and r<=rLen or r == -1)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemBackGroundColor",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemBackGroundColor",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemBackGroundColor",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemBackGroundColor",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 	--Deal with the color
 	local colors
-	local argLen = select("#",...)
 	local args = {...}
-	if argLen == 0 then
-		error(dgsGenAsrt(args[1],"dgsGridListSetItemBackGroundColor",2,"table/number"))
-	elseif argLen == 1 and type(args[1]) == "table" then
+	if #args == 0 then
+		error(dgsGenAsrt(args[1],"dgsGridListSetItemBackGroundColor",4,"table/number"))
+	elseif #args == 1 and type(args[1]) == "table" then
 		colors = args[1]
-	elseif argLen >= 3 then
-		if not (type(args[1]) == "number") then error(dgsGenAsrt(args[1],"dgsGridListSetItemBackGroundColor",2,"number")) end
-		if not (type(args[2]) == "number") then error(dgsGenAsrt(args[2],"dgsGridListSetItemBackGroundColor",3,"number")) end
-		if not (type(args[3]) == "number") then error(dgsGenAsrt(args[3],"dgsGridListSetItemBackGroundColor",4,"number")) end
-		if not (not args[4] or type(args[4]) == "number") then error(dgsGenAsrt(args[4],"dgsGridListSetItemBackGroundColor",5,"nil/number")) end
-		local clr = tocolor(...)
+	elseif #args >= 3 then
+		if not (type(args[1]) == "number") then error(dgsGenAsrt(args[1],"dgsGridListSetItemBackGroundColor",4,"number")) end
+		if not (type(args[2]) == "number") then error(dgsGenAsrt(args[2],"dgsGridListSetItemBackGroundColor",5,"number")) end
+		if not (type(args[3]) == "number") then error(dgsGenAsrt(args[3],"dgsGridListSetItemBackGroundColor",6,"number")) end
+		if not (not args[4] or type(args[4]) == "number") then error(dgsGenAsrt(args[4],"dgsGridListSetItemBackGroundColor",7,"nil/number")) end
+		local clr = tocolor(args[1],args[2],args[3],args[4] or 255)
 		colors = {clr,clr,clr}
 	end
 	if r == -1 then
 		if c == -1 then
 			for i=1,rLen do
 				for j=1,cLen do
-					rData[i][j][13] = {colors[1],colors[2],colors[3]}
+					rData[i][j][glItem_bgColor] = {colors[1],colors[2],colors[3]}
 				end
 			end
 		else
 			for i=1,rLen do
-				rData[i][c][13] = {colors[1],colors[2],colors[3]}
+				rData[i][c][glItem_bgColor] = {colors[1],colors[2],colors[3]}
 			end
 		end
 	else
 		if c == -1 then
 			for j=1,cLen do
-				rData[r][j][13] = {colors[1],colors[2],colors[3]}
+				rData[r][j][glItem_bgColor] = {colors[1],colors[2],colors[3]}
 			end
 		else
-			rData[r][c][13] = {colors[1],colors[2],colors[3]}
+			rData[r][c][glItem_bgColor] = {colors[1],colors[2],colors[3]}
 		end
 	end
 	return false
@@ -2184,19 +2539,30 @@ function dgsGridListGetItemBackGroundColor(gridlist,r,c,notSplitColor)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemBackGroundColor",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemBackGroundColor",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c][13] then
-		if notSplitColor then
-			return rData[r][c][13][1],rData[r][c][13][2],rData[r][c][13][3]
-		else
-			return fromColor(rData[r][c][13][1]),fromColor(rData[r][c][13][2]),fromColor(rData[r][c][13][3])
-		end
-	elseif rData[r][0] then
-		return rData[r][0][1],rData[r][0][2],rData[r][0][3]
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemBackGroundColor",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemBackGroundColor",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	local item = rData[r][c]
+	local defColor,hovColor,cliColor
+	if item[glItem_bgColor] then
+		defColor = item[glItem_bgColor][1]
+		hovColor = item[glItem_bgColor][2]
+		cliColor = item[glItem_bgColor][3]
+	elseif rData[r][glRow_bgColor] then
+		defColor = rData[r][glRow_bgColor][1]
+		hovColor = rData[r][glRow_bgColor][2]
+		cliColor = rData[r][glRow_bgColor][3]
+	else
+		return false,false,false
 	end
-	return false,false,false
+	if notSplitColor then
+		return defColor,hovColor,cliColor
+	else
+		local dR,dG,dB,dA = fromColor(defColor)
+		local hR,hG,hB,hA = fromColor(hovColor)
+		local cR,cG,cB,cA = fromColor(cliColor)
+		return dR,dG,dB,dA,hR,hG,hB,hA,cR,cG,cB,cA
+	end
 end
 
 function dgsGridListSetItemBackGroundImage(gridlist,r,c,nImg,sImg,cImg)
@@ -2206,9 +2572,9 @@ function dgsGridListSetItemBackGroundImage(gridlist,r,c,nImg,sImg,cImg)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen or c == -1),not (r>=1 and r<=rLen or r == -1)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemBackGroundImage",2,"number","-1,1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemBackGroundImage",3,"number","-1,1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListSetItemBackGroundImage",2,"number","-1,1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListSetItemBackGroundImage",3,"number","-1,1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
 
 	if nImg ~= nil then
 		if not isMaterial(nImg) then error(dgsGenAsrt(nImg,"dgsGridListSetItemBackGroundImage",4,"material")) end
@@ -2223,21 +2589,21 @@ function dgsGridListSetItemBackGroundImage(gridlist,r,c,nImg,sImg,cImg)
 		if c == -1 then
 			for i=1,rLen do
 				for j=1,cLen do
-					rData[i][j][14] = {nImg,sImg,cImg}
+					rData[i][j][glItem_bgImage] = {nImg,sImg,cImg}
 				end
 			end
 		else
 			for i=1,rLen do
-				rData[i][c][14] = {nImg,sImg,cImg}
+				rData[i][c][glItem_bgImage] = {nImg,sImg,cImg}
 			end
 		end
 	else
 		if c == -1 then
 			for j=1,cLen do
-				rData[r][j][14] = {nImg,sImg,cImg}
+				rData[r][j][glItem_bgImage] = {nImg,sImg,cImg}
 			end
 		else
-			rData[r][c][14] = {nImg,sImg,cImg}
+			rData[r][c][glItem_bgImage] = {nImg,sImg,cImg}
 		end
 	end
 	return false
@@ -2250,51 +2616,147 @@ function dgsGridListGetItemBackGroundImage(gridlist,r,c)
 	local cLen,rLen = #cData,#rData
 	if cLen == 0 or rLen == 0 then return false end
 	local cNInRange,rNInRange = not (c>=1 and c<=cLen),not (r>=1 and r<=rLen)
-	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemBackGroundImage",2,"number","1~"..rLen,rNInRange and "Out Of Range")) end
-	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemBackGroundImage",3,"number","1~"..cLen,cNInRange and "Out Of Range")) end
-	local c,r = c-c%1,r-r%1
-	if rData[r][c][14] then
-		return rData[r][c][14][1],rData[r][c][14][2],rData[r][c][14][3]
-	elseif rData[r][-3] then
-		return rData[r][-3][1],rData[r][-3][2],rData[r][-3][3]
+	if rNInRange then error(dgsGenAsrt(r,"dgsGridListGetItemBackGroundImage",2,"number","1~"..rLen,rNInRange and "row out of range")) end
+	if cNInRange then error(dgsGenAsrt(c,"dgsGridListGetItemBackGroundImage",3,"number","1~"..cLen,cNInRange and "column out of range")) end
+	c,r = c-c%1,r-r%1
+	if rData[r][c][glItem_bgImage] then
+		return rData[r][c][glItem_bgImage][1],rData[r][c][glItem_bgImage][2],rData[r][c][glItem_bgImage][3]
+	elseif rData[r][glRow_bgImage] then
+		return rData[r][glRow_bgImage][1],rData[r][glRow_bgImage][2],rData[r][glRow_bgImage][3]
 	end
 	return false,false,false
 end
 
+--[[
+filter = {
+	[columnID] = string,
+}
+]]
+function dgsGridListSetFilter(gridlist,filter)
+	local eleData = dgsElementData[gridlist]
+	if type(filter) == "string" then
+		fnc,err = loadstring(filter)
+		if not fnc then error("Bad Argument @'dgsGridListSetFilter' at argument 1, failed to load the function:\n"..err) end
+		eleData.filter = fnc
+	else
+		eleData.filter = filter
+	end
+	eleData.updateFilterNextFrame = true
+	return true
+end
+
+function dgsGridListUpdateFilter(gridlist)
+	local eleData = dgsElementData[gridlist]
+	eleData.updateFilterNextFrame = false
+	local filter = eleData.filter
+	local rowData = eleData.rowData
+	if not eleData.rowData.filteredData then eleData.rowData.filteredData = {} end
+	local rowDataFiltered = eleData.rowData.filteredData
+	local filterLogic = eleData.filterLogic
+	local columnData = eleData.columnData
+	local rowFilteredCount = 0
+	if type(filter) == "table" then	--For table as "filter"
+		if filterLogic == "or" then
+			for row=1,#rowData do
+				local isRowFiltered = false
+				local currentFilter
+				for col=1,#columnData do
+					if filter[col] ~= false then	--Skip filter = false, no need to filter
+						if filter[col] ~= nil then currentFilter = filter[col] end	--Default filter
+						if currentFilter and utf8.find(rowData[row][col][glCol_text],currentFilter) then  --Skip invalid filter, and not matched row
+							isRowFiltered = true
+						end
+					end
+				end
+				if isRowFiltered then
+					rowFilteredCount = rowFilteredCount+1
+					rowDataFiltered[rowFilteredCount] = row
+				end
+			end
+		elseif filterLogic == "and" then
+			for row=1,#rowData do
+				local isRowFiltered = true
+				local currentFilter
+				for col=1,#columnData do
+					if filter[col] ~= false then	--Skip filter = false, no need to filter
+						if filter[col] ~= nil then currentFilter = filter[col] end	--Default filter
+						if not (currentFilter and utf8.find(rowData[row][col][glCol_text],currentFilter)) then  --Skip invalid filter, and not matched row
+							isRowFiltered = false
+						end
+					end
+				end
+				if isRowFiltered then
+					rowFilteredCount = rowFilteredCount+1
+					rowDataFiltered[rowFilteredCount] = row
+				end
+			end
+		end
+		rowDataFiltered.count = rowFilteredCount
+		eleData.rowData.isFiltered = true
+	elseif type(filter) == "function" then	--For string as "filter"
+		eleData.rowData.isFiltered = true
+	else
+		eleData.rowData.isFiltered = false
+	end
+	eleData.configNextFrame = true
+end
+
 function dgsGridListUpdateRowMoveOffset(gridlist,rowMoveOffset)
 	local eleData = dgsElementData[gridlist]
-	local rowMoveOffset = rowMoveOffset or eleData.rowMoveOffsetTemp
-	local rowHeight = eleData.rowHeight
-	local rowHeightLeadingTemp = rowHeight + eleData.leading
+	rowMoveOffset = tonumber(rowMoveOffset) or eleData.rowMoveOffsetTemp
+	local rowHeight = eleData.rowHeight--_RowHeight
+	local rowHeightLeadingTemp = rowHeight + eleData.leading--_RowHeight
 	local scrollbar = eleData.scrollbars[2]
 	local scbThickH = dgsElementData[scrollbar].visible and eleData.scrollBarThick or 0
 	local h = eleData.absSize[2]
 	local columnHeight = eleData.columnHeight
-	local rowCount = #eleData.rowData
-	if eleData.mode then
-		local temp1 = rowMoveOffset/rowHeightLeadingTemp
-		local whichRowToStart = -(temp1-temp1%1)+1
-		local temp2 = (h-columnHeight-scbThickH+rowHeight)/rowHeightLeadingTemp
-		local whichRowToEnd = whichRowToStart+(temp2-temp2%1)-2
-		eleData.FromTo = {whichRowToStart > 0 and whichRowToStart or 1,whichRowToEnd <= rowCount and whichRowToEnd or rowCount}
+	local rowCount
+	if eleData.rowData.isFiltered then	--If filter is enabled
+		if not eleData.rowData.filteredData then eleData.rowData.filteredData = {} end
+		rowCount = eleData.rowData.filteredData.count
 	else
-		local temp1 = (rowMoveOffset+rowHeight)/rowHeightLeadingTemp
-		local whichRowToStart = -(temp1-temp1%1)+1
-		local temp2 = (h-columnHeight-scbThickH+rowHeight*2)/rowHeightLeadingTemp
-		local whichRowToEnd = whichRowToStart+(temp2-temp2%1)-1
-		eleData.FromTo = {whichRowToStart > 0 and whichRowToStart or 1,whichRowToEnd <= rowCount and whichRowToEnd or rowCount}
+		rowCount = #eleData.rowData
 	end
+	local whichRowToStart,whichRowToEnd
+	if (-rowMoveOffset+h-columnHeight-scbThickH)/rowHeightLeadingTemp > rowCount then
+		if (h-columnHeight-scbThickH)/rowHeightLeadingTemp > rowCount then
+			dgsGridListSetScrollPosition(gridlist,0)
+		else
+			dgsGridListSetScrollPosition(gridlist,100)
+		end
+	end
+	if eleData.rowShowUnclippedOnly then
+		local temp1 = rowMoveOffset/rowHeightLeadingTemp
+		whichRowToStart = -(temp1-temp1%1)+1
+		local temp2 = (h-columnHeight-scbThickH)/rowHeightLeadingTemp--_RowHeight
+		whichRowToEnd = whichRowToStart+temp2-temp2%1-1
+	else
+		local temp1 = rowMoveOffset/rowHeightLeadingTemp
+		whichRowToStart = -(temp1-temp1%1)
+		local temp2 = (-rowMoveOffset+h-columnHeight-scbThickH)/rowHeightLeadingTemp--_RowHeight
+		whichRowToEnd = temp2-temp2%1+1
+	end
+	eleData.FromTo = {whichRowToStart > 0 and whichRowToStart or 1,whichRowToEnd <= rowCount and whichRowToEnd or rowCount}
 end
 
 function configGridList(gridlist)
 	local eleData = dgsElementData[gridlist]
+	eleData.configNextFrame = false
 	local scrollbar = eleData.scrollbars
 	local w,h = eleData.absSize[1],eleData.absSize[2]
-	local columnHeight,rowHeight,leading = eleData.columnHeight,eleData.rowHeight,eleData.leading
+	local columnHeight,rowHeight,leading = eleData.columnHeight,eleData.rowHeight,eleData.leading--_RowHeight
 	local scbThick = eleData.scrollBarThick
 	local columnWidth = dgsGridListGetColumnAllWidth(gridlist,#eleData.columnData,false,true)
-	local rowLength = #eleData.rowData*(rowHeight+leading)
-	local scbX,scbY = w-scbThick,h-scbThick
+	local rowLength
+	if eleData.rowData.isFiltered then	--If filter is enabled
+		if not eleData.rowData.filteredData then eleData.rowData.filteredData = {} end
+		rowLength = eleData.rowData.filteredData.count*(rowHeight+leading)--_RowHeight
+	else
+		rowLength = #eleData.rowData*(rowHeight+leading)--_RowHeight
+	end
+	local scbAlignment = eleData.scrollBarAlignment
+	local scbAlignmentV,scbAlignmentH = scbAlignment[1],scbAlignment[2]
+	local scbX,scbY = scbAlignmentV ~= "left" and w-scbThick or 0, h-scbThick
 	local oriScbStateV,oriScbStateH = dgsElementData[scrollbar[1]].visible,dgsElementData[scrollbar[2]].visible
 	local scbStateV,scbStateH
 	if columnWidth > w then
@@ -2317,82 +2779,267 @@ function configGridList(gridlist)
 	local rowShowRange = relSizY-columnHeight
 	local columnShowRange = relSizX
 	--if scbStateH and scbStateH ~= oriScbStateH then
-		--dgsSetData(scrollbar[2],"position",0)
+		--dgsSetData(scrollbar[2],"scrollPosition",0)
 	--end
 	--if scbStateV and scbStateV ~= oriScbStateV  then
-		--dgsSetData(scrollbar[1],"position",0)
+		--dgsSetData(scrollbar[1],"scrollPosition",0)
 	--end
+
 	dgsSetVisible(scrollbar[1],scbStateV and true or false)
 	dgsSetVisible(scrollbar[2],scbStateH and true or false)
-	dgsSetPosition(scrollbar[1],scbX,0,false)
-	dgsSetPosition(scrollbar[2],0,scbY,false)
-	dgsSetSize(scrollbar[1],scbThick,relSizY,false)
+
+	local scb1Y,scb1H = 0,relSizY
+	if not dgsElementData[gridlist].scrollBarCoverColumn then
+		scb1Y,scb1H = scb1Y+columnHeight,scb1H-columnHeight
+	end
+	dgsSetPosition(scrollbar[1],scbX,scb1Y,false)
+	dgsSetPosition(scrollbar[2],scbAlignmentV == "left" and scbThickV or 0,scbY,false)
+	dgsSetSize(scrollbar[1],scbThick,scb1H,false)
 	dgsSetSize(scrollbar[2],relSizX,scbThick,false)
-	local scroll1 = dgsElementData[scrollbar[1]].position
-	local scroll2 = dgsElementData[scrollbar[2]].position
+	local scroll1 = dgsElementData[scrollbar[1]].scrollPosition
+	local scroll2 = dgsElementData[scrollbar[2]].scrollPosition
 	dgsSetData(gridlist,"rowMoveOffset",-scroll1*(rowLength-rowShowRange)/100)
 
 	local scbLengthVrt = eleData.scrollBarLength[1]
 	local higLen = 1-(rowLength-rowShowRange)/rowLength
 	higLen = higLen >= 0.95 and 0.95 or higLen
-	dgsSetData(scrollbar[1],"length",scbLengthVrt or {higLen,true})
+	dgsSetData(scrollbar[1],"cursorLength",scbLengthVrt or {higLen,true})
 	local verticalScrollSize = eleData.scrollSize/(rowLength-rowShowRange)
 	dgsSetData(scrollbar[1],"multiplier",{verticalScrollSize,true})
+	dgsSetData(scrollbar[1],"moveType","sync")
 
 	local scbLengthHoz = dgsElementData[gridlist].scrollBarLength[2]
 	local widLen = 1-(columnWidth-columnShowRange)/columnWidth
 	widLen = widLen >= 0.95 and 0.95 or widLen
-	dgsSetData(scrollbar[2],"length",scbLengthHoz or {widLen,true})
+	dgsSetData(scrollbar[2],"cursorLength",scbLengthHoz or {widLen,true})
 	local horizontalScrollSize = eleData.scrollSize*5/(columnWidth-columnShowRange)
 	dgsSetData(scrollbar[2],"multiplier",{horizontalScrollSize,true})
-
-	local res = eleData.resource
-	if isElement(eleData.columnRT) then destroyElement(eleData.columnRT) end
-	if isElement(eleData.columnTextRT) then destroyElement(eleData.columnTextRT) end
-	if isElement(eleData.rowRT) then destroyElement(eleData.rowRT) end
-	if isElement(eleData.rowTextRT) then destroyElement(eleData.rowTextRT) end
-	if not eleData.mode then
-		local columnRT,rowRT,columnTextRT,rowTextRT
-		if relSizX*columnHeight ~= 0 then
-			columnRT,err = dxCreateRenderTarget(relSizX,columnHeight,true,gridlist,res)
-			if columnRT ~= false then
-				dgsAttachToAutoDestroy(columnRT,gridlist,-1)
-			else
-				outputDebugString(err,2)
-			end
-			columnTextRT,err = dxCreateRenderTarget(relSizX,columnHeight,true,gridlist,res)
-			if columnTextRT ~= false then
-				dgsAttachToAutoDestroy(columnTextRT,gridlist,-2)
-			else
-				outputDebugString(err,2)
-			end
-		end
-		if relSizX*rowShowRange ~= 0 then
-			rowRT,err = dxCreateRenderTarget(relSizX,rowShowRange,true,gridlist,res)
-			if rowRT ~= false then
-				dgsAttachToAutoDestroy(rowRT,gridlist,-3)
-			else
-				outputDebugString(err,2)
-			end
-			rowTextRT,err = dxCreateRenderTarget(relSizX,rowShowRange,true,gridlist,res)
-			if rowTextRT ~= false then
-				dgsAttachToAutoDestroy(rowTextRT,gridlist,-4)
-			else
-				outputDebugString(err,2)
-			end
-		end
-		dgsSetData(gridlist,"columnRT",columnRT)
-		dgsSetData(gridlist,"columnTextRT",columnTextRT)
-		dgsSetData(gridlist,"rowRT",rowRT)
-		dgsSetData(gridlist,"rowTextRT",rowTextRT)
-	end
+	dgsSetData(scrollbar[2],"moveType","sync")
+	dgsGridListRecreateRenderTarget(gridlist,true)
 	dgsGridListUpdateRowMoveOffset(gridlist)
-	eleData.configNextFrame = false
+end
+
+----------------------------------------------------------------
+---------------------OnMouseScrollAction------------------------
+----------------------------------------------------------------
+dgsOnMouseScrollAction["dgs-dxgridlist"] = function(dgsEle,isWheelDown)
+	local scrollbar
+	local scrollbar1,scrollbar2 = dgsElementData[dgsEle].scrollbars[1],dgsElementData[dgsEle].scrollbars[2]
+	local visibleScb1,visibleScb2 = dgsGetVisible(scrollbar1),dgsGetVisible(scrollbar2)
+	if visibleScb1 then
+		scrollbar = scrollbar1
+	elseif visibleScb2 and not visibleScb1 then
+		scrollbar = scrollbar2
+	elseif not visibleScb1 and not visibleScb2 then
+		scrollbar = scrollbar1
+	end
+	if scrollbar then
+		dgsSetData(scrollbar,"moveType","slow")
+		scrollScrollBar(scrollbar,isWheelDown)
+	end
+end
+
+----------------------------------------------------------------
+----------------------OnMouseClickAction------------------------
+----------------------------------------------------------------
+GirdListDoubleClick = {
+	down = false,
+	up = false,
+}
+dgsOnMouseClickAction["dgs-dxgridlist"] = function(dgsEle,button,state)
+	local eleData = dgsElementData[dgsEle]
+	while true do
+		if state ~= "down" then break end
+		--------
+		local oPreSelect = eleData.oPreSelect
+		local rowData = eleData.rowData
+		----Sort
+		if eleData.sortEnabled then
+			local column = eleData.selectedColumn
+			if column and column >= 1 then
+				local sortFunction = eleData.sortFunction
+				local defSortFnc = eleData.defaultSortFunctions
+				local upperSortFnc = gridlistSortFunctions[defSortFnc[1]]
+				local lowerSortFnc = gridlistSortFunctions[defSortFnc[2]]
+				local targetfunction = (sortFunction == upperSortFnc or eleData.sortColumn ~= column) and lowerSortFnc or upperSortFnc
+				dgsGridListSetSortFunction(dgsEle,targetfunction)
+				dgsGridListSetSortColumn(dgsEle,column)
+			end
+		end
+		if not(oPreSelect and rowData[oPreSelect] and rowData[oPreSelect][-1] ~= false) then break end
+		local selectionMode = eleData.selectionMode
+		local multiSelection = eleData.multiSelection
+		local preSelect = eleData.preSelect
+		local clicked = eleData.itemClick
+		local shift,ctrl = getKeyState("lshift") or getKeyState("rshift"),getKeyState("lctrl") or getKeyState("rctrl")
+		if #preSelect ~= 2 then break end
+		if multiSelection then
+			if selectionMode == 1 then
+				if ctrl then
+					dgsGridListSelectItem(dgsEle,preSelect[1],1,not dgsGridListItemIsSelected(dgsEle,preSelect[1],1))
+					break
+				elseif shift then
+					if clicked and #clicked == 2 then
+						dgsGridListClearSelectedItem(dgsEle)
+						local startRow,endRow = mathMin(clicked[1],preSelect[1]),mathMax(clicked[1],preSelect[1])
+						for row = startRow,endRow do
+							dgsGridListSelectItem(dgsEle,row,1,true)
+						end
+						--eleData.itemClick = clicked
+					end
+					break
+				end
+			elseif selectionMode == 2 then
+				if ctrl then
+					dgsGridListSelectItem(dgsEle,preSelect[1],preSelect[2],not dgsGridListItemIsSelected(dgsEle,1,preSelect[2]))
+					break
+				elseif shift then
+					if clicked and #clicked == 2 then
+						dgsGridListClearSelectedItem(dgsEle)
+						local startColumn,endColumn = mathMin(clicked[2],preSelect[2]),mathMax(clicked[2],preSelect[2])
+						for column = startColumn, endColumn do
+							dgsGridListSelectItem(dgsEle,preSelect[1],column,true)
+						end
+						--eleData.itemClick = clicked
+					end
+					break
+				end
+			elseif selectionMode == 3 then
+				if ctrl then
+					dgsGridListSelectItem(dgsEle,preSelect[1],preSelect[2],not dgsGridListItemIsSelected(dgsEle,preSelect[1],preSelect[2]))
+					break
+				elseif shift then
+					if clicked and #clicked == 2 then
+						dgsGridListClearSelectedItem(dgsEle)
+						local startRow,endRow = mathMin(clicked[1],preSelect[1]),mathMax(clicked[1],preSelect[1])
+						local startColumn,endColumn = mathMin(clicked[2],preSelect[2]),mathMax(clicked[2],preSelect[2])
+						for row = startRow,endRow do
+							for column = startColumn, endColumn do
+								dgsGridListSelectItem(dgsEle,row,column,true)
+							end
+						end
+						--eleData.itemClick = clicked
+					end
+					break
+				end
+			end
+		end
+		dgsGridListSetSelectedItem(dgsEle,preSelect[1],preSelect[2])
+		break
+	end
+	--Grid List Double Click
+	if GirdListDoubleClick[state] and isTimer(GirdListDoubleClick[state].timer) then
+		local clicked = eleData.itemClick
+		local selectionMode = eleData.selectionMode
+		if GirdListDoubleClick[state].gridlist == dgsEle and MouseData.focused == GirdListDoubleClick[state].gridlist and GirdListDoubleClick[state].button == button then
+			local pass = true
+			if selectionMode == 1 then
+				if GirdListDoubleClick[state].item ~= clicked[1] then
+					pass = false
+				end
+			elseif selectionMode == 2 then
+				if GirdListDoubleClick[state].column ~= clicked[2] then
+					pass = false
+				end
+			elseif selectionMode == 3 then
+				if GirdListDoubleClick[state].item ~= clicked[1] or GirdListDoubleClick[state].column ~= clicked[2] then
+					pass = false
+				end
+			end
+			if pass then
+				dgsTriggerEvent("onDgsGridListItemDoubleClick",dgsEle,GirdListDoubleClick[state].button,state,clicked[1],clicked[2])
+			end
+		end
+		killTimer(GirdListDoubleClick[state].timer)
+		GirdListDoubleClick[state] = {}
+	else
+		local clicked = eleData.itemClick
+		if clicked[1] ~= -1 and clicked[2] ~= -1 then
+			GirdListDoubleClick[state] = {}
+			GirdListDoubleClick[state].item,GirdListDoubleClick[state].column = clicked[1],clicked[2]
+			GirdListDoubleClick[state].gridlist = dgsEle
+			GirdListDoubleClick[state].button = button
+			GirdListDoubleClick[state].timer = setTimer(function()
+				GirdListDoubleClick[state].gridlist = false
+			end,multiClick.Interval,1)
+		end
+	end
+end
+----------------------------------------------------------------
+-----------------------PropertyListener-------------------------
+----------------------------------------------------------------
+dgsOnPropertyChange["dgs-dxgridlist"] = {
+	columnHeight = configGridList,
+	scrollBarThick = configGridList,
+	scrollBarState = configGridList,
+	scrollBarAlignment = configGridList,
+	leading = configGridList,
+	scrollBarCoverColumn = configGridList,
+	rowData = function(dgsEle,key,value,oldValue)
+		if dgsElementData[dgsEle].autoSort then
+			dgsElementData[dgsEle].nextRenderSort = true
+		end
+	end,
+	rowMoveOffset = dgsGridListUpdateRowMoveOffset,
+	defaultSortFunctions = function(dgsEle,key,value,oldValue)
+		local sortFunction = dgsElementData[dgsEle].sortFunction
+		local oldDefSortFnc = oldValue
+		local oldUpperSortFnc = gridlistSortFunctions[oldDefSortFnc[1]]
+		local oldLowerSortFnc = gridlistSortFunctions[oldDefSortFnc[2]]
+		local defSortFnc = dgsElementData[dgsEle].defaultSortFunctions
+		local upperSortFnc = gridlistSortFunctions[defSortFnc[1]]
+		local lowerSortFnc = gridlistSortFunctions[defSortFnc[2]]
+		local oldSort = sortFunction == oldLowerSortFnc and lowerSortFnc or upperSortFnc
+	end,
+}
+
+----------------------------------------------------------------
+---------------------Translation Updater------------------------
+----------------------------------------------------------------
+dgsOnTranslationUpdate["dgs-dxgridlist"] = function(dgsEle,key,value)
+	local columnData = dgsElementData[dgsEle].columnData
+	for cIndex=1,#columnData do
+		local text = columnData[cIndex]._translation_text
+		if text then
+			if key then text[key] = value end
+			columnData[cIndex][glCol_text] = dgsTranslate(dgsEle,text,sourceResource)
+		end
+		local font = columnData[cIndex]._translation_font
+		if font then
+			columnData[cIndex][glCol_textFont] = dgsGetTranslationFont(dgsEle,font,sourceResource)
+		end
+	end
+	dgsSetData(dgsEle,"columnData",columnData)
+	local rowData = dgsElementData[dgsEle].rowData
+	for rID=1,#rowData do
+		for cID=1,#rowData[rID] do
+			local text = rowData[rID][cID]._translation_text
+			if text then
+				if key then text[key] = value end
+				rowData[rID][cID][glItem_text] = dgsTranslate(dgsEle,text,sourceResource)
+			end
+			local font = rowData[rID][cID]._translation_font
+			if font then
+				rowData[rID][cID][glItem_textFont] = dgsGetTranslationFont(dgsEle,font,sourceResource)
+			end
+		end
+	end
+	dgsSetData(dgsEle,"rowData",rowData)
+end
+
+----------------------------------------------------------------
+-----------------------VisibilityManage-------------------------
+----------------------------------------------------------------
+dgsOnVisibilityChange["dgs-dxgridlist"] = function(dgsElement,selfVisibility,inheritVisibility)
+	if not selfVisibility or not inheritVisibility then
+		dgsGridListRecreateRenderTarget(dgsElement,true)
+	end
 end
 ----------------------------------------------------------------
 --------------------------Renderer------------------------------
 ----------------------------------------------------------------
 dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInherited,enabledSelf,eleData,parentAlpha,isPostGUI,rndtgt,xRT,yRT,xNRT,yNRT,OffsetX,OffsetY,visible)
+	if eleData.updateFilterNextFrame then dgsGridListUpdateFilter(source) end
 	if eleData.configNextFrame then configGridList(source) end
 	local scrollbar = eleData.scrollbars
 	if MouseData.hit == source then
@@ -2400,64 +3047,78 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 	end
 	local bgColor,bgImage = applyColorAlpha(eleData.bgColor,parentAlpha),eleData.bgImage
 	local columnColor,columnImage = applyColorAlpha(eleData.columnColor,parentAlpha),eleData.columnImage
-	
-	local res = eleData.resource or "global"
-	local style = styleManager.styles[res]
-	local using = style.using
-	style = style.loaded[using]
-	local systemFont = style.systemFontElement
 
-	local font = eleData.font or systemFont
+	local style = styleManager.styles[eleData.resource or "global"]
+	style = style.loaded[style.using]
+	local font = eleData.font or style.gridlist.font or style.systemFontElement
+
 	local columnHeight = eleData.columnHeight
-	dxSetBlendMode(rndtgt and "modulate_add" or "blend")
-	if bgImage then
-		dxDrawImage(x,y+columnHeight,w,h-columnHeight,bgImage,0,0,0,bgColor,isPostGUI,rndtgt)
-	else
-		dxDrawRectangle(x,y+columnHeight,w,h-columnHeight,bgColor,isPostGUI)
-	end
 	local columnData,rowData = eleData.columnData,eleData.rowData
 	local columnCount,rowCount = #columnData,#rowData
-	local sortColumn = eleData.sortColumn
-	if sortColumn and columnData[sortColumn] then
-		if eleData.nextRenderSort then
-			dgsGridListSort(source)
-			eleData.nextRenderSort = false
-		end
+	local isFiltered = eleData.rowData.isFiltered
+	if isFiltered then
+		rowCount = eleData.rowData.filteredData.count
 	end
 	local columnTextColor = eleData.columnTextColor
-	local rowHeight = eleData.rowHeight
+	local columnWordBreak = eleData.columnWordBreak
+	local rowHeight = eleData.rowHeight--_RowHeight
 	local rowTextPosOffset = eleData.rowTextPosOffset
+	local rowWordBreak = eleData.rowWordBreak
+	local rowColor = eleData.rowColor
+	local itemColorTemplate = eleData.itemColorTemplate
+	local itemPadding = eleData.itemPadding
+	local rowImage = eleData.rowImage
 	local columnTextPosOffset = eleData.columnTextPosOffset
 	local leading = eleData.leading
 	local scbThick = eleData.scrollBarThick
 	local scrollbars = eleData.scrollbars
 	local scb1,scb2 = scrollbars[1],scrollbars[2]
 	local scbThickV,scbThickH = dgsElementData[scb1].visible and scbThick or 0,dgsElementData[scb2].visible and scbThick or 0
-	local colorcoded = eleData.colorcoded
-	local shadow = eleData.rowShadow
-	local rowHeightLeadingTemp = rowHeight+leading
+	local scbAlignment = eleData.scrollBarAlignment
+	local scbAlignmentV,scbAlignmentH = scbAlignment[1],scbAlignment[2]
+	local viewWidth,viewHeight = w-(scbAlignmentV ~= "left" and scbThickV or 0),h-scbThickH
+	local colorCoded = eleData.colorCoded
+	local rowShadow = eleData.rowShadow
+	local rowHeightLeadingTemp = rowHeight+leading--_RowHeight
 	--Smooth Row
 	local _rowMoveOffset = eleData.rowMoveOffset
 	local rowMoveOffset = _rowMoveOffset
 	if eleData.rowMoveOffsetTemp ~= _rowMoveOffset then
-		local rowMoveHardness = dgsElementData[scb1].moveType == "slow" and eleData.moveHardness[1] or eleData.moveHardness[2]
-		eleData.rowMoveOffsetTemp = mathLerp(rowMoveHardness,eleData.rowMoveOffsetTemp,_rowMoveOffset)
+		local mHardness = 1
+		local moveType = dgsElementData[scb1].moveType
+		if moveType == "slow" then
+			mHardness = eleData.moveHardness[1]
+		elseif moveType == "fast" then
+			mHardness = eleData.moveHardness[2]
+		end
+		eleData.rowMoveOffsetTemp = mathLerp(mHardness,eleData.rowMoveOffsetTemp,_rowMoveOffset)
 		local rMoveOffset = eleData.rowMoveOffsetTemp-eleData.rowMoveOffsetTemp%1
-		dgsGridListUpdateRowMoveOffset(source)
 		if _rowMoveOffset-eleData.rowMoveOffsetTemp <= 0.5 and _rowMoveOffset-eleData.rowMoveOffsetTemp >= -0.5 then
 			eleData.rowMoveOffsetTemp = _rowMoveOffset
+			dgsElementData[scb1].moveType = "sync"
 		end
+		dgsGridListUpdateRowMoveOffset(source)
 		rowMoveOffset = rMoveOffset
+	end
+	if eleData.rowShowUnclippedOnly then
+		rowMoveOffset = (1-eleData.FromTo[1])*rowHeightLeadingTemp--_RowHeight
 	end
 	--Smooth Column
 	local _columnMoveOffset = eleData.columnMoveOffset
 	local columnMoveOffset = _columnMoveOffset
 	if eleData.columnMoveOffsetTemp ~= _columnMoveOffset then
-		local columnMoveHardness  = dgsElementData[scb2].moveType == "slow" and eleData.moveHardness[1] or eleData.moveHardness[2]
-		eleData.columnMoveOffsetTemp = mathLerp(columnMoveHardness,eleData.columnMoveOffsetTemp,_columnMoveOffset)
+		local mHardness = 1
+		local moveType = dgsElementData[scb2].moveType
+		if moveType == "slow" then
+			mHardness = eleData.moveHardness[1]
+		elseif moveType == "fast" then
+			mHardness = eleData.moveHardness[2]
+		end
+		eleData.columnMoveOffsetTemp = mathLerp(mHardness,eleData.columnMoveOffsetTemp,_columnMoveOffset)
 		local cMoveOffset = eleData.columnMoveOffsetTemp-eleData.columnMoveOffsetTemp%1
 		if _columnMoveOffset-eleData.columnMoveOffsetTemp <= 0.5 and _columnMoveOffset-eleData.columnMoveOffsetTemp >= -0.5 then
 			eleData.columnMoveOffsetTemp = _columnMoveOffset
+			dgsElementData[scb2].moveType = "sync"
 		end
 		columnMoveOffset = cMoveOffset
 	end
@@ -2467,487 +3128,322 @@ dgsRenderer["dgs-dxgridlist"] = function(source,x,y,w,h,mx,my,cx,cy,enabledInher
 	local columnTextSx,columnTextSy = eleData.columnTextSize[1],eleData.columnTextSize[2] or eleData.columnTextSize[1]
 	local selectionMode = eleData.selectionMode
 	local clip = eleData.clip
-	local mouseInsideGridList = mx >= cx and mx <= cx+w and my >= cy and my <= cy+h-scbThickH
+	local mouseInsideGridList = false
+	if mx and my then
+		mouseInsideGridList = mx >= cx and mx <= cx+w and my >= cy and my <= cy+viewHeight
+	end
 	local mouseInsideColumn = mouseInsideGridList and my <= cy+columnHeight
 	local mouseInsideRow = mouseInsideGridList and my > cy+columnHeight
-	local defaultSortFunctions = eleData.defaultSortFunctions
+	local mouseColumnPos = mouseInsideGridList and mx-cx
 	eleData.selectedColumn = -1
-	local sortIcon = eleData.sortFunction == sortFunctions[defaultSortFunctions[1]] and eleData.defaultSortIcons[1] or (eleData.sortFunction == sortFunctions[defaultSortFunctions[2]] and eleData.defaultSortIcons[2]) or nil
+	local defaultSortFunctions,sortIcon
 	local sortColumn = eleData.sortColumn
-	local backgroundOffset = eleData.backgroundOffset
+	if eleData.sortEnabled then
+		defaultSortFunctions = eleData.defaultSortFunctions
+		sortIcon = eleData.sortFunction == gridlistSortFunctions[defaultSortFunctions[1]] and eleData.defaultSortIcons[1] or (eleData.sortFunction == gridlistSortFunctions[defaultSortFunctions[2]] and eleData.defaultSortIcons[2]) or nil
+	end
+	if sortColumn and columnData[sortColumn] then
+		if eleData.nextRenderSort then
+			dgsGridListSort(source)
+			eleData.nextRenderSort = false
+		end
+	end
+	local bgOffset = eleData.bgOffset
 
 	local renderBuffer = eleData.renderBuffer
 	local columnPos = renderBuffer.columnPos
 	local columnEndPos = renderBuffer.columnEndPos
 	local columnShadow = eleData.columnShadow
-
-	if columnImage then
-		dxDrawImage(x,y,w,columnHeight,columnImage,0,0,0,columnColor,isPostGUI,rndtgt)
-	else
-		dxDrawRectangle(x,y,w,columnHeight,columnColor,isPostGUI)
+	local shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont
+	if eleData.retrieveRT then
+		dgsGridListRecreateRenderTarget(source)
 	end
-	if not eleData.mode then
-
-		---dxSetRenderTarget(eleData.columnRT,true)
-
-		dxSetRenderTarget(eleData.columnTextRT,true)
-		dxSetBlendMode("modulate_add")
-		local multiplier = eleData.columnRelative and (w-scbThickV) or 1
-		local tempColumnOffset = columnMoveOffset+columnOffset
-		local mouseColumnPos = mx-cx
-		local mouseSelectColumn = -1
-		local cPosStart,cPosEnd
-		for id = 1,#columnData do
-			local data = columnData[id]
-			local _columnTextColor = data[5] or columnTextColor
-			local _columnTextColorCoded = data[6] or colorcoded
-			local _columnTextSx,_columnTextSy = data[7] or columnTextSx,data[8] or columnTextSy
-			local _columnFont = data[9] or eleData.columnFont or font
-			local tempCpos = data[3]*multiplier
-			local _tempStartx = tempCpos+tempColumnOffset
-			local _tempEndx = _tempStartx+data[2]*multiplier
-			if _tempStartx <= w and _tempEndx >= 0 then
-				columnPos[id],columnEndPos[id] = tempCpos,_tempEndx
-				cPosStart,cPosEnd = cPosStart or id,id
-				if eleData.columnTextRT then
-					local _tempStartx = eleData.PixelInt and _tempStartx-_tempStartx%1 or _tempStartx
-					local textPosL = _tempStartx+columnTextPosOffset[1]
-					local textPosT = columnTextPosOffset[2]
-					local textPosR = _tempEndx+columnTextPosOffset[1]
-					local textPosB = columnHeight+columnTextPosOffset[2]
-					if sortColumn == id and sortIcon then
-						local iconWidth = dxGetTextWidth(sortIcon,_columnTextSx*0.8,_columnFont)
-						local iconTextPosL = textPosL-iconWidth
-						local iconTextPosR = textPosR-iconWidth
-						if columnShadow then
-							dxDrawText(sortIcon,iconTextPosL+columnShadow[1],textPosT+columnShadow[2],iconTextPosR+columnShadow[1],textPosB+columnShadow[2],columnShadow[3],_columnTextSx*0.8,_columnTextSy*0.8,_columnFont,"left","center",clip,false,false,false,true)
-						end
-						dxDrawText(sortIcon,iconTextPosL-1,textPosT,iconTextPosR-1,textPosB,_columnTextColor,_columnTextSx*0.8,_columnTextSy*0.8,_columnFont,"left","center",clip,false,false,false,true)
-					end
-					if columnShadow then
-						dxDrawText(data[1],textPosL+columnShadow[1],textPosT+columnShadow[2],textPosR+columnShadow[1],textPosB+columnShadow[2],columnShadow[3],_columnTextSx,_columnTextSy,_columnFont,data[4],"center",clip,false,false,false,true)
-					end
-					dxDrawText(data[1],textPosL,textPosT,textPosR,textPosB,_columnTextColor,_columnTextSx,_columnTextSy,_columnFont,data[4],"center",clip,false,false,_columnTextColorCoded,true)
+	dxSetRenderTarget(eleData.columnRT,true)
+	dxSetBlendMode("modulate_add")
+	local multiplier = eleData.columnRelative and viewWidth or 1
+	local tempColumnOffset = columnMoveOffset+columnOffset
+	local mouseSelectColumn = -1
+	local cPosStart,cPosEnd
+	if columnShadow then
+		shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont = columnShadow[1],columnShadow[2],applyColorAlpha(columnShadow[3],parentAlpha),columnShadow[4],columnShadow[5]
+	end
+	for id = 1,#columnData do
+		local cCol = columnData[id]
+		local cTextColor = applyColorAlpha(cCol[glCol_textColor] or columnTextColor,parentAlpha)
+		local cTextColorCoded = cCol[glCol_textColorCoded] or colorCoded
+		local cTextScaleX,cTextScaleY = cCol[glCol_textScaleX] or columnTextSx,cCol[glCol_textScaleY] or columnTextSy
+		local cTextFont = cCol[glCol_textFont] or eleData.columnFont or font
+		local tempCpos = cCol[glCol_widthSum]*multiplier
+		local columnStartX = tempCpos+tempColumnOffset
+		if scbAlignmentV == "left" then
+			columnStartX = columnStartX+scbThickV
+		end
+		local columnEndX = columnStartX+cCol[glCol_width]*multiplier
+		if columnStartX <= w and columnEndX >= 0 then
+			columnPos[id],columnEndPos[id] = tempCpos,columnEndX
+			cPosStart,cPosEnd = cPosStart or id,id
+			if eleData.columnRT then
+				columnStartX = eleData.PixelInt and columnStartX-columnStartX%1 or columnStartX
+				local textPosL = columnStartX+columnTextPosOffset[1]
+				local textPosT = columnTextPosOffset[2]
+				local textPosR = columnEndX+columnTextPosOffset[1]
+				local textPosB = columnHeight+columnTextPosOffset[2]
+				if sortColumn == id and sortIcon then
+					local iconWidth = dxGetTextWidth(sortIcon,cTextScaleX*0.8,cTextFont)
+					local iconTextPosL = textPosL-iconWidth
+					local iconTextPosR = textPosR-iconWidth
+					dgsDrawText(sortIcon,iconTextPosL-1,textPosT,iconTextPosR-1,textPosB,cTextColor,cTextScaleX*0.8,cTextScaleY*0.8,cTextFont,"left","center",clip,columnWordBreak,false,false,false,0,0,0,0,shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont)
 				end
-				if mouseInsideGridList and mouseSelectColumn == -1 then
-					if mouseColumnPos >= _tempStartx and mouseColumnPos <= _tempEndx then
-						mouseSelectColumn = id
-					end
+				dgsDrawText(cCol[glCol_text],textPosL,textPosT,textPosR,textPosB,cTextColor,cTextScaleX,cTextScaleY,cTextFont,cCol[glCol_textAlignment],"center",clip,columnWordBreak,false,cTextColorCoded,false,0,0,0,0,shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont)
+			end
+			if mouseInsideGridList and mouseSelectColumn == -1 and (scbAlignmentV ~= "left" or (mouseColumnPos > scbThickV)) then
+				if mouseColumnPos <= (columnEndX <= viewWidth and columnEndX or viewWidth + (scbAlignmentV == "left" and scbThickV or 0)) then
+					mouseSelectColumn = id
 				end
 			end
 		end
-		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
-		
-		
-		local preSelectLastFrame = eleData.preSelectLastFrame
-		local preSelect = eleData.preSelect
-		if mouseInsideRow then
-			local toffset = (eleData.FromTo[1]*rowHeightLeadingTemp)+rowMoveOffset
-			local tempID = (my-cy-columnHeight-toffset)/rowHeightLeadingTemp
-			local sid = (tempID-tempID%1)+eleData.FromTo[1]+1
-			if sid >= 1 and sid <= rowCount and my-cy-columnHeight < sid*rowHeight+(sid-1)*leading+rowMoveOffset then
-				eleData.oPreSelect = sid
-				if rowData[sid][-2] ~= false then
-					preSelect[1],preSelect[2] = sid,mouseSelectColumn
-				else
-					preSelect[1],preSelect[2] = -1,mouseSelectColumn
-				end
+	end
+	local preSelectLastFrame = eleData.preSelectLastFrame
+	local preSelect = eleData.preSelect
+	if mouseInsideRow then
+		local toffset = (eleData.FromTo[1]*rowHeightLeadingTemp)+rowMoveOffset--_RowHeight
+		local tempID = (my-cy-columnHeight-toffset)/rowHeightLeadingTemp--_RowHeight
+		local sid = (tempID-tempID%1)+eleData.FromTo[1]+1
+		if sid >= 1 and sid <= rowCount and my-cy-columnHeight < sid*rowHeight+(sid-1)*leading+rowMoveOffset then--_RowHeight
+			eleData.oPreSelect = sid
+			local rowAllowHover = rowData[sid][glRow_hoverable] ~= false
+			local itemAllowHover = false
+			if mouseSelectColumn ~= -1 then
+				itemAllowHover = (rowData[sid][mouseSelectColumn][glItem_hoverable] == nil and rowAllowHover) or rowData[sid][mouseSelectColumn][glItem_hoverable]
+			end
+			if itemAllowHover and rowAllowHover then
+				preSelect[1],preSelect[2] = sid,mouseSelectColumn
 			else
-				preSelect[1],preSelect[2] = -1,mouseSelectColumn
+				preSelect[1],preSelect[2] = -1,-1
 			end
-		elseif mouseInsideColumn then
-			eleData.selectedColumn = mouseSelectColumn
-			preSelect[1],preSelect[2] = -1,mouseSelectColumn
 		else
-			preSelect[1],preSelect[2] = -1,-1
+			preSelect[1],preSelect[2] = -1,mouseSelectColumn
 		end
-		local preSelect = eleData.preSelect
-		if preSelectLastFrame[1] ~= preSelect[1] or preSelectLastFrame[2] ~= preSelect[2] then
-			triggerEvent("onDgsGridListHover",source,preSelect[1],preSelect[2],preSelectLastFrame[1],preSelectLastFrame[2])
-			preSelectLastFrame[1],preSelectLastFrame[2] = preSelect[1],preSelect[2]
-		end
-		local Select = eleData.rowSelect
-		local sectionFont = eleData.sectionFont or font
-		local textBufferCnt = 0
-		local elementBuffer = renderBuffer.elementBuffer
-		local textBuffer = renderBuffer.textBuffer
-		
-		dxSetBlendMode("modulate_add")
-		if eleData.rowRT then
-			dxSetRenderTarget(eleData.rowRT,true)
-			if cPosStart and cPosEnd then
-				for i=eleData.FromTo[1],eleData.FromTo[2] do
-					elementBuffer[i] = elementBuffer[i] or {}
-					local lc_rowData = rowData[i]
-					local image,columnOffset,isSection,color = lc_rowData[-3] or eleData.rowImage,lc_rowData[-4] or eleData.columnOffset,lc_rowData[-5],lc_rowData[0] or eleData.rowColor
-					local rowpos = i*rowHeight+rowMoveOffset+(i-1)*leading
-					local rowpos_1 = rowpos-rowHeight
-					local _x,_y,_sx,_sy = tempColumnOffset+columnOffset,rowpos_1,sW,rowpos
-					--[[if eleData.PixelInt then
-						_x,_y,_sx,_sy = _x-_x%1,_y-_y%1,_sx-_sx%1,_sy-_sy%1
-					end]]
+	elseif mouseInsideColumn then
+		eleData.selectedColumn = mouseSelectColumn
+		preSelect[1],preSelect[2] = -1,mouseSelectColumn
+	else
+		preSelect[1],preSelect[2] = -1,-1
+	end
+	preSelect = eleData.preSelect
+	if preSelectLastFrame[1] ~= preSelect[1] or preSelectLastFrame[2] ~= preSelect[2] then
+		dgsTriggerEvent("onDgsGridListHover",source,preSelect[1],preSelect[2],preSelectLastFrame[1],preSelectLastFrame[2])
+		preSelectLastFrame[1],preSelectLastFrame[2] = preSelect[1],preSelect[2]
+	end
+	local Select = eleData.rowSelect
+	local sectionFont = eleData.sectionFont
+	local textBufferCnt = 0
+	local elementBuffer = renderBuffer.elementBuffer
+	local textBuffer = renderBuffer.textBuffer
+	local sectionColumnOffset = eleData.sectionColumnOffset
+	local defaultColumnOffset = eleData.defaultColumnOffset
+	local rowStartX = 0
+	if scbAlignmentV == "left" then
+		rowStartX = scbThickV
+	end
+	if eleData.rowRT then
+		dxSetRenderTarget(eleData.rowRT,true)
+		if cPosStart and cPosEnd then
+			local rFrom,rTo = mathClamp(eleData.FromTo[1],1,rowCount+1),mathClamp(eleData.FromTo[2],0,rowCount)
+			for i=rFrom,rTo do
+				if not elementBuffer[i] then elementBuffer[i] = {} end
+				local cRow = rowData[i]
+				if isFiltered then
+					local cRowIndex = rowData.filteredData[i]
+					cRow = rowData[cRowIndex]
+				end
+				local image = cRow[glRow_bgImage] or rowImage
+				local isSection = cRow[glRow_isSection]
+				local color = cRow[glRow_bgColor] or rowColor
+				local rowpos = i*rowHeight+rowMoveOffset+(i-1)*leading--_RowHeight
+				local rowpos_1 = rowpos-rowHeight--_RowHeight
+				local rowX,rowY,rowH = rowStartX+tempColumnOffset,rowpos_1,rowpos
+				for id = cPosStart,cPosEnd do
+					local cItem = cRow[id]
+					local text = cItem[glItem_text]
+					local isSection = cItem[glItem_isSection] == nil and isSection or cItem[glItem_isSection]
+					local columnOffset = (isSection and sectionColumnOffset or cItem[glItem_columnOffset] or 0)
+					local alignment = cItem[glItem_textAlignment] or columnData[id][glCol_textAlignment]
 
-					for id = cPosStart,cPosEnd do
-						local currentRowData = lc_rowData[id]
-						local text = currentRowData[1]
-						local _txtFont = isSection and (currentRowData[6] or sectionFont) or (currentRowData[6] or eleData.rowFont or eleData.columnFont or font)
-						local _txtScalex = currentRowData[4] or rowTextSx
-						local _txtScaley = currentRowData[5] or rowTextSy
-						local alignment = currentRowData[11] or columnData[id][4]
-						local itemBGColor,itemBGImage = currentRowData[13] or color,currentRowData[14] or image
-						local rowState = 1
-						if selectionMode == 1 then
-							if i == preSelect[1] then
-								rowState = 2
-							end
-							if Select[i] and Select[i][1] then
-								rowState = 3
-							end
-						elseif selectionMode == 2 then
-							if id == preSelect[2] then
-								rowState = 2
-							end
-							if Select[1] and Select[1][id] then
-								rowState = 3
-							end
-						elseif selectionMode == 3 then
-							if i == preSelect[1] and id == preSelect[2] then
-								rowState = 2
-							end
-							if Select[i] and Select[i][id] then
-								rowState = 3
-							end
-						end
-						local offset = columnPos[id]
-						local _x = _x+offset
-						local _sx = columnEndPos[id]
-						local columnWidth = columnData[id][2]*multiplier
-						local _bgX = _x
-						local backgroundWidth = columnWidth
-						if id == 1 then
-							_bgX = _x+backgroundOffset
-							backgroundWidth = columnWidth-backgroundOffset
-						elseif backgroundWidth+_x >= w or columnCount == id then
-							backgroundWidth = w-_x
-						end
-						local itemUsingBGColor,itemUsingBGImage = itemBGColor[rowState] or color[rowState],itemBGImage[rowState] or image[rowState]
-						if itemUsingBGImage then
-							dxDrawImage(_bgX,_y,backgroundWidth,rowHeight,itemUsingBGImage,0,0,0,itemUsingBGColor)
+					local itemBGColor,itemBGImage = cItem[glItem_bgColor],cItem[glItem_bgImage] or image
+					if not itemBGColor then
+						if itemColorTemplate then
+							local iCTRows = #itemColorTemplate or 0
+							local iCTRow = ((i-1)%iCTRows)+1
+							local iCTColumns = #itemColorTemplate[iCTRow] or 0
+							local iCTColumn = ((id-1)%iCTColumns)+1
+							itemBGColor = itemColorTemplate[iCTRow][iCTColumn]
 						else
-							dxDrawRectangle(_bgX,_y,backgroundWidth,rowHeight,itemUsingBGColor,false)
+							itemBGColor = color
 						end
-						elementBuffer[i][id] = elementBuffer[i][id] or {}
-						local currentElementBuffer = elementBuffer[i][id]
-						currentElementBuffer[1] = currentRowData[10]
-						currentElementBuffer[2] = _x
-						currentElementBuffer[3] = _y
-						if text then
-							local colorcoded = currentRowData[3] == nil and colorcoded or currentRowData[3]
-							if currentRowData[7] then
-								local imageData = currentRowData[7]
-								local imagex = _x+(imageData[7] and imageData[3]*columnWidth or imageData[3])
-								local imagey = _y+(imageData[7] and imageData[4]*rowHeight or imageData[4])
-								local imagew = imageData[7] and imageData[5]*columnWidth or imageData[5]
-								local imageh = imageData[7] and imageData[6]*rowHeight or imageData[6]
-								if isElement(imageData[1]) then
-									dxDrawImage(imagex,imagey,imagew,imageh,imageData[1],0,0,0,imageData[2])
-								else
-									dxDrawRectangle(imagex,imagey,imagew,imageh,imageData[2],false)
-								end
-							end
-							local textXS,textYS,textXE,textYE = _x,_y,_sx,_sy
-							if currentRowData[12] then
-								local itemTextOffsetX = currentRowData[12][3] and columnWidth*currentRowData[12][1] or currentRowData[12][1]
-								local itemTextOffsetY = currentRowData[12][3] and rowHeight*currentRowData[12][2] or currentRowData[12][2]
-								textXS,textYS,textXE,textYE = textXS+itemTextOffsetX,textYS+itemTextOffsetY,textXE+itemTextOffsetX,textYE+itemTextOffsetY
-							end
-							textBufferCnt = textBufferCnt+1
-							textBuffer[textBufferCnt] = textBuffer[textBufferCnt] or {}
-							local currentTextBuffer = textBuffer[textBufferCnt]
-							currentTextBuffer[1] = currentRowData[1]	--Text
-							currentTextBuffer[2] = textXS-textXS%1			--startX
-							currentTextBuffer[3] = textYS-textYS%1			--startY
-							currentTextBuffer[4] = textXE-textXE%1			--endX
-							currentTextBuffer[5] = textYE-textYE%1			--endY
-							currentTextBuffer[6] = type(currentRowData[2]) == "table" and currentRowData[2][rowState] or currentRowData[2]
-							currentTextBuffer[7] = _txtScalex
-							currentTextBuffer[8] = _txtScaley
-							currentTextBuffer[9] = _txtFont
-							currentTextBuffer[10] = clip
-							currentTextBuffer[11] = colorcoded
-							currentTextBuffer[12] = alignment
+					end
+					local rowState = 1
+					if selectionMode == 1 then
+						if i == preSelect[1] then
+							rowState = 2
 						end
+						if Select[i] and Select[i][1] then
+							rowState = 3
+						end
+					elseif selectionMode == 2 then
+						if id == preSelect[2] then
+							rowState = 2
+						end
+						if Select[1] and Select[1][id] then
+							rowState = 3
+						end
+					elseif selectionMode == 3 then
+						if i == preSelect[1] and id == preSelect[2] then
+							rowState = 2
+						end
+						if Select[i] and Select[i][id] then
+							rowState = 3
+						end
+					end
+					local rowX = rowX+columnPos[id]
+					local rowW = columnEndPos[id]
+					local columnWidth = columnData[id][glCol_width]*multiplier
+					local rowBGX = rowX
+					local backgroundWidth = columnWidth
+					if id == 1 then
+						rowBGX = rowX+bgOffset
+						backgroundWidth = columnWidth-bgOffset
+					end
+					local itemUsingBGColor,itemUsingBGImage = applyColorAlpha(itemBGColor[rowState] or color[rowState],parentAlpha),itemBGImage[rowState] or image[rowState]
+					if itemUsingBGImage then
+						if not eleData.rowImageStyle or eleData.rowImageStyle == 1 then
+							local itemX,itemY,itemW,itemH = rowBGX+itemPadding[1],rowY+itemPadding[2],backgroundWidth-itemPadding[1]*2,rowHeight-itemPadding[2]*2
+							dxDrawImage(x,y,w,h,itemUsingBGImage,0,0,0,itemUsingBGColor,false,true)--_RowHeight
+						elseif eleData.rowImageStyle == 2 then
+							local allColumnWidth = dgsGridListGetColumnAllWidth(source,#eleData.columnData)
+							if viewWidth > allColumnWidth then
+								allColumnWidth = viewWidth+bgOffset
+							end
+							if id == columnCount and rowBGX+backgroundWidth <= viewWidth then
+								backgroundWidth = viewWidth-rowBGX
+							end
+							local imageType = dgsGetType(itemUsingBGImage)
+							local materialWidth,materialHeight = backgroundWidth,rowHeight
+							if imageType == "texture" or imageType == "svg" then
+								materialWidth,materialHeight = dxGetMaterialSize(itemUsingBGImage)
+							end
+							local itemX,itemY,itemW,itemH = rowBGX+itemPadding[1],rowY+itemPadding[2],backgroundWidth-itemPadding[1]*2,rowHeight-itemPadding[2]*2
+							dxDrawImageSection(itemX,itemY,itemW,itemH,-materialWidth*(columnMoveOffset-rowBGX)/(allColumnWidth-bgOffset),0,materialWidth*backgroundWidth/(allColumnWidth-bgOffset),materialHeight,itemUsingBGImage,0,0,0,itemUsingBGColor,false,true)--_RowHeight
+						elseif eleData.rowImageStyle == 3 then
+							if rowBGX+backgroundWidth >= viewWidth then
+								backgroundWidth = viewWidth-rowBGX
+							elseif id == columnCount and rowBGX+backgroundWidth <= viewWidth then
+								backgroundWidth = viewWidth-rowBGX
+							end
+							local imageType = dgsGetType(itemUsingBGImage)
+							local materialWidth,materialHeight = backgroundWidth,rowHeight
+							if imageType == "texture" or imageType == "svg" then
+								materialWidth,materialHeight = dxGetMaterialSize(itemUsingBGImage)
+							end
+							local itemX,itemY,itemW,itemH = rowBGX+itemPadding[1],rowY+itemPadding[2],backgroundWidth-itemPadding[1]*2,rowHeight-itemPadding[2]*2
+							dxDrawImageSection(itemX,itemY,itemW,itemH,materialWidth*rowBGX/viewWidth,0,materialWidth*backgroundWidth/viewWidth,materialHeight,itemUsingBGImage,0,0,0,itemUsingBGColor,false,true)--_RowHeight
+						end
+					else
+						local itemX,itemY,itemW,itemH = rowBGX+itemPadding[1],rowY+itemPadding[2],backgroundWidth-itemPadding[1]*2,rowHeight-itemPadding[2]*2
+						dxDrawImage(itemX,itemY,itemW,itemH,itemUsingBGImage,0,0,0,itemUsingBGColor,false,true)--_RowHeight
+					end
+					elementBuffer[i][id] = elementBuffer[i][id] or {}
+					local eBuffer = elementBuffer[i][id]
+					eBuffer[1] = cItem[glItem_attachedElement]
+					eBuffer[2] = rowX
+					eBuffer[3] = rowY
+					if text then
+						if cItem[glItem_image] then
+							local imageData = cItem[glItem_image]
+							local imagex = rowX+(imageData[7] and imageData[3]*columnWidth or imageData[3])
+							local imagey = rowY+(imageData[7] and imageData[4]*rowHeight or imageData[4])--_RowHeight
+							local imagew = imageData[7] and imageData[5]*columnWidth or imageData[5]
+							local imageh = imageData[7] and imageData[6]*rowHeight or imageData[6]--_RowHeight
+							dxDrawImage(imagex,imagey,imagew,imageh,imageData[1],0,0,0,applyColorAlpha(imageData[2],parentAlpha),false,true)
+						end
+						local textXS,textYS,textXE,textYE = rowX+columnOffset,rowY,rowW,rowH
+						if cItem[glItem_textOffset] then
+							local itemTextOffsetX = cItem[glItem_textOffset][3] and columnWidth*cItem[glItem_textOffset][1] or cItem[glItem_textOffset][1]
+							local itemTextOffsetY = cItem[glItem_textOffset][3] and rowHeight*cItem[glItem_textOffset][2] or cItem[glItem_textOffset][2]--_RowHeight
+							textXS,textYS,textXE,textYE = textXS+itemTextOffsetX,textYS+itemTextOffsetY,textXE+itemTextOffsetX,textYE+itemTextOffsetY
+						end
+						textBufferCnt = textBufferCnt+1
+						if not textBuffer[textBufferCnt] then textBuffer[textBufferCnt] = {} end
+						local tBuffer = textBuffer[textBufferCnt]
+						tBuffer[1] = cItem[1]	--Text
+						tBuffer[2] = textXS-textXS%1			--startX
+						tBuffer[3] = textYS-textYS%1			--startY
+						tBuffer[4] = textXE-textXE%1			--endX
+						tBuffer[5] = textYE-textYE%1			--endY
+						tBuffer[6] = applyColorAlpha(type(cItem[glItem_textColor]) == "table" and cItem[glItem_textColor][rowState] or cItem[glItem_textColor],parentAlpha)	--Text Color
+						tBuffer[7] = cItem[glItem_textScaleX] or rowTextSx	--Text Size X
+						tBuffer[8] = cItem[glItem_textScaleY] or rowTextSy	--Text Size Y
+						tBuffer[9] = isSection and (cItem[glItem_textFont] or sectionFont) or (cItem[glItem_textFont] or eleData.rowFont or eleData.columnFont or font)	-- Text Font
+						tBuffer[10] = cItem[glItem_textColorCoded] == nil and colorCoded or cItem[glItem_textColorCoded]	--Text Color Coded
+						tBuffer[11] = alignment
 					end
 				end
 			end
-			dxSetBlendMode(rndtgt and "modulate_add" or "blend")
 		end
-		if eleData.rowTextRT then
-			dxSetRenderTarget(eleData.rowTextRT,true)
-			dxSetBlendMode("modulate_add")
-			for a=1,textBufferCnt do
-				local line = textBuffer[a]
-				local text = line[1]
-				local psx,psy,pex,pey = line[2]+rowTextPosOffset[1],line[3]+rowTextPosOffset[2],line[4]+rowTextPosOffset[1],line[5]+rowTextPosOffset[2]
-				local clr,tSclx,tScly,tFnt,tClip,tClrCode,tHozAlign = line[6],line[7],line[8],line[9],line[10],line[11],line[12]
-				if shadow then
-					if tClrCode then
-						text = text:gsub("#%x%x%x%x%x%x","") or text
-					end
-					dxDrawText(text,psx+shadow[1],psy+shadow[2],pex+shadow[1],pey+shadow[2],shadow[3],tSclx,tScly,tFnt,tHozAlign,"center",tClip,false,false,false,true)
-				end
-				dxDrawText(line[1],psx,psy,pex,pey,clr,tSclx,tScly,tFnt,tHozAlign,"center",tClip,false,false,tClrCode,true)
+		dxSetBlendMode("modulate_add")
+		if rowShadow then
+			shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont = rowShadow[1],rowShadow[2],applyColorAlpha(rowShadow[3],parentAlpha),rowShadow[4],rowShadow[5]
+		end
+		for a=1,textBufferCnt do
+			local line = textBuffer[a]
+			local text = line[1]
+			local psx,psy,pex,pey = line[2]+rowTextPosOffset[1],line[3]+rowTextPosOffset[2],line[4]+rowTextPosOffset[1],line[5]+rowTextPosOffset[2]
+			local clr,tSclx,tScly,tFnt,tClrCode,tHozAlign = line[6],line[7],line[8],line[9],line[10],line[11]
+			dgsDrawText(line[1],psx,psy,pex,pey,clr,tSclx,tScly,tFnt,tHozAlign,"center",clip,rowWordBreak,false,tClrCode,true,0,0,0,0,shadowOffsetX,shadowOffsetY,shadowColor,shadowIsOutline,shadowFont)
+		end
+
+		if not eleData.childOutsideHit then
+			if MouseData.hit ~= source then
+				enabledInherited = false
 			end
-			
-			dxSetBlendMode("blend")
-			if not eleData.hitoutofparent then
-				if MouseData.hit ~= source then
-					enabledInherited = false
-				end
-			end
-			local preHitElement = MouseData.hit
-			for i=eleData.FromTo[1],eleData.FromTo[2] do
+		end
+		if cPosStart and cPosEnd then
+			for i=eleData.FromTo[2],eleData.FromTo[1],-1 do
 				for id = cPosStart,cPosEnd do
 					local item = elementBuffer[i][id]
 					if item and item[1] then
 						local offx,offy = item[2],item[3]
 						for a=1,#item[1] do
-							renderGUI(item[1][a],mx,my,enabledInherited,enabledSelf,eleData.rowTextRT,0,0,xNRT,yNRT+columnHeight,offx,offy,parentAlpha,visible,checkElement)
+							renderGUI(item[1][a],mx,my,enabledInherited,enabledSelf,eleData.rowRT,0,0,xNRT,yNRT+columnHeight,offx,offy,parentAlpha,visible)
 						end
 					end
 				end
 			end
-		end
-		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
-		dxSetRenderTarget(rndtgt)
-		if eleData.rowRT then
-			dxDrawImage(x,y+columnHeight,w-scbThickV,h-columnHeight-scbThickH,eleData.rowRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
-		end
-		if eleData.rowTextRT then
-			dxDrawImage(x,y+columnHeight,w-scbThickV,h-columnHeight-scbThickH,eleData.rowTextRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
-		end
-		if eleData.columnTextRT then
-			dxDrawImage(x,y,w-scbThickV,columnHeight,eleData.columnTextRT,0,0,0,tocolor(255,255,255,255*parentAlpha),isPostGUI)
-		end
-
-	elseif columnCount >= 1 then --NO RT
-		local whichColumnToStart,whichColumnToEnd = -1,-1
-		local _rowMoveOffset = (1-eleData.FromTo[1])*rowHeightLeadingTemp
-		local cpos = {}
-		local multiplier = eleData.columnRelative and (w-scbThickV) or 1
-		local ypcolumn = cy+columnHeight
-		local _y,_sx = ypcolumn+_rowMoveOffset,cx+w-scbThickV
-		local column_x = columnOffset
-		local allColumnWidth = columnData[columnCount][2]+columnData[columnCount][3]
-		local scrollbar = eleData.scrollbars[2]
-		local scrollPos = dgsElementData[scrollbar].position*0.01
-		local mouseSelectColumn = -1
-		local does = false
-		for id = 1,#columnData do
-			local data = columnData[id]
-			cpos[id] = data[3]*multiplier
-			if (data[3]+data[2])*multiplier-columnOffset >= scrollPos*allColumnWidth*multiplier then
-				if (data[3]+data[2])*multiplier-scrollPos*allColumnWidth*multiplier <= w-scbThickV then
-					whichColumnToStart = whichColumnToStart ~= -1 and whichColumnToStart or id
-					whichColumnToEnd = whichColumnToEnd <= whichColumnToStart and whichColumnToStart or id
-					whichColumnToEnd = id
-					does = true
-				end
-			end
-		end
-		if not does then
-			whichColumnToStart,whichColumnToEnd = columnCount,columnCount
-		end
-		column_x = cx-cpos[whichColumnToStart]+columnOffset
-		dxSetBlendMode(rndtgt and "modulate_add" or "blend")
-		local relativeBlack = applyColorAlpha(black,parentAlpha)
-		for i=whichColumnToStart,whichColumnToEnd or columnCount do
-			local data = columnData[i]
-			local _columnTextColor = applyColorAlpha(data[5] or columnTextColor,parentAlpha)
-			local _columnTextColorCoded = data[6] or colorcoded
-			local _columnTextSx,_columnTextSy = data[7] or columnTextSx,data[8] or columnTextSy
-			local _columnFont = data[9] or eleData.columnFont or font
-			local column_sx = column_x+cpos[i]+data[2]*multiplier-scbThickV
-			local posx = column_x+cpos[i]
-			local tPosX = posx-posx%1
-			local textPosL = tPosX+columnTextPosOffset[1]
-			local textPosT = cy+columnTextPosOffset[2]
-			local textPosR = column_sx+columnTextPosOffset[1]
-			local textPosB = ypcolumn+columnTextPosOffset[2]
-			if sortColumn == i and sortIcon then
-				local iconWidth = dxGetTextWidth(sortIcon,_columnTextSx*0.8,_columnFont)
-				local iconTextPosL = textPosL-iconWidth
-				local iconTextPosR = textPosR-iconWidth
-				if eleData.columnShadow then
-					dxDrawText(sortIcon,iconTextPosL,textPosT,iconTextPosR,textPosB,relativeBlack,_columnTextSx*0.8,_columnTextSy*0.8,_columnFont,"left","center",clip,false,isPostGUI,false,true)
-				end
-				dxDrawText(sortIcon,iconTextPosL-1,textPosT,iconTextPosR-1,textPosB,_columnTextColor,_columnTextSx*0.8,_columnTextSy*0.8,_columnFont,"left","center",clip,false,isPostGUI,false,true)
-			end
-			if eleData.columnShadow then
-				dxDrawText(data[1],textPosL+1,textPos+1,textPosR+1,textPosB+1,relativeBlack,_columnTextSx,_columnTextSy,_columnFont,data[4],"center",clip,false,isPostGUI,false,true)
-			end
-			dxDrawText(data[1],textPosL,textPosT,textPosR,textPosB,_columnTextColor,_columnTextSx,_columnTextSy,_columnFont,data[4],"center",clip,false,isPostGUI,false,true)
-			if mouseInsideGridList and mouseSelectColumn == -1 then
-				backgroundWidth = data[2]*multiplier
-				if backgroundWidth+posx-x >= w or whichColumnToEnd == i then
-					backgroundWidth = w-posx+x
-				end
-				local _tempStartx = posx
-				local _tempEndx = _tempStartx+backgroundWidth
-				if mx >= _tempStartx and mx <= _tempEndx then
-					mouseSelectColumn = i
-				end
-			end
-		end
-		local preSelectLastFrame = eleData.preSelectLastFrame
-		local preSelect = eleData.preSelect
-		if MouseData.entered == source then		-------PreSelect
-			if mouseInsideRow then
-				local tempID = (my-cy-columnHeight)/rowHeightLeadingTemp-1
-				sid = (tempID-tempID%1)+eleData.FromTo[1]+1
-				if sid >= 1 and sid <= rowCount and my-cy-columnHeight < sid*rowHeight+(sid-1)*leading+_rowMoveOffset then
-					eleData.oPreSelect = sid
-					if rowData[sid][-2] ~= false then
-						preSelect[1],preSelect[2] = sid,mouseSelectColumn
-					else
-						preSelect[1],preSelect[2] = -1,mouseSelectColumn
-					end
-				else
-					preSelect[1],preSelect[2] = -1,mouseSelectColumn
-				end
-			elseif mouseInsideColumn then
-				eleData.selectedColumn = mouseSelectColumn
-				preSelect[1],preSelect[2] = -1,mouseSelectColumn
-			else
-				preSelect[1],preSelect[2] = -1,-1
-			end
-		else
-			preSelect[1],preSelect[2] = -1,-1
-		end
-		local preSelect = eleData.preSelect
-		if preSelectLastFrame[1] ~= preSelect[1] or preSelectLastFrame[2] ~= preSelect[2] then
-			triggerEvent("onDgsGridListHover",source,preSelect[1],preSelect[2],preSelectLastFrame[1],preSelectLastFrame[2])
-			preSelectLastFrame[1],preSelectLastFrame[2] = preSelect[1],preSelect[2]
-		end
-		local Select = eleData.rowSelect
-		local sectionFont = eleData.sectionFont or font
-		local textBuffer = {}
-		local textBufferCnt = 1
-		for i=eleData.FromTo[1],eleData.FromTo[2] do
-			local lc_rowData = rowData[i]
-			local image = lc_rowData[-3]
-			local color = lc_rowData[0]
-			local columnOffset = lc_rowData[-4]
-			local isSection = lc_rowData[-5]
-			local rowpos = i*rowHeight+(i-1)*leading
-			local _x,_y,_sx,_sy = column_x+columnOffset,_y+rowpos-rowHeight,_sx,_y+rowpos
-			if eleData.PixelInt then
-				_x,_y,_sx,_sy = _x-_x%1,_y-_y%1,_sx-_sx%1,_sy-_sy%1
-			end
-			for id=whichColumnToStart,whichColumnToEnd do
-				local currentRowData = lc_rowData[id]
-				local text = currentRowData[1]
-				local _txtFont = isSection and sectionFont or (currentRowData[6] or eleData.rowFont or eleData.columnFont or font)
-				local _txtScalex = currentRowData[4] or rowTextSx
-				local _txtScaley = currentRowData[5] or rowTextSy
-				local alignment = currentRowData[11] or columnData[id][4]
-				local itemBGColor,itemBGImage = currentRowData[13] or color,currentRowData[14] or image
-				local rowState = 1
-				if selectionMode == 1 then
-					if i == preSelect[1] then
-						rowState = 2
-					end
-					if Select[i] and Select[i][1] then
-						rowState = 3
-					end
-				elseif selectionMode == 2 then
-					if id == preSelect[2] then
-						rowState = 2
-					end
-					if Select[1] and Select[1][id] then
-						rowState = 3
-					end
-				elseif selectionMode == 3 then
-					if i == preSelect[1] and id == preSelect[2] then
-						rowState = 2
-					end
-					if Select[i] and Select[i][id] then
-						rowState = 3
-					end
-				end
-				local offset = cpos[id]
-				local _x = _x+offset
-				local _sx = (cpos[id+1] or (columnData[id][2])*multiplier)+_x
-				local columnWidth = columnData[id][2]*multiplier
-				local _bgX = _x
-				if id == 1 then
-					_bgX = _x+backgroundOffset
-					columnWidth = columnWidth-backgroundOffset
-				elseif columnWidth+_x-x >= w or whichColumnToEnd == id then
-					columnWidth = w-_x+x-scbThickV
-				end
-				local itemUsingBGColor,itemUsingBGImage = applyColorAlpha(itemBGColor[rowState] or color[rowState],parentAlpha),itemBGImage[rowState] or image[rowState]
-				if itemUsingBGImage then
-					dxDrawImage(_bgX,_y,columnWidth,rowHeight,itemUsingBGImage,0,0,0,itemUsingBGColor,isPostGUI,rndtgt)
-				else
-					dxDrawRectangle(_bgX,_y,columnWidth,rowHeight,itemUsingBGColor,isPostGUI)
-				end
-				if text ~= "" then
-					local colorcoded = currentRowData[3] == nil and colorcoded or currentRowData[3]
-					if currentRowData[7] then
-						local imageData = currentRowData[7]
-						local color = applyColorAlpha(imageData[2],parentAlpha)
-						if isElement(imageData[1]) then
-							dxDrawImage(_x+imageData[3],_y+imageData[4],imageData[5],imageData[6],imageData[1],0,0,0,color,rndtgt)
-						else
-							dxDrawRectangle(_x+imageData[3],_y+imageData[4],imageData[5],imageData[6],color)
-						end
-					end
-					local textXS,textYS,textXE,textYE = _x,_y,_sx,_sy
-					if currentRowData[12] then
-						local itemTextOffsetX = currentRowData[12][3] and columnWidth*currentRowData[12][1] or currentRowData[12][1]
-						local itemTextOffsetY = currentRowData[12][3] and rowHeight*currentRowData[12][2] or currentRowData[12][2]
-						textXS,textYS,textXE,textYE = textXS+itemTextOffsetX,textYS+itemTextOffsetY,textXE+itemTextOffsetX,textYE+itemTextOffsetY
-					end
-					local color = type(currentRowData[2]) == "table" and currentRowData[2] or {currentRowData[2],currentRowData[2],currentRowData[2]}
-					textBuffer[textBufferCnt] = {
-						currentRowData[1],	--Text
-						textXS-textXS%1,			--startX
-						textYS-textYS%1,			--startY
-						textXE-textXE%1,			--endX
-						textYE-textYE%1,			--endY
-						color[rowState],
-						_txtScalex,
-						_txtScaley,
-						_txtFont,
-						clip,
-						colorcoded,
-						alignment,
-					}
-					textBufferCnt = textBufferCnt+1
-				end
-			end
-		end
-		for i=1,#textBuffer do
-			local line = textBuffer[i]
-			local text = line[1]
-			local psx,psy,pex,pey = line[2]+rowTextPosOffset[1],line[3]+rowTextPosOffset[2],line[4]+rowTextPosOffset[1],line[5]+rowTextPosOffset[2]
-			local clr,tSclx,tScly,tFnt,tClip,tClrCode,tHozAlign = line[6],line[7],line[8],line[9],line[10],line[11],line[12]
-			local color = applyColorAlpha(clr,parentAlpha)
-			local psx = psx-psx%1			--startX
-			local psy = psy-psy%1			--startY
-			local pex = pex-pex%1			--endX
-			local pey = pey-pey%1			--endY
-			if shadow then
-				if tClrCode then
-					text = text:gsub("#%x%x%x%x%x%x","") or text
-				end
-				local shadowColor = applyColorAlpha(shadow[3],parentAlpha)
-				dxDrawText(text,psx+shadow[1],psy+shadow[2],pex+shadow[1],pey+shadow[2],shadowColor,tSclx,tScly,tFnt,tHozAlign,"center",tClip,false,isPostGUI,false,true)
-			end
-			dxDrawText(line[1],psx,psy,pex,pey,color,tSclx,tScly,tFnt,tHozAlign,"center",tClip,false,isPostGUI,tClrCode,true)
 		end
 	end
 	dxSetBlendMode(rndtgt and "modulate_add" or "blend")
+	dxSetRenderTarget(rndtgt)
+	dxDrawImage(x,y+columnHeight,w,h-columnHeight,bgImage,0,0,0,bgColor,isPostGUI,rndtgt)
+	dxDrawImage(x,y,w,columnHeight,columnImage,0,0,0,columnColor,isPostGUI,rndtgt)
+	dxSetBlendMode(rndtgt and "modulate_add" or "add")
+	if eleData.rowRT then
+		dxDrawImage(x,y+columnHeight,viewWidth,viewHeight-columnHeight,eleData.rowRT,0,0,0,white,isPostGUI)
+	end
+	if eleData.columnRT then
+		dxDrawImage(x,y,viewWidth,columnHeight,eleData.columnRT,0,0,0,white,isPostGUI)
+	end
+	dxSetBlendMode(rndtgt and "modulate_add" or "blend")
 	return rndtgt,false,mx,my,0,0
+end
+
+----------------------------------------------------------------
+-------------------------Children Renderer----------------------
+----------------------------------------------------------------
+dgsChildRenderer["dgs-dxgridlist"] = function(children,mx,my,enabledInherited,enabledSelf,rndtgt,xRT,yRT,xNRT,yNRT,OffsetX,OffsetY,parentAlpha)
+	for i=1,#children do
+		local child = children[i]
+		if not dgsElementData[child].attachedToGridList then
+			renderGUI(child,mx,my,enabledInherited,enabledSelf,rndtgt,xRT,yRT,xNRT,yNRT,OffsetX,OffsetY,parentAlpha)
+		end
+	end
 end

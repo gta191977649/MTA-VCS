@@ -1,14 +1,13 @@
-﻿<meta>
-	<info type="script" name="dgs" description="thisdp's directx graphic user interface system" author="DGS Community" version="Hydro" />
+<meta>
+	<info type="script" name="dgs" description="thisdp's directx graphic user interface system" author="DGS Community" version="3.524" />
 	<file src="html/media.html" />
 	<file src="styleManager/styleMapper.lua"/>
-	<script src="lua.lua" type="shared" />
+	<script src="lua.lua" type="server" />
 	<script src="server.lua" type="server" />
 	<script src="utility.lua" type="client" />
 	<script src="manager.lua" type="client" />
-	<script src="client.lua" type="client" />
-	<script src="functions.lua" type="client" />
 	<script src="styleManager/styleManager.lua" type="client" />
+	<script src="functions.lua" type="client" />
 	<script src="Core/3dinterface.lua" type="client" />
 	<script src="Core/3dline.lua" type="client" />
 	<script src="Core/3dtext.lua" type="client" />
@@ -19,6 +18,7 @@
 	<script src="Core/combobox.lua" type="client" />
 	<script src="Core/customRenderer.lua" type="client" />
 	<script src="Core/edit.lua" type="client" />
+	<script src="Core/effectview.lua" type="client" />
 	<script src="Core/detectarea.lua" type="client" />
 	<script src="Core/gridlist.lua" type="client" />
 	<script src="Core/image.lua" type="client" />
@@ -26,7 +26,7 @@
 	<script src="Core/layout.lua" type="client" />
 	<script src="Core/line.lua" type="client" />
 	<script src="Core/memo.lua" type="client" />
-	<script src="Core/menulist.lua" type="client" />
+	<script src="Core/menu.lua" type="client" />
 	<script src="Core/progressbar.lua" type="client" />
 	<script src="Core/radiobutton.lua" type="client" />
 	<script src="Core/tabpanel.lua" type="client" />
@@ -37,15 +37,18 @@
 	<script src="Core/switchbutton.lua" type="client" />
 	<script src="Core/window.lua" type="client" />
 	<script src="Core/customCursor.lua" type="client" />
+	
+	<script src="client.lua" type="client" />
 	<script src="dgsExportedFunction.lua" type="client" />
-	<script src="plugin/media.lua" type="client" />
 	<script src="animation.lua" type="client" />
-
-	<script src="plugin/pluginManager.lua" type="client" />
+	
+	<script src="plugin/media.lua" type="client" />
 
 	<script src="plugin/objPrevSupport.lua" type="client" />
 
 	<script src="plugin/cmd.lua" type="client" />
+
+	<script src="plugin/gif.lua" type="client" />
 
 	<script src="plugin/ColorPicker/colorPicker.lua" type="client" />
 	<file src="plugin/ColorPicker/HSVRingSel.fx" type="client" />
@@ -59,9 +62,14 @@
 	<file src="plugin/ColorPicker/RGBComponent.fx" type="client" />
 	<file src="plugin/ColorPicker/ALPComponent.fx" type="client" />
 
-	<script src="plugin/Effect3D.lua" type="client" />
+	<script src="plugin/effect3D.lua" type="client" />
 
-	<script src="plugin/basicShape.lua" type="client" />
+	<file src="plugin/BasicShape/roundedRectangle.fx" />
+	<script src="plugin/BasicShape/roundedRectangle.lua" type="client" />
+	<file src="plugin/BasicShape/circle.fx" />
+	<script src="plugin/BasicShape/circle.lua" type="client" />
+	<file src="plugin/BasicShape/quadrilateral.fx" />
+	<script src="plugin/BasicShape/quadrilateral.lua" type="client" />
 
 	<script src="plugin/QRCode.lua" type="client" />
 	
@@ -71,17 +79,22 @@
 
 	<script src="plugin/canvas.lua" type="client" />
 	
-	<script src="plugin/gradient.lua" type="client" />
+	<script src="plugin/Gradient/gradient.lua" type="client" />
+	<file src="plugin/Gradient/gradient.fx" type="client" />
 
-	<script src="plugin/nineSlice.lua" type="client" />
+	<script src="plugin/NineSlice/nineSlice.lua" type="client" />
+	<file src="plugin/NineSlice/nineSlice.fx" type="client" />
 
-	<script src="plugin/BlurBox.lua" type="client" />
+	<script src="plugin/BlurBox/blurBox.lua" type="client" />
+	<file src="plugin/BlurBox/blurBox.fx" type="client" />
 	
 	<script src="plugin/screenSource.lua" type="client" />
-	
+
 	<script src="plugin/svg.lua" type="client" />
 	
 	<script src="plugin/chart.lua" type="client" />
+	
+	<script src="plugin/tooltip.lua" type="client" />
 
 	<script src="plugin/pasteHandler/pasteHandler.lua" type="client"/>
 	<file src="plugin/pasteHandler/pasteHandler.html" />
@@ -92,7 +105,6 @@
 	<file src="plugin/mask/mask-BackGroundFilter.fx" type="client" />
 	<file src="plugin/mask/mask-ColorInverter.fx" type="client" />
 
-	<script src="dxCmdEvent.lua" type="client" />
 	<script src="update.lua" type="server" />
 	<script src="G2DManager_s.lua" type="server" />
 	<script src="test.lua" type="client" />
@@ -101,16 +113,16 @@
 
 	<!--(Default Style)-->
 	<file src="styleManager/Default/Images/combobox/arrow.fx" />
-	<file src="styleManager/Default/Images/checkbox/cb_t.png" />
-	<file src="styleManager/Default/Images/checkbox/cb_f.png" />
-	<file src="styleManager/Default/Images/checkbox/cb_i.png" />
-	<file src="styleManager/Default/Images/checkbox/cb_t_s.png" />
-	<file src="styleManager/Default/Images/checkbox/cb_f_s.png" />
-	<file src="styleManager/Default/Images/checkbox/cb_i_s.png" />
-	<file src="styleManager/Default/Images/radiobutton/rb_t.png" />
-	<file src="styleManager/Default/Images/radiobutton/rb_f.png" />
-	<file src="styleManager/Default/Images/radiobutton/rb_t_s.png" />
-	<file src="styleManager/Default/Images/radiobutton/rb_f_s.png" />
+	<file src="styleManager/Default/Images/checkbox/cbChecked.png" />
+	<file src="styleManager/Default/Images/checkbox/cbUnchecked.png" />
+	<file src="styleManager/Default/Images/checkbox/cbIndeterminate.png" />
+	<file src="styleManager/Default/Images/checkbox/cbChecked_s.png" />
+	<file src="styleManager/Default/Images/checkbox/cbUnchecked_s.png" />
+	<file src="styleManager/Default/Images/checkbox/cbIndeterminate_s.png" />
+	<file src="styleManager/Default/Images/radiobutton/rbChecked.png" />
+	<file src="styleManager/Default/Images/radiobutton/rbUnchecked.png" />
+	<file src="styleManager/Default/Images/radiobutton/rbChecked_s.png" />
+	<file src="styleManager/Default/Images/radiobutton/rbUnchecked_s.png" />
 	<file src="styleManager/Default/Images/scrollbar/scrollbar_arrow.png" />
 	<file src="styleManager/Default/Images/cursor/CursorText.png" />
 	<file src="styleManager/Default/Images/cursor/CursorMove.png" />
@@ -127,8 +139,6 @@
 	<!--(Custom Style 2) -->
 
 	<!--&Add Your Styles Here-->
-	<script src="lastExecution.lua" type="client" />
-
 	<export function="dgsAddEasingFunction" type="client" />
 	<export function="dgsEasingFunctionExists" type="client" />
 	<export function="dgsRemoveEasingFunction" type="client" />
@@ -170,10 +180,8 @@
 	<export function="dgsGetClickingSoundVolume" type="client" />
 	<export function="dgsGetPositionAlignment" type="client" />
 	<export function="dgsSetPositionAlignment" type="client" />
-
 	<export function="dgsGetSide" type="client" />
 	<export function="dgsSetSide" type="client" />
-
 	<export function="dgsGetAlpha" type="client" />
 	<export function="dgsSetAlpha" type="client" />
 	<export function="dgsSetLayer" type="client" />
@@ -192,11 +200,18 @@
 	<export function="dgsCreateFont" type="client" />
 	<export function="dgsBringToFront" type="client" />
 	<export function="dgsMoveToBack" type="client" />
+	<export function="dgsAddToBackEndRenderList" type="client" />
+	<export function="dgsRemoveFromBackEndRenderList" type="client" />
 	<export function="dgsIsMouseWithinGUI" type="client" />
 	<export function="dgsGetMouseEnterGUI" type="client" />
 	<export function="dgsGetMouseLeaveGUI" type="client" />
+	<export function="dgsCenterElement" type="client" />
+	
 	<export function="dgsGetDxGUIFromResource" type="client" />
 	<export function="dgsGetDxGUINoParent" type="client" />
+	
+	<export function="dgsGetElementsInLayer" type="client" />
+	<export function="dgsGetElementsFromResource" type="client" />
 	<export function="dgsGetFocusedGUI" type="client" />
 	<export function="dgsClear" type="client" />
 	<export function="dgsSetRenderSetting" type="client" />
@@ -207,6 +222,7 @@
 	<export function="dgsGetInputMode" type="client" />
 	<export function="dgsGetRootElement" type="client" />
 	<export function="dgsSetInputEnabled" type="client" />
+	<export function="dgsGetInputEnabled" type="client" />
 	<export function="dgsAddMoveHandler" type="client" />
 	<export function="dgsRemoveMoveHandler" type="client" />
 	<export function="dgsIsMoveHandled" type="client" />
@@ -214,25 +230,25 @@
 	<export function="dgsRemoveSizeHandler" type="client" />
 	<export function="dgsAddPropertyListener" type="client" />
 	<export function="dgsRemovePropertyListener" type="client" />
-	<export function="dgsGetListeningProperties" type="client" />
+	<export function="dgsGetListenedProperties" type="client" />
 	<export function="dgsIsSizeHandled" type="client" />
 	<export function="dgsAttachElements" type="client" />
 	<export function="dgsDetachElements" type="client" />
 	<export function="dgsElementIsAttached" type="client" />
 	<export function="dgsGetCursorPosition" type="client" />
+	<export function="dgsGetMultiClickInterval" type="client" />
 	<export function="dgsSetMultiClickInterval" type="client" />
-	<export function="dgsSetMultiClickInterval" type="client" />
+	<export function="dgsGetMouseStayDelay" type="client" />
+	<export function="dgsSetMouseStayDelay" type="client" />
 	<export function="dgsGetBrowser" type="client" />
 	<export function="dgsAttachToAutoDestroy" type="client" />
 	<export function="dgsDetachFromAutoDestroy" type="client" />
 	<export function="dgsGetDetectArea" type="client" />
 	<export function="dgsApplyDetectArea" type="client" />
 	<export function="dgsRemoveDetectArea" type="client" />
-	<export function="dgsPushElement" type="client" />
-	<export function="dgsPopElement" type="client" />
-	<export function="dgsSetElementKeeperEnabled" type="client" />
-	<export function="dgsGetElementKeeperEnabled" type="client" />
 	<export function="dgsSetDebugTracerEnabled" type="client" />
+	<export function="dgsGetRegisteredProperties" type="client" />
+	<export function="dgsListPropertyTypes" type="client" />
 
 	<export function="dgsAddStyle" type="client" />
 	<export function="dgsLoadStyle" type="client" />
@@ -267,6 +283,77 @@
 	<export function="dgsGetTranslationName" type="client" />
 	<export function="dgsGetTranslationValue" type="client" />
 	<export function="dgsTranslateText" type="client" />
+	<export function="dgsTranslationAddPropertyListener" type="client" />
+	<export function="dgsTranslationRemovePropertyListener" type="client" />
+
+	<export function="dgs3DSetPosition" type="client" />
+	<export function="dgs3DGetPosition" type="client" />
+	<export function="dgs3DSetInterior" type="client" />
+	<export function="dgs3DGetInterior" type="client" />
+	<export function="dgs3DSetDimension" type="client" />
+	<export function="dgs3DGetDimension" type="client" />
+	
+	<export function="dgsCreate3DInterface" type="client" />
+	<export function="dgs3DInterfaceProcessLineOfSight" type="client" />
+	<export function="dgs3DInterfaceSetDoublesided" type="client" />
+	<export function="dgs3DInterfaceGetDoublesided" type="client" />
+	<export function="dgs3DInterfaceGetBlendMode" type="client" />
+	<export function="dgs3DInterfaceSetBlendMode" type="client" />
+	<export function="dgs3DInterfaceGetSize" type="client" />
+	<export function="dgs3DInterfaceSetSize" type="client" />
+	<export function="dgs3DInterfaceGetResolution" type="client" />
+	<export function="dgs3DInterfaceSetResolution" type="client" />
+	<export function="dgs3DInterfaceGetFaceTo" type="client" />
+	<export function="dgs3DInterfaceSetFaceTo" type="client" />
+	<export function="dgs3DInterfaceAttachToElement" type="client" />
+	<export function="dgs3DInterfaceIsAttached" type="client" />
+	<export function="dgs3DInterfaceDetachFromElement" type="client" />
+	<export function="dgs3DInterfaceSetAttachedOffsets" type="client" />
+	<export function="dgs3DInterfaceGetAttachedOffsets" type="client" />
+	<export function="dgs3DInterfaceSetRoll" type="client" />
+	<export function="dgs3DInterfaceGetRoll" type="client" />
+
+	<export function="dgsCreate3DLine" type="client" />
+	<export function="dgs3DLineAddItem" type="client" />
+	<export function="dgs3DLineRemoveItem" type="client" />
+	<export function="dgs3DLineSetLineType" type="client" />
+	<export function="dgs3DLineGetLineType" type="client" />
+	<export function="dgs3DLineSetItemPosition" type="client" />
+	<export function="dgs3DLineGetItemPosition" type="client" />
+	<export function="dgs3DLineSetItemWidth" type="client" />
+	<export function="dgs3DLineGetItemWidth" type="client" />
+	<export function="dgs3DLineSetItemColor" type="client" />
+	<export function="dgs3DLineGetItemColor" type="client" />
+	<export function="dgs3DLineAttachToElement" type="client" />
+	<export function="dgs3DLineIsAttached" type="client" />
+	<export function="dgs3DLineDetachFromElement" type="client" />
+	<export function="dgs3DLineSetAttachedOffsets" type="client" />
+	<export function="dgs3DLineGetAttachedOffsets" type="client" />
+	<export function="dgs3DLineSetRotation" type="client" />
+	<export function="dgs3DLineGetRotation" type="client" />
+
+	<export function="dgsCreate3DText" type="client" />
+	<export function="dgs3DTextAttachToElement" type="client" />
+	<export function="dgs3DTextIsAttached" type="client" />
+	<export function="dgs3DTextDetachFromElement" type="client" />
+	<export function="dgs3DTextSetAttachedOffsets" type="client" />
+	<export function="dgs3DTextGetAttachedOffsets" type="client" />
+
+	<export function="dgsCreate3DImage" type="client" />
+	<export function="dgs3DImageSetImage" type="client" />
+	<export function="dgs3DImageGetImage" type="client" />
+	<export function="dgs3DImageSetSize" type="client" />
+	<export function="dgs3DImageGetSize" type="client" />
+	<export function="dgs3DImageAttachToElement" type="client" />
+	<export function="dgs3DImageIsAttached" type="client" />
+	<export function="dgs3DImageDetachFromElement" type="client" />
+	<export function="dgs3DImageSetAttachedOffsets" type="client" />
+	<export function="dgs3DImageGetAttachedOffsets" type="client" />
+	<export function="dgs3DImageGetNativeSize" type="client" />
+	<export function="dgs3DImageGetUVPosition" type="client" />
+	<export function="dgs3DImageSetUVPosition" type="client" />
+	<export function="dgs3DImageGetUVSize" type="client" />
+	<export function="dgs3DImageSetUVSize" type="client" />
 
 	<export function="dgsCreateWindow" type="client" />
 	<export function="dgsWindowSetSizable" type="client" />
@@ -283,90 +370,19 @@
 	<export function="dgsWindowSetVerticalAlign" type="client" />
 	<export function="dgsWindowGetHorizontalAlign" type="client" />
 	<export function="dgsWindowGetVerticalAlign" type="client" />
+	<export function="dgsWindowGetTextExtent" type="client" />
+	<export function="dgsWindowGetFontHeight" type="client" />
+	<export function="dgsWindowGetTextSize" type="client" />
 
 	<export function="dgsCreateCustomRenderer" type="client" />
 	<export function="dgsCustomRendererSetFunction" type="client" />
+	<export function="dgsCustomRendererSetBackEndFunction" type="client" />
+	<export function="dgsCustomRendererSetRenderTargetSize" type="client" />
+	<export function="dgsCustomRendererGetRenderTargetSize" type="client" />
+	<export function="dgsCustomRendererGetRenderTarget" type="client" />
 
-	<export function="dgsCreate3DInterface" type="client" />
-	<export function="dgs3DInterfaceGetBlendMode" type="client" />
-	<export function="dgs3DInterfaceSetBlendMode" type="client" />
-	<export function="dgs3DInterfaceGetPosition" type="client" />
-	<export function="dgs3DInterfaceSetPosition" type="client" />
-	<export function="dgs3DInterfaceGetSize" type="client" />
-	<export function="dgs3DInterfaceSetSize" type="client" />
-	<export function="dgs3DInterfaceGetResolution" type="client" />
-	<export function="dgs3DInterfaceSetResolution" type="client" />
-	<export function="dgs3DInterfaceGetFaceTo" type="client" />
-	<export function="dgs3DInterfaceSetFaceTo" type="client" />
-	<export function="dgs3DInterfaceAttachToElement" type="client" />
-	<export function="dgs3DInterfaceIsAttached" type="client" />
-	<export function="dgs3DInterfaceDetachFromElement" type="client" />
-	<export function="dgs3DInterfaceSetAttachedOffsets" type="client" />
-	<export function="dgs3DInterfaceGetAttachedOffsets" type="client" />
-	<export function="dgs3DInterfaceSetDimension" type="client" />
-	<export function="dgs3DInterfaceGetDimension" type="client" />
-	<export function="dgs3DInterfaceSetInterior" type="client" />
-	<export function="dgs3DInterfaceGetInterior" type="client" />
-	<export function="dgs3DInterfaceSetRotation" type="client" />
-	<export function="dgs3DInterfaceGetRotation" type="client" />
-
-	<export function="dgsCreate3DLine" type="client" />
-	<export function="dgs3DLineAddItem" type="client" />
-	<export function="dgs3DLineRemoveItem" type="client" />
-	<export function="dgs3DLineSetItemPosition" type="client" />
-	<export function="dgs3DLineGetItemPosition" type="client" />
-	<export function="dgs3DLineSetItemWidth" type="client" />
-	<export function="dgs3DLineGetItemWidth" type="client" />
-	<export function="dgs3DLineSetItemColor" type="client" />
-	<export function="dgs3DLineGetItemColor" type="client" />
-	<export function="dgs3DLineGetDimension" type="client" />
-	<export function="dgs3DLineSetDimension" type="client" />
-	<export function="dgs3DLineGetInterior" type="client" />
-	<export function="dgs3DLineSetInterior" type="client" />
-	<export function="dgs3DLineAttachToElement" type="client" />
-	<export function="dgs3DLineIsAttached" type="client" />
-	<export function="dgs3DLineDetachFromElement" type="client" />
-	<export function="dgs3DLineSetAttachedOffsets" type="client" />
-	<export function="dgs3DLineGetAttachedOffsets" type="client" />
-	<export function="dgs3DLineSetPosition" type="client" />
-	<export function="dgs3DLineGetPosition" type="client" />
-	<export function="dgs3DLineSetRotation" type="client" />
-	<export function="dgs3DLineGetRotation" type="client" />
-
-	<export function="dgsCreate3DText" type="client" />
-	<export function="dgs3DTextGetPosition" type="client" />
-	<export function="dgs3DTextSetPosition" type="client" />
-	<export function="dgs3DTextAttachToElement" type="client" />
-	<export function="dgs3DTextIsAttached" type="client" />
-	<export function="dgs3DTextDetachFromElement" type="client" />
-	<export function="dgs3DTextSetAttachedOffsets" type="client" />
-	<export function="dgs3DTextGetAttachedOffsets" type="client" />
-	<export function="dgs3DTextSetDimension" type="client" />
-	<export function="dgs3DTextGetDimension" type="client" />
-	<export function="dgs3DTextSetInterior" type="client" />
-	<export function="dgs3DTextGetInterior" type="client" />
-
-	<export function="dgsCreate3DImage" type="client" />
-	<export function="dgs3DImageSetImage" type="client" />
-	<export function="dgs3DImageGetImage" type="client" />
-	<export function="dgs3DImageSetSize" type="client" />
-	<export function="dgs3DImageGetSize" type="client" />
-	<export function="dgs3DImageGetDimension" type="client" />
-	<export function="dgs3DImageSetDimension" type="client" />
-	<export function="dgs3DImageGetInterior" type="client" />
-	<export function="dgs3DImageSetInterior" type="client" />
-	<export function="dgs3DImageAttachToElement" type="client" />
-	<export function="dgs3DImageIsAttached" type="client" />
-	<export function="dgs3DImageDetachFromElement" type="client" />
-	<export function="dgs3DImageSetAttachedOffsets" type="client" />
-	<export function="dgs3DImageGetAttachedOffsets" type="client" />
-	<export function="dgs3DImageSetPosition" type="client" />
-	<export function="dgs3DImageGetPosition" type="client" />
-	<export function="dgs3DImageGetNativeSize" type="client" />
-	<export function="dgs3DImageGetUVPosition" type="client" />
-	<export function="dgs3DImageSetUVPosition" type="client" />
-	<export function="dgs3DImageGetUVSize" type="client" />
-	<export function="dgs3DImageSetUVSize" type="client" />
+	<export function="dgsCreateEffectView" type="client" />
+	<export function="dgsEffectViewSetEffectShader" type="client" />
 
 	<export function="dgsCreateScalePane" type="client" />
 	<export function="dgsScalePaneGetScrollBar" type="client" />
@@ -395,18 +411,26 @@
 	<export function="dgsCreateRadioButton" type="client" />
 	<export function="dgsRadioButtonGetSelected" type="client" />
 	<export function="dgsRadioButtonSetSelected" type="client" />
-	<export function="dgsRadioButtonSetHorizontalAlign" type="client" />
-	<export function="dgsRadioButtonSetVerticalAlign" type="client" />
 	<export function="dgsRadioButtonGetHorizontalAlign" type="client" />
+	<export function="dgsRadioButtonSetHorizontalAlign" type="client" />
 	<export function="dgsRadioButtonGetVerticalAlign" type="client" />
+	<export function="dgsRadioButtonSetVerticalAlign" type="client" />
+	<export function="dgsRadioButtonGetButtonSide" type="client" />
+	<export function="dgsRadioButtonSetButtonSide" type="client" />
+	<export function="dgsRadioButtonGetButtonAlign" type="client" />
+	<export function="dgsRadioButtonSetButtonAlign" type="client" />
 
 	<export function="dgsCreateCheckBox" type="client" />
 	<export function="dgsCheckBoxGetSelected" type="client" />
 	<export function="dgsCheckBoxSetSelected" type="client" />
-	<export function="dgsCheckBoxSetHorizontalAlign" type="client" />
-	<export function="dgsCheckBoxSetVerticalAlign" type="client" />
 	<export function="dgsCheckBoxGetHorizontalAlign" type="client" />
+	<export function="dgsCheckBoxSetHorizontalAlign" type="client" />
 	<export function="dgsCheckBoxGetVerticalAlign" type="client" />
+	<export function="dgsCheckBoxSetVerticalAlign" type="client" />
+	<export function="dgsCheckBoxGetButtonSide" type="client" />
+	<export function="dgsCheckBoxSetButtonSide" type="client" />
+	<export function="dgsCheckBoxGetButtonAlign" type="client" />
+	<export function="dgsCheckBoxSetButtonAlign" type="client" />
 
 	<export function="dgsCreateComboBox" type="client" />
 	<export function="dgsComboBoxAddItem" type="client" />
@@ -418,8 +442,15 @@
 	<export function="dgsComboBoxGetSelectedItem" type="client" />
 	<export function="dgsComboBoxSetItemColor" type="client" />
 	<export function="dgsComboBoxGetItemColor" type="client" />
+	<export function="dgsComboBoxSetItemImage" type="client" />
+	<export function="dgsComboBoxGetItemImage" type="client" />
+	<export function="dgsComboBoxRemoveItemImage" type="client" />
 	<export function="dgsComboBoxSetItemData" type="client" />
 	<export function="dgsComboBoxGetItemData" type="client" />
+	<export function="dgsComboBoxSetItemBackGroundImage" type="client" />
+	<export function="dgsComboBoxGetItemBackGroundImage" type="client" />
+	<export function="dgsComboBoxSetItemBackGroundColor" type="client" />
+	<export function="dgsComboBoxGetItemBackGroundColor" type="client" />
 	<export function="dgsComboBoxSetState" type="client" />
 	<export function="dgsComboBoxGetState" type="client" />
 	<export function="dgsComboBoxSetBoxHeight" type="client" />
@@ -427,6 +458,8 @@
 	<export function="dgsComboBoxGetScrollBar" type="client" />
 	<export function="dgsComboBoxSetScrollPosition" type="client" />
 	<export function="dgsComboBoxGetScrollPosition" type="client" />
+	<export function="dgsComboBoxSetScrollBarState" type="client" />
+	<export function="dgsComboBoxGetScrollBarState" type="client" />
 	<export function="dgsComboBoxSetCaptionText" type="client" />
 	<export function="dgsComboBoxGetCaptionText" type="client" />
 	<export function="dgsComboBoxSetEditEnabled" type="client" />
@@ -437,11 +470,17 @@
 	<export function="dgsComboBoxGetViewCount" type="client" />
 	<export function="dgsComboBoxSetItemFont" type="client" />
 	<export function="dgsComboBoxGetItemFont" type="client" />
-	<export function="dgsComboBoxSetItemImage" type="client" />
-	<export function="dgsComboBoxGetItemImage" type="client" />
-	<export function="dgsComboBoxRemoveItemImage" type="client" />
+	<export function="dgsComboBoxSetSortFunction" type="client" />
+	<export function="dgsComboBoxSortSetAutoSortEnabled" type="client" />
+	<export function="dgsComboBoxSortGetAutoSortEnabled" type="client" />
+	<export function="dgsComboBoxSort" type="client" />
 
 	<export function="dgsCreateButton" type="client" />
+	<export function="dgsButtonGetTextExtent" type="client" />
+	<export function="dgsButtonGetFontHeight" type="client" />
+	<export function="dgsButtonGetTextSize" type="client" />
+	<export function="dgsButtonMakeForm" type="client" />
+	<export function="dgsButtonRemoveForm" type="client" />
 
 	<export function="dgsCreateEdit" type="client" />
 	<export function="dgsEditMoveCaret" type="client" />
@@ -449,7 +488,7 @@
 	<export function="dgsEditSetCaretPosition" type="client" />
 	<export function="dgsEditGetCaretStyle" type="client" />
 	<export function="dgsEditSetCaretStyle" type="client" />
-	<export function="dgsEditSetWhiteList" type="client" />
+	<export function="dgsEditSetTextFilter" type="client" />
 	<export function="dgsEditGetMaxLength" type="client" />
 	<export function="dgsEditSetMaxLength" type="client" />
 	<export function="dgsEditSetReadOnly" type="client" />
@@ -516,26 +555,20 @@
 	<export function="dgsMemoGetMaxLength" type="client" />
 	<export function="dgsMemoSetMaxLength" type="client" />
 
-	<export function="dgsCreateMediaBrowser" type="client" />
-	<export function="dgsMediaLoadMedia" type="client" />
-	<export function="dgsMediaGetMediaPath" type="client" />
-	<export function="dgsMediaClearMedia" type="client" />
-	<export function="dgsMediaIsStreamMedia" type="client" />
-	<export function="dgsMediaPlay" type="client" />
-	<export function="dgsMediaPause" type="client" />
-	<export function="dgsMediaStop" type="client" />
-	<export function="dgsMediaSetSize" type="client" />
-	<export function="dgsMediaSetSpeed" type="client" />
-	<export function="dgsMediaGetSpeed" type="client" />
-	<export function="dgsMediaSetFilled" type="client" />
-	<export function="dgsMediaGetFilled" type="client" />
-	<export function="dgsMediaSetFullScreen" type="client" />
-	<export function="dgsMediaGetFullScreen" type="client" />
-	<export function="dgsMediaGetDuration" type="client" />
-	<export function="dgsMediaGetCurrentPosition" type="client" />
-	<export function="dgsMediaSetCurrentPosition" type="client" />
-	<export function="dgsMediaGetLooped" type="client" />
-	<export function="dgsMediaSetLooped" type="client" />
+	<export function="dgsCreateMenu" type="client" />
+	<export function="dgsMenuShow" type="client" />
+	<export function="dgsMenuHide" type="client" />
+	<export function="dgsMenuAddItem" type="client" />
+	<export function="dgsMenuSetItemCommand" type="client" />
+	<export function="dgsMenuGetItemCommand" type="client" />
+	<export function="dgsMenuSetItemText" type="client" />
+	<export function="dgsMenuGetItemText" type="client" />
+	<export function="dgsMenuSetItemTextSize" type="client" />
+	<export function="dgsMenuGetItemTextSize" type="client" />
+	<export function="dgsMenuSetItemColor" type="client" />
+	<export function="dgsMenuGetItemColor" type="client" />
+	<export function="dgsMenuAddSeparator" type="client" />
+	<export function="dgsMenuRemoveItem" type="client" />
 
 	<export function="dgsCreateImage" type="client" />
 	<export function="dgsImageSetImage" type="client" />
@@ -567,11 +600,14 @@
 	<export function="dgsLabelGetVerticalAlign" type="client" />
 	<export function="dgsLabelGetTextExtent" type="client" />
 	<export function="dgsLabelGetFontHeight" type="client" />
+	<export function="dgsLabelGetTextSize" type="client" />
 	
 	<export function="dgsCreateLayout" type="client" />
 	<export function="dgsLayoutAddItem" type="client" />
 	<export function="dgsLayoutRemoveItem" type="client" />
 	<export function="dgsLayoutGetItemIndex" type="client" />
+	<export function="dgsLayoutSetItemSortPriority" type="client" />
+	<export function="dgsLayoutGetItemSortPriority" type="client" />
 
 	<export function="dgsCreateLine" type="client"/>
 	<export function="dgsLineAddItem" type="client"/>
@@ -607,6 +643,8 @@
 	<export function="dgsScrollBarGetTroughWidth" type="client" />
 	<export function="dgsScrollBarSetArrowSize" type="client" />
 	<export function="dgsScrollBarGetArrowSize" type="client" />
+	<export function="dgsScrollBarSetTroughClickAction" type="client" />
+	<export function="dgsScrollBarGetTroughClickAction" type="client" />
 
 	<export function="dgsCreateSelector" type="client" />
 	<export function="dgsSelectorAddItem" type="client" />
@@ -658,6 +696,8 @@
 	<export function="dgsGridListGetColumnAlignment" type="client" />
 	<export function="dgsGridListGetColumnTextSize" type="client" />
 	<export function="dgsGridListSetColumnTextSize" type="client" />
+	<export function="dgsGridListSetColumnTextColor" type="client" />
+	<export function="dgsGridListGetColumnTextColor" type="client" />
 	<export function="dgsGridListInsertRowAfter" type="client" />
 	<export function="dgsGridListAddRow" type="client" />
 	<export function="dgsGridListAddRows" type="client" />
@@ -683,6 +723,7 @@
 	<export function="dgsGridListGetRowBackGroundColor" type="client" />
 	<export function="dgsGridListGetRowBackGroundImage" type="client" />
 	<export function="dgsGridListSetRowBackGroundImage" type="client" />
+	<export function="dgsGridListSetRowAsSection" type="client" />
 	<export function="dgsGridListSetItemText" type="client" />
 	<export function="dgsGridListGetItemText" type="client" />
 	<export function="dgsGridListSetItemTextOffset" type="client" />
@@ -695,17 +736,18 @@
 	<export function="dgsGridListSetItemHoverable" type="client" />
 	<export function="dgsGridListGetItemSelectable" type="client" />
 	<export function="dgsGridListSetItemSelectable" type="client" />
+	<export function="dgsGridListSetItemBackGroundColorTemplate" type="client" />
 	<export function="dgsGridListSetItemBackGroundColor" type="client" />
 	<export function="dgsGridListGetItemBackGroundColor" type="client" />
 	<export function="dgsGridListSetItemBackGroundImage" type="client" />
 	<export function="dgsGridListGetItemBackGroundImage" type="client" />
+	<export function="dgsGridListSetItemAsSection" type="client" />
 	<export function="dgsGridListSetItemFont" type="client" />
 	<export function="dgsGridListGetItemFont" type="client" />
 	<export function="dgsGridListSetItemTextSize" type="client" />
 	<export function="dgsGridListGetItemTextSize" type="client" />
 	<export function="dgsGridListGetItemData" type="client" />
 	<export function="dgsGridListSetItemData" type="client" />
-	<export function="dgsGridListSetRowAsSection" type="client" />
 	<export function="dgsGridListGetItemImage" type="client" />
 	<export function="dgsGridListSetItemImage" type="client" />
 	<export function="dgsGridListRemoveItemImage" type="client" />
@@ -731,6 +773,8 @@
 	<export function="dgsGridListGetHorizontalScrollPosition" type="client" />
 	<export function="dgsGridListSetVerticalScrollPosition" type="client" />
 	<export function="dgsGridListGetVerticalScrollPosition" type="client" />
+	<export function="dgsGridListSetScrollBarState" type="client" />
+	<export function="dgsGridListGetScrollBarState" type="client" />
 	<export function="dgsGridListSetNavigationEnabled" type="client" />
 	<export function="dgsGridListGetNavigationEnabled" type="client" />
 	<export function="dgsAttachToGridList" type="client" />
@@ -778,6 +822,8 @@
 	<export function="dgsBlurBoxGetIntensity" type="client" />
 	<export function="dgsBlurBoxSetLevel" type="client" />
 	<export function="dgsBlurBoxGetLevel" type="client" />
+	<export function="dgsBlurBoxSetBrightness" type="client" />
+	<export function="dgsBlurBoxGetBrightness" type="client" />
 	<export function="dgsBlurBoxSetTexture" type="client" />
 	<export function="dgsBlurBoxGetTexture" type="client" />
 	<export function="dgsBlurBoxSetFilter" type="client" />
@@ -789,6 +835,22 @@
 	<export function="dgsEffect3DGetRotationFactor" type="client" />
 	<export function="dgsEffect3DSetAlwaysEnabled" type="client" />
 	<export function="dgsEffect3DGetAlwaysEnabled" type="client" />
+
+
+
+	<export function="dgsCreateGIF" type="client" />
+	<export function="dgsGIFGetSize" type="client" />
+	<export function="dgsGIFGetImageCount" type="client" />
+	<export function="dgsGIFGetImages" type="client" />
+	<export function="dgsGIFPlay" type="client" />
+	<export function="dgsGIFStop" type="client" />
+	<export function="dgsGIFSetSpeed" type="client" />
+	<export function="dgsGIFGetSpeed" type="client" />
+	<export function="dgsGIFGetPlaying" type="client" />
+	<export function="dgsGIFSetLooped" type="client" />
+	<export function="dgsGIFGetLooped" type="client" />
+	<export function="dgsGIFSetFrameID" type="client" />
+	<export function="dgsGIFGetFrameID" type="client" />
 
 	<export function="dgsRGBToHSV" type="client" />
 	<export function="dgsRGBToHSL" type="client" />
@@ -817,6 +879,27 @@
 	<export function="dgsMaskSetTexture" type="client" />
 	<export function="dgsMaskCenterTexturePosition" type="client" />
 	<export function="dgsMaskAdaptTextureSize" type="client" />
+
+	<export function="dgsCreateMediaBrowser" type="client" />
+	<export function="dgsMediaLoadMedia" type="client" />
+	<export function="dgsMediaGetMediaPath" type="client" />
+	<export function="dgsMediaClearMedia" type="client" />
+	<export function="dgsMediaIsStreamMedia" type="client" />
+	<export function="dgsMediaPlay" type="client" />
+	<export function="dgsMediaPause" type="client" />
+	<export function="dgsMediaStop" type="client" />
+	<export function="dgsMediaSetSize" type="client" />
+	<export function="dgsMediaSetSpeed" type="client" />
+	<export function="dgsMediaGetSpeed" type="client" />
+	<export function="dgsMediaSetFilled" type="client" />
+	<export function="dgsMediaGetFilled" type="client" />
+	<export function="dgsMediaSetFullScreen" type="client" />
+	<export function="dgsMediaGetFullScreen" type="client" />
+	<export function="dgsMediaGetDuration" type="client" />
+	<export function="dgsMediaGetCurrentPosition" type="client" />
+	<export function="dgsMediaSetCurrentPosition" type="client" />
+	<export function="dgsMediaGetLooped" type="client" />
+	<export function="dgsMediaSetLooped" type="client" />
 
 	<export function="dgsCreateRemoteImage" type="client" />
 	<export function="dgsRemoteImageRequest" type="client" />
@@ -857,28 +940,86 @@
 	<export function="dgsCircleGetDirection" type="client" />
 	<export function="dgsCircleSetAngle" type="client" />
 	<export function="dgsCircleGetAngle" type="client" />
+	<export function="dgsCircleSetRotation" type="client" />
+	<export function="dgsCircleSetRotation" type="client" />
 	<export function="dgsCircleSetTextureRotation" type="client" />
 	<export function="dgsCircleGetTextureRotation" type="client" />
+	
+	<export function="dgsCreateQuad" type="client" />
+	<export function="dgsQuadSetVertices" type="client" />
+	<export function="dgsQuadGetVertices" type="client" />
+	<export function="dgsQuadSetTexture" type="client" />
+	<export function="dgsQuadGetTexture" type="client" />
+	<export function="dgsQuadSetColor" type="client" />
+	<export function="dgsQuadGetColor" type="client" />
+	<export function="dgsQuadSetColorOverwritten" type="client" />
+	<export function="dgsQuadGetColorOverwritten" type="client" />
+	<export function="dgsQuadSetRotation" type="client" />
+	<export function="dgsQuadSetRotation" type="client" />
+	<export function="dgsQuadSetTextureRotation" type="client" />
+	<export function="dgsQuadGetTextureRotation" type="client" />
+
+	<export function="dgsCreateChart" type="client" />
+	<export function="dgsChartAddDataset" type="client" />
+	<export function="dgsChartSetLabels" type="client" />
+	<export function="dgsChartRemoveDataset" type="client" />
+	<export function="dgsChartDatasetSetStyle" type="client" />
+	<export function="dgsChartDatasetSetLabel" type="client" />
+	<export function="dgsChartDatasetSetData" type="client" />
+	<export function="dgsChartDatasetAddData" type="client" />
+	<export function="dgsChartDatasetRemoveData" type="client" />
+	<export function="dgsChartDatasetClearData" type="client" />
 	
 	<export function="dgsCreateScreenSource" type="client" />
 	<export function="dgsScreenSourceSetUVPosition" type="client" />
 	<export function="dgsScreenSourceGetUVPosition" type="client" />
 	<export function="dgsScreenSourceSetUVSize" type="client" />
 	<export function="dgsScreenSourceGetUVSize" type="client" />
+	
+	<export function="dgsCreateSVG" type="client" />
+	<export function="dgsSVGGetDocument" type="client" />
+	<export function="dgsSVGGetRawDocument" type="client" />
+	<export function="dgsSVGCreateNode" type="client" />
+	<export function="dgsSVGDestroyNode" type="client" />
+	<export function="dgsSVGNodeSetAttribute" type="client" />
+	<export function="dgsSVGNodeGetAttribute" type="client" />
+	<export function="dgsSVGNodeSetAttributes" type="client" />
+	<export function="dgsSVGNodeGetAttributes" type="client" />
 
 	<export function="dgsCreateCanvas" type="client" />
+	<export function="dgsCanvasSetBackEndFunction" type="client" />
 
-	<export function="dgsCenterElement" type="client" />
+	<export function="dgsCreateToolTip" type="client" />
+	<export function="dgsTooltipApplyTo" type="client" />
+	<export function="dgsTooltipRemoveFrom" type="client" />
 
-	<export function="dgsGetExportedFunctionName" type="client" />
 	<export function="dgsImportFunction" type="client" />
 	<export function="dgsImportOOPClass" type="client" />
 	<export function="dgsG2DLoadHooker" type="client" />
 
-	<min_mta_version client="1.5.8-9.20998" server="1.5.4-9.11342" />
+	<min_mta_version client="1.6.0-9.21938" server="1.6.0-9.21938" />
 	<aclrequest>
 		<right name="function.fetchRemote" access="true" />
+		<right name="function.loadstring" access="true" />
 		<right name="general.ModifyOtherObjects" access="true" />
 	</aclrequest>
+
+	<settings>
+		<setting name="*testFile" value="true" friendlyname="Enable Test File" group="General" accept="boolean" desc="Enable or disable loading of DGS test file." />
+		<setting name="*compatibilityChecks" value="true" friendlyname="Enable Compatibility Check" group="General" accept="boolean" desc="Enable or disable compatibility check warnings." />
+		<setting name="*debugging" value="true" friendlyname="Enable Debugging" group="General" accept="boolean" desc="Enable or disable /debugdgs command." />
+
+		<setting name="*updateCheck" value="true" friendlyname="Enable Update Check" group="Updater" accept="boolean" desc="Enable or disable automatic update checks." />
+		<setting name="*updateCheckInterval" value="120" friendlyname="Update Check Interval" group="Updater" accept="number" desc="Interval in minutes between automatic update checks." />
+		<setting name="*updateCheckNoticeInterval" value="120" friendlyname="Update Check Notice Interval" group="Updater" accept="number" desc="Interval in minutes between update check notices." />
+		<setting name="*updateCommand" value="updatedgs" friendlyname="Update Command" group="Updater" accept="string" desc="Command to trigger a DGS update." />
+		<setting name="*updater" value="true" friendlyname="Enable Update System" group="Updater" accept="boolean" desc="Enable or disable the DGS update system." />
+		<setting name="*metaBackup" value="true" friendlyname="Enable Meta Backup" group="Updater" accept="boolean" desc="Enable or disable backup of meta.xml when updating." />
+		<setting name="*metaStyleBackup" value="true" friendlyname="Enable Style Meta Backup" group="Updater" accept="boolean" desc="Enable or disable backup of style files from meta.xml when updating." />
+		
+		<setting name="*G2DCMD" value="true" friendlyname="Enable G2D Command Line" group="CMD" accept="boolean" desc="Enable or disable GUI to DGS command line." />
+		<setting name="*CMD" value="true" friendlyname="Enable Built-in CMD" group="CMD" accept="boolean" desc="Enable or disable DGS built-in CMD /dgscmd." />
+	</settings>
+
 	<download_priority_group>999</download_priority_group>
 </meta>

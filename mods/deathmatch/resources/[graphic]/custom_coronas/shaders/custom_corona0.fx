@@ -15,6 +15,7 @@ float3 fCoronaPosition = float3(0,0,0);
 float4x4 gWorld : WORLD;
 float4x4 gView : VIEW;
 float4x4 gProjection : PROJECTION;
+#include "coronaAspect.fx"
 float3 gCameraPosition : CAMERAPOSITION;
 int CUSTOMFLAGS <string skipUnusedParameters = "yes"; >;
 
@@ -92,7 +93,8 @@ PSInput VertexShaderFunction(VSInput VS)
     float4x4 gWorldFix = mul( gWorld, posMat );
 
     float4x4 worldViewMatrix = mul( gWorldFix, gView );
-    float4 worldViewPosition = float4( worldViewMatrix[3].xyz + position.xzy - fCoronaPosition.xzy , 1 );
+    float3 offset = coronaViewOffset(position.xzy - fCoronaPosition.xzy, gProjection);
+    float4 worldViewPosition = float4(worldViewMatrix[3].xyz + offset, 1);
     worldViewPosition.xyz += fDepthBias * 1.5 * mul( normalize( gCameraPosition - fCoronaPosition ), gView).xyz;
 	
     float DistFromCam = distance( gCameraPosition, fCoronaPosition.xyz );

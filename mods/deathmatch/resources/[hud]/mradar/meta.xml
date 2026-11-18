@@ -1,0 +1,43 @@
+<meta>
+
+	<info
+		author="matran/rifleh"
+		version="4.1.0"
+		name="mradar"
+		description="Vice City Stories PS2 radar and HUD adapted for MTA"
+		type="script"
+	/>
+
+	<min_mta_version client="1.6.0-9.0"/>
+
+	<script src="transform2.lua" type="shared" cache="false"/>
+
+	<script src="mradar_dict_client.lua" type="client" cache="false"/>
+
+	<!-- localization (choose one) -->
+	<script src="mradar_text_en_client.lua" type="client" cache="false"/>
+	<!--<script src="mradar_text_es_client.lua" type="client" cache="false"/>-->
+	<!--<script src="mradar_text_ru_client.lua" type="client" cache="false"/>-->
+
+	<script src="mradar_vcs_client.lua" type="client" cache="false"/>
+	<script src="mradar_main_client.lua" type="client" cache="false"/>
+
+	<!-- comment script if u don't need it -->
+	<script src="mradar_crosshair_client.lua" type="client" cache="false"/>
+	<script src="mradar_hud_client.lua" type="client" cache="false"/>
+	<include resource="frontend"/>
+
+	<export function="getMRadarVisible" type="client"/>
+	<export function="setMRadarVisible" type="client"/>
+	<export function="getMHudVisible" type="client"/>
+	<export function="setMHudVisible" type="client"/>
+	<export function="getVcsWeaponHudInfo" type="client"/>
+
+	<file src="transform.fx"/>
+	<file src="circle.fx"/>
+	<file src="radar.fx"/>
+	<file src="crosshair.fx"/>
+
+	<file src="font/*" />
+
+</meta>

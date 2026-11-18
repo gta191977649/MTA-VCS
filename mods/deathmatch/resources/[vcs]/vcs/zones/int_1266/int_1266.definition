@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="lha_gunshop_int" txd="knackers_75856" lodDistance="250.00" flags="disable_backface_culling,draw_last" col="lha_gunshop_int" id="lha_gunshop_int" sourceModelId="6455" sourceModelName="lha_gunshop_int" drawDistanceUnits="world" sourceTxd="knackers" />
+</zoneDefinitions>

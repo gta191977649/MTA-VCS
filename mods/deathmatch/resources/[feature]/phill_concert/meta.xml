@@ -1,0 +1,27 @@
+<meta>
+    <info name="Phil Collins Concert" type="script" description="Vice City Stories Stadium concert"/>
+    <min_mta_version client="1.6.0-9.22741" server="1.6.0-9.22676"/>
+    <include resource="frontend"/>
+    <include resource="interior"/>
+    <script src="timeline.lua" type="client"/>
+    <script src="actor_data.lua" type="client"/>
+    <script src="actor.lua" type="client"/>
+    <script src="lights.lua" type="client"/>
+    <script src="client.lua" type="client"/>
+    <script src="server.lua" type="server"/>
+    <file src="assets/concert.ogg"/>
+    <file src="assets/crowd_flash.png"/>
+    <file src="assets/pc_conc.ifp"/>
+    <file src="assets/phcol.dff"/>
+    <file src="assets/phcol.txd"/>
+    <file src="assets/gtr1.dff"/>
+    <file src="assets/gtr1.txd"/>
+    <file src="assets/gtr2.dff"/>
+    <file src="assets/gtr2.txd"/>
+    <file src="assets/bmyst.dff"/>
+    <file src="assets/bmyst.txd"/>
+    <file src="assets/me_mainlightrig.dff"/>
+    <file src="assets/me_mainlightrig.txd"/>
+    <file src="assets/ndc_philstick.dff"/>
+    <file src="assets/stage_props.txd"/>
+</meta>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<zoneDefinitions>
+    <definition dff="vcs_model_771_a9d24" txd="knackers_b83b4" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_771_a9d24" id="vcs_model_7718_670bf" sourceModelId="7718" sourceModelName="vcs_model_7718" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="vcs_model_773_c0486" txd="knackers_b83b4" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="vcs_model_773_c0486" id="vcs_model_7737_4bce2" sourceModelId="7737" sourceModelName="vcs_model_7737" drawDistanceUnits="world" sourceTxd="knackers" />
+    <definition dff="ebprop_freezerfloor" txd="ebprop_freezerfloor" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="ebprop_freezerfloor" id="ebprop_freezerfloor" sourceModelId="7441" sourceModelName="ebprop_freezerfloor" drawDistanceUnits="world" sourceTxd="ebprop_freezerfloor" />
+    <definition dff="ebprop_freeze_f6b97" txd="ebprop_freezerfloor" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="ebprop_freeze_f6b97" id="ebprop_freezerfloor_2ccfb" sourceModelId="7441" sourceModelName="ebprop_freezerfloor" drawDistanceUnits="world" sourceTxd="ebprop_freezerfloor" />
+    <definition dff="ebprop_freezer" txd="ebprop_freezer" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="ebprop_freezer" id="ebprop_freezer" sourceModelId="7442" sourceModelName="ebprop_freezer" drawDistanceUnits="world" sourceTxd="ebprop_freezer" />
+    <definition dff="ebprop_freeze_ad887" txd="ebprop_freezer" lodDistance="100.00" flags="disable_backface_culling,draw_last" col="ebprop_freeze_ad887" id="ebprop_freezer_ab393" sourceModelId="7442" sourceModelName="ebprop_freezer" drawDistanceUnits="world" sourceTxd="ebprop_freezer" />
+    <definition dff="ebprop_cashreg" txd="ebprop_cashreg" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_cashreg" id="ebprop_cashreg" sourceModelId="7491" sourceModelName="ebprop_cashreg" drawDistanceUnits="world" sourceTxd="ebprop_cashreg" />
+    <definition dff="ebprop_cashre_cd791" txd="ebprop_cashreg" lodDistance="100.00" flags="disable_backface_culling" col="ebprop_cashre_cd791" id="ebprop_cashreg_9b67f" sourceModelId="7491" sourceModelName="ebprop_cashreg" drawDistanceUnits="world" sourceTxd="ebprop_cashreg" />
+</zoneDefinitions>

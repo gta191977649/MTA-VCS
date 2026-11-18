@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<eagleLoader>
+    <img name="dff" max="1" />
+    <img name="col" max="0" />
+    <img name="txd" max="0" />
+</eagleLoader>

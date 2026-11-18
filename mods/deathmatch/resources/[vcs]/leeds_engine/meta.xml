@@ -1,0 +1,5 @@
+<meta>
+    <info name="Leeds Engine" type="script" description="Starts and reloads the VCS scripts"/>
+    <script src="resources.lua" type="server"/>
+    <script src="server.lua" type="server"/>
+</meta>

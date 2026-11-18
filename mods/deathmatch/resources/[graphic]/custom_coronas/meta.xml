@@ -6,6 +6,7 @@
 	<script src="c_exported_functions.lua" type="client" />
 	<file src="shaders/custom_corona0.fx" type="client" />
 	<file src="shaders/custom_corona1.fx" type="client" />
+	<file src="shaders/coronaAspect.fx" type="client" />
 	<file src="textures/coronastar.png" type="client" />
 	<export function="createCorona" type="client" />
 	<export function="createMaterialCorona" type="client" />

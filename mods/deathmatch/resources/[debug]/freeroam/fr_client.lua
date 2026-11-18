@@ -1,4 +1,4 @@
-WEA = exports.timecyc
+WEA = exports.skygfx
 local commands = {}
 local customSpawnTable = false
 local allowedStyles =
@@ -1883,7 +1883,7 @@ function toggleFreezeTime()
 	local state = guiCheckBoxGetSelected(getControl(wndMain, 'freezetime'))
 	guiCheckBoxSetSelected(getControl(wndMain, 'freezetime'), not state)
 	freezeTimeHour, freezeTimeMinute = getTime()
-	freezeTimeWeather = getWeather()
+	freezeTimeWeather = WEA:getOutdoorWeather()
 	setTimeFrozen(state)
 end
 
@@ -1891,7 +1891,12 @@ function setTimeFrozen(state)
 	guiCheckBoxSetSelected(getControl(wndMain, 'freezetime'), state)
 	if state then
 		if not g_TimeFreezeTimer then
-			g_TimeFreezeTimer = setTimer(function() setTime(freezeTimeHour, freezeTimeMinute) setWeather(freezeTimeWeather) end, 5000, 0)
+			g_TimeFreezeTimer = setTimer(function()
+				setTime(freezeTimeHour, freezeTimeMinute)
+				if freezeTimeWeather and WEA:getOutdoorWeather() ~= freezeTimeWeather then
+					WEA:setVcsWeather(freezeTimeWeather)
+				end
+			end, 5000, 0)
 			setMinuteDuration(9001)
 		end
 	else
@@ -1914,7 +1919,7 @@ function applyWeather(leaf)
 		end
 	end
 	--setWeather(leaf.id)
-	WEA:setWeather(leaf.id)
+	WEA:setVcsWeather(leaf.id)
 	print(leaf.id)
 	closeWindow(wndWeather)
 	freezeTimeWeather = leaf.id
@@ -1947,8 +1952,8 @@ function setWeatherCommand(cmd, weather)
 		errMsg("Invalid weather ID!")
 		return
 	end
-	if weather then
-		setWeather(weather)
+	if not WEA:setVcsWeather(weather) then
+		exports.interior:setOutdoorWeather(weather)
 	end
 end
 addCommandHandler('setweather', setWeatherCommand)

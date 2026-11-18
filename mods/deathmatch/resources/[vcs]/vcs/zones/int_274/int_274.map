@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<map>
+    <object posX="-972.002197" posY="-1276.894043" posZ="27.954573" rotX="-0.000000" rotY="-0.000000" rotZ="68.176827" interior="1" dimension="274" id="vcs_model_6311_ff60e" />
+    <object posX="-974.983398" posY="-1275.727051" posZ="27.954573" rotX="-0.000000" rotY="-0.000000" rotZ="68.176827" interior="1" dimension="274" id="vcs_model_6311_ff60e" />
+    <object posX="-811.469604" posY="-1177.254517" posZ="14.520868" rotX="-0.000000" rotY="-0.000000" rotZ="18.106000" interior="1" dimension="274" id="dks_sh_int" />
+</map>

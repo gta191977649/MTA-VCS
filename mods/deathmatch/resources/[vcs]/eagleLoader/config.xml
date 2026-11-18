@@ -1,0 +1,84 @@
+<config>
+
+    <!-- IMG Archive Loading
+         names : comma-separated base names of IMG archives to scan per resource
+         max   : highest numbered variant to check (e.g. txd_1.img .. txd_64.img) -->
+    <img names="dff,col,txd,custom" max="64" />
+
+    <!-- Streaming & Distances
+         removeDefaultMap       : remove the stock SA world map
+         removeDefaultInteriors : also remove stock interiors (false = keep them)
+         allocateDefaultIDs     : fall back to SA model IDs when the custom pool is exhausted
+         capAt19999            : reject extended custom IDs and use the SA fallback pool instead
+         highDefLODs            : use each model as its own LOD; disables separate default LODs
+         preferStaticBuildings  : put safe, static dimension-0 map objects in GTA's faster building pool
+                                  Stock models tagged `physics` in sa_full_id_list.id remain objects.
+                                  (set simulated="true", physicsRoot="SA model ID",
+                                   dynamic="true", physical values, respawn="true",
+                                   overrideFlags="unbreakable,frozen", or
+                                   forceObject="true" on a placement to opt out)
+         buildingPoolHeadroom   : spare building slots reserved above the current map requirement
+         memoryAllocation       : (MB) memory budget for streamed assets (default 512, max 1024)
+         bufferAllocation       : (MB) streaming buffer size            (default 150, max 512)
+         drawDistanceMultiplier : scales all draw distances (<1 perf, >1 view range) -->
+    <streaming
+        removeDefaultMap="true"
+        removeDefaultInteriors="true"
+        allocateDefaultIDs="true"
+        capAt19999="true"
+        highDefLODs="false"
+        preferStaticBuildings="true"
+        buildingPoolHeadroom="2048"
+        memoryAllocation="512"
+        bufferAllocation="150"
+        drawDistanceMultiplier="1" />
+
+    <!-- Debug
+         streamDebug         : print streaming debug messages
+         disableLOD          : disable all LOD handling
+         forceObject         : create every element as 'object' instead of 'building'
+         modelCrashDebug     : enable the crash-finder spawn loop
+         modelCrashDebugRate : (ms) delay between spawn attempts
+         streamFlightRecorder: write streamed objects/buildings to stream_flight_recorder.log
+         despawnDebug        : destroy each object immediately after it streams in -->
+    <debug
+        streamDebug="false"
+        disableLOD="false"
+        forceObject="false"
+        modelCrashDebug="false"
+        modelCrashDebugRate="25"
+        streamFlightRecorder="false"
+        despawnDebug="false" />
+
+    <!-- Crash Zones
+         skip : do not create map elements inside the radius
+         blip : add a red blip and radar square for easy retesting
+         resource : optional resource name filter -->
+    <crashZones>
+
+    </crashZones>
+
+    <!-- LOD Attachments
+         Model IDs/names whose LODs should be physically attached to the parent
+         element (so the LOD follows when the parent moves, e.g. the Tram).
+         Add one <model name="..." /> per entry. -->
+    <lodAttach>
+        <model name="Tram" />
+    </lodAttach>
+
+    <!-- Alpha Fix Shader
+         enable       : apply the alpha fix shader on resource start
+         experimental : use the alternate (experimental) alpha fix shader instead
+         Each <pattern> matches world textures (wildcards allowed). -->
+    <alphaFix enable="true" experimental="false">
+        <pattern value="*plant*" />
+        <pattern value="*grass*" />
+        <pattern value="*foliage*" />
+        <pattern value="*flower*" />
+        <pattern value="*leave*" />
+        <pattern value="*fern*" />
+        <pattern value="*palm*" />
+        <pattern value="kbtree4_test" />
+    </alphaFix>
+
+</config>

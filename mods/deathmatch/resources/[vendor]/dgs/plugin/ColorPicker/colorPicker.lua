@@ -1,3 +1,6 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxcolorpicker")
+dgsRegisterPluginType("dgs-dxcomponentselector")
 addEvent("onDgsColorPickerChange",true)
 addEvent("onDgsColorPickerComponentSelectorChange",true)
 
@@ -16,7 +19,6 @@ function dgsCreateColorPicker(style,...)
 		local PickCircle = dxCreateShader("plugin/ColorPicker/PickCircle.fx")
 		local PickCircleImg = dgsCreateImage(0,0,0.06,0.06,PickCircle,true,HSVRingSelImg)
 		dgsSetEnabled(PickCircleImg,false)
-		dgsAddMoveHandler(PickCircleImg)
 		dgsSetData(HSVRingImg,"cp_shaders",{HSVRing,HSVRingSel,PickCircle})
 		dgsSetData(HSVRingImg,"cp_images",{HSVRingImg,HSVRingSelImg,PickCircleImg})
 		dgsAddEventHandler("onDgsMouseDrag",HSVRingImg,"HSVRingChange",false)
@@ -33,7 +35,6 @@ function dgsCreateColorPicker(style,...)
 		local PickCircle = dxCreateShader("plugin/ColorPicker/PickCircle.fx")
 		local PickCircleImg = dgsCreateImage(0,0,0.06,0.06,PickCircle,true,HSLSquareImg)
 		dgsSetEnabled(PickCircleImg,false)
-		dgsAddMoveHandler(PickCircleImg)
 		dgsSetData(HSLSquareImg,"cp_shaders",{HSLSquare,PickCircle})
 		dgsSetData(HSLSquareImg,"cp_images",{HSLSquareImg,PickCircleImg})
 		dgsAddEventHandler("onDgsMouseDrag",HSLSquareImg,"HSLSquareChange",false)
@@ -49,7 +50,6 @@ function dgsCreateColorPicker(style,...)
 		local PickCircle = dxCreateShader("plugin/ColorPicker/PickCircle.fx")
 		local PickCircleImg = dgsCreateImage(0,0,0.06,0.06,PickCircle,true,HSDiskImg)
 		dgsSetEnabled(PickCircleImg,false)
-		dgsAddMoveHandler(PickCircleImg)
 		dgsSetData(HSDiskImg,"cp_shaders",{HSDisk,PickCircle})
 		dgsSetData(HSDiskImg,"cp_images",{HSDiskImg,PickCircleImg})
 		dgsAddEventHandler("onDgsMouseDrag",HSDiskImg,"HSDiskChange",false)
@@ -65,7 +65,6 @@ function dgsCreateColorPicker(style,...)
 		local PickCircle = dxCreateShader("plugin/ColorPicker/PickCircle.fx")
 		local PickCircleImg = dgsCreateImage(0,0,0.06,0.06,PickCircle,true,HLDiskImg)
 		dgsSetEnabled(PickCircleImg,false)
-		dgsAddMoveHandler(PickCircleImg)
 		dgsSetData(HLDiskImg,"cp_shaders",{HLDisk,PickCircle})
 		dgsSetData(HLDiskImg,"cp_images",{HLDiskImg,PickCircleImg})
 		dgsAddEventHandler("onDgsMouseDrag",HLDiskImg,"HLDiskChange",false)
@@ -80,7 +79,7 @@ function dgsCreateColorPicker(style,...)
 		dgsSetData(mainElement,"componentSelectors",{})
 		dgsSetData(mainElement,"style",style)
 		dgsColorPickerSetColor(mainElement,0,0,255,255)
-		triggerEvent("onDgsPluginCreate",mainElement,sourceResource)
+		dgsTriggerEvent("onDgsPluginCreate",mainElement,sourceResource)
 		return mainElement
 	end
 	return false
@@ -104,7 +103,7 @@ function dgsColorPickerCreateComponentSelector(x,y,w,h,voh,relative,parent,thick
 	dgsSetData(cs,"voh",voh)
 	dgsSetData(cs,"cp_images",{cs,selector})
 	dgsSetData(cs,"value",0)	--0~100
-	dgsSetData(cs,"isReverse",false)
+	dgsSetData(cs,"isReversed",false)
 	dgsAddEventHandler("onDgsMouseDrag",cs,"dgsColorPickerComponentChange",false)
 	dgsAddEventHandler("onDgsMouseClickDown",cs,"dgsColorPickerComponentChange",false)
 	dgsAddEventHandler("onDgsSizeChange",cs,"ComponentResize",false)
@@ -165,15 +164,14 @@ function dgsColorPickerComponentChange()
 	local cx,cy = dgsGetCursorPosition(source)
 	local absSize = dgsElementData[source].absSize
 	local voh = dgsElementData[source].voh
-	local absSize = dgsElementData[source].absSize
 	local position
 	if voh then
 		position = cx/absSize[1]*100
 	else
 		position = cy/absSize[2]*100
 	end
-	local isReverse = dgsElementData[source].isReverse
-	position = isReverse and 100-position or position
+	local isReversed = dgsElementData[source].isReversed
+	position = isReversed and 100-position or position
 	dgsColorPickerSetComponentSelectorValue(source,position)
 end
 
@@ -189,18 +187,18 @@ function dgsColorPickerSetComponentSelectorValue(cs,value)
 	local offset =  dgsElementData[cs].offset
 	local voh = dgsElementData[cs].voh
 	local oldV = dgsElementData[cs].value
-	local value = math.restrict(value,0,100)
+	value = math.clamp(value,0,100)
 	dgsSetData(cs,"value",value)
 	local absSize = dgsElementData[cs].absSize
 	local images = dgsElementData[cs].cp_images
-	local isReverse = dgsElementData[cs].isReverse
-	value = isReverse and 100-value or value
+	local isReversed = dgsElementData[cs].isReversed
+	value = isReversed and 100-value or value
 	if voh then
 		dgsSetPosition(images[2],value*absSize[1]/100-thickness/2,-offset,false)
 	else
 		dgsSetPosition(images[2],-offset,value*absSize[2]/100-thickness/2,false)
 	end
-	triggerEvent("onDgsColorPickerComponentSelectorChange",cs,value,oldV)
+	dgsTriggerEvent("onDgsColorPickerComponentSelectorChange",cs,value,oldV)
 end
 
 AvailableColorType = {
@@ -344,9 +342,35 @@ updateSelectorOnColorChange_EditLabel = function()
 		dgsElementData[source].setCool = false
 		return
 	end
-	local attrID = AvailableColorType[colorType][colorAttribute][1]
 	dgsElementData[source].setCool = true
-	dgsSetText(source,tostring(math.floor(dgsElementData[cp][colorType][attrID])))
+	if colorType == "#RGBAHEX" then
+		local RGBA = "#"
+		for i=1,#colorAttribute do
+			local colorAttr = colorAttribute:sub(i,i)
+			if colorAttr == "A" then
+				RGBA = RGBA..string.format("%02X",tostring(math.floor(dgsElementData[cp]["A"])))
+			else
+				local attrID = AvailableColorType["RGB"][colorAttr][1]
+				RGBA = RGBA..string.format("%02X",tostring(math.floor(dgsElementData[cp]["RGB"][attrID])))
+			end
+		end
+		dgsSetText(source,RGBA)
+	elseif colorType == "RGBAHEX" then
+		local RGBA = ""
+		for i=1,#colorAttribute do
+			local colorAttr = colorAttribute:sub(i,i)
+			if colorAttr == "A" then
+				RGBA = RGBA..string.format("%02X",tostring(math.floor(dgsElementData[cp]["A"])))
+			else
+				local attrID = AvailableColorType["RGB"][colorAttr][1]
+				RGBA = RGBA..string.format("%02X",tostring(math.floor(dgsElementData[cp]["RGB"][attrID])))
+			end
+		end
+		dgsSetText(source,RGBA)
+	else
+		local attrID = AvailableColorType[colorType][colorAttribute][1]
+		dgsSetText(source,tostring(math.floor(dgsElementData[cp][colorType][attrID])))
+	end
 	dgsElementData[source].setCool = false
 end
 		
@@ -357,7 +381,8 @@ updateColorOnSelectorChange_EditLabel = function()
 	if not isElement(cp) then return dgsUnbindFromColorPicker(source) end
 	local colorType = dgsElementData[source].colorType
 	local colorAttribute = dgsElementData[source].colorAttribute
-	local value = tonumber(dgsGetProperty(source,changeProperty or "text"))
+	local colorValue = dgsGetProperty(source,changeProperty or "text")
+	local value = tonumber(colorValue)
 	if value then
 		if colorAttribute == "A" then
 			dgsElementData[source].setCool = true
@@ -380,14 +405,34 @@ updateColorOnSelectorChange_EditLabel = function()
 			dgsColorPickerSetColor(cp,HSV.H,HSV.S,HSV.V,_,colorType)
 		end
 		dgsElementData[source].setCool = false
+	else
+		if colorType == "#RGBAHEX" then
+			local colorAttrLen = #colorAttribute
+			if colorValue:sub(1,1) == "#" and #colorValue == colorAttrLen*2+1 then
+				local RGB = {R=nil,G=nil,B=nil,A=nil}
+				for i=1,colorAttrLen do
+					RGB[colorAttribute:sub(i,i)] = tonumber(colorValue:sub(i*2,i*2+1),16)
+				end
+				dgsColorPickerSetColor(cp,RGB.R,RGB.G,RGB.B,RGB.A,"RGB")
+			end
+		elseif colorType == "RGBAHEX" then
+			local colorAttrLen = #colorAttribute
+			if #colorValue == colorAttrLen*2 then
+				local RGB = {R=nil,G=nil,B=nil,A=nil}
+				for i=1,colorAttrLen do
+					RGB[colorAttribute:sub(i,i)] = tonumber(colorValue:sub(i*2-1,i*2),16)
+				end
+				dgsColorPickerSetColor(cp,RGB.R,RGB.G,RGB.B,RGB.A,"RGB")
+			end
+		end
 	end
 end
 
-function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode,isReverse)
+function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode,isReversed)
 	if not(dgsIsType(cs)) then error(dgsGenAsrt(cs,"dgsBindToColorPicker",1,"dgs-dxgui")) end
 	if not(dgsGetPluginType(colorPicker) == "dgs-dxcolorpicker") then error(dgsGenAsrt(colorPicker,"dgsBindToColorPicker",2,"plugin dgs-dxcolorpicker")) end
-	if colorAttribute ~= "A" then
-		if not(AvailableColorType[colorType]) then error(dgsGenAsrt(colorType,"dgsBindToColorPicker",3,"string","RGB/HSL/HSV")) end
+	if colorAttribute ~= "A" and colorType ~= "#RGBAHEX" and colorType ~= "RGBAHEX"  then
+		if not(AvailableColorType[colorType]) then error(dgsGenAsrt(colorType,"dgsBindToColorPicker",3,"string","RGB/HSL/HSV/#RGBAHEX/RGBAHEX")) end
 		if not(AvailableColorType[colorType][colorAttribute]) then error(dgsGenAsrt(colorAttribute,"dgsBindToColorPicker",4,"string",table.concat(ColorAttributeOrder[colorType],"/"))) end
 	end
 	local targetPlugin = dgsGetPluginType(cs)
@@ -398,7 +443,7 @@ function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode
 	local componentSelectors = dgsElementData[colorPicker].componentSelectors
 	componentSelectors[cs] = true
 	dgsSetData(cs,"bindColorPicker",colorPicker)
-	dgsSetData(cs,"isReverse",isReverse)
+	dgsSetData(cs,"isReversed",isReversed)
 	dgsSetData(cs,"colorType",colorType)
 	dgsSetData(cs,"colorAttribute",colorAttribute)
 	if targetPlugin == "dgs-dxcomponentselector" then
@@ -409,7 +454,8 @@ function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode
 			dgsSetData(cs,"shader",ALPComponent)
 			dgsImageSetImage(cs,ALPComponent)
 			dxSetShaderValue(ALPComponent,"vertical",dgsElementData[cs].voh)
-			dxSetShaderValue(ALPComponent,"isReverse",isReverse and true or false)
+			dxSetShaderValue(ALPComponent,"isReversed",isReversed and true or false)
+			dgsAttachToAutoDestroy(ALPComponent,cs,-1)
 		elseif colorType == "RGB" then
 			local RGBComponent = dxCreateShader("plugin/ColorPicker/RGBComponent.fx")
 			dgsSetData(cs,"shader",RGBComponent)
@@ -419,12 +465,13 @@ function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode
 			dgsImageSetImage(cs,RGBComponent)
 			dxSetShaderValue(RGBComponent,"RGB_Chg",RGBCHG)
 			dxSetShaderValue(RGBComponent,"vertical",dgsElementData[cs].voh)
-			dxSetShaderValue(RGBComponent,"isReverse",isReverse and true or false)
+			dxSetShaderValue(RGBComponent,"isReversed",isReversed and true or false)
 			if staticMode then
 				dxSetShaderValue(RGBComponent,"StaticMode",{0,0,0})
 			else
 				dxSetShaderValue(RGBComponent,"StaticMode",{1,1,1})
 			end
+			dgsAttachToAutoDestroy(HSLComponent,cs,-1)
 		elseif colorType == "HSL" then
 			local HSLComponent = dxCreateShader("plugin/ColorPicker/HSLComponent.fx")
 			dgsSetData(cs,"shader",HSLComponent)
@@ -434,12 +481,13 @@ function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode
 			HSLCHG[colorID] = 1
 			dxSetShaderValue(HSLComponent,"HSL_Chg",HSLCHG)
 			dxSetShaderValue(HSLComponent,"vertical",dgsElementData[cs].voh)
-			dxSetShaderValue(HSLComponent,"isReverse",isReverse and true or false)
+			dxSetShaderValue(HSLComponent,"isReversed",isReversed and true or false)
 			if staticMode then
 				dxSetShaderValue(HSLComponent,"StaticMode",{1,0,0})
 			else
 				dxSetShaderValue(HSLComponent,"StaticMode",{1,1,1})
 			end
+			dgsAttachToAutoDestroy(HSLComponent,cs,-1)
 		elseif colorType == "HSV" then
 			local HSVComponent = dxCreateShader("plugin/ColorPicker/HSVComponent.fx")
 			dgsSetData(cs,"shader",HSVComponent)
@@ -449,12 +497,13 @@ function dgsBindToColorPicker(cs,colorPicker,colorType,colorAttribute,staticMode
 			HSVCHG[colorID] = 1
 			dxSetShaderValue(HSVComponent,"HSV_Chg",HSVCHG)
 			dxSetShaderValue(HSVComponent,"vertical",dgsElementData[cs].voh)
-			dxSetShaderValue(HSVComponent,"isReverse",isReverse and true or false)
+			dxSetShaderValue(HSVComponent,"isReversed",isReversed and true or false)
 			if staticMode then
 				dxSetShaderValue(HSVComponent,"StaticMode",{1,0,0})
 			else
 				dxSetShaderValue(HSVComponent,"StaticMode",{1,1,1})
 			end
+			dgsAttachToAutoDestroy(HSVComponent,cs,-1)
 		end
 		
 		if dgsElementData[cs].maskTexture then
@@ -514,27 +563,27 @@ function dgsColorPickerUpdate(cp)
 		local pAbsSize = dgsElementData[ images[2] ].absSize
 		local absSize = dgsElementData[ images[3] ].absSize
 		local x,y = dgsProjectHSVToXY(dgsElementData[cp].HSV[1],dgsElementData[cp].HSV[2],dgsElementData[cp].HSV[3])
-		local x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
+		x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
 		dgsSetPosition(images[3],x,y,true)
 	elseif style == "HSLSquare" then
 		local pAbsSize = dgsElementData[ images[1] ].absSize
 		local absSize = dgsElementData[ images[2] ].absSize
 		local x,y = HSLToXY(dgsElementData[cp].HSL[1],dgsElementData[cp].HSL[2])
-		local x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
+		x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
 		dgsSetPosition(images[2],x,y,true)
 	elseif style == "HSDisk" then
 		dxSetShaderValue(shaders[2],"Hue",dgsElementData[cp].HSL[1]/360)
 		local pAbsSize = dgsElementData[ images[1] ].absSize
 		local absSize = dgsElementData[ images[2] ].absSize
 		local x,y = HSToRR(dgsElementData[cp].HSL[1],dgsElementData[cp].HSL[2])
-		local x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
+		x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
 		dgsSetPosition(images[2],x,y,true)
 	elseif style == "HLDisk" then
 		dxSetShaderValue(shaders[2],"Hue",dgsElementData[cp].HSL[1]/360)
 		local pAbsSize = dgsElementData[ images[1] ].absSize
 		local absSize = dgsElementData[ images[2] ].absSize
 		local x,y = HLToRR(dgsElementData[cp].HSL[1],dgsElementData[cp].HSL[3])
-		local x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
+		x,y = x-absSize[1]/pAbsSize[1]/2,y-absSize[2]/pAbsSize[2]/2
 		dgsSetPosition(images[2],x,y,true)
 	end
 end
@@ -547,27 +596,27 @@ function dgsColorPickerSetColor(cp,...)
 	if args[5] == "HSL" then
 		local color = dgsElementData[cp].HSL
 		local h,s,l = args[1] or color[1] or 360,args[2] or color[2] or 100,args[3] or color[3] or 100
-		h = math.restrict(h,0,360)
-		s = math.restrict(s,0,100)
-		l = math.restrict(l,0,100)
+		h = math.clamp(h,0,360)
+		s = math.clamp(s,0,100)
+		l = math.clamp(l,0,100)
 		newColorRGB = {HSL2RGB(h,s,l)}
 		newColorHSL = {h,s,l}
 		newColorHSV = {HSL2HSV(h,s,l)}
 	elseif args[5] == "HSV" then
 		local color = dgsElementData[cp].HSV
 		local h,s,v = args[1] or color[1] or 360,args[2] or color[2] or 100,args[3] or color[3] or 100
-		h = math.restrict(h,0,360)
-		s = math.restrict(s,0,100)
-		v = math.restrict(v,0,100)
+		h = math.clamp(h,0,360)
+		s = math.clamp(s,0,100)
+		v = math.clamp(v,0,100)
 		newColorRGB = {HSV2RGB(h,s,v)}
 		newColorHSV = {h,s,v}
 		newColorHSL = {HSV2HSL(h,s,v)}
 	elseif args[5] == "RGB" then
 		local color = dgsElementData[cp].RGB
 		local r,g,b = args[1] or color[1] or 255,args[2] or color[2] or 255,args[3] or color[3] or 255
-		r = math.restrict(r,0,255)
-		g = math.restrict(g,0,255)
-		b = math.restrict(b,0,255)
+		r = math.clamp(r,0,255)
+		g = math.clamp(g,0,255)
+		b = math.clamp(b,0,255)
 		newColorRGB = {r,g,b}
 		newColorHSL = {RGB2HSL(r,g,b)}
 		newColorHSV = {HSL2HSV(newColorHSL[1],newColorHSL[2],newColorHSL[3])}
@@ -582,7 +631,7 @@ function dgsColorPickerSetColor(cp,...)
 	dgsSetData(cp,"HSV",newColorHSV)
 	dgsSetData(cp,"RGB",newColorRGB)
 	dgsSetData(cp,"A",newA)
-	triggerEvent("onDgsColorPickerChange",cp,oldRGB,oldHSL,oldHSV,oldAlp)
+	dgsTriggerEvent("onDgsColorPickerChange",cp,oldRGB,oldHSL,oldHSV,oldAlp)
 	for cs,_ in pairs(componentSelectors) do
 		if not isElement(cs) then componentSelectors[cs] = nil end
 		local csType = dgsGetPluginType(cs)
@@ -631,8 +680,8 @@ end
 ---------------------HSVRing Color Picker
 function HSVRingChange()
 	local cx,cy = dgsGetCursorPosition()
+	local rot,CenDisX,CenDisY = dgsFindRotationByCenter(source,cx,cy,90)
 	if eventName == "onDgsMouseClickDown" then
-		local rot,CenDisX,CenDisY = dgsFindRotationByCenter(source,cx,cy,90)
 		local clickRadius = (CenDisX^2+CenDisY^2)^0.5
 		dgsSetData(source,"clickRadius",clickRadius)
 		if clickRadius >= 0.4 and clickRadius <= 0.5 then
@@ -645,10 +694,8 @@ function HSVRingChange()
 	else
 		local clickRadius = dgsElementData[source].clickRadius or 1
 		if clickRadius >= 0.4 and clickRadius <= 0.5 then
-			local rot = dgsFindRotationByCenter(source,cx,cy,90)
-			dgsColorPickerSetColor(source,rot,_,_,_,"HSL")
+			dgsColorPickerSetColor(source,rot,_,_,_,"HSV")
 		elseif clickRadius< 0.4 then
-			local rot,CenDisX,CenDisY = dgsFindRotationByCenter(source,cx,cy,90)
 			local HSV = dgsElementData[source].HSV
 			local S,V = dgsProjectHXYToSV(HSV[1],CenDisX,CenDisY)
 			dgsColorPickerSetColor(source,_,S,V,_,"HSV")
@@ -657,21 +704,20 @@ function HSVRingChange()
 end
 
 function dgsProjectHSVToXY(H,S,V)
-	local H = math.rad(H+180)
-	local S,V = S/100,V/100
-	y = (6*V-3-3*V*S)/2/math.sqrt(3)/2
-	x = (1-3*V*S)/2/2
+	H = math.rad(H+180)
+	S,V = S/100,V/100
 	local rotedi = {math.cos(H),math.sin(H)}
 	local rotedj = {math.cos(H-math.rad(90)),math.sin(H-math.rad(90))}
-	local x,y = x*rotedi[1]+y*rotedi[2],x*rotedj[1]+y*rotedj[2]
+	local x,y = (1-3*V*S)/2/2,(6*V-3-3*V*S)/2/math.sqrt(3)/2
+	x,y = x*rotedi[1]+y*rotedi[2],x*rotedj[1]+y*rotedj[2]
 	return x+0.5,y+0.5
 end
 
 function dgsProjectHXYToSV(H,x,y)
-	local H = math.rad(H+180)
+	H = math.rad(H+180)
 	local rotedi = {math.cos(H-math.rad(90)),math.sin(H-math.rad(90))}
 	local rotedj = {math.cos(H),math.sin(H)}
-	local x,y = x*rotedi[1]+y*rotedi[2],x*rotedj[1]+y*rotedj[2]
+	x,y = x*rotedi[1]+y*rotedi[2],x*rotedj[1]+y*rotedj[2]
 	x,y = x/0.4,y/0.4
 	local S,V = (1-2*y)/(math.sqrt(3)*x-y+2)*100,(math.sqrt(3)*x-y+2)/3*100
 	return S-S%1,V-V%1
@@ -688,8 +734,8 @@ function HSDiskChange()
 end
 
 function HSToRR(H,S)
-	local H = math.rad(H)
-	local S = S/100/2
+	H = math.rad(H)
+	S = S/100/2
 	local x,y = math.cos(H)*S,math.sin(H)*S
 	return x+0.5,y+0.5
 end
@@ -698,15 +744,15 @@ end
 function HLDiskChange()
 	local cx,cy = dgsGetCursorPosition()
 	local rot,CenDisX,CenDisY = dgsFindRotationByCenter(source,cx,cy,90)
-	local clickRadius = (CenDisX^2+CenDisY^2)^0.5*2
-	clickRadius = clickRadius<=1 and clickRadius or 1
+	local clickRadius = (CenDisX^2+CenDisY^2)^0.5
+	clickRadius = clickRadius <= 0.5 and clickRadius or 0.5
 	dgsColorPickerSetColor(source,rot,_,(1-clickRadius)*100,_,"HSL")
 end
 
 function HLToRR(H,L)
-	local H = math.rad(H)
-	local L = 0.5-L/100/2
-	local x,y = math.cos(H)*L,math.sin(H)*L
+	H = math.rad(H)
+	L = 0.5-L/100/2
+	local x,y = math.cos(H)*L*2,math.sin(H)*L*2
 	return x+0.5,y+0.5
 end
 

@@ -1,3 +1,5 @@
+dgsLogLuaMemory()
+dgsRegisterPluginType("dgs-dxpastehandler")
 GlobalPasteHandler = false
 
 function dgsPasteHandlerSetEnabled(state)
@@ -17,14 +19,14 @@ function dgsPasteHandlerSetEnabled(state)
 		--focusBrowser(GlobalPasteHandler)
 		end,false)
 
-		triggerEvent("onDgsPluginCreate",GlobalPasteHandler,sourceResource)
+		dgsTriggerEvent("onDgsPluginCreate",GlobalPasteHandler,sourceResource)
 
 		addEventHandler("DGSI_Paste",GlobalPasteHandler,function(data,theType)
 			if theType == "file" then
-				local result = base64Decode(split(data,",")[2])
-				return triggerEvent("onDgsPaste",resourceRoot,result,theType)
+				local result = decodeString("base64", split(data,",")[2])
+				return dgsTriggerEvent("onDgsPaste",resourceRoot,result,theType)
 			elseif theType == "string" then
-				return triggerEvent("onDgsPaste",resourceRoot,data,theType)
+				return dgsTriggerEvent("onDgsPaste",resourceRoot,data,theType)
 			end
 		end)
 	end
@@ -47,7 +49,6 @@ end
 function dgsPasteHandlerIsFocused()
 	return isElement(GlobalPasteHandler) and isBrowserFocused(GlobalPasteHandler)
 end
-
 
 function dgsPasteHandlerIsEnabled()
 	return isElement(GlobalPasteHandler)

@@ -21,7 +21,7 @@ local fixablePlanes = {
     [469] = true,
 }
 local renderList = {}
-local rotor_txd = dxCreateTexture("fx/rotor/model/black64aa.dds", "argb", true, "clamp")
+local rotor_txd = SKYGFX.profile ~= "VCS" and dxCreateTexture("fx/rotor/model/black64aa.dds", "argb", true, "clamp")
 -- better way of handling that use shader
 function applyHeliRotorFix(heli)
     --create shader

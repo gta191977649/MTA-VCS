@@ -1,4 +1,4 @@
-UI = exports.ui
+UI = exports.frontend
 
 function putPlayerInPosition(timeslice)
 	local cx,cy,cz,ctx,cty,ctz = getCameraMatrix()
@@ -22,11 +22,11 @@ function toggleAirBrake()
 	if air_brake then
 		abx,aby,abz = getElementPosition(localPlayer)
 		addEventHandler("onClientPreRender",root,putPlayerInPosition)
-		UI.showTextBox(localPlayer,"Airbrake Enabled",3000)
+		UI:showTextBox("Airbrake Enabled",3000)
 	else
 		abx,aby,abz = nil
 		removeEventHandler("onClientPreRender",root,putPlayerInPosition)
-		UI.showTextBox(localPlayer,"Airbrake Disabled",3000)
+		UI:showTextBox("Airbrake Disabled",3000)
 	end
 end
 

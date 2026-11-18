@@ -1,8 +1,32 @@
-UI = exports.ui
-LANG = exports.language
+UI = exports.frontend
 DGS = exports.dgs
-CAM = exports.freecam
-WEA = exports.timecyc
+WEA = exports.skygfx
+
+local function optionalExports(name)
+    local resource = getResourceFromName(name)
+    if resource and getResourceState(resource) == "running" then
+        return exports[name]
+    end
+    outputChatBox(name .. " is unavailable.")
+end
+addCommandHandler("hudtext", function(_, style, ...)
+    local text = table.concat({...}, " ")
+    if text == "" and style then text = ("GameText %s"):format(style) end
+    local id = tonumber(style)
+    local shown
+    if id then
+        shown = UI:showGameTextForPlayer(text, id, 3000)
+    elseif style then
+        shown = UI:showGameText(text, style, 3000)
+    end
+    if not shown then outputChatBox("Usage: /hudtext <0-8|VEHICLE_NAME|LOCATION_NAME|garage|radio|radioTuning> [text]") end
+end)
+
+addCommandHandler("hudcaption", function(_, ...)
+    local text = table.concat({...}, " ")
+    if text == "" then UI:hideCaptionForPlayer() else UI:showCaptionForPlayer(text, 0) end
+end)
+
 addCommandHandler("sound",function(cmd,id) 
     outputChatBox( id )
     playSoundFrontEnd ( id )   
@@ -18,7 +42,10 @@ addCommandHandler("setint",function(cmd,id)
 end)
 
 addCommandHandler("setwea",function(cmd,id) 
-    setWeather( id )
+    local weather = tonumber(id)
+    if weather and not exports.skygfx:setVcsWeather(weather) then
+        exports.interior:setOutdoorWeather(weather)
+    end
 end)
 addCommandHandler("sett",function(cmd,id) 
     setTime(id, 0 )
@@ -57,6 +84,8 @@ end)
 
 
 addCommandHandler("lang",function(cmd,lang) 
+    local LANG = optionalExports("language")
+    if not LANG then return end
     LANG:setLanguage(lang)
     UI:showTextBox(string.format(LANG:translateText("LANGUAGE_SET"),LANG:getLanguageName()),3000)
 end)
@@ -64,13 +93,15 @@ addCommandHandler("fix",function(cmd,lang)
     local veh = getPedOccupiedVehicle(localPlayer)
     if veh then 
         fixVehicle(veh)
-        UI.showTextBox(_,"Veh fixed",3000)
+        UI:showTextBox("Veh fixed",3000)
     end
     
 end)
 addCommandHandler("getlang",function(cmd,lang) 
-    outputChatBox(LANG:getLangugae())
-    UI.showTextBox(_,"LANG SET",3000)
+    local LANG = optionalExports("language")
+    if not LANG then return end
+    outputChatBox(LANG:getLanguage())
+        UI:showTextBox("LANG SET",3000)
 end)
 local god = false
 
@@ -81,27 +112,36 @@ addCommandHandler("god",function(cmd)
 end) 
 
 local freecam = false
+local radarVisibility
+
+local function restoreRadar()
+    if not radarVisibility then return end
+    local radar = getResourceFromName("mradar")
+    if radar and getResourceState(radar) == "running" then
+        exports.mradar:setMRadarVisible(radarVisibility.radar)
+        exports.mradar:setMHudVisible(radarVisibility.hud)
+    end
+    radarVisibility = nil
+end
+
+addEventHandler("onClientResourceStop", resourceRoot, restoreRadar, false)
+
 addCommandHandler("freecam",function(cmd) 
+    local CAM = optionalExports("freecam")
+    if not CAM then return end
     freecam = not freecam
     if freecam == true then 
         CAM:setFreecamEnabled()
-        setPlayerHudComponentVisible ("radar", false )
-        setPlayerHudComponentVisible ("armour", false )
-        setPlayerHudComponentVisible ("breath", false )
-        setPlayerHudComponentVisible ("clock", false )
-        setPlayerHudComponentVisible ("health", false )
-        setPlayerHudComponentVisible ("money", false )
-        setPlayerHudComponentVisible ("wanted", false )
+        local radar = getResourceFromName("mradar")
+        if radar and getResourceState(radar) == "running" then
+            radarVisibility = {radar = exports.mradar:getMRadarVisible(), hud = exports.mradar:getMHudVisible()}
+            exports.mradar:setMRadarVisible(false)
+            exports.mradar:setMHudVisible(false)
+        end
     else
         CAM:setFreecamDisabled()
         setCameraTarget (localPlayer)
-        setPlayerHudComponentVisible ("radar", true )
-        setPlayerHudComponentVisible ("armour", true )
-        setPlayerHudComponentVisible ("breath", true )
-        setPlayerHudComponentVisible ("clock", true )
-        setPlayerHudComponentVisible ("health", true )
-        setPlayerHudComponentVisible ("money", true )
-        setPlayerHudComponentVisible ("wanted", true )
+        restoreRadar()
     end
     UI:showTextBox(freecam == true and "Freecam Enabled" or "Freecam Disabled",3000)
 
@@ -132,7 +172,7 @@ addCommandHandler("cor",
 )
 addCommandHandler("wea",
     function(_,id)
-        WEA:setWeather(id)
+        WEA:setVcsWeather(id)
         UI:showTextBox("Weather Set.",3000)
     end
 )

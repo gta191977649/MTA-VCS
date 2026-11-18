@@ -1,4 +1,4 @@
-UI = exports.ui
+UI = exports.frontend
 
 local menu_id = UI:createMenu("Header")
 UI:addMenuItem(menu_id,"Item A") 
