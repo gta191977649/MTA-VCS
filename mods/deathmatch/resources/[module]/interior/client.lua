@@ -1,11 +1,12 @@
 -- PS2 SCM 0313 selects a fixed hour from weather table 6.
 -- Expose it as MTA's active weather while the room's timecycle is applied.
 local EXTRA_COLOURS = 6
+local DEFAULT_COLOUR = 0
 local CHANGE_EVENT = "onClientInteriorChanged"
 local rooms = {}
 local area, dimension, colour
 local outdoorWeather, outdoorTarget
-local transition
+local refreshPending = true
 
 addEvent(CHANGE_EVENT, false)
 
@@ -41,9 +42,10 @@ function setOutdoorWeather(weather, target)
 end
 
 local function refresh()
-    transition = nil
     local nextArea, nextDimension = getElementInterior(localPlayer), getElementDimension(localPlayer)
-    local nextColour = rooms[scope(nextArea, nextDimension)]
+    if not refreshPending and area == nextArea and dimension == nextDimension then return end
+    refreshPending = false
+    local nextColour = nextArea ~= 0 and (rooms[scope(nextArea, nextDimension)] or DEFAULT_COLOUR) or nil
     if area == nextArea and dimension == nextDimension and colour == nextColour then return end
 
     if nextColour and not outdoorWeather then
@@ -58,8 +60,8 @@ local function refresh()
 end
 
 local function scheduleRefresh()
-    -- ENEX changes dimension and interior in the same tick.
-    if not transition then transition = setTimer(refresh, 0, 1) end
+    -- Scripts can change both values before the next render.
+    refreshPending = true
 end
 
 local function loadRooms()
@@ -82,6 +84,7 @@ end
 addEventHandler("onClientElementInteriorChange", localPlayer, scheduleRefresh, false)
 addEventHandler("onClientElementDimensionChange", localPlayer, scheduleRefresh, false)
 addEventHandler("onClientPlayerSpawn", localPlayer, scheduleRefresh, false)
+addEventHandler("onClientPreRender", root, refresh, false, "high+1")
 addEventHandler("onClientResourceStart", root, function(resource)
     if resource == getThisResource() or getResourceName(resource) == "vcs" then
         loadRooms()
@@ -90,7 +93,6 @@ addEventHandler("onClientResourceStart", root, function(resource)
 end)
 addEventHandler("onClientResourceStop", root, function(resource)
     if resource == getThisResource() then
-        if transition then killTimer(transition) end
         if outdoorWeather then applyWeather(outdoorWeather, outdoorTarget) end
     elseif getResourceName(resource) == "vcs" then
         rooms = {}

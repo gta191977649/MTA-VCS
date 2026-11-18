@@ -1,4 +1,6 @@
 local nativeWeathers = {[0]=0, 4, 8, 9, 1, 8, 6, 1}
+local EXTRA_COLOURS = 6
+local DEFAULT_COLOUR = 0
 -- SLUS-21590 weather wind table at 0x48a0f8.
 local waterWinds = {[0]=0.25, 0.7, 1, 0, 0, 2, 0, 0}
 local function nativeGetWeather()
@@ -14,7 +16,8 @@ local rows, restore = {}, {}
 local reloadSnapshot = "leeds_engine:weather"
 local weights, fromWeights = {[initialWeather]=1}, nil
 local lastSample, blendStart, lastMinute
-local interior, interiorWeather, colour
+local interiorWeather, colour
+local lastCameraInterior, outdoorClouds
 local customSun = false
 local lightProperties = {"SpriteSize", "SpriteBrightness", "LightsOnGround"}
 VCSWeather = {old=initialWeather, new=initialWeather, interpolation=1, data={}}
@@ -83,11 +86,16 @@ end
 
 local function update(force)
     if #rows ~= 192 then return end
+    local cameraInterior = getCameraInterior()
+    local indoorColour = colour
+    if indoorColour == nil and cameraInterior ~= 0 then indoorColour = DEFAULT_COLOUR end
+    local indoors = indoorColour ~= nil
     local now = getTickCount()
     local hour, minute = getTime()
     local clock = hour * 60 + minute
-    if not force and lastMinute == clock and (not blendStart or now - lastSample < 100) then return end
-    lastSample, lastMinute = now, clock
+    if not force and lastCameraInterior == cameraInterior and lastMinute == clock
+        and (not blendStart or now - lastSample < 100) then return end
+    lastSample, lastMinute, lastCameraInterior = now, clock, cameraInterior
     updateBlend(now)
     local v = {}
     for field = 1, 56 do
@@ -102,28 +110,29 @@ local function update(force)
         end
         v[field] = value
     end
-    if colour then
-        -- SLUS-21590 001CCF20 applies the selected hour from EXTRA_COLOURS,
-        -- with black sky entries preserving the outdoor sky/cloud colours.
-        local extra = rows[interiorWeather * 24 + colour + 1]
+    if indoors then
+        local extra = rows[(interiorWeather or EXTRA_COLOURS) * 24 + indoorColour + 1]
         for field = 1, 15 do v[field] = extra[field] end
+        -- The MTA sky should use the room's actual gradient, including black.
+        for field = 16, 21 do v[field] = extra[field] end
         for field = 29, 38 do v[field] = extra[field] end
         for field = 48, 50 do v[field] = extra[field] end
+        -- SLUS-21590 001CCF20 gates the remaining sky-dependent colours.
         if extra[16] ~= 0 or extra[17] ~= 0 or extra[18] ~= 0 then
-            for field = 16, 28 do v[field] = extra[field] end
             for field = 39, 47 do v[field] = extra[field] end
             for field = 51, 54 do v[field] = extra[field] end
         end
+        for field = 22, 28 do v[field] = 0 end
     end
     local function rgb(i) return {v[i], v[i+1], v[i+2]} end
-    local clip = colour and v[34] or (interior == 0 and 2000 or 1000)
+    local clip = indoors and v[34] or 2000
     local fog = math.min(v[35], clip - 1)
     local waterWind = 0
     for weather, weight in pairs(weights) do
         waterWind = waterWind + weight * waterWinds[weather]
     end
     VCSWeather.data = {
-        values=v, amb=rgb(1), amb_obj=rgb(4), amb_bl=rgb(7), amb_obj_bl=rgb(10),
+        values=v, indoors=indoors, amb=rgb(1), amb_obj=rgb(4), amb_bl=rgb(7), amb_obj_bl=rgb(10),
         directional=rgb(13), dirMult=1, sky_top=rgb(16), sky_bot=rgb(19),
         sun_core=rgb(22), sun_corona=rgb(25), sun_size=v[28],
         sprite_size=v[29], sprite_brightness=v[30], farClp=clip, fogSt=fog, fogginess=weights[3] or 0,
@@ -134,6 +143,13 @@ local function update(force)
         water={v[51],v[52],v[53],v[54]},
         waterWind=math.min(waterWind, 1),
     }
+    if indoors and outdoorClouds == nil then
+        outdoorClouds = getCloudsEnabled()
+        setCloudsEnabled(false)
+    elseif not indoors and outdoorClouds ~= nil then
+        setCloudsEnabled(outdoorClouds)
+        outdoorClouds = nil
+    end
     setSkyGradient(v[16],v[17],v[18],v[19],v[20],v[21])
     if not customSun then applySun(v) end
     setWorldProperty("SpriteSize", v[29])
@@ -144,12 +160,12 @@ local function update(force)
     setFogDistance(fog)
     setFarClipDistance(clip)
     setWaterColor(v[51],v[52],v[53],v[54])
-    setRainLevel(interior == 0 and math.min(1, (weights[2] or 0)*0.65 + (weights[5] or 0)) or 0)
+    setRainLevel(not indoors and math.min(1, (weights[2] or 0)*0.65 + (weights[5] or 0)) or 0)
 end
 
-local function interiorChanged(area, _, weather, row)
-    interior, interiorWeather, colour = area or 0, weather, row
-    update(true)
+local function interiorChanged(_, _, weather, row)
+    interiorWeather, colour = weather, row
+    lastMinute = nil
 end
 
 function getTimeCycleValue(key)
@@ -185,7 +201,7 @@ function getOutdoorWeather()
 end
 
 function getVcsWeather()
-    if interiorWeather then return interiorWeather end
+    if VCSWeather.data.indoors then return interiorWeather or EXTRA_COLOURS end
     return getOutdoorWeather()
 end
 
@@ -224,12 +240,17 @@ function VCSWeather.start()
     end
     addEventHandler("onClientInteriorChanged", localPlayer, interiorChanged, false, "high")
     interiorChanged(exports.interior:getInteriorState())
+    update(true)
     addEventHandler("onClientPreRender", root, function() update(false) end, false, "high")
     return true
 end
 
 function VCSWeather.stop(reloading)
     removeEventHandler("onClientInteriorChanged", localPlayer, interiorChanged)
+    if outdoorClouds ~= nil then
+        setCloudsEnabled(outdoorClouds)
+        outdoorClouds = nil
+    end
     if reloading and #rows == 192 then
         local original = {}
         for index, state in ipairs(restore) do original[index] = state[2] end

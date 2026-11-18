@@ -8,6 +8,10 @@ local healthChanged, armourChanged, wantedChanged
 -- VCSPC CHud::Draw uses one right-edge anchor and a shared safe zone.
 local hudOffsetX, hudOffsetY = -8 * 2.30, -8 * 0.9
 local weaponLeft, weaponWidth = 104, 76
+local white = tocolor(255, 255, 255)
+-- VCSPC PrintStaminaBar uses RGB (0, 30, 117), with half intensity for the empty portion.
+-- The original cyan sprite already contains (9, 255, 250), so compensate for its blue channel.
+local oxygenFill, oxygenEmpty = tocolor(0, 30, 119), tocolor(0, 15, 59)
 
 function getVcsPlayerHudVisible()
     return visible
@@ -56,15 +60,17 @@ local function drawDigits(text, x, y, sx, sy, clock)
     end
 end
 
-local function bar(x, y, width, height, fraction, interior)
+local function bar(x, y, width, height, fraction, interior, fillTint, emptyTint)
     local progress = Hud.clamp(fraction)
     local remaining = 1 - progress
+    local empty = emptyTint and interior or interior .. "dark"
     if remaining > 0 then
         dxDrawImageSection(x + width * progress, y, width * remaining, height, 16 + progress * 48,
-            0, remaining * 48, 16, CFont:texture(interior .. "dark"))
+            0, remaining * 48, 16, CFont:texture(empty), 0, 0, 0, emptyTint or white)
     end
     if progress > 0 then
-        dxDrawImageSection(x, y, width * progress, height, 16, 0, progress * 48, 16, CFont:texture(interior))
+        dxDrawImageSection(x, y, width * progress, height, 16, 0, progress * 48, 16, CFont:texture(interior),
+            0, 0, 0, fillTint or white)
     end
     dxDrawImageSection(x, y, width, height, 16, 0, 48, 16, CFont:texture("bar_outline"))
 end
@@ -114,7 +120,7 @@ function CHud:drawPlayer(now)
     local air = getPedOxygenLevel(localPlayer) or maxAir
     local vehicle = getPedOccupiedVehicle(localPlayer)
     if (vehicle and isElementInWater(vehicle)) or (isElementInWater(localPlayer) and air < maxAir - 1) then
-        bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, air / maxAir, "bar_inside1")
+        bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, air / maxAir, "bar_inside1", oxygenFill, oxygenEmpty)
     elseif armour > 0 and canDraw(now, armourChanged, 650) then
         bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, armour / 100, "bar_inside1")
     end

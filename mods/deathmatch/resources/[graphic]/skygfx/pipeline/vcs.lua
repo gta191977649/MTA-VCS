@@ -5,6 +5,7 @@ local thresholdUsesDepth
 local scene, bloomA, bloomB, historyA, historyB
 local width, height, bloomWidth, bloomHeight
 local lastValues, historyReady, lastCamera, previousInterior, previousDimension
+local previousCameraInterior
 local composedValues, boundHistory
 local mode = SKYGFX.vcsReducedEffects and "reduced" or "full"
 local settings, modeOverride
@@ -169,18 +170,19 @@ end
 
 local function checkCamera(now)
     local interior, dimension = getElementInterior(localPlayer), getElementDimension(localPlayer)
+    local cameraInterior = getCameraInterior()
     local x, y, z, lx, ly, lz = getCameraMatrix()
     local dx, dy, dz = lx-x, ly-y, lz-z
     local length = math.max(math.sqrt(dx*dx+dy*dy+dz*dz), 0.0001)
     dx, dy, dz = dx/length, dy/length, dz/length
     local prev = lastCamera
-    if interior ~= previousInterior or dimension ~= previousDimension or
+    if interior ~= previousInterior or dimension ~= previousDimension or cameraInterior ~= previousCameraInterior or
         (prev and ((x-prev[1])^2 + (y-prev[2])^2 + (z-prev[3])^2 > 35^2
                    or dx*prev[4]+dy*prev[5]+dz*prev[6] < 0.5 or now-prev[7] > 150)) then
         clearHistory()
     end
     lastCamera = {x,y,z,dx,dy,dz,now}
-    previousInterior, previousDimension = interior, dimension
+    previousInterior, previousDimension, previousCameraInterior = interior, dimension, cameraInterior
 end
 
 local function drawTarget(target, w, h, shader)
@@ -353,6 +355,7 @@ function VCSGraphics.stop(reloading)
     prop, solidProp, propAlpha, foliage = nil, nil, nil, nil
     thresholdUsesDepth = nil
     width, height, lastValues, previousInterior, previousDimension = nil, nil, nil, nil, nil
+    previousCameraInterior = nil
     stats = {}
     if not settings then return end
     if reloading then

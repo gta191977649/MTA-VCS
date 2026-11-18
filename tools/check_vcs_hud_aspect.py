@@ -35,10 +35,10 @@ def load_lua():
         function getPlayerWantedLevel() return armed and 0 or 2 end
         function getTime() return 3, 14 end
         function getPlayerMoney() return 150 end
-        function getPedStat() return 569 end
-        function getPedOxygenLevel() return 1000 end
+        function getPedStat(_, stat) return stat == 24 and 569 or 0 end
+        function getPedOxygenLevel() return submerged and 500 or 1000 end
         function getPedOccupiedVehicle() return false end
-        function isElementInWater() return false end
+        function isElementInWater() return submerged == true end
         function getPedWeapon() return armed and 22 or 0 end
         function getPedWeaponSlot() return armed and 2 or 0 end
         function getPedTotalAmmo() return 36 end
@@ -101,10 +101,11 @@ def render_radar(assets, diameter):
     return radar, mask
 
 
-def render_view(lua, assets, width, height, armed=False):
+def render_view(lua, assets, width, height, armed=False, submerged=False):
     globals_ = lua.globals()
     globals_.screenWidth, globals_.screenHeight = width, height
     globals_.armed = armed
+    globals_.submerged = submerged
     scale_x, scale_y, ref_left, ref_center_y, ref_diameter = reference_layout(width, height)
     viewport = globals_.getVcsHudViewport(width, height)
     assert math.isclose(viewport[0], scale_x) and math.isclose(viewport[1], scale_y)
@@ -132,8 +133,8 @@ def render_view(lua, assets, width, height, armed=False):
         if tint:
             r, g, b = (tint[index] for index in (1, 2, 3))
             red, green, blue, alpha = texture.split()
-            texture = Image.merge("RGBA", (red.point(lambda v: v * r // 255),
-                green.point(lambda v: v * g // 255), blue.point(lambda v: v * b // 255), alpha))
+            texture = Image.merge("RGBA", (red.point(lambda v: round(v * r / 255)),
+                green.point(lambda v: round(v * g / 255)), blue.point(lambda v: round(v * b / 255)), alpha))
         texture = texture.resize((max(1, round(dw)), max(1, round(dh))), Image.Resampling.BILINEAR)
         canvas.alpha_composite(texture, (round(dx), round(dy)))
         draws.append((name, dx, dy, dw, dh))
@@ -154,6 +155,11 @@ def render_view(lua, assets, width, height, armed=False):
     _, bx, by, bw, bh = next(draw for draw in draws if draw[0] == "bar_outline" and math.isclose(draw[2], 58.3 * scale_y))
     assert abs(bx - clock[0][1]) <= 1.31 * scale_x and bx + bw < weapon_x
     assert math.isclose(by + bh, 75.1 * scale_y)
+    if not armed or submerged:
+        bar_y = round((38.3 + 8.4) * scale_y)
+        samples = tuple(canvas.getpixel((round(bx + bw * portion), bar_y))[:3] for portion in (0.25, 0.75))
+        expected = ((0, 30, 117), (0, 15, 58)) if submerged else ((9, 255, 250), (0, 51, 49))
+        assert samples == expected, (submerged, samples)
     weapon_visible_right = weapon_x + weapon_w * 46 / 64
     assert abs(money[-1][1] + money[-1][3] - weapon_visible_right) <= 2 * scale_x
     assert weapon_y + weapon_h * 51 / 64 < money[0][2]
@@ -189,6 +195,8 @@ def main():
         sheet.paste(view, (left, top + 27))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(args.output)
+    render_view(lua, assets, 1920, 1080, submerged=True)
+    print("Oxygen and armour bar colors verified")
     if args.detail_output:
         frame = render_view(lua, assets, 1920, 1080, armed=True)
         frame.crop((1540, 15, 1900, 242)).save(args.detail_output)
