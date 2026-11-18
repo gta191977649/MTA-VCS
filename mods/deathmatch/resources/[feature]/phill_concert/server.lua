@@ -19,7 +19,10 @@ end
 local function releaseUnderworldWarp()
     viewers = viewers - 1
     if viewers == 0 then
-        setWorldSpecialPropertyEnabled("underworldwarp", previousWarp)
+        local enex = getResourceFromName("enex")
+        if not enex or getResourceState(enex) ~= "running" then
+            setWorldSpecialPropertyEnabled("underworldwarp", previousWarp)
+        end
         previousWarp = nil
     end
 end

@@ -3399,12 +3399,4 @@
     <object posX="-745.716736" posY="172.098679" posZ="14.573081" rotX="-0.000000" rotY="-0.000000" rotZ="169.999992" interior="0" dimension="0" physicsRoot="1294" breakable="true" respawn="true" simulated="false" frozen="false" mass="600" turnMass="4000" airResistance="0.99" elasticity="0.05" buoyancy="9.6" id="mlamppost_bde63" />
     <object posX="-753.198730" posY="135.322021" posZ="14.582648" rotX="-0.000000" rotY="-0.000000" rotZ="169.999992" interior="0" dimension="0" physicsRoot="1294" breakable="true" respawn="true" simulated="false" frozen="false" mass="600" turnMass="4000" airResistance="0.99" elasticity="0.05" buoyancy="9.6" id="mlamppost_bde63" />
     <building posX="-1100.551147" posY="361.079468" posZ="12.250264" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="haitin_sh_grg" />
-    <building posX="429.579132" posY="1169.461670" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="397.837433" posY="1169.653687" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="413.485901" posY="1202.178955" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="430.320526" posY="1079.921143" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="397.510529" posY="1079.799927" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="379.354858" posY="1025.537476" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="414.090637" posY="1049.233643" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
-    <building posX="448.706696" posY="1227.638428" posZ="-181.906631" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="veg_palmbig14" />
 </map>

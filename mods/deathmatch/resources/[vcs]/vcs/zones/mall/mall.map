@@ -188,8 +188,8 @@
     <building posX="429.369659" posY="1044.870605" posZ="-193.760269" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmkb9" />
     <building posX="467.895447" posY="1173.427490" posZ="-199.110092" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="vcs_model_7890" />
     <building posX="475.185730" posY="1122.827759" posZ="-193.248260" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="vcs_model_7891" />
-    <building posX="413.621033" posY="1139.536743" posZ="-200.783325" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="ml_escal" />
-    <building posX="413.621033" posY="1108.654175" posZ="-200.783325" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="3" dimension="0" id="ml_escal_7269b" />
+    <building posX="413.621033" posY="1139.536743" posZ="-200.783325" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="ml_escal_5b52a" />
+    <building posX="413.621033" posY="1108.654175" posZ="-200.783325" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="3" dimension="0" id="ml_escal_f1b60" />
     <building posX="370.377838" posY="1143.653320" posZ="-201.041458" rotX="0.000000" rotY="-0.000000" rotZ="-0.000010" interior="3" dimension="0" id="vcs_model_7068" />
     <building posX="374.027344" posY="1140.643921" posZ="-201.041458" rotX="0.000000" rotY="-0.000000" rotZ="-0.000010" interior="3" dimension="0" id="vcs_model_7068" />
     <building posX="379.287262" posY="1139.030029" posZ="-201.041458" rotX="0.000000" rotY="-0.000000" rotZ="-0.000010" interior="3" dimension="0" id="vcs_model_7068" />
@@ -295,7 +295,7 @@
     <building posX="370.648682" posY="1172.566528" posZ="-199.988022" rotX="0.000000" rotY="-0.000000" rotZ="-45.568851" interior="3" dimension="0" id="veg_palmkb9" />
     <building posX="370.648682" posY="1169.286011" posZ="-199.988022" rotX="-0.000000" rotY="-0.000000" rotZ="111.456783" interior="3" dimension="0" id="veg_palmkb9" />
     <building posX="417.358673" posY="1246.029541" posZ="-193.189972" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="vcs_model_7892" />
-    <building posX="407.020569" posY="1199.459473" posZ="-200.821915" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="3" dimension="0" id="ml_escal_3f76d" />
+    <building posX="407.020569" posY="1199.459473" posZ="-200.821915" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="3" dimension="0" id="ml_escal_6ecd2" />
     <building posX="369.292938" posY="1187.236938" posZ="-194.668869" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="3" dimension="0" id="vcs_model_7064_0bc64" />
     <building posX="369.292938" posY="1185.831665" posZ="-194.668869" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="3" dimension="0" id="vcs_model_7064_0bc64" />
     <building posX="394.357819" posY="1144.331421" posZ="-200.798203" rotX="0.000000" rotY="-0.000000" rotZ="-43.416820" interior="3" dimension="0" id="vcs_model_7074" />
@@ -401,4 +401,12 @@
     <building posX="-1570.017090" posY="1347.426758" posZ="-223.385376" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="pc_rightrig" />
     <building posX="-1577.534424" posY="1335.271973" posZ="-219.298172" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="pc_backlights" />
     <building posX="-1568.503296" posY="1334.833008" posZ="-222.650620" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="pc_gantry_f77a3" />
+    <building posX="429.579132" posY="1169.461670" posZ="-199.879090" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="397.837433" posY="1169.653687" posZ="-199.879090" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="413.485901" posY="1202.178955" posZ="-199.879090" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="430.320526" posY="1079.921143" posZ="-199.879090" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="397.510529" posY="1079.799927" posZ="-199.879090" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="379.354858" posY="1025.537476" posZ="-200.139676" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="414.090637" posY="1049.233643" posZ="-199.879104" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
+    <building posX="448.706696" posY="1227.638428" posZ="-200.133059" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="3" dimension="0" id="veg_palmbig14" />
 </map>

@@ -1,6 +1,7 @@
 <meta>
     <include resource="frontend"/>
     <include resource="eagleLoader"/>
+    <script src="server.lua" type="server"/>
     <script src="lib.lua" type="client"/>
     <script src="anim.lua" type="client"/>
     <script src="ps2_portals.lua" type="client"/>

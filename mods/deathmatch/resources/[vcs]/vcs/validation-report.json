@@ -1,15 +1,15 @@
 {
   "embedded_coronas": 892,
-  "dff": 4865,
-  "physical_col": 2880,
+  "dff": 4866,
+  "physical_col": 2881,
   "collision_spheres": 1363,
   "collision_boxes": 10284,
-  "collision_triangles": 220093,
-  "col": 4866,
+  "collision_triangles": 220923,
+  "col": 4867,
   "bounds_only_col": 1986,
   "textures": 14645,
   "txd": 200,
-  "textured_definitions": 5475,
+  "textured_definitions": 5477,
   "timed_definitions": 258,
   "placements": 11289,
   "standalone_low_lods": 215,
@@ -17,6 +17,7 @@
   "timed_placements": 259,
   "lod_links": 1154,
   "timed_lod_links": 68,
+  "escalator_lanes": 8,
   "portal_pairs": 52,
   "wet_cells": 11672
 }
