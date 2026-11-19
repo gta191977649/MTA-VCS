@@ -2,6 +2,7 @@
 	<info author="CrystalMV" version="1.0" name="Server collision data" description="Simple collision checking for elements on the server side" type="script"/>
 	<script src="collisions.lua" />
 	<script src="bbox.lua" />
+	<script src="nearby.lua" />
 
 	<export function="generateColData"            type="server" http="false" />
 	<export function="clearColData"               type="server" http="false" />
@@ -12,5 +13,6 @@
 	<export function="doModelBoxesIntersect"      type="server" http="false" />
 
 	<export function="getModelBoundingBox"        type="server" http="false" />
+	<export function="hasNearbyModelCollision"  type="server" http="false" />
 </meta>
 

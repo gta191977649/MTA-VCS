@@ -19,7 +19,8 @@ local lastSample, blendStart, lastMinute
 local interiorWeather, colour
 local lastCameraInterior, outdoorClouds
 local customSun = false
-local lightProperties = {"SpriteSize", "SpriteBrightness", "LightsOnGround"}
+local lightProperties = {"SpriteSize", "SpriteBrightness", "LightsOnGround",
+    "AmbientObjColor", "DirectionalColor", "Illumination"}
 VCSWeather = {old=initialWeather, new=initialWeather, interpolation=1, data={}}
 
 local function readTable()
@@ -152,6 +153,11 @@ local function update(force)
     end
     setSkyGradient(v[16],v[17],v[18],v[19],v[20],v[21])
     if not customSun then applySun(v) end
+    -- SLUS-21590 001A6310 installs the directional RGB and 001A7000
+    -- selects object ambient for the native vehicle and pedestrian draws.
+    setWorldProperty("AmbientObjColor", v[4], v[5], v[6])
+    setWorldProperty("DirectionalColor", v[13], v[14], v[15])
+    setWorldProperty("Illumination", 1)
     setWorldProperty("SpriteSize", v[29])
     -- VCS uses a unit RGB multiplier. SA divides this property by 10
     -- before converting the corona and its ground contribution to bytes.

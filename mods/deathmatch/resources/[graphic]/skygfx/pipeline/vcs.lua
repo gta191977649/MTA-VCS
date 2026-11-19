@@ -152,6 +152,7 @@ local function updateWorld(v)
     updateWorldShader(solidProp, v, true)
     updateWorldShader(propAlpha, v, true)
     updateWorldShader(foliage, v, true)
+    VCSVehicle.update(v)
     VCSWater.update(v, getTimeCycleValue("waterWind"))
 end
 
@@ -164,6 +165,7 @@ end
 
 local function restoreGraphics()
     clearHistory()
+    VCSVehicle.invalidate()
     VCSWater.restoreGraphics()
     VCSSun.resetVisibility()
 end
@@ -214,8 +216,10 @@ local function renderPost()
     stats.captures, stats.fullscreen, stats.bloomPasses, stats.historyWrites = 0, 0, 0, 0
     if isMainMenuActive() then
         clearHistory()
+        VCSVehicle.invalidate()
         return
     end
+    VCSVehicle.capture()
     local w, h = guiGetScreenSize()
     if mode == "off" or not compose or not lastValues then return end
     ensureTargets(w, h)
@@ -269,7 +273,7 @@ function getVcsGraphicsStats()
     return {
         world=isElement(world), alphaTextures=stats.alphaTextures or 0,
         props=isElement(prop) and isElement(solidProp), propAlpha=isElement(propAlpha), foliage=isElement(foliage),
-        post=isElement(compose), mode=mode, sun=VCSSun.getStats(), water=VCSWater.getStats(),
+        post=isElement(compose), mode=mode, sun=VCSSun.getStats(), water=VCSWater.getStats(), vehicles=VCSVehicle.getStats(),
         captures=stats.captures, fullscreen=stats.fullscreen,
         hudFrames=stats.hudFrames or 0,
         bloomPasses=stats.bloomPasses, historyWrites=stats.historyWrites,
@@ -293,6 +297,7 @@ function VCSGraphics.start()
     if not (prop and solidProp and propAlpha) then outputDebugString("SkyGfx VCS: prop shaders unavailable", 2) end
     if not foliage then outputDebugString("SkyGfx VCS: foliage shader unavailable", 2) end
     VCSSun.start()
+    VCSVehicle.start()
     VCSWater.start()
     compose = dxCreateShader("shader/vcsPost.fx")
     if compose then
@@ -337,6 +342,7 @@ function VCSGraphics.stop(reloading)
     removeEventHandler("onClientRestore", root, restoreGraphics)
     releaseTargets()
     VCSSun.stop(reloading)
+    VCSVehicle.stop()
     VCSWater.stop()
     release(world)
     release(worldAlpha)

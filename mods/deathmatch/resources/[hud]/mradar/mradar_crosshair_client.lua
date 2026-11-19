@@ -13,7 +13,6 @@ local CROSSHAIR_CAMERA_TEXTURE
 
 local CROSSHAIR_ROCKET_ENABLED = true
 local CROSSHAIR_ROCKET_SIZE = SCREEN_HEIGHT / 10
-local CROSSHAIR_ROCKET_SIZE_OFFSET = CROSSHAIR_ROCKET_SIZE / 4
 local CROSSHAIR_ROCKET_COLOR = tocolor(255, 255, 255, 255)
 local CROSSHAIR_ROCKET_TEXTURE
 
@@ -33,26 +32,16 @@ local dxDrawImageSection = dxDrawImageSection
 ------------------------------------------------------------------------------------------------------------------------
 
 
-local function dxDrawImageQuad(x, y, width, height, image, rot, rotX, rotY, color, postGUI, offset)
+local function dxDrawImageQuad(x, y, width, height, image, rot, rotX, rotY, color)
+	local w2 = width / 2
+	local h2 = height / 2
 
-	offset = offset or 0
-
-	local off2 = offset * 2
-	local w2 = (width - offset) / 2
-	local h2 = (height - offset) / 2
-
-	dxDrawImage(x, y, w2, h2, image, rot, rotX, rotY, color, postGUI)
-	dxDrawImage(x + w2 + w2 + off2, y, -w2, h2, image, rot, rotX, rotY, color, postGUI)
-	dxDrawImage(x + w2 + w2 + off2, y + h2 + h2 + off2, -w2, -h2, image, rot, rotX, rotY, color, postGUI)
-	dxDrawImage(x, y + h2 + h2 + off2, w2, -h2, image, rot, rotX, rotY, color, postGUI)
+	dxDrawImage(x, y, w2, h2, image, rot, rotX, rotY, color)
+	dxDrawImage(x + width, y, -w2, h2, image, rot, rotX, rotY, color)
+	dxDrawImage(x + width, y + height, -w2, -h2, image, rot, rotX, rotY, color)
+	dxDrawImage(x, y + height, w2, -h2, image, rot, rotX, rotY, color)
 
 	return true
-end
-
-local function dxGetHudFixRatio()
-
-	if dxGetStatus().SettingHUDMatchAspectRatio then return {1, 1/(4/3 * 448/640)} end
-	return {SCREEN_WIDTH/SCREEN_HEIGHT * 448/640, 1}
 end
 
 local function initCrosshairRegular()
@@ -63,7 +52,6 @@ local function initCrosshairRegular()
 	if not shader then return false end
 
 	dxSetShaderValue(shader, "gTexture", CROSSHAIR_REGULAR_TEXTURE)
-	dxSetShaderValue(shader, "fViewportRatio", dxGetHudFixRatio())
 	engineApplyShaderToWorldTexture(shader, CROSSHAIR_REGULAR_TEXTURE_NAME)
 
 	return true
@@ -144,7 +132,7 @@ local function drawCrosshairRocket()
 
 	setPlayerHudComponentVisible("crosshair", false)
 
-	return dxDrawImageQuad(
+	return dxDrawImage(
 		(SCREEN_WIDTH - CROSSHAIR_ROCKET_SIZE) / 2,
 		(SCREEN_HEIGHT - CROSSHAIR_ROCKET_SIZE) / 2,
 		CROSSHAIR_ROCKET_SIZE,
@@ -153,9 +141,7 @@ local function drawCrosshairRocket()
 		0,
 		0,
 		0,
-		CROSSHAIR_ROCKET_COLOR,
-		false,
-		CROSSHAIR_ROCKET_SIZE_OFFSET)
+		CROSSHAIR_ROCKET_COLOR)
 end
 
 local function drawCrosshairRegular()

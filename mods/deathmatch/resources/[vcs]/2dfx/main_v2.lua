@@ -23,6 +23,7 @@ TRAFFIC_LIGHT_COLORS = {
 }
 TRAFFIC_LIGHT_COLOR_MAPPING = {
     ["NS"] = {
+        [9] = {0, 0, 0, 0},
         [0] = TRAFFIC_LIGHT_COLORS["GREEN"],
         [5] = TRAFFIC_LIGHT_COLORS["GREEN"],
         [8] = TRAFFIC_LIGHT_COLORS["GREEN"],
@@ -34,6 +35,7 @@ TRAFFIC_LIGHT_COLOR_MAPPING = {
         [7] = TRAFFIC_LIGHT_COLORS["YELLOW"],
     },
     ["WE"] = {
+        [9] = {0, 0, 0, 0},
         [3] = TRAFFIC_LIGHT_COLORS["GREEN"],
         [5] = TRAFFIC_LIGHT_COLORS["GREEN"],
         [7] = TRAFFIC_LIGHT_COLORS["GREEN"],
@@ -52,6 +54,7 @@ RENDERED = 0
 IS_NIGHT = false
 local h,m = getTime()
 local traffic_status = getTrafficLightState()
+local activeTrafficLights = {}
 
 function getTrafficLightDirection(rotation) 
     local angleMapping = {
@@ -129,16 +132,18 @@ function create2dFX(object)
         if LIGHT_OBJS[object].type == "Traffic" then -- traffic light
             local x,y,z = unpack(LIGHT_OBJS[object].pos)
             local heading = LIGHT_OBJS[object].rot
-            local r,g,b,a = unpack(LIGHT_OBJS[object].color)
+            local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[heading][traffic_status])
 
             LIGHT_OBJS[object].light = LIGHT:createPointLight(x,y,z,r,g,b,a,10,false)
             LIGHT:setLightDistFade(LIGHT_OBJS[object].light,FADE_DIST,FADE_DIST*0.6)
             LIGHT_OBJS[object].damage = false
+            activeTrafficLights[object] = LIGHT_OBJS[object]
             RENDERED = RENDERED + 1
         end
     end
 end
 function remove2dFX(object) 
+    activeTrafficLights[object] = nil
     if LIGHT_OBJS[object] and LIGHT_OBJS[object].light then -- recreate damaged light
         LIGHT:destroyLight(LIGHT_OBJS[object].light)
         LIGHT_OBJS[object].light = nil
@@ -160,14 +165,11 @@ function forceDestory()
     end
 end
 function updateTrafficLights(status) 
-    local objects = getElementsByType("object",root,true) 
-    for k,v in ipairs(objects) do 
-        if LIGHT_OBJS[v] and LIGHT_OBJS[v].type == "Traffic" and LIGHT_OBJS[v].light then 
-            local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[LIGHT_OBJS[v].rot][status])
-            LIGHT:setLightColor(LIGHT_OBJS[v].light,r,g,b,a)
-            if DEBUG then 
-                DGS:dgsSetProperty(LIGHT_OBJS[v].label,"color",tocolor(r,g,b,a))
-            end
+    for _, entry in pairs(activeTrafficLights) do
+        local r,g,b,a = unpack(TRAFFIC_LIGHT_COLOR_MAPPING[entry.rot][status])
+        LIGHT:setLightColor(entry.light,r,g,b,a)
+        if DEBUG then
+            DGS:dgsSetProperty(entry.label,"color",tocolor(r,g,b,a))
         end
     end
 end 

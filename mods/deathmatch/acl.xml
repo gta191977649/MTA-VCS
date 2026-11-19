@@ -57,10 +57,10 @@
         <acl name="LeedsEngine"/>
         <object name="resource.leeds_engine"/>
     </group>
-    <acl name="LeedsEngine">
-        <right name="function.startResource" access="true"/>
-        <right name="function.stopResource" access="true"/>
-    </acl>
+    <group name="RunCode">
+        <acl name="RunCode"/>
+        <object name="resource.runcode"/>
+    </group>
     <group name="autoGroup_acpanel">
         <acl name="autoACL_acpanel"/>
         <object name="resource.acpanel"/>
@@ -69,6 +69,17 @@
         <acl name="autoACL_mapmanager"/>
         <object name="resource.mapmanager"/>
     </group>
+    <group name="autoGroup_runcode">
+        <acl name="autoACL_runcode"/>
+        <object name="resource.runcode"/>
+    </group>
+    <acl name="RunCode">
+        <right name="function.loadstring" access="true"/>
+    </acl>
+    <acl name="LeedsEngine">
+        <right name="function.startResource" access="true"/>
+        <right name="function.stopResource" access="true"/>
+    </acl>
     <acl name="Default">
         <right name="general.ModifyOtherObjects" access="false"/>
         <right name="general.http" access="false"/>
@@ -841,5 +852,8 @@
         <right name="function.restartResource" access="false" who="" pending="true" date=""/>
         <right name="function.stopResource" access="false" who="" pending="true" date=""/>
         <right name="function.refreshResources" access="false" who="" pending="true" date=""/>
+    </acl>
+    <acl name="autoACL_runcode">
+        <right name="function.loadstring" access="false" who="" pending="true" date=""/>
     </acl>
 </acl>

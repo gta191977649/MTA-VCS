@@ -31,7 +31,7 @@ local starUv = {1.5/128, 1.5/128, 64.5/128, 64.5/128}
 local ringUv = {67.5/128, 1.5/128, 98.5/128, 32.5/128}
 
 function VCSSun.resetVisibility()
-    lastFrame, rayDimension, rayMinute = nil, nil, nil
+    lastFrame, lastRay, rayDimension, rayMinute = nil, nil, nil, nil
     haloClear, haloOpacity = nil, 0
 end
 
@@ -95,7 +95,7 @@ function VCSSun.getStats()
     }
 end
 
-local function updateHalo(now, x, y, z, sx, sy, sz, distance, clock)
+local function updateHalo(now, onScreen, x, y, z, sx, sy, sz, distance, clock)
     local dimension = getElementDimension(localPlayer)
     if haloClear ~= nil and (dimension ~= rayDimension
             or math.min(math.abs(clock-rayMinute), 1440-math.abs(clock-rayMinute)) > 2
@@ -103,7 +103,10 @@ local function updateHalo(now, x, y, z, sx, sy, sz, distance, clock)
         VCSSun.resetVisibility()
     end
 
-    if not lastRay or now < lastRay or now-lastRay >= rayInterval then
+    if not onScreen then
+        -- The corona fades out when its center leaves the viewport.
+        lastRay = nil
+    elseif not lastRay or now < lastRay or now-lastRay >= rayInterval then
         local clear = isLineOfSightClear(x, y, z, x+sx*distance, y+sy*distance, z+sz*distance,
             true, true, false, true, false, true, false, localPlayer)
         if haloClear == nil then haloOpacity = clear and 1 or 0 end
@@ -115,7 +118,7 @@ local function updateHalo(now, x, y, z, sx, sy, sz, distance, clock)
 
     local elapsed = lastFrame and math.max(0, math.min(now-lastFrame, 50)) or 0
     lastFrame = now
-    if haloClear then
+    if onScreen and haloClear then
         haloOpacity = math.min(1, haloOpacity + elapsed/fadeInMs)
     else
         haloOpacity = math.max(0, haloOpacity - elapsed/fadeOutMs)
@@ -196,6 +199,7 @@ function VCSSun.prepare(values)
         clock = clock + math.min((now-minuteTick) / math.max(getMinuteDuration(), 1), 1)
     end
     local sx, sy, sz = sunDirection(clock)
+    -- SLUS-21590 registers the core at z > -0.2 and the halo at z > 0.
     if sz <= -0.2 then VCSSun.resetVisibility() return end
 
     local x, y, z, lx, ly, lz, _, fov = getCameraMatrix()
@@ -229,7 +233,8 @@ function VCSSun.prepare(values)
     local farClip = getFarClipDistance()
     if sz > 0 and opticsShader then
         stats.haloWidth, stats.haloHeight = 2*haloRadius, 2*haloRadius
-        updateHalo(now, x, y, z, sx, sy, sz, farClip/math.max(viewDot, 0.5), clock)
+        local onScreen = overlapsScreen(screenX, screenY, width, height, 0, 0)
+        updateHalo(now, onScreen, x, y, z, sx, sy, sz, farClip/math.max(viewDot, 0.5), clock)
     else
         VCSSun.resetVisibility()
     end

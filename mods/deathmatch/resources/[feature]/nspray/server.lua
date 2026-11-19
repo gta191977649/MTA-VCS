@@ -34,7 +34,13 @@ local function clearParole(player)
 end
 
 local function startParole(player, wanted, now)
-    if wanted == 0 or not setPlayerWantedLevel(player, 0) then return end
+    if wanted == 0 then return end
+    local traffic = getResourceFromName("npchlc_traffic")
+    if traffic and getResourceState(traffic) == "running" and call(traffic, "suspendPlayerWanted", player) then
+        parole[player] = nil
+        return
+    end
+    if not setPlayerWantedLevel(player, 0) then return end
     parole[player] = {stars = wanted, expires = now + paroleTime}
     setElementData(player, paroleKey, wanted, "broadcast", "deny")
 end

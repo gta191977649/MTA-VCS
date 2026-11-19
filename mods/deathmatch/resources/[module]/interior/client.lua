@@ -45,7 +45,8 @@ local function refresh()
     local nextArea, nextDimension = getElementInterior(localPlayer), getElementDimension(localPlayer)
     if not refreshPending and area == nextArea and dimension == nextDimension then return end
     refreshPending = false
-    local nextColour = nextArea ~= 0 and (rooms[scope(nextArea, nextDimension)] or DEFAULT_COLOUR) or nil
+    local nextColour = rooms[scope(nextArea, nextDimension)]
+    if nextColour == nil and nextArea ~= 0 then nextColour = DEFAULT_COLOUR end
     if area == nextArea and dimension == nextDimension and colour == nextColour then return end
 
     if nextColour and not outdoorWeather then
@@ -73,7 +74,7 @@ local function loadRooms()
             local interior = tonumber(xmlNodeGetAttribute(endpoint, "interior"))
             local dim = tonumber(xmlNodeGetAttribute(endpoint, "dimension"))
             local row = tonumber(xmlNodeGetAttribute(endpoint, "timecycle"))
-            if interior and interior ~= 0 and dim and row and row >= 0 and row < 24 then
+            if interior and dim and (interior ~= 0 or dim ~= 0) and row and row >= 0 and row < 24 then
                 rooms[scope(interior, dim)] = row
             end
         end

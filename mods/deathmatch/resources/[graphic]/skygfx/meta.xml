@@ -22,6 +22,7 @@
     <script src="pipeline/postfx.lua" type="client" cache="false"/>
     <script src="pipeline/worldPipe.lua" type="client" cache="false"/>
     <script src="pipeline/vcsSun.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsVehicle.lua" type="client" cache="false"/>
     <script src="pipeline/vcsWater.lua" type="client" cache="false"/>
     <script src="pipeline/vcs.lua" type="client" cache="false"/>
     <script src="debug.lua" type="client" cache="false"/>
@@ -48,6 +49,7 @@
     <file src="shader/mta-helper.fx" type="client"/>
     <file src="shader/vcsWorld.fx" type="client"/>
     <file src="shader/vcsSun.fx" type="client"/>
+    <file src="shader/vcsVehicle.fx" type="client"/>
     <file src="shader/vcsWater.fx" type="client"/>
     <file src="models/vcsAlphaTextures.txt" type="client"/>
     <file src="timecycle/timecyc_vcs.dat" type="client"/>

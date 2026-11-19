@@ -1,4 +1,5 @@
 <meta>
+	<min_mta_version server="1.6.0-9.22815" />
 	<info author="CrystalMV" version="0.1" name="NPC high-level control" description="Higher level control over peds" type="script" />
 	<script src="npc_functions_s.lua"	type="server"	/>
 	<script src="npc_functions.lua"		type="server"	/>
@@ -10,6 +11,7 @@
 	<script src="valid_tasks_s.lua"		type="server"	/>
 	<script src="tasks_s.lua"			type="server"	/>
 	<script src="tasks_c.lua"			type="client" 	/>
+	<script src="task_progress.lua"		type="shared" 	/>
 	<script src="actions_s.lua"			type="server" 	/>
 	<script src="actions_c.lua"			type="client" 	/>
 	<script src="math.lua"				type="server"	/>
@@ -32,7 +34,19 @@
 	<export function="addNPCTask"			type="server" http="false" />
 	<export function="clearNPCTasks"		type="server" http="false" />
 	<export function="setNPCTask"			type="server" http="false" />
+	<export function="getNPCSchedulerStats" type="server" http="false" />
+	<export function="projectNPCTrafficRailStart" type="server" http="false" />
+	<export function="getNPCTrafficRailSegment" type="server" http="false" />
+	<export function="isNPCTrafficRailWaitingForSignal" type="server" http="false" />
+	<export function="getNPCTrafficRailDebugPoints" type="server" http="false" />
+	<export function="getNPCTrafficPhysicsRejoin" type="server" http="false" />
 
+	<script src="traffic_rail.lua" type="shared" />
+	<script src="traffic_physics.lua" type="shared" />
+	<script src="traffic_physics_c.lua" type="client" />
+	<script src="traffic_rail_c.lua" type="client" />
+	<script src="traffic_pedestrians_c.lua" type="client" />
+	<script src="traffic_pedestrian_vehicles_c.lua" type="client" />
 	<settings>
 		<setting name="*server_colchecking" value="true" />
 	</settings>

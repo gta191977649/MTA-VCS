@@ -47,7 +47,7 @@ local function loadScripts()
 
         local resource = getResourceFromName(name)
         local state = resource and getResourceState(resource)
-        if not entry.optional or state == "running" then
+        if state == "running" or (not entry.optional and not entry.ifInstalled) or (entry.ifInstalled and resource) then
             expected = expected + 1
             if state == "running" or state == "loaded" then
                 selected[#selected + 1] = { name = name, resource = resource, running = state == "running" }

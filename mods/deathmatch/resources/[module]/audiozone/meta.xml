@@ -1,0 +1,12 @@
+<meta>
+    <info name="Audio zones" type="script" />
+    <include resource="interior" />
+    <script src="client.lua" type="client" />
+    <file src="zones.xml" />
+    <file src="audio/city.ogg" />
+    <file src="audio/mall_1.ogg" />
+    <file src="audio/mall_2.ogg" />
+    <file src="audio/mall_3.ogg" />
+    <file src="audio/mall_4.ogg" />
+    <file src="audio/mall_5.ogg" />
+</meta>

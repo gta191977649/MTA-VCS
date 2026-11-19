@@ -1,60 +1,83 @@
-taskValid = {}
+local signatures = {
+    walkToPos = "nnnd",
+    walkTrafficToPoint = "nnnd",
+    walkTrafficCrossing = "nnndnn",
+    walkAlongLine = "nnnnnndd",
+    walkAroundBend = "nnnnnnnndd",
+    walkFollowElement = "ed",
+    shootPoint = "nnn",
+    shootElement = "e",
+    killPed = "pdd",
+    driveToPos = "nnnd",
+    driveTrafficToPoint = "nnnd",
+    driveTrafficRail = "nnnnnnnnnnnnddd",
+    driveAlongLine = "nnnnnndd",
+    driveAroundBend = "nnnnnnnndd",
+    waitForGreenLight = "l",
+}
 
-function taskValid.walkToPos(task)
-	local x,y,z,dist = task[2],task[3],task[4],task[5]
-	return tonumber(x) and tonumber(y) and tonumber(z) and tonumber(dist) and true or false
+function normalizeNPCTask(task)
+    if type(task) ~= "table" then return false end
+    if task[1] == "driveTrafficPhysics" then return normalizeNPCTrafficPhysics(task) end
+    local signature = signatures[task[1]]
+    if not signature then return false end
+    local speedClasses = 0
+    local driving = task[1] == "driveTrafficToPoint"
+    if task[1] == "driveTrafficRail" then
+        if #task == 17 or #task == 22 or #task == 27 then
+            speedClasses = (#task - 12) / 5
+        elseif #task ~= 16 and #task ~= 20 and #task ~= 24 then
+            return false
+        end
+        signature = signature .. string.rep("dnnn", (#task - 16 - speedClasses) / 4)
+    elseif driving and (#task == 6 or #task == 8 or #task == 14) then
+        speedClasses = 1
+    end
+
+    local normalized = {task[1]}
+    for index = 1, #signature do
+        local rule = signature:sub(index, index)
+        local arg = task[index + 1]
+        if rule == "n" or rule == "d" then
+            arg = tonumber(arg)
+            if not arg or not (arg > -math.huge and arg < math.huge)
+                or rule == "d" and arg < 0 then return false end
+        elseif rule == "e" then
+            if not isElement(arg) or not getElementPosition(arg) then return false end
+        elseif rule == "p" then
+            if not isElement(arg) then return false end
+            local kind = getElementType(arg)
+            if kind ~= "ped" and kind ~= "player" then return false end
+        elseif arg ~= "NS" and arg ~= "WE" and arg ~= "ped" then
+            return false
+        end
+        normalized[index + 1] = arg
+    end
+    for index = #signature + 2, #signature + 1 + speedClasses do
+        local class = tonumber(task[index])
+        if not class or class < 0 or class > 3 or class % 1 ~= 0 then return false end
+        normalized[index] = class
+    end
+    if driving and (#task == 8 or #task == 14) then
+        for index = 7, #task do
+            local value = tonumber(task[index])
+            if not value or not (value > -math.huge and value < math.huge) then return false end
+            normalized[index] = value
+        end
+        if normalized[7] == 0 and normalized[8] == 0 then return false end
+        if normalized[12] and (normalized[12] < 0 or normalized[12] > 2 or normalized[12] % 1 ~= 0
+            or normalized[13] == 0 and normalized[14] == 0) then return false end
+    end
+
+    local name = normalized[1]
+    if name == "walkTrafficCrossing" then
+        if normalized[2] == normalized[6] and normalized[3] == normalized[7] then return false end
+    elseif name == "walkAlongLine" or name == "driveAlongLine" then
+        if normalized[2] == normalized[5] and normalized[3] == normalized[6] then return false end
+    elseif name == "walkAroundBend" or name == "driveAroundBend" then
+        local ax, ay = normalized[4] - normalized[2], normalized[5] - normalized[3]
+        local bx, by = normalized[7] - normalized[2], normalized[8] - normalized[3]
+        if ax * by == ay * bx then return false end
+    end
+    return normalized
 end
-
-function taskValid.walkAlongLine(task)
-	local x1,y1,z1 = task[2],task[3],task[4]
-	local x2,y2,z2 = task[5],task[6],task[7]
-	local off,enddist = task[8],task[9]
-	return
-		tonumber(x1) and tonumber(y1) and tonumber(z1) and
-		tonumber(x2) and tonumber(y2) and tonumber(z2) and
-		tonumber(off) and tonumber(enddist) and true or false
-end
-
-function taskValid.walkAroundBend(task)
-	local bx,by = task[2],task[3]
-	local x1,y1,z1 = task[4],task[5],task[6]
-	local x2,y2,z2 = task[7],task[8],task[9]
-	local off,enddist = task[10],task[11]
-	return
-		tonumber(bx) and tonumber(by) and
-		tonumber(x1) and tonumber(y1) and tonumber(z1) and
-		tonumber(x2) and tonumber(y2) and tonumber(z2) and
-		tonumber(off) and tonumber(enddist) and true or false
-end
-
-function taskValid.walkFollowElement(task)
-	local element,dist = task[2],task[3]
-	return isElement(element) and getElementPosition(element) and tonumber(dist) and true or false
-end
-
-function taskValid.shootPoint(task)
-	local x,y,z = task[2],task[3],task[4]
-	return tonumber(x) and tonumber(y) and tonumber(z) and true or false
-end
-
-function taskValid.shootElement(task)
-	local element = task[2]
-	return isElement(element) and getElementPosition(element) and true or false
-end
-
-function taskValid.killPed(task)
-	local element,shootdist,followdist = task[2],task[3],task[4]
-	return
-		isElement(element) and getElementType(element) == "ped" and
-		tonumber(shootdist) and tonumber(followdist) and true or false
-end
-
-taskValid.driveToPos = taskValid.walkToPos
-taskValid.driveAlongLine = taskValid.walkAlongLine
-taskValid.driveAroundBend = taskValid.walkAroundBend
-
-function taskValid.waitForGreenLight(task)
-	local dir = task[2]
-	return dir == "NS" or dir == "WE" or dir == "ped"
-end
-

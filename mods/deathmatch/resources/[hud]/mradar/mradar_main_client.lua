@@ -149,6 +149,7 @@ drawData.playerElement = nil
 drawData.playerElementMatrix = nil                -- Radar.h: CVector2D& vec2DRadarOrigin
 drawData.playerCameraAngle = 0                    -- Radar.h: float& m_fRadarOrientation
 drawData.playerInterior = nil
+drawData.hasIndoorProfile = false
 drawData.playerDimension = nil
 drawData.flashingRadarAreaAlphaMultiplier = 0
 
@@ -502,7 +503,7 @@ local function drawRadarMapTile(tx, ty)
 	local rtx, rty = transformWorldToRadarMapRtView(wx, wy)
 	local rtx2, rty2 = transformWorldToRadarMapRtView(wx + MAP_TILE_WORLD_SIZE, wy - MAP_TILE_WORLD_SIZE)
 
-	if RADAR_MAP_SHOW_IN_INTERIOR or drawData.playerInterior == 0 then
+	if RADAR_MAP_SHOW_IN_INTERIOR or (drawData.playerInterior == 0 and not drawData.hasIndoorProfile) then
 
 		if isMapTileInBounds(tx, ty) then
 
@@ -1580,6 +1581,10 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 -- Radar.cpp: CRadar::Initialise() // 0x587FB0
+local function interiorChanged(_, _, weather)
+	drawData.hasIndoorProfile = type(weather) == "number"
+end
+
 local function initRadar()
 
 	if not loadTexturesRadar() then return false end
@@ -1593,6 +1598,11 @@ local function initRadar()
 	end
 	setPlayerHudComponentVisible("radar", false)
 
+	local interiorResource = getResourceFromName("interior")
+	if interiorResource and getResourceState(interiorResource) == "running" then
+		addEventHandler("onClientInteriorChanged", localPlayer, interiorChanged, false)
+		interiorChanged(exports.interior:getInteriorState())
+	end
 	addEventHandler("onClientRestore", root, function() drawData.areRenderTargetsReady = false end)
 	addEventHandler("onClientRender", root, draw)
 

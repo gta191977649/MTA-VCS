@@ -3,6 +3,7 @@ vcsResources = {
     { "dgs" },
     { "custom_coronas" },
     { "interior" },
+    { "audiozone" },
     { "skygfx" },
     { "font" },
     { "frontend" },
@@ -18,6 +19,10 @@ vcsResources = {
     { "debug" },
     { "freeroam" },
     { "play" },
+    { "server_coldata" },
+    { "npc_hlc" },
+    { "vcs_model", ifInstalled = true },
+    { "npchlc_traffic" },
 
     -- Standalone tools and alternate renderers keep their current enabled state.
     { "model", optional = true },

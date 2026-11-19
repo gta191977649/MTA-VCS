@@ -3,8 +3,8 @@
     "lights": 3950,
     "unsupported_type_1": 9,
     "unsupported_type_3": 227,
-    "unsupported_flash_255": 2,
-    "escalators": 8
+    "escalators": 14,
+    "unsupported_flash_255": 2
   },
   "surfaces": {
     "0": 196627,
@@ -622,11 +622,11 @@
     },
     "mall": {
       "placements": 409,
-      "definitions": 196
+      "definitions": 195
     },
     "props": {
       "placements": 3399,
-      "definitions": 251
+      "definitions": 236
     },
     "int_3000": {
       "placements": 7,
@@ -768,8 +768,8 @@
     3840,
     3841
   ],
-  "dff": 4866,
-  "col": 4867,
+  "dff": 4850,
+  "col": 4851,
   "txd": 200,
   "interior_portals": [
     "JS",

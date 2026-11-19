@@ -6,31 +6,31 @@
     </pair>
     <pair id="MALL1" name="MALL1" source="PUHELP_1103">
         <portal x="378.75900" y="1257.16000" z="17.47138" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="378.75900" spawnY="1261.16000" floorZ="17.06269" heading="0.00000" />
-        <portal x="379.93800" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="3" dimension="0" spawnX="379.93800" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
+        <portal x="379.93800" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="379.93800" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
     </pair>
     <pair id="MALL2" name="MALL2" source="PUHELP_1103">
         <portal x="449.42400" y="1257.16000" z="17.27212" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="449.42400" spawnY="1261.16000" floorZ="16.93191" heading="0.00000" />
-        <portal x="448.45900" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="3" dimension="0" spawnX="448.45900" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
+        <portal x="448.45900" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="448.45900" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
     </pair>
     <pair id="MALL3" name="MALL3" source="PUHELP_1103">
         <portal x="478.30500" y="1124.48210" z="16.55756" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="480.30500" spawnY="1124.48210" floorZ="16.20849" heading="270.00000" />
-        <portal x="471.52000" y="1123.55600" z="-200.86601" yaw="90.00000" width="2" depth="2" interior="3" dimension="0" spawnX="467.52000" spawnY="1123.55600" floorZ="-200.86601" heading="90.00000" timecycle="10" />
+        <portal x="471.52000" y="1123.55600" z="-200.86601" yaw="90.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="467.52000" spawnY="1123.55600" floorZ="-200.86601" heading="90.00000" timecycle="10" />
     </pair>
     <pair id="MALL4" name="MALL4" source="PUHELP_1103">
         <portal x="449.64500" y="995.69400" z="17.27631" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="449.64500" spawnY="991.69400" floorZ="17.26645" heading="180.00000" />
-        <portal x="448.55100" y="1003.07800" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="3" dimension="0" spawnX="448.55100" spawnY="1007.07800" floorZ="-200.86601" heading="0.00000" timecycle="10" />
+        <portal x="448.55100" y="1003.07800" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="448.55100" spawnY="1007.07800" floorZ="-200.86601" heading="0.00000" timecycle="10" />
     </pair>
     <pair id="MALL5" name="MALL5" source="PUHELP_1103">
         <portal x="379.18200" y="994.72100" z="17.26645" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="379.18200" spawnY="990.72100" floorZ="17.26645" heading="180.00000" />
-        <portal x="379.58000" y="1002.34400" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="3" dimension="0" spawnX="379.58000" spawnY="1006.34400" floorZ="-200.86601" heading="0.00000" timecycle="10" />
+        <portal x="379.58000" y="1002.34400" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="379.58000" spawnY="1006.34400" floorZ="-200.86601" heading="0.00000" timecycle="10" />
     </pair>
     <pair id="MALL6" name="MALL6" source="PUHELP_1103">
         <portal x="349.44000" y="1123.68300" z="17.25287" yaw="90.00000" width="2" depth="2" interior="0" dimension="0" spawnX="345.44000" spawnY="1123.68300" floorZ="17.25287" heading="90.00000" />
-        <portal x="356.66700" y="1124.77600" z="-200.86581" yaw="270.00000" width="2" depth="2" interior="3" dimension="0" spawnX="360.66700" spawnY="1124.77600" floorZ="-200.86581" heading="270.00000" timecycle="10" />
+        <portal x="356.66700" y="1124.77600" z="-200.86581" yaw="270.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="360.66700" spawnY="1124.77600" floorZ="-200.86581" heading="270.00000" timecycle="10" />
     </pair>
     <pair id="MALL7" name="MALL7" source="PUHELP_1103">
         <portal x="365.12000" y="1210.09900" z="24.24030" yaw="90.00000" width="2" depth="2" interior="0" dimension="0" spawnX="361.12000" spawnY="1210.09900" floorZ="24.16433" heading="90.00000" />
-        <portal x="366.00100" y="1210.10400" z="-194.63086" yaw="270.00000" width="2" depth="2" interior="3" dimension="0" spawnX="370.00100" spawnY="1210.10400" floorZ="-194.63086" heading="270.00000" timecycle="10" />
+        <portal x="366.00100" y="1210.10400" z="-194.63086" yaw="270.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="370.00100" spawnY="1210.10400" floorZ="-194.63086" heading="270.00000" timecycle="10" />
     </pair>
     <pair id="ARMYH" name="ARMYH" source="SAFEHOU_830">
         <portal x="-1648.87000" y="-262.50000" z="13.47207" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1648.87000" spawnY="-261.00000" floorZ="13.48041" heading="0.00000" />

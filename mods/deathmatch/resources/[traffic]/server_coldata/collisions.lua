@@ -11,6 +11,8 @@ last_box = 1
 function loadCollisionData()
 	bb_x1,bb_y1,bb_z1,bb_x2,bb_y2,bb_z2 = {},{},{},{},{},{}
 	bs_r = {}
+	maxModelRadius = 0
+	maxPedRadius = 0
 	local coldata_file = xmlLoadFile("coldata.xml")
 	local colbox_nodes = xmlNodeGetChildren(coldata_file)
 	for colbox_num,colbox_node in ipairs(colbox_nodes) do
@@ -22,7 +24,10 @@ function loadCollisionData()
 		bb_x2[model],bb_y2[model],bb_z2[model] = x2,y2,z2
 		x2,y2 = x2-x1,y2-y1
 		bs_r[model] = math.sqrt(x2*x2+y2*y2)
+		maxModelRadius = math.max(maxModelRadius, bs_r[model])
+		if model <= 312 then maxPedRadius = math.max(maxPedRadius, bs_r[model]) end
 	end
+	xmlUnloadFile(coldata_file)
 	bbox_part = {x1 = bb_x1,y1 = bb_y1,z1 = bb_z1,x2 = bb_x2,y2 = bb_y2,z2 = bb_z2}
 	clearColData()
 end
