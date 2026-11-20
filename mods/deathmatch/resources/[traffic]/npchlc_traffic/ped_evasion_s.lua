@@ -68,7 +68,7 @@ addEventHandler("npchlc_traffic:evadeCar", resourceRoot, function(ped, car, kind
         or type(fx) ~= "number" or type(fy) ~= "number" or not (math.abs(fx*fx+fy*fy-1) < 0.01) then return end
     local now, brain = getTickCount(), PedAI.attach(ped)
     if last[ped] and age(now,last[ped]) < 2500 or brain.event and brain.event.intent == "fight" then return end
-    if kind == "ev_dive" and math.floor(brain.profile.flags/16)%2 == 1 then
+    if kind == "ev_dive" and not PedAIRules.canDive(brain.profile) then
         kind = "handsup"
         local px, py = getElementPosition(ped)
         local cx, cy = getElementPosition(car)

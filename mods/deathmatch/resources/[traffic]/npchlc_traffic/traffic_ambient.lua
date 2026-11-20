@@ -202,10 +202,10 @@ local function chooseActor(profile, context, roll)
                 if not modelsForGang then return end
                 local model = modelsForGang[math.random(1, 2)]
                 -- 0x002B3B90 selects a single ped for territory type 11.
-                if group == 5 then return model, false, 1 end
+                if group == 5 then return model, false, 1, nil, nil, group + 6 end
                 local clustered = math.random() >= 0.333
                 local formation = clustered and (group == 4 and "cluster" or "chat") or "follow"
-                return model, false, math.random(2, 3), modelsForGang, formation
+                return model, false, math.random(2, 3), modelsForGang, formation, group + 6
             end
         end
     elseif roll < math.max(context.groupChance, context.policeChance) then
@@ -254,8 +254,8 @@ local function collectCandidate(player, context, targeted, stinger)
     local profile = TrafficPopulation.sample(graph.population, x, y, z, getTime(), math.random(0, 15))
     if not profile then return false end
     local roll = math.random(0,999)
-    local originalId, police, groupSize, gangModels, formation = chooseActor(profile, context,roll)
-    if targeted then originalId,police,groupSize,gangModels,formation=8,true,nil,nil,nil end
+    local originalId, police, groupSize, gangModels, formation, populationType = chooseActor(profile, context,roll)
+    if targeted then originalId,police,groupSize,gangModels,formation,populationType=8,true,nil,nil,nil,nil end
     local model = originalId and TrafficAmbient.getPedestrianModel(originalId)
     if not model then return false end
 
@@ -278,12 +278,12 @@ local function collectCandidate(player, context, targeted, stinger)
                     local distance = getDistanceBetweenPoints2D(x, y, px, py)
                     if (visibleMin < distance and distance < visibleMax)
                         or (hiddenMin < distance and distance < hiddenMax) then
-                        local originalId,police,groupSize,gangModels,formation,model =
-                            originalId,police,groupSize,gangModels,formation,model
+                        local originalId,police,groupSize,gangModels,formation,model,populationType =
+                            originalId,police,groupSize,gangModels,formation,model,populationType
                         if context.thresholds and graph.edition == "SLUS-21590 USA v1.00" and not police then
                             local values,destination = currentPopulationRecord(px,py,pz,getTime())
                             if destination and destination.zoneId ~= profile.zoneId then
-                                originalId,police,groupSize,gangModels,formation = chooseActor(profile,
+                                originalId,police,groupSize,gangModels,formation,populationType = chooseActor(profile,
                                     {thresholds=values,policeChance=0},roll)
                                 model = originalId and TrafficAmbient.getPedestrianModel(originalId)
                                 if not model then return end
@@ -291,7 +291,7 @@ local function collectCandidate(player, context, targeted, stinger)
                         end
                         return {x = px, y = py, z = pz, from = from, to = to, model = model,
                             originalModelId = originalId, police = police, targeted = targeted, stinger = stinger, groupSize = groupSize,
-                            gangModels = gangModels, formation = formation, started = getTickCount(),
+                            gangModels = gangModels, formation = formation, populationType = populationType, started = getTickCount(),
                             visibleMin = visibleMin, visibleMax = visibleMax,
                             hiddenMin = hiddenMin, hiddenMax = hiddenMax, interior = getElementInterior(player),
                             dimension = getElementDimension(player), playerX = x, playerY = y}
@@ -384,7 +384,7 @@ local function saveActor(player, candidate)
     if not ped then return end
     setElementInterior(ped, getElementInterior(player))
     setElementDimension(ped, getElementDimension(player))
-    TrafficModelBindings.tag(ped, candidate.originalModelId)
+    TrafficModelBindings.tag(ped, candidate.originalModelId, false, candidate.populationType)
     if not hlc:enableHLCForNPC(ped, "walk") then
         destroyElement(ped)
         return
@@ -395,7 +395,7 @@ local function saveActor(player, candidate)
     actors[ped] = state
     actorCount = actorCount + 1
     TrafficVisibility.track(ped, "pedestrian")
-    PedAI.attach(ped, graph.modelIdSpace ~= "mta" and candidate.originalModelId or nil)
+    PedAI.attach(ped, graph.modelIdSpace ~= "mta" and candidate.originalModelId or nil, candidate.populationType)
     if candidate.police then
         setTrafficPolicePed(ped, true)
         if candidate.stinger and getPlayerWantedLevel(player)>2 then
@@ -793,7 +793,7 @@ local function continueCandidate(player, candidate)
                     if info and info[2] == 39 and not probe.skatable then break end
                     if candidate.leaderGround and candidate.formation == "follow"
                         and math.abs(candidate.groundZ-candidate.leaderGround) > 1 then break end
-                    local limits = not candidate.leader and candidate.gangModels and info and PedGangLimits[info[1]]
+                    local limits = not candidate.leader and candidate.populationType and PedGangLimits[candidate.populationType]
                     if limits then
                         local count = 0
                         for _,neighbor in ipairs(getElementsWithinRange(candidate.finalX,candidate.finalY,candidate.groundZ,

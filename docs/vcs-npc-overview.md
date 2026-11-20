@@ -84,8 +84,9 @@ flowchart LR
 Enter `/trafficdebug` to show overhead labels for traffic NPCs in view. Enter it again or use `/trafficdebug off` to hide them. The `road`, `ped`, and `boat` filters select the underlying path network. All three modes show labels for drivers, passengers, and pedestrians.
 
 - Labels and path target lines use the 3D distance between the NPC and the local player. In the same interior and dimension, they are fully visible within 12 metres, fade between 12 and 35 metres, and disappear at 35 metres.
-- The first line shows temper and fear from PEDSTATS. When temper exceeds fear, “Hot temper” appears in red. The carjacking response uses the same comparison to decide whether the driver gets angry.
-- The second line shows the behavior, the HLC task name used in code, and its execution phase, for example `fight > killPed`. During conversation it shows the current gesture or listening phase. For seating it shows approach, turn, and sit phases. “Awaiting sync” means the executing client has yet to report a sample.
+- Read the original VCS group first, for example `[CIVMALE]`, `[COP]`, `[EMERGENCY]` or `[FIREMAN]`. The next line gives the model's PEDSTATS temper and fear. A red “Hot temper” means temper exceeds fear.
+- A seated road driver also shows the active driving style. The task line follows the NPC through maneuvers such as braking, approaching the driver door, pulling the player out, and fighting on foot.
+- The sync line is green for current execution or idle. Red identifies the pending step, such as waiting for the server to replace a completed task, waiting for the current executor to report, or waiting to retry a blocked door.
 - The red bar in the black frame shows current HP relative to the character's configured spawn health. A white bar appears when armor is above zero.
 - A solid cyan line and cross mark the point the executor is moving toward. During a detour, a faint dashed line connects the temporary point to the subsequent walking target. Waiting and stationary animations have no movement line.
 

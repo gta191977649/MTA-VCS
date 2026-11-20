@@ -23,6 +23,7 @@ local function acquire(ped,owner)
     PedVehicleEvasion.cancel(ped)
     brain.tasks:clear(true)
     brain.objectives:clear()
+    PedCarjack.cancelExtraction(ped, brain.event)
     brain.event = nil
     if TrafficRoad.driverScriptChanged then TrafficRoad.driverScriptChanged(ped,true) end
     return true

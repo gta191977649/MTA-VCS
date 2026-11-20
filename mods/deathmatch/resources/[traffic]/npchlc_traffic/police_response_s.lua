@@ -125,7 +125,7 @@ local function deploy(state, now)
     setElementFrozen(ped, true)
     setElementCollisionsEnabled(ped,false)
     setPedAnimation(ped, "ped", "abseil", -1, true, false, false)
-    setElementData(ped, "traffic:policeRope", {heli,pos[1],pos[2],pos[3]}, "broadcast", "deny")
+    setElementData(ped, "traffic:policeRope", {heli,pos[1],pos[2],pos[3],ox,oy,state.floor}, "broadcast", "deny")
     descending[ped] = {heli = heli, player = state.player, floor = state.floor, started = now,
         ox = ox, oy = oy, x = pos[1], y = pos[2]}
     state.remaining = slot
@@ -243,17 +243,14 @@ function TrafficPoliceResponse.descend(now)
                 local linked = isElement(rope.heli) and elapsed < TrafficPoliceFlight.ropeLifetimeMs
                 local landed = false
                 if linked then
-                    local head = muzzle(getElementMatrix(rope.heli),rope.ox,rope.oy,-0.5)
-                    -- Approximate the 32-node strand with a taut line from the
-                    -- moving door to its surveyed foot. Progress uses VCS time steps.
-                    local dz = math.max(0,head[3]-rope.floor)
-                    local dx,dy = rope.x-head[1],rope.y-head[2]
-                    local length = math.sqrt(dx*dx+dy*dy+dz*dz)
-                    local travel = math.min(0.999,elapsed*TrafficPoliceFlight.ropeProgressPerMs)*TrafficPoliceFlight.ropeSpan
-                    local t = math.min(1,travel/math.max(0.01,length))
-                    local x,y,z = head[1]+dx*t,head[2]+dy*t,head[3]-dz*t
+                    local x,y,z = TrafficPoliceFlight.ropePosition(getElementMatrix(rope.heli),
+                        rope.ox,rope.oy,rope.x,rope.y,rope.floor,elapsed)
                     landed = z-rope.floor < 2
-                    setElementPosition(ped,x,y,landed and rope.floor+1 or z)
+                    -- Reserve network updates for landing and periodic stream-in checkpoints.
+                    if landed or not rope.checkpoint or age(now,rope.checkpoint)>=500 then
+                        setElementPosition(ped,x,y,landed and rope.floor+1 or z,false)
+                        rope.checkpoint = now
+                    end
                 end
                 if landed or not linked then
                     descending[ped] = nil

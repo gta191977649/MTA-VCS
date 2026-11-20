@@ -71,20 +71,27 @@ flowchart TD
     B --> C{"Which impact conditions apply?"}
     C -->|Both drivers present and intermediate damage above 5| D["Request the driver's crash line"]
     C -->|On-duty vehicle and player speed qualifies| E["Set at least one wanted star"]
-    C -->|Player at fault and body took damage| F{"Sample eligible VCSPC event 73 tasks for this driver"}
-    F -->|200| G["Resume cruise and track the lane"]
-    F -->|726| H["Drive away"]
-    F -->|729| I["Pursue the other driver by car"]
-    F -->|1031| J["Brake, get out and confront the other driver"]
-    J -->|Target in a vehicle| K["Approach and attack the vehicle"]
-    J -->|Target on foot| L["Pursue and attack the target"]
-    K -->|Target exits| L
-    L -->|Target lost or encounter over| M["Return to the original car if available"]
+    C -->|Player caused a damaging collision| F{"Driver group and current duty?"}
+    F -->|On duty| R["Continue service response"]
+    F -->|CIVMALE or CIVFEMALE| T{"Temper greater than fear?"}
+    T -->|Yes| I["Pursue and ram the player's vehicle"]
+    T -->|No| H["Continue or drive away using the eligible personality weights"]
+    F -->|Other eligible group| J["Sample its VCSPC event 73 tasks"]
+    J -->|200 or 726| G["Resume cruise or drive away"]
+    J -->|729| P["Pursue the player by car"]
+    J -->|1031| Q["Exit and confront the player"]
+    I -->|Player stops nearby| K["Check the exit path, brake and leave the original car"]
+    K -->|Player in accessible driver seat| V["Approach the driver door and request a native pull-out"]
+    V -->|Player is on foot| L["Fight the player in melee"]
+    I -->|Player goes on foot| M["Brake and check the dismount"]
+    M --> L
 ```
+
+The port extends the PS2 carjacking test at `0x002FDCB0` to civilian drivers provoked by a player. A driver with temper strictly above fear commits to retaliation. A tie takes the calm branch. For calm civilians the server keeps the relative VCSPC weights for continuing and driving away. The type check uses the model's original ped type. For example, model 48 is a `CIVMALE` with `STAT_TOUGH_GUY`, temper 70 and fear 30. The PCSX2 rear-end observation above records how the original game handled one collision with that model.
 
 Rebuild coefficients, access flags and the player-impact table with `py -B tools/vehicle_impact_import.py "<disc-directory>" --vcs-pc-dir "D:/Game/vcs_pc_edition"`. The integration points are traffic_world_c.lua, traffic_vehicle_collision.lua and traffic_road.lua. Clients report forces on their respective vehicle bodies. The server merges duplicate or out-of-order contact and damage reports. [MTA collision event parameters](https://wiki.multitheftauto.com/wiki/OnClientVehicleCollision)
 
-In native MTA 1.7 server testing, original model 170 (coefficient about 0.51) requested no speech at impulse 41 and requested one line at 42. A duplicate after 50 ms merged with the original report. An independent impact after 1.4 s could request another line. A separate test supplied player attribution and body damage, then sampled 1031 for a tough driver. The server accepted the brake task. Following simulated exit confirmation it issued the confrontation, occupied-vehicle attack, and pursuit of the dismounted target in order.
+In native MTA 1.7 server testing, original model 170 (coefficient about 0.51) requested no speech at impulse 41 and requested one line at 42. A duplicate after 50 ms merged with the original report. An independent impact after 1.4 s could request another line. A test of the earlier weighted implementation supplied player attribution and body damage, then sampled 1031 for a tough driver. The server accepted the brake task. Following simulated exit confirmation it issued the confrontation, occupied-vehicle attack, and pursuit of the dismounted target in order.
 
 ## Motorcycles and riders
 
@@ -96,7 +103,9 @@ Knocking off a rider uses a separate calculation. At 0033647C–003364E4, scale 
 
 In the PS2 Ghidra program `SLUS_215.90 (VCS)`, open `00428C48` and follow the mission dispatch to `00429110` (RAMPLAYER_CLOSE) and `00429488` (BLOCKPLAYER_CLOSE). The enforcement branches check the player's situation and distance before ordering occupants out. The ram branch includes speed 0.05 and the distance gate is 14 game units. Follow the call to `0042AD80` to see driver and passenger objective 0x10. Near `00429B74` the close/far mission switch rejoins the road system. The contact branch around `00429B90` can request a short reverse when nearly stopped against its target. These locations establish the enforcement behavior. The civilian task 729 selection comes from the PC Edition decision files described above.
 
-The MTA civilian pursuit uses its own progress and exit rules in `traffic_vehicle_pursuit.lua`. Two missed passes or four seconds without gaining a metre allow a dismount check within ten metres, after the target has stayed within one metre for two seconds. The client probes floor, steps, water, overhead clearance and the walking corridor from the driver's door to the player or the outside of the player's car. A positive response starts braking. At speed 0.05 or lower the syncer checks again before requesting the native vehicle exit. A moving target cancels braking. An impassable approach allows one attempt to rejoin the directed road graph, bounded to eight seconds. The traffic manager transfers the same NPC into its on-foot task after seat release. A script taking ownership cancels this pursuit and can release control back to road driving.
+The MTA weighted task 729 pursuit uses its own progress and exit rules in `traffic_vehicle_pursuit.lua`. Two missed passes or four seconds without gaining a metre allow a dismount check within ten metres, after the target has stayed within one metre for two seconds. The client probes floor, steps, water, overhead clearance and the walking corridor from the driver's door to the player or the outside of the player's car. A positive response starts braking. At speed 0.05 or lower the syncer checks again before requesting the native vehicle exit. A moving target cancels braking. An impassable approach allows one attempt to rejoin the directed road graph, bounded to eight seconds. The traffic manager transfers the same NPC into its on-foot task after seat release. A script taking ownership cancels this pursuit and can release control back to road driving.
+
+A civilian committed to retaliation can start the dismount check as soon as the target car stops nearby. If the player goes on foot during pursuit, the NPC brakes and checks the exit path. On foot, the driver requests a native pull-out only while the stopped car is unlocked and the original player occupies the driver's seat. The ped follows the same player into melee after the seat clears. Repeated hits on the civilian's car preserve that target. [Occupied-car reactions](vcs-npc-vehicles.md)
 
 Run `py -B tools/check_vcs_traffic.py` for pass counting, timeout and reroute limits, canceling an exit against a moving target, and the on-foot and occupied-car probes. Those tests use simulated geometry and seat events.
 ### Checking pedestrian injuries and motorcycle exits

@@ -32,6 +32,7 @@ def main():
         function getElementInterior(e) return 0 end
         function getPedWeapon(e) return e.weapon or 0 end
         function getPedTotalAmmo(e) return e.ammo or 0 end
+        function giveWeapon(p, weapon, ammo) p.weapon, p.ammo = weapon, ammo; return true end
         function setPedWeaponSlot(e, slot) if slot == 0 then e.weapon = 0 end end
         function getPedRotation() return 0 end
         function setPedRotation(e, value) e.heading = value end
@@ -57,13 +58,49 @@ def main():
             {id=2,x=-6,y=0,z=0,flags=0,linkCount=0}}, links={{to=1},{to=2}}}
         function person(kind, x) return {kind=kind, x=x or 0, y=0} end
     """)
-    for filename in ("ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_carjack.lua", "ped_ai.lua"):
+    for filename in ("ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_carjack.lua", "ped_ai.lua"):
         lua.execute((RESOURCE / filename).read_text(encoding="utf-8-sig"))
     lua.execute("""
         function modelFor(stat)
             for model, row in pairs(PedAIModels) do if row[2] == stat then return model end end
         end
         local tough, timid = modelFor(18), modelFor(16)
+        for _, row in pairs(PedAIModels) do
+            assert(type(PedAITypes[row[1]].name) == "string" and PedAITypes[row[1]].name ~= "")
+        end
+        for model, group in pairs({[0]="PLAYER1",[8]="COP",[12]="EMERGENCY",[13]="FIREMAN",
+                [17]="CIVFEMALE",[26]="CIVMALE",[31]="PROSTITUTE",[55]="CRIMINAL",
+                [91]="GANG1",[107]="GANG9",[72]="CIVMALE"}) do
+            assert(PedAIRules.profile(model).group == group)
+        end
+        assert(PedAIRules.committedDriver(PedAIRules.profile(17)))
+        assert(PedAIRules.committedDriver(PedAIRules.profile(26)))
+        assert(not PedAIRules.committedDriver({pedType=5, temper=45, fear=45}))
+        assert(not PedAIRules.committedDriver(PedAIRules.profile(timid)))
+        for _, model in ipairs({8,12,13,91,107,31,55}) do
+            assert(not PedAIRules.committedDriver(PedAIRules.profile(model)))
+        end
+        local rules = PedAIRules
+        local copProfile, playerProfile = rules.profile(8), rules.profile(0)
+        assert(rules.gunpointWait(copProfile, playerProfile, true) == "police")
+        assert(rules.gunpointWait(copProfile, copProfile, false) == nil)
+        assert(not rules.gunpointWait(rules.profile(103), playerProfile, true))
+        assert(not rules.gunpointWait(rules.profile(107), playerProfile, true))
+        assert(rules.gunpointWait(rules.profile(17), playerProfile, true) == "handsup")
+        assert(rules.gunpointWait(rules.profile(26), playerProfile, true) == "handscower")
+        local pose, remember = rules.gunpointWait(rules.profile(26), playerProfile, true, {intent="fight"})
+        assert(pose == nil and remember)
+        assert(rules.gunpointRelease({fear=40}, {temper=60}, true, 0x11) == "fight")
+        assert(rules.gunpointRelease({fear=41}, {temper=60}, true, 0x11) == "flee")
+        assert(rules.gunpointRelease({fear=40}, {temper=60}, false, 0x11) == "wander")
+        assert(rules.gunpointRelease({fear=40}, {temper=60}, false, 0x12) == "flee")
+        assert(rules.passengerLingers(rules.profile(31), true))
+        assert(rules.passengerLingers(rules.profile(17), true))
+        assert(not rules.passengerLingers(rules.profile(17), false))
+        assert(rules.defendsLeader(rules.profile(91), playerProfile))
+        assert(not rules.defendsLeader(rules.profile(91), copProfile))
+        assert(not rules.defendsLeader({temper=30, fear=30}, playerProfile))
+        assert(rules.canDive(rules.profile(91)) and not rules.canDive(rules.profile(99)))
         local player = person("player", -1)
         local cop = person("ped", 2)
         cop.owner = player
@@ -314,7 +351,6 @@ def main():
         assert(decide(strong,0,true,player,false,nil)=="reclaim")
         assert(decide(strong,1,false,nil,false,player)=="fight")
 
-        function giveWeapon(p, weapon, ammo) p.weapon, p.ammo = weapon, ammo end
         local enraged, ownCar, targetCar = victim(tough), person("vehicle",1), person("vehicle",2)
         local previousRoad = {vehicle=ownCar,driver=enraged}
         player.vehicle, targetCar.driver = targetCar, player

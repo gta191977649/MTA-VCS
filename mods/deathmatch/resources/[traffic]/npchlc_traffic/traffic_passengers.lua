@@ -42,21 +42,25 @@ function TrafficPassengers.spawn(state, graph, group, class, originalId)
     end
     for seat = 1, count do
         if (seat > 1 or not reservedFront[originalId]) and not getVehicleOccupant(state.vehicle, seat) then
-            local model = officer or TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
+            local model, populationType = officer
+            if not model then
+                model, populationType = PedWeapons.gangOccupant(originalId, graph.population, TrafficAmbient.getPedestrianModel)
+            end
+            model = model or TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
                 math.random(0, 15), available, graph.fallbackDriverModelId)
             if model and TrafficAmbient.getPedestrianModel(model) then
                 local x, y, z = getElementPosition(state.vehicle)
                 local ped = createPed(TrafficAmbient.getPedestrianModel(model), x, y, z)
                 if ped then
                     setElementDimension(ped, state.dimension)
-                    TrafficModelBindings.tag(ped, model)
+                    TrafficModelBindings.tag(ped, model, false, populationType)
                     if warpPedIntoVehicle(ped, state.vehicle, seat) and hlc:enableHLCForNPC(ped) then
                         used[model] = true
                         local entry = {ped=ped, vehicle=state.vehicle, seat=seat, model=model}
                         passengers[ped] = entry
                         byVehicle[state.vehicle] = byVehicle[state.vehicle] or {}
                         byVehicle[state.vehicle][seat] = entry
-                        PedAI.attach(ped, model)
+                        PedAI.attach(ped, graph.modelIdSpace ~= "mta" and model or nil, populationType)
                         if state.lawEnforcer then setTrafficPolicePed(ped,true) end
                         TrafficVisibility.track(ped, "road")
                     else
@@ -220,8 +224,7 @@ function TrafficPassengers.driverGone(vehicle, jacker)
     for seat = 1, getVehicleMaxPassengers(vehicle) do
         local entry = seats[seat]
         if entry then
-            local pedType = PedAIRules.profile(entry.model).pedType
-            local waits = linger and (pedType == 5 or pedType == 20 or math.random(0, 1) == 0)
+            local waits = PedAIRules.passengerLingers(PedAI.profile(entry.ped), linger)
             entry.since, entry.delay = getTickCount(), waits and 10000 or delay
             entry.jacker = jacker
             leaving[entry.ped] = entry
@@ -236,7 +239,7 @@ addEventHandler("onVehicleExit",root,function(ped)
 end)
 local exitSerial=0
 
-function TrafficPassengers.requestExit(ped, vehicle, seat, target, actor, x, y, z)
+function TrafficPassengers.requestExit(ped, vehicle, seat, target, actor, x, y, z, onFoot, committed)
     local owner = getElementSyncer(ped)
     if not owner then
         local vehicleOwner = getElementSyncer(vehicle)
@@ -246,7 +249,7 @@ function TrafficPassengers.requestExit(ped, vehicle, seat, target, actor, x, y, 
     exitSerial=exitSerial+1
     setElementData(ped,exitStamp,exitSerial,"broadcast","deny")
     return triggerClientEvent(owner, "npchlc_traffic:occupantExit", resourceRoot, ped, vehicle, seat,
-        target or false, actor or false, x or false, y or false, z or false, exitSerial)
+        target or false, actor or false, x or false, y or false, z or false, exitSerial, onFoot or false, committed or false)
 end
 
 function TrafficPassengers.update(now)

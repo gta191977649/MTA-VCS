@@ -15,12 +15,22 @@ function PedAIRules.ranged(weapon)
     return weapon >= 22 and weapon <= 38
 end
 
-function PedAIRules.profile(model)
+function PedAIRules.profile(model, populationType)
     local entry = PedAIModels[model]
     -- Models outside the VCS namespace use the ordinary street pedestrian.
     local pedType, statId = 4, 13
     if entry then pedType, statId = entry[1], entry[2] end
-    return setmetatable({pedType = pedType, statId = statId}, {__index = PedAIStats[statId]})
+    pedType = populationType or pedType
+    return setmetatable({pedType = pedType, group = PedAITypes[pedType].name, statId = statId}, {__index = PedAIStats[statId]})
+end
+
+function PedAIRules.civilianDriver(profile)
+    return profile and (profile.pedType == 4 or profile.pedType == 5)
+end
+
+-- Apply the occupied-seat temper comparison to an attributable attack on a civilian's car.
+function PedAIRules.committedDriver(profile)
+    return PedAIRules.civilianDriver(profile) and profile.temper > profile.fear
 end
 
 local function hasFlag(mask, flag)
@@ -39,7 +49,7 @@ function PedAIRules.gunshot(listener, shooter, horizontalDistance, armed, wanted
         if wanted then return "fight", "run", 20000 end
         return "look", "walk", 1000
     end
-    if group >= 7 and group <= 15 then
+    if PedAIRules.gangMember(listener) then
         -- 0x001EFFB0 returns the shooter's type bit in place of the gun flag.
         if group ~= 11 and not hasFlag(threats, enemy.identity) then return end
         if enemy.identity == 0 then return end
@@ -61,8 +71,47 @@ function PedAIRules.gunshot(listener, shooter, horizontalDistance, armed, wanted
     return "flee", "walk", 5000
 end
 
+function PedAIRules.canDive(profile)
+    return not hasFlag(profile.flags, 0x10)
+end
+
 function PedAIRules.evadeAnimation(profile)
-    return hasFlag(profile.flags, 0x10) and "EV_step" or "EV_dive"
+    return PedAIRules.canDive(profile) and "EV_dive" or "EV_step"
+end
+
+-- 0030A520 only recruits a willing follower against a non-police aggressor.
+function PedAIRules.defendsLeader(profile, attacker)
+    return attacker.pedType ~= 6 and profile.temper > profile.fear
+end
+
+-- 003EF018 draws for other passenger types only after the car's linger draw passes.
+function PedAIRules.passengerLingers(profile, linger)
+    return linger and (profile.pedType == 5 or profile.pedType == 20 or math.random(0, 1) == 0)
+end
+
+function PedAIRules.gangMember(profile)
+    return profile and profile.pedType >= 7 and profile.pedType <= 15
+end
+
+-- The second return requests the ordinary branch's hostility update, even if
+-- an existing fight or flee objective prevents a new wait.
+function PedAIRules.gunpointWait(profile, sourceProfile, player, old, sourcePed)
+    local group = profile.pedType
+    if player and (group == 13 or group == 15) then return end
+    if hasFlag(profile.flags, 0x80) and not (old and (old.intent == "fight" or old.intent == "flee")) then
+        return "handscower"
+    end
+    if group == sourceProfile.pedType then return end
+    if group == 6 then return "police", true end
+    if old and (old.intent == "fight" or old.intent == "flee" and (not player or old.target == sourcePed)) then
+        return nil, true
+    end
+    return "handsup", true
+end
+
+function PedAIRules.gunpointRelease(profile, sourceProfile, armed, wait)
+    if profile.fear > 100 - sourceProfile.temper or not armed and wait == 0x12 then return "flee" end
+    return armed and "fight" or "wander"
 end
 
 local protectedGroup = {[6]=true,[10]=true,[11]=true}
@@ -77,7 +126,7 @@ function PedAIRules.intent(kind, self, attacker, rangedAttack, rangedDefense)
     elseif kind == "witness" or kind == "ally" then
         -- 0x0030A520 tests the actual linked leader, excludes police aggressors,
         -- and puts willing followers on objective 8 for 30000 ms.
-        if kind == "ally" and attacker.pedType ~= 6 and self.temper > self.fear then return "fight" end
+        if kind == "ally" and PedAIRules.defendsLeader(self, attacker) then return "fight" end
         if self.pedType == 6 and attacker.pedType ~= 6 then return "fight" end
         if self.fear > 100 - attacker.temper or rangedAttack and not rangedDefense then return "flee" end
         return nil
@@ -93,8 +142,8 @@ end
 -- MTA inventory counterparts. Both Ingram variants and the PS2 heavy weapons
 -- share host inventory slots, so use the ordinary model for that host weapon.
 local vcsWeapon = {[22]=19,[23]=19,[24]=20,[25]=21,[26]=23,[27]=22,[28]=25,
-    [29]=27,[30]=28,[31]=29,[32]=24,[33]=30,[34]=31,[35]=32,[36]=32,[37]=33,[38]=35}
-function PedAIRules.attackRange(weapon)
-    local id = vcsWeapon[weapon]
+    [29]=27,[30]=29,[31]=28,[32]=24,[33]=30,[34]=31,[35]=32,[36]=32,[37]=33,[38]=35}
+function PedAIRules.attackRange(weapon, original)
+    local id = original or vcsWeapon[weapon]
     return id and PedAIWeaponRange[id] or 1.7
 end

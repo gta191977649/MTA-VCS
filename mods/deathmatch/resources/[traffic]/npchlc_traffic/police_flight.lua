@@ -3,6 +3,19 @@ TrafficPoliceFlight.ropeLifetimeMs = 255 * (1000 / 30)
 TrafficPoliceFlight.ropeSpan = 31 * (20 / 32)
 TrafficPoliceFlight.ropeProgressPerMs = 0.003 / 20
 
+-- Sample the strand between the current door and its surveyed foot.
+-- CTaskComplexUseSwatRope advances its coordinate once per frame.
+function TrafficPoliceFlight.ropePosition(matrix, ox, oy, footX, footY, floor, elapsed)
+    local hx = matrix[4][1]+ox*matrix[1][1]+oy*matrix[2][1]-.5*matrix[3][1]
+    local hy = matrix[4][2]+ox*matrix[1][2]+oy*matrix[2][2]-.5*matrix[3][2]
+    local hz = matrix[4][3]+ox*matrix[1][3]+oy*matrix[2][3]-.5*matrix[3][3]
+    local dx,dy,dz = footX-hx,footY-hy,math.min(0,floor-hz)
+    local length = math.sqrt(dx*dx+dy*dy+dz*dz)
+    local travel = math.min(.999,elapsed*TrafficPoliceFlight.ropeProgressPerMs)*TrafficPoliceFlight.ropeSpan
+    local t = math.min(1,travel/math.max(.01,length))
+    return hx+dx*t,hy+dy*t,hz+dz*t
+end
+
 local function clamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, value))
 end

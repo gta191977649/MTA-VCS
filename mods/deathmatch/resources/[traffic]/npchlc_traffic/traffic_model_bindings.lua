@@ -122,11 +122,17 @@ function TrafficModelBindings.getPedestrian(originalId)
     return resolve(originalId, "ped")
 end
 
+function TrafficModelBindings.pedProfileModel(ped)
+    if nativePeds then return end
+    local original = getElementData(ped, "npchlc_traffic:originalModel", false)
+    if PedAIModels[original] then return original end
+end
+
 function TrafficModelBindings.get(originalId)
     return resolve(originalId, "vehicle")
 end
 
-function TrafficModelBindings.tag(element, originalId, scripted)
+function TrafficModelBindings.tag(element, originalId, scripted, populationType)
     local kind = getElementType(element)
     local provider = activeProvider()
     local street = kind == "ped" and streetModels and streetModels[originalId]
@@ -141,7 +147,7 @@ function TrafficModelBindings.tag(element, originalId, scripted)
     end
     local pedModel = not nativePeds and kind == "ped" and PedAIModels and PedAIModels[originalId]
     if pedModel then
-        local stat, group = PedAIStats[pedModel[2]],PedAITypes[pedModel[1]]
+        local stat, group = PedAIStats[pedModel[2]],PedAITypes[populationType or pedModel[1]]
         -- 001ED840 starts a civilian at 100; 001D7940 scales incoming damage.
         -- Express the same damage budget in native MTA health units so synced
         -- hits, including lethal hits, keep their original attacker and order.

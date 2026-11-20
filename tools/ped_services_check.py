@@ -8,7 +8,52 @@ from lupa.lua51 import LuaRuntime
 RESOURCE = Path(__file__).resolve().parents[1] / "mods/deathmatch/resources/[traffic]/npchlc_traffic"
 
 
+def check_spawn_inventory():
+    vm = LuaRuntime()
+    vm.execute("""
+        root, resourceRoot, exports = {}, {}, {npc_hlc={}}
+        function addEvent() end
+        function addEventHandler() end
+        function setTimer() end
+        function getElementHealth() return 100 end
+        function getTickCount() return 1000 end
+        function giveWeapon(ped, weapon, ammo, equip)
+            ped.ammo[weapon]=(ped.ammo[weapon] or 0)+ammo
+            if equip then ped.selected=weapon end
+        end
+        function setPedWeaponSlot(ped, slot) ped.selected=slot end
+        function setPedArmor(ped, armor) ped.armor=armor end
+    """)
+    for name in ("ped_ai_profiles", "ped_ai_rules", "ped_objectives", "ped_ai_tasks", "ped_services", "ped_ai"):
+        vm.execute((RESOURCE / (name + ".lua")).read_text(encoding="utf-8-sig"))
+    vm.execute("""
+        PedServices.start({edition="SLUS-21590 USA v1.00"})
+        local function spawn(model, group)
+            local ped={ammo={},selected=0,armor=0}
+            local brain=PedAI.attach(ped,model)
+            assert(brain.profile.pedType==group and PedAI.attach(ped,model)==brain)
+            return ped
+        end
+        -- A civilian can have firefighter or criminal stats and still use its civilian constructor.
+        for model,group in pairs({[12]=16,[13]=17,[14]=4,[16]=5,[31]=20,[37]=4,[55]=18,[72]=4}) do
+            local ped=spawn(model,group)
+            assert(not next(ped.ammo) and ped.selected==0 and ped.armor==0)
+        end
+        -- Current slot and carried ammunition are separate for patrol and biker police.
+        for _,model in ipairs({8,119}) do
+            local ped=spawn(model,6)
+            assert(ped.ammo[3]==1000 and ped.ammo[22]==1000 and ped.selected==0 and ped.armor==0)
+        end
+        for model,weapon in pairs({[9]=28,[10]=29,[11]=29,[117]=28,[118]=28}) do
+            local ped=spawn(model,6)
+            assert(ped.selected==weapon and ped.ammo[weapon]==1000)
+            assert(ped.armor==(model==9 and 50 or 100))
+        end
+    """)
+
+
 def main():
+    check_spawn_inventory()
     vm = LuaRuntime()
     vm.execute("""
         root, resourceRoot, now, world = {}, {}, 100, {}

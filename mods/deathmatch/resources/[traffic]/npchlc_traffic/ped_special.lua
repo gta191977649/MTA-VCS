@@ -29,12 +29,11 @@ local function release(ped, react)
     if not react or not sameWorld(wait.source,ped) or isPedDead(wait.source) or isPedDead(ped) then return end
     if brain.event and (brain.event.intent == "fight" or brain.event.intent == "flee") then return end
     local attacker = PedAI.profile(wait.source) or PedAIRules.profile(0)
-    local flee = brain.profile.fear > 100 - attacker.temper
-    local melee = not PedAIRules.ranged(getPedWeapon(ped))
-    if flee or melee and wait.id == 0x12 then
+    local intent = PedAIRules.gunpointRelease(brain.profile, attacker, PedAIRules.ranged(getPedWeapon(ped)), wait.id)
+    if intent == "flee" then
         brain:react("gunpoint",wait.source,0,"flee","run",10000)
         PedVoice.emit(ped,"reclaim")
-    elseif not melee then
+    elseif intent == "fight" then
         brain:react("gunpoint",wait.source,0,"fight","run",20000)
     else
         brain.objectives:clear()
@@ -112,9 +111,7 @@ local function threaten(sourcePed,ped)
         or isPedInVehicle(ped) or isPedDead(ped) or isPedDead(sourcePed) or not PedAIRules.ranged(getPedWeapon(sourcePed))
         or brain.leader == sourcePed or brain.leader and isElement(brain.leader) and getElementType(brain.leader) == "player"
         or PedVehicleEvasion.active(ped) then return end
-    local group = brain.profile.pedType
     local player = getElementType(sourcePed) == "player"
-    if player and (group == 13 or group == 15) then return end
     local x,y = getElementPosition(ped)
     local sx,sy = getElementPosition(sourcePed)
     local dx,dy = sx-x,sy-y
@@ -122,17 +119,15 @@ local function threaten(sourcePed,ped)
     local yaw = math.rad(getPedRotation(ped))
     if length > 15 or length > 0 and (-math.sin(yaw)*dx+math.cos(yaw)*dy)/length <= -0.5 then return end
     local old = brain.event
-    local special = math.floor(brain.profile.flags/128)%2 == 1 and not (old and (old.intent == "flee" or old.intent == "fight"))
-    if not special then
-        local sourceProfile = PedAI.profile(sourcePed) or PedAIRules.profile(0)
-        if group == sourceProfile.pedType then return end
-        PedAI.rememberHostility(ped,sourcePed)
-        if group == 6 then
-            if player then exports.wanted:raisePlayerWanted(sourcePed,2,"gunpoint") end
-            return
-        end
-        if old and (old.intent == "fight" or old.intent == "flee" and (not player or old.target == sourcePed)) then return end
+    local sourceProfile = PedAI.profile(sourcePed) or PedAIRules.profile(0)
+    local pose, remember = PedAIRules.gunpointWait(brain.profile, sourceProfile, player, old, sourcePed)
+    if remember then PedAI.rememberHostility(ped,sourcePed) end
+    if not pose then return end
+    if pose == "police" then
+        if player then exports.wanted:raisePlayerWanted(sourcePed,2,"gunpoint") end
+        return
     end
+    local special = pose == "handscower"
     local id = special and 0x12 or 0x11
     TrafficAmbient.suspend(ped)
     responded[sourcePed]=ped
@@ -141,7 +136,7 @@ local function threaten(sourcePed,ped)
     sequence = sequence + 1
     holding[ped] = {id=id, source=sourcePed, tick=getTickCount(), duration=math.random(3000,5999), revision=sequence}
     brain.wait = id
-    setElementData(ped,poseKey,{special and "handscower" or "handsup",sequence,holding[ped].duration},"broadcast","deny")
+    setElementData(ped,poseKey,{pose,sequence,holding[ped].duration},"broadcast","deny")
     PedVoice.emit(ped,"gunpoint",special and 1500 or nil)
     if player and not special then dropCash(brain) end
 end

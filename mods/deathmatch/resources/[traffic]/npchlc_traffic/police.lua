@@ -87,6 +87,8 @@ local function spawn(player, x, y, floor)
     local z = TrafficPoliceFlight.spawnAltitude(route, targetZ, type(floor) == "number" and floor or nil)
     local heli = createVehicle(vehicleModel, x, y, z)
     if not heli then return end
+    -- SLUS-21590 model 261 has one paint pair, palette entries 46 and 1.
+    if route.originalModelId == 261 then setVehicleColor(heli,157,152,114,188,188,180) end
     local pilot = createPed(pedModel, x, y, z)
     if not pilot then
         destroyElement(heli)

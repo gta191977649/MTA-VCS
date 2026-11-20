@@ -10,6 +10,138 @@ addEventHandler("onVehicleStartEnter", root, function(ped, seat)
     end
 end)
 
+-- Road rage uses the native carjacking task. Seat ownership always comes
+-- from the vehicle, including when the player changes seats during approach.
+local extractionSerial = 0
+
+function PedCarjack.cancelExtraction(ped, event)
+    if not event or not event.extractId then return end
+    if isElement(event.extractOwner) then
+        triggerClientEvent(event.extractOwner, "npchlc_traffic:cancelPullOut", resourceRoot, ped, event.extractId)
+    end
+    event.extractOwner, event.extractId, event.extractCar, event.extractStatus = nil, nil, nil, nil
+end
+
+local function stopped(car)
+    local vx, vy, vz = getElementVelocity(car)
+    return vx*vx + vy*vy + vz*vz <= 0.05^2
+end
+
+addEventHandler("onVehicleStartEnter", root, function(ped, seat, occupant, door)
+    local brain = PedAI.brain(ped)
+    local event = brain and brain.event
+    if not event or not event.committed then return end
+    -- MTA 1.7 also reports door 2 for a native automobile jack through
+    -- the front left door. Both forms still require seat zero, the exact
+    -- victim, and the validated driver-side approach for this request.
+    if seat ~= 0 or (door ~= 0 and door ~= 2) or event.extractCar ~= source or occupant ~= event.target
+        or getVehicleOccupant(source, 0) ~= event.target or isVehicleLocked(source) or not stopped(source) then cancelEvent() end
+end)
+
+local function currentExtraction(ped, id)
+    if not client or type(id) ~= "number" then return end
+    local brain = PedAI.brain(ped)
+    local event = brain and brain.event
+    if event and event.extractId == id and event.extractOwner == client and getElementSyncer(ped) == client then
+        return event
+    end
+end
+
+addEvent("npchlc_traffic:pullOutStarted", true)
+addEventHandler("npchlc_traffic:pullOutStarted", resourceRoot, function(ped, id)
+    local event = currentExtraction(ped, id)
+    if event and not event.extractStatus then
+        event.extractStatus = "active"
+        if event.lastApproachedCar ~= event.extractCar then
+            event.lastApproachedCar, event.lastSeen = event.extractCar, getTickCount()
+        end
+    end
+end, false)
+
+addEvent("npchlc_traffic:pullOutBlocked", true)
+addEventHandler("npchlc_traffic:pullOutBlocked", resourceRoot, function(ped, id)
+    local event = currentExtraction(ped, id)
+    if event then
+        event.extractStatus = "blocked"
+        event.maneuver = "Driver door blocked"
+    end
+end, false)
+
+-- The walking task reports arrival at the final handle from its syncer.
+-- MTA may omit the final position delta when the ped stops moving.
+addEventHandler("npc_hlc:onDriverDoorArrival", root, function(car, order)
+    local brain = PedAI.brain(source)
+    local event = brain and brain.event
+    if not event or not event.committed or event.doorOrder ~= order or event.followCar ~= car
+        or getVehicleOccupant(car, 0) ~= event.target or not stopped(car) then return end
+    local x, y, z = getElementPosition(source)
+    if getDistanceBetweenPoints3D(x, y, z, getElementPosition(car)) > 8 then return end
+    event.arrivalOwner, event.arrivalAt = getElementSyncer(source), getTickCount()
+end)
+
+function PedCarjack.confront(manager, event, now)
+    local ped, target = manager.ped, event.target
+    local car = getPedOccupiedVehicle(target)
+    if not car then
+        if event.maneuver then
+            PedCarjack.cancelExtraction(ped, event)
+            manager:clear()
+            event.task, event.maneuver, event.lastApproachedCar = nil, nil, nil
+            event.lastSeen = now
+        end
+        return false
+    end
+    local owner = getElementSyncer(ped)
+    local x, y, z = getElementPosition(ped)
+    local distance = getDistanceBetweenPoints3D(x, y, z, getElementPosition(car))
+    if event.extractId and (event.extractCar ~= car or event.extractOwner ~= owner
+        or distance > 8 or getVehicleOccupant(car, 0) ~= target or isVehicleLocked(car) or not stopped(car)) then
+        PedCarjack.cancelExtraction(ped, event)
+    end
+    local arrived = event.followCar == car and event.arrivalOwner == owner and event.arrivalAt
+        and (now-event.arrivalAt) % 4294967296 < 1500
+    local phase
+    if distance > 8 then phase = "Approach driver door"
+    elseif getVehicleOccupant(car, 0) ~= target then phase = "Waiting for target to exit"
+    elseif not stopped(car) then phase = "Waiting for driver to stop"
+    elseif isVehicleLocked(car) then phase = "Driver door locked"
+    elseif not event.extractId and not arrived and not TrafficWanted.atDriverDoor(ped, car) then phase = "Approach driver door"
+    end
+    if phase then
+        if event.maneuver ~= phase or event.followCar ~= car then
+            manager:clear()
+            event.task, event.maneuver, event.followCar = nil, phase, car
+            event.doorOrder, event.arrivalAt = nil, nil
+            if phase == "Approach driver door" then
+                hlc:setNPCWalkSpeed(ped, "run")
+                if getVehicleOccupant(car, 0) == target then
+                    local side, along = TrafficWanted.driverDoorApproach(car)
+                    local task = {"approachDriverDoor", target, side, along}
+                    if side then
+                        extractionSerial = extractionSerial + 1
+                        event.doorOrder, task[5] = extractionSerial, extractionSerial
+                    end
+                    hlc:setNPCTask(ped, task)
+                else
+                    hlc:setNPCTask(ped, {"walkFollowElement", target, 3})
+                end
+            end
+        end
+        return true
+    end
+    local retryAfter = event.extractStatus == "active" and 12500 or 5500
+    if isElement(owner) and (not event.extractId or (now - event.requested) % 4294967296 >= retryAfter) then
+        PedCarjack.cancelExtraction(ped, event)
+        manager:clear()
+        extractionSerial = extractionSerial + 1
+        event.doorOrder, event.arrivalAt = nil, nil
+        event.extractId, event.extractOwner, event.extractCar = extractionSerial, owner, car
+        event.requested, event.maneuver, event.task = now, "Pull driver out", nil
+        triggerClientEvent(owner, "npchlc_traffic:pullDriverOut", resourceRoot, ped, car, target, extractionSerial)
+    end
+    return true
+end
+
 function PedCarjack.capture(event, car, jacker)
     event.exitDriver = getVehicleOccupant(car, 0)
     if event.exitDriver == event.road.driver then event.exitDriver = nil end

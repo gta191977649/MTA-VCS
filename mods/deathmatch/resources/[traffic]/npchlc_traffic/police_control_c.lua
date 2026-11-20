@@ -1,8 +1,9 @@
 local missions = {}
 local createdRopes = setmetatable({}, {__mode="k"})
+local activeRopes = {}
 local render, watching
 local function refreshRender()
-    local needed=next(missions)~=nil
+    local needed=next(missions)~=nil or next(activeRopes)~=nil
     if needed and not watching then
         addEventHandler("onClientPreRender",root,render)
     elseif watching and not needed then
@@ -31,12 +32,18 @@ local function observe(element)
     elseif getElementType(element)=="ped" then
         local data = getElementData(element,ropeKey,false)
         if type(data)~="table" then
-            createdRopes[element]=nil
-        elseif not createdRopes[element] then
+            activeRopes[element],createdRopes[element]=nil,nil
+        elseif data[7] and not activeRopes[element] then
             local _,_,z=getElementPosition(element)
             local speed=TrafficPoliceFlight.ropeSpan*TrafficPoliceFlight.ropeProgressPerMs
-            local duration=TrafficPoliceFlight.ropeLifetimeMs-math.max(0,data[4]-z)/speed
-            if duration>0 then createdRopes[element]=createSWATRope(data[2],data[3],data[4],math.floor(duration)) end
+            local elapsed=math.max(0,data[4]-z)/speed
+            local duration=TrafficPoliceFlight.ropeLifetimeMs-elapsed
+            if duration>0 then
+                activeRopes[element]={data=data,started=getTickCount()-elapsed}
+                if not createdRopes[element] then
+                    createdRopes[element]=createSWATRope(data[2],data[3],data[4],math.floor(duration))
+                end
+            end
         end
     end
     refreshRender()
@@ -47,6 +54,7 @@ addEventHandler("onClientElementDataChange",resourceRoot,function(key)
 end)
 addEventHandler("onClientElementStreamIn",resourceRoot,function() observe(source) end)
 local function forget()
+    activeRopes[source]=nil
     if missions[source] then release(source) end
     refreshRender()
 end
@@ -227,6 +235,15 @@ end
 
 render=function(ms)
     local dt,now=math.min(ms,150)/1000,getTickCount()
+    for ped,rope in pairs(activeRopes) do
+        local data=rope.data
+        local matrix=isElement(data[1]) and isElementStreamedIn(data[1]) and getElementMatrix(data[1])
+        if matrix then
+            local elapsed=(now-rope.started)%4294967296
+            local x,y,z=TrafficPoliceFlight.ropePosition(matrix,data[5],data[6],data[2],data[3],data[7],elapsed)
+            setElementPosition(ped,x,y,math.max(z,data[7]+1),false)
+        end
+    end
     for vehicle,state in pairs(missions) do
         if not isElement(vehicle) or not isElementStreamedIn(vehicle) then
             release(vehicle)

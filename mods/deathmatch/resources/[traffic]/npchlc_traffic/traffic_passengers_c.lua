@@ -7,12 +7,12 @@ addEventHandler("npchlc_traffic:reclaimDriverSeat", resourceRoot, function(ped, 
 end, false)
 
 addEvent("npchlc_traffic:occupantExit", true)
-addEventHandler("npchlc_traffic:occupantExit", resourceRoot, function(ped, vehicle, seat, target, actor, x, y, z, stamp)
+addEventHandler("npchlc_traffic:occupantExit", resourceRoot, function(ped, vehicle, seat, target, actor, x, y, z, stamp, onFoot, committed)
     if stamp and (not isElement(ped) or getElementData(ped,"npchlc_traffic:exitStamp",false)~=stamp) then return end
     if target then
         if not isElement(vehicle) or not isElement(target) or (getPedOccupiedVehicle(target) or target) ~= actor
-            or getDistanceBetweenPoints3D(x, y, z, getElementPosition(actor)) > 1
-            or not canTrafficPursuerExit(vehicle, target) then return end
+            or not onFoot and getDistanceBetweenPoints3D(x, y, z, getElementPosition(actor)) > 1
+            or not canTrafficPursuerExit(vehicle, target, onFoot, committed) then return end
         local vx, vy, vz = getElementVelocity(vehicle)
         if vx*vx + vy*vy + vz*vz > 0.05^2 then return end
     end
@@ -20,6 +20,84 @@ addEventHandler("npchlc_traffic:occupantExit", resourceRoot, function(ped, vehic
         and getPedOccupiedVehicle(ped) == vehicle and getPedOccupiedVehicleSeat(ped) == seat then
         setPedExitVehicle(ped)
     end
+end, false)
+
+-- Stop the native entry as soon as the target leaves the driver seat.
+-- GTA performs the actual door opening and drag animation on the syncer.
+local pullOuts = {}
+
+local function finishPullOut(ped)
+    pullOuts[ped] = nil
+    if isElement(ped) and isElementSyncer(ped) and not isPedDead(ped) and not isPedInVehicle(ped) then
+        setPedAnimation(ped, "PED", "IDLE_stance", 180, false, false, false, false, 0)
+    end
+end
+
+local function validPullOut(ped, car, target)
+    if not isElement(ped) or not isElementSyncer(ped) or isPedDead(ped) or not isElement(car)
+        or not isElementStreamedIn(car) or not isElement(target) or isPedDead(target)
+        or getVehicleOccupant(car, 0) ~= target or isVehicleLocked(car) then return false end
+    if getElementDimension(ped) ~= getElementDimension(car) or getElementInterior(ped) ~= getElementInterior(car) then return false end
+    local x, y, z = getElementPosition(ped)
+    if getDistanceBetweenPoints3D(x, y, z, getElementPosition(car)) > 8 then return false end
+    local vx, vy, vz = getElementVelocity(car)
+    return vx*vx + vy*vy + vz*vz <= 0.05^2
+end
+
+local function doorAccessible(ped, car)
+    local m = getElementMatrix(car)
+    local left, rear, _, _, front = getElementBoundingBox(car)
+    if not m or not left or m[3][3] < 0.8 then return false end
+    local px, py, pz = getElementPosition(ped)
+    local dx, dy = px-m[4][1], py-m[4][2]
+    local side = dx*m[1][1] + dy*m[1][2]
+    local along = (front - rear) * 0.1
+    local longitudinal = dx*m[2][1] + dy*m[2][2]
+    if side >= -0.45 or math.abs(side-left) > 1.1 or math.abs(longitudinal-along) > 1.2
+        or math.abs(pz-m[4][3]) > 1.8 then return false end
+    local x = m[4][1] + left*m[1][1] + along*m[2][1]
+    local y = m[4][2] + left*m[1][2] + along*m[2][2]
+    local z = m[4][3] + 0.35
+    return isLineOfSightClear(x, y, z, x-m[1][1], y-m[1][2], z, true, true, false, true, false, false, false, car)
+end
+
+local function observePullOuts()
+    for ped, a in pairs(pullOuts) do
+        local entering = isElement(ped) and (getPedOccupiedVehicle(ped) == a.car
+            or getPedTask(ped, "primary", 3) == "TASK_COMPLEX_ENTER_CAR_AS_DRIVER")
+        if not validPullOut(ped, a.car, a.target) or isPedInVehicle(ped) then
+            finishPullOut(ped)
+        elseif (getTickCount()-a.at) % 4294967296 >= (a.started and 12000 or 5000) then
+            finishPullOut(ped)
+            triggerServerEvent("npchlc_traffic:pullOutBlocked", resourceRoot, ped, a.id)
+        elseif not a.started and entering then
+            a.started = true
+            triggerServerEvent("npchlc_traffic:pullOutStarted", resourceRoot, ped, a.id)
+        elseif a.started and not entering then
+            finishPullOut(ped)
+            triggerServerEvent("npchlc_traffic:pullOutBlocked", resourceRoot, ped, a.id)
+        end
+    end
+    if not next(pullOuts) then removeEventHandler("onClientPreRender", root, observePullOuts) end
+end
+
+addEvent("npchlc_traffic:cancelPullOut", true)
+addEventHandler("npchlc_traffic:cancelPullOut", resourceRoot, function(ped, id)
+    local a = pullOuts[ped]
+    if a and a.id == id then finishPullOut(ped) end
+end, false)
+
+addEvent("npchlc_traffic:pullDriverOut", true)
+addEventHandler("npchlc_traffic:pullDriverOut", resourceRoot, function(ped, car, target, id)
+    if not validPullOut(ped, car, target) or isPedInVehicle(ped) then return end
+    if not doorAccessible(ped, car) or not setPedEnterVehicle(ped, car, false) then
+        triggerServerEvent("npchlc_traffic:pullOutBlocked", resourceRoot, ped, id)
+        return
+    end
+    if not next(pullOuts) then
+        addEventHandler("onClientPreRender", root, observePullOuts)
+    end
+    pullOuts[ped] = {car=car, target=target, at=getTickCount(), id=id}
 end, false)
 
 -- The damage hook identifies the body and the entity that actually struck it.
@@ -89,6 +167,7 @@ addEventHandler("npchlc_traffic:openPoliceDriverDoor",resourceRoot,function(offi
     doorAttempts[officer]={car=car,player=player,id=id,at=getTickCount()}
 end,false)
 addEventHandler("onClientResourceStop",resourceRoot,function()
+    for ped in pairs(pullOuts) do finishPullOut(ped) end
     for officer in pairs(doorAttempts) do
         if isElement(officer) and isElementSyncer(officer) then
             setPedAnimation(officer,"PED","IDLE_stance",180,false,false,false,false,0)

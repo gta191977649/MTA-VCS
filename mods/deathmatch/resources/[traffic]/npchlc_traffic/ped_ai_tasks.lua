@@ -122,7 +122,8 @@ end)
 
 function PedTaskManager:execute(graph, event, now)
     local ped = self.ped
-    if event.kind == "roadRage" then
+    if event.committed and PedCarjack.confront(self, event, now) then return end
+    if event.kind == "roadRage" and not event.committed then
         if not event.gestureAt then
             local x, y = getElementPosition(ped)
             local tx, ty = getElementPosition(event.target)
@@ -162,7 +163,8 @@ function PedTaskManager:execute(graph, event, now)
             if not armed and PedAIRules.ranged(getPedWeapon(ped)) then setPedWeaponSlot(ped, 0)
                 event.weapon = getPedWeapon(ped)
             end
-            local range = armed and PedAIRules.attackRange(weapon) or 1.7
+            local original = weapon == self.hostWeapon and self.originalWeapon
+            local range = armed and PedAIRules.attackRange(weapon, original) or 1.7
             event.task = hlc:setNPCTask(ped, {vehicle and "attackOccupiedVehicle" or "killPed",
                 event.target, range, armed and range / 3 or range * 0.8, armed and 1 or 0})
         end

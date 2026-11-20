@@ -143,7 +143,11 @@ def main():
             count=count+1; peds[count]={x=x,y=y,z=z}
             return peds[count]
         end
-        function setElementPosition(ped,x,y,z) ped.x,ped.y,ped.z=x,y,z end
+        function setElementPosition(ped,x,y,z,warp)
+            assert(warp==false)
+            ped.x,ped.y,ped.z=x,y,z
+            ped.positions=(ped.positions or 0)+1
+        end
         math.random=function(lo,hi) return hi and lo or 1 end
         for i=1,5 do
             now=last+3000+i*100
@@ -167,6 +171,9 @@ def main():
         local startX,startZ=moving.x,moving.z
         assert(moving.equipped and moving.frozen and not moving.collisions)
         heli.x=3
+        TrafficPoliceResponse.descend(now+100)
+        for i=2,5 do TrafficPoliceResponse.descend(now+i*100) end
+        assert(moving.positions==1)
         TrafficPoliceResponse.descend(now+1000)
         assert(moving.x>startX+2 and moving.z>startZ-3 and moving.z<startZ-2.8)
         -- Repeated sync readback of an older pose cannot rewind time on the rope.
@@ -241,12 +248,21 @@ def main():
             return true
         end
         source={z=16}
-        function getElementData() return {heli,4,7,21} end
+        function getElementData() return {heli,4,7,21,1.2,1,0} end
         handlers["onClientElementStreamIn"]()
         handlers["onClientElementDataChange"]("traffic:policeRope")
         handlers["onClientElementStreamOut"]()
         handlers["onClientElementStreamIn"]()
-        assert(creations==1 and handlers["onClientPreRender"]==nil)
+        assert(creations==1 and handlers["onClientPreRender"])
+        local last
+        for i=1,20 do
+            now=now+16
+            handlers["onClientPreRender"](16)
+            assert(not last or source.z<last and last-source.z<.06)
+            last=source.z
+        end
+        handlers["onClientElementDestroy"]()
+        assert(handlers["onClientPreRender"]==nil)
         source=heli
         local steeringCalls,elapsed=0,0
         function getElementData() return {player,"boat",3} end

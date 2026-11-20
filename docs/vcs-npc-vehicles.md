@@ -66,6 +66,8 @@ Ordinary non-drag exit also has `0x001FDE18`. With prior state 0x3F, non-player,
 
 ## Passengers and threats to the vehicle
 
+The following diagram traces the US PS2 game. The MTA civilian retaliation rule appears below the table.
+
 ```mermaid
 flowchart TD
     A["Generate driver, then sample passenger capacity"] --> C{"What happened to the car?"}
@@ -94,7 +96,11 @@ Ghidra MCP reports two direct calls to `0x003EF910` in the US PS2 executable. At
 
 In MTA the attacker’s client or the vehicle syncer reports the native body contact. Matching observations from both owners count once. A melee strike also checks the equipped weapon, on-foot state and server-side range. A firearm needs a recent shot through the car and a server health-loss event. An attributable blast or flame uses the native damage cause and health loss. A missed swing, tire-only hit or unattributed loss supplies no body-hit decision. The report queue handles different network arrival orders. Script-controlled occupants retain their tasks.
 
-On acceptance, the existing driving task carries style 3 and the increased cruise target. The driver and each eligible passenger keep their identity through the native exit. Occupant deadlines are issued in seat order. Animation and seat synchronization determine the time at which the player sees each exit. For a player-caused crash, the port also requires a damage report naming the same colliding vehicle before sampling the VCSPC personality weights. [MTA vehicle damage event](https://wiki.multitheftauto.com/wiki/OnClientVehicleDamage) · [Collision decisions and source provenance](vcs-vehicle-impact.md)
+For the original acceleration response, the existing driving task carries style 3 and the increased cruise target. Passengers receive their own exit deadlines in seat order. With the longer passenger wait selected, `CIVFEMALE` and `PROSTITUTE` wait ten seconds. Other passenger types receive another random draw. Seat synchronization determines when each passenger exits.
+
+The MTA port also uses the civilian driver's temper when a player causes a damaging collision or directly attacks the vehicle. The eligible driver groups are `CIVMALE` and `CIVFEMALE`. Temper above fear commits the driver to the same player throughout pursuit, dismount, driver-door approach and melee. A stopped, unlocked vehicle with the player in the driver's seat permits a native pull-out. A direct attack from a player already on foot leads to a dismount and melee. The PS2 provides the strict temper comparison in its carjacking path. Applying it to these additional events is a port decision.
+
+Group and personality are separate inputs. Model 12 uses `EMERGENCY` and model 13 uses `FIREMAN`. The separate `COP` and `GANG1` through `GANG9` roles keep their wanted and occupant-defense decisions. A player striking an eligible gang driver's car can also bring its passengers into the fight. A nearby gunshot uses the listener's role, threat mask, lawfulness and fear. The PS2 type labels are stored at `0x004BE3A8` onward. [Impact decision tree](vcs-vehicle-impact.md) and [group and personality records](vcs-npc-profiles.md).
 
 ### Loopback client observations
 

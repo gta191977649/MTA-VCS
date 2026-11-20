@@ -12,6 +12,7 @@ import subprocess
 from tempfile import TemporaryDirectory
 from time import perf_counter, sleep
 import xml.etree.ElementTree as ET
+import zlib
 
 from lupa.lua51 import LuaRuntime
 
@@ -234,11 +235,14 @@ local trafficDrive = {"driveTrafficToPoint", 10, 0, 0, 0.1}
 function makeNPCDriveToPos(_, _, _, _, traffic) assert(traffic) issued = issued + 1 end
 stream = true
 deliver("npc_hlc:control", resourceRoot, npc, 4, trafficDrive, vehicle)
+assert(not getNPCDebugExecution(npc,4))
 deliver("onClientPreRender", root)
 assert(issued == 3)
+assert(getNPCDebugExecution(npc,4)[9]==false)
 vehicle.x, vehicle.z = 10, 4
 deliver("onClientPreRender", root)
 assert(issued == 3 and released == 3 and stopped == 0)
+assert(getNPCDebugExecution(npc,4)[9]==true)
 
 npc.vehicle = nil
 npc.x, npc.z = 0, 0
@@ -247,6 +251,7 @@ local nextWalk = {"walkTrafficToPoint", 4, 0, 0, 0.25}
 local targets = {}
 function makeNPCWalkToPos(_, x) targets[#targets + 1] = x end
 deliver("npc_hlc:control", resourceRoot, npc, 5, first, npc, nextWalk)
+assert(not getNPCDebugExecution(npc,4))
 deliver("onClientPreRender", root)
 npc.x = 2
 deliver("onClientPreRender", root)
@@ -1735,7 +1740,135 @@ def check_airtrain_bounds():
     print("AIRTRAIN shared pivot, sphere and box enclose all three rendered meshes")
 
 
+def check_gang_weapons(disc):
+    # Compare both outcomes of a real brain attachment with the original SCM.
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    lua.execute("""
+        exports = {npc_hlc={clearNPCTasks=function() end}}
+        math.random = function(lo, hi)
+            if lo == 0 and hi == 99 then draws = draws + 1; return roll end
+            return lo
+        end
+        function giveWeapon(p, weapon, amount, equip)
+            assert(equip and amount == 25001)
+            p.gun, p.ammo = weapon, (p.ammo or 0) + amount
+            return true
+        end
+        function setPedWeaponSlot(p, slot) assert(slot == 0); p.gun = 0 end
+    """)
+    load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua",
+                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua"])
+    check = lua.eval("""
+        function(model, index, sample, original, host)
+            local p, player = element("ped"), element("player")
+            roll, draws = sample, 0
+            local brain = PedAI.attach(p, model, index+7)
+            assert(brain.profile.statId == PedAIModels[model][2])
+            assert(brain.profile.pedType == index+7 and draws == 1 and p.gun == host)
+            assert((brain.tasks.originalWeapon or 0) == original)
+            local ammo = p.ammo
+            assert(PedAI.attach(p, model) == brain)
+            PedAI.roadRage(p, player, {})
+            assert(p.gun == host and ammo == p.ammo and draws == 1)
+            if host == 28 then
+                assert(PedAIRules.attackRange(host, brain.tasks.originalWeapon) == (original == 25 and 45 or 30))
+            end
+        end
+    """)
+    pairs = [(19,0), (19,6), (26,25), (28,28), (0,19), (19,25), (19,6), (3,3), (26,29)]
+    if disc:
+        script = (disc / "MAIN.SCM").read_bytes()
+        startup = script[0xF6EA:0xF72F]
+        assert startup == script[0x36863:0x368A8]
+        records = iter(startup)
+        def operand():
+            tag = next(records)
+            if tag == 1:
+                return 0
+            assert tag == 7
+            return next(records)
+        for _ in pairs:
+            assert (next(records), next(records)) == (0x57, 1)
+            index = operand()
+            assert (operand(), operand()) == pairs[index]
+        assert next(records, None) is None
+    host = {0:0, 3:2, 6:5, 19:22, 25:28, 26:28, 28:31, 29:30}
+    for index, pair in enumerate(pairs):
+        model = (91, 93, 95, 97, 99, 101, 89, 105, 107)[index]
+        for sample, original in zip((49, 50), pair):
+            check(model, index, sample, original, host[original])
+    lua.execute("""
+        local pop = {gangModels = {}}
+        for i = 1, 9 do pop.gangModels[i] = {200+i, 300+i} end
+        local ids = {267, 265, 269, 209, 174, 231, 171, 184}
+        for group, car in ipairs(ids) do
+            local model, role = PedWeapons.gangOccupant(car, pop, function() return true end)
+            assert(model == 200+group and role == 6+group)
+            model, role = PedWeapons.gangOccupant(car, pop, function() return false end)
+            assert(model == 14 and role == nil)
+        end
+        assert(PedWeapons.gangOccupant(207, pop) == nil)
+        local golfer = PedAI.attach(element("ped"), 105)
+        assert(golfer.profile.pedType == 4 and golfer.tasks.originalWeapon == nil)
+    """)
+    print("Verified both weapon draws for all nine gangs, combat ranges and persistence through road rage")
+
+
+def check_ped_personalities(disc):
+    game = zlib.decompress((disc / "PS2/GAME.DTZ").read_bytes())
+    count, model_table = struct.unpack_from("<II", game, 0x38)
+    stat_table, = struct.unpack_from("<I", game, 0x20 + 4 * 0x1B)
+    stats = struct.unpack_from("<42I", game, stat_table)
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    lua.execute("exports = {npc_hlc = {}}")
+    load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_model_bindings.lua", "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua",
+                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua", "traffic_ambient.lua"])
+    runtime = lua.globals()
+    expected_ids = set()
+    for model, record in enumerate(struct.unpack_from(f"<{count}I", game, model_table)):
+        if not record or game[record + 0x10] != 7:
+            continue
+        expected_ids.add(model)
+        ped_type, stat_id = struct.unpack_from("<II", game, record + 0x34)
+        fear, temper = struct.unpack_from("<bb", game, stats[stat_id] + 0x16)
+        profile = runtime.PedAIRules.profile(model)
+        assert (profile.pedType, profile.statId, profile.fear, profile.temper) == (ped_type, stat_id, fear, temper), model
+    assert set(runtime.PedAIModels.keys()) == expected_ids and len(expected_ids) == 161
+    for stat_id, address in enumerate(stats):
+        profile = runtime.PedAIStats[stat_id]
+        assert struct.pack("<4f", profile.fleeDistance, profile.headingChangeRate, profile.attackStrength,
+                           profile.damageScale) == game[address + 4:address + 0x14]
+        assert (profile.flags, profile.fear, profile.temper, profile.law, profile.social) == struct.unpack_from(
+            "<H4b", game, address + 0x14)
+        assert profile.name == game[address + 0x1A:address + 0x32].split(b"\0", 1)[0].decode("ascii")
+    lua.execute("""
+        TrafficModelBindings.load({})
+        assert(bindTrafficPedestrianModel(34, 7) and bindTrafficPedestrianModel(48, 7))
+        local calm, hot = element("ped"), element("ped")
+        calm.model, hot.model = TrafficAmbient.getPedestrianModel(34), TrafficAmbient.getPedestrianModel(48)
+        assert(calm.model == hot.model and hot.model == 7)
+        TrafficModelBindings.tag(calm, 34)
+        TrafficModelBindings.tag(hot, 48)
+        assert(PedAI.profile(calm).temper == 30 and PedAI.profile(hot).temper == 70)
+        assert(PedAI.attach(calm, calm.model).profile.statId == 15)
+        local profile = PedAI.attach(hot).profile
+        assert(PedAI.setLeader(hot, calm))
+        assert(bindTrafficPedestrianModel(48, 46))
+        assert(PedAI.attach(hot, 34).profile == profile and profile.temper == 70)
+        assert(TrafficAmbient.getPedestrianModel(48) == 46)
+        local native = element("ped")
+        function getValidPedModels() return {48} end
+        TrafficModelBindings.load({modelIdSpace="mta"})
+        TrafficModelBindings.tag(native, 48)
+        assert(not PedAI.profile(native) and PedAI.attach(native).profile.statId == 13)
+    """)
+    print("Verified all 161 PS2 ped model assignments, 42 complete PEDSTATS records and visual skin overrides")
+
+
 def check_assets(disc, vcs_pc):
+    check_ped_personalities(disc)
     with TemporaryDirectory() as directory:
         rebuilt = Path(directory) / "traffic_collision_handling.lua"
         export_collision_handling(disc, rebuilt)
@@ -2004,7 +2137,7 @@ def check_reaction_latency():
         function getPedTotalAmmo() return 0 end
         TrafficGraph={pedestrianAnchor=noop}
     """)
-    load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua",
+    load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua", "ped_objectives.lua", "ped_ai_tasks.lua",
                         "ped_ai.lua", "traffic_world.lua", "traffic_ambient.lua"])
     lua.execute("""
         local player=element("player",-1)
@@ -2533,6 +2666,24 @@ def check_vehicle_pursuit():
         assert(p:update(car, target, 14000) == "end")
     end
 
+    -- A committed driver can leave earlier at a reachable, stationary car.
+    -- A change to a moving target invalidates the exit even after approval.
+    car.x, car.vx, car.vy = 0, 0, 0
+    local suspectCar = element("vehicle", 13)
+    target.vehicle, safe = suspectCar, true
+    p = TrafficVehiclePursuit.new(target, 0)
+    p.committed = true
+    assert(not p:update(car, target, 200))
+    assert(p:update(car, target, 350) == "brake")
+    assert(p:update(car, target, 500) == "exit")
+    suspectCar.vx = 0.1
+    assert(p:update(car, target, 750) == "chase")
+    -- A player on foot can keep walking while the NPC checks its own exit.
+    target.vehicle, target.vx = nil, 0.08
+    assert(p:update(car, target, 850) == "brake")
+    assert(p:update(car, target, 2100) == "exit")
+    target.vx = 0
+
     local floorMode, clear, water = "flat", true, false
     function isElementStreamedIn(e) return not e.out end
     function isVehicleWheelOnGround(e) return not e.air end
@@ -2738,7 +2889,7 @@ def check_road(disc=None, vcs_pc=None):
     load(lua, HLC, ["traffic_rail.lua", "traffic_physics.lua"])
     load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_visibility_s.lua", "traffic_model_bindings.lua",
                         "traffic_graph.lua", "traffic_world.lua", "traffic_road_population.lua",
-                        "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua",
+                        "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua",
                         "ped_carjack.lua", "traffic_passengers.lua", "traffic_collision_handling.lua", "traffic_crash_decisions.lua",
                         "traffic_vehicle_collision.lua", "traffic_vehicle_pursuit.lua", "ped_road_injury.lua", "traffic_road.lua"])
     lua.execute("""
@@ -2937,7 +3088,7 @@ def check_road(disc=None, vcs_pc=None):
             copy.kind, copy.flags, copy.x = "boat", 0x100, ({65,15,2,95})[index]
             water.nodes[index] = copy
         end
-        -- The inclusion test compares d² with 1.5R²; interpolation uses 1.5R.
+        -- The inclusion test compares dÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â² with 1.5RÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â²; interpolation uses 1.5R.
         assert(math.abs(TrafficRoad.crossing(water.nodes[1],water.nodes[2],0,0,40)-0.1)<1e-8)
         water.nodes[1].x = 48
         assert(not TrafficRoad.crossing(water.nodes[1],water.nodes[2],0,0,40))
@@ -3538,7 +3689,7 @@ def check_road(disc=None, vcs_pc=None):
         end
         function getPlayerWantedLevel(p) return p.stars or 0 end
         function exports.wanted:raisePlayerWanted(p, stars, reason) assert(reason == "policeCollision") p.stars = math.max(p.stars or 0, stars) end
-        local function crashScenario(roll, expect, police, nativeExit)
+        local function crashScenario(model, roll, expect, police, nativeExit)
             chooseTrafficCivilianVehicle = function() return 400, 171, police and 13 or 0 end
             players, created, packets, player.vehicle = {player}, {}, {}, nil
             TrafficRoad.start(graph, function() return 1 end)
@@ -3549,8 +3700,7 @@ def check_road(disc=None, vcs_pc=None):
             local ped, collider = car.driver, element("vehicle", car.x)
             ped.syncer, collider.driver, player.vehicle = player, player, collider
             collider.y, collider.z, collider.vy = car.y-2, car.z, 0.4
-            local profile = PedAI.profile(ped)
-            profile.name = "STAT_STREET_GUY"
+            PedAI.brain(ped).profile = PedAIRules.profile(model)
             client = player
             -- At or below the calculated-damage boundary there is only a native handoff.
             local function report(impulse)
@@ -3567,7 +3717,7 @@ def check_road(disc=None, vcs_pc=None):
             assert(ped.calls == 1 and car.vy == vy)
             math.random = function(n) return n or roll end
             tick()
-            assert(ped.task[1] == "driveTrafficPhysics")
+            if roll >= 0.1 then assert(ped.task[1] == "driveTrafficPhysics") end
             deliver("onVehicleDamage", car, 5)
             if roll >= 0.1 then
                 tick()
@@ -3590,7 +3740,7 @@ def check_road(disc=None, vcs_pc=None):
                     car.driver, ped.vehicle = nil, nil
                     deliver("onVehicleExit", car, ped, 0)
                     assert(ped.angry and ped.adopted and not car.destroyed)
-                elseif expect == "crashPursuit" then
+                elseif expect == "crashPursuit" or expect == "committedRoadRage" then
                     assert(ped.task[1] == "driveAtPed" and ped.task[2] == player)
                     if nativeExit then
                         car.vx,car.vy,car.vz,collider.vy = 0,0,0,0
@@ -3626,6 +3776,15 @@ def check_road(disc=None, vcs_pc=None):
                         assert(ped.confronted and not car.destroyed)
                         PedAI.vehicleThreat = oldFight
                     else
+                        if expect == "committedRoadRage" then
+                            player.vehicle = nil
+                            deliver("onVehicleStartEnter",car,player,0,ped,0)
+                            -- Abandon the jack and return to the original car.
+                            player.vehicle = collider
+                            now = now + 8100
+                            tick()
+                            assert(ped.task[1] == "driveAtPed" and ped.task[2] == player)
+                        end
                         player.health = 0
                         tick()
                         assert(ped.task[1] == "driveTrafficPhysics")
@@ -3653,16 +3812,19 @@ def check_road(disc=None, vcs_pc=None):
         assert(TrafficVehicleCollision.damage(35.01, 5/6, "Automobile") > 5)
         assert(TrafficVehicleCollision.damage(35, 0.5, "Bike") == 5)
         assert(TrafficVehicleCollision.damage(35.01, 0.5, "Bike") > 5)
-        crashScenario(0.01, "crashContinue")
-        crashScenario(0.49, "crashFlee")
-        crashScenario(0.72, "crashRoadRage")
-        crashScenario(0.99, "crashPursuit")
-        crashScenario(0.99, "crashPursuit", false, true)
+        crashScenario(34, 0.01, "crashContinue")
+        crashScenario(34, 0.99, "crashFlee")
+        crashScenario(91, 0.25, "crashRoadRage")
+        crashScenario(48, 0.01, "committedRoadRage")
+        crashScenario(48, 0.99, "committedRoadRage")
+        crashScenario(91, 0.99, "crashPursuit", false, true)
         graph.pedestrianDriverMasks['34'] = 8193
-        crashScenario(0.72, nil, true)
+        crashScenario(8, 0.72, nil, true)
         graph.pedestrianDriverMasks['34'] = 1
-        assert(TrafficVehicleCollision.chooseResponse({name="STAT_SKATER"}, 0.99) == 726)
-        assert(TrafficVehicleCollision.chooseResponse({name="STAT_TOUGH_GUY"}, 0.25) == 1031)
+        assert(TrafficVehicleCollision.chooseResponse(PedAIRules.profile(91), 0.25) == 1031)
+        local tie = {pedType=5, name="STAT_STREET_GIRL", fear=40, temper=40}
+        assert(TrafficVehicleCollision.chooseResponse(tie, 0) == 200)
+        assert(TrafficVehicleCollision.chooseResponse(tie, 0.99) == 726)
         player.vehicle = nil
         PedVoice, PedAI.roadRage, chooseTrafficCivilianVehicle = oldVoice, oldRage, oldPicker
     end
@@ -5120,7 +5282,7 @@ def check_debug_overlay():
     function addCommandHandler(name, callback) commands[name] = callback end
     function removeEventHandler(name) events[name] = nil end
     function killTimer() end
-    function dxDrawText(text) texts[text]=true end
+    function dxDrawText(text,x,y,right,bottom,color) texts[text]={y=y,color=color} end
     function dxDrawLine(x, y, u, v) lines[#lines + 1] = {x,y,u,v} end
     function getCameraMatrix() return 0,0,0, 1,0,0 end
     function getScreenFromWorldPosition(x, y)
@@ -5145,6 +5307,7 @@ def check_debug_overlay():
     local ped=element("ped")
     ped.health,ped.armor=25,50
     local row={ped,7,75,30,"fight",false,"killPed",localPlayer,50}
+    row[13]="CIVMALE"
     function exports.npc_hlc:getNPCDebugExecution() return {"killPed",false,1,2,3,4,5,6} end
     deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
     lines={}
@@ -5152,6 +5315,13 @@ def check_debug_overlay():
     assert(#rectangles==6 and rectangles[3][1]==25 and rectangles[3][2]==16777215)
     assert(rectangles[6][1]==25 and rectangles[6][2]==0xAF191E and #lines>=4)
     assert(texts["Hot temper 75"] and texts["fight > killPed"])
+    assert(texts["[CIVMALE]"].y<texts["Hot temper 75"].y)
+    assert(texts["Hot temper 75"].y<texts["fight > killPed"].y)
+    assert(texts["fight > killPed"].y<texts["Sync: synchronized"].y)
+    assert(texts["Sync: synchronized"].color==0x75E988)
+    function exports.npc_hlc:getNPCDebugExecution() return {"killPed",false,false,false,false,false,false,false,true} end
+    TrafficNPCDebug.draw()
+    assert(texts["Sync: waiting for server"].color==0xFF5050)
     -- Two heads at the same projection must keep the same bar coordinates,
     -- even when one has armor and the other has a longer task label.
     local neighbor=element("ped")
@@ -5196,6 +5366,32 @@ def check_debug_overlay():
     deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
     texts={};TrafficNPCDebug.draw()
     assert(texts["Driving style 0 - Stop for cars"])
+    assert(texts["Driving style 0 - Stop for cars"].y>texts["Hot temper 75"].y)
+    assert(texts["Driving style 0 - Stop for cars"].y<texts["fight > killPed"].y)
+    assert(texts["Sync: waiting for executor"])
+    local remoteSample={"killPed",false,false,false,false,false,false,false,true}
+    deliver("npchlc_traffic:npcDebugDetails",resourceRoot,1,{{ped,19,remoteSample}})
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Sync: waiting for server"])
+    now=now+651
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Sync: waiting for executor"])
+    row[5],row[6]="Road rage","Approach driver door"
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
+    remoteSample[2],remoteSample[9]="TASK_SIMPLE_STAND_STILL",false
+    deliver("npchlc_traffic:npcDebugDetails",resourceRoot,1,{{ped,19,remoteSample}})
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Road rage > killPed > Approach driver door"] and texts["Sync: synchronized"])
+    row[7],row[14]=false,"pending"
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Sync: waiting for executor"] and not texts["Sync: idle"])
+    row[14]="active"
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Sync: native executor"])
+    row[14]="blocked"
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Sync: waiting for server retry"])
+    row[14]=false
     deliver("npchlc_traffic:npcDebugRevision",resourceRoot,1,ped,20,false,localPlayer,2,car)
     texts={};TrafficNPCDebug.draw()
     assert(texts["Driving style 2 - Avoid cars"] and not texts["Driving style 0 - Stop for cars"])
@@ -5220,7 +5416,8 @@ def check_debug_overlay():
     server.execute("""
     viewer,owner,ped=element("player"),element("player"),element("ped")
     exports={npc_hlc={getNPCDebugAssignment=function() return "walkTrafficToPoint",7,owner end}}
-    local brain={profile={temper=75,fear=30},objectives={}}
+    local brain={profile={pedType=4,temper=75,fear=30},objectives={}}
+    PedAITypes={[4]={name="CIVMALE"}}
     PedAI={brain=function() return brain end}
     PedActivity={debugTask=function() return "seat","approach" end}
     function isPedInVehicle() return false end
@@ -5236,14 +5433,15 @@ def check_debug_overlay():
     assert(#packets==2 and packets[1].owner==viewer and packets[2].owner==owner)
     local row=packets[1][1][2][1]
     assert(row[1]==ped and row[2]==7 and row[3]==75 and row[5]=="seat" and row[6]=="approach")
-    assert(row[11]==0 and row[12]==car)
-    local report={{ped,7,{"walkTrafficToPoint","detour",1,2,3,4,5,6}}}
+    assert(row[11]==0 and row[12]==car and row[13]=="CIVMALE")
+    local report={{ped,7,{"walkTrafficToPoint","detour",1,2,3,4,5,6,true}}}
     client=element("player")
     deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
     assert(#packets==2)
     client=owner
     deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
     assert(#packets==3 and packets[3].owner==viewer and packets[3][1][2][1][3][6]==4)
+    assert(packets[3][1][2][1][3][9]==true)
     car.driver=owner
     deliver("npc_hlc:debugAssignmentChanged",ped,8,false,false)
     assert(#packets==4 and packets[4].name=="npchlc_traffic:npcDebugRevision")
@@ -5262,6 +5460,22 @@ def check_debug_overlay():
     assert(scripted[11]==5 and scripted[12]==car)
     deliver("npc_hlc:debugAssignmentChanged",ped,11,"driveTrafficPhysics",owner,6)
     assert(packets[7][1][6]==6 and packets[7][1][7]==car)
+    local event={kind="roadRage",maneuver="Pull driver out",extractId=17,extractOwner=owner}
+    local brain=PedAI.brain(ped)
+    brain.event,ped.syncer=event,owner
+    local function nativeStatus()
+        now=now+250
+        local index=#packets+1
+        deliver("npchlc_traffic:npcDebugWatch",resourceRoot,2,{ped})
+        return packets[index][1][2][1][14]
+    end
+    assert(nativeStatus()=="pending")
+    event.extractStatus="active"
+    assert(nativeStatus()=="active")
+    ped.syncer=viewer
+    assert(nativeStatus()=="pending")
+    ped.syncer,event.extractStatus=owner,"blocked"
+    assert(nativeStatus()=="blocked")
     """)
     print("Traffic overlay, HP/armor bars, routing targets, owner-only relay and revision cleanup passed")
 
@@ -5372,6 +5586,7 @@ def main():
     check_car_service()
     check_ped_services()
     check_vehicle_pursuit()
+    check_gang_weapons(args.disc)
     check_road(args.disc, args.vcs_pc_dir)
     check_road_injuries()
     check_pedestrian_avoidance()

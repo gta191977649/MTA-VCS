@@ -393,8 +393,8 @@ local function roadInteraction(vehicle)
 end
 
 local function yieldDriver(state, player, claimed)
-    if not player and state.pursuit and state.pursuit.phase == "exit" then
-        state.evacuating = {retaliate=true, pursuitExit=true, attacker=state.pursuit.target}
+    if state.pursuit and (state.pursuit.committed or not player and state.pursuit.phase == "exit") then
+        state.evacuating = {retaliate=true, pursuitExit=true, committed=state.pursuit.committed, attacker=state.pursuit.target}
     end
     unregister(state)
     local vehicle, ped = state.vehicle, state.driver
@@ -415,8 +415,10 @@ local function yieldDriver(state, player, claimed)
         if not player and not state.evacuating and getVehicleType(vehicle)=="Bike" then
             detachedBikes[vehicle]={road=state,at=getTickCount()}
         end
-        if not player and state.evacuating and isElement(state.evacuating.attacker) then
-            if state.evacuating.roadRage then
+        if state.evacuating and (not player or state.evacuating.committed) and isElement(state.evacuating.attacker) then
+            if state.evacuating.committed then
+                PedAI.committedRoadRage(ped, state.evacuating.attacker, state)
+            elseif state.evacuating.roadRage then
                 PedAI.roadRage(ped, state.evacuating.attacker, state)
             elseif state.evacuating.retaliate then
                 PedAI.vehicleThreat(ped, state.evacuating.attacker, state.evacuating.pursuitExit and state)
@@ -760,6 +762,7 @@ function TrafficRoad.driverScriptChanged(ped, controlled)
         TrafficWorld.cancelPursuit(state.vehicle)
         releaseRoadControl(state)
         state.rail, state.railTask, state.railMotion = false, nil, nil
+        if state.pursuit and state.pursuit.committed then state.drivingStyle = state.pursuit.cruiseStyle end
         state.scriptPaused, state.pursuit, state.evacuating = true, nil, nil
         state.bodyReceipts, state.losses, state.collisionLossAt, state.lossCollider = nil, nil, nil, nil
         state.crashDecision, state.bodyHits, state.jacker, state.damagePending = nil, nil, nil, nil
@@ -1458,6 +1461,23 @@ local function nextBodyHit(state, now)
     end
 end
 
+function TrafficRoad.startRetaliation(state, player, now)
+    if state.pursuit and state.pursuit.committed then return end
+    if state.rail then switchToPhysics(state) end
+    if vehicles[state.vehicle] ~= state or state.rail then return end
+    local pursuit = TrafficVehiclePursuit.new(player, now)
+    pursuit.committed, pursuit.cruiseStyle = true, state.drivingStyle
+    state.pursuit, state.drivingStyle = pursuit, 2
+    state.crashDecision, state.panicDriving = nil, nil
+    if getPedOccupiedVehicle(player) then
+        assignTask(state, {"driveAtPed", player})
+    else
+        pursuit.phase, pursuit.brakeAt = "brake", now
+        assignTask(state, {"stopVehicle"})
+    end
+    record("committedRoadRage")
+end
+
 -- SLUS_215.90 003EF910. The wanted and gang branches precede the style test.
 local function reactToBodyHit(state, attacker)
     local model = state.originalVehicle
@@ -1467,7 +1487,12 @@ local function reactToBodyHit(state, attacker)
         return
     end
     local profile = PedAI.profile(state.driver)
-    local retaliate = player and profile and profile.pedType >= 7 and profile.pedType <= 15
+    if state.pursuit and state.pursuit.committed then return false end
+    if player and PedAIRules.committedDriver(profile) and not (PedServices and PedServices.hasAssignment(state.driver)) then
+        TrafficRoad.startRetaliation(state, attacker, getTickCount())
+        return true
+    end
+    local retaliate = player and PedAIRules.gangMember(profile)
     local brain = PedAI.brain(state.driver)
     local objective = brain and brain.objectives.current
     if not retaliate then
@@ -1509,6 +1534,7 @@ end
 
 local function resumeCruise(state)
     TrafficWorld.cancelPursuit(state.vehicle)
+    if state.pursuit and state.pursuit.committed then state.drivingStyle = state.pursuit.cruiseStyle end
     state.pursuit = nil
     rejoinRoadAtVehicle(state)
     resetPhysicsSequence(state)
@@ -1552,10 +1578,14 @@ local function updatePursuit(state, owner, now)
         assignTask(state, {"stopVehicle"})
     elseif action == "chase" then
         TrafficWorld.cancelPursuit(state.vehicle)
-        assignTask(state, {"driveAtPed", pursuit.target})
+        if pursuit.committed and not getPedOccupiedVehicle(pursuit.target) then
+            assignTask(state, {"stopVehicle"})
+        else
+            assignTask(state, {"driveAtPed", pursuit.target})
+        end
     elseif action == "exit" then
         TrafficPassengers.requestExit(state.driver, state.vehicle, 0, pursuit.target,
-            pursuit.actor, pursuit.anchorX, pursuit.anchorY, pursuit.anchorZ)
+            pursuit.actor, pursuit.anchorX, pursuit.anchorY, pursuit.anchorZ, pursuit.committed and pursuit.actor == pursuit.target, pursuit.committed)
     end
 end
 
@@ -1946,7 +1976,12 @@ local function decideAfterCrash(state, now)
     end
     if state.lossCollider ~= incident.collider or not state.collisionLossAt or (now - state.collisionLossAt) % 4294967296 > 900 then return end
     state.crashDecision, state.collisionLossAt, state.lossCollider = nil, nil, nil
-    local response = TrafficVehicleCollision.chooseResponse(PedAI.profile(state.driver), math.random())
+    if PedServices and PedServices.hasAssignment(state.driver) then return end
+    local profile = PedAI.profile(state.driver)
+    if PedAIRules.committedDriver(profile) then
+        return TrafficRoad.startRetaliation(state, incident.target, now)
+    end
+    local response = TrafficVehicleCollision.chooseResponse(profile, math.random())
     if response == 1031 then
         -- CTaskComplexRoadRage leaves only the offended driver, then seeks
         -- the driver responsible for the collision.
@@ -1997,8 +2032,10 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked, door
     local state, restored = roadInteraction(source)
     if not state or state.scriptPaused then return end
     if seat == 0 and (jacked == state.driver or getVehicleOccupant(source, 0) == state.driver) then
-        if state.pursuit then TrafficWorld.cancelPursuit(source) end
-        state.pursuit = nil
+        if state.pursuit then
+            TrafficWorld.cancelPursuit(source)
+            if not state.pursuit.committed then state.pursuit = nil end
+        end
         state.jacker, state.jackStarted = player, getTickCount()
         state.jackDoor = door or 0
         state.quickDrag = PedCarjack.quickDrag(source,state.originalVehicle,state.jackDoor)
@@ -2264,7 +2301,12 @@ local function spawn(candidate, ground, player)
     local profile = TrafficPopulation.sample(graph.population,
         candidate.playerX, candidate.playerY, candidate.playerZ, (getTime()))
     local group = profile and graph.population.pedGroups[profile.pedestrianGroupId + 1]
-    local originalDriver = vcsServices and (class==13 and original==204 and TrafficGroundPolice.viceModel() or PedServices.crewModel(original) or PedServices.policeCrewModel(original)) or TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
+    local originalDriver = vcsServices and (class==13 and original==204 and TrafficGroundPolice.viceModel() or PedServices.crewModel(original) or PedServices.policeCrewModel(original))
+    local populationType
+    if vcsServices and not originalDriver then
+        originalDriver, populationType = PedWeapons.gangOccupant(original, graph.population, TrafficAmbient.getPedestrianModel)
+    end
+    originalDriver = originalDriver or TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
         math.random(0, 15), TrafficAmbient.getPedestrianModel, graph.fallbackDriverModelId)
     if not originalDriver then record("modelUnavailable") return end
     local driverModel = TrafficAmbient.getPedestrianModel(originalDriver)
@@ -2292,7 +2334,7 @@ local function spawn(candidate, ground, player)
         return
     end
     TrafficModelBindings.tag(vehicle, original)
-    TrafficModelBindings.tag(driver, originalDriver)
+    TrafficModelBindings.tag(driver, originalDriver, false, populationType)
     if not warpPedIntoVehicle(driver, vehicle, 0) or not HLC:enableHLCForNPC(driver) then
         destroyElement(driver)
         destroyElement(vehicle)
@@ -2324,7 +2366,7 @@ local function spawn(candidate, ground, player)
     end
     sampleRailVelocity(state, x, y, z, getTickCount())
     register(state)
-    PedAI.attach(driver, graph.modelIdSpace ~= "mta" and originalDriver or nil)
+    PedAI.attach(driver, graph.modelIdSpace ~= "mta" and originalDriver or nil, populationType)
     if vcsServices and state.lawEnforcer then
         setTrafficPolicePed(driver,true)
         if level>0 then TrafficGroundPolice.assignVehicle(state,player) end
@@ -2960,7 +3002,15 @@ local function tick()
                 local player = state.jacker
                 state.jacker, state.jackStarted, state.railStall = nil, nil, nil
                 if getVehicleOccupant(vehicle, 0) == state.driver then
-                    if state.rail and state.damagePending then
+                    if state.pursuit and state.pursuit.committed then
+                        local pursuit = state.pursuit
+                        pursuit.phase, pursuit.probeAt = "chase", nil
+                        if targetNearby(state, pursuit.target) then
+                            assignTask(state, getPedOccupiedVehicle(pursuit.target) and {"driveAtPed", pursuit.target} or {"stopVehicle"})
+                        else
+                            resumeCruise(state)
+                        end
+                    elseif state.rail and state.damagePending then
                         switchToPhysics(state)
                     else
                         assignTask(state, state.railTask or state.physicsTask)

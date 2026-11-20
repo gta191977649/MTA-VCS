@@ -194,3 +194,9 @@ The deterministic Lua traffic check exercises changes during an active drive. It
 ## PHI_A3 Barracks riders
 
 A server-side test mission created three original-model-37 BMYCR actors through `createTrafficScriptPed`, provided the Uzi loadout, and mounted them using the PHI_A3 export. The connected player drove the Barracks. All three actors streamed with the same custom BMYCR skin and weapon 28. The client reported each ped attached at the recovered offset, outside the native seats, before accelerator input and at speed 0.185. The driver remained in seat 0. A repeat mount was idempotent, duplicate riders were rejected, and explicit unmount and truck destruction both released all three actors. This fixture exercises the mission export independently of the six-star army patrol. [Truck bed](barracks-mission-bed-riders.jpg) and [client and server measurements](barracks-mission-bed-riders.txt)
+
+## SWAT descent cadence and Police Maverick paint
+
+On 21 November 2026 a four-star rooftop test followed a production SWAT officer in a real MTA client on an isolated loopback server. A low-priority pre-render probe measured height after the traffic controller. Height changed on **287 of 287 consecutive airborne frame intervals**, with a maximum absolute vertical step of **0.094 game units**. Half-second samples reported `ped/abseil` throughout descent. The last airborne sample was 3.06 units above the roof. The first grounded sample was 1.00 unit above it, with collisions released to normal control and the same officer executing `killPed` with weapon 28. [Officer on the rope](swat-frame-descent.jpg)
+
+A separate daylight run read back model 261's primary RGB (157, 152, 114) and secondary RGB (188, 188, 180) on both client and server. The side view shows the khaki fuselage, light upper cowling and VCPD markings. [Police Maverick side view](polmav-ps2-paint.jpg) · [PS2 palette and deployment references](../../police-ai/vehicle-and-special-response.md)

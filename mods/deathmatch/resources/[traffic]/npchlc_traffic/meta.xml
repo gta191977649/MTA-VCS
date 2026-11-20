@@ -40,6 +40,7 @@
 	<script src="traffic_debug_c.lua" type="client" />
 	<script src="ped_ai_profiles.lua" type="shared" />
 	<script src="ped_ai_rules.lua" type="server" />
+	<script src="ped_weapons.lua" type="server" />
 	<script src="ped_voice/catalog.lua" type="server" />
 	<script src="ped_voice.lua" type="server" />
 	<script src="ped_voice_c.lua" type="client" />

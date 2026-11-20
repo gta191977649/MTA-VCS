@@ -12,8 +12,18 @@ local function speedSquared(x, y, z)
 end
 
 function TrafficVehicleCollision.chooseResponse(profile, roll)
+    if PedAIRules.committedDriver(profile) then return 729 end
     local choices = profile and TrafficCrashDecisions[profile.name]
     if not choices then return 200 end
+    if PedAIRules.civilianDriver(profile) then
+        -- Preserve the personality's original relative weights for continuing and driving away.
+        local continueWeight, fleeWeight = 0, 0
+        for _, item in ipairs(choices) do
+            if item[1] == 200 then continueWeight = item[2] end
+            if item[1] == 726 then fleeWeight = item[2] end
+        end
+        return fleeWeight > 0 and roll * (continueWeight + fleeWeight) >= continueWeight and 726 or 200
+    end
     local total = 0
     for _, item in ipairs(choices) do total = total + item[2] end
     local selection = roll * total

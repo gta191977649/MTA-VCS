@@ -13,6 +13,14 @@ local function describe(ped,brain)
         return "gunpoint",brain.wait==0x11 and "handsup" or "handscower"
     end
     local event = brain and (brain.objectives.current or brain.event)
+    if event and event.kind=="roadRage" then
+        local native
+        if event.extractId then
+            native="pending"
+            if event.extractOwner==getElementSyncer(ped) then native=event.extractStatus or native end
+        end
+        return "Road rage",event.maneuver,native
+    end
     if event and event.intent=="flee" and event.probe and not event.task then
         return "flee","Awaiting route"
     end
@@ -50,16 +58,16 @@ addEventHandler("npchlc_traffic:npcDebugWatch",resourceRoot,function(generation,
             local brain=PedAI.brain(ped)
             if brain or getElementParent(ped)==getResourceDynamicElementRoot(getThisResource()) then
                 local task,revision,owner,fallback,taskStyle=hlc:getNPCDebugAssignment(ped)
-                local kind,phase=describe(ped,brain)
+                local kind,phase,native=describe(ped,brain)
                 local style,vehicle=driving(ped,taskStyle)
-                local profile=brain and brain.profile or PedAIRules.profile(getElementData(ped,"npchlc_traffic:originalModel",false))
+                local profile=brain and brain.profile or PedAI.profile(ped) or PedAIRules.profile()
                 local group=PedAITypes[profile.pedType]
                 local entry={ped,revision or 0}
                 watch[ped]=entry
                 rows[#rows+1]={ped,revision or 0,profile.temper,profile.fear,kind or "idle",
                     type(phase)=="string" and phase or false,task or false,owner or false,
                     getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100,fallback or false,style,vehicle,
-                    group and group.name or "UNKNOWN"}
+                    group and group.name or "UNKNOWN",native or false}
                 if owner and owner~=client then
                     owners[owner]=owners[owner] or {}
                     table.insert(owners[owner],entry)

@@ -132,7 +132,7 @@ function TrafficWorld.cancelPursuit(car)
     for _, slots in pairs(requests) do slots[car] = nil end
 end
 
-function TrafficWorld.pursuitExit(owner, car, target, phase)
+function TrafficWorld.pursuitExit(owner, car, target, phase, onFoot, committed)
     if not isElement(owner) or not isElement(car) or getElementSyncer(car) ~= owner
         or not isElement(target) or getElementDimension(car) ~= getElementDimension(target)
         or getElementInterior(car) ~= getElementInterior(target) then return false end
@@ -140,8 +140,8 @@ function TrafficWorld.pursuitExit(owner, car, target, phase)
     local x, y, z = getElementPosition(car)
     local tx, ty, tz = getElementPosition(actor)
     local key = phase .. "/" .. tostring(target)
-    local snapshot = {car = car, actor = actor, target = target, x = x, y = y, z = z, tx = tx, ty = ty, tz = tz}
-    return query(owner, "pursuitExit", car, key, snapshot, car, target)
+    local snapshot = {car = car, actor = actor, target = target, onFoot = onFoot, x = x, y = y, z = z, tx = tx, ty = ty, tz = tz}
+    return query(owner, "pursuitExit", car, key, snapshot, car, target, onFoot or false, committed or false)
 end
 
 addEvent("npchlc_traffic:worldProbeResult", true)
@@ -191,7 +191,7 @@ addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, re
         local x, y, z = getElementPosition(p.car)
         local tx, ty, tz = getElementPosition(p.actor)
         pending.result = (x-p.x)^2 + (y-p.y)^2 + (z-p.z)^2 <= 2^2
-            and (tx-p.tx)^2 + (ty-p.ty)^2 + (tz-p.tz)^2 <= 1
+            and (p.onFoot or (tx-p.tx)^2 + (ty-p.ty)^2 + (tz-p.tz)^2 <= 1)
     elseif pending.kind == "reach" and type(result) == "table" and #result <= 15 then
         local reachable = {}
         for _, nodeId in ipairs(result) do

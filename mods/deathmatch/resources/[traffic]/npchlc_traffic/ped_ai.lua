@@ -27,13 +27,19 @@ local function distance(a, b)
     return getDistanceBetweenPoints3D(x, y, z, tx, ty, tz)
 end
 
-function PedAI.attach(ped, model)
+function PedAI.attach(ped, model, populationType)
     if not brains[ped] then
+        if TrafficModelBindings then model = TrafficModelBindings.pedProfileModel(ped) or model end
         poolSerial = poolSerial + 1
-        brains[ped] = setmetatable({ped = ped, poolSlot = poolSerial, profile = rules.profile(model), tasks = PedTaskManager.new(ped),
+        brains[ped] = setmetatable({ped = ped, poolSlot = poolSerial, profile = rules.profile(model, populationType), tasks = PedTaskManager.new(ped),
             objectives = PedObjectives.new(), losses = {}, reports = {}, receipts = {},
             health = getElementHealth(ped), sampled = getTickCount(), reactionDelay = math.random(250, 999)}, Intelligence)
-        if PedServices and brains[ped].profile.pedType==6 then PedServices.initializeOfficer(ped,model) end
+        local brain = brains[ped]
+        if rules.gangMember(brain.profile) then
+            brain.tasks.originalWeapon, brain.tasks.hostWeapon = PedWeapons.equipGang(ped, brain.profile)
+        elseif PedServices and brain.profile.pedType == 6 then
+            PedServices.initializeOfficer(ped, model)
+        end
     end
     return brains[ped]
 end
@@ -45,7 +51,11 @@ function PedAI.isScriptControlled(ped)
 end
 
 function PedAI.profile(ped)
-    return brains[ped] and brains[ped].profile
+    if brains[ped] then return brains[ped].profile end
+    if TrafficModelBindings and isElement(ped) and getElementType(ped) == "ped" then
+        local original = TrafficModelBindings.pedProfileModel(ped)
+        if original then return rules.profile(original) end
+    end
 end
 
 function PedAI.setLeader(ped, leader)
@@ -89,7 +99,7 @@ addEventHandler("onPlayerDamage",root,function(attacker,weapon)
     local x,y,z = getElementPosition(source)
     for _,ped in ipairs(getElementsWithinRange(x,y,z,30,"ped",getElementInterior(source),getElementDimension(source)) or {}) do
         local brain = brains[ped]
-        if brain and brain.leader == source and brain.profile.temper > brain.profile.fear then
+        if brain and brain.leader == source and rules.defendsLeader(brain.profile, profile) then
             brain:react("ally",attacker,weapon or 0,"fight","run",30000)
         end
     end
@@ -98,6 +108,7 @@ end)
 function PedAI.detach(ped)
     if PedVehicleEvasion then PedVehicleEvasion.cancel(ped) end
     if PedSpecial then PedSpecial.cancel(ped) end
+    if brains[ped] then PedCarjack.cancelExtraction(ped, brains[ped].event) end
     brains[ped] = nil
 end
 
@@ -113,6 +124,10 @@ function Intelligence:react(kind, attacker, weapon, intent, pace, duration)
         or self.ped == attacker or isPedDead(attacker) then return false end
     local now = getTickCount()
     local old = self.event
+    if old and old.committed then
+        if old.target == attacker and (kind == "damage" or kind == "roadRage") then old.lastSeen = now end
+        return false
+    end
     if old and priorities[kind] < priorities[old.kind] then return false end
     intent = intent or rules.intent(kind, self.profile, PedAI.profile(attacker) or playerProfile,
         rules.ranged(weapon), self.tasks:hasRangedWeapon())
@@ -233,19 +248,17 @@ function PedAI.vehicleThreat(ped, attacker, road)
     end
 end
 
+function PedAI.committedRoadRage(ped, attacker, road)
+    local brain = brains[ped]
+    if not brain or not brain:react("roadRage", attacker, 0, "fight", "run", 20000) then return end
+    brain.event.originalRoad, brain.event.committed = road, true
+    setPedWeaponSlot(ped, 0)
+end
+
 function PedAI.roadRage(ped, attacker, road)
     local brain = brains[ped]
     if not brain or not brain:react("roadRage", attacker, 0, "fight", "run", 20000) then return end
     brain.event.originalRoad = road
-    -- CTaskComplexRoadRage::CreateFirstSubTask equips the offended driver.
-    if getPedWeapon(ped) == 0 then
-        if brain.profile.pedType >= 7 and brain.profile.pedType <= 15 then
-            giveWeapon(ped, 22, 2000, true)
-        elseif math.random(0, 1) == 1 then
-            local melee = {5, 2, 6}
-            giveWeapon(ped, melee[math.random(#melee)], 1, true)
-        end
-    end
 end
 
 local function prune(queue, now)
@@ -412,6 +425,7 @@ local function finish(brain)
 end
 
 local function returnToCar(brain, now, road)
+    PedCarjack.cancelExtraction(brain.ped, brain.event)
     road = road or brain.event and brain.event.originalRoad
     if not road or not sameWorld(brain.ped, road.vehicle) or isVehicleBlown(road.vehicle)
         or isPedDead(brain.ped) or getVehicleOccupant(road.vehicle, 0) then return finish(brain) end
@@ -459,8 +473,21 @@ function PedAI.update(ped, graph)
     local pointFlight = event.intent == "flee" and event.origin and (not event.road or event.resolved)
     if isPedDead(ped) or not pointFlight and (not sameWorld(ped, event.target) or isPedDead(event.target)) then return returnToCar(brain, now) end
     if isPedInVehicle(ped) then
-        if leavingVehicle(event.kind) and elapsed(now, event.started) < 2500 then return true end
-        return finish(brain)
+        if event.committed then
+            local car, seat = getPedOccupiedVehicle(ped), getPedOccupiedVehicleSeat(ped)
+            if car and seat and getVehicleOccupant(car, seat) == ped then
+                if not event.leaveAt or elapsed(now, event.leaveAt) >= 1600 then
+                    event.leaveAt = now
+                    TrafficPassengers.requestExit(ped, car, seat)
+                end
+                return true
+            end
+            -- MTA also reports an entering ped in-vehicle on the server.
+            -- Continue validating the driver and syncer during the pull-out.
+        else
+            if leavingVehicle(event.kind) and elapsed(now, event.started) < 2500 then return true end
+            return finish(brain)
+        end
     end
     local separation = not pointFlight and distance(ped, event.target) or 0
     local duration = event.duration or (event.kind == "witness" and 10000 or event.kind == "ally" and 30000 or 20000)

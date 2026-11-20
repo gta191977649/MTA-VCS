@@ -71,6 +71,7 @@ def main():
         now,barks,clears,clocks=0,0,0,0
         source,client=resourceRoot,other
     """)
+    lua.execute((RESOURCE / "ped_ai_rules.lua").read_text())
     lua.execute((RESOURCE / "ped_evasion_s.lua").read_text())
     lua.execute("""
         local issue = handlers["npchlc_traffic:evadeCar"]

@@ -28,7 +28,7 @@ local function hasWheelContact(vehicle)
     return false
 end
 
-function canTrafficPursuerExit(car, target)
+function canTrafficPursuerExit(car, target, onFoot, committed)
     if not isElement(car) or not isElement(target) or not isElementStreamedIn(car)
         or not isElementStreamedIn(target) or isElementInWater(car) or isElementInWater(target)
         or not hasWheelContact(car) then return false end
@@ -42,10 +42,25 @@ function canTrafficPursuerExit(car, target)
     local side, along = xmin - 0.7, (ymax-ymin)*0.1
     local sx, sy = cx + side*m[1][1]+along*m[2][1], cy + side*m[1][2]+along*m[2][2]
     local tx, ty, tz = getElementPosition(actor)
-    if (cx-tx)^2 + (cy-ty)^2 + (cz-tz)^2 > 10^2 or math.abs(cz-tz) > 2 then return false end
+    local exitDistance = committed and 14 or 10
+    if not onFoot and ((cx-tx)^2 + (cy-ty)^2 + (cz-tz)^2 > exitDistance^2 or math.abs(cz-tz) > 2) then return false end
     local ground = floorAt(sx, sy, cz)
     if not ground or not isLineOfSightClear(cx,cy,cz+0.3,sx,sy,ground+0.8,true,true,false,true,false,false,false,car) then
         return false
+    end
+    if onFoot then return actor == target end
+    if committed and actor ~= target then
+        -- GTA walks around both cars during its native door approach. Probe
+        -- the standing space at the target door as well as the driver's exit.
+        local v = getElementMatrix(actor)
+        local left, rear, _, _, front = getElementBoundingBox(actor)
+        if not v or not left or v[3][3] < 0.8 then return false end
+        local along = (front-rear)*0.1
+        local x = tx + (left-0.7)*v[1][1] + along*v[2][1]
+        local y = ty + (left-0.7)*v[1][2] + along*v[2][2]
+        local doorFloor = floorAt(x, y, tz)
+        return doorFloor and math.abs(ground-doorFloor) <= 2
+            and isLineOfSightClear(tx, ty, tz+0.35, x, y, doorFloor+0.85, true,true,false,true,false,false,false,actor) or false
     end
     if actor ~= target then
         -- Stop outside the occupied vehicle, on the side facing the pursuer.

@@ -115,6 +115,9 @@ local function bar(x,y,value,maximum,color,colors)
 end
 
 local function syncStatus(row,sample)
+    if row[14]=="active" then return "Sync: native executor",true end
+    if row[14]=="blocked" then return "Sync: waiting for server retry",false end
+    if row[14]=="pending" then return "Sync: waiting for executor",false end
     if row[5]=="dead" or not row[7] then return "Sync: idle",true end
     if sample then
         if sample[9] then return "Sync: waiting for server",false end
@@ -168,6 +171,7 @@ function TrafficNPCDebug.draw()
                 elseif details[ped] and (getTickCount()-details[ped][2])%4294967296<650 then sample=details[ped][1] end
                 local task=sample and sample[1] or row[7]
                 local phase=sample and sample[2] or row[6]
+                if row[5]=="Road rage" and row[6] then phase=row[6] end
                 local caption=row[5]
                 if task then caption=caption.." > "..task end
                 if phase then caption=caption.." > "..phase end

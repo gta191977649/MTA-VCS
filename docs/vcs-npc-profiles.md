@@ -2,6 +2,8 @@
 
 The US PS2 model record has class byte 7 for peds, ped type at +34h and personality ID at +38h. The 42 personality records below come from the pointer table at offset 4CC250h of the **decompressed** GAME.DTZ. Both tables list the complete set of matching original model IDs in decimal. A dash indicates a record with no associated model in this model table. Use the VCS model ID before conversion to an MTA skin.
 
+The traffic resource loads the converted PEDSTATS data on both the client and the server. Use `PedAIModels[originalModel]` to obtain the ped type and stat ID, then `PedAIStats[statId]` to read the profile. Its named fields are `name`, `fleeDistance`, `headingChangeRate` in degrees, `attackStrength`, `damageScale`, `fear`, `temper`, `law`, `social` and `flags`. The four floats start at offsets +04h, +08h, +0Ch and +10h. The USA disc supplies the values through root slot 1Bh in GAME.DTZ. The PC conversion's PEDSTATS column headings identify heading change rate, attack strength and the received-damage multiplier. [Shared Lua table](../mods/deathmatch/resources/%5Btraffic%5D/npchlc_traffic/ped_ai_profiles.lua) and [disc importer](../tools/ped_ai_profiles.py).
+
 ## Personality by situation
 
 F, T and L are fear (+16h), temper (+17h) and lawfulness (+18h). D is the float at +04h named fleeDistance by the importer. +19h is a signed value compared between actors in one social interaction. The carjack column tests only T > F. The civilian gunshot column takes the first satisfied test in order: F > L, then T > F, otherwise Other. Use that column only after confirming the listener's role and event path. Evasion shows flag 10h, which can select a step instead of a dive for a near miss or a hands-up response in the ordinary vehicle dive path. Flag 80h also matters when [held at gunpoint](vcs-npc-special.md).
@@ -61,7 +63,9 @@ F, T and L are fear (+16h), temper (+17h) and lawfulness (+18h). D is the float 
 
 The float at +08h is read at 001F6B3C and 00210774. At 001D97C4 and 001D97DC a collision branch compares the two actors' +10h values. It takes the same side if the second value is ≤ 1.5 or the first is ≤ the second. The behavioral meaning of +0Ch remains unresolved.
 
-The table lists disc defaults. 00237FF8 writes through the actor's personality pointer. It increments temper at values ≤ 51. Above 51 a zero second argument preserves the value; a nonzero argument increments 52–54 and resets values ≥ 55 to 46. Check the caller and whether the record is shared before modeling this as an individual actor's change.
+The table lists disc defaults. During model setup, `0x001EED4C` passes model+38h to the stat setter. At `0x001EEE6C` the setter assigns the selected shared record pointer to ped+554h. A visual skin override, seat change or change of duty preserves the port actor's profile. In the PS2 program a separate script handler at `0x004152FC` can select a stat ID explicitly. Objective 32h at `0x003BFBE8` selects stat 12h, TOUGH_GUY. Its vehicle-state producer at `0x001F8C70` checks the boat class, a matching local-player vehicle reference and the actor's creation flags.
+
+The PS2 writer `0x00237FF8` increments temper through the profile pointer at values up to 51. Above 51 it preserves the value for a zero second argument. A nonzero argument increments values 52–54 and resets values of 55 or more to 46. All four direct callers in this executable pass zero. The damage caller at `0x001D7AF0` passes the active player. The two contact callers at `0x001F6324` and `0x001F64BC` and the vehicle scan at `0x004347E4` require the affected ped to pass `0x0020C310`, which tests ped type 0 (PLAYER1). Ordinary traffic spawns read their source PEDSTATS temper. For example, models 34 and 48 can share one host skin and retain temper 30 and 70 respectively.
 
 ## Initial type masks
 

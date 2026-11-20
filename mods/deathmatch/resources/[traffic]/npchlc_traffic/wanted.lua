@@ -181,6 +181,8 @@ local function atDriverDoor(officer,car)
         and math.abs(longitudinal-along)<1.15 and math.abs(z-cz)<1.8
 end
 
+TrafficWanted.atDriverDoor = atDriverDoor
+
 local serial=0
 local function clearDoor(car,attempt)
     if openingDoors[car]~=attempt then return end
