@@ -1,5 +1,4 @@
 PATH_VEHICLE_IDE = "data/vehicles.ide"
-PATH_HANDING_CFG = "data/handing.dat"
 PATH_PREFIX_VEHICLE = "src/vehicle/"
 VEHICLE_TABLE = ""
 VEHICLE_META = ""
@@ -53,9 +52,9 @@ function loadModels()
   
     if(fileExists(PATH_VEHICLE_IDE)) then 
         print("Start load vehicle handing...")
-        local f = fileOpen(PATH_HANDING_CFG)
-        local l = fileRead(f,fileGetSize(f))
-        VEHICLE_HANDING_TABLE = readHandingSection(l)
+        local handling = exports.vcs_vehicle:getVcsHandlingData()
+        if not handling then return end
+        VEHICLE_HANDING_TABLE = readHandingSection(handling)
 
         print("Start load vehicle ide...")
 

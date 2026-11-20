@@ -54,12 +54,12 @@ local function hits(box, a, b)
     end
 end
 
-function findNPCTrafficVehicleInPath(npc, x, y, z, dx, dy, distance)
+function findNPCTrafficVehicleInPath(npc, x, y, z, dx, dy, distance, target)
     local lookahead = math.min(distance, 3.6)
     local nearby = getElementsWithinRange(x, y, z, 9, "vehicle", getElementInterior(npc), getElementDimension(npc)) or {}
     local nearest, closest, nearestBox
     for _, vehicle in ipairs(nearby) do
-        if isElementStreamedIn(vehicle) then
+        if vehicle ~= target and isElementStreamedIn(vehicle) then
             local box = bounds(vehicle, z)
             if box then
                 local start = pointInVehicleSpace(box, x, y)
@@ -79,7 +79,7 @@ local function distance(a, b)
 end
 
 function planNPCTrafficWalkRoundCar(vehicle, box, x, y, dx, dy, remaining, now, canWalk)
-    if vehicleMoves(vehicle, box.x, box.y, now) then return end
+    if vehicleMoves(vehicle, box.x, box.y, now) then return nil, true end
     local start = pointInVehicleSpace(box, x, y)
     local supportX = math.abs(dx * box.fy - dy * box.fx) * math.max(-box.minX, box.maxX)
     local supportY = math.abs(dx * box.fx + dy * box.fy) * math.max(-box.minY, box.maxY)

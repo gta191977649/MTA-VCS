@@ -1,4 +1,4 @@
-TrafficWantedRules = {}
+WantedRules = {}
 
 -- SLUS_215.90 0x003AA918, 0x003AAB80 and the initial globals at 0x00489EE8.
 local threshold = {[0] = 0, 40, 180, 550, 1200, 2400, 4800}
@@ -15,27 +15,27 @@ local response = {
     {2, 1, 0}, {3, 2, 0}, {4, 3, 12}, {6, 3, 18}, {8, 4, 24}, {10, 4, 30},
 }
 
-function TrafficWantedRules.forLevel(level)
+function WantedRules.forLevel(level)
     return scriptedPoints[level]
 end
 
-function TrafficWantedRules.levelForPoints(points)
+function WantedRules.levelForPoints(points)
     for level = 6, 1, -1 do
         if points >= threshold[level] then return level end
     end
     return 0
 end
 
-function TrafficWantedRules.isCrimeType(crimeType)
+function WantedRules.isCrimeType(crimeType)
     return type(crimeType) == "number" and crimePoints[crimeType] ~= nil
 end
 
-function TrafficWantedRules.addCrime(points, parolePoints, crimeType, reduced)
-    local amount = crimePoints[crimeType] * (reduced and 0.333 or 1)
+function WantedRules.addCrime(points, parolePoints, crimeType, reduced, multiplier)
+    local amount = crimePoints[crimeType] * (multiplier or 1) * (reduced and 0.333 or 1)
     return math.min(maximumPoints, math.max(parolePoints, math.floor(points + amount)))
 end
 
-function TrafficWantedRules.getPoliceResponse(level)
+function WantedRules.getPoliceResponse(level)
     local counts = response[level]
     if not counts then return false end
     return {

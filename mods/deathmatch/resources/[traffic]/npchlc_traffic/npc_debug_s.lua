@@ -23,6 +23,17 @@ local function describe(ped,brain)
     return TrafficAmbient.debugTask(ped)
 end
 
+local function driving(ped,taskStyle)
+    local vehicle=getPedOccupiedVehicle(ped)
+    if vehicle and getVehicleOccupant(vehicle,0)==ped then
+        local style=taskStyle
+        if style==nil then style=TrafficRoad.driverStyle(ped)
+        elseif getVehicleType(vehicle)=="Boat" then return false,false end
+        if style~=nil then return style,vehicle end
+    end
+    return false,false
+end
+
 addEvent("npchlc_traffic:npcDebugWatch",true)
 addEventHandler("npchlc_traffic:npcDebugWatch",resourceRoot,function(generation,peds)
     if not client or type(generation)~="number" then return end
@@ -38,14 +49,17 @@ addEventHandler("npchlc_traffic:npcDebugWatch",resourceRoot,function(generation,
         if nearby(ped,client) and not watch[ped] then
             local brain=PedAI.brain(ped)
             if brain or getElementParent(ped)==getResourceDynamicElementRoot(getThisResource()) then
-                local task,revision,owner,fallback=hlc:getNPCDebugAssignment(ped)
+                local task,revision,owner,fallback,taskStyle=hlc:getNPCDebugAssignment(ped)
                 local kind,phase=describe(ped,brain)
+                local style,vehicle=driving(ped,taskStyle)
                 local profile=brain and brain.profile or PedAIRules.profile(getElementData(ped,"npchlc_traffic:originalModel",false))
+                local group=PedAITypes[profile.pedType]
                 local entry={ped,revision or 0}
                 watch[ped]=entry
                 rows[#rows+1]={ped,revision or 0,profile.temper,profile.fear,kind or "idle",
                     type(phase)=="string" and phase or false,task or false,owner or false,
-                    getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100,fallback or false}
+                    getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100,fallback or false,style,vehicle,
+                    group and group.name or "UNKNOWN"}
                 if owner and owner~=client then
                     owners[owner]=owners[owner] or {}
                     table.insert(owners[owner],entry)
@@ -62,6 +76,7 @@ end,false)
 local function validDetail(detail)
     if type(detail)~="table" or type(detail[1])~="string" or #detail[1]>60 then return false end
     if detail[2]~=false and (type(detail[2])~="string" or #detail[2]>64) then return false end
+    if detail[9]~=nil and type(detail[9])~="boolean" then return false end
     for i=3,8 do
         local n=detail[i]
         if n~=false and (type(n)~="number" or not (math.abs(n)<100000)) then return false end
@@ -82,20 +97,21 @@ addEventHandler("npchlc_traffic:npcDebugReport",resourceRoot,function(viewer,gen
             if owner==client and revision==row[2] and (row[3]==false or validDetail(row[3])) then
                 entry.sent=true
                 local detail=row[3]
-                accepted[#accepted+1]={row[1],revision,detail and {unpack(detail,1,8)} or false}
+                accepted[#accepted+1]={row[1],revision,detail and {unpack(detail,1,9)} or false}
             end
         end
     end
     if #accepted>0 then triggerClientEvent(viewer,"npchlc_traffic:npcDebugDetails",resourceRoot,generation,accepted) end
 end,false)
 
-addEventHandler("npc_hlc:debugAssignmentChanged",root,function(revision,task,owner)
+addEventHandler("npc_hlc:debugAssignmentChanged",root,function(revision,task,owner,taskStyle)
     for viewer,sub in pairs(viewers) do
         if (getTickCount()-requestTime[viewer])%4294967296>1500 then
             viewers[viewer]=nil
         elseif sub.watch[source] and nearby(source,viewer) then
             sub.watch[source]={source,revision}
-            triggerClientEvent(viewer,"npchlc_traffic:npcDebugRevision",resourceRoot,sub.generation,source,revision,task,owner)
+            local style,vehicle=driving(source,taskStyle)
+            triggerClientEvent(viewer,"npchlc_traffic:npcDebugRevision",resourceRoot,sub.generation,source,revision,task,owner,style,vehicle)
         end
     end
 end)

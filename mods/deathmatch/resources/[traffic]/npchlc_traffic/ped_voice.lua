@@ -2,6 +2,8 @@ PedVoice = {}
 
 -- SLUS_215.90 0x00485AA8, rows indexed by speech event minus 0x66.
 local rules = {
+    pursuitGroup = {id=0x86, delay=5000, jitter=1000, repeatDelay=6000, repeatJitter=2000, global=2300},
+    pursuitReply = {id=0x87, delay=4000, jitter=2000, repeatDelay=7000, repeatJitter=2000, global=3500},
     mugVictim = {id=0x7B, delay=800, jitter=400, repeatDelay=2000, repeatJitter=1000, global=3200},
     mugger = {id=0x79, delay=800, jitter=200, repeatDelay=1000, repeatJitter=500, global=2200},
     serviceOffer = {id=0x93, delay=2500, jitter=1000, repeatDelay=5000, repeatJitter=5000, global=3000},

@@ -83,7 +83,9 @@ addEventHandler("bombshop:detonate", resourceRoot, function()
     end
     for _, vehicle in ipairs(targets) do
         removeBomb(vehicle)
-        blowVehicle(vehicle)
+        if blowVehicle(vehicle) then
+            exports.wanted:reportWantedEvent(client, 13, vehicle)
+        end
     end
 end, false)
 

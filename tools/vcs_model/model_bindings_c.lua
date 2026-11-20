@@ -3,11 +3,12 @@ local provider = getResourceName(getThisResource())
 local MODEL_KEY = "npchlc_traffic:originalModel"
 local models = VCS_TRAFFIC_MODEL_CATALOG
 local archives = {}
-local vehicleBindings = setmetatable({}, {__mode = "k"})
+local vehicleBindings = {}
 local lampShaders = {}
-local lampBindings = setmetatable({}, {__mode = "k"})
+local lampBindings = {}
 local replacedVehicleModels = {}
 local vehicleRenderMaterials = {}
+local policeVehicles = {[191]=true, [193]=true, [204]=true, [207]=true, [234]=true, [268]=true}
 local lampTextures = {
     vehiclelights128 = "vehiclelights128.png",
     vehiclelightson128 = "vehiclelightson128.png",
@@ -124,6 +125,7 @@ local function loadModel(model)
         local materials = {}
         for name in modelData:gmatch("(vcsenv_%d+_[%w_]+)%z") do materials[name] = true end
         for name in modelData:gmatch("(vcsglass_[%x]+)%z") do materials[name] = true end
+        for name in modelData:gmatch("(vcssiren_%l+)%z") do materials[name] = true end
         vehicleRenderMaterials[id] = materials
         for _, vehicle in ipairs(getElementsByType("vehicle", root, true)) do
             if getElementModel(vehicle) == id then bindVehicleLamps(vehicle, true) end
@@ -135,10 +137,10 @@ end
 local function applyModel(element)
     local kind = getElementType(element)
     if not archives[kind] then return end
-    if kind == "vehicle" and getElementData(element, "mod.model", false) then return end
     local selectedProvider = getElementData(element, PROVIDER_KEY, false)
     local originalId = getElementData(element, MODEL_KEY, false)
     local standalone = kind == "vehicle" and getElementData(element, "vcs_vehicle:originalModel", false)
+    if kind == "vehicle" and getElementData(element, "mod.model", false) and not policeVehicles[standalone] then return end
     if selectedProvider ~= provider and (selectedProvider or not standalone) then return end
     local model = models[standalone or originalId]
     if standalone then
@@ -148,7 +150,7 @@ local function applyModel(element)
     if not model or model.kind ~= kind or model.failed then return end
     if not model.id and not loadModel(model) then
         model.failed = true
-            outputDebugString("[vcs_model] Could not load " .. model.name .. " from " .. kind .. ".img.", 1)
+        outputDebugString("[vcs_model] Could not load " .. model.name .. " from " .. kind .. ".img.", 1)
         return
     end
     if getElementModel(element) ~= model.id and not setElementModel(element, model.id) then return end
@@ -167,7 +169,9 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
     for _, kind in ipairs({"ped", "vehicle"}) do
         local image = engineLoadIMG(kind .. ".img")
         local files = image and engineImageGetFiles(image)
-        if type(files) == "table" and engineAddImage(image) then
+        -- Read entries directly with engineImageGetFile. Installing these
+        -- archives into GTA streaming also retains native file handles.
+        if type(files) == "table" then
             local indices = {}
             for index, name in ipairs(files) do indices[name:lower()] = index - 1 end
             local archive = {image = image, indices = indices}
@@ -176,13 +180,14 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
                 archive.shared = data and engineLoadTXD(data)
             end
             if kind == "vehicle" and not archive.shared then
-                engineRemoveImage(image)
+                destroyElement(image)
                 outputDebugString("[vcs_model] Could not load vehshare.txd from vehicle.img.", 1)
             else
                 archives[kind] = archive
                 for _, element in ipairs(getElementsByType(kind, root, true)) do applyModel(element) end
             end
         else
+            if image then destroyElement(image) end
             outputDebugString("[vcs_model] Could not mount " .. kind .. ".img.", 1)
         end
     end
@@ -194,6 +199,9 @@ addEventHandler("onClientElementStreamIn", root, function()
 end)
 addEventHandler("onClientElementStreamOut", root, function()
     bindVehicleLamps(source, false)
+end)
+addEventHandler("onClientElementDestroy", root, function()
+    vehicleBindings[source], lampBindings[source] = nil, nil
 end)
 addEventHandler("onClientElementModelChange", root, function()
     if isElementStreamedIn(source) then updateVehicleLamps(source) end
@@ -228,5 +236,5 @@ addEventHandler("onClientResourceStop", resourceRoot, function()
             else engineRestoreModel(model.id) end
         end
     end
-    for _, archive in pairs(archives) do engineRemoveImage(archive.image) end
+    for _, archive in pairs(archives) do destroyElement(archive.image) end
 end, false)

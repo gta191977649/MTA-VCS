@@ -1,0 +1,40 @@
+[2026-11-21 00:46:42] ROPEBREAK ready
+[2026-11-21 00:46:43] ROPEBREAK loss started
+[2026-11-21 00:47:06] ROPEBREAK loss observed rope model 9 z 62.57
+[2026-11-21 00:47:08] ROPEBREAK loss interrupted z 57.61 synchronous ped true
+[2026-11-21 00:47:08] ROPEBREAK loss elapsed 12 clientExists true serverExists true attached true z 57.61 frozen true HLC false task false aim false fire false wanted 4
+[2026-11-21 00:47:08] ROPEBREAK swat-loss-before-side ok
+[2026-11-21 00:47:08] ROPEBREAK loss elapsed 419 clientExists true serverExists true attached false z 56.57 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:09] ROPEBREAK loss elapsed 832 clientExists true serverExists true attached false z 52.36 frozen false HLC true task killPed aim true fire true wanted 4
+[2026-11-21 00:47:09] ROPEBREAK loss elapsed 1234 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:09] ROPEBREAK loss elapsed 1640 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim false fire false wanted 4
+[2026-11-21 00:47:09] ROPEBREAK swat-loss-after-side ok
+[2026-11-21 00:47:10] ROPEBREAK loss elapsed 2059 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire true wanted 4
+[2026-11-21 00:47:10] ROPEBREAK loss elapsed 2452 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire true wanted 4
+[2026-11-21 00:47:11] ROPEBREAK loss elapsed 2846 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire true wanted 4
+[2026-11-21 00:47:11] ROPEBREAK loss elapsed 3256 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:11] ROPEBREAK loss elapsed 3675 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:12] ROPEBREAK loss elapsed 4085 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:12] ROPEBREAK loss elapsed 4490 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire false wanted 4
+[2026-11-21 00:47:13] ROPEBREAK loss elapsed 4893 clientExists true serverExists true attached false z 48.00 frozen false HLC true task killPed aim true fire true wanted 4
+[2026-11-21 00:47:13] ROPEBREAK loss result true before ok after ok
+[2026-11-21 00:47:25] ROPEBREAK clear started
+[2026-11-21 00:48:09] ROPEBREAK clear observed rope model 9 z 93.95
+[2026-11-21 00:48:10] ROPEBREAK swat-clear-before-side ok
+[2026-11-21 00:48:11] ROPEBREAK clear interrupted z 81.98 synchronous ped false
+[2026-11-21 00:48:11] ROPEBREAK clear elapsed 1 clientExists true serverExists false attached true z 81.98 frozen true HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:11] ROPEBREAK clear elapsed 409 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:12] ROPEBREAK swat-clear-after-side ok
+[2026-11-21 00:48:12] ROPEBREAK clear elapsed 804 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:12] ROPEBREAK clear elapsed 1205 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:13] ROPEBREAK clear elapsed 1655 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:13] ROPEBREAK clear elapsed 2028 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:13] ROPEBREAK clear elapsed 2428 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:14] ROPEBREAK clear elapsed 2833 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:14] ROPEBREAK clear elapsed 3255 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:15] ROPEBREAK clear elapsed 3647 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:15] ROPEBREAK clear elapsed 4065 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:15] ROPEBREAK clear elapsed 4473 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:16] ROPEBREAK clear elapsed 4869 clientExists false serverExists false attached false z 48.00 frozen false HLC false task false aim false fire false wanted 0
+[2026-11-21 00:48:16] ROPEBREAK clear result true before ok after ok
+[2026-11-21 00:48:16] ROPEBREAK DONE

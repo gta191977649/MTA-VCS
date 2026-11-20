@@ -27,6 +27,18 @@ function Hud.owner()
     return getResourceName(sourceResource or getThisResource())
 end
 
+-- Immediate screen-space captions for opt-in debug overlays. The caller
+-- submits one frame's projected positions, with no persistent HUD slots.
+function drawDebugLabels(labels)
+    for _, label in ipairs(labels) do
+        local text, x, y, color, align, scale, shadow = unpack(label)
+        if shadow then
+            dxDrawText(text, x+1, y+1, x+1, y+16, shadow, scale, "default-bold", align)
+        end
+        dxDrawText(text, x, y, x, y+15, color, scale, "default-bold", align)
+    end
+end
+
 function Hud.number(value, fallback)
     value = tonumber(value)
     if value and value > -math.huge and value < math.huge then return value end

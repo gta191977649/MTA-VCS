@@ -98,6 +98,7 @@ function TrafficGraph.build(data, checkpoint)
         vehicleModelRules = data.vehicleModelRules,
         pedestrianDriverMasks = data.pedestrianDriverMasks,
         pedestrianCells = {},
+        roadNodeCells = {},
         roadTurnClosures = {},
         counts = { peds = 0, cars = 0, boats = 0, routes = #data.routes, links = #links },
     }
@@ -112,6 +113,8 @@ function TrafficGraph.build(data, checkpoint)
         node.speedClass = math.floor(node.flags / 0x400) % 4
         if kind == "peds" then
             addToSpatialIndex(graph.pedestrianCells, node)
+        elseif kind == "cars" then
+            addToSpatialIndex(graph.roadNodeCells, node)
         end
         graph.counts[kind] = graph.counts[kind] + 1
         checkpoint()

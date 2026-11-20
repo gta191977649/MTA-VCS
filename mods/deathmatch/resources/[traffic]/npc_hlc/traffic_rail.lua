@@ -1,10 +1,19 @@
 local progressByVehicle = setmetatable({}, {__mode = "k"})
 local windowByVehicle = setmetatable({}, {__mode = "k"})
 local multiplierByVehicle = setmetatable({}, {__mode = "k"})
+local segmentsByTask = setmetatable({}, {__mode = "k"})
 local points = {2, 5, 8, 11, 18, 22}
 local signals = {15, 17, 21}
 local geometrySize = {16, 20, 24}
 local speedMultipliers = {[0] = 1, 1.5, 2, 1}
+
+function isNPCTrafficDrivingStyle(style)
+    return type(style) == "number" and style >= 0 and style <= 6 and style % 1 == 0
+end
+
+function doesNPCTrafficAvoidCars(style)
+    return style == 2 or style == 5 or style == 6
+end
 
 local function segmentCount(task)
     return #task >= 24 and 3 or #task >= 20 and 2 or 1
@@ -43,13 +52,34 @@ local function distanceToRail(task, t, x, y, segment)
     return (px - x) ^ 2 + (py - y) ^ 2
 end
 
+-- A dispatched route window is immutable. Projection and arc length use
+-- the same 21 horizontal samples, on both the server and the sync owner.
+local function sampledSegment(task, segment)
+    local segments = segmentsByTask[task]
+    if not segments then
+        segments = {}
+        segmentsByTask[task] = segments
+    end
+    if segments[segment] then return segments[segment] end
+    local samples = {}
+    for step = 0, 20 do
+        local x, y = sampleNPCTrafficRail(task, step * 0.05, segment)
+        local index = 2 * step + 1
+        samples[index], samples[index+1] = x, y
+    end
+    segments[segment] = samples
+    return samples
+end
+
 local function project(task, x, y, segment)
-    local best, distance = 0, distanceToRail(task, 0, x, y, segment)
+    local samples = sampledSegment(task, segment)
+    local best, distance = 0, (samples[1]-x)^2 + (samples[2]-y)^2
     -- 0x003181D0 samples every 0.05. Refine around the closest sample
     -- to keep the vehicle in place when the MTA sync owner changes.
     for step = 1, 20 do
         local t = step * 0.05
-        local candidate = distanceToRail(task, t, x, y, segment)
+        local index = 2 * step + 1
+        local candidate = (samples[index]-x)^2 + (samples[index+1]-y)^2
         if candidate < distance then best, distance = t, candidate end
     end
     local low, high = math.max(0, best - 0.05), math.min(1, best + 0.05)
@@ -84,12 +114,10 @@ end
 -- and 0x0047FCC8 use that length to time the entire segment.
 local function railLength(task, segment, lengths)
     if lengths[segment] then return lengths[segment] end
-    local x, y = sampleNPCTrafficRail(task, 0, segment)
+    local samples = sampledSegment(task, segment)
     local length = 0
-    for step = 1, 20 do
-        local nx, ny = sampleNPCTrafficRail(task, step * 0.05, segment)
-        length = length + math.sqrt((nx - x) ^ 2 + (ny - y) ^ 2)
-        x, y = nx, ny
+    for i = 3, #samples, 2 do
+        length = length + math.sqrt((samples[i]-samples[i-2])^2 + (samples[i+1]-samples[i-1])^2)
     end
     lengths[segment] = math.max(0.01, length)
     return lengths[segment]
@@ -174,8 +202,8 @@ function getNPCTrafficRailSegment(task, x, y, z, fx, fy)
     return closest
 end
 
-function isNPCTrafficSignalClosed(group)
-    if group == 0 then return false end
+function isNPCTrafficSignalClosed(group, style)
+    if group == 0 or style == 2 or style == 3 or style == 4 then return false end
     local state = getTrafficLightState()
     if state == 5 or state == 6 or state == 9 then return false end
     if group == 1 then return state ~= 0 and state ~= 8 end
@@ -184,7 +212,7 @@ end
 
 local function railSignalBlocked(task, segment, x, y)
     local goal = points[segment + 2]
-    return isNPCTrafficSignalClosed(task[signals[segment]])
+    return isNPCTrafficSignalClosed(task[signals[segment]], task.style)
         and (task[goal] - x) ^ 2 + (task[goal + 1] - y) ^ 2 < 64
 end
 
@@ -218,11 +246,13 @@ function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed, boat)
     px, py, _, dx, dy = sampleNPCTrafficRail(task, t, segment)
     local tangent = math.max(0.1, math.sqrt(dx * dx + dy * dy))
     local speed = task[14] * getNPCTrafficDriveMultiplier(vehicle, task[geometrySize[count] + segment], elapsed)
+    local bearing
     if railSignalBlocked(task, segment, x, y) then speed = 0 end
     if limitSpeed then
         local ax, ay, az = sampleNPCTrafficRail(task, math.min(1, t + 5 / tangent), segment)
-        local limit, emergency = limitSpeed(vehicle, x, y, z, ax, ay, az, dx / tangent, dy / tangent,
-            task[16], task, segment, t, progress.lengths, progress.speed)
+        local limit, emergency, avoidance = limitSpeed(vehicle, x, y, z, ax, ay, az, dx / tangent, dy / tangent,
+            task[16], task, segment, t, progress.lengths, progress.speed, speed)
+        bearing = avoidance
         speed = math.min(speed, limit)
         if emergency then progress.speed = math.min(progress.speed, speed) end
     end
@@ -230,13 +260,17 @@ function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed, boat)
     local step = elapsed * 0.05
     progress.speed = speed >= progress.speed and math.min(speed, progress.speed + step * 0.05)
         or math.max(speed, progress.speed - step * 0.7)
-    local _, _, vz = getElementVelocity(vehicle)
+    local vx, vy, vz = getElementVelocity(vehicle)
+    if progress.speed <= 0 then
+        if vx ~= 0 or vy ~= 0 then setElementVelocity(vehicle, 0, 0, vz) end
+        return
+    end
     local look = boat and math.max(2.5, progress.speed * 0.45) or math.max(0.5, progress.speed * 0.16)
     local nx, ny, nz, nextDX, nextDY = getNPCTrafficRailPreview(task, segment, t, progress.lengths, look)
     local tx, ty = nx - x, ny - y
     local distance = math.sqrt(tx * tx + ty * ty)
-    if distance < 0.001 or progress.speed <= 0 then
-        setElementVelocity(vehicle, 0, 0, vz)
+    if distance < 0.001 then
+        if vx ~= 0 or vy ~= 0 then setElementVelocity(vehicle, 0, 0, vz) end
         return
     end
     if localPlayer and recordNPCDebugTarget then recordNPCDebugTarget(vehicle, nx, ny, nz) end
@@ -249,6 +283,10 @@ function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed, boat)
     if boat then
         exports.vcs_vehicle:steerBoatTraffic(vehicle, tx / distance, ty / distance, dx, dy, nextDX, nextDY, look, speedMS, vz, elapsed)
         return
+    end
+    if bearing and bearing ~= 0 then
+        local c, s = math.cos(bearing), math.sin(bearing)
+        tx, ty = tx*c + ty*s, ty*c - tx*s
     end
     setElementVelocity(vehicle, tx / distance * speedMS / 50, ty / distance * speedMS / 50, vz)
     local _, _, heading = getElementRotation(vehicle)

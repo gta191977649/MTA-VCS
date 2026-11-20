@@ -258,15 +258,35 @@ def original_vehicle_reflections(data):
     return {key: next(iter(values)) for key, values in candidates.items() if len(values) == 1}
 
 
-def complete_vehicle_textures(data, dictionary, shared, original, name, reflections):
+def complete_vehicle_textures(data, dictionary, shared, original, name, reflections, police_surfaces=None):
     textures = native_textures(dictionary)
     common = {}
+    if police_surfaces is not None:
+        original = dict(original)
+        # vcsconv leaves the unused high byte of X8R8G8B8 undefined. Normalize
+        # it for reproducible archives without touching alpha-bearing textures.
+        for key, source in original.items():
+            if struct.unpack_from("<I", source, 100)[0] == 22:
+                raster = bytearray(source)
+                offset = 112
+                for _ in range(raster[109]):
+                    size, = struct.unpack_from("<I", raster, offset)
+                    offset += 4
+                    raster[offset+3:offset+size:4] = b"\xff" * (size // 4)
+                    offset += size
+                original[key] = bytes(raster)
+        textures.update(original)
+        if name in ("policem", "electrap"):
+            for side in (("left", "right") if name == "policem" else ("right",)):
+                alias = "vcssiren_" + side
+                source = original["policebits" if name == "policem" else "vcs_electraglidebit"]
+                textures[alias] = source[:32] + alias.encode().ljust(32, b"\0") + source[64:]
     # San Andreas selects the illuminated atlas by comparing the actual shared
     # texture pointer. A per-model copy of either lamp atlas breaks that switch.
     native = {"vehiclelights128", "vehiclelightson128"}
     if name == "hovercr":
         native.add("vortex128x64")  # The native Vortex model's local TXD.
-    for texture in sorted(vehicle_material_textures(data) - textures.keys() - native):
+    for texture in sorted(vehicle_material_textures(data) - textures.keys() - native - (police_surfaces or {}).keys()):
         if texture in shared:
             common[texture] = shared[texture]
         elif texture in original:
@@ -305,7 +325,9 @@ def complete_vehicle_textures(data, dictionary, shared, original, name, reflecti
             # PS2 windscreens use translucent material colours. Bind the same
             # tint as a raster so the SA vehicle pipeline samples it, and keep
             # the material alpha used by its glass sorting and removal code.
-            if 0 < alpha < 255 and rgb in ((102, 182, 194), (35, 62, 66), (54, 57, 89)):
+            rear_glass = ((name == "fbiran" and (*rgb, alpha) == (23, 23, 23, 152))
+                          or (name == "enforce" and (*rgb, alpha) == (0, 0, 0, 152)))
+            if 0 < alpha < 255 and (rgb in ((102, 182, 194), (35, 62, 66), (54, 57, 89)) or rear_glass):
                 alias = "vcsglass_%02x%02x%02x%02x" % (*rgb, alpha)
                 if alias not in textures:
                     # The model-local TXD owns this material's shader marker.
@@ -322,9 +344,22 @@ def complete_vehicle_textures(data, dictionary, shared, original, name, reflecti
         lo, hi = texture_chunk
         offset, text_end = next((begin, stop) for kind, begin, stop in chunks(data, lo, hi) if kind == 2)
         texture = data[offset:text_end].split(b"\0", 1)[0].decode("ascii").lower()
+        if name == "vicechee" and texture == "vicechee868bit128" and rgb == (255, 255, 255):
+            # The PC port whitened every neutral panel of the original 0x959595 atlas.
+            rgb = (149, 149, 149)
+        if name == "enforce" and texture == "crackedglassa_sl" and alpha == 252:
+            rgb = (0, 0, 0)
+        prefix = data[start:material + 4] + bytes(rgb) + data[material + 7:lo - 12]
         atlas = textures if texture in textures else common
-        if texture not in atlas:
-            return data[start:end]
+        source_alias = None
+        if police_surfaces and texture in police_surfaces:
+            source_name, raster = police_surfaces[texture]
+            source_alias = "vcspol_" + texture.removeprefix("xv_")
+            raster = original.get(source_name, raster)
+            atlas = common if source_name not in original else textures
+            atlas[source_alias] = raster[:32] + source_alias.encode().ljust(32, b"\0") + raster[64:]
+        elif texture not in atlas:
+            return prefix + data[lo - 12:end]
 
         strength, reflection = material_environment(data, fields)
         original_strength = None
@@ -336,15 +371,20 @@ def complete_vehicle_textures(data, dictionary, shared, original, name, reflecti
             if original_strength is not None:
                 strength = original_strength
         managed_reflection = strength in (5, 10, 20, 30, 50, 100)
-        replace_effect = reflection and (managed_reflection or original_strength == 0)
-        if managed_reflection:
+        siren = texture in ("vcssiren_left", "vcssiren_right")
+        replace_effect = reflection and (managed_reflection or original_strength == 0 or siren)
+        if siren:
+            alias = texture
+        elif managed_reflection:
             # Tag each reflective material independently of its base atlas.
-            alias = remap_texture(texture, atlas, f"vcsenv_{strength:02d}_")
+            alias = remap_texture(source_alias or texture, atlas, f"vcsenv_{strength:02d}_")
+        elif source_alias:
+            alias = source_alias
         elif texture in shared or atlas is common:
             # SA resolves textures in its global vehicle dictionary first.
             alias = remap_texture(texture, atlas, "vcstx_")
         elif not replace_effect:
-            return data[start:end]
+            return prefix + data[lo - 12:end]
         else:
             alias = texture
         payload = data[lo:offset - 12] + texture_name(alias) + data[text_end:hi]
@@ -355,7 +395,7 @@ def complete_vehicle_textures(data, dictionary, shared, original, name, reflecti
             ext, ext_end, effect_start, effect_end = reflection
             tail = (data[hi:ext - 12] + rw_chunk(3, data[ext:effect_start] + data[effect_end:ext_end])
                     + data[ext_end:end])
-        return data[start:lo - 12] + rw_chunk(6, payload) + tail
+        return prefix + rw_chunk(6, payload) + tail
 
     def rebuild(start, end):
         result = bytearray()

@@ -1,0 +1,11 @@
+<meta>
+    <info name="VCS end credits" type="script" />
+    <include resource="frontend" />
+    <script src="scene.lua" type="client" cache="false" />
+    <script src="roll.lua" type="client" cache="false" />
+    <script src="client.lua" type="client" cache="false" />
+    <file src="audio/theme.ogg" />
+    <export function="startCredits" type="client" />
+    <export function="stopCredits" type="client" />
+    <export function="isCreditsRunning" type="client" />
+</meta>

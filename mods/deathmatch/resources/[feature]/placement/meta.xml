@@ -1,4 +1,6 @@
 <meta>
+    <include resource="wanted" />
+    <script src="pickups/bribes.lua" type="server" />
     <info name="VCS world placements" type="script" />
     <include resource="vcs_model" />
     <include resource="vcs_vehicle" />

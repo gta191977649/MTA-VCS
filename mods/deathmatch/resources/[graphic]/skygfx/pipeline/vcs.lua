@@ -5,6 +5,7 @@ local thresholdUsesDepth
 local scene, bloomA, bloomB, historyA, historyB
 local width, height, bloomWidth, bloomHeight
 local lastValues, historyReady, lastCamera, previousInterior, previousDimension
+local bloomCamera, bloomValues
 local previousCameraInterior
 local composedValues, boundHistory
 local mode = SKYGFX.vcsReducedEffects and "reduced" or "full"
@@ -37,6 +38,7 @@ end
 
 local function clearHistory()
     historyReady, lastCamera = false, nil
+    bloomCamera, bloomValues = nil, nil
 end
 
 local function releaseTargets()
@@ -184,6 +186,7 @@ end
 local function prepareWorld()
     local v = getTimeCycleValue("values")
     updateWorld(v)
+    VCSVehicle.prepare()
     VCSWater.prepare()
     VCSBoatWake.prepare(v)
     VCSSun.prepare(v)
@@ -199,17 +202,17 @@ end
 local function checkCamera(now)
     local interior, dimension = getElementInterior(localPlayer), getElementDimension(localPlayer)
     local cameraInterior = getCameraInterior()
-    local x, y, z, lx, ly, lz = getCameraMatrix()
+    local x, y, z, lx, ly, lz, roll, fov = getCameraMatrix()
     local dx, dy, dz = lx-x, ly-y, lz-z
     local length = math.max(math.sqrt(dx*dx+dy*dy+dz*dz), 0.0001)
     dx, dy, dz = dx/length, dy/length, dz/length
     local prev = lastCamera
     if interior ~= previousInterior or dimension ~= previousDimension or cameraInterior ~= previousCameraInterior or
         (prev and ((x-prev[1])^2 + (y-prev[2])^2 + (z-prev[3])^2 > 35^2
-                   or dx*prev[4]+dy*prev[5]+dz*prev[6] < 0.5 or now-prev[7] > 150)) then
+                   or dx*prev[4]+dy*prev[5]+dz*prev[6] < 0.5 or now-prev[9] > 150)) then
         clearHistory()
     end
-    lastCamera = {x,y,z,dx,dy,dz,now}
+    lastCamera = {x,y,z,dx,dy,dz,roll,fov,now}
     previousInterior, previousDimension, previousCameraInterior = interior, dimension, cameraInterior
 end
 
@@ -220,13 +223,32 @@ local function drawTarget(target, w, h, shader)
     return ok
 end
 
+local function canReuseBloom(v)
+    if not bloomCamera or not lastCamera or v ~= bloomValues then return false end
+    local age = lastCamera[9] - bloomCamera[9]
+    if age < 0 or age >= 33 then return false end
+    for i = 1, 8 do
+        if lastCamera[i] ~= bloomCamera[i] then return false end
+    end
+    return true
+end
+
 local function renderBloom(v)
-    if not SKYGFX.doRadiosity or not bloomA or v[36] < 1 then return false end
+    if not SKYGFX.doRadiosity or not bloomA or v[36] < 1 then
+        bloomCamera = nil
+        return false
+    end
+    -- Bloom is a blurred 256x128 image. Reuse it briefly at a stationary
+    -- camera, while the scene, sun, reflections and trails still update live.
+    if canReuseBloom(v) then return true end
+    bloomCamera = nil
     if not drawTarget(bloomA, bloomWidth, bloomHeight, threshold) then return false end
     for _ = 1, 2 do
         if not drawTarget(bloomB, bloomWidth, bloomHeight, blurCross) then return false end
         if not drawTarget(bloomA, bloomWidth, bloomHeight, blurDiagonal) then return false end
     end
+    stats.bloomPasses = 5
+    bloomCamera, bloomValues = lastCamera, v
     return true
 end
 
@@ -245,12 +267,18 @@ local function renderPost()
         VCSVehicle.invalidate()
         return
     end
-    VCSVehicle.capture()
     local w, h = guiGetScreenSize()
-    if mode == "off" or not compose or not lastValues then return end
+    if mode == "off" or not compose or not lastValues then
+        VCSVehicle.capture()
+        return
+    end
     ensureTargets(w, h)
-    if not scene or not dxUpdateScreenSource(scene, true) then return end
+    if not scene or not dxUpdateScreenSource(scene, true) then
+        VCSVehicle.capture()
+        return
+    end
     stats.captures = 1
+    VCSVehicle.capture(scene)
     local now = getTickCount()
     if historyA then checkCamera(now) end
 
@@ -263,7 +291,6 @@ local function renderPost()
         dxSetShaderValue(compose, "SmearWeight", math.floor(math.floor(v[55])*0.8)/255)
     end
     local bloomEnabled = renderBloom(v)
-    stats.bloomPasses = bloomEnabled and 5 or 0
     if v ~= composedValues or bloomEnabled ~= stats.boundBloom then
         dxSetShaderValue(compose, "Bloom", bloomEnabled and bloomA or scene)
         -- VCSPC draws the same radiosity buffer twice with intensity * 4.

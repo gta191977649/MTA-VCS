@@ -253,6 +253,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["ENFORCR"] = {
+		policeModel = 234,
 		parent = 427,
 		name = "ENFORCR",
 		txd = "src/vehicle/enforce.txd",
@@ -693,6 +694,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["FBIRANC"] = {
+		policeModel = 268,
 		parent = 490,
 		name = "FBIRANC",
 		txd = "src/vehicle/fbiran.txd",
@@ -789,7 +791,8 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["VICECHE"] = {
-		parent = 415,
+		policeModel = 204,
+		parent = 597,
 		name = "VICECHE",
 		txd = "src/vehicle/cheetah.txd",
 		dff = "src/vehicle/vicechee.dff",
@@ -829,6 +832,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["ELECTRP"] = {
+		policeModel = 191,
 		parent = 523,
 		name = "ELECTRP",
 		txd = "src/vehicle/electrap.txd",
@@ -917,7 +921,8 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["FBICAR"] = {
-		parent = 421,
+		policeModel = 193,
+		parent = 598,
 		name = "FBICAR",
 		txd = "src/vehicle/fbicar.txd",
 		dff = "src/vehicle/fbicar.dff",
@@ -1029,7 +1034,8 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["POLICEM"] = {
-		parent = 411,
+		policeModel = 207,
+		parent = 596,
 		name = "POLICEM",
 		txd = "src/vehicle/policem.txd",
 		dff = "src/vehicle/policem.dff",

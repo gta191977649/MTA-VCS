@@ -71,7 +71,7 @@ flowchart TD
     A["Generate driver, then sample passenger capacity"] --> C{"What happened to the car?"}
     C -->|Driver jacked| D["Filter passengers; schedule individual exits"]
     C -->|Nearby gunshot| E["Driving state 0x37 skips on-foot hearing gate"]
-    C -->|Weapon damaged body| F{"Special wanted branch?"}
+    C -->|Confirmed melee contact or surviving weapon damage| F{"Special wanted branch?"}
     F -->|Yes| G["Request wanted response and return"]
     F -->|No| H{"Non-mission gang driver and player attacker?"}
     H -->|Yes| I["Driver and eligible passengers request objective 8"]
@@ -87,6 +87,31 @@ flowchart TD
 | Passenger exit `0x003EF018` | Exclude empty seat, displaced ped and normally P+0x1D0 bit 31. Non-player jacker's selected door can re-admit a candidate. A police jacker targeting a wanted player can return that pair early. Deadlines +0x6C0 begin at now+1800. For bit-31-clear candidates request 0x10 and advance cumulative delay by 300â€“599. | Two eligible passengers get 1800 and 2100â€“2399. Regular cars may perform a binary draw, then extend extra candidates to 10000 and set bit 47 if type 5/0x14 or a subsequent draw passes. Extra candidate means seat index >0 or displaced ped was driver. |
 | Weapon damage `0x003EF910` | Require V+0x264 == 1, V+0x354 != 1, entity status 2/3. V+0x260 bit 40 or model 0x105/0xDB/0xCF/0xEA with player attacker triggers wanted and returns. A driver type 7â€“15, source other than 2, with player attacker requests 8. Occupied passengers whose current objective differs from 8 and source differs from 2 also request 8; deadlines +0x6DC advance by 200 ms per eligible passenger. | Skip an occupant already on objective 8. The first remaining eligible passenger still gets now+200. Deadline and animation onset are separate observations. |
 | Ordinary damage reaction | Style 3 skips sampling. Otherwise sample once. If >0.5 with V+0x215 == 1, a present driver outside objective 0x10 sets style 3 and on first transition multiplies cruise target V+0x217 by 1.5 with integer truncation. Other path sets bit 47, requests 0x10 and speech 0x77 for eligible occupants. Driver requires source other than 2 and vehicle class other than 4; passengers are filtered separately. | With normal style and mission 1, 0.499 and 0.500 select the exit branch; 0.501 selects acceleration. Test nearby shots, direct hits and collision separately. [Damage speech](vcs-voice-calls.md) Â· [Vehicle impact](vcs-vehicle-impact.md) |
+
+### How a hit reaches the occupants
+
+Ghidra MCP reports two direct calls to `0x003EF910` in the US PS2 executable. At `0x001D50C0` the ped contact path passes the vehicle and the attacking ped after the body contact call. The caller does not check the resulting health loss there. At `0x003E85BC` the vehicle damage path calls the same routine after subtracting damage strictly below the remaining health. Equal or greater damage follows the destruction branch. The ordinary automobile collision routine at `0x00136C10` has a separate driver speech and physics path.
+
+In MTA the attacker’s client or the vehicle syncer reports the native body contact. Matching observations from both owners count once. A melee strike also checks the equipped weapon, on-foot state and server-side range. A firearm needs a recent shot through the car and a server health-loss event. An attributable blast or flame uses the native damage cause and health loss. A missed swing, tire-only hit or unattributed loss supplies no body-hit decision. The report queue handles different network arrival orders. Script-controlled occupants retain their tasks.
+
+On acceptance, the existing driving task carries style 3 and the increased cruise target. The driver and each eligible passenger keep their identity through the native exit. Occupant deadlines are issued in seat order. Animation and seat synchronization determine the time at which the player sees each exit. For a player-caused crash, the port also requires a damage report naming the same colliding vehicle before sampling the VCSPC personality weights. [MTA vehicle damage event](https://wiki.multitheftauto.com/wiki/OnClientVehicleDamage) · [Collision decisions and source provenance](vcs-vehicle-impact.md)
+
+### Loopback client observations
+
+On November 20, 2026, a real MTA 1.7 client connected to a temporary loopback server. Traffic spawned and drove the test vehicles. The fixture selected the original models for the civilian, gang and on-duty cases and held the target in place during selected strikes. Server observations matched the vehicle and original driver by element identity.
+
+| Scene | Measured outcome |
+| --- | --- |
+| Player shoots civilian car 171 | The client identified a pistol body hit and the server recorded 25 damage. Driver 23 and both passengers left their seats. A second run recorded flee objective 10 targeting the shooter after exit. [Pistol-hit exit](street-ai-evidence/occupied-car-pistol-exit.jpg) |
+| Player punches or bats a civilian car | A punch reported weapon 0 and about 1.22 damage. The original driver left the car. A separate bat strike reported weapon 5 and about 7.43 damage. The cruise target rose from 13 to 19 and the original driver and passengers stayed aboard. [Punch reaction](street-ai-evidence/occupied-car-punch-exit.jpg) · [Drive-away reaction](street-ai-evidence/occupied-car-accelerate.jpg) |
+| Player hits gang driver 91’s car | The bat struck the body, the driver and passengers exited, and the original driver held objective 8 with the player as target. [Gang driver exits](street-ai-evidence/occupied-car-gang-exit.jpg) |
+| Passenger abandonment | In a separate civilian bat strike, the original driver and passengers in seats 1 and 2 exited the same car. [Occupants leaving](street-ai-evidence/occupied-car-passenger-exit.jpg) |
+| Missed swing and nearby gunfire | The missed swing left the driver seated and car health at 1000. In the shot case, four shots missed the selected body, health stayed at 1000 and the driver retained the native driving task. |
+| Player rear-ends a traffic car | The client reported two collision losses of about 67.25 and 17.18. The server received 84.5 loss and recorded the VCSPC continue outcome with the original driver seated. |
+| Player shoots an on-duty car | On original vehicle 207, 25 pistol damage raised the player to one wanted star. Driver 8 stayed seated and vehicle health was 975. A separate bat strike on a patrol car also raised wanted to one. [Patrol car after a bat strike](street-ai-evidence/occupied-police-car.jpg) |
+| NPC shoots an on-duty car | The NPC fired ten confirmed pistol hits at vehicle 207. Driver 8 selected style 3, retained the seat and held the cruise target at 19 through subsequent hits. Health reached 750. [NPC shooter and departing patrol car](street-ai-evidence/occupied-car-npc-gunfire.jpg) |
+
+The client measured playback on the front passenger after abandonment. The punch scene played `2325.wav` with left and right levels of 30102 at 0.088 seconds. The bat scene played `2335.wav` with levels of 27222 at 0.065 seconds. These are client sound measurements.
 
 ## A vehicle approaches a pedestrian
 

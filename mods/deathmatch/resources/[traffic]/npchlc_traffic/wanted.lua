@@ -1,218 +1,49 @@
-local rules = TrafficWantedRules
-local states = {}
-local pendingEvents = {}
-local publishing = false
-local paroleKey = "nspray:paroleStars"
-local clockPeriod = 4294967296
-
-TrafficWanted = {getPoliceResponse = rules.getPoliceResponse}
-
-local function elapsed(now, thenTick)
-    return (now - thenTick) % clockPeriod
-end
-
-local function isPlayer(player)
-    return isElement(player) and getElementType(player) == "player"
-end
-
-local function publish(player, state, level, reason)
-    local oldLevel = state.level
-    state.level = level
-    if oldLevel == level then return end
-
-    pendingEvents[#pendingEvents + 1] = {player, oldLevel, level, reason}
-    if publishing then return end
-    publishing = true
-    local index = 1
-    while index <= #pendingEvents do
-        local change = pendingEvents[index]
-        if isPlayer(change[1]) then
-            triggerEvent("onPlayerWanted", change[1], change[2], change[3], change[4])
-        end
-        index = index + 1
+-- Existing traffic exports forward to the server authority.
+TrafficWanted = {}
+local responseByPlayer, responseByLevel = {}, {}
+function TrafficWanted.getPoliceResponse(level, player)
+    if not player then
+        if not responseByLevel[level] then responseByLevel[level] = exports.wanted:getWantedResponseForLevel(level) end
+        return responseByLevel[level]
     end
-    pendingEvents = {}
-    publishing = false
-end
-
-local function observe(player, now)
-    local level = getPlayerWantedLevel(player)
-    local state = states[player]
-    if not state then
-        state = {level = level, points = rules.forLevel(level), lastUpdate = now, crimes = {}}
-        states[player] = state
-    elseif level ~= state.level then
-        state.points = rules.forLevel(level)
-        state.crimes = {}
-        publish(player, state, level, "native")
+    local entry = responseByPlayer[player]
+    if not entry or entry.level ~= level then
+        local response = exports.wanted:getPlayerPoliceResponse(player)
+        if not response then return false end
+        entry = {level=level, response=response}
+        responseByPlayer[player] = entry
     end
-    return state
+    return entry.response
 end
-
-local function writePoints(player, state, points, reason)
-    local level = rules.levelForPoints(points)
-    if level ~= state.level and not setPlayerWantedLevel(player, level) then return false end
-    state.points = points
-    publish(player, state, level, reason)
-    return true
-end
-
-local function clearParole(player, state)
-    if not state.parole then return end
-    if state.parole.visible then removeElementData(player, paroleKey) end
-    state.parole = nil
-end
-
-function getPlayerWanted(player)
-    if not isPlayer(player) then return false end
-    return getPlayerWantedLevel(player)
-end
-
-function setPlayerWanted(player, level, reason)
-    if not isPlayer(player) or type(level) ~= "number" then return false end
-    local points = rules.forLevel(level)
-    if not points or (reason ~= nil and type(reason) ~= "string") then return false end
-
-    local state = observe(player, getTickCount())
-    state.crimes = {}
-    return writePoints(player, state, points, reason or "script")
-end
-
-function suspendPlayerWanted(player)
-    if not isPlayer(player) then return false end
-
-    local now = getTickCount()
-    local state = observe(player, now)
-    if state.level == 0 then return false end
-    local previousParole = state.parole
-    state.parole = {points = state.points, started = now, visible = true}
-    setElementData(player, paroleKey, state.level, "broadcast", "deny")
-    if writePoints(player, state, 0, "respray") then return true end
-
-    state.parole = previousParole
-    if previousParole and previousParole.visible then
-        setElementData(player, paroleKey, rules.levelForPoints(previousParole.points), "broadcast", "deny")
-    else
-        removeElementData(player, paroleKey)
-    end
-    return false
-end
-
-local function policeNearby(player, range)
-    return TrafficActors and TrafficActors.isPoliceNearby and TrafficActors.isPoliceNearby(player, range)
-end
-
-local function applyCrime(player, state, crimeType, reduced)
-    local parole = state.parole
-    local points = rules.addCrime(state.points, parole and parole.points or 0, crimeType, reduced)
-    if parole and parole.visible then
-        parole.visible = false
-        removeElementData(player, paroleKey)
-    end
-    return writePoints(player, state, points, "crime")
-end
-
--- 0x003AB2A8 scans 16 records by crime ID and incident identity. An
--- immediate report in 0x003AAB08 still adds an unreported queue record.
-local function queueCrime(state, crimeType, incident, reduced, now)
-    local vacancy
-    for index = 1, 16 do
-        local record = state.crimes[index]
-        if record then
-            if record.type == crimeType and record.incident == incident then return not record.reported end
-        elseif not vacancy then
-            vacancy = index
-        end
-    end
-
-    if vacancy then
-        state.crimes[vacancy] = {type = crimeType, incident = incident, reduced = reduced, started = now}
-    end
-    return true
-end
-
--- Server scripts report a classified VCS incident. A nil immediate value
--- uses the 14 m police-presence branch at 0x00279768.
-function reportWantedCrime(player, crimeType, incident, immediate, reduced)
-    if not isPlayer(player) or not rules.isCrimeType(crimeType) then return false end
-    if incident ~= nil and not isElement(incident) and type(incident) ~= "number" then return false end
-    if immediate ~= nil and type(immediate) ~= "boolean" then return false end
-    if reduced ~= nil and type(reduced) ~= "boolean" then return false end
-
-    local now = getTickCount()
-    local state = observe(player, now)
-    if state.parole and elapsed(now, state.parole.started) > 20000 then clearParole(player, state) end
-    if immediate == nil then immediate = policeNearby(player, 14) end
-    if queueCrime(state, crimeType, incident or player, reduced, now) and immediate then
-        return applyCrime(player, state, crimeType, reduced)
-    end
-    return true
-end
-
-local function updatePlayer(player, now)
-    local state = observe(player, now)
-    if state.parole and elapsed(now, state.parole.started) > 20000 then clearParole(player, state) end
-    if elapsed(now, state.lastUpdate) <= 1000 then return end
-    if state.points == 0 and next(state.crimes) == nil then
-        state.lastUpdate = now
-        return
-    end
-    if state.level >= 2 then
-        state.lastUpdate = now
-    elseif not policeNearby(player, 18) then
-        state.lastUpdate = now
-        if state.points > 0 then
-            writePoints(player, state, state.points - 1, "decay")
-        end
-    end
-
-    for index = 1, 16 do
-        local record = state.crimes[index]
-        if record then
-            local age = elapsed(now, record.started)
-            if age > 500 and not record.reported then
-                record.reported = true
-                applyCrime(player, state, record.type, record.reduced)
-            end
-            if age > 10000 and state.crimes[index] == record then state.crimes[index] = nil end
-        end
-    end
-end
-
-addEvent("onPlayerWanted", false)
-
-addEventHandler("onPlayerJoin", root, function() observe(source, getTickCount()) end)
-addEventHandler("onPlayerQuit", root, function() states[source] = nil end)
-addEventHandler("onPlayerWasted", root, function()
-    local state = observe(source, getTickCount())
-    state.respawn = true
-    clearParole(source, state)
+local function forgetResponse() responseByPlayer[source] = nil end
+addEventHandler("onPlayerPoliceResponseChange", root, forgetResponse)
+addEventHandler("onPlayerQuit", root, forgetResponse)
+addEventHandler("onResourceStop", root, function(resource)
+    if getResourceName(resource) == "wanted" then responseByPlayer, responseByLevel = {}, {} end
 end)
-addEventHandler("onPlayerSpawn", root, function()
-    local state = states[source]
-    if state and state.respawn then
-        state.respawn = nil
-        setPlayerWanted(source, 0, "respawn")
+TrafficWantedRules = {getPoliceResponse = TrafficWanted.getPoliceResponse}
+function setPlayerWanted(...) return exports.wanted:setPlayerWanted(...) end
+function getPlayerWanted(...) return exports.wanted:getPlayerWanted(...) end
+function reportWantedCrime(...) return exports.wanted:reportWantedCrime(...) end
+function suspendPlayerWanted(...) return exports.wanted:suspendPlayerWanted(...) end
+
+function isWantedPoliceNearby(player, range)
+    return TrafficActors.isPoliceNearby(player, range)
+end
+addEventHandler("onResourceStart", root, function(resource)
+    if resource == getThisResource() or getResourceName(resource) == "wanted" then
+        exports.wanted:registerPolicePresenceProvider()
     end
 end)
-
--- VCS reports event 4 -> crime 1 when firing a bullet (0x002C3E48).
--- Native MTA supplies the shooter without a client-script report.
-addEventHandler("onPlayerWeaponFire", root, function()
-    local now = getTickCount()
-    local state = observe(source, now)
-    local last = state.lastShot
-    state.lastShot = now
-    if last and elapsed(now, last) <= 1000 then return end
-    reportWantedCrime(source, 1, source)
-end)
-
+local function isPlayer(element)
+    return isElement(element) and getElementType(element) == "player"
+end
 -- 0x002C6460 and 0x002C7C28 submit an additional firearm hit report after
 -- the general damage report in 0x001D7940. MTA only exposes full attribution
 -- for a ped on the server when the damage was fatal.
 addEventHandler("onPedWasted", root, function(_, killer, weapon)
     local victim = source
-    if type(weapon) ~= "number" or weapon < 22 or weapon > 34 or not isPlayer(killer)
+    if type(weapon) ~= "number" or not isPlayer(killer)
         or not TrafficActors.isManagedPed(victim)
         or getElementInterior(killer) ~= getElementInterior(victim)
         or getElementDimension(killer) ~= getElementDimension(victim) then
@@ -220,30 +51,16 @@ addEventHandler("onPedWasted", root, function(_, killer, weapon)
     end
 
     local police = TrafficActors.isPolicePed(victim)
-    local immediate = policeNearby(killer, 14) == true
+    local immediate = isWantedPoliceNearby(killer, 14) == true
     if police and not immediate then
         local x, y, z = getElementPosition(killer)
         local vx, vy, vz = getElementPosition(victim)
         local dx, dy, dz = x - vx, y - vy, z - vz
         immediate = dx * dx + dy * dy + dz * dz < 14 * 14
     end
-    reportWantedCrime(killer, police and 3 or 2, victim, immediate)
-    reportWantedCrime(killer, police and 5 or 4, victim, immediate)
+    PedAIRules.reportPlayerStrike(killer, victim, police, weapon, immediate)
 end)
 
-addEventHandler("onResourceStart", resourceRoot, function()
-    local now = getTickCount()
-    for _, player in ipairs(getElementsByType("player")) do observe(player, now) end
-    setTimer(function()
-        local tick = getTickCount()
-        for player in pairs(states) do updatePlayer(player, tick) end
-    end, 200, 0)
-end, false)
-
-addEventHandler("onResourceStop", resourceRoot, function()
-    for player, state in pairs(states) do clearParole(player, state) end
-end, false)
--- A wanted arrest is committed by the same authority that owns wanted points.
 local entering, arrests, restrained = {}, {}, {}
 addEvent("onTrafficPlayerArrest",false)
 addEventHandler("onVehicleStartEnter",root,function(p,seat)
@@ -261,7 +78,7 @@ function setTrafficPlayerRestrained(player,active)
 end
 addEventHandler("onPlayerSpawn",root,function() restrained[source],entering[source]=nil,nil end)
 local function eligibleOfficer(officer,player,allowWasted)
-    if not isElement(player) or getElementType(player)~="player" or (isPedDead(player) and not allowWasted)
+    if TrafficCustody.isActive(player) or not isElement(player) or getElementType(player)~="player" or (isPedDead(player) and not allowWasted)
         or not isElement(officer) or not TrafficActors.isPolicePed(officer) or isPedDead(officer)
         or getPlayerWantedLevel(player)==0 or getElementInterior(officer)~=getElementInterior(player)
         or getElementDimension(officer)~=getElementDimension(player) then return false end
@@ -269,16 +86,18 @@ local function eligibleOfficer(officer,player,allowWasted)
     return getDistanceBetweenPoints3D(x,y,z,getElementPosition(player))<=65
 end
 function TrafficWanted.officerCanPursue(officer,player)
-    return eligibleOfficer(officer,player,false)
+    if not eligibleOfficer(officer,player,false) then return false end
+    local response = TrafficWanted.getPoliceResponse(getPlayerWantedLevel(player), player)
+    return response and (restrained[player] or not (response.suppressPolice or response.suppressGarage)) or false
 end
-local function arrest(officer,player,now,wasted)
+local function arrest(officer,player,now,wasted,seatedDriver)
     if not eligibleOfficer(officer,player,wasted) then return false end
     local entry=entering[player]
     local x,y,z=getElementPosition(player)
     local officerDistance=getDistanceBetweenPoints3D(x,y,z,getElementPosition(officer))
     local duringEntry=entry and isElement(entry.vehicle) and (now-entry.at)%4294967296<=1800
         and not isPedInVehicle(player) and getDistanceBetweenPoints3D(x,y,z,getElementPosition(entry.vehicle))<=4
-    if not ((wasted or restrained[player]) and officerDistance<5 or duringEntry and officerDistance<1.3) then return false end
+    if not (seatedDriver or (wasted or restrained[player]) and officerDistance<5 or duringEntry and officerDistance<1.3) then return false end
     if arrests[player] then return false end
     arrests[player]=officer
     local level=getPlayerWantedLevel(player)
@@ -287,18 +106,171 @@ local function arrest(officer,player,now,wasted)
     arrests[player],entering[player]=nil,nil
     if not accepted or not isElement(player) or not isElement(officer) then return false end
     restrained[player]=nil
-    if not wasted then setPlayerWanted(player,0,"arrest") end
+    if not wasted and not TrafficCustody.begin(player,level,officer) then return false end
     local ox,oy=getElementPosition(officer)
     setPedRotation(officer,-math.deg(math.atan2(x-ox,y-oy)))
     if getPedWeapon(officer,2)==22 then setPedWeaponSlot(officer,2) end
-    setPedAnimation(officer,"PED","ARRESTgun",1200,false,false,true,false)
+    if seatedDriver then
+        setPedAnimation(officer)
+        setElementData(officer,"npchlc_traffic:seatedArrestAim",player,"broadcast","deny")
+    else
+        setPedAnimation(officer,"PED","ARRESTgun",wasted and 1200 or -1,false,false,false,not wasted)
+    end
     PedVoice.emit(officer,"arrest")
     PedVoice.emit(player,"arrested")
     return true
 end
 
-function TrafficWanted.tryArrest(officer,player,now)
-    return arrest(officer,player,now,false)
+-- Door-open callback 002FD098 / seat resolver 003EF018. When the resolved
+-- suspect is the driver the PS2 returns before starting the drag-out task.
+local openingDoors={}
+function TrafficWanted.driverArrestCar(officer,player)
+    local car=getPedOccupiedVehicle(player)
+    if not car or getVehicleOccupant(car,0)~=player or isPedInVehicle(officer) or isVehicleLocked(car) then return false end
+    local kind=getVehicleType(car)
+    if kind~="Automobile" and kind~="Monster Truck" and kind~="Bike" and kind~="Quad" and kind~="BMX" then return false end
+    local vx,vy,vz=getElementVelocity(car)
+    return vx*vx+vy*vy+vz*vz<0.05^2 and car
+end
+
+-- Objective 8, 00100BA0. The shot and recovery deadlines belong to the
+-- officer. The sync owner may change while the officer is recovering.
+local vehicleFireClocks=setmetatable({}, {__mode="k"})
+function TrafficWanted.vehicleFireDue(officer,player,car,range,now,seekRadius)
+    local x,y,z=getElementPosition(officer)
+    local tx,ty,tz=getElementPosition(player)
+    local distance=getDistanceBetweenPoints3D(x,y,z,tx,ty,tz)
+    if distance<=3 or distance>=range then return false end
+    local clock=vehicleFireClocks[officer]
+    if clock then
+        local elapsed=(now-clock.start)%4294967296
+        if elapsed<=clock.burst then return true end
+        if elapsed<=clock.recover then return false end
+    end
+    local burst=math.random(500,1999)
+    local vx,vy=getElementVelocity(car)
+    local speed=math.sqrt(vx*vx+vy*vy)
+    local delay
+    if speed>.2 then
+        local cx,cy=getElementPosition(car)
+        local dx,dy=x-cx,y-cy
+        local length=math.sqrt(dx*dx+dy*dy)
+        local projection=length>0 and (vx*dx+vy*dy)/(speed*length) or vx/speed
+        delay=projection>.8 and math.random(200,499) or 0
+    else
+        delay=distance>(seekRadius or .5) and math.random(2000,4999) or math.random(200,499)
+    end
+    vehicleFireClocks[officer]={start=now,burst=burst,recover=burst+delay}
+    return true
+end
+
+function TrafficWanted.driverDoorApproach(car)
+    local left,_,_,_,front=exports.server_coldata:getModelBoundingBox(getElementModel(car))
+    if left then return left-.55,front*.2 end
+end
+
+local function atDriverDoor(officer,car)
+    local x,y,z=getElementPosition(officer)
+    local cx,cy,cz=getElementPosition(car)
+    local m=getElementMatrix(car)
+    if not m or getDistanceBetweenPoints3D(x,y,z,cx,cy,cz)>=3.5 then return false end
+    local lateral=(x-cx)*m[1][1]+(y-cy)*m[1][2]
+    local longitudinal=(x-cx)*m[2][1]+(y-cy)*m[2][2]
+    local side,along=TrafficWanted.driverDoorApproach(car)
+    return side and lateral<-.45 and math.abs(lateral-(side+.55))<1.05
+        and math.abs(longitudinal-along)<1.15 and math.abs(z-cz)<1.8
+end
+
+local serial=0
+local function clearDoor(car,attempt)
+    if openingDoors[car]~=attempt then return end
+    openingDoors[car]=nil
+    if attempt.work then attempt.work.doorRetry=getTickCount() end
+end
+
+addEventHandler("onVehicleStartEnter",root,function(officer,seat,driver,door)
+    local a=openingDoors[source]
+    if not a or officer~=a.officer then return end
+    if seat~=0 or driver~=a.player or door~=0 or isVehicleLocked(source) or wasEventCancelled() then
+        cancelEvent()
+        clearDoor(source,a)
+        return
+    end
+    a.started=getTickCount()
+end,true,"low-100")
+
+-- Vehicle synchronization can arrive after the script notification. Confirm
+-- the independently replicated hinge angle for this vehicle and reach.
+local function confirmDoor(car,a,remaining)
+    if openingDoors[car]~=a then return end
+    if not isElement(car) or not isElement(a.officer) or not isElement(a.player)
+        or getElementSyncer(a.officer)~=a.owner or isVehicleLocked(car)
+        or getVehicleOccupant(car,0)~=a.player or getPedOccupiedVehicle(a.player)~=car
+        or not TrafficWanted.officerCanPursue(a.officer,a.player)
+        or TrafficGroundPolice.target(a.officer)~=a.player or not atDriverDoor(a.officer,car) then
+        clearDoor(car,a)
+        return
+    end
+    if not isPedInVehicle(a.officer) and getVehicleDoorOpenRatio(car,2)>=.75 then
+        clearDoor(car,a)
+        if TrafficWanted.driverArrestCar(a.officer,a.player)==car then arrest(a.officer,a.player,getTickCount(),false,true) end
+    elseif remaining>0 then
+        setTimer(function() confirmDoor(car,a,remaining-1) end,50,1)
+    else
+        clearDoor(car,a)
+    end
+end
+
+addEvent("npchlc_traffic:observedDriverDoor",true)
+addEventHandler("npchlc_traffic:observedDriverDoor",resourceRoot,function(car,id,opened)
+    local a=openingDoors[car]
+    if not a or a.id~=id or a.owner~=client or not isElement(a.officer) or getElementSyncer(a.officer)~=client or a.reported then return end
+    a.reported=true
+    local now=getTickCount()
+    if opened~=true or not a.started or (now-a.started)%4294967296<50 or (now-a.at)%4294967296>5000 then
+        clearDoor(car,a)
+        return
+    end
+    confirmDoor(car,a,8)
+end,false)
+
+function TrafficWanted.tryDriverArrest(officer,player,now,work)
+    local current=getPedOccupiedVehicle(player)
+    local pending=current and openingDoors[current]
+    if pending and pending.officer==officer then return false,true end
+    local car=TrafficWanted.driverArrestCar(officer,player)
+    if not car or TrafficGroundPolice.target(officer)~=player or not TrafficWanted.officerCanPursue(officer,player)
+        or not atDriverDoor(officer,car) then return false end
+    if work and work.doorRetry and (now-work.doorRetry)%4294967296<2000 then return false,true end
+    if work and work.follow then
+        exports.npc_hlc:clearNPCTasks(officer)
+        work.follow=nil
+    end
+    if pending then return false,true end
+    local kind=getVehicleType(car)
+    if kind=="Bike" or kind=="BMX" or kind=="Quad" or getVehicleDoorState(car,2)==4 or getVehicleDoorOpenRatio(car,2)>=.85 then
+        local accepted=arrest(officer,player,now,false,true)
+        if not accepted and work then work.doorRetry=now end
+        return accepted,true
+    end
+    local owner=getElementSyncer(officer)
+    if not owner then return false end
+    serial=serial+1
+    local a={officer=officer,player=player,owner=owner,at=now,id=serial,work=work}
+    openingDoors[car]=a
+    triggerClientEvent(owner,"npchlc_traffic:openPoliceDriverDoor",resourceRoot,officer,car,player,serial)
+    setTimer(function() clearDoor(car,a) end,5200,1)
+    return false,true
+end
+
+function TrafficWanted.tryArrest(officer,player,now,work,deferDoor)
+    if arrest(officer,player,now,false) then return true end
+    if deferDoor then
+        local car=getPedOccupiedVehicle(player)
+        local pending=car and openingDoors[car]
+        return false,pending and pending.officer==officer
+    end
+    return TrafficWanted.tryDriverArrest(officer,player,now,work)
 end
 -- The PS2 corpse branch leaves the player in its dying/wasted state.
 -- Emit the ownership notification while preserving MTA's respawn lifecycle.

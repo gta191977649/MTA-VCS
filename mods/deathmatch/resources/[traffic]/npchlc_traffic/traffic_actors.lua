@@ -142,15 +142,29 @@ function setTrafficPolicePed(ped, police)
     return true
 end
 
+local presenceModels = {[261]=true,[219]=true,[207]=true,[234]=true}
+local presencePeds = {[8]=true,[9]=true,[10]=true,[11]=true,[117]=true,[118]=true,[119]=true}
 function TrafficActors.isPoliceNearby(player, radius)
-    local x, y, z = getElementPosition(player)
+    local occupied = getPedOccupiedVehicle(player)
+    local x, y, z = getElementPosition(occupied or player)
     for _, ped in ipairs(getElementsWithinRange(x, y, z, radius, "ped",
         getElementInterior(player), getElementDimension(player))) do
-        if TrafficActors.isPolicePed(ped) and not isPedDead(ped) then
+        if TrafficActors.isPolicePed(ped) or presencePeds[getElementData(ped, "npchlc_traffic:originalModel", false)] then
             local px, py, pz = getElementPosition(ped)
             local dx, dy, dz = px - x, py - y, pz - z
             if dx * dx + dy * dy + dz * dz < radius * radius then
                 return true
+            end
+        end
+    end
+    for _, vehicle in ipairs(getElementsWithinRange(x, y, z, radius, "vehicle",
+        getElementInterior(player), getElementDimension(player))) do
+        if vehicle ~= occupied and not isVehicleBlown(vehicle) then
+            local driver = getVehicleOccupant(vehicle)
+            local model = getElementData(vehicle, "npchlc_traffic:originalModel", false)
+            if presenceModels[model] or (driver and TrafficActors.isPolicePed(driver)) then
+                local vx, vy, vz = getElementPosition(vehicle)
+                if (vx-x)^2 + (vy-y)^2 + (vz-z)^2 < radius^2 then return true end
             end
         end
     end

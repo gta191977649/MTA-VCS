@@ -100,8 +100,8 @@ function PedCarjack.update(brain, now)
             -- ordinary pull-out. Nearby gang drivers can reacquire it on foot.
             if not quick or brain.profile.pedType == 6
                 or gang and getDistanceBetweenPoints3D(x, y, z, tx, ty, tz) < 3.5 then attackTarget = event.target end
-            if brain.profile.pedType == 6 and getPlayerWantedLevel(event.target) < 1 then
-                setPlayerWanted(event.target, 1, "carjackPolice")
+            if brain.profile.pedType == 6 then
+                exports.wanted:raisePlayerWanted(event.target, 1, "carjackPolice")
             end
         end
         event.intent, event.duration = PedCarjack.decide(brain.profile, door, quick, event.exitDriver, event.target,

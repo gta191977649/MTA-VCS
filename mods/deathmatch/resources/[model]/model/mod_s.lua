@@ -1,4 +1,12 @@
 local PlayerModModel = {}
+addEventHandler("onResourceStart", resourceRoot, function()
+    for _, vehicle in ipairs(getElementsByType("vehicle")) do
+        local definition = IMG_VEHICLE[getElementData(vehicle, "mod.model", false)]
+        if definition and definition.policeModel then
+            exports.vcs_vehicle:bindVcsVehicle(vehicle, definition.policeModel)
+        end
+    end
+end)
 function initModels() 
     -- process vehicle handing
     for key,val in pairs(IMG_VEHICLE) do 
@@ -28,9 +36,10 @@ addEventHandler("mod.server.spawnVehicle",root,function(model,_,x,y,z)
     local veh = createVehicle(definition.parent or 500,x,y,z)
     if not veh then return end
     setElementData(veh,"mod.model",model,"broadcast","deny")
-    if definition.originalId then exports.vcs_vehicle:bindVcsVehicle(veh, definition.originalId) end
+    local originalId = definition.policeModel or definition.originalId
+    if originalId then exports.vcs_vehicle:bindVcsVehicle(veh, originalId) end
     -- deal with handing 
-    if IMG_VEHICLE[model].handing ~= nil then 
+    if not definition.policeModel and definition.handing ~= nil then
         print(#IMG_VEHICLE[model].handing)
         applyVehicleCustomHanding(veh,IMG_VEHICLE[model].handing) 
     end

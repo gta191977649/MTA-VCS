@@ -1110,11 +1110,19 @@ addEventHandler("onClientResourceStop", getRootElement(),
             -- before the client resource has already begun stopping. Normal map
             -- unload owns all explicit model/TXD/IMG cleanup while this resource
             -- is still running; MTA owns final resource/session destruction.
+            -- Lowering the budget or resizing the read buffer here can evict
+            -- textures while MTA is detaching the map's streaming records.
+            if next(resourceImages) or next(resourceTextureIDs) or next(unloadingResources) then
+                outputDebugString("eagleLoader: leaving active map streaming limits to session cleanup", 3)
+                return
+            end
             local ownsMemorySetting = not engineStreamingGetMemorySize
                 or engineStreamingGetMemorySize() == configuredStreamingMemorySize
             local ownsBufferSetting = not engineStreamingGetBufferSize
                 or engineStreamingGetBufferSize() == configuredStreamingBufferSize
-            if ownsMemorySetting and previousStreamingMemorySize and engineStreamingSetMemorySize then
+            local usedMemory = engineStreamingGetUsedMemory and engineStreamingGetUsedMemory()
+            if ownsMemorySetting and previousStreamingMemorySize and engineStreamingSetMemorySize
+                and (not usedMemory or usedMemory <= previousStreamingMemorySize) then
                 pcall(engineStreamingSetMemorySize, previousStreamingMemorySize)
             end
             if ownsBufferSetting and previousStreamingBufferSize and engineStreamingSetBufferSize then

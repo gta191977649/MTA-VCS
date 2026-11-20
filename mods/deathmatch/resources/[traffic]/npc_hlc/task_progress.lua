@@ -30,7 +30,7 @@ function getNPCControlElement(npc, task)
     local vehicle = getPedOccupiedVehicle(npc)
     local name = task[1]
     if name == "driveToPos" or name == "driveTrafficToPoint" or name == "driveTrafficRail" or name == "driveTrafficPhysics"
-        or name == "driveAlongLine" or name == "driveAroundBend" or name == "driveAtPed" or name == "stopVehicle" then
+        or name == "driveAlongLine" or name == "driveAroundBend" or name == "driveAtPed" or name == "drivePoliceBlock" or name == "stopVehicle" then
         return vehicle and getVehicleOccupant(vehicle, 0) == npc and vehicle or false
     end
     if name == "waitForGreenLight" and vehicle then
@@ -92,6 +92,7 @@ end
 function completion.attackOccupiedVehicle(npc, actor, task)
     return completion.killPed(npc, actor, task) or not getPedOccupiedVehicle(task[2])
 end
+completion.approachDriverDoor = completion.attackOccupiedVehicle
 
 function completion.driveToPos(_, actor, task)
     return actor and closeToPoint(actor, task, true)
@@ -100,6 +101,7 @@ end
 function completion.driveAtPed(_, _, task)
     return not isElement(task[2]) or isPedDead(task[2])
 end
+completion.drivePoliceBlock = completion.driveAtPed
 
 function completion.driveTrafficToPoint(_, actor, task)
     if not actor then return false end

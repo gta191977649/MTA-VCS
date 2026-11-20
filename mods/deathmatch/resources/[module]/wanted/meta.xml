@@ -1,0 +1,20 @@
+<meta>
+    <info name="VCS wanted" type="script" />
+    <script src="rules.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="getPlayerWanted" type="server" />
+    <export function="setPlayerWanted" type="server" />
+    <export function="resetPlayerWanted" type="server" />
+    <export function="raisePlayerWanted" type="server" />
+    <export function="reportWantedEvent" type="server" />
+    <export function="reportWantedCrime" type="server" />
+    <export function="suspendPlayerWanted" type="server" />
+    <export function="setPlayerWantedCap" type="server" />
+    <export function="setPlayerCrimeMultiplier" type="server" />
+    <export function="setPlayerPoliceOverride" type="server" />
+    <export function="getPlayerPoliceResponse" type="server" />
+    <export function="getWantedResponseForLevel" type="server" />
+    <export function="registerPolicePresenceProvider" type="server" />
+    <export function="getLocalWantedSnapshot" type="client" />
+</meta>

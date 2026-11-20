@@ -107,6 +107,9 @@ function PedRoadInjury.strike(ped,walk,car,impulse,normalZ,vx,vy,vz)
     local baseline=brain and brain.health and (now-brain.sampled)%4294967296<=250 and math.max(health,brain.health) or health
     walk.carContact={car=car,at=now,damage=damage}
     local driver=getVehicleOccupant(car,0)
+    if driver and getElementType(driver) == "player" then
+        exports.wanted:reportWantedEvent(driver, TrafficActors.isPolicePed(ped) and 10 or 9, ped)
+    end
     TrafficAmbient.suspend(ped)
     PedVehicleEvasion.cancel(ped)
     local tx,ty,tz=pedestrianVelocity(ped,car,damage,vx,vy,vz)

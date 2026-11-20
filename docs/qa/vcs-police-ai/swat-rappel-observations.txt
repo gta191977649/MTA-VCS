@@ -1,0 +1,39 @@
+[2026-11-21 00:02:31] ROPEQA client rope API createSWATRope
+[2026-11-21 00:02:36] ROPEQA ready
+[2026-11-21 00:04:03] ROPEQA four-star rooftop
+[2026-11-21 00:04:19] ROPEQA native createSWATRope allowed true xyz -658.86 723.79 65.30 duration 8499
+[2026-11-21 00:04:19] ROPEQA air z 63.50 gap 16.50 target 15.58 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:20] ROPEQA air z 61.70 gap 14.70 target 13.79 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:20] ROPEQA air z 59.43 gap 12.43 target 11.52 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:21] ROPEQA air z 57.98 gap 10.98 target 10.10 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:21] ROPEQA swat-rappel-air-three-quarter ok
+[2026-11-21 00:04:21] ROPEQA air z 56.13 gap 9.13 target 8.27 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:22] ROPEQA air z 54.57 gap 7.57 target 6.73 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:22] ROPEQA air z 52.63 gap 5.63 target 4.87 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:23] ROPEQA air z 51.17 gap 4.17 target 3.51 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:23] ROPEQA air z 49.48 gap 2.48 target 2.12 frozen true hlc false tasks 0 weapon 28 aim false fire false anim ped/abseil task false
+[2026-11-21 00:04:24] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:24] ROPEQA swat-rappel-ground-three-quarter ok
+[2026-11-21 00:04:24] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:25] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:25] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:26] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire false anim / task killPed
+[2026-11-21 00:04:26] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:27] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:27] ROPEQA native createSWATRope allowed true xyz -657.71 722.69 62.52 duration 8500
+[2026-11-21 00:04:27] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:28] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:29] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire false anim / task killPed
+[2026-11-21 00:04:29] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:29] ROPEQA native createSWATRope allowed true xyz -656.84 725.69 62.45 duration 8499
+[2026-11-21 00:04:30] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire false anim / task killPed
+[2026-11-21 00:04:30] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:31] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:31] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:32] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire false anim / task killPed
+[2026-11-21 00:04:32] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:33] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire false anim / task killPed
+[2026-11-21 00:04:33] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:34] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim false fire false anim / task killPed
+[2026-11-21 00:04:34] ROPEQA ground z 48.00 gap 1.00 target 1.54 frozen false hlc true tasks 1 weapon 28 aim true fire true anim / task killPed
+[2026-11-21 00:04:34] ROPEQA DONE 530168 ok ok

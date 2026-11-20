@@ -1,5 +1,6 @@
 <meta>
     <include resource="vcs_vehicle"/>
+    <include resource="vcs_model"/>
 
     <script src="mod.lua" type="shared" cache="false"/>
     <script src="mod_c.lua" type="client" cache="false"/>

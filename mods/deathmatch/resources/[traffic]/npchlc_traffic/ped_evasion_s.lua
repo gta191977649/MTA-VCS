@@ -76,6 +76,11 @@ addEventHandler("npchlc_traffic:evadeCar", resourceRoot, function(ped, car, kind
         if length > 0.01 then fx,fy = (cx-px)/length,(cy-py)/length end
     end
     begin(ped,brain,now,kind,fx,fy,not horn and "evade",kind=="ev_dive" or kind=="ev_step")
+    if brain.profile.pedType == 6 and (kind == "ev_dive" or kind == "handsup") then
+        local driver = getVehicleOccupant(car, 0)
+        exports.wanted:reportWantedCrime(driver, 8, ped, true)
+        exports.wanted:reportWantedCrime(driver, 9, ped, true)
+    end
 end)
 
 addEvent("npchlc_traffic:evadeClock", true)

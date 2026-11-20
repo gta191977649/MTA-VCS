@@ -42,6 +42,25 @@ technique vcs_reflection_map {
         PixelShader = compile ps_2_0 reflectionMapPixel();
     }
 }
+#elif defined(VCS_SIREN_LENS)
+float LensPhase;
+sampler LensSampler = sampler_state {
+    Texture = (gTexture0);
+};
+
+float4 lensPixel(float2 uv : TEXCOORD0, float4 diffuse : COLOR0) : COLOR0 {
+    float4 lens = tex2D(LensSampler, uv);
+    // The model's atlas supplies the red and blue sectors on BOTH sides.
+    // Approximate the rotating native beacon's measured one-second sweep.
+    float pulse = saturate(cos((gTime / 1.024 + LensPhase) * 6.2831853));
+    return float4(saturate(lens.rgb * (diffuse.rgb + 2 * pulse * pulse)), lens.a * diffuse.a);
+}
+
+technique vcs_emergency_lens {
+    pass Lens {
+        PixelShader = compile ps_2_0 lensPixel();
+    }
+}
 #elif defined(VCS_GLASS)
 sampler GlassSampler = sampler_state {
     Texture = (gTexture0);

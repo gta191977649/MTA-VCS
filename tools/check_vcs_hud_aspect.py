@@ -54,6 +54,7 @@ def load_lua():
     lua.execute((FRONTEND / "widescreen_c.lua").read_text(encoding="utf-8"))
     lua.execute("""
         exports = {
+            wanted = {getLocalWantedSnapshot = function() return 6, 0 end},
             frontend = {getVcsHudViewport = function(_, w, h) return getVcsHudViewport(w,h) end},
             mradar = {getVcsWeaponHudInfo = function() return {name = "beretta", clipped = true} end}
         }
@@ -151,6 +152,16 @@ def render_view(lua, assets, width, height, armed=False, submerged=False):
     clock = [draw for draw in draws if draw[0] == "hudnumbers" and math.isclose(draw[2], 19.3 * scale_y)]
     money = [draw for draw in draws if draw[0] == "hudnumbers" and math.isclose(draw[2], 78.3 * scale_y)]
     assert len(clock) == 5 and len(money) == 9
+    # SLUS_215.90 0x0031FDF0 supplies x=441 and a 13.5-unit leftward step.
+    # 0x0031EF08 supplies the 14-unit star width. Keep it square on every viewport.
+    star_top = money[0][2] + money[0][4] + 3 * scale_y
+    stars = [draw for draw in draws if draw[0] == "hudnumbers" and math.isclose(draw[2], star_top)]
+    assert len(stars) == 6
+    for index, (_, star_x, star_y, star_w, star_h) in enumerate(stars):
+        assert math.isclose((width - star_x) / scale_x, (480 - 441 + index * 13.5) / 480 * 640)
+        assert math.isclose(star_y - money[0][2] - money[0][4], 3 * scale_y)
+        assert math.isclose(star_w / scale_x, 14 / 480 * 640)
+        assert math.isclose(star_w, star_h)
     assert math.isclose(clock[0][1], money[0][1])
     _, bx, by, bw, bh = next(draw for draw in draws if draw[0] == "bar_outline" and math.isclose(draw[2], 58.3 * scale_y))
     assert abs(bx - clock[0][1]) <= 1.31 * scale_x and bx + bw < weapon_x
@@ -199,7 +210,7 @@ def main():
     print("Oxygen and armour bar colors verified")
     if args.detail_output:
         frame = render_view(lua, assets, 1920, 1080, armed=True)
-        frame.crop((1540, 15, 1900, 242)).save(args.detail_output)
+        frame.crop((1540, 15, 1900, 300)).save(args.detail_output)
 
 
 if __name__ == "__main__":

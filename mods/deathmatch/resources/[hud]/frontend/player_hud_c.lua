@@ -4,6 +4,37 @@ local reloadSnapshot = "leeds_engine:playerHud"
 local visible, ready = true, false
 local lastHealth, lastArmour, lastWanted
 local healthChanged, armourChanged, wantedChanged
+local wanted, parole = 0, 0
+local cashFrom, cashTarget, cashStarted
+local cashDuration = 1000
+
+local function displayedCash(now)
+    local balance = getPlayerMoney(localPlayer)
+    if cashTarget == nil then
+        cashFrom, cashTarget, cashStarted = balance, balance, now
+    end
+    local amount = cashTarget
+    if cashFrom ~= cashTarget then
+        local elapsed = (now - cashStarted) % 4294967296
+        local remaining = 1 - math.min(1, elapsed / cashDuration)
+        amount = cashTarget + (cashFrom - cashTarget) * remaining * remaining
+        amount = cashFrom < cashTarget and math.floor(amount) or math.ceil(amount)
+        if amount == cashTarget then cashFrom = amount end
+    end
+    if balance ~= cashTarget then
+        cashFrom, cashTarget, cashStarted = amount, balance, now
+    end
+    return amount
+end
+
+addEventHandler("onClientPlayerWanted", localPlayer, function(_, level, reason)
+    if reason == "respray" then parole = wanted end
+    wanted = level
+    wantedChanged = getTickCount()
+end)
+addEventHandler("onClientWantedSnapshot", localPlayer, function(level, suspended)
+    wanted, parole = level, suspended
+end)
 
 -- VCSPC CHud::Draw uses one right-edge anchor and a shared safe zone.
 local hudOffsetX, hudOffsetY = -8 * 2.30, -8 * 0.9
@@ -103,10 +134,10 @@ function CHud:drawPlayer(now)
     local width, height = guiGetScreenSize()
     local sx, sy = getVcsHudViewport(width, height)
     local function x(offset) return width - (offset + hudOffsetX) * sx end
-    local health, armour, wanted = getElementHealth(localPlayer), getPedArmor(localPlayer), getPlayerWantedLevel()
+    local health, armour = getElementHealth(localPlayer), getPedArmor(localPlayer)
     updateFlashes(now, health, armour, wanted)
     local hour, minute = getTime()
-    local cash = getPlayerMoney(localPlayer)
+    local cash = displayedCash(now)
     drawDigits(("%02d:%02d"):format(hour, minute), x(163.5), (26.5 + hudOffsetY) * sy, sx, sy, true)
     drawDigits((cash < 0 and "-$%07d" or "$%08d"):format(math.abs(cash)), x(163.5), (85.5 + hudOffsetY) * sy,
         sx, sy, false)
@@ -134,13 +165,17 @@ function CHud:drawPlayer(now)
     end
     drawWeapon(weapon, name, x, sx, sy, clipped)
 
-    local parole = tonumber(getElementData(localPlayer, "nspray:paroleStars", false)) or 0
     local shown = canDraw(now, wantedChanged, 2000) and wanted or 0
     local atlas = CFont:texture("hudnumbers")
     for i = 1, math.min(6, math.max(wanted, parole)) do
         if i <= shown or (i <= parole and now % 300 < 150) then
             local tint = i <= shown and tocolor(207, 149, 54) or tocolor(0, 100, 150)
-            dxDrawImageSection(x(66.59 + (i - 1) * 19.4), (103 + hudOffsetY) * sy, 20.904 * sx, 26 * sy,
+            -- PS2 0x0031FDF0 anchors horizontally at 441, stepping left by 13.5.
+            -- Use the native 14-unit width for both axes to preserve square stars.
+            local starSize = 14 * 640 / 480 * sx
+            local starY = (85.5 + hudOffsetY + 20 * 0.742 + 3) * sy
+            dxDrawImageSection(width - (39 + (i - 1) * 13.5) * 640 / 480 * sx,
+                starY, starSize, starSize,
                 96, 34, 16, 16, atlas, 0, 0, 0, tint)
         end
     end
@@ -152,6 +187,7 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
     for _, name in ipairs({"hudnumbers", "bar_inside1", "bar_inside1dark", "bar_inside2", "bar_inside2dark", "bar_outline"}) do
         if not CFont:texture(name) then return end
     end
+    wanted, parole = exports.wanted:getLocalWantedSnapshot()
     local previous = getElementData(localPlayer, reloadSnapshot, false)
     if previous then
         original = previous

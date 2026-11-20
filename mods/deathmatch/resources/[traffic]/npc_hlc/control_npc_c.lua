@@ -33,9 +33,10 @@ function getNPCDebugExecution(npc, revision)
         samples[npc] = sample
     end
     sample.requested = getTickCount()
-    if not sample.task or not controlled[npc] then return false end
+    if not sample.task then return false end
     return {sample.task, sample.action or false, sample.x or false, sample.y or false,
-        sample.z or false, sample.gx or false, sample.gy or false, sample.gz or false}
+        sample.z or false, sample.gx or false, sample.gy or false, sample.gz or false,
+        sample.waitingForServer or false}
 end
 
 local function setActive(npc, enabled)
@@ -156,39 +157,47 @@ local function cycleNPCs(elapsed)
         if sample then
             sample.task, sample.action, sample.x, sample.y, sample.z = nil, nil, nil, nil, nil
             sample.gx, sample.gy, sample.gz = nil, nil, nil
+            sample.waitingForServer = nil
         end
         local hitAt = trafficHits[npc]
         if hitAt and (getTickCount() - hitAt) % 4294967296 >= 350 then
             trafficHits[npc], hitAt = nil, nil
         end
         if (socialStops[npc] and actor == npc) or (hitAt and isNPCTrafficWalkTask(task[1])) then
+            if sample then sample.task = task[1] end
             stopControl(npc, true)
         elseif isElement(actor) and isElementStreamedIn(actor) and isElementSyncer(actor)
             and getNPCControlElement(npc, task) == actor and getElementHealth(actor) >= 1
             and not isPedDead(npc) and getNPCWalkSpeed(npc) then
-            if state.preview and (state.usePreview or isNPCTaskComplete(npc, actor, task)) then
+            if state.usePreview and state.preview then task = state.preview end
+            local complete = isNPCTaskComplete(npc, actor, task)
+            if complete and state.preview and not state.usePreview then
                 state.usePreview, task = true, state.preview
+                complete = isNPCTaskComplete(npc, actor, task)
             end
             if sample then sample.task = task[1] end
-            if isNPCTaskComplete(npc, actor, task) then
+            if complete then
                 if task[1] == "driveTrafficToPoint" and task[9] and task[12] == 0 then
                     performTask.driveTrafficToPoint(npc, task, elapsed, true)
                     controlled[npc] = true
                 else
+                    if sample then sample.waitingForServer = true end
                     if sample and isNPCTrafficWalkTask(task[1]) then sample.action="Awaiting route" end
                     stopControl(npc, task[1] == "driveTrafficToPoint" or task[1] == "driveTrafficRail"
                         or task[1] == "driveTrafficPhysics")
                 end
             else
-                if task[1] == "driveTrafficPhysics" then
-                    performTask.driveTrafficPhysics(npc, task, elapsed, state.driveProgress)
-                elseif isNPCTrafficWalkTask(task[1]) or task[1] == "walkFormation" then
+                if task[1] == "driveTrafficPhysics" or task[1] == "driveAtPed" or task[1] == "drivePoliceBlock" then
+                    performTask[task[1]](npc, task, elapsed, state.driveProgress)
+                elseif isNPCTrafficWalkTask(task[1]) or task[1] == "walkFormation" or task[1] == "walkToPos"
+                    or task[1] == "walkFollowElement" or task[1] == "killPed" or task[1] == "attackOccupiedVehicle"
+                    or task[1] == "approachDriverDoor" then
                     local walk = state.walkProgress
                     performTask[task[1]](npc, task, elapsed, walk)
                     if sample then
                         sample.action = (sample.x or walk.action == "TASK_SIMPLE_STAND_STILL") and walk.action or nil
                         if state.usePreview then sample.action="Route preview" end
-                        if sample.x and (walk.detour or walk.carDetour) then
+                        if sample.x and (walk.detour or walk.carDetour or walk.localRoute) then
                             sample.gx, sample.gy, sample.gz = walk.goalX, walk.goalY, walk.goalZ
                         end
                     end

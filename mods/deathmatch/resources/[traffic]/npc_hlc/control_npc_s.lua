@@ -18,12 +18,28 @@ end
 
 addEvent("npc_hlc:debugAssignmentChanged", false)
 
+addEvent("npc_hlc:driverDoorArrival",true)
+addEvent("npc_hlc:onDriverDoorArrival",false)
+addEventHandler("npc_hlc:driverDoorArrival",root,function(car,order)
+    local state=all_npcs[source]
+    local task=state and state.assignedTask
+    if not client or not task or state.owner~=client or state.actor~=source
+        or task[1]~="approachDriverDoor" or type(order)~="number" or task[5]~=order
+        or getElementSyncer(source)~=client or getPedOccupiedVehicle(task[2])~=car then return end
+    triggerEvent("npc_hlc:onDriverDoorArrival",source,car,order)
+end)
+
+local function taskDrivingStyle(task)
+    if task and task[1] == "driveTrafficPhysics" then return task[6] or 0 end
+    if task and task[1] == "driveTrafficRail" then return task.style or 0 end
+end
+
 function getNPCDebugAssignment(npc)
     local state = all_npcs[npc]
     if not state then return false end
     state.debugReadAt = getTickCount()
     local task = state.tasks[state.head]
-    return task and task[1] or false, state.revision or 0, state.owner or false, state.debugFallback or false
+    return task and task[1] or false, state.revision or 0, state.owner or false, state.debugFallback or false, taskDrivingStyle(task)
 end
 
 function recordNPCDebugFallback(actor, x, y, z)
@@ -53,7 +69,7 @@ local function updateAssignment(state, actor, owner, task, preview)
         sendTask(previousOwner, state, false)
     end
     if state.debugReadAt and elapsedMs(getTickCount(),state.debugReadAt)<1000 then
-        triggerEvent("npc_hlc:debugAssignmentChanged",state.npc,revision,task and task[1] or false,owner or false)
+        triggerEvent("npc_hlc:debugAssignmentChanged",state.npc,revision,task and task[1] or false,owner or false,taskDrivingStyle(task))
     end
     if owner then
         addElementDataSubscriber(state.npc, "npc_hlc:profile", owner)
@@ -94,7 +110,7 @@ function removeNPCControl(state)
     setActive(state, false)
 end
 
-local function completeTask(state, task)
+local function completeHead(state, task)
     state.tasks[state.head] = nil
     state.head = state.head + 1
     if state.head > state.tail then state.head, state.tail = 1, 0 end
@@ -102,11 +118,23 @@ local function completeTask(state, task)
     if all_npcs[state.npc] == state then refreshNPCControl(state) end
 end
 
+-- Consume queued steps whose completion condition already holds at this position.
+-- A completion handler may replace the queue, disable the ped or enqueue more work.
+local function completeTask(state, task)
+    for _ = 1, 8 do
+        completeHead(state, task)
+        if all_npcs[state.npc] ~= state then return end
+        task = state.assignedTask
+        if not task or not isNPCTaskComplete(state.npc, state.actor, task, true) then return end
+    end
+end
+
 local function cycleNPCs()
     local now = getTickCount()
     local gameSpeed = getGameSpeed()
-    for index = 1, math.min(MAX_UPDATES, #active) do
-        if index % 4 == 0 and elapsedMs(getTickCount(), now) >= TIME_BUDGET_MS then
+    for _ = 1, math.min(MAX_UPDATES, #active) do
+        local visit = getTickCount()
+        if elapsedMs(visit, now) >= TIME_BUDGET_MS then
             budgetExhaustions = budgetExhaustions + 1
             break
         end
@@ -115,9 +143,9 @@ local function cycleNPCs()
         if not state or state.visitedAt == now then break end
         cursor = cursor + 1
         state.visitedAt = now
+        local previousMovement = state.lastMovement
         refreshNPCControl(state)
         local task, actor = state.assignedTask, state.actor
-        local elapsed = math.min(MAX_FALLBACK_ELAPSED, elapsedMs(getTickCount(), state.lastMovement))
         if task then
             local passed=false
             if actor and state.preview and task[1]=="walkTrafficToPoint" then
@@ -137,10 +165,12 @@ local function cycleNPCs()
             end
             if passed or isNPCTaskComplete(state.npc, actor, task, true) then
                 completeTask(state, task)
-            elseif not clientDrivenTraffic[task[1]] and actor and not state.owner and not getElementSyncer(actor)
-                and getElementHealth(actor) >= 1 and elapsed >= FALLBACK_INTERVAL then
+            elseif not clientDrivenTraffic[task[1]] and actor and not state.owner and state.lastMovement == previousMovement
+                and elapsedMs(visit, previousMovement) >= FALLBACK_INTERVAL
+                and not getElementSyncer(actor) and getElementHealth(actor) >= 1 then
+                local elapsed = math.min(MAX_FALLBACK_ELAPSED, elapsedMs(visit, state.lastMovement))
                 state.debugFallback = nil
-                state.lastMovement = getTickCount()
+                state.lastMovement = visit
                 performTask[task[1]](state.npc, task, elapsed * gameSpeed)
                 if isNPCTaskComplete(state.npc, actor, task, true) then completeTask(state, task) end
             end

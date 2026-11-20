@@ -39,6 +39,12 @@ function CVehicle.resolve(vehicle)
     return classes[CVehicle.originalModel(vehicle)]
 end
 
+local policeParents = {[191]=523, [193]=598, [204]=597, [207]=596, [234]=427, [268]=490}
+function CVehicle.hasPoliceSiren(vehicle)
+    if not isElement(vehicle) or getElementType(vehicle) ~= "vehicle" then return false end
+    return policeParents[CVehicle.originalModel(vehicle)] == getElementModel(vehicle)
+end
+
 function getVcsVehicleClass(vehicle)
     local class = CVehicle.resolve(vehicle)
     return class and class.name or false

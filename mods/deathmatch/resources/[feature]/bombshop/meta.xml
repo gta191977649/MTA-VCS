@@ -1,6 +1,7 @@
 <meta>
     <info name="VCS Bomb Shop" type="script" description="Remote car bombs"/>
     <include resource="garage"/>
+    <include resource="wanted"/>
     <include resource="frontend"/>
     <include resource="mradar"/>
     <script src="server.lua" type="server"/>

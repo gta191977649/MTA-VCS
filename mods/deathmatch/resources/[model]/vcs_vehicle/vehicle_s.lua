@@ -1,5 +1,16 @@
--- External scripts can bind a native hull or construct one using the converted
--- model catalog. The synchronized identity survives controller resource restarts.
+local handlingData
+function getVcsHandlingData()
+    if not handlingData then
+        local file = fileOpen("data/handling.dat", true)
+        if not file then return false end
+        handlingData = fileRead(file, fileGetSize(file))
+        fileClose(file)
+    end
+    return handlingData
+end
+
+-- Scripts can bind a native hull or construct one from the converted catalog.
+-- The synchronized identity survives controller resource restarts.
 local restoringIdentity = false
 addEventHandler("onElementDataChange",root,function(key,previous)
     if client and not restoringIdentity and key == CVehicle.modelKey and getElementType(source) == "vehicle" then
@@ -24,8 +35,24 @@ local function matchesHull(vehicle, originalId)
     return base and getElementModel(vehicle) == base or false
 end
 
+local dashboardBeacon = {[193]={.38,.74,.23}, [204]={.36,.57,.16}}
+addEvent("vcs_vehicle:setDriverSiren", true)
+addEventHandler("vcs_vehicle:setDriverSiren", root, function(enabled)
+    if client and type(enabled) == "boolean" and CVehicle.hasPoliceSiren(source)
+        and getVehicleOccupant(source, 0) == client and isControlEnabled(client, "horn") then
+        setVehicleSirensOn(source, enabled)
+    end
+end)
+
+function configureVcsDashboardBeacon(vehicle, originalId)
+    local position = dashboardBeacon[originalId]
+    if not position or not addVehicleSirens(vehicle,1,2,true,false,false,false) then return false end
+    return setVehicleSirens(vehicle,1,position[1],position[2],position[3],255,24,16,255,0)
+end
+
 function bindVcsVehicle(vehicle, originalId)
     if not matchesHull(vehicle, originalId) then return false end
+    if dashboardBeacon[originalId] then configureVcsDashboardBeacon(vehicle, originalId) end
     return setElementData(vehicle, CVehicle.modelKey, originalId, "broadcast", "deny")
 end
 

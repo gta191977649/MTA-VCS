@@ -139,6 +139,18 @@ local function roadVehicle(vehicle)
         and getElementData(vehicle, TrafficVisibility.profileKey, false) == "road"
 end
 
+addEventHandler("npc_hlc:onHeadOnBlocker", root, function(blocker)
+    if roadVehicle(source) and isElementSyncer(source) and roadVehicle(blocker) then
+        triggerServerEvent("npchlc_traffic:headOnBlocker", resourceRoot, source, blocker)
+    end
+end)
+
+addEventHandler("npc_hlc:onAbandonedBlocker", root, function(blocker)
+    if roadVehicle(source) and isElementSyncer(source) and isElement(blocker) then
+        triggerServerEvent("npchlc_traffic:abandonedBlocker", resourceRoot, source, blocker)
+    end
+end)
+
 addEventHandler("npc_hlc:onCruiseStuck", root, function()
     if roadVehicle(source) and isElementSyncer(source) then
         triggerServerEvent("npchlc_traffic:cruiseStuck", resourceRoot, source)
@@ -285,13 +297,14 @@ addEventHandler("onClientPreRender",root,function()
     blockedCorrectionCar=nil
     sampledAt=now
     local x,y,z=getElementPosition(localPlayer)
+    local interior,dimension=getElementInterior(localPlayer),getElementDimension(localPlayer)
     for _,kind in ipairs({"vehicle","ped"}) do
-        for _,e in ipairs(getElementsWithinRange(x,y,z,100,kind,getElementInterior(localPlayer),getElementDimension(localPlayer)) or {}) do
+        for _,e in ipairs(getElementsWithinRange(x,y,z,100,kind,interior,dimension) or {}) do
             if isElementStreamedIn(e) then
                 local s=impactMotion[e] or {}
                 s.x,s.y,s.z=getElementPosition(e)
                 s.vx,s.vy,s.vz=getElementVelocity(e)
-                s.dimension,s.interior=getElementDimension(e),getElementInterior(e)
+                s.dimension,s.interior=dimension,interior
                 s.tick=now
                 impactMotion[e]=s
             end

@@ -22,7 +22,16 @@ DGS:dgsSetProperty(debug_memo,"textSize",{1.2,1.2})
 DGS:dgsSetProperty(debug_memo,"bgColor",tocolor(209, 157, 0,0))
 DGS:dgsSetProperty(debug_memo,"textColor",tocolor(255, 255, 255,255))
 
-setTimer(function() 
+local labelsVisible = true
+setTimer(function()
+    local visible = exports.frontend:isGameplayUiVisible()
+    if visible ~= labelsVisible then
+        labelsVisible = visible
+        for _, label in ipairs({build_info, debug_info, pos_info}) do
+            DGS:dgsSetVisible(label, visible)
+        end
+    end
+    if not visible then return end
     local net_info = getNetworkStats ()
     local x,y,z = getElementPosition(localPlayer)
     DGS:dgsSetProperty(build_info,"text",string.format("VICE CITY STORIES FREEROAM - DEV BUILD"))

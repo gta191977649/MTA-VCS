@@ -6,6 +6,7 @@ vcsResources = {
     { "audiozone" },
     { "skygfx" },
     { "font" },
+    { "wanted" },
     { "frontend" },
     { "mradar" },
     { "garage" },
@@ -25,6 +26,7 @@ vcsResources = {
     { "vcs_model", ifInstalled = true },
     { "npchlc_traffic" },
     { "placement" },
+    { "vcs_credit" },
 
     -- Standalone tools and alternate renderers keep their current enabled state.
     { "model", optional = true },

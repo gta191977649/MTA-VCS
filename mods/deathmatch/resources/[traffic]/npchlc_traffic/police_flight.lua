@@ -1,4 +1,7 @@
 TrafficPoliceFlight = {}
+TrafficPoliceFlight.ropeLifetimeMs = 255 * (1000 / 30)
+TrafficPoliceFlight.ropeSpan = 31 * (20 / 32)
+TrafficPoliceFlight.ropeProgressPerMs = 0.003 / 20
 
 local function clamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, value))
@@ -61,4 +64,49 @@ function TrafficPoliceFlight.controls(state, heading, distance, clearanceAltitud
     end
     if lateral ~= 0 then pitch = state.horizontalForwardSpeed * 2 end
     return clamp(-delta * 2, -1, 1), clamp(pitch, -1, 1), lateral, clamp(rawCollective, -0.3, 1)
+end
+
+local firingDelay = {[3] = 10000, [4] = 5000, [5] = 3500, [6] = 2000}
+function TrafficPoliceFlight.acquisitionDelay(level, occupied)
+    return occupied and 5000 or firingDelay[level] or 999999
+end
+
+-- The beam interpolates between older one-second prediction samples.
+function TrafficPoliceFlight.track(state, target, x, y, vx, vy, now)
+    if not state or state.target ~= target then
+        state = {target=target, samples={}, at=now, x=x, y=y}
+    end
+    local elapsed = (now-state.at)%4294967296
+    if elapsed >= 1000 then
+        table.insert(state.samples,1,{x+vx*100, y+vy*100})
+        state.samples[7] = nil
+        state.at, elapsed = now, 0
+    end
+    local a,b = state.samples[2],state.samples[3]
+    if a and b then
+        local t = elapsed/1000
+        state.x,state.y = b[1]+(a[1]-b[1])*t,b[2]+(a[2]-b[2])*t
+    end
+    return state
+end
+
+local boatCruise = {[0] = 8, 10, 15, 20, 25, 30, 40}
+function TrafficPoliceFlight.boatPaused(state, targetKind, now)
+    -- 00428C48 sets temporary maneuver 1 against a pedestrian or land vehicle.
+    if targetKind ~= "Boat" and targetKind ~= "Plane" and targetKind ~= "Helicopter" then
+        state.brakedAt = now
+    end
+    return state.brakedAt and (now-state.brakedAt)%4294967296 <= 1000
+end
+
+function TrafficPoliceFlight.boatIntent(level, x, y, z, tx, ty, tz, tvx, tvy, heading, speed)
+    local dx, dy, dz = tx - x, ty - y, tz - z
+    local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
+    local lead = 60 * math.min(2, distance * 0.05)
+    local bearing = math.atan2(dy + tvy * lead, dx + tvx * lead)
+    local error = angleDifference(bearing, heading)
+    local cruise = boatCruise[level] or 8
+    local deficit = cruise - speed * 60
+    local throttle = deficit > 0 and math.min(1, 4 * deficit / cruise) or deficit < -5 and -0.2 or -0.1
+    return bearing, throttle, distance < 40 and error < 0.15
 end

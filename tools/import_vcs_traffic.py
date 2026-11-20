@@ -23,6 +23,7 @@ from vcs_model_assets import (
     original_vehicle_reflections, vehicle_material_textures, vehicle_native_raster,
 )
 from vcs_vehicle_ground import ground_catalog
+from vcs_police_materials import POLICE_MODELS, SHARED_SURFACES, source_motorcycle_beacon, source_siren_bar
 from vcs_traffic_animations import convert_locomotion
 from vcs_road_collision import analyze_road_turns
 from vcs_pc_road_population import import_pc_road_population
@@ -333,7 +334,8 @@ def read_traffic_model_sources(image, models, pedestrian_ids=(), vehicle_binding
                                "textures": locate(first_texture + texture_slot),
                                "kind": "vehicle" if is_vehicle else "ped",
                                "base": vehicles[original_id]["model"] if original_id in vehicles
-                               else {8: 280, 12: 274, 13: 277, 280: 577}.get(original_id, 7)}
+                               else {8: 280, 9: 285, 10: 286, 11: 287, 12: 274, 13: 277,
+                                     117: 126, 118: 127, 119: 284, 280: 577}.get(original_id, 7)}
     return assets, entries
 
 
@@ -620,14 +622,15 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
     palette = table(raw_game, palette_offset, 0xF0, 3, "Pedestrian RGB palette")
     pedestrian_ids = {model for group in population["pedGroups"] for model in group if model >= 0}
     if street_peds:
-        pedestrian_ids.update((12, 13))
+        pedestrian_ids.update((9, 10, 11, 12, 13, 117, 118, 119))
         pedestrian_ids.update(model for group in GANG_MODELS for model in group)
     if not street_peds:
         vehicle_bindings = list(vehicle_bindings)
-        for original_id, (name, base) in WATER_MODEL_VARIANTS.items():
+        vehicle_bindings = [entry for entry in vehicle_bindings if entry["originalId"] not in POLICE_MODELS]
+        for original_id, (name, base) in (WATER_MODEL_VARIANTS | POLICE_MODELS).items():
             pointer, = U32.unpack_from(raw_game, model_table + original_id * 4)
             key, = U32.unpack_from(raw_game, pointer + 8)
-            require(key == model_name_key(name), f"Unexpected PS2 water model for {name}")
+            require(key == model_name_key(name), f"Unexpected PS2 vehicle model for {name}")
             vehicle_bindings.append({"originalId": original_id, "model": base, "name": name})
     model_sources, _ = read_traffic_model_sources(raw_game, model_table, pedestrian_ids, vehicle_bindings)
     if street_peds:
@@ -650,6 +653,8 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
             shared_vehicle_textures[texture] = native_textures((source_dir / donor).read_bytes())[texture]
         for name, offset in (("xv_vehiclegeneric_sl", 0x55CB0), ("xv_vehiclegrunge_sl", 0x55D10)):
             shared_vehicle_textures[name] = vehicle_native_raster(raw_game, name, offset)
+        police_surfaces = {name: (source, vehicle_native_raster(raw_game, source, offset))
+                           for name, (source, offset) in SHARED_SURFACES.items()}
     with tempfile.TemporaryDirectory(prefix="vcs-traffic-models-") as temp_dir:
         workspace = Path(temp_dir)
         game_dat = workspace / "game.dat"
@@ -688,11 +693,16 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
                     )
                     require(result.returncode == 0 and original_dff.is_file(),
                             f"PS2 material conversion failed for {name}: {result.stderr.strip()}")
-                    reflections = original_vehicle_reflections(original_dff.read_bytes())
+                    original_geometry = original_dff.read_bytes()
+                    reflections = original_vehicle_reflections(original_geometry)
+                    if name == "policem":
+                        geometry = source_siren_bar(geometry, original_geometry)
+                    elif name == "electrap":
+                        geometry = source_motorcycle_beacon(geometry, original_geometry)
                     external = {"vehiclelights128", "vehiclelightson128", "tablica", "vortex128x64"}
                     missing = vehicle_material_textures(geometry) - native_textures(dictionary).keys()
                     original = {}
-                    if missing - shared_vehicle_textures.keys() - external:
+                    if original_id in POLICE_MODELS or missing - shared_vehicle_textures.keys() - external:
                         entry = asset["textures"]
                         archive.seek(entry["offset"])
                         texture_input = workspace / (name + ".tex")
@@ -709,7 +719,8 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
                         validate_pc_texture_dictionary(original_dictionary, texture_output.name)
                         original = native_textures(original_dictionary)
                     geometry, dictionary, common = complete_vehicle_textures(
-                        geometry, dictionary, shared_vehicle_textures, original, name, reflections)
+                        geometry, dictionary, shared_vehicle_textures, original, name, reflections,
+                        police_surfaces if original_id in POLICE_MODELS else None)
                     used_common_textures.update(common)
                     outputs["vehicle"][name + ".dff"] = geometry
                     outputs["vehicle"][name + ".txd"] = dictionary
@@ -752,8 +763,10 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
         catalog.extend(("}", ""))
         animations, groups = convert_locomotion(raw_game, disc / "GTA3PS2.IMG", model_table, model_sources,
                                                street_evades=True)
-        image = build_img(outputs["ped"])
-        for name, data in {"street.img": image, "street.ifp": animations,
+        officer_files = {f"ped_{model}.{ext}" for model in (9, 10, 11, 117, 118, 119) for ext in ("dff", "txd")}
+        officer_image = build_img({name: data for name, data in outputs["ped"].items() if name in officer_files})
+        image = build_img({name: data for name, data in outputs["ped"].items() if name not in officer_files})
+        for name, data in {"police.img": officer_image, "street.img": image, "street.ifp": animations,
                            "models.lua": "\n".join(catalog).encode("ascii"), "groups.lua": groups,
                            "jaw_c.lua": templates["jaw_c.lua"]}.items():
             write_atomic(destination / name, data)
@@ -763,7 +776,7 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
     catalog = ["VCS_TRAFFIC_MODEL_CATALOG = {"]
     for original_id, asset in model_sources.items():
         kind, base = asset["kind"], asset["base"]
-        variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS else ""
+        variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS or original_id == 218 else ""
         catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"{variant}}},')
     catalog.append("}")
     templates["model_catalog.lua"] = ("\n".join(catalog) + "\n").encode("utf-8")

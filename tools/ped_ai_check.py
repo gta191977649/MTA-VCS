@@ -27,7 +27,7 @@ def main():
         function getElementHealth(e) return e.hp or 100 end
         function getPedOccupiedVehicle(e) return e.vehicle end
         function isPedInVehicle(e) return e.vehicle ~= nil end
-        function isPedOnGround(e) return true end
+        function isPedOnGround(e) return not e.airborne end
         function getElementDimension(e) return e.dim or 0 end
         function getElementInterior(e) return 0 end
         function getPedWeapon(e) return e.weapon or 0 end
@@ -43,7 +43,7 @@ def main():
         function getDistanceBetweenPoints3D(x,y,z,a,b,c) return math.sqrt((x-a)^2+(y-b)^2+(z-c)^2) end
         function getElementsWithinRange() return nearby end
         function triggerClientEvent(...) table.insert(messages, {...}) end
-        function reportWantedCrime(...) table.insert(crimes, {...}) end
+        exports.wanted = {reportWantedEvent = function(_, ...) table.insert(crimes, {...}) end}
         voices = {}
         PedVoice = {emit = function(ped, kind) table.insert(voices, {ped, kind}) end}
         TrafficActors = {isPolicePed = function() return false end}
@@ -78,7 +78,7 @@ def main():
         local driver = victim(tough)
         nearby = {driver, cop}
         PedAI.carjacked(driver, player, {})
-        assert(PedAI.busy(driver) and PedAI.update(driver, graph) and not driver.task)
+        assert(PedAI.busy(driver) and PedAI.update(driver, graph) and driver.task[1] == "killPed")
         assert(not PedAI.busy(cop) and #messages == 1)
         now = now + 1000
         assert(PedAI.update(driver, graph) and driver.task[1] == "killPed" and driver.task[2] == player)
@@ -146,8 +146,9 @@ def main():
         passenger.vehicle = {}
         PedAI.passengerThreat(passenger, player)
         assert(PedAI.update(passenger, graph) and not passenger.task)
-        passenger.vehicle = nil
-        now = now + 1000
+        passenger.vehicle, passenger.airborne = nil, true
+        assert(PedAI.update(passenger, graph) and not passenger.task)
+        passenger.airborne = false
         assert(PedAI.update(passenger, graph) and passenger.task[1] == "walkTrafficToPoint")
         now = now + 21000
         assert(not PedAI.update(driver, graph))

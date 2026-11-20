@@ -249,12 +249,13 @@ local function spawnEndpoints(from, to, heading)
     return {to}
 end
 
-local function collectCandidate(player, context)
+local function collectCandidate(player, context, targeted, stinger)
     local x, y, z = getElementPosition(player)
     local profile = TrafficPopulation.sample(graph.population, x, y, z, getTime(), math.random(0, 15))
     if not profile then return false end
     local roll = math.random(0,999)
     local originalId, police, groupSize, gangModels, formation = chooseActor(profile, context,roll)
+    if targeted then originalId,police,groupSize,gangModels,formation=8,true,nil,nil,nil end
     local model = originalId and TrafficAmbient.getPedestrianModel(originalId)
     if not model then return false end
 
@@ -289,7 +290,7 @@ local function collectCandidate(player, context)
                             end
                         end
                         return {x = px, y = py, z = pz, from = from, to = to, model = model,
-                            originalModelId = originalId, police = police, groupSize = groupSize,
+                            originalModelId = originalId, police = police, targeted = targeted, stinger = stinger, groupSize = groupSize,
                             gangModels = gangModels, formation = formation, started = getTickCount(),
                             visibleMin = visibleMin, visibleMax = visibleMax,
                             hiddenMin = hiddenMin, hiddenMax = hiddenMax, interior = getElementInterior(player),
@@ -395,7 +396,12 @@ local function saveActor(player, candidate)
     actorCount = actorCount + 1
     TrafficVisibility.track(ped, "pedestrian")
     PedAI.attach(ped, graph.modelIdSpace ~= "mta" and candidate.originalModelId or nil)
-    if candidate.police then setTrafficPolicePed(ped, true) end
+    if candidate.police then
+        setTrafficPolicePed(ped, true)
+        if candidate.stinger and getPlayerWantedLevel(player)>2 then
+            TrafficGroundPolice.prepareStinger(ped,player,candidate.from,candidate.to,target)
+        end
+    end
     if not candidate.gangModels and graph.edition == "SLUS-21590 USA v1.00" then
         PedActivity.onSpawn(ped, state, candidate.originalModelId)
     end
@@ -455,9 +461,8 @@ end
 function TrafficAmbient.adoptDriver(ped, player, vehicle, originalModelId, roadState, recoveryMs)
     if not graph or not isElement(ped) or isPedDead(ped) then return false end
     if actors[ped] then return true end
-    local now = getTickCount()
     local _, _, rotation = getElementRotation(ped)
-    actors[ped] = {owner = player or getElementSyncer(ped), queued = 0, hitAt = now, recoveryMs = recoveryMs,
+    actors[ped] = {owner = player or getElementSyncer(ped), queued = 0, hitAt = recoveryMs and getTickCount(), recoveryMs = recoveryMs,
         originalModelId = originalModelId, heading = math.floor(-rotation / 45 + 0.5) % 8}
     actorCount = actorCount + 1
     hlc:clearNPCTasks(ped)
@@ -606,15 +611,17 @@ local function hasNearbyObserver(ped, x, y, z)
 end
 
 local function updateBehavior(ped,state,now)
+    if TrafficCustody and TrafficCustody.isArresting(ped) then return true end
+    if state.hitAt and not state.roadFall then
+        local elapsed = (now - state.hitAt) % 4294967296
+        if elapsed < (state.recoveryMs or hitRecoveryMs) or (not isPedOnGround(ped) and elapsed < 2500) then return true end
+        state.hitAt, state.recoveryMs, state.blockedSince = nil, nil, now
+        state.behaviorOwned = true
+    end
     if state.roadFall then
         PedRoadInjury.update(ped,state,now)
     elseif state.bikePassenger and not PedAI.busy(ped) and TrafficPassengers.returnToBike(ped,state,now) then
         -- The passenger owns this approach until the native seat is occupied.
-    elseif state.hitAt then
-        local elapsed = (now - state.hitAt) % 4294967296
-        if elapsed >= (state.recoveryMs or hitRecoveryMs) and (isPedOnGround(ped) or elapsed >= 2500) then
-            state.hitAt, state.blockedSince = nil, now
-        end
     elseif PedAI.busy(ped) then
         local brain = PedAI.brain(ped)
         local event = brain and brain.event
@@ -667,9 +674,7 @@ local directKinds = {damage=true,gunpoint=true,carjack=true,passenger=true,vehic
 
 function TrafficAmbient.scheduleReaction(ped,event)
     local direct = directKinds[event.kind]==true and getElementType(event.target)=="player"
-    if direct or event.kind=="gunshot" or event.kind=="nearMiss" or event.kind=="damage" then
-        reactions[ped] = {event=event,direct=direct}
-    end
+    reactions[ped] = {event=event,direct=direct}
 end
 
 function TrafficAmbient.wakeReaction(ped,event)
@@ -769,7 +774,8 @@ local function continueCandidate(player, candidate)
     if (getTickCount() - candidate.started) % 4294967296 > attemptTimeout
         or candidate.interior ~= getElementInterior(player) or candidate.dimension ~= getElementDimension(player)
         or TrafficAmbient.getPedestrianModel(candidate.originalModelId) ~= candidate.model
-        or getDistanceBetweenPoints2D(x, y, candidate.playerX, candidate.playerY) > 2 then
+        or candidate.targeted and getPlayerWantedLevel(player)<3
+        or getDistanceBetweenPoints2D(x, y, candidate.playerX, candidate.playerY) > (candidate.stinger and 12 or 2) then
         cancelFormation(candidate)
         pending[player] = nil
         return
@@ -881,8 +887,16 @@ local function tick()
     local cap = math.floor(context.cap * densityScale)
     local x, y, z = getElementPosition(player)
     local interior, dimension = getElementInterior(player), getElementDimension(player)
+    local targeted,stinger
+    if graph.edition=="SLUS-21590 USA v1.00" and TrafficGroundPolice and getPlayerWantedLevel(player)>2 then
+        targeted,stinger=TrafficGroundPolice.footCandidate(player)
+        if targeted then
+            local _,response=TrafficGroundPolice.response(player)
+            cap=cap+response.pursuitPedLimit
+        end
+    end
     if not hasPedestrianSpace(x, y, z, interior, dimension, cap) then return end
-    local candidate = collectCandidate(player, context)
+    local candidate = collectCandidate(player, context, targeted, stinger)
     if not candidate then return end
     candidate.cap, candidate.playerZ = cap, z
     pending[player] = candidate

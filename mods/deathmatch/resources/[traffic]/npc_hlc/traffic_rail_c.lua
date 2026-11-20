@@ -294,6 +294,7 @@ addEventHandler("onClientRender", root, function()
     local sample = closest and closest[2]
     if not sample or not sample.contacts then return end
     local names = {"FL", "RL", "FR", "RR"}
+    local labels = {}
     for index, contact in ipairs(sample.contacts) do
         local x = sample.x + sample.dx * contact[1] + sample.dy * contact[2]
         local y = sample.y + sample.dy * contact[1] - sample.dx * contact[2]
@@ -306,7 +307,8 @@ addEventHandler("onClientRender", root, function()
             local _, _, actualZ = getElementPosition(closest[1])
             local label = contact[3] and ("%s fit %+.2f m"):format(name, actualZ + contact[4])
                 or name .. " surface rejected"
-            dxDrawText(label, sx - 55, sy - 12, sx + 55, sy + 12, color, 1, "default-bold", "center", "center")
+            labels[#labels+1] = {label,sx,sy-dxGetFontHeight(1,"default-bold")/2,color,"center",1}
         end
     end
+    if #labels>0 then exports.frontend:drawDebugLabels(labels) end
 end)

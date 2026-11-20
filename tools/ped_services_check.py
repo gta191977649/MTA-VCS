@@ -36,6 +36,8 @@ def main():
         function setPedAnimation(e,block,clip) e.animation=clip end
         function setPedRotation(e,h) e.heading=h end
         function getElementRotation(e) return 0,0,e.heading or 0 end
+        function setPedWeaponSlot(p,slot) p.armed=slot end
+        function setPedArmor(p,armor) p.armor=armor end
         function giveWeapon(p,id,ammo,equip)
             p[id]=ammo
             if equip then p.armed=id end
@@ -58,11 +60,51 @@ def main():
         PedServices.start({edition="SLUS-21590 USA v1.00"})
         local officer=actor(0,0,6)
         PedServices.initializeOfficer(officer,8)
-        assert(officer[3]==1000 and officer[22]==1000 and officer.armed==3)
+        assert(officer[3]==1000 and officer[22]==1000 and officer.armed==0)
         PedServices.initializeOfficer(officer,9)
-        assert(officer[28]==1000 and officer.armed==28)
+        assert(officer[28]==1000 and officer.armed==28 and officer.armor==50)
         PedServices.initializeOfficer(officer,11)
-        assert(officer[29]==1000 and officer.armed==29)
+        assert(officer[29]==1000 and officer.armed==29 and officer.armor==100)
+        local suspect=actor(15,0,0)
+        officer.original,officer.brain,officer.armed=8,{},0
+        local enrolled,stars,contact=1,1,true
+        TrafficGroundPolice={target=function() return suspect end, updateSpecial=function() end,
+            enroll=function() return true end,officerCount=function() return enrolled end,releaseOfficer=function() end}
+        TrafficWanted={tryArrest=function() return false end, driverArrestCar=function() return false end, officerCanPursue=function() return true end}
+        TrafficActors={isPolicePed=function(p) return p.role==6 end}
+        PedAIRules={ranged=function(w) return w>=22 end, attackRange=function() return 30 end}
+        function getPlayerWantedLevel() return stars end
+        function getPedOccupiedVehicle() return false end
+        function getPedContactElement() return contact end
+        function getPedWeapon(p,slot) return ({[0]=0,[1]=3,[2]=22})[slot or p.armed] end
+        assert(PedServices.update(officer,8,now) and officer.armed==0)
+        assert(not officer.pursuitGroup and not suspect.pursuitReply)
+        contact=false
+        assert(PedServices.update(officer,8,now) and officer.armed==1)
+        stars,enrolled,now=2,2,now+1000
+        world.ped={officer}
+        assert(PedServices.update(officer,8,now) and officer.armed==1)
+        assert(officer.pursuitGroup==1 and suspect.pursuitReply==1)
+        officer.armed,now=0,now+1000
+        world.ped={officer,officer,officer,officer}
+        assert(PedServices.update(officer,8,now) and officer.armed==2)
+        assert(officer.pursuitGroup==1 and suspect.pursuitReply==1)
+        local stopped=actor(15,0,0)
+        local shoot,locked=false,false
+        function getPedOccupiedVehicle(p) return p==suspect and stopped end
+        function getElementVelocity() return 0,0,0 end
+        TrafficWanted.vehicleFireDue=function() return shoot end
+        TrafficWanted.driverArrestCar=function() return not locked and stopped end
+        TrafficWanted.tryDriverArrest=function() return false end
+        TrafficWanted.driverDoorApproach=function() return -1.55,.4 end
+        assert(PedServices.update(officer,8,now) and officer.task[1]=="approachDriverDoor")
+        shoot=true
+        assert(PedServices.update(officer,8,now) and officer.task[1]=="attackOccupiedVehicle" and officer.task[6]==1)
+        shoot,locked=false,true
+        assert(PedServices.update(officer,8,now) and officer.task[1]=="attackOccupiedVehicle" and officer.task[6]==0)
+        locked=false
+        assert(PedServices.update(officer,8,now) and officer.task[1]=="approachDriverDoor")
+        function getPedOccupiedVehicle() return false end
         local casualty=actor(0,0,4,0)
         local elevated=actor(1,10,4,0)
         elevated.mission=true

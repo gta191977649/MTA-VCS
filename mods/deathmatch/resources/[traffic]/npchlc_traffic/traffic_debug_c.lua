@@ -46,6 +46,7 @@ local function update()
 end
 
 local function drawAircraft()
+    local labels = {}
     local status = TrafficAircraftClient.debugSlots()
     local cx, cy, cz = getCameraMatrix()
     local lines = {("AIRTRAIN   %s   %d/%d"):format(status.state, status.active, status.expected)}
@@ -56,20 +57,19 @@ local function drawAircraft()
             label = ("%s   phase %.1fs   XYZ %.0f %.0f %.0f   camera %.0fm"):format(
                 label, plane.phaseMs / 1000, plane.x, plane.y, plane.z, distance)
             local sx, sy = getScreenFromWorldPosition(plane.x, plane.y, plane.z)
-            if sx then dxDrawText("AIRTRAIN " .. plane.slot, sx, sy, sx, sy, foreground, 1, "default-bold", "center") end
+            if sx then labels[#labels+1] = {"AIRTRAIN " .. plane.slot, sx, sy, foreground, "center", 1} end
         end
         lines[#lines + 1] = label
     end
     local message = table.concat(lines, "\n")
-    dxDrawText(message, 19, 19, 0, 0, background, 1, "default-bold")
-    dxDrawText(message, 18, 18, 0, 0, foreground, 1, "default-bold")
+    labels[#labels+1] = {message,18,18,foreground,"left",1,background}
+    exports.frontend:drawDebugLabels(labels)
 end
 
 local function draw()
     if mode == "plane" then drawAircraft() return end
     local message = "Traffic debug / " .. mode .. "   Lane connections: orange   Active routes: light yellow   Ped: green   Boat: blue   Signal: red"
-    dxDrawText(message, 19, 19, 0, 0, background, 1, "default-bold")
-    dxDrawText(message, 18, 18, 0, 0, foreground, 1, "default-bold")
+    exports.frontend:drawDebugLabels({{message,18,18,foreground,"left",1,background}})
     TrafficNPCDebug.draw()
     if not nodes then return end
     local cx, cy, cz, tx, ty, tz = getCameraMatrix()
@@ -104,19 +104,19 @@ local function draw()
             end
         end
     end
-    local labels = 0
+    local labels = {}
     for _, node in ipairs(nodes) do
         local nx, ny, nz, kind, id = unpack(node)
         local color = colors[kind]
         drawProjectedLine(nx, ny, nz + 0.2, nx, ny, nz + 0.8, color, 2)
-        if labels < 24 and (nx - x) ^ 2 + (ny - y) ^ 2 + (nz - z) ^ 2 <= 35 ^ 2 then
+        if #labels < 24 and (nx - x) ^ 2 + (ny - y) ^ 2 + (nz - z) ^ 2 <= 35 ^ 2 then
             local sx, sy = getScreenFromWorldPosition(nx, ny, nz + 0.9)
             if sx then
-                dxDrawText(tostring(id), sx, sy, sx, sy, color, 0.9, "default-bold", "center")
-                labels = labels + 1
+                labels[#labels+1]={tostring(id),sx,sy,color,"center",0.9}
             end
         end
     end
+    if #labels>0 then exports.frontend:drawDebugLabels(labels) end
 end
 
 addEvent("npchlc_traffic:debugPaths", true)

@@ -19,6 +19,9 @@ VCS_TRAFFIC_LOCOMOTION_GROUPS = {
 }
 VCS_TRAFFIC_PEDESTRIAN_GROUPS = {
     [8] = 0,
+    [9] = 0,
+    [10] = 0,
+    [11] = 0,
     [12] = 0,
     [13] = 0,
     [14] = 0,
@@ -111,6 +114,9 @@ VCS_TRAFFIC_PEDESTRIAN_GROUPS = {
     [106] = 0,
     [107] = 39,
     [108] = 40,
+    [117] = 0,
+    [118] = 0,
+    [119] = 0,
     [127] = 0,
     [130] = 0,
 }

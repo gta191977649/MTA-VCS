@@ -75,7 +75,7 @@ function TrafficWorld.roadObserverPosition(player)
     return getElementPosition(isElement(vehicle) and vehicle or player)
 end
 
-function TrafficWorld.probeRoad(player, batch, onResult)
+function TrafficWorld.probeRoad(player, batch, onResult, slot)
     if not ready[player] then return false end
     local px, py, pz = TrafficWorld.roadObserverPosition(player)
     local points = {}
@@ -83,15 +83,17 @@ function TrafficWorld.probeRoad(player, batch, onResult)
         if getDistanceBetweenPoints3D(px, py, pz, candidate.x, candidate.y, candidate.z) > MAX_ACTOR_DISTANCE then return false end
         points[index] = {candidate.x, candidate.y, candidate.z, candidate.boat and "boat" or nil}
     end
-    query(player, "road", "road", batch, points, points)
-    requests[player].road.onResult = onResult
+    slot = slot or "road"
+    query(player, "road", slot, batch, points, points)
+    requests[player][slot].onResult = onResult
     return true
 end
 
-function TrafficWorld.cancelRoad(player, batch)
+function TrafficWorld.cancelRoad(player, batch, slot)
     local playerRequests = requests[player]
-    if playerRequests and playerRequests.road and playerRequests.road.key == batch then
-        playerRequests.road = nil
+    slot = slot or "road"
+    if playerRequests and playerRequests[slot] and playerRequests[slot].key == batch then
+        playerRequests[slot] = nil
     end
 end
 
@@ -146,9 +148,9 @@ addEvent("npchlc_traffic:worldProbeResult", true)
 addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, result)
     local playerRequests = requests[client]
     if not playerRequests then return end
-    local pending
-    for _, request in pairs(playerRequests) do
-        if request.id == id then pending = request break end
+    local pending, slot
+    for key, request in pairs(playerRequests) do
+        if request.id == id then pending, slot = request, key break end
     end
     if not pending or pending.id ~= id or pending.finished
         or pending.interior ~= getElementInterior(client) or pending.dimension ~= getElementDimension(client)
@@ -162,7 +164,7 @@ addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, re
             and (not endpoints[2] or destination ~= endpoints[2].id) then return end
         pending.result = {groundZ = result[1], visible = result[2], clear = true, destination = destination, skatable = result[4] == true}
     elseif pending.kind == "road" then
-        playerRequests.road = nil
+        playerRequests[slot] = nil
         if type(result) ~= "table" or type(result[1]) ~= "table" then
             pending.onResult(client, pending.key, false)
             return
@@ -178,7 +180,7 @@ addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, re
         pending.result = {probes = probes}
         local x, y = result[2], result[3]
         if type(x) == "number" and type(y) == "number" and math.abs(x * x + y * y - 1) < 0.01 then
-            roadViews[client] = {x = x, y = y, tick = getTickCount()}
+            if slot == "road" then roadViews[client] = {x = x, y = y, tick = getTickCount()} end
             pending.result.viewX, pending.result.viewY = x, y
         end
         pending.onResult(client, pending.key, pending.result)

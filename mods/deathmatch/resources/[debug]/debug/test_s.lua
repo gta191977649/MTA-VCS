@@ -1,5 +1,24 @@
 UI = exports.frontend
 
+addCommandHandler("wanted", function(player, _, value, extra)
+    if not isElement(player) or getElementType(player) ~= "player" then return end
+    if extra or not value or not value:match("^[1-6]$") then
+        UI:showTextBox(player, "Usage: /wanted [1-6]", 3000)
+        return
+    end
+    local resource = getResourceFromName("wanted")
+    if not resource or getResourceState(resource) ~= "running" then
+        UI:showTextBox(player, "Wanted resource is unavailable.", 3000)
+        return
+    end
+    if exports.wanted:setPlayerWanted(player, tonumber(value), "debug") then
+        local level = exports.wanted:getPlayerWanted(player)
+        UI:showTextBox(player, ("Wanted level set to %d %s."):format(level, level == 1 and "star" or "stars"), 3000)
+    else
+        UI:showTextBox(player, "Could not set wanted level.", 3000)
+    end
+end)
+
 local function optionalExports(player, name)
     local resource = getResourceFromName(name)
     if resource and getResourceState(resource) == "running" then

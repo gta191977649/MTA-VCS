@@ -1,5 +1,8 @@
 StreetPedModels = {
     [8] = {base=280, name="cop"},
+    [9] = {base=285, name="ped_9"},
+    [10] = {base=286, name="ped_10"},
+    [11] = {base=287, name="ped_11"},
     [12] = {base=274, name="ped_12"},
     [13] = {base=277, name="ped_13"},
     [14] = {base=7, name="male01"},
@@ -92,6 +95,9 @@ StreetPedModels = {
     [106] = {base=7, name="ped_106"},
     [107] = {base=7, name="ped_107"},
     [108] = {base=7, name="ped_108"},
+    [117] = {base=126, name="ped_117"},
+    [118] = {base=127, name="ped_118"},
+    [119] = {base=284, name="ped_119"},
     [127] = {base=7, name="ped_127"},
     [130] = {base=7, name="ped_130"},
 }

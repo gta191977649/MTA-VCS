@@ -128,7 +128,7 @@ local function threaten(sourcePed,ped)
         if group == sourceProfile.pedType then return end
         PedAI.rememberHostility(ped,sourcePed)
         if group == 6 then
-            if player and getPlayerWantedLevel(sourcePed) < 2 then setPlayerWanted(sourcePed,2,"gunpoint") end
+            if player then exports.wanted:raisePlayerWanted(sourcePed,2,"gunpoint") end
             return
         end
         if old and (old.intent == "fight" or old.intent == "flee" and (not player or old.target == sourcePed)) then return end
@@ -175,6 +175,14 @@ function PedSpecial.observeFire(brain, persistent, attacker)
     local fire = {tick=getTickCount(),persistent=persistent,pace="sprint"}
     if sameWorld(ped,attacker) then fire.target = attacker else fire.origin = {getElementPosition(ped)} end
     burning[ped] = fire
+end
+
+function PedSpecial.reportIgnition(brain, player)
+    local fire = burning[brain.ped]
+    if fire and not fire.reported and onFire(brain.ped) then
+        fire.reported = true
+        exports.wanted:reportWantedEvent(player, brain.profile.pedType == 6 and 15 or 14, brain.ped)
+    end
 end
 
 function PedSpecial.update(ped,graph)

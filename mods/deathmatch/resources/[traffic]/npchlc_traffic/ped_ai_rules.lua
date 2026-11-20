@@ -1,5 +1,16 @@
 PedAIRules = {}
 
+-- 001D8B30 chooses the heavier assault event for the combat knife,
+-- machete/katana and chainsaw. The host shares one slot for both blades.
+function PedAIRules.reportPlayerStrike(player, ped, police, weapon, immediate)
+    local firearm = weapon >= 22 and weapon <= 34 or weapon == 38
+    if weapon < 0 or weapon > 15 and not firearm then return end
+    local sharp = weapon == 4 or weapon == 8 or weapon == 9
+    local general = sharp and (police and 18 or 17) or (police and 3 or 1)
+    exports.wanted:reportWantedEvent(player, general, ped, immediate)
+    if firearm then exports.wanted:reportWantedEvent(player, police and 12 or 11, ped, immediate) end
+end
+
 function PedAIRules.ranged(weapon)
     return weapon >= 22 and weapon <= 38
 end

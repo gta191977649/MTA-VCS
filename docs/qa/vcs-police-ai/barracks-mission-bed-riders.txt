@@ -1,0 +1,12 @@
+[2026-11-21 00:52:24] PHIQA ready
+[2026-11-21 00:52:34] PHIQA duplicate denied true
+[2026-11-21 00:52:34] PHIQA mounted true true
+[2026-11-21 00:52:35] PHIQA armed 1 28 4 37
+[2026-11-21 00:52:35] PHIQA armed 2 28 4 37
+[2026-11-21 00:52:35] PHIQA armed 3 28 4 37
+[2026-11-21 00:52:36] PHIQA client true 0.020734577 [[[true,true,false,28,19791,37,0.75,-1.5,1.700000047683716],[true,true,false,28,19791,37,-0.75,-2.200000047683716,1.700000047683716],[true,true,false,28,19791,37,0,-4,1.700000047683716]]]
+[2026-11-21 00:52:39] PHIQA shot barracks-mission-bed-riders
+[2026-11-21 00:52:39] PHIQA client true 0.18502407 [[[true,true,false,28,19791,37,0.75,-1.5,1.700000047683716],[true,true,false,28,19791,37,-0.75,-2.200000047683716,1.700000047683716],[true,true,false,28,19791,37,0,-4,1.700000047683716]]]
+[2026-11-21 00:52:41] PHIQA released true true true true
+[2026-11-21 00:52:41] PHIQA truck removed true true true
+[2026-11-21 00:52:41] PHIQA DONE

@@ -346,6 +346,36 @@ def check():
         probe({},6,site,true)
         assert(result == false)
     """)
+    client.execute("""
+        streetEvents={}
+        function addEventHandler(event,_,handler)
+            streetEvents[event]=streetEvents[event] or {}
+            table.insert(streetEvents[event],handler)
+        end
+        function engineLoadIMG() return {} end
+        function engineImageGetFiles() return {} end
+        function setPedAnimation(ped,block,name,time,loop,move,interrupt,freeze,blend)
+            assert(block==TrafficAnimationBanks.street and name=="weapon_throwu")
+            assert(time==-1 and not loop and not move and not freeze and blend==0)
+            ped.throws=ped.throws+1
+        end
+    """)
+    client.execute((ROOT / "street_models_c.lua").read_text())
+    client.execute("""
+        for _,start in ipairs(streetEvents.onClientResourceStart) do start() end
+        source={throws=0}
+        local key="npchlc_traffic:stinger"
+        local function receive(ms,previous)
+            source[key]={[6]=ms}
+            for _,changed in ipairs(streetEvents.onClientElementDataChange) do changed(key,previous) end
+        end
+        receive(391,nil) -- observing an already deployed strip
+        assert(source.throws==0)
+        receive(0,false)
+        receive(0,{})
+        receive(650,{})
+        assert(source.throws==1)
+    """)
 
 
 if __name__ == "__main__":

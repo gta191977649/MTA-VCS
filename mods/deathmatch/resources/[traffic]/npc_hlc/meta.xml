@@ -41,6 +41,8 @@
 	<export function="getNPCSchedulerStats" type="server" http="false" />
 	<export function="projectNPCTrafficRailStart" type="server" http="false" />
 	<export function="getNPCTrafficRailSegment" type="server" http="false" />
+	<export function="isNPCTrafficHeadOnBlocked" type="server" http="false" />
+	<export function="isNPCTrafficSignalClosed" type="server" http="false" />
 	<export function="isNPCTrafficRailWaitingForSignal" type="server" http="false" />
 	<export function="getNPCTrafficRailDebugPoints" type="server" http="false" />
 	<export function="getNPCTrafficPhysicsRejoin" type="server" http="false" />

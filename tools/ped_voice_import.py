@@ -24,7 +24,8 @@ BANK_HASH = "22aba95a685061f018827323cd7c6623917f31ef3feaca425d5cd3ee603057e0"
 EVENTS = {"gunpoint": 0x76, "fear": 0x77, "pain": 0x6A, "impact": 0x8A, "carjack": 0x7A, "evade": 0x8D,
           "reclaim": 0x8E, "crash": 0x8F, "treat": 0x8B, "arrive": 0x8C, "revived": 0x7C,
           "fireScene": 0x96, "arrest": 0x6D, "arrested": 0x6C, "chat": 0x9C, "look": 0x99,
-          "mugVictim": 0x7B, "mugger": 0x79, "serviceOffer": 0x93, "serviceAction": 0x7F, "serviceEnd": 0x7E}
+          "mugVictim": 0x7B, "mugger": 0x79, "serviceOffer": 0x93, "serviceAction": 0x7F, "serviceEnd": 0x7E,
+          "pursuitGroup": 0x86, "pursuitReply": 0x87}
 SELECTOR, RANDOM_RANGE = 0x001C2448, 0x001C87D8
 MANAGER, PED, STACK, RETURN = 0x514A90, 0x820000, 0x8F0000, 0x890000
 BANK_FIRST = 293
@@ -54,6 +55,8 @@ def original_model_ranges(executable, game):
         cpu.mem_write(PED + 0x550, struct.pack("<I", ped_type))
         variants = [{} for _ in range(20)]
         for kind, event in EVENTS.items():
+            if kind == "pursuitGroup" and ped_type != 6 or kind == "pursuitReply" and original_id != 0:
+                continue
             # The fallback dispatcher selects from 2, 4 or 5 alternate voice packs
             # for certain uniforms. Twenty manager counter values cover every residue.
             for counter in range(20):

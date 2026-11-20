@@ -7,7 +7,11 @@ local rayX, rayY, rayZ, haloClear
 local haloOpacity = 0
 local lastColors, lastFogScale
 local stats = {draws=0, rays=0}
-local vertices = {{0,0,0,-1,0,0}, {0,0,0,-1,1,0}, {0,0,0,-1,0,1}, {0,0,0,-1,1,1}}
+-- Nonblack texels of the 64x64 star span 6..57 on both axes. Include one
+-- black texel center on each side for the entire bilinear footprint.
+local coreMin, coreMax = 5.5/64, 58.5/64
+local vertices = {{0,0,0,-1,coreMin,coreMin}, {0,0,0,-1,coreMax,coreMin},
+                  {0,0,0,-1,coreMin,coreMax}, {0,0,0,-1,coreMax,coreMax}}
 
 -- VCSPC Coronas.cpp patches the native registration distance and size operands.
 -- The patch divides its coefficients by ten because VCSPC stores SunSize in tenths.
@@ -27,7 +31,9 @@ local flareCorners = {{0,0}, {1,0}, {0,1}, {0,1}, {1,0}, {1,1}}
 local opticsVertices = {}
 for i = 1, (#flares + 1) * 6 do opticsVertices[i] = {} end
 -- Texel centers of the 64x64 star and 32x32 ring in the padded optics atlas.
-local starUv = {1.5/128, 1.5/128, 64.5/128, 64.5/128}
+-- The atlas maps the original quad between texel centers (63 intervals).
+local starUv = {6.5/128, 6.5/128, 59.5/128, 59.5/128}
+local starRadiusScale = 53/63
 local ringUv = {67.5/128, 1.5/128, 98.5/128, 32.5/128}
 
 function VCSSun.resetVisibility()
@@ -163,7 +169,7 @@ local function drawOptics(x, y, radius, width, height, values, fogScale)
     local r, g, b = values[25], values[26], values[27]
     local opacity = 255*haloOpacity
     local haloColor = tocolor(r/fogScale, g/fogScale, b/fogScale, opacity)
-    local count = appendOpticsQuad(0, x, y, radius, width, height, haloColor, starUv)
+    local count = appendOpticsQuad(0, x, y, radius*starRadiusScale, width, height, haloColor, starUv)
     if overlapsScreen(x, y, width, height, 0, 0) then
         local cx, cy = width/2, height/2
         local sizeScale = 4*height/448

@@ -79,6 +79,14 @@ The inflated GAME.DTZ count/pointer pair at +0x54/+0x58 leads to 686 effect reco
 
 Compare `HasEmptySlot`, `IsApproachable` and `RegisterPedWithAttractor` in gta-reversed revision `04c5b664`, `source/game_sa/PedAttractorManager.cpp`. The VCS comparisons, thresholds and rain gates above come from the US PS2 executable.
 
+## Walking around obstacles and changing tasks
+
+In the US PS2 executable, the pursuit branch at `0x001024E4` calls `0x00307900` to choose an intermediate seek point. The helper tests line of sight to the destination with `0x0018FC88` and examines linked pedestrian nodes when the direct path is obstructed. In the San Andreas comparison, `CTaskComplexWalkRoundBuildingAttempt::ComputeRoute` checks clearance along a wall and considers both sides on a head-on approach.
+
+In MTA the controlling client uses streamed collision. A parked car gets a route around the corners of its oriented bounds. When a wall blocks a walking corridor, the client searches a bounded patch of ground, checks shoulder clearance and follows intermediate points until it can resume the original approach. Moving cars can still require a pedestrian to yield. The local search adapts the seek behavior to streamed map objects. [Wall test](street-ai-evidence/wall-ped-detour-overhead.jpg) and [parked car test](street-ai-evidence/car-ped-detour-overhead.jpg).
+
+Ordinary vehicle exits allow the on-foot objective to run as soon as the ped is out and grounded. Airborne injuries and explicitly scripted recoveries keep their recovery conditions. The shared HLC scheduler consumes up to eight already-complete steps in queue order per visit, checking the active assignment again after each completion callback. Three loopback client samples measured 54, 96 and 105 ms from native driver exit to the first forward input. [Driver running after exit](street-ai-evidence/ped-vehicle-exit-running.jpg).
+
 ## Arriving at, using and leaving an attractor
 
 All six approach objectives enter 0x003BE80C. If unsigned ped+0x6DC < now, clear the deadline and cancel when an attractor reference exists. Equality permits the update. Once squared **horizontal** distance is ≤ (+0x810)², check the heading difference, including wrapping by ±2π. Report arrival when any absolute difference is strictly below +0x534. Otherwise set movement level 1 while turning. On arrival call 0x003FFFF8 and 0x00400248. The latter uses vtable+0x18 to grant a turn. Subtype 4 always grants one. The other five require first place in the arrived queue. A waiting actor clears the saved objective, takes objective 1 and clears the deadline.

@@ -392,10 +392,18 @@ local pools = {
         "ped_voice/0813.wav", "ped_voice/0814.wav",
     },
     {
+        "ped_voice/0818.wav", "ped_voice/0819.wav", "ped_voice/0820.wav", "ped_voice/0821.wav", "ped_voice/0822.wav",
+        "ped_voice/0823.wav",
+    },
+    {
         "ped_voice/0824.wav", "ped_voice/0825.wav",
     },
     {
         "ped_voice/0864.wav", "ped_voice/0865.wav",
+    },
+    {
+        "ped_voice/0869.wav", "ped_voice/0870.wav", "ped_voice/0871.wav", "ped_voice/0872.wav", "ped_voice/0873.wav",
+        "ped_voice/0874.wav",
     },
     {
         "ped_voice/0875.wav", "ped_voice/0876.wav",
@@ -404,16 +412,28 @@ local pools = {
         "ped_voice/0888.wav", "ped_voice/0889.wav",
     },
     {
+        "ped_voice/0893.wav", "ped_voice/0894.wav", "ped_voice/0895.wav", "ped_voice/0896.wav", "ped_voice/0897.wav",
+        "ped_voice/0898.wav",
+    },
+    {
         "ped_voice/0899.wav", "ped_voice/0900.wav",
     },
     {
         "ped_voice/0914.wav", "ped_voice/0915.wav",
     },
     {
+        "ped_voice/0919.wav", "ped_voice/0920.wav", "ped_voice/0921.wav", "ped_voice/0922.wav", "ped_voice/0923.wav",
+        "ped_voice/0924.wav",
+    },
+    {
         "ped_voice/0925.wav", "ped_voice/0926.wav",
     },
     {
         "ped_voice/0939.wav", "ped_voice/0940.wav",
+    },
+    {
+        "ped_voice/0944.wav", "ped_voice/0945.wav", "ped_voice/0946.wav", "ped_voice/0947.wav", "ped_voice/0948.wav",
+        "ped_voice/0949.wav",
     },
     {
         "ped_voice/0950.wav", "ped_voice/0951.wav",
@@ -1190,6 +1210,10 @@ local pools = {
         "ped_voice/3116.wav", "ped_voice/3117.wav", "ped_voice/3118.wav", "ped_voice/3119.wav", "ped_voice/3120.wav",
     },
     {
+        "ped_voice/3121.wav", "ped_voice/3122.wav", "ped_voice/3123.wav", "ped_voice/3124.wav", "ped_voice/3125.wav",
+        "ped_voice/3126.wav", "ped_voice/3127.wav", "ped_voice/3128.wav",
+    },
+    {
         "ped_voice/3129.wav", "ped_voice/3130.wav", "ped_voice/3131.wav", "ped_voice/3132.wav", "ped_voice/3133.wav",
         "ped_voice/3134.wav", "ped_voice/3135.wav", "ped_voice/3136.wav", "ped_voice/3137.wav",
     },
@@ -1685,457 +1709,457 @@ local pools = {
 }
 PedVoiceClips = {
     [0] = {
-        {fear=pools[320], pain=pools[319], carjack=pools[390], crash=pools[389], arrested=pools[388], serviceOffer=pools[391], serviceAction=pools[392]},
-        {fear=pools[320], pain=pools[319], arrested=pools[388], serviceAction=pools[392]},
-        {fear=pools[320], pain=pools[319], carjack=pools[390], arrested=pools[388], serviceAction=pools[392]},
-        {fear=pools[320], pain=pools[319], arrested=pools[388], serviceAction=pools[392]},
+        {fear=pools[325], pain=pools[324], carjack=pools[396], crash=pools[395], arrested=pools[393], serviceOffer=pools[397], serviceAction=pools[398], pursuitReply=pools[394]},
+        {fear=pools[325], pain=pools[324], arrested=pools[393], serviceAction=pools[398]},
+        {fear=pools[325], pain=pools[324], carjack=pools[396], arrested=pools[393], serviceAction=pools[398]},
+        {fear=pools[325], pain=pools[324], arrested=pools[393], serviceAction=pools[398]},
     },
     [8] = {
-        {fear=pools[320], pain=pools[319], evade=pools[131], arrest=pools[130]},
-        {fear=pools[320], pain=pools[319], evade=pools[133], arrest=pools[132]},
-        {fear=pools[320], pain=pools[319], evade=pools[135], arrest=pools[134]},
-        {fear=pools[320], pain=pools[319], evade=pools[137], arrest=pools[136]},
-        {fear=pools[320], pain=pools[319], evade=pools[139], arrest=pools[138]},
+        {fear=pools[325], pain=pools[324], evade=pools[132], arrest=pools[130], pursuitGroup=pools[131]},
+        {fear=pools[325], pain=pools[324], evade=pools[135], arrest=pools[133], pursuitGroup=pools[134]},
+        {fear=pools[325], pain=pools[324], evade=pools[138], arrest=pools[136], pursuitGroup=pools[137]},
+        {fear=pools[325], pain=pools[324], evade=pools[141], arrest=pools[139], pursuitGroup=pools[140]},
+        {fear=pools[325], pain=pools[324], evade=pools[144], arrest=pools[142], pursuitGroup=pools[143]},
     },
     [9] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [10] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [11] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [12] = {
-        {fear=pools[320], pain=pools[319], treat=pools[345], arrive=pools[344]},
-        {fear=pools[320], pain=pools[319], treat=pools[347], arrive=pools[346]},
+        {fear=pools[325], pain=pools[324], treat=pools[350], arrive=pools[349]},
+        {fear=pools[325], pain=pools[324], treat=pools[352], arrive=pools[351]},
     },
     [13] = {
-        {gunpoint=pools[167], fear=pools[320], pain=pools[319], carjack=pools[168], evade=pools[166], crash=pools[165]},
+        {gunpoint=pools[172], fear=pools[325], pain=pools[324], carjack=pools[173], evade=pools[171], crash=pools[170]},
     },
     [14] = {
-        {gunpoint=pools[466], fear=pools[320], pain=pools[319], carjack=pools[467], evade=pools[465], crash=pools[464], chat=pools[463]},
+        {gunpoint=pools[472], fear=pools[325], pain=pools[324], carjack=pools[473], evade=pools[471], crash=pools[470], chat=pools[469]},
     },
     [16] = {
-        {gunpoint=pools[234], fear=pools[163], pain=pools[162], carjack=pools[235], evade=pools[233], crash=pools[232], chat=pools[231], serviceAction=pools[164]},
+        {gunpoint=pools[239], fear=pools[168], pain=pools[167], carjack=pools[240], evade=pools[238], crash=pools[237], chat=pools[236], serviceAction=pools[169]},
     },
     [17] = {
-        {gunpoint=pools[194], fear=pools[163], pain=pools[162], carjack=pools[195], evade=pools[193], crash=pools[192], chat=pools[191], serviceAction=pools[164]},
+        {gunpoint=pools[199], fear=pools[168], pain=pools[167], carjack=pools[200], evade=pools[198], crash=pools[197], chat=pools[196], serviceAction=pools[169]},
     },
     [18] = {
-        {gunpoint=pools[293], fear=pools[320], pain=pools[319], carjack=pools[294], evade=pools[292], crash=pools[291], chat=pools[290]},
+        {gunpoint=pools[298], fear=pools[325], pain=pools[324], carjack=pools[299], evade=pools[297], crash=pools[296], chat=pools[295]},
     },
     [19] = {
-        {gunpoint=pools[268], fear=pools[320], pain=pools[319], carjack=pools[269], evade=pools[267], crash=pools[266], chat=pools[265]},
+        {gunpoint=pools[273], fear=pools[325], pain=pools[324], carjack=pools[274], evade=pools[272], crash=pools[271], chat=pools[270]},
     },
     [20] = {
-        {gunpoint=pools[229], fear=pools[163], pain=pools[162], carjack=pools[230], evade=pools[228], crash=pools[227], chat=pools[226], serviceAction=pools[164]},
+        {gunpoint=pools[234], fear=pools[168], pain=pools[167], carjack=pools[235], evade=pools[233], crash=pools[232], chat=pools[231], serviceAction=pools[169]},
     },
     [21] = {
-        {gunpoint=pools[189], fear=pools[163], pain=pools[162], carjack=pools[190], evade=pools[188], crash=pools[187], chat=pools[186], serviceAction=pools[164]},
+        {gunpoint=pools[194], fear=pools[168], pain=pools[167], carjack=pools[195], evade=pools[193], crash=pools[192], chat=pools[191], serviceAction=pools[169]},
     },
     [22] = {
-        {gunpoint=pools[288], fear=pools[320], pain=pools[319], carjack=pools[289], evade=pools[287], crash=pools[286], chat=pools[285]},
+        {gunpoint=pools[293], fear=pools[325], pain=pools[324], carjack=pools[294], evade=pools[292], crash=pools[291], chat=pools[290]},
     },
     [23] = {
-        {gunpoint=pools[263], fear=pools[320], pain=pools[319], carjack=pools[264], evade=pools[262], crash=pools[261], chat=pools[260]},
+        {gunpoint=pools[268], fear=pools[325], pain=pools[324], carjack=pools[269], evade=pools[267], crash=pools[266], chat=pools[265]},
     },
     [24] = {
-        {gunpoint=pools[204], fear=pools[163], pain=pools[162], carjack=pools[205], evade=pools[203], crash=pools[202], chat=pools[201], serviceAction=pools[164]},
+        {gunpoint=pools[209], fear=pools[168], pain=pools[167], carjack=pools[210], evade=pools[208], crash=pools[207], chat=pools[206], serviceAction=pools[169]},
     },
     [25] = {
-        {gunpoint=pools[184], fear=pools[163], pain=pools[162], carjack=pools[185], evade=pools[183], crash=pools[182], chat=pools[181], serviceAction=pools[164]},
+        {gunpoint=pools[189], fear=pools[168], pain=pools[167], carjack=pools[190], evade=pools[188], crash=pools[187], chat=pools[186], serviceAction=pools[169]},
     },
     [26] = {
-        {gunpoint=pools[283], fear=pools[320], pain=pools[319], carjack=pools[284], evade=pools[282], crash=pools[281], chat=pools[280]},
+        {gunpoint=pools[288], fear=pools[325], pain=pools[324], carjack=pools[289], evade=pools[287], crash=pools[286], chat=pools[285]},
     },
     [27] = {
-        {gunpoint=pools[253], fear=pools[320], pain=pools[319], carjack=pools[254], evade=pools[252], crash=pools[251], chat=pools[250]},
+        {gunpoint=pools[258], fear=pools[325], pain=pools[324], carjack=pools[259], evade=pools[257], crash=pools[256], chat=pools[255]},
     },
     [28] = {
-        {gunpoint=pools[209], fear=pools[163], pain=pools[162], carjack=pools[210], evade=pools[208], crash=pools[207], chat=pools[206], serviceAction=pools[164]},
+        {gunpoint=pools[214], fear=pools[168], pain=pools[167], carjack=pools[215], evade=pools[213], crash=pools[212], chat=pools[211], serviceAction=pools[169]},
     },
     [29] = {
-        {gunpoint=pools[219], fear=pools[163], pain=pools[162], carjack=pools[220], evade=pools[218], crash=pools[217], chat=pools[216], serviceAction=pools[164]},
+        {gunpoint=pools[224], fear=pools[168], pain=pools[167], carjack=pools[225], evade=pools[223], crash=pools[222], chat=pools[221], serviceAction=pools[169]},
     },
     [30] = {
-        {gunpoint=pools[214], fear=pools[163], pain=pools[162], carjack=pools[215], evade=pools[213], crash=pools[212], chat=pools[211], serviceAction=pools[164]},
+        {gunpoint=pools[219], fear=pools[168], pain=pools[167], carjack=pools[220], evade=pools[218], crash=pools[217], chat=pools[216], serviceAction=pools[169]},
     },
     [31] = {
-        {gunpoint=pools[224], fear=pools[163], pain=pools[162], carjack=pools[225], evade=pools[223], crash=pools[222], chat=pools[221], serviceAction=pools[164]},
+        {gunpoint=pools[229], fear=pools[168], pain=pools[167], carjack=pools[230], evade=pools[228], crash=pools[227], chat=pools[226], serviceAction=pools[169]},
     },
     [32] = {
-        {gunpoint=pools[199], fear=pools[163], pain=pools[162], carjack=pools[200], evade=pools[198], crash=pools[197], chat=pools[196], serviceAction=pools[164]},
+        {gunpoint=pools[204], fear=pools[168], pain=pools[167], carjack=pools[205], evade=pools[203], crash=pools[202], chat=pools[201], serviceAction=pools[169]},
     },
     [33] = {
-        {gunpoint=pools[273], fear=pools[320], pain=pools[319], carjack=pools[274], evade=pools[272], crash=pools[271], chat=pools[270]},
+        {gunpoint=pools[278], fear=pools[325], pain=pools[324], carjack=pools[279], evade=pools[277], crash=pools[276], chat=pools[275]},
     },
     [34] = {
-        {gunpoint=pools[278], fear=pools[320], pain=pools[319], carjack=pools[279], evade=pools[277], crash=pools[276], chat=pools[275]},
+        {gunpoint=pools[283], fear=pools[325], pain=pools[324], carjack=pools[284], evade=pools[282], crash=pools[281], chat=pools[280]},
     },
     [35] = {
-        {gunpoint=pools[258], fear=pools[320], pain=pools[319], carjack=pools[259], evade=pools[257], crash=pools[256], chat=pools[255]},
+        {gunpoint=pools[263], fear=pools[325], pain=pools[324], carjack=pools[264], evade=pools[262], crash=pools[261], chat=pools[260]},
     },
     [36] = {
-        {gunpoint=pools[73], fear=pools[320], pain=pools[319], carjack=pools[74], evade=pools[72], crash=pools[71], chat=pools[70]},
+        {gunpoint=pools[73], fear=pools[325], pain=pools[324], carjack=pools[74], evade=pools[72], crash=pools[71], chat=pools[70]},
     },
     [37] = {
-        {gunpoint=pools[103], fear=pools[320], pain=pools[319], carjack=pools[104], evade=pools[102], crash=pools[101], chat=pools[100]},
+        {gunpoint=pools[103], fear=pools[325], pain=pools[324], carjack=pools[104], evade=pools[102], crash=pools[101], chat=pools[100]},
     },
     [38] = {
-        {gunpoint=pools[55], fear=pools[163], pain=pools[162], carjack=pools[56], evade=pools[54], crash=pools[53], chat=pools[52], serviceAction=pools[164]},
+        {gunpoint=pools[55], fear=pools[168], pain=pools[167], carjack=pools[56], evade=pools[54], crash=pools[53], chat=pools[52], serviceAction=pools[169]},
     },
     [39] = {
-        {gunpoint=pools[30], fear=pools[163], pain=pools[162], carjack=pools[31], evade=pools[29], crash=pools[28], chat=pools[27], serviceAction=pools[164]},
+        {gunpoint=pools[30], fear=pools[168], pain=pools[167], carjack=pools[31], evade=pools[29], crash=pools[28], chat=pools[27], serviceAction=pools[169]},
     },
     [40] = {
-        {gunpoint=pools[118], fear=pools[320], pain=pools[319], carjack=pools[119], evade=pools[117], crash=pools[116], chat=pools[115]},
+        {gunpoint=pools[118], fear=pools[325], pain=pools[324], carjack=pools[119], evade=pools[117], crash=pools[116], chat=pools[115]},
     },
     [41] = {
-        {gunpoint=pools[78], fear=pools[320], pain=pools[319], carjack=pools[79], evade=pools[77], crash=pools[76], chat=pools[75]},
+        {gunpoint=pools[78], fear=pools[325], pain=pools[324], carjack=pools[79], evade=pools[77], crash=pools[76], chat=pools[75]},
     },
     [42] = {
-        {gunpoint=pools[50], fear=pools[163], pain=pools[162], carjack=pools[51], evade=pools[49], crash=pools[48], chat=pools[47], serviceAction=pools[164]},
+        {gunpoint=pools[50], fear=pools[168], pain=pools[167], carjack=pools[51], evade=pools[49], crash=pools[48], chat=pools[47], serviceAction=pools[169]},
     },
     [43] = {
-        {gunpoint=pools[25], fear=pools[163], pain=pools[162], carjack=pools[26], evade=pools[24], crash=pools[23], chat=pools[22], serviceAction=pools[164]},
+        {gunpoint=pools[25], fear=pools[168], pain=pools[167], carjack=pools[26], evade=pools[24], crash=pools[23], chat=pools[22], serviceAction=pools[169]},
     },
     [44] = {
-        {gunpoint=pools[113], fear=pools[320], pain=pools[319], carjack=pools[114], evade=pools[112], crash=pools[111], chat=pools[110]},
+        {gunpoint=pools[113], fear=pools[325], pain=pools[324], carjack=pools[114], evade=pools[112], crash=pools[111], chat=pools[110]},
     },
     [45] = {
-        {gunpoint=pools[40], fear=pools[163], pain=pools[162], carjack=pools[41], evade=pools[39], crash=pools[38], chat=pools[37], serviceAction=pools[164]},
+        {gunpoint=pools[40], fear=pools[168], pain=pools[167], carjack=pools[41], evade=pools[39], crash=pools[38], chat=pools[37], serviceAction=pools[169]},
     },
     [46] = {
-        {gunpoint=pools[93], fear=pools[320], pain=pools[319], carjack=pools[94], evade=pools[92], crash=pools[91], chat=pools[90]},
+        {gunpoint=pools[93], fear=pools[325], pain=pools[324], carjack=pools[94], evade=pools[92], crash=pools[91], chat=pools[90]},
     },
     [47] = {
-        {gunpoint=pools[20], fear=pools[163], pain=pools[162], carjack=pools[21], evade=pools[19], crash=pools[18], chat=pools[17], serviceAction=pools[164]},
+        {gunpoint=pools[20], fear=pools[168], pain=pools[167], carjack=pools[21], evade=pools[19], crash=pools[18], chat=pools[17], serviceAction=pools[169]},
     },
     [48] = {
-        {gunpoint=pools[68], fear=pools[320], pain=pools[319], carjack=pools[69], evade=pools[67], crash=pools[66], chat=pools[65]},
+        {gunpoint=pools[68], fear=pools[325], pain=pools[324], carjack=pools[69], evade=pools[67], crash=pools[66], chat=pools[65]},
     },
     [49] = {
-        {gunpoint=pools[98], fear=pools[320], pain=pools[319], carjack=pools[99], evade=pools[97], crash=pools[96], chat=pools[95]},
+        {gunpoint=pools[98], fear=pools[325], pain=pools[324], carjack=pools[99], evade=pools[97], crash=pools[96], chat=pools[95]},
     },
     [50] = {
-        {gunpoint=pools[45], fear=pools[163], pain=pools[162], carjack=pools[46], evade=pools[44], crash=pools[43], chat=pools[42], serviceAction=pools[164]},
+        {gunpoint=pools[45], fear=pools[168], pain=pools[167], carjack=pools[46], evade=pools[44], crash=pools[43], chat=pools[42], serviceAction=pools[169]},
     },
     [51] = {
-        {gunpoint=pools[35], fear=pools[163], pain=pools[162], carjack=pools[36], evade=pools[34], crash=pools[33], chat=pools[32], serviceAction=pools[164]},
+        {gunpoint=pools[35], fear=pools[168], pain=pools[167], carjack=pools[36], evade=pools[34], crash=pools[33], chat=pools[32], serviceAction=pools[169]},
     },
     [52] = {
-        {gunpoint=pools[83], fear=pools[320], pain=pools[319], carjack=pools[84], evade=pools[82], crash=pools[81], chat=pools[80]},
+        {gunpoint=pools[83], fear=pools[325], pain=pools[324], carjack=pools[84], evade=pools[82], crash=pools[81], chat=pools[80]},
     },
     [53] = {
-        {gunpoint=pools[108], fear=pools[320], pain=pools[319], carjack=pools[109], evade=pools[107], crash=pools[106], chat=pools[105]},
+        {gunpoint=pools[108], fear=pools[325], pain=pools[324], carjack=pools[109], evade=pools[107], crash=pools[106], chat=pools[105]},
     },
     [54] = {
-        {gunpoint=pools[88], fear=pools[320], pain=pools[319], carjack=pools[89], evade=pools[87], crash=pools[86], chat=pools[85]},
+        {gunpoint=pools[88], fear=pools[325], pain=pools[324], carjack=pools[89], evade=pools[87], crash=pools[86], chat=pools[85]},
     },
     [55] = {
-        {gunpoint=pools[516], fear=pools[320], pain=pools[319], carjack=pools[517], evade=pools[515], crash=pools[514], chat=pools[513]},
+        {gunpoint=pools[522], fear=pools[325], pain=pools[324], carjack=pools[523], evade=pools[521], crash=pools[520], chat=pools[519]},
     },
     [56] = {
-        {gunpoint=pools[461], fear=pools[163], pain=pools[162], carjack=pools[462], evade=pools[460], crash=pools[459], chat=pools[458], serviceAction=pools[164]},
+        {gunpoint=pools[467], fear=pools[168], pain=pools[167], carjack=pools[468], evade=pools[466], crash=pools[465], chat=pools[464], serviceAction=pools[169]},
     },
     [57] = {
-        {gunpoint=pools[416], fear=pools[163], pain=pools[162], carjack=pools[417], evade=pools[415], crash=pools[414], chat=pools[413], serviceAction=pools[164]},
+        {gunpoint=pools[422], fear=pools[168], pain=pools[167], carjack=pools[423], evade=pools[421], crash=pools[420], chat=pools[419], serviceAction=pools[169]},
     },
     [58] = {
-        {gunpoint=pools[551], fear=pools[320], pain=pools[319], carjack=pools[552], evade=pools[550], crash=pools[549], chat=pools[548]},
+        {gunpoint=pools[557], fear=pools[325], pain=pools[324], carjack=pools[558], evade=pools[556], crash=pools[555], chat=pools[554]},
     },
     [59] = {
-        {gunpoint=pools[496], fear=pools[320], pain=pools[319], carjack=pools[497], evade=pools[495], crash=pools[494], chat=pools[493]},
+        {gunpoint=pools[502], fear=pools[325], pain=pools[324], carjack=pools[503], evade=pools[501], crash=pools[500], chat=pools[499]},
     },
     [60] = {
-        {gunpoint=pools[446], fear=pools[163], pain=pools[162], carjack=pools[447], evade=pools[445], crash=pools[444], chat=pools[443], serviceAction=pools[164]},
+        {gunpoint=pools[452], fear=pools[168], pain=pools[167], carjack=pools[453], evade=pools[451], crash=pools[450], chat=pools[449], serviceAction=pools[169]},
     },
     [61] = {
-        {gunpoint=pools[406], fear=pools[163], pain=pools[162], carjack=pools[407], evade=pools[405], crash=pools[404], chat=pools[403], serviceAction=pools[164]},
+        {gunpoint=pools[412], fear=pools[168], pain=pools[167], carjack=pools[413], evade=pools[411], crash=pools[410], chat=pools[409], serviceAction=pools[169]},
     },
     [62] = {
-        {gunpoint=pools[541], fear=pools[320], pain=pools[319], carjack=pools[542], evade=pools[540], crash=pools[539], chat=pools[538]},
+        {gunpoint=pools[547], fear=pools[325], pain=pools[324], carjack=pools[548], evade=pools[546], crash=pools[545], chat=pools[544]},
     },
     [63] = {
-        {gunpoint=pools[491], fear=pools[320], pain=pools[319], carjack=pools[492], evade=pools[490], crash=pools[489], chat=pools[488]},
+        {gunpoint=pools[497], fear=pools[325], pain=pools[324], carjack=pools[498], evade=pools[496], crash=pools[495], chat=pools[494]},
     },
     [64] = {
-        {gunpoint=pools[426], fear=pools[163], pain=pools[162], carjack=pools[427], evade=pools[425], crash=pools[424], chat=pools[423], serviceAction=pools[164]},
+        {gunpoint=pools[432], fear=pools[168], pain=pools[167], carjack=pools[433], evade=pools[431], crash=pools[430], chat=pools[429], serviceAction=pools[169]},
     },
     [65] = {
-        {gunpoint=pools[506], fear=pools[320], pain=pools[319], carjack=pools[507], evade=pools[505], crash=pools[504], chat=pools[503]},
+        {gunpoint=pools[512], fear=pools[325], pain=pools[324], carjack=pools[513], evade=pools[511], crash=pools[510], chat=pools[509]},
     },
     [66] = {
-        {gunpoint=pools[396], fear=pools[163], pain=pools[162], carjack=pools[397], evade=pools[395], crash=pools[394], chat=pools[393], serviceAction=pools[164]},
+        {gunpoint=pools[402], fear=pools[168], pain=pools[167], carjack=pools[403], evade=pools[401], crash=pools[400], chat=pools[399], serviceAction=pools[169]},
     },
     [67] = {
-        {gunpoint=pools[471], fear=pools[320], pain=pools[319], carjack=pools[472], evade=pools[470], crash=pools[469], chat=pools[468]},
+        {gunpoint=pools[477], fear=pools[325], pain=pools[324], carjack=pools[478], evade=pools[476], crash=pools[475], chat=pools[474]},
     },
     [68] = {
-        {gunpoint=pools[521], fear=pools[320], pain=pools[319], carjack=pools[522], evade=pools[520], crash=pools[519], chat=pools[518]},
+        {gunpoint=pools[527], fear=pools[325], pain=pools[324], carjack=pools[528], evade=pools[526], crash=pools[525], chat=pools[524]},
     },
     [69] = {
-        {gunpoint=pools[401], fear=pools[163], pain=pools[162], carjack=pools[402], evade=pools[400], crash=pools[399], chat=pools[398], serviceAction=pools[164]},
+        {gunpoint=pools[407], fear=pools[168], pain=pools[167], carjack=pools[408], evade=pools[406], crash=pools[405], chat=pools[404], serviceAction=pools[169]},
     },
     [70] = {
-        {gunpoint=pools[486], fear=pools[320], pain=pools[319], carjack=pools[487], evade=pools[485], crash=pools[484], chat=pools[483]},
+        {gunpoint=pools[492], fear=pools[325], pain=pools[324], carjack=pools[493], evade=pools[491], crash=pools[490], chat=pools[489]},
     },
     [71] = {
-        {gunpoint=pools[441], fear=pools[163], pain=pools[162], carjack=pools[442], evade=pools[440], crash=pools[439], chat=pools[438], serviceAction=pools[164]},
+        {gunpoint=pools[447], fear=pools[168], pain=pools[167], carjack=pools[448], evade=pools[446], crash=pools[445], chat=pools[444], serviceAction=pools[169]},
     },
     [72] = {
-        {gunpoint=pools[531], fear=pools[320], pain=pools[319], carjack=pools[532], evade=pools[530], crash=pools[529], chat=pools[528]},
+        {gunpoint=pools[537], fear=pools[325], pain=pools[324], carjack=pools[538], evade=pools[536], crash=pools[535], chat=pools[534]},
     },
     [73] = {
-        {gunpoint=pools[431], fear=pools[163], pain=pools[162], carjack=pools[432], evade=pools[430], crash=pools[429], chat=pools[428], serviceAction=pools[164]},
+        {gunpoint=pools[437], fear=pools[168], pain=pools[167], carjack=pools[438], evade=pools[436], crash=pools[435], chat=pools[434], serviceAction=pools[169]},
     },
     [74] = {
-        {gunpoint=pools[511], fear=pools[320], pain=pools[319], carjack=pools[512], evade=pools[510], crash=pools[509], chat=pools[508]},
+        {gunpoint=pools[517], fear=pools[325], pain=pools[324], carjack=pools[518], evade=pools[516], crash=pools[515], chat=pools[514]},
     },
     [75] = {
-        {gunpoint=pools[476], fear=pools[320], pain=pools[319], carjack=pools[477], evade=pools[475], crash=pools[474], chat=pools[473]},
+        {gunpoint=pools[482], fear=pools[325], pain=pools[324], carjack=pools[483], evade=pools[481], crash=pools[480], chat=pools[479]},
     },
     [76] = {
-        {fear=pools[163], pain=pools[162], serviceAction=pools[164]},
+        {fear=pools[168], pain=pools[167], serviceAction=pools[169]},
     },
     [77] = {
-        {gunpoint=pools[421], fear=pools[163], pain=pools[162], carjack=pools[422], evade=pools[420], crash=pools[419], chat=pools[418], serviceAction=pools[164]},
+        {gunpoint=pools[427], fear=pools[168], pain=pools[167], carjack=pools[428], evade=pools[426], crash=pools[425], chat=pools[424], serviceAction=pools[169]},
     },
     [78] = {
-        {gunpoint=pools[501], fear=pools[320], pain=pools[319], carjack=pools[502], evade=pools[500], crash=pools[499], chat=pools[498]},
+        {gunpoint=pools[507], fear=pools[325], pain=pools[324], carjack=pools[508], evade=pools[506], crash=pools[505], chat=pools[504]},
     },
     [79] = {
-        {gunpoint=pools[536], fear=pools[320], pain=pools[319], carjack=pools[537], evade=pools[535], crash=pools[534], chat=pools[533]},
+        {gunpoint=pools[542], fear=pools[325], pain=pools[324], carjack=pools[543], evade=pools[541], crash=pools[540], chat=pools[539]},
     },
     [80] = {
-        {gunpoint=pools[481], fear=pools[320], pain=pools[319], carjack=pools[482], evade=pools[480], crash=pools[479], chat=pools[478]},
+        {gunpoint=pools[487], fear=pools[325], pain=pools[324], carjack=pools[488], evade=pools[486], crash=pools[485], chat=pools[484]},
     },
     [81] = {
-        {gunpoint=pools[436], fear=pools[163], pain=pools[162], carjack=pools[437], evade=pools[435], crash=pools[434], chat=pools[433], serviceAction=pools[164]},
+        {gunpoint=pools[442], fear=pools[168], pain=pools[167], carjack=pools[443], evade=pools[441], crash=pools[440], chat=pools[439], serviceAction=pools[169]},
     },
     [82] = {
-        {gunpoint=pools[526], fear=pools[320], pain=pools[319], carjack=pools[527], evade=pools[525], crash=pools[524], chat=pools[523]},
+        {gunpoint=pools[532], fear=pools[325], pain=pools[324], carjack=pools[533], evade=pools[531], crash=pools[530], chat=pools[529]},
     },
     [83] = {
-        {gunpoint=pools[456], fear=pools[163], pain=pools[162], carjack=pools[457], evade=pools[455], crash=pools[454], chat=pools[453], serviceAction=pools[164]},
+        {gunpoint=pools[462], fear=pools[168], pain=pools[167], carjack=pools[463], evade=pools[461], crash=pools[460], chat=pools[459], serviceAction=pools[169]},
     },
     [84] = {
-        {gunpoint=pools[546], fear=pools[320], pain=pools[319], carjack=pools[547], evade=pools[545], crash=pools[544], chat=pools[543]},
+        {gunpoint=pools[552], fear=pools[325], pain=pools[324], carjack=pools[553], evade=pools[551], crash=pools[550], chat=pools[549]},
     },
     [85] = {
-        {gunpoint=pools[451], fear=pools[163], pain=pools[162], carjack=pools[452], evade=pools[450], crash=pools[449], chat=pools[448], serviceAction=pools[164]},
+        {gunpoint=pools[457], fear=pools[168], pain=pools[167], carjack=pools[458], evade=pools[456], crash=pools[455], chat=pools[454], serviceAction=pools[169]},
     },
     [86] = {
-        {gunpoint=pools[411], fear=pools[163], pain=pools[162], carjack=pools[412], evade=pools[410], crash=pools[409], chat=pools[408], serviceAction=pools[164]},
+        {gunpoint=pools[417], fear=pools[168], pain=pools[167], carjack=pools[418], evade=pools[416], crash=pools[415], chat=pools[414], serviceAction=pools[169]},
     },
     [87] = {
-        {gunpoint=pools[300], fear=pools[163], pain=pools[162], carjack=pools[301], evade=pools[299], crash=pools[298], chat=pools[297], serviceAction=pools[164]},
+        {gunpoint=pools[305], fear=pools[168], pain=pools[167], carjack=pools[306], evade=pools[304], crash=pools[303], chat=pools[302], serviceAction=pools[169]},
     },
     [88] = {
-        {gunpoint=pools[305], fear=pools[320], pain=pools[319], carjack=pools[306], evade=pools[304], crash=pools[303], chat=pools[302]},
+        {gunpoint=pools[310], fear=pools[325], pain=pools[324], carjack=pools[311], evade=pools[309], crash=pools[308], chat=pools[307]},
     },
     [89] = {
-        {gunpoint=pools[312], fear=pools[320], pain=pools[319], carjack=pools[313], evade=pools[311], crash=pools[310], chat=pools[309]},
+        {gunpoint=pools[317], fear=pools[325], pain=pools[324], carjack=pools[318], evade=pools[316], crash=pools[315], chat=pools[314]},
     },
     [90] = {
-        {gunpoint=pools[317], fear=pools[320], pain=pools[319], carjack=pools[318], evade=pools[316], crash=pools[315], chat=pools[314]},
+        {gunpoint=pools[322], fear=pools[325], pain=pools[324], carjack=pools[323], evade=pools[321], crash=pools[320], chat=pools[319]},
     },
     [91] = {
-        {gunpoint=pools[143], fear=pools[320], pain=pools[319], carjack=pools[144], evade=pools[142], crash=pools[141], chat=pools[140]},
+        {gunpoint=pools[148], fear=pools[325], pain=pools[324], carjack=pools[149], evade=pools[147], crash=pools[146], chat=pools[145]},
     },
     [92] = {
-        {gunpoint=pools[148], fear=pools[320], pain=pools[319], carjack=pools[149], evade=pools[147], crash=pools[146], chat=pools[145]},
+        {gunpoint=pools[153], fear=pools[325], pain=pools[324], carjack=pools[154], evade=pools[152], crash=pools[151], chat=pools[150]},
     },
     [93] = {
-        {gunpoint=pools[123], fear=pools[320], pain=pools[319], carjack=pools[124], evade=pools[122], crash=pools[121], chat=pools[120]},
+        {gunpoint=pools[123], fear=pools[325], pain=pools[324], carjack=pools[124], evade=pools[122], crash=pools[121], chat=pools[120]},
     },
     [94] = {
-        {gunpoint=pools[128], fear=pools[320], pain=pools[319], carjack=pools[129], evade=pools[127], crash=pools[126], chat=pools[125]},
+        {gunpoint=pools[128], fear=pools[325], pain=pools[324], carjack=pools[129], evade=pools[127], crash=pools[126], chat=pools[125]},
     },
     [95] = {
-        {fear=pools[367], pain=pools[319], crash=pools[366]},
+        {fear=pools[372], pain=pools[324], crash=pools[371]},
     },
     [96] = {
-        {fear=pools[369], pain=pools[319], crash=pools[368]},
+        {fear=pools[374], pain=pools[324], crash=pools[373]},
     },
     [97] = {
-        {gunpoint=pools[8], fear=pools[320], pain=pools[319], carjack=pools[9], evade=pools[7], crash=pools[6], chat=pools[5]},
+        {gunpoint=pools[8], fear=pools[325], pain=pools[324], carjack=pools[9], evade=pools[7], crash=pools[6], chat=pools[5]},
     },
     [98] = {
-        {gunpoint=pools[13], fear=pools[320], pain=pools[319], carjack=pools[14], evade=pools[12], crash=pools[11], chat=pools[10]},
+        {gunpoint=pools[13], fear=pools[325], pain=pools[324], carjack=pools[14], evade=pools[12], crash=pools[11], chat=pools[10]},
     },
     [99] = {
-        {gunpoint=pools[359], fear=pools[320], pain=pools[319], carjack=pools[360], evade=pools[358], crash=pools[357], chat=pools[356]},
+        {gunpoint=pools[364], fear=pools[325], pain=pools[324], carjack=pools[365], evade=pools[363], crash=pools[362], chat=pools[361]},
     },
     [100] = {
-        {gunpoint=pools[364], fear=pools[320], pain=pools[319], carjack=pools[365], evade=pools[363], crash=pools[362], chat=pools[361]},
+        {gunpoint=pools[369], fear=pools[325], pain=pools[324], carjack=pools[370], evade=pools[368], crash=pools[367], chat=pools[366]},
     },
     [101] = {
-        {gunpoint=pools[60], fear=pools[320], pain=pools[319], carjack=pools[61], evade=pools[59], crash=pools[58], chat=pools[57]},
+        {gunpoint=pools[60], fear=pools[325], pain=pools[324], carjack=pools[61], evade=pools[59], crash=pools[58], chat=pools[57]},
     },
     [102] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [103] = {
-        {gunpoint=pools[324], fear=pools[320], pain=pools[319], carjack=pools[325], evade=pools[323], crash=pools[322], chat=pools[321]},
+        {gunpoint=pools[329], fear=pools[325], pain=pools[324], carjack=pools[330], evade=pools[328], crash=pools[327], chat=pools[326]},
     },
     [104] = {
-        {fear=pools[320], pain=pools[319], carjack=pools[329], evade=pools[328], crash=pools[327], chat=pools[326]},
+        {fear=pools[325], pain=pools[324], carjack=pools[334], evade=pools[333], crash=pools[332], chat=pools[331]},
     },
     [105] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [106] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [107] = {
-        {gunpoint=pools[239], fear=pools[320], pain=pools[319], carjack=pools[240], evade=pools[238], crash=pools[237], chat=pools[236]},
+        {gunpoint=pools[244], fear=pools[325], pain=pools[324], carjack=pools[245], evade=pools[243], crash=pools[242], chat=pools[241]},
     },
     [108] = {
-        {gunpoint=pools[244], fear=pools[320], pain=pools[319], carjack=pools[245], evade=pools[243], crash=pools[242], chat=pools[241]},
+        {gunpoint=pools[249], fear=pools[325], pain=pools[324], carjack=pools[250], evade=pools[248], crash=pools[247], chat=pools[246]},
     },
     [109] = {
-        {gunpoint=pools[154], fear=pools[320], pain=pools[319], carjack=pools[155], evade=pools[153], crash=pools[152], chat=pools[151]},
+        {gunpoint=pools[159], fear=pools[325], pain=pools[324], carjack=pools[160], evade=pools[158], crash=pools[157], chat=pools[156]},
     },
     [110] = {
-        {gunpoint=pools[159], fear=pools[320], pain=pools[319], carjack=pools[160], evade=pools[158], crash=pools[157], chat=pools[156]},
+        {gunpoint=pools[164], fear=pools[325], pain=pools[324], carjack=pools[165], evade=pools[163], crash=pools[162], chat=pools[161]},
     },
     [111] = {
-        {gunpoint=pools[174], fear=pools[320], pain=pools[319], carjack=pools[175], evade=pools[173], crash=pools[172], chat=pools[171]},
+        {gunpoint=pools[179], fear=pools[325], pain=pools[324], carjack=pools[180], evade=pools[178], crash=pools[177], chat=pools[176]},
     },
     [112] = {
-        {gunpoint=pools[179], fear=pools[320], pain=pools[319], carjack=pools[180], evade=pools[178], crash=pools[177], chat=pools[176]},
+        {gunpoint=pools[184], fear=pools[325], pain=pools[324], carjack=pools[185], evade=pools[183], crash=pools[182], chat=pools[181]},
     },
     [113] = {
-        {gunpoint=pools[337], fear=pools[320], pain=pools[319], carjack=pools[338], evade=pools[336], crash=pools[335], chat=pools[334]},
+        {gunpoint=pools[342], fear=pools[325], pain=pools[324], carjack=pools[343], evade=pools[341], crash=pools[340], chat=pools[339]},
     },
     [114] = {
-        {gunpoint=pools[342], fear=pools[320], pain=pools[319], carjack=pools[343], evade=pools[341], crash=pools[340], chat=pools[339]},
+        {gunpoint=pools[347], fear=pools[325], pain=pools[324], carjack=pools[348], evade=pools[346], crash=pools[345], chat=pools[344]},
     },
     [115] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [116] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [117] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [118] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [119] = {
-        {fear=pools[320], pain=pools[319], evade=pools[64], crash=pools[63], arrest=pools[62]},
+        {fear=pools[325], pain=pools[324], evade=pools[64], crash=pools[63], arrest=pools[62]},
     },
     [120] = {
-        {fear=pools[2], pain=pools[319], crash=pools[1]},
+        {fear=pools[2], pain=pools[324], crash=pools[1]},
     },
     [121] = {
-        {fear=pools[4], pain=pools[319], crash=pools[3]},
+        {fear=pools[4], pain=pools[324], crash=pools[3]},
     },
     [122] = {
-        {fear=pools[16], pain=pools[319], crash=pools[15]},
+        {fear=pools[16], pain=pools[324], crash=pools[15]},
     },
     [123] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [124] = {
-        {fear=pools[170], pain=pools[319], crash=pools[169]},
+        {fear=pools[175], pain=pools[324], crash=pools[174]},
     },
     [125] = {
-        {fear=pools[170], pain=pools[319], crash=pools[169]},
+        {fear=pools[175], pain=pools[324], crash=pools[174]},
     },
     [126] = {
-        {fear=pools[170], pain=pools[319], crash=pools[169]},
+        {fear=pools[175], pain=pools[324], crash=pools[174]},
     },
     [127] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [128] = {
-        {fear=pools[161], pain=pools[319], crash=pools[150]},
+        {fear=pools[166], pain=pools[324], crash=pools[155]},
     },
     [129] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [130] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [131] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [132] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [133] = {
-        {fear=pools[247], pain=pools[319], crash=pools[246]},
-        {fear=pools[249], pain=pools[319], crash=pools[248]},
+        {fear=pools[252], pain=pools[324], crash=pools[251]},
+        {fear=pools[254], pain=pools[324], crash=pools[253]},
     },
     [134] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [135] = {
-        {fear=pools[296], pain=pools[319], crash=pools[295]},
+        {fear=pools[301], pain=pools[324], crash=pools[300]},
     },
     [136] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [137] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [138] = {
-        {fear=pools[308], pain=pools[162], crash=pools[307], serviceAction=pools[164]},
+        {fear=pools[313], pain=pools[167], crash=pools[312], serviceAction=pools[169]},
     },
     [139] = {
-        {fear=pools[308], pain=pools[162], crash=pools[307], serviceAction=pools[164]},
+        {fear=pools[313], pain=pools[167], crash=pools[312], serviceAction=pools[169]},
     },
     [140] = {
-        {fear=pools[308], pain=pools[162], crash=pools[307], serviceAction=pools[164]},
+        {fear=pools[313], pain=pools[167], crash=pools[312], serviceAction=pools[169]},
     },
     [141] = {
-        {fear=pools[308], pain=pools[162], crash=pools[307], serviceAction=pools[164]},
+        {fear=pools[313], pain=pools[167], crash=pools[312], serviceAction=pools[169]},
     },
     [142] = {
-        {fear=pools[331], pain=pools[319], crash=pools[330]},
+        {fear=pools[336], pain=pools[324], crash=pools[335]},
     },
     [143] = {
-        {fear=pools[333], pain=pools[162], crash=pools[332], serviceAction=pools[164]},
+        {fear=pools[338], pain=pools[167], crash=pools[337], serviceAction=pools[169]},
     },
     [144] = {
-        {fear=pools[379], pain=pools[319], crash=pools[378]},
+        {fear=pools[384], pain=pools[324], crash=pools[383]},
     },
     [145] = {
-        {fear=pools[381], pain=pools[319], crash=pools[380]},
+        {fear=pools[386], pain=pools[324], crash=pools[385]},
     },
     [146] = {
-        {fear=pools[351], pain=pools[319], crash=pools[350]},
+        {fear=pools[356], pain=pools[324], crash=pools[355]},
     },
     [147] = {
-        {fear=pools[349], pain=pools[319], crash=pools[348]},
+        {fear=pools[354], pain=pools[324], crash=pools[353]},
     },
     [148] = {
-        {fear=pools[355], pain=pools[319], crash=pools[354]},
+        {fear=pools[360], pain=pools[324], crash=pools[359]},
     },
     [149] = {
-        {fear=pools[353], pain=pools[162], crash=pools[352], serviceAction=pools[164]},
+        {fear=pools[358], pain=pools[167], crash=pools[357], serviceAction=pools[169]},
     },
     [150] = {
-        {fear=pools[383], pain=pools[319], crash=pools[382]},
-        {fear=pools[385], pain=pools[319], crash=pools[384]},
+        {fear=pools[388], pain=pools[324], crash=pools[387]},
+        {fear=pools[390], pain=pools[324], crash=pools[389]},
     },
     [151] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
     [152] = {
-        {fear=pools[371], pain=pools[319], crash=pools[370]},
-        {fear=pools[373], pain=pools[319], crash=pools[372]},
-        {fear=pools[375], pain=pools[319], crash=pools[374]},
-        {fear=pools[377], pain=pools[319], crash=pools[376]},
+        {fear=pools[376], pain=pools[324], crash=pools[375]},
+        {fear=pools[378], pain=pools[324], crash=pools[377]},
+        {fear=pools[380], pain=pools[324], crash=pools[379]},
+        {fear=pools[382], pain=pools[324], crash=pools[381]},
     },
     [153] = {
-        {fear=pools[387], pain=pools[319], crash=pools[386]},
+        {fear=pools[392], pain=pools[324], crash=pools[391]},
     },
     [154] = {
-        {fear=pools[320], pain=pools[319]},
+        {fear=pools[325], pain=pools[324]},
     },
 }

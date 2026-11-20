@@ -64,7 +64,7 @@ local function checkLawEnforcer(state, other, driver, now, observer)
         ownSpeed = speedSquared(sample.vx, sample.vy, sample.vz)
     end
     if otherSpeed > 0.1^2 and otherSpeed >= ownSpeed then
-        setPlayerWanted(driver, 1, "policeCollision")
+        exports.wanted:raisePlayerWanted(driver, 1, "policeCollision")
     end
 end
 

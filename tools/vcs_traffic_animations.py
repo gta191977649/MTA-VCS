@@ -225,7 +225,11 @@ def convert_locomotion(image, archive_path, model_table, pedestrian_ids, *, stre
                     for bone, frames in tracks.items()
                 }
         catalog.append("}")
-        for group, ordinal, expected, alias in ((26, 0xDF, "cpr", "service_cpr"), (0, 0x97, "arrestgun", "service_arrest")):
+        for group, ordinal, expected, alias in (
+            (26, 0xDF, "cpr", "service_cpr"),
+            (0, 0x97, "arrestgun", "service_arrest"),
+            (0, 0x3A, "weapon_throwu", "weapon_throwu"),
+        ):
             _, raw_block, first, count = GROUP.unpack_from(image, manager + group * GROUP.size)
             record = next(address for i in range(first, first + count)
                           if u32(image, address := associations + i * 56) == ordinal)

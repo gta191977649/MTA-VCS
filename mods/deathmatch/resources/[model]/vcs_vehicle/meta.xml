@@ -2,6 +2,7 @@
     <info name="VCS special vehicles" type="script" />
     <min_mta_version client="1.6.0-9.22676" server="1.6.0-9.22815" />
     <script src="controllers/vehicle.lua" type="shared" />
+    <script src="controllers/police_siren_c.lua" type="client" />
     <script src="controllers/bfinjection_c.lua" type="client" />
     <script src="controllers/boat.lua" type="shared" />
     <script src="controllers/jetski_control.lua" type="shared" />
@@ -22,12 +23,15 @@
     <script src="boarding_s.lua" type="server" />
     <script src="boarding_c.lua" type="client" />
     <file src="data/jetski_rider.json" />
+    <file src="data/handling.dat" download="false" />
     <file src="audio/jetski_engine.wav" />
     <export function="BindVehicleSoundBank" type="client" />
     <export function="UpdateGenericVehicleSound" type="client" />
     <export function="UpdateBoatSound" type="client" />
     <export function="StopGenericEngineSound" type="client" />
     <export function="getVcsVehicleClass" type="shared" />
+    <export function="getVcsHandlingData" type="server" http="false" />
+    <export function="configureVcsDashboardBeacon" type="server" />
     <export function="bindVcsVehicle" type="server" />
     <export function="createVcsVehicle" type="server" />
     <export function="transferWatercraftSeat" type="server" />

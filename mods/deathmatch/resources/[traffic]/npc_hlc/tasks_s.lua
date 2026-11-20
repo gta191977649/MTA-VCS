@@ -48,7 +48,9 @@ function performTask.shootPoint() end
 function performTask.shootElement() end
 function performTask.killPed() end
 function performTask.attackOccupiedVehicle() end
+function performTask.approachDriverDoor() end
 -- These tasks act on the native vehicle through its syncer.
 function performTask.stopVehicle() end
 function performTask.driveAtPed() end
+function performTask.drivePoliceBlock() end
 function performTask.waitForGreenLight() end

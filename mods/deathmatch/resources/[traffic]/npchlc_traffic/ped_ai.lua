@@ -291,11 +291,10 @@ local function confirmLoss(brain, report, observation)
     if PedVoice and not isPedDead(ped) then
         PedVoice.emit(ped, rules.ranged(weapon) and "pain" or "impact")
     end
-    if sameWorld(attacker, ped) and not isPedDead(ped) and getElementType(attacker) == "player"
-        and (weapon == 0 or weapon >= 22 and weapon <= 34) then
+    if sameWorld(attacker, ped) and not isPedDead(ped) and getElementType(attacker) == "player" then
         local police = brain.profile.pedType == 6 or TrafficActors.isPolicePed(ped)
-        reportWantedCrime(attacker, police and 3 or 2, ped)
-        if weapon ~= 0 then reportWantedCrime(attacker, police and 5 or 4, ped) end
+        rules.reportPlayerStrike(attacker, ped, police, weapon)
+        if weapon == 37 and PedSpecial then PedSpecial.reportIgnition(brain, attacker) end
     end
 end
 
@@ -451,6 +450,9 @@ function PedAI.update(ped, graph)
     local event = brain and brain.event
     if not event then return false end
     local now = getTickCount()
+    if brain.profile.pedType==6 and event.intent=="fight" and TrafficCustody and TrafficCustody.isActive(event.target) then
+        return returnToCar(brain,now)
+    end
     if event.road and PedCarjack.seated(brain) then return true end
     if event.kind == "returnCar" and (not sameWorld(ped, event.road.vehicle) or isVehicleBlown(event.road.vehicle)
         or getVehicleOccupant(event.road.vehicle, 0)) then return finish(brain) end
@@ -486,8 +488,7 @@ function PedAI.update(ped, graph)
         brain.tasks:clear()
         event.consumed, event.lastSeen = true, now
     end
-    if leavingVehicle(event.kind) and (elapsed(now, event.started) < 900
-        or not isPedOnGround(ped) and elapsed(now, event.started) < 2500) then return true end
+    if leavingVehicle(event.kind) and not isPedOnGround(ped) and elapsed(now, event.started) < 2500 then return true end
     if event.road and PedCarjack.update(brain, now) then return true end
     brain.objectives.body = event.intent == "flee" and (event.origin and 8 or 9)
         or event.intent == "fight" and (brain.tasks:hasRangedWeapon() and 0x10 or 0x11) or 2

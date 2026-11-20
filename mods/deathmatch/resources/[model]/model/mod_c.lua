@@ -33,7 +33,10 @@ function initModels()
     end
 
     for key,val in pairs(IMG_VEHICLE) do 
-        if val.replace == nil or val.replace == false then
+        if val.policeModel then
+            -- vcs_model owns the mesh on the synchronized emergency parent.
+            val.pointer = val.parent
+        elseif val.replace == nil or val.replace == false then
             if val.parent ~= nil then
                 val.pointer = engineRequestModel("vehicle",val.parent)
             else 
@@ -63,8 +66,8 @@ function setElementModModel(element,model)
         local id = IMG_PED[model].pointer
         setElementModel(element,id)
     elseif type == "vehicle" then 
-        local id = IMG_VEHICLE[model].pointer
-        setElementModel(element,id)
+        local definition = IMG_VEHICLE[model]
+        if definition and not definition.policeModel then setElementModel(element,definition.pointer) end
     else 
         print("[MOD]: Unsupported element type!")
     end

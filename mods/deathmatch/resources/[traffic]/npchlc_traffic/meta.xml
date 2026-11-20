@@ -1,4 +1,5 @@
 <meta>
+    <include resource="wanted" />
 	<include resource="vcs_vehicle"/>
 	<min_mta_version server="1.6.0" client="1.6.0" />
 	<info author="CrystalMV" version="0.2" name="NPC traffic" type="script"/>
@@ -11,11 +12,16 @@
 	<script src="traffic_population.lua" type="server" />
 	<script src="traffic_road_population.lua" type="server" />
 	<script src="traffic_graph.lua" type="server" />
+	<script src="traffic_stinger.lua" type="shared" />
+	<file src="stinger/plc_stinger.dff" />
+	<file src="stinger/plc_stinger.txd" />
 	<script src="ped_models/models.lua" type="shared" />
 	<script src="ped_models/groups.lua" type="shared" />
 	<script src="ped_models/jaw_c.lua" type="client" />
 	<script src="ped_animation_banks_c.lua" type="client" />
 	<script src="street_models_c.lua" type="client" />
+	<file src="police_models.img" />
+	<file src="ped_models/police.img" />
 	<file src="ped_models/street.img" />
 	<file src="ped_models/street.ifp" />
 	<script src="traffic_model_bindings.lua" type="server" />
@@ -26,6 +32,7 @@
 	<script src="traffic_world.lua" type="server" />
 	<script src="traffic_pursuit_exit_c.lua" type="client" />
 	<script src="traffic_world_c.lua" type="client" />
+	<script src="traffic_stinger_c.lua" type="client" />
 	<script src="traffic_debug.lua" type="server" />
 	<script src="npc_debug_range.lua" type="shared" />
 	<script src="npc_debug_s.lua" type="server" />
@@ -57,12 +64,16 @@
 	<script src="ped_theft.lua" type="server" />
 	<script src="ped_social.lua" type="server" />
 	<script src="ped_social_c.lua" type="client" />
+	<script src="traffic_ground_police.lua" type="server" />
 	<script src="ped_services.lua" type="server" />
 	<script src="ped_car_service.lua" type="server" />
 	<script src="ped_car_service_c.lua" type="client" />
 	<file src="sfx_service_suspension.wav" />
 	<script src="traffic_ambient.lua" type="server" />
 	<script src="traffic_passengers.lua" type="server" />
+	<script src="mission_barracks_s.lua" type="server" />
+	<export function="mountPhilBarracksRiders" type="server" />
+	<export function="unmountPhilBarracksRiders" type="server" />
 	<script src="traffic_passengers_c.lua" type="client" />
 	<script src="traffic_collision_handling.lua" type="server" />
 	<script src="traffic_crash_decisions.lua" type="server" />
@@ -72,11 +83,17 @@
 	<script src="traffic_road.lua" type="server" />
 	<script src="ped_script_control.lua" type="server" />
 	<script src="traffic_runtime.lua" type="server" />
-	<script src="wanted_rules.lua" type="server" />
+	<script src="custody_restarts.lua" type="server" />
+	<script src="custody.lua" type="server" />
+	<script src="custody_camera_c.lua" type="client" />
+	<script src="custody_c.lua" type="client" />
 	<script src="wanted.lua" type="server" />
-	<script src="police_flight.lua" type="server" />
+	<script src="police_flight.lua" type="shared" />
+	<script src="police_control_c.lua" type="client" />
+	<script src="police_response_s.lua" type="server" />
 	<script src="police.lua" type="server" />
 
+	<export function="setTrafficPlayerFreeBail" type="server" />
 	<export function="setTrafficPlayerRestrained" type="server" http="false" />
 	<export function="createTrafficScriptPed" type="server" http="false" />
 	<export function="acquireTrafficPedInArea" type="server" http="false" />
@@ -91,6 +108,7 @@
 	<export function="chooseTrafficPedestrianStep" type="server" http="false" />
 	<export function="findTrafficPedestrianAnchor" type="server" http="false" />
 	<export function="setNPCTrafficRoute" type="server" http="false" />
+	<export function="setNPCTrafficDrivingStyle" type="server" http="false" />
 	<export function="setTrafficPolicePed" type="server" http="false" />
 	<export function="sampleTrafficFlight" type="server" http="false" />
 	<export function="bindTrafficFixedWingModel" type="server" http="false" />
@@ -99,9 +117,11 @@
 	<export function="bindTrafficPedestrianModel" type="server" http="false" />
 	<export function="registerTrafficPedestrianWorld" type="server" http="false" />
 	<export function="getTrafficAmbientStatus" type="server" http="false" />
+	<export function="getVcsVehicleRenderMaterials" type="client" />
 	<export function="getTrafficRoadStatus" type="server" http="false" />
 	<export function="chooseTrafficCivilianVehicle" type="server" http="false" />
 	<export function="getTrafficDynamicRoute" type="server" http="false" />
+	<export function="isWantedPoliceNearby" type="server" />
 	<export function="setPlayerWanted" type="server" http="false" />
 	<export function="getPlayerWanted" type="server" http="false" />
 	<export function="suspendPlayerWanted" type="server" http="false" />

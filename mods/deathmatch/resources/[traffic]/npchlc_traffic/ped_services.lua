@@ -4,6 +4,7 @@ PedServices = {}
 local hlc = exports.npc_hlc
 local accidents, fires, workers, crews = {}, {}, {}, {}
 local timer,enabled
+local doorOrder=0
 local serviceModels = {[12]=227,[13]=194}
 local function age(now, before) return (now-before)%4294967296 end
 local function sameWorld(ped, slot)
@@ -77,10 +78,12 @@ local officerGun = {[9]=28,[10]=29,[11]=29,[117]=28,[118]=28}
 function PedServices.initializeOfficer(ped,model)
     if not enabled then return end
     if model==8 or model==119 then
-        giveWeapon(ped,3,1000,true)
+        giveWeapon(ped,3,1000,false)
         giveWeapon(ped,22,1000,false)
+        setPedWeaponSlot(ped,0)
     elseif officerGun[model] then
         giveWeapon(ped,officerGun[model],1000,true)
+        setPedArmor(ped,model==9 and 50 or 100)
     end
 end
 function PedServices.crewModel(original)
@@ -143,6 +146,10 @@ local function abandonApproach(state,job,now,resume)
     resume(state)
     return false
 end
+function PedServices.hasAssignment(ped)
+    return crews[ped] ~= nil
+end
+
 function PedServices.inVehicle(state,now,enterPhysics,resume)
     local job=crews[state.driver]
     local model=PedServices.crewModel(state.originalVehicle)
@@ -227,6 +234,7 @@ function PedServices.needsParkedVehicle(road)
     return crew and crew.road==road or brain and brain.event and brain.event.road==road
 end
 local function releaseReservation(ped)
+    if TrafficGroundPolice then TrafficGroundPolice.releaseOfficer(ped) end
     local w,job=workers[ped],crews[ped]
     if job and job.slot.crew==ped then job.slot.crew=nil end
     if w and w.slot then
@@ -341,32 +349,135 @@ local function pursueStreetPed(officer,x,y,z)
         end
     end
 end
+local nearbyOfficers = setmetatable({}, {__mode="k"})
+local function pursuitSpeech(ped, suspect, work, now)
+    if work.spokeAt and age(now,work.spokeAt)<1000 then return end
+    work.spokeAt = now
+    -- The original selector has no bank-2 line for solo event 0x83 or
+    -- crowd event 0x81 for the dispatched police models.
+    if TrafficGroundPolice.officerCount(suspect)==1 then return end
+    local x,y,z = getElementPosition(suspect)
+    local nearby = nearbyOfficers[suspect]
+    if not nearby or age(now,nearby.at)>=500 then
+        local count = 0
+        for _,actor in ipairs(getElementsWithinRange(x,y,z,30,"ped",getElementInterior(suspect),getElementDimension(suspect)) or {}) do
+            if TrafficActors.isPolicePed(actor) and not isPedDead(actor) then
+                count = count + 1
+                if count==4 then break end
+            end
+        end
+        nearby = {at=now, count=count}
+        nearbyOfficers[suspect] = nearby
+    end
+    if nearby.count>=4 then return end
+    if getElementData(ped,"npchlc_traffic:originalModel",false)==8 then PedVoice.emit(ped,"pursuitGroup") end
+    if not isPedInVehicle(suspect) and getDistanceBetweenPoints3D(x,y,z,getElementPosition(ped))<20 then
+        PedVoice.emit(suspect,"pursuitReply")
+    end
+end
+
 local function pursue(ped,w,now)
     local x,y,z=getElementPosition(ped)
-    local suspect=w and w.target
-    if not isElement(suspect) or not TrafficWanted.officerCanPursue(ped,suspect) then
-        if w then release(ped) end
-        local d=50
-        for _,player in ipairs(getElementsWithinRange(x,y,z,d,"player",getElementInterior(ped),getElementDimension(ped)) or {}) do
-            local r=getDistanceBetweenPoints3D(x,y,z,getElementPosition(player))
-            if r<d and TrafficWanted.officerCanPursue(ped,player) then d,suspect=r,player end
+    local suspect=TrafficGroundPolice.target(ped)
+    if w and w.target~=suspect or suspect and not TrafficWanted.officerCanPursue(ped,suspect) then
+        release(ped)
+        w,suspect=nil,nil
+    end
+    if not suspect then
+        local nearest=50
+        for _,player in ipairs(getElementsWithinRange(x,y,z,nearest,"player",getElementInterior(ped),getElementDimension(ped)) or {}) do
+            local d=getDistanceBetweenPoints3D(x,y,z,getElementPosition(player))
+            if d<nearest and TrafficWanted.officerCanPursue(ped,player) then nearest,suspect=d,player end
         end
-        if not isElement(suspect) or not TrafficWanted.officerCanPursue(ped,suspect) then return pursueStreetPed(ped,x,y,z) end
+    end
+    if isElement(suspect) then
+        local arrested, enteringCar = TrafficWanted.tryArrest(ped,suspect,now,w,true)
+        if arrested then release(ped) return true end
+        if enteringCar then return true end
+    end
+    if not isElement(suspect) or not TrafficWanted.officerCanPursue(ped,suspect) or not TrafficGroundPolice.enroll(ped,suspect) then
+        if w then release(ped) end
+        if TrafficGroundPolice.returnDriver(ped) then return true end
+        return pursueStreetPed(ped,x,y,z)
+    end
+    local car=getPedOccupiedVehicle(suspect)
+    if car then
+        local vx,vy,vz=getElementVelocity(car)
+        if getDistanceBetweenPoints3D(x,y,z,getElementPosition(car))*math.sqrt(vx*vx+vy*vy+vz*vz)>4 then
+            release(ped)
+            return
+        end
+    end
+    if not w then
         w={target=suspect}
         workers[ped]=w
-    end
-    if TrafficWanted.tryArrest(ped,suspect,now) then release(ped) return true end
-    if not w.follow then
-        w.follow=hlc:setNPCTask(ped,{"walkFollowElement",suspect,1})
         hlc:setNPCWalkSpeed(ped,"run")
+    end
+    pursuitSpeech(ped,suspect,w,now)
+    local weapon=getPedWeapon(ped)
+    if weapon==0 then
+        local oneStar=getPlayerWantedLevel(suspect)==1
+        local slot=oneStar and 1 or 2
+        if (not oneStar or not getPedContactElement(suspect)) and getPedWeapon(ped,slot)~=0 then
+            setPedWeaponSlot(ped,slot)
+            weapon=getPedWeapon(ped)
+        end
+    end
+    local ranged=PedAIRules.ranged(weapon)
+    local range=ranged and PedAIRules.attackRange(weapon) or 1.7
+    local firing=car and ranged and TrafficWanted.vehicleFireDue(ped,suspect,car,range,now,w.seekRadius) or false
+    local door=car and not firing and TrafficWanted.driverArrestCar(ped,suspect) or false
+    if door then
+        local arrested,enteringCar=TrafficWanted.tryDriverArrest(ped,suspect,now,w)
+        if arrested then release(ped) return true end
+        if enteringCar then return true end
+    end
+    if not w.follow or w.car~=car or w.weapon~=weapon or w.door~=door or w.firing~=firing then
+        local task=door and {"approachDriverDoor",suspect} or {car and "attackOccupiedVehicle" or "killPed",suspect,range,ranged and range/3 or range*.8,ranged and 1 or 0}
+        if door then
+            task[3],task[4]=TrafficWanted.driverDoorApproach(door)
+            if task[3] then
+                doorOrder=doorOrder+1
+                task[5],w.doorOrder,w.doorAssigned=doorOrder,doorOrder,now
+            end
+        elseif car and ranged then
+            task[6]=firing and 1 or 0
+        end
+        w.follow=hlc:setNPCTask(ped,task)
+        w.car,w.weapon,w.door,w.firing=car,weapon,door,firing
+        if not firing then w.seekRadius=door and .28 or car and .5 or task[4] end
     end
     return true
 end
+
+-- The sync owner can confirm only its current assigned handle. The server
+-- computes the position and still validates the native door event and hinge.
+addEventHandler("npc_hlc:onDriverDoorArrival",root,function(car,order)
+    local w=workers[source]
+    if not w or not w.follow or w.doorOrder~=order or w.door~=car or not isElement(car)
+        or TrafficGroundPolice.target(source)~=w.target or not TrafficWanted.officerCanPursue(source,w.target)
+        or TrafficWanted.driverArrestCar(source,w.target)~=car then return end
+    local now=getTickCount()
+    local side,along=TrafficWanted.driverDoorApproach(car)
+    local matrix=getElementMatrix(car)
+    if not side or not matrix then return end
+    local cx,cy,cz=unpack(matrix[4])
+    local x,y,z=getElementPosition(source)
+    local tx=cx+side*matrix[1][1]+along*matrix[2][1]
+    local ty=cy+side*matrix[1][2]+along*matrix[2][2]
+    local distance=(x-tx)^2+(y-ty)^2
+    local reach=math.min(16,age(now,w.doorAssigned)*.0065)
+    if distance<=.30^2 or distance>reach^2 or math.abs(z-cz)>1.8 then return end
+    w.doorOrder=nil
+    setElementPosition(source,tx,ty,z)
+end)
+
 function PedServices.update(ped,model,now)
     local profile=PedAI.profile(ped)
     if not enabled or not profile then return end
     local w=workers[ped]
     if profile.pedType==6 then
+        if TrafficGroundPolice.updateSpecial(ped,now) then return true end
         local brain=PedAI.brain(ped)
         if not w and brain.serviceScan and age(now,brain.serviceScan)<500 then return end
         brain.serviceScan=now

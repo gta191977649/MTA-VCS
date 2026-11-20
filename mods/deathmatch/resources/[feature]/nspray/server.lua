@@ -1,9 +1,5 @@
 local price = 100
 local repairThreshold = 970
-local paroleTime = 20000
-local paroleKey = "nspray:paroleStars"
-local parole = {}
-
 local roadTypes = {Automobile = true, Bike = true, BMX = true, Quad = true}
 local refusedModels = {
     [407] = true, [416] = true, [427] = true, [432] = true, [433] = true,
@@ -28,43 +24,8 @@ local function getPrice(vehicle, wanted)
     return (wanted > 0 or getElementHealth(vehicle) < repairThreshold) and price or 0
 end
 
-local function clearParole(player)
-    parole[player] = nil
-    removeElementData(player, paroleKey)
-end
-
-local function startParole(player, wanted, now)
-    if wanted == 0 then return end
-    local traffic = getResourceFromName("npchlc_traffic")
-    if traffic and getResourceState(traffic) == "running" and call(traffic, "suspendPlayerWanted", player) then
-        parole[player] = nil
-        return
-    end
-    if not setPlayerWantedLevel(player, 0) then return end
-    parole[player] = {stars = wanted, expires = now + paroleTime}
-    setElementData(player, paroleKey, wanted, "broadcast", "deny")
-end
-
-local function updateParole(now)
-    for player, state in pairs(parole) do
-        if not isElement(player) then
-            parole[player] = nil
-        elseif now >= state.expires or isPedDead(player) then
-            clearParole(player)
-        else
-            local wanted = getPlayerWantedLevel(player)
-            if wanted > 0 then
-                clearParole(player)
-                if wanted < state.stars then
-                    setPlayerWantedLevel(player, state.stars)
-                end
-            end
-        end
-    end
-end
-
 local function settle(id, player, vehicle)
-    local wanted = getPlayerWantedLevel(player)
+    local wanted = exports.wanted:getPlayerWanted(player)
     local cost = getPrice(vehicle, wanted)
     if cost > 0 and (getPlayerMoney(player) < cost or not takePlayerMoney(player, cost)) then
         garageMessage(player, "GA_3")
@@ -85,7 +46,7 @@ local function settle(id, player, vehicle)
     local garage = exports.garage:getGarage(id)
     triggerClientEvent(root, "nspray:sprayEffect", resourceRoot, player,
         garage.bay, garage.floor, garage.interior, garage.dimension, paint)
-    startParole(player, wanted, getTickCount())
+    if wanted > 0 then exports.wanted:suspendPlayerWanted(player) end
     local key
     if cost > 0 then
         key = getVehicleType(vehicle) == "BMX" and "GA_2B" or "GA_2"
@@ -104,7 +65,7 @@ function sprayGarageService(stage, id, player, vehicle)
     end
     if stage == "commit" then return settle(id, player, vehicle) end
     if stage ~= "quote" then return false end
-    local cost = getPrice(vehicle, getPlayerWantedLevel(player))
+    local cost = getPrice(vehicle, exports.wanted:getPlayerWanted(player))
     if cost > 0 and getPlayerMoney(player) < cost then
         garageMessage(player, "GA_3")
         return false
@@ -128,11 +89,4 @@ addEventHandler("onResourceStart", resourceRoot, function()
         local blip = createBlip(x, y, z, 63, 2, 255, 255, 255, 255, 0, 350)
         if blip then setElementData(blip, "mradar:shortRange", true, "broadcast", "deny") end
     end
-    setTimer(function() updateParole(getTickCount()) end, 100, 0)
 end)
-
-addEventHandler("onPlayerQuit", root, function() parole[source] = nil end)
-addEventHandler("onResourceStop", resourceRoot, function()
-    for player in pairs(parole) do clearParole(player) end
-end)
-

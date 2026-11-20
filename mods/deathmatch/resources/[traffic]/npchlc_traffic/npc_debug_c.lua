@@ -1,6 +1,10 @@
 TrafficNPCDebug = {}
 local hlc = exports.npc_hlc
 local timer, generation, rows, details = nil, 0, {}, {}
+local drivingStyles={
+    [0]="Stop for cars", "Slow down for cars", "Avoid cars", "Plough through",
+    "Stop for cars, ignore lights", "Avoid cars, obey lights", "Avoid cars, stop for peds, obey lights"
+}
 local palettes = {}
 local function palette(alpha)
     if not palettes[alpha] then
@@ -8,7 +12,7 @@ local function palette(alpha)
             return tocolor(r,g,b,math.floor(alpha*(opacity or 255)/255))
         end
         palettes[alpha] = {
-            white=tint(255,255,255), dark=tint(14,10,10,235), red=tint(255,80,80),
+            white=tint(255,255,255), dark=tint(14,10,10,235), red=tint(255,80,80), green=tint(117,233,136),
             blood=tint(175,25,30), empty=tint(55,26,26), route=tint(60,235,255,230),
             continuation=tint(165,240,245,165)
         }
@@ -53,10 +57,11 @@ addEventHandler("npchlc_traffic:npcDebugRows",resourceRoot,function(epoch,nextRo
 end,false)
 
 addEvent("npchlc_traffic:npcDebugRevision",true)
-addEventHandler("npchlc_traffic:npcDebugRevision",resourceRoot,function(epoch,ped,revision,task,owner)
+addEventHandler("npchlc_traffic:npcDebugRevision",resourceRoot,function(epoch,ped,revision,task,owner,style,vehicle)
     local row=rows[ped]
     if timer and epoch==generation and row and revision>row[2] then
         row[2],row[7],row[8],row[10]=revision,task,owner,false
+        row[11],row[12]=style,vehicle
         details[ped]=nil
     end
 end,false)
@@ -109,27 +114,46 @@ local function bar(x,y,value,maximum,color,colors)
     dxDrawRectangle(x-25,y+1,50*math.max(0,math.min(1,value/maximum)),5,color)
 end
 
-local function labelText(text,x,y,color,shadow)
-    dxDrawText(text,x+1,y+1,x+1,y+16,shadow,1,"default-bold","center")
-    dxDrawText(text,x,y,x,y+15,color,1,"default-bold","center")
+local function syncStatus(row,sample)
+    if row[5]=="dead" or not row[7] then return "Sync: idle",true end
+    if sample then
+        if sample[9] then return "Sync: waiting for server",false end
+        if not row[8] then return "Sync: server",true end
+        return "Sync: synchronized",true
+    end
+    if row[8] then return "Sync: waiting for executor",false end
+    return "Sync: waiting for server",false
 end
 
-local function drawLabel(ped,row,x,bottom,caption,colors)
-    -- Reserve the armor slot so gaining or losing armor does not move the text.
-    local top=bottom-48
+local function drawLabel(labels,ped,row,x,bottom,caption,sample,colors)
+    local style,vehicle=row[11],row[12]
+    local driver=type(style)=="number" and isElement(vehicle) and getPedOccupiedVehicle(ped)==vehicle
+        and getVehicleOccupant(vehicle,0)==ped
+    local top=bottom-(driver and 89 or 75)
+    labels[#labels+1]={"["..(row[13] or "UNKNOWN").."]",x,top,colors.white,"center",1,colors.dark}
+    top=top+14
     local hot=row[3]>row[4]
     local temper=(hot and "Hot temper " or "Temper ")..row[3]
     local fear="  Fear "..row[4]
     local w1,w2=dxGetTextWidth(temper,1,"default-bold"),dxGetTextWidth(fear,1,"default-bold")
-    labelText(temper,x-w2/2,top,hot and colors.red or colors.white,colors.dark)
-    labelText(fear,x+w1/2,top,colors.white,colors.dark)
-    labelText(caption,x,top+14,colors.white,colors.dark)
+    labels[#labels+1]={temper,x-w2/2,top,hot and colors.red or colors.white,"center",1,colors.dark}
+    labels[#labels+1]={fear,x+w1/2,top,colors.white,"center",1,colors.dark}
+    if driver then
+        top=top+14
+        local label="Driving style "..style
+        if drivingStyles[style] then label=label.." - "..drivingStyles[style] end
+        labels[#labels+1]={label,x,top,colors.white,"center",1,colors.dark}
+    end
+    labels[#labels+1]={caption,x,top+14,colors.white,"center",1,colors.dark}
+    local status,ready=syncStatus(row,sample)
+    labels[#labels+1]={status,x,top+28,ready and colors.green or colors.red,"center",1,colors.dark}
     local armor=getPedArmor(ped) or 0
     if armor>0 then bar(x,bottom-15,armor,100,colors.white,colors) end
     bar(x,bottom-7,getElementHealth(ped) or 0,row[9],colors.blood,colors)
 end
 
 function TrafficNPCDebug.draw()
+    local labels={}
     local px,py,pz=getElementPosition(localPlayer)
     for ped,row in pairs(rows) do
         local alpha = isElement(ped) and isElementStreamedIn(ped) and TrafficNPCDebugRange.alpha(ped,localPlayer,px,py,pz) or 0
@@ -146,11 +170,11 @@ function TrafficNPCDebug.draw()
                 local phase=sample and sample[2] or row[6]
                 local caption=row[5]
                 if task then caption=caption.." > "..task end
-                if phase then caption=caption.." > "..phase
-                elseif task and row[8] and not sample then caption=caption.." (awaiting sync)" end
+                if phase then caption=caption.." > "..phase end
                 target(ped,sample,colors)
-                drawLabel(ped,row,x,y,caption,colors)
+                drawLabel(labels,ped,row,x,y,caption,sample,colors)
             end
         end
     end
+    if #labels>0 then exports.frontend:drawDebugLabels(labels) end
 end

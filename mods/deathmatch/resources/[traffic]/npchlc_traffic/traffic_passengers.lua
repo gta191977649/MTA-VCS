@@ -27,11 +27,16 @@ function TrafficPassengers.count(hostCapacity, originalId, roll)
 end
 
 function TrafficPassengers.spawn(state, graph, group, class, originalId)
-    if graph.edition ~= "SLUS-21590 USA v1.00" or class == 13 or class == 23 or class == 24 then return end
+    if graph.edition ~= "SLUS-21590 USA v1.00" then return end
     local capacity = getVehicleMaxPassengers(state.vehicle) or 0
-    local count = TrafficPassengers.count(capacity, originalId, math.random)
+    local count
+    if state.lawEnforcer then
+        count = math.min(capacity, TrafficGroundPolice.passengers(originalId, state.policeTarget and getPlayerWantedLevel(state.policeTarget) or 0))
+    else
+        count = TrafficPassengers.count(capacity, originalId, math.random)
+    end
     local used = {[state.originalDriver] = true}
-    local officer = PedServices and PedServices.policeCrewModel(originalId)
+    local officer = state.lawEnforcer and state.originalDriver or PedServices and PedServices.policeCrewModel(originalId)
     local function available(id)
         return not used[id] and TrafficAmbient.getPedestrianModel(id)
     end
@@ -52,6 +57,7 @@ function TrafficPassengers.spawn(state, graph, group, class, originalId)
                         byVehicle[state.vehicle] = byVehicle[state.vehicle] or {}
                         byVehicle[state.vehicle][seat] = entry
                         PedAI.attach(ped, model)
+                        if state.lawEnforcer then setTrafficPolicePed(ped,true) end
                         TrafficVisibility.track(ped, "road")
                     else
                         destroyElement(ped)
@@ -101,6 +107,9 @@ local function adopt(entry, jacker, directlyJacked)
             setElementData(ped, TrafficVisibility.retiringKey, false, "broadcast", "deny")
         end
         TrafficAmbient.adoptDriver(ped, directlyJacked and jacker or nil, entry.vehicle, entry.model)
+        if not directlyJacked and isElement(entry.policeTarget) then
+            TrafficGroundPolice.enroll(ped,entry.policeTarget)
+        end
         if isElement(jacker) and not directlyJacked then
             if entry.retaliate then PedAI.vehicleThreat(ped, jacker) else PedAI.passengerThreat(ped, jacker) end
         end
@@ -115,7 +124,11 @@ function TrafficPassengers.vehicleUnderFire(vehicle, attacker, retaliate)
     -- response by 200 ms in seat order.
     for seat = 1, getVehicleMaxPassengers(vehicle) do
         local entry = seats[seat]
-        if entry then
+        local brain = entry and PedAI.brain(entry.ped)
+        local current = brain and brain.objectives.current
+        if entry and not leaving[entry.ped] and not isPedDead(entry.ped)
+            and getVehicleOccupant(vehicle, seat) == entry.ped and not PedAI.isScriptControlled(entry.ped)
+            and not (current and current.id == (retaliate and 8 or 0x10)) then
             entry.since, entry.delay = getTickCount(), delay
             entry.jacker, entry.retaliate = attacker, retaliate
             leaving[entry.ped] = entry
@@ -183,6 +196,18 @@ function TrafficPassengers.returnToBike(ped,walk,now)
         if owner then triggerClientEvent(owner,"npchlc_traffic:boardPassenger",resourceRoot,ped,car) end
     end
     return true
+end
+
+function TrafficPassengers.policeExit(vehicle, now, player)
+    local delay = 100
+    local seats = byVehicle[vehicle] or {}
+    for seat=1,getVehicleMaxPassengers(vehicle) do
+        local entry=seats[seat]
+        if entry then
+            leaving[entry.ped],entry.since,entry.delay,entry.policeTarget=entry,now,delay,player
+            delay=delay+math.random(200,399)
+        end
+    end
 end
 
 function TrafficPassengers.driverGone(vehicle, jacker)

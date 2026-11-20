@@ -18,7 +18,8 @@ from lupa.lua51 import LuaRuntime
 from import_vcs_traffic import ROAD_MAP, assemble, encode_json
 from vehicle_impact_import import export as export_collision_handling, export_decisions, export_service_sound
 from ped_services_check import main as check_ped_services
-from vcs_model_assets import chunks
+from vcs_model_assets import chunks, vehicle_material_textures
+from vcs_police_materials import POLICE_MODELS
 from vcs_road_collision import ground_height, lane_centres, road_surfaces
 from vcs_vehicle_ground import contact_geometry, read_archive
 from vcs_jetski_rider import bake as bake_jetski_rider
@@ -69,6 +70,7 @@ function isPedDead(e) return e.health == 0 end
 function getPedOccupiedVehicle(e) return e.vehicle end
 function isPedInVehicle(e) return e.vehicle ~= nil end
 function getVehicleOccupant(e) return e.driver end
+function getVehicleOccupants(e) return {[0]=e.driver, [1]=e.passenger} end
 function getElementSyncer(e) return e.syncer end
 function setElementSyncer(e, owner) e.syncer = owner return true end
 function getElementDimension(e) return e.dimension or 0 end
@@ -78,6 +80,7 @@ function getElementMatrix(e)
     local fx, fy = e.fx or 0, e.fy or 1
     return {{fy,-fx,0}, {fx,fy,0}, {0,0,1}, {e.x,e.y,e.z}}
 end
+function getVehicleSirensOn(e) return e.siren == true end
 function getElementVelocity(e) return e.vx or 0, e.vy or 0, e.vz or 0 end
 function getElementsWithinRange() return {} end
 function setElementPosition(e, x, y, z) e.x, e.y, e.z = x, y, z end
@@ -156,9 +159,33 @@ tick()
 assert(all_npcs[npc].tasks[1][2] == 12 and #completed == 3)
 deliver("onElementDestroy", npc)
 assert(not all_npcs[npc])
+
+local officer=element("ped")
+officer.syncer=a
+b.vehicle=vehicle
+assert(enableHLCForNPC(officer,"run"))
+assert(setNPCTask(officer,{"approachDriverDoor",b,-1.55,.4,27}))
+local arrivals=0
+addEventHandler("npc_hlc:onDriverDoorArrival",root,function(car)
+    assert(source==officer and car==vehicle)
+    arrivals=arrivals+1
+end)
+client=b
+deliver("npc_hlc:driverDoorArrival",officer,vehicle,27)
+client=a
+deliver("npc_hlc:driverDoorArrival",officer,vehicle,26)
+deliver("npc_hlc:driverDoorArrival",officer,element("vehicle"),27)
+assert(arrivals==0)
+deliver("npc_hlc:driverDoorArrival",officer,vehicle,27)
+assert(arrivals==1)
+clearNPCTasks(officer)
+deliver("npc_hlc:driverDoorArrival",officer,vehicle,27)
+assert(arrivals==1)
+client=nil
 """
 
 CLIENT_OWNERSHIP = """
+function isLineOfSightClear() return true end
 local npc = element("ped")
 localPlayer = element("player")
 local other = element("player")
@@ -254,6 +281,49 @@ removeElementData(npc, facing)
 deliver("onClientElementDataChange", npc, facing)
 deliver("onClientPreRender", root)
 assert(#targets == 6)
+
+local oldWalk=walkNPCTrafficFormation
+local waypoints={}
+function walkNPCTrafficFormation(_,x,y,state)
+    assert(type(state)=="table" and state.bumper)
+    waypoints[#waypoints+1]={x,y}
+end
+function getElementBoundingBox() return -1,-2,-.5,1,2,1 end
+function getVehicleComponentPosition() return -1,0,0 end
+function stopNPCWeaponActions() end
+vehicle.x,vehicle.y,vehicle.z=0,0,0
+vehicle.driver,other.vehicle=other,vehicle
+npc.x,npc.y,npc.z=2,1,0
+deliver("npc_hlc:control",resourceRoot,npc,8,{"approachDriverDoor",other},npc)
+deliver("onClientPreRender",root)
+assert(waypoints[1][2]>2 and waypoints[1][1]>=1)
+npc.y=3
+deliver("onClientPreRender",root)
+assert(waypoints[2][1]<-1)
+local rotation
+local stopped
+local previousRotation=setPedRotation
+function setPedRotation(_,angle) rotation=angle end
+function stopNPCWalkingActions() stopped=true end
+deliver("npc_hlc:control",resourceRoot,npc,9,{"approachDriverDoor",other,-1.6,.4},npc)
+npc.x,npc.y=-1.6,.4
+deliver("onClientPreRender",root)
+assert(stopped and rotation and math.abs(rotation+math.deg(math.atan2(1.6,-.4)))<.01)
+local reports=0
+local previousReport=triggerServerEvent
+function triggerServerEvent(name,ped,car,order)
+    assert(name=="npc_hlc:driverDoorArrival" and ped==npc and car==vehicle and order==14)
+    reports=reports+1
+end
+deliver("npc_hlc:control",resourceRoot,npc,10,{"approachDriverDoor",other,-1.6,.4,14},npc)
+deliver("onClientPreRender",root)
+assert(reports==0)
+for _=1,6 do now=now+1500; deliver("onClientPreRender",root) end
+assert(reports==4)
+triggerServerEvent=previousReport
+setPedRotation=previousRotation
+deliver("npc_hlc:control",resourceRoot,npc,11,false,false)
+walkNPCTrafficFormation=oldWalk
 
 """
 
@@ -583,6 +653,11 @@ def check_hlc():
     ped.x = 2
     tick()
     assert(packets[#packets][1][3][2] == 4)
+    assert(clearNPCTasks(ped))
+    for _=1,4 do assert(addNPCTask(ped, {"walkToPos", 2, 0, 0, 0.25})) end
+    assert(addNPCTask(ped, {"walkToPos", 7, 0, 0, 0.25}))
+    tick()
+    assert(getNPCTaskCount(ped)==1 and packets[#packets][1][3][2]==7)
     """)
     lua.execute("""
     local vehicle = element("vehicle")
@@ -687,12 +762,34 @@ def check_hlc():
     local route = {"driveTrafficPhysics", 1, 11, {0,0,0},
         {{0,0,0,10,0,0,1,0,1}, {1,0,15,10,0,1,0,2,0}}}
     assert(normalizeNPCTask(route))
+    for style=0,6 do
+        route[6],speedWindow.style=style,style
+        assert(normalizeNPCTask(route)[6]==style)
+        local rail=assert(normalizeNPCTask(speedWindow))
+        assert(rail.style==style and #rail==27 and rail[27]==2)
+        function getTrafficLightState() return 2 end
+        local stops=style~=2 and style~=3 and style~=4
+        assert(isNPCTrafficSignalClosed(1,style)==stops)
+        rail[15]=1
+        assert(isNPCTrafficRailWaitingForSignal(rail,8,0,0,1,0)==stops)
+    end
+    for _,invalid in ipairs({-1,7,2.5,"2",false}) do
+        route[6],speedWindow.style=invalid,invalid
+        assert(not normalizeNPCTask(route) and not normalizeNPCTask(speedWindow))
+    end
+    route[6],speedWindow.style=nil,nil
     route[5][1][7] = 2
     assert(not normalizeNPCTask(route))
     route[5][1][7] = 1
     moving.x, moving.y = 0, 7
     function getTrafficLightState() return 2 end
     assert(not isNPCTaskComplete(nil, moving, route, true))
+    -- A siren can leave the driver parallel to the road beyond the normal
+    -- lane tolerance. Keep its stop line when evaluating the watchdog.
+    moving.x, moving.y = 3.4,5.28
+    local shortcut, displacedAtRed = getNPCTrafficPhysicsRejoin(route, moving)
+    assert(not shortcut and not displacedAtRed, "pulling aside at red authorized a new route")
+    moving.x, moving.y = 0,7
     function getTrafficLightState() return 0 end
     moving.vx = 0.2
     assert(not isNPCTaskComplete(nil, moving, route, true))
@@ -802,6 +899,43 @@ def check_hlc():
         assert((decision=="obstacle")==exitBarrier,decision)
     end
     processLineOfSight,recordNPCDebugDriving=oldCast,oldDebug
+    -- Style 2 close ram may make contact with its own target, but a
+    -- different car on the same line must steer the officer around it.
+    local targetCar=element("vehicle")
+    targetCar.x,targetCar.y,targetCar.fx,targetCar.fy=0,10,0,1
+    function getElementsWithinRange() return {vehicle,targetCar} end
+    beginNPCTrafficPhysicsFrame()
+    assert(getNPCPoliceAvoidance(vehicle,targetCar,0,20,{})==0)
+    assert(getNPCPoliceAvoidance(vehicle,nil,0,20,{})~=0)
+    function getElementsWithinRange() return {} end
+    function processLineOfSight(x,y,z,ex,ey)
+        if math.abs(ex-x)<0.5 then return true,x,y+3,z end
+        return false
+    end
+    assert(getNPCPoliceAvoidance(vehicle,targetCar,0,20,{})~=0)
+    processLineOfSight=oldCast
+    -- A police Electra approaching a right angle must brake before it
+    -- crosses the far curb. The same clear turn still admits a cruising car.
+    vehicle.x,vehicle.y,vehicle.vx,vehicle.vy=0,3,0,0.16
+    window[3],window[6]=25,2
+    vehicle["npchlc_traffic:originalModel"]=191
+    for _,siren in ipairs({false,true}) do
+        vehicle.siren=siren
+        resetNPCTrafficPhysicsSensor(vehicle)
+        beginNPCTrafficPhysicsFrame()
+        performTask.driveTrafficPhysics(npc,window,16,{})
+        assert((inputs.brake_reverse>0)==siren,"tight pursuit corner must brake with the original handling")
+    end
+    window[3],window[6],vehicle.siren=11,nil,false
+    -- At pursuit speed two collinear waypoints can fit in the braking
+    -- distance for a later right turn. Test the turn beyond the current link.
+    vehicle.y,vehicle.vy,vehicle.siren=0,0.40,true
+    local previewBend={"driveTrafficPhysics",1,43,{0,-10,0},{
+        {10,0,0,12,0,0,1,0,0},{11,0,0,24,0,0,1,0,0},{12,0,32,24,0,1,0,0,0}},2}
+    resetNPCTrafficPhysicsSensor(vehicle);beginNPCTrafficPhysicsFrame()
+    performTask.driveTrafficPhysics(npc,previewBend,16,{})
+    assert(inputs.brake_reverse>0,"brake for the second link's bend")
+    vehicle.siren=false
     resetNPCTrafficPhysicsSensor(vehicle)
     vehicle.vy=0
     vehicle.x, vehicle.y, vehicle.fx, vehicle.fy = 0, 7, 0, 1
@@ -854,9 +988,14 @@ def check_hlc():
         deliver("onClientPreRender", root, ms)
     end
     local frontBlocked, rightClear, rearBlocker, lead = true, false, nil, nil
-    function processLineOfSight(x, y, z, ex, ey)
-        if ey < y and rearBlocker then return true, x, y - 0.5, z, rearBlocker end
-        if ey > y and frontBlocked and (not rightClear or ex - x <= 0.2) then
+    function getElementsWithinRange()
+        return lead and {vehicle, lead} or {vehicle}
+    end
+    function processLineOfSight(x, y, z, ex, ey, _, _, cars)
+        if ey < y and rearBlocker and (rearBlocker.kind ~= "vehicle" or cars) then
+            return true, x, y - 0.5, z, rearBlocker
+        end
+        if ey > y and frontBlocked and (not lead or cars) and (not rightClear or ex - x <= 0.2) then
             return true, x, y + 0.2, z, lead
         end
         return false
@@ -894,12 +1033,49 @@ def check_hlc():
     assert(inputs.brake_reverse == 0 and inputs.handbrake)
 
     rearBlocker, lead = nil, element("vehicle")
+    lead.x, lead.y = vehicle.x, vehicle.y + 5
     render(100)
     render(1000)
     assert(inputs.brake_reverse == 0 and inputs.handbrake)
     lead.vy = 0.08
     render(100)
     assert(inputs.accelerate > 0 and not inputs.handbrake)
+    do
+        local nearby = getElementsWithinRange
+        local function drive()
+            beginNPCTrafficPhysicsFrame()
+            resetNPCTrafficPhysicsSensor(vehicle)
+            performTask.driveTrafficPhysics(npc,straight,16,{})
+        end
+        lead.y, lead.vy, lead.fy = vehicle.y+5.5, 0, -1
+        straight[6] = 2
+        drive()
+        assert(inputs.accelerate==0 and inputs.handbrake, "opposing car before arbitration")
+        setElementData(vehicle,"npchlc_traffic:headOnBlocker",lead)
+        drive()
+        assert(inputs.accelerate>0 and inputs.vehicle_left+inputs.vehicle_right>0, "winner failed to steer")
+        local third = element("vehicle",vehicle.x)
+        third.y = vehicle.y+4
+        function getElementsWithinRange() return {vehicle,lead,third} end
+        drive()
+        assert(inputs.accelerate==0 and inputs.handbrake, "winner entered a third vehicle")
+        getElementsWithinRange = nearby
+        local previousY = vehicle.y
+        vehicle.y, lead.y = 34,39.5
+        function getTrafficLightState() return 2 end
+        drive()
+        assert(inputs.accelerate>0 and not inputs.handbrake, "avoid-cars winner still obeyed the signal")
+        straight[6] = 5
+        drive()
+        assert(inputs.accelerate==0 and inputs.handbrake, "light-obeying winner ran a red light")
+        function getTrafficLightState() return 0 end
+        vehicle.y = previousY
+        setElementData(vehicle,"npchlc_traffic:headOnBlocker",false)
+        straight[6] = nil
+        lead.y, lead.x = vehicle.y+5.5, vehicle.x+3.25
+        drive()
+        assert(inputs.accelerate>0 and not inputs.handbrake, "adjacent opposing lane blocked physics")
+    end
     lead, vehicle.y = nil, 32
     function getTrafficLightState() return 2 end
     render(100)
@@ -1153,6 +1329,48 @@ def check_hlc():
     assert(limitNPCTrafficRailMerge(vehicle, merge, 1, 0, {}, 16, 0, 0, 0, 1, 0, now) == math.huge)
     target.x, target.y, target.vx = -3, 3.5, 0.45
     assert(limitNPCTrafficRailMerge(vehicle, merge, 1, 0, {}, 16, 0, 0, 0, 1, 0, now) < 16)
+
+    -- Check both roles. In the angled case the corners project onto both
+    -- axes of the first car, but the second car's side axis separates them.
+    local car = {fx=1, fy=0, width=1, length=2}
+    local facing = {fx=-1, fy=0, width=1, length=2}
+    local diagonal = {fx=math.sqrt(0.5), fy=math.sqrt(0.5), width=1, length=2}
+    local across = {fx=0, fy=1, width=1, length=2}
+    local function contact(other, x, y, vx, vy, expected)
+        local function check(actual)
+            if expected then assert(actual and math.abs(actual-expected)<0.0001)
+            else assert(not actual, "separated footprints reported contact") end
+        end
+        check(getNPCTrafficFootprintContact(x,y,vx,vy,1,0,1,2,other,2))
+        check(getNPCTrafficFootprintContact(-x,-y,-vx,-vy,other.fx,other.fy,1,2,car,2))
+    end
+    contact(facing, 14,3.25, -10,0, nil)
+    contact(diagonal, 3.8,-2.7, 0,0, nil)
+    contact(facing, 14,0, -10,0, 1)
+    contact(across, 0,-8, 0,5, 1)
+    contact(across, 0,8, 0,5, nil)
+    contact(car, 6,0, -2,0, 1)
+
+    local road = {"driveTrafficRail", -10,0,0, 0,0,0, 30,0,0, 50,0,0, 16,0,0.6}
+    target.x, target.y, target.vx, target.fx = 10, 3.25, -0.12, -1
+    local function railLimit()
+        return limitNPCTrafficRailMerge(vehicle,road,1,0,{},12,0,0,0,1,0,now)
+    end
+    local cap, _, blocker = railLimit()
+    assert(cap==math.huge and not blocker)
+    target.y = 0
+    cap, _, blocker = railLimit()
+    assert(cap<12 and blocker==target)
+    target.fx, target.vx = 1, 0
+    cap, _, blocker = railLimit()
+    assert(cap<12 and blocker==target)
+    target.y = 6
+    assert(railLimit()==math.huge)
+    vehicle.fx, vehicle.fy = 1, 0
+    target.x, target.y = -3.9, 0
+    assert(railLimit()==math.huge, "a touching follower must let the lead car pull away")
+    target.x = 3.9
+    assert(railLimit()==0, "the follower still brakes for the same bumper contact")
     """)
     load(client, VCS_VEHICLE, ["controllers/vehicle.lua","controllers/boat.lua"])
     client.execute("""
@@ -1238,8 +1456,248 @@ def check_hlc():
     assert(math.abs(getBoatTrafficSpeedLimit(boat,16)-16*8/13)<0.0001)
     crossing.collision=false
     assert(getBoatTrafficSpeedLimit(boat,16)==16)
+
+    -- A stopped rail vehicle only needs another velocity write if physics
+    -- moved it horizontally. Preserve vertical speed when braking again.
+    local stopped=element("vehicle")
+    stopped.vx,stopped.vy,stopped.vz=0,0,0.07
+    local writes=0
+    function setElementVelocity(v,x,y,z) writes=writes+1;v.vx,v.vy,v.vz=x,y,z end
+    local function brake() return 0,true end
+    advanceNPCTrafficRail(stopped,path,20,brake,false)
+    assert(writes==0)
+    stopped.vy=0.1
+    advanceNPCTrafficRail(stopped,path,20,brake,false)
+    assert(writes==1 and stopped.vy==0 and stopped.vz==0.07)
     """)
     print("Boat hull sweeps prevented overlap in crossing and merging traffic and released the cruise limit")
+    client.execute("""
+    local winner, waiting, driver = element("vehicle"), element("vehicle"), element("ped")
+    driver.vehicle, winner.driver = winner, driver
+    winner.fx, winner.fy, waiting.fx, waiting.fy, waiting.y = 0, 1, 0, -1, 10
+    local task = {"driveTrafficPhysics", 1, 12, {0,-5,0}, {{0,0,0,100,0,0,1,0,0}}}
+    function getElementsWithinRange() return {winner, waiting} end
+    function getVehicleType() return "Automobile" end
+    function getVehicleHandling() return {steeringLock=35} end
+    -- Asymmetric model bounds of the opposing 405/479 pair seen in MTA.
+    function getElementBoundingBox(car)
+        if car == winner then return -1.180,-3.175,-0.931,1.151,2.473,0.816 end
+        return -1.121,-3.301,-0.681,1.127,2.389,1.220
+    end
+    local steer, throttle, brake, blocker
+    function setNPCVehicleInputs(_, s, t, b) steer, throttle, brake = s, t, b end
+    function reportNPCTrafficBlocker(_, vehicle) blocker = vehicle end
+    local heading, speed, progress = 0, 0, {}
+    beginNPCTrafficPhysicsFrame()
+    performTask.driveTrafficPhysics(driver, task, 50, progress)
+    assert(blocker == waiting and brake, "centered oncoming car did not retain its maneuvering space")
+    task[6], winner["npchlc_traffic:headOnBlocker"] = 2, waiting
+    -- A bicycle model integrates the production controller's steering, brake
+    -- and throttle at 50 ms. The opposing vehicle keeps yielding throughout.
+    for frame=1,200 do
+        now = now + 50
+        if frame == 21 then winner["npchlc_traffic:headOnBlocker"] = false end
+        beginNPCTrafficPhysicsFrame()
+        performTask.driveTrafficPhysics(driver, task, 50, progress)
+        if frame == 1 then assert(math.abs(steer) > 0.5, "winner drove straight during the award") end
+        local acceleration = throttle * (throttle > 0 and 4 or 9) - 0.08*speed - (brake and 12 or 0)
+        speed = math.max(0, speed + 0.05*acceleration)
+        heading = heading + 0.05*speed/2.5 * math.tan(0.6*steer)
+        winner.fx, winner.fy = math.sin(heading), math.cos(heading)
+        winner.x, winner.y = winner.x + 0.05*speed*winner.fx, winner.y + 0.05*speed*winner.fy
+        winner.vx, winner.vy = winner.fx*speed/50, winner.fy*speed/50
+        local a, b = getNPCTrafficFootprint(winner, now), getNPCTrafficFootprint(waiting, now)
+        assert(not getNPCTrafficFootprintContact(b.x-a.x, b.y-a.y, 0, 0,
+            a.fx, a.fy, a.width, a.length, b, 0), "head-on bypass overlapped")
+        if winner.y > waiting.y + 5 then break end
+    end
+    assert(winner.y > waiting.y + 5 and winner.driver == driver, "winning NPC did not clear the opposing car")
+
+    -- A recorded model 474 stopped for a model 480 directly behind it.
+    -- Positions and headings are expressed in the lead car's local frame.
+    function getElementBoundingBox(car)
+        if car == winner then return -1.209,-3.166,-0.768,1.214,2.560,0.978 end
+        return -1.142,-2.701,-0.754,1.114,2.423,0.808
+    end
+    winner.x, winner.y, winner.fx, winner.fy, winner.vx, winner.vy = 0,0, 0,1, 0,0
+    waiting.x, waiting.y, waiting.fx, waiting.fy = -0.083,-5.524, 0.0243,0.9997
+    task[6] = nil
+    local function sampleQueueCar(car)
+        driver.vehicle = car
+        now = now + 100
+        beginNPCTrafficPhysicsFrame()
+        performTask.driveTrafficPhysics(driver, task, 50, {})
+    end
+    local front, rear = getNPCTrafficFootprint(winner,now), getNPCTrafficFootprint(waiting,now)
+    assert(getNPCTrafficFootprintContact(rear.x-front.x,rear.y-front.y,0,0,0,1,front.width,front.length,rear,0)==0)
+    sampleQueueCar(winner)
+    assert(not blocker and throttle > 0, "lead car could not move away from the touching follower")
+    sampleQueueCar(waiting)
+    assert(blocker == winner and brake, "touching follower no longer yielded to the lead car")
+    do
+        -- An empty van occupies the route in the same direction as the NPC.
+        local key = "npchlc_traffic:abandonedBlocker"
+        waiting.x, waiting.y, waiting.fx, waiting.fy = 0, 6, 0, 1
+        sampleQueueCar(winner)
+        assert(brake and throttle==0, "ordinary traffic pushed the van before the wait")
+        winner[key] = waiting
+        sampleQueueCar(winner)
+        assert(throttle>0 and not brake, "the released civilian still brakes for the empty van")
+        local room, nearby = canNPCTrafficPhysicsAvoid, getElementsWithinRange
+        canNPCTrafficPhysicsAvoid = function() return false end
+        sampleQueueCar(winner)
+        assert(steer==0 and throttle>0 and not brake, "closed sides prevented the slow push")
+        local walker = element("ped")
+        walker.y = 2.9
+        function getElementsWithinRange(x,y,z,r,kind)
+            if kind=="ped" then return {walker} end
+            if kind=="vehicle" then return {winner,waiting} end
+            return {}
+        end
+        for style=0,1 do
+            task[6] = style
+            sampleQueueCar(winner)
+            assert(throttle==0 and brake, "driver pushed ahead with a pedestrian at the bumper")
+        end
+        task[6] = nil
+        canNPCTrafficPhysicsAvoid, getElementsWithinRange = room, nearby
+        waiting.driver = element("player")
+        sampleQueueCar(winner)
+        assert(brake and throttle==0, "native driver takeover did not cancel contact")
+        waiting.driver, winner[key] = nil, false
+    end
+    waiting.x, waiting.y, waiting.vx, waiting.vy = -4,-10,0.04,0.16
+    sampleQueueCar(winner)
+    assert(blocker == waiting, "faster rear merge with future contact did not constrain the lead car")
+
+    local siren = element("vehicle")
+    function getElementsWithinRange() return {winner} end
+    local key = "npchlc_traffic:sirenYield"
+    for _, mode in ipairs({"left", "right"}) do
+        local sign = mode == "left" and -1 or 1
+        winner.x,winner.y,winner.fx,winner.fy,winner.vx,winner.vy = 0,0,0,1,0,0
+        siren.x,siren.y,siren.vy = 0,-32,0.25
+        winner[key] = {siren, mode, 2500, now, false, 0,1,sign*3.1}
+        sampleQueueCar(winner)
+        assert(sign*steer>0 and throttle>0 and not brake, "stopped driver failed to pull outward")
+        local nearby = getElementsWithinRange
+        local pedestrian = element("ped",sign*0.6)
+        pedestrian.y = 2.7
+        function getElementsWithinRange(x,y,z,r,kind)
+            if kind=="ped" then return {pedestrian} end
+            return kind=="vehicle" and {winner} or {}
+        end
+        sampleQueueCar(winner)
+        assert(throttle==0 and brake, "driver accelerated into a pedestrian while making way")
+        getElementsWithinRange=nearby
+        -- A new sync owner receives the same world-space target. Once the
+        -- car has reached it, later updates must not send it into the siren.
+        winner.x,winner.vy = sign*3.1,0.14
+        winner[key][5] = true
+        sampleQueueCar(winner)
+        assert(math.abs(steer)<0.1 and throttle<=0, "recipient crossed its cleared line")
+    end
+    winner.x,winner.vy = 0,0.2
+    winner[key] = {siren, "wait", 2000, 200, false}
+    sampleQueueCar(winner)
+    assert(steer==0 and throttle==-0.2 and not brake)
+    winner.vy = 0
+    sampleQueueCar(winner)
+    assert(throttle==0 and brake, "siren wait selected reverse at rest")
+    winner["npchlc_traffic:rail"] = true
+    local advance = advanceNPCTrafficRail
+    local railLimit
+    function advanceNPCTrafficRail(v, t, ms, limit) railLimit = limit(v) end
+    performTask.driveTrafficRail(driver, {}, 50)
+    assert(railLimit==0, "simple traffic advanced through siren wait")
+    advanceNPCTrafficRail = advance
+    winner[key] = false
+    sampleQueueCar(winner)
+    assert(throttle>0 and not brake, "traffic stayed stopped after siren action expired")
+
+    -- At 4 m/s the half-cruise target of style 1 still asks for gas.
+    -- The fully stopped leader occupies the original path in all seven cases.
+    winner.x,winner.y,winner.vx,winner.vy=0,0,0,0.08
+    waiting.x,waiting.y,waiting.fx,waiting.fy,waiting.vx,waiting.vy=0,5,0,1,0,0
+    function getElementsWithinRange() return {winner,waiting} end
+    local function styleSample(style)
+        task[6]=style
+        sampleQueueCar(winner)
+        return throttle,steer
+    end
+    local full=styleSample(0)
+    local slow=styleSample(1)
+    local plough=styleSample(3)
+    assert(full<0 and styleSample(4)==full and slow>0 and slow<plough)
+    -- A car just right of centre leaves a gap on its left.
+    waiting.x,waiting.y=1.8,10
+    for _,style in ipairs({2,5,6}) do
+        local pedal,angle=styleSample(style)
+        assert(pedal>0 and angle<0, "vehicle bypass " .. style .. ": " .. pedal .. "/" .. angle)
+    end
+
+    -- A pedestrian blocks the straight bearing. Both alternate bearings are clear.
+    local pedestrian=element("ped")
+    function getElementsWithinRange() return {winner} end
+    local oldCast=processLineOfSight
+    function processLineOfSight(x,y,z,ex,ey)
+        if math.abs(ex-x)<0.001 and ey>y then return true,x,y+1,z,pedestrian end
+        return false
+    end
+    for _,style in ipairs({2,5}) do
+        local pedal,angle=styleSample(style)
+        assert(pedal>0 and math.abs(angle)>0.1, "pedestrian bypass " .. style)
+    end
+    local pedal,angle=styleSample(6)
+    assert(pedal<0 and angle==0, "style 6 steered through the pedestrian")
+    assert(styleSample(3)==plough)
+    processLineOfSight=oldCast
+    pedestrian.x,pedestrian.y,pedestrian.z,pedestrian.vx,pedestrian.vy=0.51,5,0,0,0
+    function isPedDead(ped) return ped.dead end
+    function getElementsWithinRange(_,_,_,_,kind,interior,dimension)
+        if kind=="vehicle" then return {winner} end
+        if kind=="ped" and interior==getElementInterior(winner)
+            and dimension==(pedestrian.dimension or getElementDimension(winner)) then return {pedestrian} end
+        return {}
+    end
+    assert(styleSample(6)<0, "style 6 missed the standing ped between its rays")
+    pedestrian.x,pedestrian.vx=2.1,-0.03
+    assert(styleSample(6)<0, "crossing pedestrian footprint missed the bumper")
+    pedestrian.vehicle=waiting
+    assert(styleSample(6)>0, "seated pedestrian blocked traffic")
+    pedestrian.vehicle=nil
+    pedestrian.z=6
+    assert(styleSample(6)>0, "pedestrian on an overpass blocked traffic")
+    pedestrian.z,pedestrian.dimension=0,35
+    assert(styleSample(6)>0, "another dimension blocked traffic")
+    function getElementsWithinRange() return {winner} end
+
+    -- A standalone rail task exercises the same seven policies even without
+    -- the world scheduler, which normally promotes avoiding cars to physics.
+    local rail={"driveTrafficRail",0,-30,0, 0,0,0, 0,30,0, 0,60,0, 12,0,0}
+    local cap,bearing
+    function advanceNPCTrafficRail(v,t,ms,limit)
+        local urgent
+        cap,urgent,bearing=limit(v,0,0,0,0,5,0,0,1,nil,t,1,0,{},4,12)
+    end
+    function processLineOfSight(x,y,z,ex,ey)
+        if math.abs(ex-x)<0.001 and ey>y then return true,x,y+1,z,pedestrian end
+        return false
+    end
+    for style=0,6 do
+        rail.style=style
+        now=now+110
+        beginNPCTrafficPhysicsFrame()
+        performTask.driveTrafficRail(driver,rail,50)
+        if style==0 or style==4 or style==6 then assert(cap==0 and not bearing)
+        elseif style==1 then assert(cap==6 and not bearing)
+        elseif style==3 then assert(cap==math.huge and not bearing)
+        else assert(cap>0 and math.abs(bearing)>0.1) end
+    end
+    advanceNPCTrafficRail,processLineOfSight=advance,oldCast
+    """)
+    print("Centered opposing traffic reserved maneuvering space and passed without a footprint overlap")
+    print("All seven road driving styles passed task validation, signals, traffic limits and pedestrian response")
     print("Client task ownership, stale revision rejection and stream-out cleanup passed")
 
     lua = make_server()
@@ -1309,6 +1767,16 @@ def check_assets(disc, vcs_pc):
                 assert kind == 0x16 and 0 < length <= size * 2048 - 12
         provider = LuaRuntime()
         load(provider, model_resource, ["model_catalog.lua"])
+        for original, (name, parent) in POLICE_MODELS.items():
+            entry = provider.globals().VCS_TRAFFIC_MODEL_CATALOG[original]
+            assert entry.name == name and entry.base == parent and bool(entry.variant) == (original == 218)
+            surfaces = vehicle_material_textures(assets[name + ".dff"])
+            assert "vcsglass_66b6c24c" in surfaces
+            lenses = {key for key in surfaces if key.startswith("vcssiren_")}
+            expected = {191: {"vcssiren_right"}, 207: {"vcssiren_left", "vcssiren_right"}}
+            assert lenses == expected.get(original, set())
+            if original in (193, 204):
+                assert {"vcspol_vehiclegeneric256", "vcspol_vehiclesteering128"} <= surfaces
         for original, name in ((215,"speeder"), (233,"jetski"), (248,"marquis"),
                                (249,"rio"), (257,"squalo"), (264,"scarab")):
             entry = provider.globals().VCS_TRAFFIC_MODEL_CATALOG[original]
@@ -1323,7 +1791,12 @@ def check_assets(disc, vcs_pc):
             assert 0.25 < front[2] < 0.6 and 0.25 < rear[2] < 0.6
     ped_archive = model_resource / "ped.img"
     if ped_archive.is_file():
-        check_pedestrian_jaw(read_archive(ped_archive))
+        check_pedestrian_jaw(read_archive(ped_archive), 75)
+    street_assets = read_archive(RUNTIME / "ped_models/street.img")
+    check_pedestrian_jaw(street_assets, 95)
+    police_assets = read_archive(RUNTIME / "ped_models/police.img")
+    assert set(police_assets) == {f"ped_{model}.dff" for model in (9, 10, 11, 117, 118, 119)}
+    check_pedestrian_jaw(police_assets, 6)
     assert encode_json(data) == encode_json(data_again)
     assert manifest["counts"]["nodes"] == {"boat": 378, "pedestrian": 5308, "vehicle": 2701}
     assert manifest["counts"]["directedLinks"] == {"boat": 762, "pedestrian": 11298, "vehicle": 5592}
@@ -1523,7 +1996,7 @@ def check_reaction_latency():
         PedActivity={cancel=noop,leaveForThreat=noop}
         PedVoice={emit=noop}
         TrafficActors={isPolicePed=noop}
-        reportWantedCrime=noop
+        exports.wanted={reportWantedEvent=noop}
         function getElementRotation() return 0,0,0 end
         function getPedRotation() return 0 end
         function isPedOnGround() return true end
@@ -1545,7 +2018,8 @@ def check_reaction_latency():
             crowd[i],p.syncer=p,player
             local brain=PedAI.attach(p,40)
             brain.reactionDelay=999
-            assert(TrafficAmbient.adoptDriver(p,nil,nil,40,nil,0))
+            assert(TrafficAmbient.adoptDriver(p,nil,nil,40))
+            assert(not TrafficAmbient.isRecovering(p))
             p.task={"walkTrafficToPoint",3,0,0,1}
             assert(brain:react("gunshot",player,22,"look",nil,1000))
         end
@@ -2228,15 +2702,71 @@ def check_road(disc=None, vcs_pc=None):
     assert(not reply[1] and reply[2][1]==0 and reply[3][1]==7 and not reply[4] and not reply[5])
 
     """)
+    load(client, RUNTIME, ["traffic_passengers_c.lua"])
+    client.execute("""
+    local body = element("vehicle")
+    setElementData(body, TrafficVisibility.profileKey, "road")
+    local shooter, collider = element("ped"), element("vehicle")
+    local reports = {}
+    function triggerServerEvent(name, _, car, actor, weapon)
+        assert(car == body)
+        reports[#reports+1] = {name, actor, weapon}
+    end
+    local function damage(actor, weapon, loss, tire)
+        deliver("onClientVehicleDamage", body, actor, weapon, loss, 0, 0, 0, tire)
+    end
+    damage(localPlayer, 22, 100)
+    damage(localPlayer, 22, 120)
+    damage(localPlayer, 22, 0, 0)
+    damage(shooter, 5, 5)
+    damage(nil, nil, 20)
+    assert(#reports == 0)
+    damage(localPlayer, 0, 0)
+    shooter.syncer = localPlayer
+    damage(shooter, 5, 5)
+    damage(localPlayer, 22, 99)
+    damage(localPlayer, 51, 20)
+    collider.driver = localPlayer
+    damage(collider, nil, 10)
+    assert(#reports == 5 and reports[1][3] == 0 and reports[2][2] == shooter)
+    assert(reports[3][3] == 22 and reports[4][3] == 51 and reports[5][1] == "npchlc_traffic:collisionDamage")
+    """)
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
     lua.execute('exports = {npc_hlc = {}, server_coldata = {}}')
+    lua.execute('exports.wanted={reportWantedEvent=function(_,p,e,v) assert(e==8 and not v.takenBy); v.takenBy=p end}')
     load(lua, HLC, ["traffic_rail.lua", "traffic_physics.lua"])
     load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_visibility_s.lua", "traffic_model_bindings.lua",
                         "traffic_graph.lua", "traffic_world.lua", "traffic_road_population.lua",
                         "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua",
                         "ped_carjack.lua", "traffic_passengers.lua", "traffic_collision_handling.lua", "traffic_crash_decisions.lua",
                         "traffic_vehicle_collision.lua", "traffic_vehicle_pursuit.lua", "ped_road_injury.lua", "traffic_road.lua"])
+    lua.execute("""
+    local response = TrafficRoad.sirenResponse
+    -- Siren travels north. The target's forward vector and its velocity are independent.
+    assert(response(1,20,0,0,.1,0,1,0,1,.1) == "right")
+    assert(response(-1,20,0,0,.1,0,1,0,1,.1) == "left")
+    assert(response(0,20,0,0,.1,0,1,0,1,.1) == "left")
+    assert(response(-1,20,0,0,-.1,0,-1,0,1,.1) == "right", "oncoming car failed to swerve outward")
+    assert(response(1,20,0,0,-.1,0,-1,0,1,.1) == "wait")
+    assert(response(-1,-20,0,0,-.1,0,-1,0,-1,.1) == "right") -- emitter reversing south
+    assert(response(10,5,0,-.1,0,-1,0,0,1,.1) == "wait")
+    local crossing, _, duration = response(2,18,0,-.1,0,-1,0,0,1,.2)
+    assert(crossing=="wait" and duration==4000)
+    crossing, _, duration = response(10,5,0,-.1,0,-1,0,0,1,.1)
+    assert(crossing=="wait" and duration==2000)
+    assert(not response(10,5,0,.1,0,1,0,0,1,.1))
+    assert(not response(0,-10,0,0,.1,0,1,0,1,.1))
+    assert(response(0,10,0,0,0,0,1,0,1,.1), "stationary queue did not make room")
+    assert(not response(15,4,0,0,0,0,1,0,1,.1), "parked out of the approach corridor")
+    assert(not response(4,20,0,0,.1,0,1,0,1,.2,3), "a car already clear of the corridor swerved again")
+    assert(not response(0,10,0,0,.1,0,1,0,1,.099))
+    assert(not response(0,10,5,0,.1,0,1,0,1,.1))
+    assert(not response(0,44.5,0,0,.1,0,1,0,1,.1))
+    assert(response(0,44.49,4.99,0,.1,0,1,0,1,.1))
+    assert(not response(3,4,0,0,.1,0,1,0,1,.1)) -- cone dot exactly .8
+    assert(not response(0,4,0,0,.1,0,.7,0,1,.1)) -- heading dot exactly .7
+    """)
     load(lua,VCS_VEHICLE,["controllers/vehicle.lua","controllers/boat.lua","controllers/jetski_control.lua","vehicle_s.lua","boarding.lua","boarding_s.lua"])
     lua.execute('exports.vcs_vehicle={bindVcsVehicle=function(_,...) return bindVcsVehicle(...) end,transferWatercraftSeat=function(_,...) return transferWatercraftSeat(...) end}; function cancelEvent() cancelled=true end; local trigger=triggerEvent; function triggerEvent(...) cancelled=false; trigger(...); return not cancelled end')
     if disc:
@@ -2310,6 +2840,7 @@ def check_road(disc=None, vcs_pc=None):
     exports.npc_hlc.isNPCTrafficRailWaitingForSignal = function(_, ...)
         return isNPCTrafficRailWaitingForSignal(...)
     end
+    exports.npc_hlc.isNPCTrafficHeadOnBlocked = function(_, ...) return isNPCTrafficHeadOnBlocked(...) end
     exports.npc_hlc.clearNPCTasks = function(_, ped) ped.task = nil end
     exports.npc_hlc.getNPCTrafficPhysicsRejoin = function(_, ...) return getNPCTrafficPhysicsRejoin(...) end
     function chooseTrafficCivilianVehicle() return 400, 171, 0 end
@@ -2354,6 +2885,35 @@ def check_road(disc=None, vcs_pc=None):
         end
     end
     copyRoad(500, 0, 4, 3)
+    do
+        -- The closest outgoing link is a dead end. A two-corner detour is
+        -- required to reach the target street, and a closed turn blocks it.
+        local roads={nodes={},links={},roadTurnClosures={}}
+        local coords={{0,0},{10,0},{16,0},{10,12},{28,12},{28,0}}
+        local exits={{1},{2,3},{},{4},{5},{}}
+        for i,pt in ipairs(coords) do
+            roads.nodes[i]={x=pt[1],y=pt[2],z=0,flags=0,scene="outdoor",
+                firstLink=#roads.links,linkCount=#exits[i]}
+            for _,dest in ipairs(exits[i]) do
+                roads.links[#roads.links+1]={id=#roads.links,from=i-1,to=dest,lanes=1}
+            end
+        end
+        local first,goal=roads.links[1],roads.links[5]
+        local path,n=TrafficRoad.findPolicePath(roads,first,0,goal,true)
+        assert(n<=5 and #path==4 and path[2].edge.to==3 and path[3].edge.to==4)
+        roads.roadTurnClosures[0]={[2]=true}
+        assert(not TrafficRoad.findPolicePath(roads,first,0,goal,true))
+        assert(not TrafficRoad.findPolicePath(roads,goal,0,first,true))
+        assert(not TrafficRoad.findPolicePath(roads,first,0,first,false))
+        assert(#TrafficRoad.findPolicePath(roads,first,0,first,true)==1)
+        local long={nodes={},links={},roadTurnClosures={}}
+        for i=0,150 do
+            long.nodes[i+1]={x=i,y=0,z=0,flags=0,scene="outdoor",firstLink=i,linkCount=i<150 and 1 or 0}
+            if i<150 then long.links[i+1]={id=i,from=i,to=i+1,lanes=1} end
+        end
+        local missing,expanded=TrafficRoad.findPolicePath(long,long.links[1],0,long.links[150],true)
+        assert(not missing and expanded==128)
+    end
     assert(TrafficRoad.crossing(from, to, 0, 0, 40) == 5 / 32)
     assert(TrafficRoad.chooseDriver({34}, {['34']=1}, 1, 0, TrafficAmbient.getPedestrianModel, 14) == 14)
     local laneGraph = {nodes={{x=0,y=0,z=0}, {x=35,y=0,z=0}}}
@@ -2553,6 +3113,20 @@ def check_road(disc=None, vcs_pc=None):
     tick()
     assert(#packets == 1 and #created == 0)
     assert(packets[1][1][2] == "road" and math.abs(packets[1][1][3][1][1] - 40) < 0.1)
+    do
+        local barrier={points={{x=35,y=2,z=0},{x=35,y=-2,z=0}}}
+        local beforeX,beforeY=TrafficWorld.getRoadView(player)
+        local ground
+        assert(TrafficWorld.probeRoad(player,barrier,function(owner,plan,result)
+            assert(owner==player and plan==barrier)
+            ground=result.probes
+        end,"roadblock"))
+        local request=table.remove(packets)
+        deliver("npchlc_traffic:worldProbeResult",resourceRoot,request[1][1],{{{1,true},{.5,true}},1,0})
+        assert(ground[1].groundZ==1 and ground[2].groundZ==.5)
+        local afterX,afterY=TrafficWorld.getRoadView(player)
+        assert(beforeX==afterX and beforeY==afterY)
+    end
     client = spectator
     deliver("npchlc_traffic:worldProbeResult", resourceRoot, packets[1][1][1], {{{0, false}}, 1, 0})
     assert(TrafficWorld.getRoadView(spectator) == nil)
@@ -2771,7 +3345,9 @@ def check_road(disc=None, vcs_pc=None):
         PedAI.passengerThreat = function(ped, attacker) ped.fledFrom = attacker end
         PedAI.vehicleThreat = function(ped, attacker) ped.fought = attacker end
         PedVoice = {emit=function(ped, kind) ped.voice = kind end}
-        for scenario = 1, 3 do
+        function getPedWeapon(p) return p.weapon or 0 end
+        for scenario = 1, 6 do
+            player.x, player.y, player.z = 0, 0, 0
             players, created, packets = {player}, {}, {}
             TrafficRoad.start(graph, function() return 1 end)
             tick()
@@ -2791,31 +3367,39 @@ def check_road(disc=None, vcs_pc=None):
             tick()
             assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
             client = spectator
-            deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+            deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 22, 1000, 8)
             deliver("onVehicleDamage", car, 8)
             tick()
             assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
             client = player
-            deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+            deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 22, 1000, 8)
             tick()
             assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
             fireAtCar()
             if scenario == 2 then
                 -- Report and accepted bullet can precede server health sync.
                 now = now + 1250
-                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+                deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 22, 1000, 8)
                 fireAtCar()
                 tick()
                 assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
                 deliver("onVehicleDamage", car, 8)
             else
-                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+                deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 22, 1000, 8)
             end
-            math.random = function(lower) return lower or (scenario == 2 and 0.1 or 0.9) end
+            math.random = function(lower) return lower or ({0.501, 0.500, 0.9, 0.499, 0.501, 0.5})[scenario] end
+            if scenario >= 5 then
+                player.x, player.y, player.z = car.x, car.y, car.z
+                player.weapon = scenario == 5 and 5 or 0
+                now = now + 1250
+                deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, player.weapon, 1000, 0)
+            end
             tick()
-            if scenario == 1 then
+            if scenario == 1 or scenario == 5 then
+                assert(normalizeNPCTrafficPhysics(ped.task)[6] == 3)
                 assert(ped.task[1] == "driveTrafficPhysics" and ped.speed*50 == math.floor(speed*1.5))
-                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+                fireAtCar()
+                deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 22, 1000, 8)
                 deliver("onVehicleDamage", car, 8)
                 tick()
                 assert(ped.speed*50 == math.floor(speed*1.5))
@@ -2827,11 +3411,50 @@ def check_road(disc=None, vcs_pc=None):
                 car.driver, ped.vehicle = nil, nil
                 deliver("onVehicleExit", car, ped, 0)
                 assert(ped.adopted and not ped.destroyed and not car.destroyed)
-                assert((scenario == 2 and ped.fledFrom == player) or (scenario == 3 and ped.fought == player))
+                assert((scenario ~= 3 and ped.fledFrom == player) or (scenario == 3 and ped.fought == player))
             end
             math.random = originalRandom
             TrafficRoad.stop()
         end
+        player.x, player.y, player.z, player.weapon = 0, 0, 0, nil
+        local oldPicker = chooseTrafficCivilianVehicle
+        chooseTrafficCivilianVehicle = function() return 400, 261, 0 end
+        players, created, packets = {player}, {}, {}
+        TrafficRoad.start(graph, function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local special = assert(created[1])
+        local driver = special.driver
+        local npc = element("ped",special.x)
+        npc.y,npc.z,npc.syncer = special.y,special.z,player
+        player.x,player.y,player.z,client = special.x,special.y,special.z,player
+        function getPlayerWantedLevel(p) return p.stars or 0 end
+        function exports.wanted:raisePlayerWanted(p,n,why) assert(why=="vehicleAttack") p.stars=math.max(p.stars or 0,n) end
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, special, player, 0, 1000, 0)
+        tick()
+        assert(player.stars == 1 and driver.task[1] == "driveTrafficRail" and not driver.voice)
+        -- The vehicle owner can supply a hit the attacker's machine missed.
+        -- Two owners observing one strike request wanted only once.
+        client, special.syncer, player.stars = spectator, spectator, 0
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, special, player, 0, 1000, 0)
+        tick()
+        assert(player.stars == 0)
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, special, player, 0, 999, 1)
+        tick()
+        assert(player.stars == 1)
+        client = player
+        player.stars = 3
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, special, player, 0, 1000, 0)
+        tick()
+        assert(player.stars == 3)
+        math.random = function(lower) return lower or 0.5 end
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, special, npc, 0, 1000, 0)
+        tick()
+        assert(not driver.task and driver.voice == "fear")
+        TrafficRoad.stop()
+        math.random, chooseTrafficCivilianVehicle = originalRandom, oldPicker
+        player.x,player.y,player.z,player.stars = 0,0,0,nil
         PedAI.passengerThreat, PedAI.vehicleThreat, PedVoice = oldFlee, oldFight, oldVoice
     end
 
@@ -2914,7 +3537,7 @@ def check_road(disc=None, vcs_pc=None):
             ped.angry = true
         end
         function getPlayerWantedLevel(p) return p.stars or 0 end
-        function setPlayerWanted(p, stars, reason) assert(reason == "policeCollision") p.stars = stars end
+        function exports.wanted:raisePlayerWanted(p, stars, reason) assert(reason == "policeCollision") p.stars = math.max(p.stars or 0, stars) end
         local function crashScenario(roll, expect, police, nativeExit)
             chooseTrafficCivilianVehicle = function() return 400, 171, police and 13 or 0 end
             players, created, packets, player.vehicle = {player}, {}, {}, nil
@@ -2938,13 +3561,19 @@ def check_road(disc=None, vcs_pc=None):
             report(26)
             assert(not ped.calls)
             local vy = car.vy
+            if roll < 0.1 then deliver("npchlc_traffic:collisionDamage", resourceRoot, car, collider) end
             report(100)
             report(100)
             assert(ped.calls == 1 and car.vy == vy)
+            math.random = function(n) return n or roll end
             tick()
             assert(ped.task[1] == "driveTrafficPhysics")
-            math.random = function(n) return n or roll end
             deliver("onVehicleDamage", car, 5)
+            if roll >= 0.1 then
+                tick()
+                assert(not getTrafficRoadStatus()[expect or "crashRoadRage"])
+                deliver("npchlc_traffic:collisionDamage", resourceRoot, car, collider)
+            end
             tick()
             local status = getTrafficRoadStatus()
             if police then
@@ -3020,6 +3649,10 @@ def check_road(disc=None, vcs_pc=None):
             TrafficRoad.stop()
             math.random = oldRandom
         end
+        assert(TrafficVehicleCollision.damage(35, 5/6, "Automobile") == 5)
+        assert(TrafficVehicleCollision.damage(35.01, 5/6, "Automobile") > 5)
+        assert(TrafficVehicleCollision.damage(35, 0.5, "Bike") == 5)
+        assert(TrafficVehicleCollision.damage(35.01, 0.5, "Bike") > 5)
         crashScenario(0.01, "crashContinue")
         crashScenario(0.49, "crashFlee")
         crashScenario(0.72, "crashRoadRage")
@@ -3032,6 +3665,61 @@ def check_road(disc=None, vcs_pc=None):
         assert(TrafficVehicleCollision.chooseResponse({name="STAT_TOUGH_GUY"}, 0.25) == 1031)
         player.vehicle = nil
         PedVoice, PedAI.roadRage, chooseTrafficCivilianVehicle = oldVoice, oldRage, oldPicker
+    end
+
+    do
+        player.x, players, created, packets = 0, {player}, {}, {}
+        TrafficRoad.start(graph, function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local civilian = assert(created[1])
+        local driver = civilian.driver
+        assert(TrafficRoad.driverStyle(driver)==0 and driver.task.style==0)
+        assert(not setNPCTrafficDrivingStyle(driver,7) and not setNPCTrafficDrivingStyle(player,1))
+        assert(setNPCTrafficDrivingStyle(driver,1) and driver.task.style==1 and driver.task[1]=="driveTrafficRail")
+        assert(setNPCTrafficDrivingStyle(driver,4) and driver.task.style==4 and driver.task[15]==0)
+        assert(setNPCTrafficDrivingStyle(driver,0) and driver.task.style==0)
+        local emitter = element("vehicle",civilian.x-1)
+        emitter.model, emitter.vy, emitter.y, emitter.z = 596,.25,civilian.y-12,civilian.z
+        civilian.vy, civilian.fx, civilian.fy = .15,0,1
+        local list = getElementsByType
+        function getElementsByType(kind) return kind == "vehicle" and {emitter} or players end
+        local key = "npchlc_traffic:sirenYield"
+        local function advance(count) for _=1,count do tick() end end
+        advance(7)
+        assert(not getElementData(civilian,key))
+        emitter.siren = true
+        setElementData(emitter,"npchlc_traffic:originalModel",244)
+        advance(7)
+        assert(not getElementData(civilian,key))
+        setElementData(emitter,"npchlc_traffic:originalModel",207)
+        advance(7)
+        local action = assert(getElementData(civilian,key))
+        assert(action[1]==emitter and action[2]=="right" and action[3]==2500 and not action[5]
+            and action[6]==0 and action[7]==1 and action[8]>civilian.x and civilian.driver.task[1]=="driveTrafficPhysics")
+        emitter.x = civilian.x+1
+        advance(7)
+        assert(getElementData(civilian,key)[4]==action[4] and getElementData(civilian,key)[2]=="right")
+        emitter.siren = false
+        advance(22)
+        assert(getElementData(civilian,key)[5] and getElementData(civilian,key)[4]==action[4])
+        advance(26)
+        assert(not getElementData(civilian,key))
+        local sequence = driver.task[2]
+        for style=0,6 do
+            assert(setNPCTrafficDrivingStyle(driver,style) and TrafficRoad.driverStyle(driver)==style)
+            assert(driver.task[1]=="driveTrafficPhysics" and driver.task[2]==sequence and driver.task[6]==style)
+        end
+        assert(setNPCTrafficDrivingStyle(driver,2))
+        emitter.siren, emitter.x = true, civilian.x-1
+        advance(7)
+        assert(getElementData(civilian,key), "ordinary avoid-cars driver ignored an approaching siren")
+        civilian.driver = nil
+        assert(not TrafficRoad.driverStyle(driver) and not setNPCTrafficDrivingStyle(driver,1))
+        civilian.driver = driver
+        getElementsByType = list
+        TrafficRoad.stop()
     end
 
     copyRoad(174, 0, 12, 9)
@@ -3118,6 +3806,33 @@ def check_road(disc=None, vcs_pc=None):
         local passenger = assert(replacement.passenger)
         passenger.syncer = spectator
         assert(TrafficRoad.isManagedPed(passenger) and PedAI.profile(passenger))
+        local brain = PedAI.brain(passenger)
+        local packetCount = #packets
+        brain.scriptOwner = true
+        TrafficPassengers.vehicleUnderFire(replacement, player, true)
+        brain.scriptOwner = nil
+        brain.objectives.current = {id=8, target=player}
+        TrafficPassengers.vehicleUnderFire(replacement, player, true)
+        now = now + 300
+        TrafficPassengers.update(now)
+        assert(#packets == packetCount)
+        brain.objectives.current = nil
+        TrafficPassengers.vehicleUnderFire(replacement, player, true)
+        now = now + 199
+        TrafficPassengers.vehicleUnderFire(replacement, player, true)
+        TrafficPassengers.update(now)
+        assert(#packets == packetCount)
+        now = now + 1
+        TrafficPassengers.update(now)
+        assert(#packets == packetCount + 1 and packets[#packets][1][1] == passenger)
+        replacement.passenger, passenger.vehicle = nil, nil
+        deliver("onVehicleExit", replacement, passenger, 1)
+        math.random = function(low) return low or 0.12499 end
+        TrafficPassengers.spawn({vehicle=replacement,originalDriver=34,dimension=0},
+            {edition="SLUS-21590 USA v1.00",fallbackDriverModelId=14},{34},0,171)
+        math.random = roll
+        passenger = assert(replacement.passenger)
+        passenger.syncer = spectator
         replacement.driver, base.vehicle = player, nil
         deliver("onVehicleEnter",replacement,player,0,base)
         now = now + 10000
@@ -3155,6 +3870,145 @@ def check_road(disc=None, vcs_pc=None):
     assert(getTrafficRoadStatus().vehicles == 1 and #created == 2)
     TrafficRoad.stop()
     signal = 2
+
+    do
+        players, created, packets = {player}, {}, {}
+        TrafficRoad.start(graph, function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local first = assert(created[1])
+        local secondOwner = element("player", 500)
+        players[2] = secondOwner
+        client = secondOwner
+        deliver("npchlc_traffic:worldProbeReady",resourceRoot)
+        tick()
+        answerProbe(assert(packets[#packets]))
+        tick()
+        local second = assert(created[2])
+        assert(first["npchlc_traffic:roadOrder"] < second["npchlc_traffic:roadOrder"])
+        first.x, first.fx, first.fy = 32, -1, 0
+        second.x, second.y, second.z, second.fx, second.fy = 27, first.y, first.z, 1, 0
+        secondOwner.x = second.x
+        local award = "npchlc_traffic:headOnBlocker"
+        local function report(car, other)
+            deliver(award,resourceRoot,car,other)
+        end
+        tick() -- both stopped poses first become visible to the server here
+        signal = 0
+        for _=1,300 do tick() end
+        client = first.syncer
+        report(first,second)
+        assert(not first[award], "head-on recovery at exactly 15 seconds")
+        second.x = second.x-0.8
+        tick()
+        for _=1,10 do tick() end
+        report(first,second)
+        assert(not first[award], "moving the blocker failed to restart its own timer")
+        for _=1,300 do tick() end
+        client = second.syncer
+        report(second,first)
+        assert(not second[award], "both sides may try to move")
+        report(first,second)
+        assert(not first[award], "remote syncer assigned a maneuver")
+        client = first.syncer
+        local driver = second.driver
+        second.driver = player
+        report(first,second)
+        second.driver = driver
+        assert(not first[award], "recovery against a player")
+        second.y = first.y+3.25
+        report(first,second)
+        assert(not first[award], "adjacent lane accepted as a blocker")
+        second.y = first.y
+        for _=1,10 do tick() end
+        signal = 2
+        report(first,second)
+        assert(not first[award], "red signal released the queue")
+        for _=1,10 do tick() end
+        signal = 0
+        report(first,second)
+        assert(first[award]==second and not second[award])
+        assert(first.driver.task[1]=="driveTrafficPhysics" and first.driver.task[6]==2)
+        assert(second.driver.task[1]=="driveTrafficRail" and getTrafficRoadStatus().headOnRecoveries==1)
+        for _=1,20 do tick() end
+        assert(not first[award] and first.driver.task[6]==2)
+        -- While the winner is beside the yielding car, the forward leader
+        -- check no longer sees it. The watchdog must retain the original car.
+        first.x, first.y = second.x, second.y+3.25
+        for _=1,180 do tick() end
+        assert(not second.destroyed and not second[TrafficVisibility.retiringKey])
+        assert(not getTrafficRoadStatus().despawnRailStalled)
+        TrafficRoad.stop()
+        players, signal = {player}, 2
+    end
+
+    -- The car at the front of a stopped queue has lost its driver. The
+    -- observer reports the actual bumper obstruction, including at a light.
+    do
+        players, created, packets = {player}, {}, {}
+        client = player
+        TrafficRoad.start(graph, function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local car = assert(created[1])
+        car.x, car.fx, car.fy = 32, -1, 0
+        local empty = createVehicle(482, 27, car.y, car.z)
+        empty.fx, empty.fy = -1, 0
+        -- Rail transforms can be stationary while MTA retains a velocity.
+        car.vx = -0.08
+        local key = "npchlc_traffic:abandonedBlocker"
+        local reverseKey = "npchlc_traffic:abandonedReverse"
+        local reverseStart, reverseEnd
+        local function report() deliver(key,resourceRoot,car,empty) end
+        local function wait(seconds)
+            for i=1,seconds*20 do
+                tick()
+                if i%20==0 then report() end
+                if reverseStart and not reverseEnd and now-reverseStart==400 then
+                    assert(timers[400], "reverse deadline was not scheduled")()
+                end
+                if car[reverseKey] then reverseStart=reverseStart or now
+                elseif reverseStart and not reverseEnd then reverseEnd=now end
+            end
+        end
+        client = car.syncer
+        signal = 2
+        report()
+        wait(17)
+        assert(not car[key], "abandoned vehicle released a red-light queue")
+        signal = 0
+        wait(8)
+        assert(not car[key], "red-light time counted toward the pass")
+        empty.passenger = player
+        wait(32)
+        assert(not car[key], "driverless car carrying a player was treated as abandoned")
+        empty.passenger = nil
+        empty.driver = player
+        wait(1)
+        assert(not car[key], "a player took the empty driver's seat")
+        empty.driver = nil
+        wait(10)
+        assert(not car[key], "a new obstruction inherited an old timer")
+        signal = 2
+        wait(16)
+        assert(not car[key], "a signal cycle released the vehicle during red")
+        signal = 0
+        wait(19)
+        assert(not car[key], "the thirty-second stalled-cruise interval was shortened")
+        wait(4)
+        assert(car[key]==empty and car.driver.task[1]=="driveTrafficPhysics" and car.driver.task[6]==2,
+            "same-direction abandoned car never released the following driver")
+        wait(1)
+        assert(reverseStart and reverseEnd and reverseEnd-reverseStart==400,
+            "cruise recovery did not apply the 400 ms reverse")
+        empty.driver = player
+        wait(1)
+        assert(not car[key], "takeover left permission to push an occupied car")
+        TrafficRoad.stop()
+        players, signal = {player}, 2
+    end
 
     copyRoad(0, 18, 12, 9)
     players, created, packets = {}, {}, {}
@@ -3360,7 +4214,118 @@ def check_road(disc=None, vcs_pc=None):
             tostring(getTrafficRoadStatus().groundRejected), tostring(relocated[1][3][1][1])))
     TrafficRoad.stop()
 
+    do
+        local roads={nodes={},links={},roadTurnClosures={}}
+        local coords={{0,0},{40,0},{80,0},{80,40},{40,40}}
+        local exits={{1},{2,4},{3},{},{3}}
+        for i,pt in ipairs(coords) do
+            roads.nodes[i]={id=i-1,x=pt[1],y=pt[2],z=0,kind="vehicle",flags=0,scene="outdoor",
+                rawWidth=0,firstLink=#roads.links,linkCount=#exits[i]}
+            for _,dest in ipairs(exits[i]) do
+                roads.links[#roads.links+1]={id=#roads.links,from=i-1,to=dest,lanes=1,
+                    leftLanes=0,rightLanes=1,speedClass=0}
+            end
+        end
+        roads.population=graph.population
+        TrafficRoad.start(roads,function() return 0 end)
+        local car,driver,suspect=element("vehicle",10),element("ped"),element("vehicle",70)
+        function getElementVelocity(v) return v.vx or 0,v.vy or 0,v.vz or 0 end
+        car.fx,car.fy=1,0
+        local st={vehicle=car,driver=driver,heightOffset=0,patrol={mission=2},drivingStyle=2,cruiseSpeed=25}
+        local function visit(at)
+            tick()
+            TrafficRoad.updatePursuitRoute(st,suspect,at)
+        end
+        visit(100)
+        assert(driver.task[1]=="driveTrafficPhysics" and st.patrol.dest==roads.links[2])
+        local first=st.physicsSequence
+        visit(400)
+        assert(st.physicsSequence==first and getTrafficRoadStatus().policeRouteCacheHits==1)
+        -- The suspect turns north. Verify the actual assigned driving window changes.
+        setElementPosition(suspect,40,20,0)
+        visit(700)
+        assert(st.patrol.dest==roads.links[3] and st.physicsSequence>first)
+        assert(st.railRoute[#st.railRoute].edge==roads.links[3])
+        first=st.physicsSequence
+        visit(1000)
+        car.x=14
+        visit(4500)
+        assert(st.physicsSequence==first,"forward progress must postpone the stuck timeout")
+        visit(8550)
+        assert(st.physicsSequence>first,"a stationary cruiser must obtain a replacement driving task")
+        -- Close the only legal turn and occupy the shared search slot with a second cruiser.
+        local other={vehicle=car,driver=element("ped"),heightOffset=0,patrol={mission=4},drivingStyle=2,cruiseSpeed=25}
+        tick()
+        TrafficRoad.updatePursuitRoute(other,suspect,8800)
+        roads.roadTurnClosures[0]={[2]=true}
+        TrafficRoad.updatePursuitRoute(st,suspect,8900)
+        assert(st.patrol.waiting and driver.task[1]=="stopVehicle")
+        visit(9200)
+        assert(not st.patrol.path and getTrafficRoadStatus().policeRouteMisses==1)
+        roads.roadTurnClosures[0]=nil
+        visit(9500)
+        assert(driver.task[1]=="stopVehicle","failed routes must respect retry backoff")
+        visit(10300)
+        assert(st.patrol.path and driver.task[1]=="driveTrafficPhysics")
+        -- Cross a junction by less than the six-unit fast resnap threshold.
+        setElementPosition(suspect,40,2,0)
+        visit(10700)
+        setElementPosition(suspect,42,0,0)
+        visit(11000)
+        assert(st.patrol.dest==roads.links[3])
+        visit(11800)
+        assert(st.patrol.dest==roads.links[2],"a short turn must not leave a stationary suspect on the old road")
+        -- An impact can put the cruiser outside every road corridor. Stop
+        -- until a valid road is available and then resume on its new street.
+        setElementPosition(car,140,100,0)
+        visit(12100)
+        assert(not st.patrol.path and driver.task[1]=="stopVehicle")
+        setElementPosition(car,41,0,0)
+        visit(13200)
+        assert(st.patrol.path and st.railRoute[1].edge==roads.links[2])
+        TrafficRoad.stop()
+        -- A wide inbound lane meets the midpoint of a short outbound link.
+        -- Preserve the legal link but give the syncer distinct turning targets.
+        coords={{0,0},{40,0},{40,-23},{40,-55}}
+        roads={nodes={},links={},roadTurnClosures={},population=graph.population}
+        for i,pt in ipairs(coords) do
+            roads.nodes[i]={id=i-1,x=pt[1],y=pt[2],z=0,kind="vehicle",flags=0,scene="outdoor",
+                rawWidth=i==1 and 144 or 0,firstLink=i-1,linkCount=i<#coords and 1 or 0}
+            if i<#coords then roads.links[i]={id=i-1,from=i-1,to=i,lanes=1,
+                leftLanes=1,rightLanes=1,speedClass=0} end
+        end
+        TrafficRoad.start(roads,function() return 0 end)
+        setElementPosition(car,9,-11.5,0);setElementPosition(suspect,37.5,-47,0)
+        st.patrol={mission=2};visit(14600)
+        local r=st.railRoute
+        assert(#r==4 and r[2].edge==roads.links[1] and r[3].edge==roads.links[2])
+        assert(math.abs(r[2].point[1]-34.5)<.01 and math.abs(r[2].point[2]+11.5)<.01)
+        assert(math.abs(r[3].point[1]-37.5)<.01 and math.abs(r[3].point[2]+20.5)<.01)
+        TrafficRoad.stop()
+    end
     if streetGraph then
+        do
+            local function road(a,b)
+                local n=streetGraph.nodes[a+1]
+                for offset=1,n.linkCount do
+                    local e=streetGraph.links[n.firstLink+offset]
+                    if e.to==b and e.lanes>0 then return e end
+                end
+            end
+            local path,visited=TrafficRoad.findPolicePath(streetGraph,road(1383,1381),0,road(1677,1678),true)
+            assert(path and visited<=128)
+            local expected={1383,1381,1382,1380,1674,1675,1677,1678}
+            assert(#path==#expected-1)
+            for i,item in ipairs(path) do
+                assert(item.edge.from==expected[i] and item.edge.to==expected[i+1])
+            end
+            local block=assert(TrafficRoad.findPolicePath(streetGraph,road(389,342),0,road(336,337),true))
+            local around={389,342,340,341,310,336,337}
+            assert(#block==#around-1 and block[4].lane==1)
+            for i,item in ipairs(block) do
+                assert(item.edge.from==around[i] and item.edge.to==around[i+1])
+            end
+        end
         streetGraph.population = graph.population
         streetGraph.pedestrianDriverMasks = graph.pedestrianDriverMasks
         math.random = seededRandom
@@ -3374,6 +4339,9 @@ def check_road(disc=None, vcs_pc=None):
         observer.x, observer.y = -655, 629
         created, packets = {}, {}
         TrafficRoad.start(streetGraph, function() return 4 end, "zone")
+        local sideways=TrafficRoad.nearestPursuitRoad(-590.2,746.1,11.1,0,-1)
+        assert(sideways.from==2663 and sideways.to==87)
+        assert(not TrafficRoad.nearestPursuitRoad(-590.2,746.1,90,0,-1))
         local steps, answered, firstSpawn = 0, 0, nil
         for i = 1, #route - 1 do
             local a,b = streetGraph.nodes[route[i]+1], streetGraph.nodes[route[i+1]+1]
@@ -3463,6 +4431,8 @@ def check_road_injuries():
     function getElementModel() return 400 end
     function getElementRotation() return 0,0,0 end
     exports={server_coldata={getModelBoundingBox=function() return -1,-2,-0.5,1,2,1 end}}
+    TrafficActors={isPolicePed=function() return false end}
+    exports.wanted={reportWantedEvent=function(_,p,e,v) assert(p==driver and e==9 and v==ped) end}
     local hit={score=100,impulse=200,mass=800,nx=0,ny=1,vx=0.1,vy=0.25,vz=0,attacker=driver}
     injury.startBike(ped,walk,hit,true,{vehicle=bike})
     assert(ped.health==95 and math.abs(ped.vy-0.1)<0.0001 and ped.vz>=8/70 and ped.vz<=15/70 and ped.clip=="BIKE_fall_off")
@@ -3627,6 +4597,27 @@ def check_pedestrian_avoidance():
     pedestrians = {a,b}
 
     b.virtual = true
+    -- Cross a finite wall by walking around its end, then resume the original goal.
+    wall = function(x,y,tx,ty)
+        if x==tx or (x-3)*(tx-3)>0 then return true end
+        local t=(3-x)/(tx-x)
+        return math.abs(y+t*(ty-y))>2.2
+    end
+    local around, crossed = {}, false
+    for frame=1,360 do
+        now=now+50
+        walkNPCTrafficAroundPeds(a,forward,around)
+        if a.target then
+            local dx,dy=a.target[1]-a.x,a.target[2]-a.y
+            local step=math.min(1,0.075/math.max(0.001,math.sqrt(dx*dx+dy*dy)))
+            local tx,ty=a.x+step*dx,a.y+step*dy
+            assert(wall(a.x,a.y,tx,ty))
+            if a.x<3 and tx>=3 then crossed=true end
+            a.x,a.y=tx,ty
+        end
+    end
+    assert(crossed and a.x>7.9 and math.abs(a.y)<0.05)
+    a.x,a.y,wall=0,0,nil
     local car = element("vehicle", 4)
     car.fx, car.fy, car.z = 1, 0, 0.7
     vehicles[1] = car
@@ -3685,7 +4676,7 @@ def check_pedestrian_crossing():
     print("Signalized pedestrian crossing waits at the curb and runs after entry, including syncer handoff")
 
 
-def check_pedestrian_jaw(assets):
+def check_pedestrian_jaw(assets, expected_count):
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
     lua.execute("""
@@ -3706,7 +4697,7 @@ def check_pedestrian_jaw(assets):
     load(lua, Path(__file__).parent / "vcs_model", ["jaw_c.lua"])
     pivot_for = lua.globals().getTrafficJawBindPivot
     pivots = [pivot_for(data) for name, data in assets.items() if name.endswith(".dff")]
-    assert len(pivots) == 75 and all(pivot is not None for pivot in pivots)
+    assert len(pivots) == expected_count and all(pivot is not None for pivot in pivots)
     lua.globals().pivot = pivots[0]
     lua.execute("""
     trackTrafficJaw(ped, 7, pivot)
@@ -3726,7 +4717,7 @@ def check_pedestrian_jaw(assets):
     deliver("onClientPedsProcessed", root)
     assert(not output)
     """)
-    print("All 75 mounted pedestrian rigs supply jaw pivots and preserve the facial rotation delta")
+    print(f"All {expected_count} mounted pedestrian rigs supply jaw pivots and preserve the facial rotation delta")
 
 
 def check_jetski_controller():
@@ -4112,6 +5103,9 @@ def check_debug_overlay():
     localPlayer = element("player")
     commands, lines, rectangles, texts = {}, {}, {}, {}
     exports={npc_hlc={}}
+    function isMainMenuActive() return false end
+    function isPlayerMapVisible() return false end
+    CWidescreenSupport={playerHud=function() return 0,1,1 end}
     function setTimer(callback,interval) timers[interval]=callback return callback end
     function guiGetScreenSize() return 1280,720 end
     function getElementsByType() return {} end
@@ -4135,6 +5129,8 @@ def check_debug_overlay():
     end
     function triggerServerEvent(...) request = {...} end
     """)
+    load(lua, TRAFFIC.parent / "[hud]" / "frontend", ["hud_c.lua"])
+    lua.execute("exports.frontend={drawDebugLabels=function(_,labels) return drawDebugLabels(labels) end}")
     load(lua, RUNTIME, ["npc_debug_range.lua","npc_debug_c.lua","traffic_debug_c.lua"])
     lua.execute("""
     commands.trafficdebug("trafficdebug", "road")
@@ -4193,8 +5189,31 @@ def check_debug_overlay():
     TrafficNPCDebug.draw()
     assert(#rectangles==0)
 
+    ped.dimension=0
+    local car=element("vehicle")
+    car.driver,ped.vehicle=ped,car
+    row[2],row[8],row[11],row[12]=19,element("player"),0,car
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Driving style 0 - Stop for cars"])
+    deliver("npchlc_traffic:npcDebugRevision",resourceRoot,1,ped,20,false,localPlayer,2,car)
+    texts={};TrafficNPCDebug.draw()
+    assert(texts["Driving style 2 - Avoid cars"] and not texts["Driving style 0 - Stop for cars"])
+    car.driver=localPlayer
+    texts={};TrafficNPCDebug.draw()
+    assert(not texts["Driving style 2 - Avoid cars"]) -- passenger with an old driver snapshot
+    ped.vehicle=nil
+    texts={};TrafficNPCDebug.draw()
+    assert(not texts["Driving style 2 - Avoid cars"])
+    local replacement=element("vehicle")
+    replacement.driver,ped.vehicle=ped,replacement
+    texts={};TrafficNPCDebug.draw()
+    assert(not texts["Driving style 2 - Avoid cars"]) -- now driving a different car
     commands.trafficdebug("trafficdebug")
     assert(not events.onClientRender)
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
+    texts={};TrafficNPCDebug.draw()
+    assert(not next(texts))
     """)
     server = LuaRuntime()
     server.execute(SERVER_MOCK)
@@ -4205,6 +5224,10 @@ def check_debug_overlay():
     PedAI={brain=function() return brain end}
     PedActivity={debugTask=function() return "seat","approach" end}
     function isPedInVehicle() return false end
+    car=element("vehicle")
+    ped.vehicle,car.driver=car,ped
+    local style=0
+    TrafficRoad={driverStyle=function(driver) assert(driver==ped and driver.vehicle.driver==driver);return style end}
     """)
     load(server,RUNTIME,["npc_debug_range.lua","npc_debug_s.lua"])
     server.execute("""
@@ -4213,6 +5236,7 @@ def check_debug_overlay():
     assert(#packets==2 and packets[1].owner==viewer and packets[2].owner==owner)
     local row=packets[1][1][2][1]
     assert(row[1]==ped and row[2]==7 and row[3]==75 and row[5]=="seat" and row[6]=="approach")
+    assert(row[11]==0 and row[12]==car)
     local report={{ped,7,{"walkTrafficToPoint","detour",1,2,3,4,5,6}}}
     client=element("player")
     deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
@@ -4220,14 +5244,24 @@ def check_debug_overlay():
     client=owner
     deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
     assert(#packets==3 and packets[3].owner==viewer and packets[3][1][2][1][3][6]==4)
+    car.driver=owner
     deliver("npc_hlc:debugAssignmentChanged",ped,8,false,false)
     assert(#packets==4 and packets[4].name=="npchlc_traffic:npcDebugRevision")
+    assert(packets[4][1][6]==false and packets[4][1][7]==false)
     deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
     assert(#packets==4)
     client=viewer
     deliver("npchlc_traffic:npcDebugWatch",resourceRoot,1,false)
     deliver("npc_hlc:debugAssignmentChanged",ped,9,false,false)
     assert(#packets==4)
+    now=now+300
+    car.driver=ped
+    exports.npc_hlc.getNPCDebugAssignment=function() return "driveTrafficRail",10,owner,false,5 end
+    deliver("npchlc_traffic:npcDebugWatch",resourceRoot,2,{ped})
+    local scripted=packets[5][1][2][1]
+    assert(scripted[11]==5 and scripted[12]==car)
+    deliver("npc_hlc:debugAssignmentChanged",ped,11,"driveTrafficPhysics",owner,6)
+    assert(packets[7][1][6]==6 and packets[7][1][7]==car)
     """)
     print("Traffic overlay, HP/armor bars, routing targets, owner-only relay and revision cleanup passed")
 
@@ -4255,6 +5289,7 @@ def check_native(disc, vcs_pc):
                 ignore=lambda _directory, names: {"generated"} & set(names),
             )
         copytree(ROOT / "mods/deathmatch/resources/[model]/vcs_model", resources / "vcs_model")
+        copytree(ROOT / "mods/deathmatch/resources/[module]/wanted", resources / "wanted")
         copytree(VCS_VEHICLE, resources / "vcs_vehicle")
         generated = resources / "npchlc_traffic/paths/generated"
         generated.mkdir(parents=True)

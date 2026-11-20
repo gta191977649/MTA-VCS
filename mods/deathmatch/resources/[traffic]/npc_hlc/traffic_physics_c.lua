@@ -37,15 +37,115 @@ local function vehicleExtents(vehicle)
     return a and c and math.max(-a, c) or 1, b and d and math.max(-b, d) or 2
 end
 
-local function scanStrip(vehicle, x0, y0, z, dx, dy, halfWidth, sweep, grade, travelled, speed)
-    local limit, nearest, cause = math.huge, math.huge, "clear"
+-- Raycasts cover the environment and pedestrians. Vehicles use moving
+-- rectangles over the same braking path, including its curved segments.
+local function vehicleScan(vehicle, motion, range, speed, now, exempt, stopForPeds)
+    local body = getNPCTrafficFootprint(vehicle, now)
+    local others = {}
+    local nearby = getElementsWithinRange(motion.x, motion.y, motion.z, range + 16,
+        "vehicle", getElementInterior(vehicle), getElementDimension(vehicle)) or {}
+    for _, other in ipairs(nearby) do
+        if other ~= vehicle and other ~= exempt and isElementStreamedIn(other) then
+            local bounds = getNPCTrafficFootprint(other, now)
+            if bounds then others[#others + 1] = bounds end
+        end
+    end
+    local pedestrians
+    if stopForPeds then
+        pedestrians = {}
+        for _, kind in ipairs({"ped", "player"}) do
+            local actors = getElementsWithinRange(motion.x, motion.y, motion.z, range + 6,
+                kind, getElementInterior(vehicle), getElementDimension(vehicle)) or {}
+            for _, actor in ipairs(actors) do
+                if getElementType(actor) == kind and isElementStreamedIn(actor)
+                    and not getPedOccupiedVehicle(actor) and not isPedDead(actor) then
+                    local x,y,z = getElementPosition(actor)
+                    local vx,vy = getElementVelocity(actor)
+                    pedestrians[#pedestrians+1] = {x=x, y=y, z=z, vx=vx*50, vy=vy*50}
+                end
+            end
+        end
+    end
+    return {body = body, others = others, pedestrians = pedestrians, speed = math.max(4, speed), motion = motion}
+end
+
+local function sweptVehicleLimit(scan, x, y, z, dx, dy, sweep, travelled, grade, speed)
+    local body = scan.body
+    local limit, nearest, cause, blocker = math.huge, math.huge, "clear"
+    if not body then return limit, cause, nearest end
+    local distance = math.max(0, travelled + 0.35)
+    local arrival, duration = distance / scan.speed, sweep / scan.speed
+    for _, other in ipairs(scan.others) do
+        local rx = other.x + other.vx * arrival - x
+        local ry = other.y + other.vy * arrival - y
+        local hit = getNPCTrafficFootprintContact(rx, ry, other.vx - dx * scan.speed, other.vy - dy * scan.speed,
+            dx, dy, body.width + (scan.turnMargin or 0), body.length, other, duration)
+        -- A touching follower must not hold the lead car at a green light.
+        -- Keep future contact from behind (such as a faster merge) eligible.
+        local initialX, initialY = other.x - body.x, other.y - body.y
+        local leavingFollower = hit == 0 and initialX*body.fx + initialY*body.fy < 0
+            and rx*dx + ry*dy < 0 and other.vx*dx + other.vy*dy <= scan.speed
+        if hit and other.vehicle ~= scan.exempt and not leavingFollower and math.abs(other.z - (z + grade * hit * scan.speed)) < 3 then
+            local gap = distance + hit * scan.speed
+            local alignment = other.fx * dx + other.fy * dy
+            local following = alignment > 0.9 and initialX * body.fx + initialY * body.fy > 0
+                and math.abs(initialX * body.fy - initialY * body.fx) < body.width + other.width
+            local leader = following and math.max(0, other.vx * dx + other.vy * dy) or 0
+            -- Keep turning room before a stopped queue starts its bypass.
+            local ahead = initialX * body.fx + initialY * body.fy > 0
+            local reserve = ahead and (alignment < -0.5 or other.parked) and other.vehicle ~= scan.passing and 4 or 0
+            local cap = stopSpeed(gap - reserve, leader, speed)
+            if scan.committed == other.vehicle then
+                -- The awarded driver's side maneuver keeps the physical
+                -- braking clearance after its one-second cruise floor expires.
+                local available = math.max(0, gap - 0.35 - speed * 0.15)
+                local safe = math.sqrt(2 * BRAKING * available)
+                cap = scan.floor and math.min(safe, math.max(cap, scan.floor)) or safe
+            end
+            nearest = math.min(nearest, gap)
+            if cap < limit then
+                limit, cause, blocker = cap, (following or alignment < -0.5) and "following" or "crossing", other.vehicle
+            end
+        end
+    end
+    return limit, cause, nearest, blocker
+end
+
+local function scanStrip(vehicle, x0, y0, z, dx, dy, halfWidth, sweep, grade, travelled, speed, scan)
+    local limit, nearest, cause, blocker = math.huge, math.huge, "clear"
+    if scan and scan.body then
+        local body, motion = scan.body, scan.motion
+        -- The existing ray path starts at the bumper. Translate its initial
+        -- point back to the chassis origin and rotate the local box centre.
+        local x = x0 - motion.fx * scan.bumper + dx * body.offsetY + dy * body.offsetX
+        local y = y0 - motion.fy * scan.bumper + dy * body.offsetY - dx * body.offsetX
+        limit, cause, nearest, blocker = sweptVehicleLimit(scan, x, y, z - motion.grade * scan.bumper,
+            dx, dy, sweep, travelled, grade, speed)
+    end
+    -- A narrow pedestrian can fit between the three chassis rays. Style 6
+    -- must brake across the full bumper width, including for a crossing ped.
+    if scan and scan.pedestrians then
+        for _, ped in ipairs(scan.pedestrians) do
+            local rx, ry = ped.x-x0, ped.y-y0
+            local arrival = math.max(0, math.min(1.5, (travelled+rx*dx+ry*dy)/scan.speed))
+            rx, ry = rx+ped.vx*arrival, ry+ped.vy*arrival
+            local ahead = rx*dx + ry*dy
+            if ahead >= -0.5 and ahead <= sweep+0.35 and math.abs(rx*dy-ry*dx) <= halfWidth+0.35
+                and math.abs(ped.z-z-grade*ahead) < 2 then
+                local gap = math.max(0, travelled+ahead-0.35)
+                local cap = stopSpeed(gap, 0, speed)
+                nearest = math.min(nearest, gap)
+                if cap <= limit then limit, cause, blocker = cap, "pedestrian", nil end
+            end
+        end
+    end
     for offset = -1, 1 do
         local side = offset * halfWidth * 0.85
         local x = x0 + dy * side
         local y = y0 - dx * side
         local hit, hx, hy, _, element = processLineOfSight(x, y, z, x + dx * sweep, y + dy * sweep, z + grade * sweep,
-            true, true, true, true, false, false, false, false, vehicle)
-        if hit then
+            true, not (scan and scan.body), true, true, false, false, false, false, vehicle)
+        if hit and not (scan and scan.exempt and element == scan.exempt) then
             local leader = 0
             local kind = isElement(element) and getElementType(element)
             if kind == "vehicle" and not isElementFrozen(element) then
@@ -57,36 +157,73 @@ local function scanStrip(vehicle, x0, y0, z, dx, dy, halfWidth, sweep, grade, tr
             local hitCause = kind == "vehicle" and "following"
                 or (kind == "ped" or kind == "player") and "pedestrian" or "obstacle"
             nearest = math.min(nearest, gap)
-            if candidate < limit or candidate == limit and cause == "obstacle" and hitCause ~= "obstacle" then
-                limit, cause = candidate, hitCause
+            if candidate < limit or candidate == limit and (blocker or cause == "obstacle" and hitCause ~= "obstacle") then
+                limit, cause, blocker = candidate, hitCause, nil
             end
         end
     end
-    return limit, cause, nearest
+    return limit, cause, nearest, blocker
 end
 
-local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed)
+local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed, scan)
     local sign = dx * motion.fx + dy * motion.fy < 0 and -1 or 1
     local offset = sign * (length - 0.35)
     local grade = math.max(-0.3, math.min(0.3, motion.grade))
+    if scan then scan.bumper = offset end
     return scanStrip(vehicle, motion.x + motion.fx * offset, motion.y + motion.fy * offset,
-        motion.z + grade * offset, dx, dy, width, range + 0.35, grade * sign, -0.35, speed)
+        motion.z + grade * offset, dx, dy, width, range + 0.35, grade * sign, -0.35, speed, scan)
+end
+
+-- 00435348 picks a free bearing for style 2, scanning 12–24 world units.
+-- Close ram excludes its vehicle target. Block approach considers all cars.
+local policeBearings = {0.32, -0.32, 0.65, -0.65}
+function getNPCPoliceAvoidance(vehicle, exempt, dx, dy, progress, stopForPeds)
+    local distance = math.sqrt(dx*dx+dy*dy)
+    if distance < 0.1 then return 0 end
+    local now = getTickCount()
+    local age = progress.avoidAt and (now-progress.avoidAt)%4294967296 or math.huge
+    if age < 100 then return progress.avoidAngle, progress.avoidSpeed end
+    if sensorBudget <= reserved then return age < 200 and progress.avoidAngle or 0 end
+    local motion = getNPCTrafficPhysicsMotion(vehicle)
+    if not motion then return 0 end
+    sensorBudget = sensorBudget-1
+    local speed = math.sqrt(motion.vx^2 + motion.vy^2)
+    local reach = math.min(distance, 12*math.min(2, 1+speed/20))
+    local width, length = vehicleExtents(vehicle)
+    local scan = vehicleScan(vehicle, motion, reach, speed, now, exempt, stopForPeds)
+    scan.exempt = exempt
+    dx, dy = dx/distance, dy/distance
+    local cap, cause, best = scanBumper(vehicle,motion,dx,dy,width,length,reach,speed,scan)
+    local angle = 0
+    if best < reach and not (stopForPeds and cause == "pedestrian") then
+        local bearing = math.atan2(dy, dx)
+        for _, offset in ipairs(policeBearings) do
+            local x, y = math.cos(bearing-offset), math.sin(bearing-offset)
+            local limit, _, gap = scanBumper(vehicle,motion,x,y,width,length,reach,speed,scan)
+            if gap > best then
+                best, angle, cap = gap, offset, limit
+                if gap >= reach then break end
+            end
+        end
+    end
+    progress.avoidAt, progress.avoidAngle, progress.avoidSpeed = now, angle, cap
+    return angle, cap
 end
 
 -- Near a turn the steering target can already point across the junction while
 -- the bumper is still facing into it. Sweep from the actual bumper, rounding
 -- toward the steering target before extending the braking sightline.
-local function scanRoute(vehicle, motion, dx, dy, width, length, range, speed, lane, nextLane)
+local function scanRoute(vehicle, motion, dx, dy, width, length, range, speed, lane, nextLane, scan)
     local dot = dx * motion.fx + dy * motion.fy
     local radius = math.max(3, length * 1.5)
     local straight = 0
     if dot > 0.985 then
         local nextDot = nextLane and dx*nextLane[6]+dy*nextLane[7]
-        if not nextDot or nextDot > 0.985 then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed) end
+        if not nextDot or nextDot > 0.985 then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed,scan) end
         local bendAngle = math.acos(math.max(-1, math.min(1, nextDot)))
         local remaining = (lane[3]-motion.x)*dx + (lane[4]-motion.y)*dy - length
         straight = math.max(0, remaining - radius * math.tan(math.min(bendAngle, math.pi/2)/2))
-        if straight >= range then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed) end
+        if straight >= range then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed,scan) end
         dx,dy = nextLane[6],nextLane[7]
         dot = dx * motion.fx + dy * motion.fy
     end
@@ -97,10 +234,11 @@ local function scanRoute(vehicle, motion, dx, dy, width, length, range, speed, l
     local grade = math.max(-0.3, math.min(0.3, motion.grade))
     local x,y = motion.x + motion.fx*(length-0.35), motion.y + motion.fy*(length-0.35)
     local z = motion.z + grade*(length-0.35)
-    local limit,cause,gap = math.huge,"clear",math.huge
+    scan.bumper = length - 0.35
+    local limit,cause,gap,blocker = math.huge,"clear",math.huge
     local travelled = -0.35
     if straight > 0 then
-        limit,cause,gap = scanStrip(vehicle,x,y,z,motion.fx,motion.fy,width,straight,grade,travelled,speed)
+        limit,cause,gap,blocker = scanStrip(vehicle,x,y,z,motion.fx,motion.fy,width,straight,grade,travelled,speed,scan)
         x,y,z=x+motion.fx*straight,y+motion.fy*straight,z+grade*straight
         travelled=travelled+straight
     end
@@ -110,72 +248,90 @@ local function scanRoute(vehicle, motion, dx, dy, width, length, range, speed, l
         local ux,uy = math.cos(yaw),math.sin(yaw)
         local distance = i<=steps and 2*radius*math.sin(bend/(2*radius*steps)) or range-straight-bend+0.35
         local slope = grade*(motion.fx*ux+motion.fy*uy)
-        local cap,reason,clearance = scanStrip(vehicle,x,y,z,ux,uy,width,distance,slope,travelled,speed)
-        if cap<limit then limit,cause=cap,reason end
+        local cap,reason,clearance,other = scanStrip(vehicle,x,y,z,ux,uy,width,distance,slope,travelled,speed,scan)
+        if cap<limit or cap==limit and not other then limit,cause,blocker=cap,reason,other end
         gap=math.min(gap,clearance)
         x,y,z=x+ux*distance,y+uy*distance,z+slope*distance
         travelled=travelled+distance
     end
-    return limit,cause,gap
+    return limit,cause,gap,blocker
 end
 
--- Calculate the time interval in which one axis of two moving bounds overlaps.
-local function overlap(position, velocity, extent)
-    if math.abs(velocity) < 0.01 then
-        if math.abs(position) <= extent then return -math.huge, math.huge end
-        return
+local function canPassOnRoute(task, index, motion, dx, dy, reach, width, passing)
+    if canNPCTrafficPhysicsAvoid(task,index,motion.x,motion.y,motion.z,dx,dy,reach,width,passing) then return true end
+    if not task[5][index+1] then return false end
+    local half = reach / 2
+    return canNPCTrafficPhysicsAvoid(task,index,motion.x,motion.y,motion.z,dx,dy,half,width,passing)
+        and canNPCTrafficPhysicsAvoid(task,index+1,motion.x+dx*half,motion.y+dy*half,motion.z,dx,dy,half,width,passing)
+        or canNPCTrafficPhysicsAvoid(task,index+1,motion.x,motion.y,motion.z,dx,dy,reach,width,passing)
+end
+
+-- Remember the chosen side until the whole vehicle is past the opposing
+-- car. Steering straight back to the lane centre while alongside it closes
+-- the very gap the maneuver needs.
+local function passingOpponent(previous, award, scan)
+    local pass = previous and previous.pass
+    if award and (not pass or pass.vehicle ~= award) then
+        pass = {vehicle = award, fx = scan.motion.fx, fy = scan.motion.fy}
     end
-    local enter, leave = (-extent - position) / velocity, (extent - position) / velocity
-    return math.min(enter, leave), math.max(enter, leave)
-end
-
-local function crossingLimit(vehicle, motion, dx, dy, width, length, range, speed)
-    if speed < 0.5 then return math.huge end
-    local limit, tested = math.huge, 0
-    local x, y, z = motion.x, motion.y, motion.z
-    local vehicles = getElementsWithinRange(x, y, z, range + length, "vehicle",
-        getElementInterior(vehicle), getElementDimension(vehicle)) or {}
-    for _, other in ipairs(vehicles) do
-        if other ~= vehicle and isElementStreamedIn(other) and not isElementFrozen(other) then
-            local ox, oy, oz = getElementPosition(other)
-            local vx, vy = getElementVelocity(other)
-            vx, vy = vx * 50, vy * 50
-            if math.abs(oz - z) <= 3 and math.abs(vx * dy - vy * dx) > 0.8 then
-                local a, b, _, c, d = getElementBoundingBox(other)
-                local heading = getElementMatrix(other)
-                if a and b and c and d and heading then
-                    tested = tested + 1
-                    local otherWidth, otherLength = (c - a) * 0.5, (d - b) * 0.5
-                    local h = heading[2]
-                    local forward, side = math.abs(h[1] * dx + h[2] * dy), math.abs(h[1] * dy - h[2] * dx)
-                    local long = length + forward * otherLength + side * otherWidth
-                    local wide = width + side * otherLength + forward * otherWidth
-                    local px, py = ox - x, oy - y
-                    local enter, leave = overlap(px * dx + py * dy, vx * dx + vy * dy - speed, long)
-                    local sideEnter, sideLeave = overlap(px * dy - py * dx, vx * dy - vy * dx, wide)
-                    if enter and sideEnter then
-                        local t = math.max(0, enter, sideEnter)
-                        if t <= math.min(leave, sideLeave, 3) then
-                            limit = math.min(limit, stopSpeed(t * speed, 0, speed))
-                        end
-                    end
-                    if tested == 12 then break end
-                end
+    if not pass or not scan.body then return end
+    for _, other in ipairs(scan.others) do
+        if other.vehicle == pass.vehicle then
+            local x, y = other.x-scan.body.x, other.y-scan.body.y
+            local ahead = x*pass.fx + y*pass.fy
+            if x*x+y*y < 25^2 and ahead > -(scan.body.length+other.length+0.5) then
+                return pass, other, ahead, x*pass.fy-y*pass.fx
             end
         end
     end
-    return limit
+end
+
+local function passOpponent(vehicle, motion, task, index, scan, pass, other, ahead, sideGap, width, length, speed, routeX, routeY)
+    local firstSide = pass.side or (sideGap > 0 and 1 or -1)
+    local lastSide = pass.side or -firstSide
+    local best, angle, chosenSide, cause, blocker = -1, 0, nil, "route"
+    scan.passing, scan.committed, scan.turnMargin = other.vehicle, other.vehicle, 0.2
+    local parallel = math.abs(other.fx*pass.fx + other.fy*pass.fy)
+    local across = math.abs(other.fx*pass.fy - other.fy*pass.fx)
+    local halfWidth = other.width*parallel + other.length*across
+    local halfLength = other.length*parallel + other.width*across
+    for side = firstSide, lastSide, -2*firstSide do
+        -- Aim outside the nearer corner of the blocker. Then follow its
+        -- flank until the rear bumper clears, even if the straight ray opens.
+        local lateral = sideGap - side*(scan.body.width + halfWidth + 0.7)
+        local along = math.max(2.5, ahead - scan.body.length - halfLength)
+        local reach = math.sqrt(lateral*lateral + along*along)
+        local ax = (pass.fx*along + pass.fy*lateral)/reach
+        local ay = (pass.fy*along - pass.fx*lateral)/reach
+        if canPassOnRoute(task,index,motion,ax,ay,reach,width,true) then
+            local cap, hazard, _, limitedBy = scanRoute(vehicle,motion,ax,ay,width,length,math.max(7,reach),speed,nil,nil,scan)
+            if cap > best then
+                best, chosenSide = cap, side
+                angle = math.atan2(routeX*ay-routeY*ax, routeX*ax+routeY*ay)
+                cause, blocker = hazard, limitedBy
+            end
+        end
+    end
+    scan.turnMargin = nil
+    if best <= 0 then return 0, angle, cause, blocker end
+    pass.side = chosenSide
+    return math.min(best, task[3]*0.4), angle, "avoiding"
 end
 
 -- The VCS PC follow-path routine (0x00434900) calls the traffic speed
 -- routine (0x00434400). Measure clearance with streamed MTA collision data.
-local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowAvoid)
+local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowAvoid, abandoned)
+    local style = task[6]
+    if style == 3 then return math.huge, "clear", 0 end
+    local avoidsCars = doesNPCTrafficAvoidCars(style)
     local speed = math.sqrt(motion.vx ^ 2 + motion.vy ^ 2)
     local dx, dy = routeX, routeY
     if speed > 0.5 then dx, dy = motion.vx / speed, motion.vy / speed end
     local sequence = task[2] + index - 1
     local previous, now = samples[vehicle], getTickCount()
-    if previous and previous.sequence == sequence and (now - previous.tick) % 4294967296 < SAMPLE_MS
+    if previous and (previous.style ~= style or previous.abandoned ~= abandoned) then previous = nil end
+    local award = abandoned or getElementData(vehicle, "npchlc_traffic:headOnBlocker", false)
+    if previous and previous.award == award and previous.sequence == sequence and (now - previous.tick) % 4294967296 < SAMPLE_MS
         and previous.dx * dx + previous.dy * dy > 0.94
         and previous.fx * motion.fx + previous.fy * motion.fy > 0.94
         and previous.routeX * routeX + previous.routeY * routeY > 0.94
@@ -203,21 +359,54 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
     sensorBudget = sensorBudget - 1
     local width, length = vehicleExtents(vehicle)
     local range = math.min(120, math.max(8, speed ^ 2 / (2 * BRAKING) + speed * 0.15 + 4))
-    local limit, cause, gap = scanRoute(vehicle, motion, routeX, routeY, width, length, range, speed,
-        task[5][index],task[5][index+1])
+    local scan = vehicleScan(vehicle, motion, range, speed, now, nil, style == 6 or abandoned)
+    local limit, cause, gap, blocker = scanRoute(vehicle, motion, routeX, routeY, width, length, range, speed,
+        task[5][index],task[5][index+1],scan)
     local avoidAngle = 0
-    if task[6] == 2 and allowAvoid and cause == "following" and limit < task[3] then
+    local pass, opposing, ahead, sideGap
+    if avoidsCars or abandoned then pass, opposing, ahead, sideGap = passingOpponent(previous, award, scan) end
+    if pass and allowAvoid then
+        scan.floor = award == opposing.vehicle and task[3]*0.2 or nil
+        local sideLimit, angle, hazard, sideBlocker = passOpponent(vehicle,motion,task,index,scan,pass,opposing,ahead,sideGap,
+            width,length,speed,routeX,routeY)
+        if blocker == opposing.vehicle or cause == "clear" or sideLimit < limit then
+            if sideLimit <= 0 and abandoned and blocker == abandoned then
+                -- Both side paths are closed. Creep against this one empty
+                -- vehicle, keeping the full sweep for buildings, peds and cars.
+                scan.exempt = abandoned
+                local clearance
+                sideLimit, hazard, clearance, sideBlocker = scanRoute(vehicle,motion,routeX,routeY,width,length,range,speed,
+                    task[5][index],task[5][index+1],scan)
+                if sideLimit > task[3]*0.2 then sideLimit,hazard = task[3]*0.2,"clearing abandoned car" end
+                angle = 0
+            end
+            limit, cause, avoidAngle, blocker = sideLimit, hazard, angle, sideBlocker
+        end
+    elseif avoidsCars and allowAvoid and (blocker or cause == "pedestrian" and style ~= 6) and limit < task[3] then
+        scan.passing = blocker
+        scan.turnMargin = 0.2 -- Allow for steering response while passing a stopped car.
         local angle = math.atan2(routeY,routeX)
         local reach = math.min(range,math.max(7,speed*1.4))
-        for side = -1, 1, 2 do
-            local offset = side * math.min(math.rad(25),math.atan2(3.25,reach))
+        local firstSide = 1
+        if blocker then
+            local bx, by = getElementPosition(blocker)
+            firstSide = (bx-motion.x)*routeY - (by-motion.y)*routeX > 0 and 1 or -1
+        end
+        local lane = task[5][index]
+        local endOffset = (motion.x + routeX*reach - lane[3])*lane[7] - (motion.y + routeY*reach - lane[4])*lane[6]
+        for side = firstSide, -firstSide, -2*firstSide do
+            local room = math.max(0, 4.9-width + side*endOffset)
+            local offset = side * math.asin(math.min(0.55,room/reach))
             local ax, ay = math.cos(angle+offset), math.sin(angle+offset)
-            local sideLimit = scanBumper(vehicle,motion,ax,ay,width,length,reach,speed)
-            if sideLimit > limit and canNPCTrafficPhysicsAvoid(task,index,motion.x,motion.y,motion.z,ax,ay,reach,width) then
-                limit, cause, avoidAngle = math.min(sideLimit,task[3]), "avoiding", offset
-                break
+            if room > 0 and canPassOnRoute(task,index,motion,ax,ay,reach,width) then
+                local sideLimit = scanRoute(vehicle,motion,ax,ay,width,length,reach,speed,nil,nil,scan)
+                if math.min(sideLimit,task[3]) > limit then
+                    limit, cause, avoidAngle, blocker = math.min(sideLimit,task[3]), "avoiding", offset, nil
+                end
             end
         end
+        scan.turnMargin = nil
+        scan.passing = nil
     end
     if allowAvoid and cause == "obstacle" and gap <= AVOID_DISTANCE and speed <= RECOVERY_SPEED then
         local angle = math.atan2(routeY, routeX)
@@ -226,7 +415,7 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
             local ax, ay = math.cos(angle + offset), math.sin(angle + offset)
             if ax * motion.fx + ay * motion.fy > 0
                 and canNPCTrafficPhysicsAvoid(task, index, motion.x, motion.y, motion.z, ax, ay, AVOID_DISTANCE, width) then
-                local _, _, clearance = scanBumper(vehicle, motion, ax, ay, width, length, AVOID_DISTANCE, speed)
+                local _, _, clearance = scanBumper(vehicle, motion, ax, ay, width, length, AVOID_DISTANCE, speed, scan)
                 if clearance == math.huge then
                     limit, cause, avoidAngle = RECOVERY_SPEED, "avoiding", offset
                     break
@@ -238,15 +427,13 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
         -- The tangent checks immediate drift during steering. Longer range
         -- braking is already covered along the turning path above.
         local emergencyRange = math.max(2, speed * 0.35)
-        local emergency, hazard = scanBumper(vehicle, motion, dx, dy, width, length, math.min(range, emergencyRange), speed)
-        if emergency < limit then limit, cause = emergency, hazard end
+        if cause ~= "avoiding" then scan.committed, scan.passing = nil, nil end
+        local emergency, hazard, _, other = scanBumper(vehicle, motion, dx, dy, width, length, math.min(range, emergencyRange), speed, scan)
+        if emergency < limit then limit, cause, blocker = emergency, hazard, other end
     end
-    local crossing = crossingLimit(vehicle, motion, dx, dy, width, length, range, speed)
-    if dx * routeX + dy * routeY < 0.94 then
-        crossing = math.min(crossing, crossingLimit(vehicle, motion, routeX, routeY, width, length, range, speed))
-    end
-    if crossing < limit then limit, cause = crossing, "crossing" end
-    samples[vehicle] = {tick = now, sequence = sequence, dx = dx, dy = dy, fx = motion.fx, fy = motion.fy,
+    reportNPCTrafficBlocker(vehicle, blocker, limit, task[3], now)
+    samples[vehicle] = {style = style, emptyBlocker = blocker and not getVehicleOccupant(blocker,0),
+        abandoned = abandoned, award = award, pass = pass, tick = now, sequence = sequence, dx = dx, dy = dy, fx = motion.fx, fy = motion.fy,
         routeX = routeX, routeY = routeY, limit = limit, speed = speed, cause = cause, avoidAngle = avoidAngle,
         allowAvoid = allowAvoid, x = motion.x, y = motion.y,z=motion.z,range=range,
         nextLink=task[5][index+1] and task[5][index+1][1]}
@@ -306,7 +493,8 @@ local function runReverse(npc, vehicle, motion, progress, now, signalClosed)
         local width, length = vehicleExtents(vehicle)
         local speed = math.max(0, -motion.forward)
         local clearance = 2.5 + speed ^ 2 / (2 * BRAKING)
-        local _, _, gap = scanBumper(vehicle, motion, -motion.fx, -motion.fy, width, length, clearance, speed)
+        local scan = progress.abandonedReverse and vehicleScan(vehicle,motion,clearance,speed,now,nil,true) or nil
+        local _, _, gap = scanBumper(vehicle, motion, -motion.fx, -motion.fy, width, length, clearance, speed,scan)
         rear = gap == math.huge and "clear" or ("%.2f"):format(gap)
         reason = gap == math.huge and "reverse" or "rear blocked"
     end
@@ -318,10 +506,93 @@ local function runReverse(npc, vehicle, motion, progress, now, signalClosed)
     end
 end
 
-local function speedForAngle(angle, start, finish)
+local function speedForAngle(cruise, angle, start, finish, cornerSpeed)
     angle = math.abs(math.atan2(math.sin(angle), math.cos(angle)))
     local fraction = math.max(0, math.min(1, (angle - start) / (finish - start)))
-    return 1 - 0.6 * fraction
+    local minimum=math.min(0.4*cruise,cornerSpeed or cruise)
+    return cruise+(minimum-cruise)*fraction
+end
+
+local function steeringLock(vehicle, progress)
+    if not progress.steeringLock then
+        local handling = getVehicleHandling(vehicle)
+        progress.steeringLock = handling and handling.steeringLock and math.rad(handling.steeringLock) or 0.5
+    end
+    return math.max(0.01, progress.steeringLock)
+end
+
+local function sirenPathLimit(vehicle,motion,progress,task,action,dx,dy,look)
+    local now = getTickCount()
+    local previous = progress.sirenProbe
+    if previous and previous.start == action[4] and (now-previous.tick)%4294967296 < 100 then return previous.cap end
+    local width,length = vehicleExtents(vehicle)
+    local speed = math.sqrt(motion.vx^2+motion.vy^2)
+    local index = getNPCTrafficPhysicsIndex(task,math.max(1,(progress.sequence or task[2])-task[2]+1),motion)
+    local lane = task[5][index]
+    local cap = 0
+    if lane and not motion.unstable and canPassOnRoute(task,index,motion,dx,dy,look,width,true) then
+        local range = math.max(5,speed^2/(2*BRAKING)+speed*0.3+2)
+        local source = action[1]
+        if isElement(source) then
+            -- An emitter catching up from behind is the reason to pull aside.
+            -- Retain it in the sweep once alongside or ahead of the civilian.
+            local x,y = getElementPosition(source)
+            if (x-motion.x)*motion.fx+(y-motion.y)*motion.fy >= -2*length-1 then source=nil end
+        end
+        local scan = vehicleScan(vehicle,motion,range,speed,now,source,true)
+        cap = scanRoute(vehicle,motion,dx,dy,width,length,range,speed,nil,nil,scan)
+        if isNPCTrafficSignalClosed(lane[9],task[6]) then
+            local remaining=(lane[3]-motion.x)*lane[6]+(lane[4]-motion.y)*lane[7]
+            if remaining >= 0 then cap=math.min(cap,stopSpeed(remaining-length,0,speed)) end
+        end
+    end
+    progress.sirenProbe = {start=action[4],tick=now,cap=cap}
+    return cap
+end
+
+local function applySirenYield(npc, vehicle, motion, progress,task)
+    local action = getElementData(vehicle, "npchlc_traffic:sirenYield", false)
+    if type(action) ~= "table" then progress.sirenProbe=nil; return false end
+    local mode = action[2]
+    local moving = motion.forward > 0.5
+    if mode == "right" or mode == "left" then
+        local fx,fy,target = action[6],action[7],action[8]
+        if type(target)~="number" then
+            -- An action from a server running the original two-phase controller.
+            local steer=(mode=="right" and 0.15 or -0.15)/steeringLock(vehicle,progress)
+            setNPCVehicleInputs(npc,action[5] and -steer or steer,moving and -0.001 or 0,false)
+        else
+            -- Steer out, then countersteer until parallel to the protected path.
+            -- Reconstruct both errors from world coordinates on syncer handoff.
+            local offset=target-(motion.x*fy-motion.y*fx)
+            local heading=math.atan2(motion.fx*fy-motion.fy*fx,motion.fx*fx+motion.fy*fy)
+            local side=mode=="right" and 1 or -1
+            local desired=math.max(-0.62,math.min(0.62,math.atan2(side*math.max(0,side*offset),math.max(2.5,motion.forward*0.46))))
+            local dx=fx*math.cos(desired)+fy*math.sin(desired)
+            local dy=fy*math.cos(desired)-fx*math.sin(desired)
+            local look=math.max(2.5,math.min(6,math.abs(offset)/math.max(0.1,math.abs(math.sin(desired)))))
+            local cap=sirenPathLimit(vehicle,motion,progress,task,action,dx,dy,look)
+            local steer=math.max(-1,math.min(1,(desired-heading)/steeringLock(vehicle,progress)))
+            local speed=math.min(cap, math.max(5.5,math.min(11,motion.forward)))
+            if side*offset <= 0.12 and math.abs(heading)<0.16 then speed=0 end
+            applyInputs(npc,vehicle,motion,progress,steer,speed,speed==0 and "obstacle" or "Siren "..mode)
+        end
+    elseif mode == "wait" then
+        setNPCVehicleInputs(npc,0,moving and -0.2 or 0,not moving)
+    else
+        return false
+    end
+    progress.reverseAt, progress.rejoinAt, progress.stalledAt, progress.cruiseThrottle = nil, nil, nil, nil
+    recordNPCDebugDriving("Siren " .. mode, false)
+    return true
+end
+
+local function canMoveAbandonedBlocker(car)
+    if not isElement(car) or getVehicleOccupant(car,0) then return false end
+    for _, occupant in pairs(getVehicleOccupants(car) or {}) do
+        if getElementType(occupant) == "player" then return false end
+    end
+    return true
 end
 
 function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
@@ -329,12 +600,24 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     if isElementFrozen(vehicle) then setNPCVehicleInputs(npc, 0, 0, false) return end
     local motion = getNPCTrafficPhysicsMotion(vehicle)
     if not motion then stopAllNPCActions(npc) return end
+    if applySirenYield(npc, vehicle, motion, progress,task) then return end
     local now = getTickCount()
     local x, y, z, fx, fy = motion.x, motion.y, motion.z, motion.fx, motion.fy
     local start = math.max(1, (progress.sequence or task[2]) - task[2] + 1)
+    local abandoned = getElementData(vehicle, "npchlc_traffic:abandonedBlocker", false)
+    if not canMoveAbandonedBlocker(abandoned) then abandoned = nil end
+    if abandoned and getElementData(vehicle,"npchlc_traffic:abandonedReverse",false) then
+        -- The server owns this 400 ms window, including across syncer changes.
+        progress.reverseAt, progress.abandonedReverse = now, true
+        runReverse(npc, vehicle, motion, progress, now, false)
+        progress.reverseAt = nil
+        return
+    elseif progress.abandonedReverse then
+        progress.abandonedReverse, progress.rejoinAt = nil, now
+    end
     if progress.reverseAt then
         local lane = task[5][start]
-        local signalClosed = lane and isNPCTrafficSignalClosed(lane[9])
+        local signalClosed = lane and isNPCTrafficSignalClosed(lane[9], task[6])
             and (lane[3] - x) * lane[6] + (lane[4] - y) * lane[7] >= 0
         runReverse(npc, vehicle, motion, progress, now, signalClosed)
         return
@@ -382,29 +665,47 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     local limit = getElementData(vehicle, "npchlc_traffic:steeringLimit", false)
     if type(limit) ~= "number" or not (limit > 0 and limit <= 1) then limit = 0.5 end
     if motion.vx ^ 2 + motion.vy ^ 2 > (0.45 * 50) ^ 2 then limit = 0.2 end
-    if not progress.steeringLock then
-        local handling = getVehicleHandling(vehicle)
-        progress.steeringLock = handling and handling.steeringLock and math.rad(handling.steeringLock) or 0.5
-    end
     local step = math.min(elapsed or 16, 100) * getGameSpeed()
     local multiplier = getNPCTrafficDriveMultiplier(vehicle, lane[8], step)
     progress.cruiseSpeed = task[3] * multiplier
-    local speed, reason = progress.cruiseSpeed * speedForAngle(direct, 0.4, 1.2), "cruise"
+    -- A pursuit cruise request can exceed 40 units/s. At the ambient
+    -- 40-percent turn floor that sends even a bike across the far curb.
+    local cornerSpeed
+    if task[6]==2 and getVehicleSirensOn(vehicle) then
+        cornerSpeed=getElementData(vehicle,"npchlc_traffic:originalModel",false)==191 and 3.5 or 4.5
+    end
+    local speed, reason = speedForAngle(progress.cruiseSpeed,direct,0.4,1.2,cornerSpeed), "cruise"
+    if cornerSpeed then
+        -- On a short outbound link the waypoint can be nearly straight ahead
+        -- while the car is still crossing the junction sideways to that link.
+        local headingError=math.atan2(lane[7],lane[6])-forward
+        local aligning=speedForAngle(progress.cruiseSpeed,headingError,0.1,1.2,cornerSpeed)
+        if aligning<speed then speed,reason=aligning,"bend" end
+    end
     local nextLane = task[5][index + 1]
-    if nextLane and distance <= 40 then
-        local bend = math.atan2(nextLane[7], nextLane[6]) - math.atan2(lane[7], lane[6])
-        local bendSpeed = progress.cruiseSpeed * speedForAngle(bend, 0.1, 1.2)
-        local approachSpeed = math.sqrt(bendSpeed ^ 2 + 2 * BRAKING * math.max(0, distance - 5))
+    local bendDistance = distance
+    local lastBend = cornerSpeed and #task[5]-1 or math.min(index,#task[5]-1)
+    for i=index,lastBend do
+        if not cornerSpeed and bendDistance > 40 then break end
+        local before, after = task[5][i], task[5][i+1]
+        local bend = math.atan2(after[7],after[6]) - math.atan2(before[7],before[6])
+        local bendSpeed = speedForAngle(progress.cruiseSpeed,bend,0.1,1.2,cornerSpeed)
+        local approachSpeed = math.sqrt(bendSpeed^2 + 2*BRAKING*math.max(0,bendDistance-5))
         if approachSpeed < speed then speed, reason = approachSpeed, "bend" end
+        bendDistance = bendDistance + math.sqrt((before[3]-after[3])^2 + (before[4]-after[4])^2)
     end
     local remaining = (lane[3] - x) * lane[6] + (lane[4] - y) * lane[7]
-    local signalClosed = remaining >= 0 and isNPCTrafficSignalClosed(lane[9])
+    local signalClosed = remaining >= 0 and isNPCTrafficSignalClosed(lane[9], task[6])
     if signalClosed then
         local signalSpeed = stopSpeed(remaining - 6, 0, motion.forward)
         if signalSpeed < speed then speed, reason = signalSpeed, "signal" end
     end
-    local obstacle, cause, avoidAngle = trafficLimit(vehicle, motion, routeX, routeY, task, index,
-        not signalClosed and remaining > AVOID_DISTANCE)
+    local allowAvoid = not signalClosed and (remaining > AVOID_DISTANCE or doesNPCTrafficAvoidCars(task[6]) and nextLane ~= nil)
+    if signalClosed and remaining <= 12 then abandoned = nil end
+    local obstacle, cause, avoidAngle = trafficLimit(vehicle, motion, routeX, routeY, task, index, allowAvoid or abandoned ~= nil, abandoned)
+    if not abandoned and task[6] == 1 and (cause == "following" or cause == "crossing" or cause == "pedestrian") then
+        obstacle = (math.min(obstacle, progress.cruiseSpeed) + progress.cruiseSpeed) * 0.5
+    end
     if obstacle < speed then speed, reason = obstacle, cause end
     if not nextLane then
         local terminalSpeed=math.sqrt(2*BRAKING*remainingPath)
@@ -416,7 +717,8 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     local ambientReverse = getElementData(vehicle, "npchlc_traffic:stuckReverse", false)
     local ps2Cruise = type(ambientReverse) == "number"
     local waiting = reason == "obstacle" or ps2Cruise and reason == "following"
-    if not signalClosed and waiting and speed == 0 and ambientReverse ~= 0
+    local sensor = samples[vehicle]
+    if not signalClosed and waiting and speed == 0 and ambientReverse ~= 0 and not (ps2Cruise and sensor and sensor.emptyBlocker)
         and motion.vx ^ 2 + motion.vy ^ 2 < (ps2Cruise and 0.9^2 or 0.6^2) then
         if not progress.stalledAt or (x - progress.stalledX) ^ 2 + (y - progress.stalledY) ^ 2 > 0.5 ^ 2 then
             progress.stalledAt, progress.stalledX, progress.stalledY = now, x, y
@@ -439,7 +741,7 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     end
     local angle = forward - math.atan2(routeY, routeX) - avoidAngle
     angle = math.atan2(math.sin(angle), math.cos(angle))
-    local steer = math.max(-1, math.min(1, math.max(-limit, math.min(limit, angle)) / math.max(0.01, progress.steeringLock)))
+    local steer = math.max(-1, math.min(1, math.max(-limit, math.min(limit, angle)) / steeringLock(vehicle, progress)))
     applyInputs(npc, vehicle, motion, progress, steer, speed, reason, avoidAngle, nil, step)
 end
 

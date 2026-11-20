@@ -10,8 +10,10 @@ local signatures = {
     shootElement = "e",
     killPed = "pdd",
     attackOccupiedVehicle = "pdd",
+    approachDriverDoor = "p",
     stopVehicle = "",
     driveAtPed = "p",
+    drivePoliceBlock = "p",
     driveToPos = "nnnd",
     driveTrafficToPoint = "nnnd",
     driveTrafficRail = "nnnnnnnnnnnnddd",
@@ -28,12 +30,22 @@ function normalizeNPCTask(task)
     local speedClasses = 0
     local driving = task[1] == "driveTrafficToPoint"
     if task[1] == "driveTrafficRail" then
+        if task.style ~= nil and not isNPCTrafficDrivingStyle(task.style) then return false end
         if #task == 17 or #task == 22 or #task == 27 then
             speedClasses = (#task - 12) / 5
         elseif #task ~= 16 and #task ~= 20 and #task ~= 24 then
             return false
         end
         signature = signature .. string.rep("dnnn", (#task - 16 - speedClasses) / 4)
+    elseif task[1]=="approachDriverDoor" and #task>2 then
+        if #task~=4 and #task~=5 then return false end
+        signature=#task==5 and "pnnd" or "pnn"
+    elseif task[1]=="driveAtPed" and #task==3 then
+        if type(task[3])~="number" or task[3]%1~=0 or task[3]<0 or task[3]>3 then return false end
+        signature=signature.."d"
+    elseif task[1]=="attackOccupiedVehicle" and #task==6 then
+        if task[5]~=1 or (task[6]~=0 and task[6]~=1) then return false end
+        signature=signature.."dd"
     elseif (task[1] == "killPed" or task[1] == "attackOccupiedVehicle") and #task == 5 then
         if task[5] ~= 0 and task[5] ~= 1 then return false end
         signature = signature .. "d"
@@ -42,6 +54,7 @@ function normalizeNPCTask(task)
     end
 
     local normalized = {task[1]}
+    if task[1] == "driveTrafficRail" then normalized.style = task.style end
     for index = 1, #signature do
         local rule = signature:sub(index, index)
         local arg = task[index + 1]
