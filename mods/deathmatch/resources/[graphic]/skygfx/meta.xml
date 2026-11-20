@@ -23,6 +23,9 @@
     <script src="pipeline/worldPipe.lua" type="client" cache="false"/>
     <script src="pipeline/vcsSun.lua" type="client" cache="false"/>
     <script src="pipeline/vcsVehicle.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsBoatSheet.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsBoatParticles.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsBoatWake.lua" type="client" cache="false"/>
     <script src="pipeline/vcsWater.lua" type="client" cache="false"/>
     <script src="pipeline/vcs.lua" type="client" cache="false"/>
     <script src="debug.lua" type="client" cache="false"/>
@@ -46,12 +49,19 @@
     <file src="txd/vcs-waterreflection2.png" type="client"/>
     <file src="txd/vcs-water-noise.png" type="client"/>
     <file src="txd/vcs-waterwake.png" type="client"/>
+    <file src="txd/vcs-boatwake.png" type="client"/>
+    <file src="txd/vcs-boatwake2.png" type="client"/>
+    <file src="txd/vcs-carsplash_01.png" type="client"/>
+    <file src="txd/vcs-carsplash_02.png" type="client"/>
+    <file src="txd/vcs-carsplash_03.png" type="client"/>
+    <file src="txd/vcs-carsplash_04.png" type="client"/>
     <file src="shader/mta-helper.fx" type="client"/>
     <file src="shader/vcsWorld.fx" type="client"/>
     <file src="shader/vcsSun.fx" type="client"/>
     <file src="shader/vcsVehicle.fx" type="client"/>
     <file src="shader/vcsWater.fx" type="client"/>
     <file src="models/vcsAlphaTextures.txt" type="client"/>
+    <file src="models/vcsShopTextures.txt" type="client"/>
     <file src="timecycle/timecyc_vcs.dat" type="client"/>
     <file src="shader/vcsPost.fx" type="client"/>
     <file src="shader/ps2CarFxVS.fx" type="client"/>

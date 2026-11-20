@@ -20,9 +20,11 @@ vcsResources = {
     { "freeroam" },
     { "play" },
     { "server_coldata" },
+    { "vcs_vehicle" },
     { "npc_hlc" },
     { "vcs_model", ifInstalled = true },
     { "npchlc_traffic" },
+    { "placement" },
 
     -- Standalone tools and alternate renderers keep their current enabled state.
     { "model", optional = true },

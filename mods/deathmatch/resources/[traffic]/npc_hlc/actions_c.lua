@@ -61,6 +61,7 @@ function stopNPCDrivingActions(npc)
 end
 
 function makeNPCWalkToPos(npc,x,y,pace)
+	recordNPCDebugTarget(npc,x,y)
 	local px,py = getElementPosition(npc)
 	setPedCameraRotation(npc,math.deg(math.atan2(x-px,y-py)))
 	setPedControlState(npc,"forwards",true)
@@ -134,6 +135,7 @@ function makeNPCShootAtElement(npc,target)
 end
 
 function makeNPCDriveToPos(npc,x,y,z,traffic,cruiseSpeed)
+	recordNPCDebugTarget(npc,x,y,z)
 	local car = getPedOccupiedVehicle(npc)
 	local m = car and getElementMatrix(car)
 	if not m then setNPCVehicleInputs(npc, 0, 0, false) return end

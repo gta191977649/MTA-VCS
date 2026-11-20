@@ -42,6 +42,29 @@ function performTask.walkFollowElement(npc, task)
     end
 end
 
+function performTask.walkFormation(npc,task,elapsed,progress)
+    local x,y,_,fx,fy = getNPCFormationSlot(task)
+    if not x then stopNPCWalkingActions(npc) return end
+    local px,py = getElementPosition(npc)
+    local gap = (px-x)^2+(py-y)^2
+    -- Slot 7 is beside the leader. Aim along their path while abreast so a
+    -- small sideways correction does not turn the follower across the couple.
+    if task[4]>0 and task[5]==0 and gap<=task[3]^2 then
+        local vx,vy = getElementVelocity(task[2])
+        if vx*fx+vy*fy > 0.003 then
+            walkNPCTrafficFormation(npc,x+fx,y+fy,progress)
+        else
+            stopNPCWalkingActions(npc)
+            local _,_,heading = getElementRotation(npc)
+            local target = math.deg(math.atan2(-fx,fy))
+            local delta = (target-heading+180)%360-180
+            local step = math.min(elapsed,100)*0.24
+            if math.abs(delta)>0.5 then setPedRotation(npc,heading+math.max(-step,math.min(step,delta)),true) end
+        end
+    elseif gap > task[3]^2 then walkNPCTrafficFormation(npc,x,y,progress)
+    else stopNPCWalkingActions(npc) end
+end
+
 function performTask.shootPoint(npc, task)
     makeNPCShootAtPos(npc, task[2], task[3], task[4])
 end
@@ -50,12 +73,40 @@ function performTask.shootElement(npc, task)
     makeNPCShootAtElement(npc, task[2])
 end
 
+-- The optional fifth argument selects VCS objective 8. Existing HLC callers
+-- retain their continuous attack. Timers belong to this task on this syncer.
+local attackClocks = setmetatable({}, {__mode="k"})
+local function canStrike(npc, task, distance, occupied)
+    if task[5] == nil then return true end
+    local state = getPedSimplestTask(task[2])
+    if state == "TASK_SIMPLE_GET_UP" or state == "TASK_SIMPLE_CAR_GET_DRAGGED_OUT" then return false end
+    local x,y,z = getElementPosition(npc)
+    local tx,ty,tz = getElementPosition(task[2])
+    if not isLineOfSightClear(x,y,z+0.45,tx,ty,tz+0.45,true,false,false,true,false) then return false end
+    local ranged = task[5] == 1
+    if occupied and ranged and distance <= 3 then return false end
+    local now = getTickCount()
+    local clock = attackClocks[npc]
+    if clock and clock.task == task then
+        local age = (now-clock.start)%4294967296
+        if age <= clock.burst then return true end
+        if age <= clock.nextAttack then return false end
+    end
+    -- 0010262C / 00101308: the second timer starts after the first.
+    local burst = ranged and math.random(600,1499) or math.random(0,499)
+    local delay = not ranged and math.random(100,1499)
+        or distance <= task[4] and math.random(100,499) or math.random(1500,2999)
+    attackClocks[npc] = {task=task,start=now,burst=burst,nextAttack=burst+delay}
+    return true
+end
+
 function performTask.killPed(npc, task)
-    local x, y = getElementPosition(npc)
-    local tx, ty = getElementPosition(task[2])
+    local x, y, z = getElementPosition(npc)
+    local tx, ty, tz = getElementPosition(task[2])
     local dx, dy = tx - x, ty - y
     local distanceSquared = dx * dx + dy * dy
-    if distanceSquared < task[3] * task[3] then
+    if task[5] ~= nil then distanceSquared = distanceSquared + (tz-z)^2 end
+    if distanceSquared < task[3] * task[3] and canStrike(npc,task,math.sqrt(distanceSquared),false) then
         makeNPCShootAtElement(npc, task[2])
         setPedRotation(npc, -math.deg(math.atan2(dx, dy)))
     else
@@ -68,8 +119,85 @@ function performTask.killPed(npc, task)
     end
 end
 
+local doorBySeat = {[0]="door_lf_dummy", "door_rf_dummy", "door_lr_dummy", "door_rr_dummy"}
+
+function performTask.attackOccupiedVehicle(npc, task)
+    local vehicle = getPedOccupiedVehicle(task[2])
+    if not vehicle then stopNPCWeaponActions(npc) stopNPCWalkingActions(npc) return end
+    local m = getElementMatrix(vehicle)
+    local xmin, ymin, _, xmax, ymax = getElementBoundingBox(vehicle)
+    if not m or not xmin or not xmax then return end
+    local x, y = getElementPosition(npc)
+    local cx, cy, cz = unpack(m[4])
+    local dx, dy = x - cx, y - cy
+    local side = math.max(xmin, math.min(xmax, dx * m[1][1] + dy * m[1][2]))
+    local along = math.max(ymin, math.min(ymax, dx * m[2][1] + dy * m[2][2]))
+    local tx, ty = cx + side*m[1][1] + along*m[2][1], cy + side*m[1][2] + along*m[2][2]
+    if task[5] == 0 then
+        local component = doorBySeat[getPedOccupiedVehicleSeat(task[2])]
+        local doorX,doorY
+        if component then doorX,doorY = getVehicleComponentPosition(vehicle,component,"world") end
+        if doorX then tx,ty = doorX,doorY end
+    end
+    local distance = (x - tx)^2 + (y - ty)^2
+    if task[5] == 1 and distance <= 9 then
+        stopNPCWeaponActions(npc)
+        local length = math.sqrt(dx*dx+dy*dy)
+        if length>0.01 then
+            local retreatX,retreatY = x+dx/length*2,y+dy/length*2
+            local _,_,z=getElementPosition(npc)
+            if isLineOfSightClear(x,y,z,retreatX,retreatY,z,true,true,false,true,false,false,false,npc)
+                and isLineOfSightClear(retreatX,retreatY,z,retreatX,retreatY,z-1.8,true,false,false,true,false)==false then
+                makeNPCWalkToPos(npc,retreatX,retreatY)
+                return
+            end
+        end
+        stopNPCWalkingActions(npc)
+        return
+    end
+    if distance <= task[3]^2 and canStrike(npc,task,math.sqrt(distance),true) then
+        setPedRotation(npc, -math.deg(math.atan2(cx - x, cy - y)))
+        makeNPCShootAtPos(npc, tx, ty, cz)
+    else
+        stopNPCWeaponActions(npc)
+    end
+    if distance > task[4]^2 then makeNPCWalkToPos(npc, tx, ty) else stopNPCWalkingActions(npc) end
+end
+
 function performTask.driveToPos(npc, task)
     makeNPCDriveToPos(npc, task[2], task[3], task[4])
+end
+
+function performTask.stopVehicle(npc)
+    local vehicle = getPedOccupiedVehicle(npc)
+    local motion = getNPCTrafficPhysicsMotion(vehicle)
+    if motion and motion.forward > 0.5 then setNPCVehicleInputs(npc, 0, -1, false)
+    else setNPCVehicleInputs(npc, 0, 0, true) end
+end
+
+function performTask.driveAtPed(npc, task)
+    local vehicle = getPedOccupiedVehicle(npc)
+    local target = getPedOccupiedVehicle(task[2]) or task[2]
+    local motion = getNPCTrafficPhysicsMotion(vehicle)
+    if not motion or motion.unstable then
+        setNPCVehicleInputs(npc, 0, 0, false)
+        return
+    end
+    local x, y = getElementPosition(target)
+    local dx, dy = x - motion.x, y - motion.y
+    local distance = math.sqrt(dx * dx + dy * dy)
+    local vx, vy = getElementVelocity(target)
+    local lead = math.min(0.6, distance / 40)
+    dx, dy = dx + vx * 50 * lead, dy + vy * 50 * lead
+    recordNPCDebugTarget(npc, motion.x + dx, motion.y + dy, motion.z)
+    local angle = math.atan2(dx * motion.fy - dy * motion.fx, dx * motion.fx + dy * motion.fy)
+    local steer = math.max(-1, math.min(1, angle * 2))
+    local speed = 40 / (1 + math.abs(angle) * 2)
+    if vx*vx + vy*vy <= 0.02^2 and distance < 20 then
+        speed = math.min(speed, math.sqrt(8 * math.max(0, distance-1.5)))
+        if distance < 10 and math.abs(angle) > math.pi * 0.55 then speed = 0 end
+    end
+    setNPCVehicleInputs(npc, steer, math.max(-0.5, math.min(1, (speed - motion.forward) * 0.16)), false)
 end
 
 function performTask.driveTrafficToPoint(npc, task, elapsed, useNextLane)
@@ -198,7 +326,12 @@ local function railSpeedLimit(vehicle, x, y, z, ax, ay, az, dx, dy, centreHeight
     local limit = math.huge
     local leaderSample
     local emergency = false
-    if centreHeight then
+    local boat = getVehicleType(vehicle) == "Boat"
+    if boat then
+        -- Leave vertical velocity and pitch/roll to native buoyancy. Refuse a dry next sample.
+        local water = getWaterLevel(ax, ay, az, true)
+        if type(water) ~= "number" or math.abs(water - az) > 7 then limit = 0 end
+    elseif centreHeight then
         local expectedGround = az - centreHeight
         local water = getWaterLevel(ax, ay, expectedGround, true)
         if type(water) == "number" and water >= expectedGround - 3 then
@@ -229,6 +362,9 @@ local function railSpeedLimit(vehicle, x, y, z, ax, ay, az, dx, dy, centreHeight
             emergency = gap <= 1 and lead < speed
         end
     end
+    if boat and limit > 0 and getElementData(vehicle, "npchlc_traffic:boatStyle") ~= 2 then
+        limit = math.min(limit, exports.vcs_vehicle:getBoatTrafficSpeedLimit(vehicle, task[14]))
+    end
     if limit > 0 then
         local mergeLimit, imminent = limitNPCTrafficRailMerge(vehicle, task, segment, t, lengths, speed, x, y, z, dx, dy, now)
         limit, emergency = math.min(limit, mergeLimit), emergency or imminent
@@ -241,7 +377,8 @@ function performTask.driveTrafficRail(npc, task, elapsed)
     local vehicle = getPedOccupiedVehicle(npc)
     if getElementData(vehicle, "npchlc_traffic:rail", false) and not isElementFrozen(vehicle)
         and not getElementData(vehicle, "npchlc_traffic:impactPending", false) then
-        advanceNPCTrafficRail(vehicle, task, math.min(elapsed or 16, 100) * getGameSpeed(), railSpeedLimit)
+        advanceNPCTrafficRail(vehicle, task, math.min(elapsed or 16, 100) * getGameSpeed(), railSpeedLimit,
+            getVehicleType(vehicle) == "Boat")
     end
 end
 

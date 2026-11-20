@@ -1,10 +1,12 @@
 """Regression checks for the VCS graph, fixed-wing math and NPCHLC ownership."""
 
 import argparse
+import json
 import math
 from pathlib import Path
 from shutil import copy2, copytree
 import socket
+import struct
 from statistics import quantiles
 import subprocess
 from tempfile import TemporaryDirectory
@@ -14,13 +16,19 @@ import xml.etree.ElementTree as ET
 from lupa.lua51 import LuaRuntime
 
 from import_vcs_traffic import ROAD_MAP, assemble, encode_json
+from vehicle_impact_import import export as export_collision_handling, export_decisions, export_service_sound
+from ped_services_check import main as check_ped_services
+from vcs_model_assets import chunks
 from vcs_road_collision import ground_height, lane_centres, road_surfaces
 from vcs_vehicle_ground import contact_geometry, read_archive
+from vcs_jetski_rider import bake as bake_jetski_rider
+from vcs_jetski_engine import extract as extract_jetski_engine
 
 ROOT = Path(__file__).resolve().parents[1]
 TRAFFIC = ROOT / "mods/deathmatch/resources/[traffic]"
 HLC = TRAFFIC / "npc_hlc"
 RUNTIME = TRAFFIC / "npchlc_traffic"
+VCS_VEHICLE = TRAFFIC.parent / "[model]" / "vcs_vehicle"
 
 SERVER_MOCK = """
 root, resourceRoot = {}, {}
@@ -52,7 +60,11 @@ end
 function get() end
 function isElement(e) return type(e) == "table" and e.kind and not e.destroyed end
 function getElementType(e) return e.kind end
+function getElementModel(e) return e.model end
 function getElementHealth(e) return e.health end
+function setElementHealth(e,value) e.health=value end
+function setPedStat(e,id,value) e[id]=value return true end
+function getVehicleType(e) return e.vehicleType or "Automobile" end
 function isPedDead(e) return e.health == 0 end
 function getPedOccupiedVehicle(e) return e.vehicle end
 function isPedInVehicle(e) return e.vehicle ~= nil end
@@ -216,12 +228,33 @@ deliver("onClientPreRender", root)
 deliver("npc_hlc:control", resourceRoot, npc, 6, nextWalk, npc)
 deliver("onClientPreRender", root)
 assert(table.concat(targets, ",") == "2,4,4,4" and released == 3 and stopped == 0)
+function isPedOnGround() return true end
+deliver("onClientPedDamage", npc, localPlayer, 0, 3, 5)
+deliver("onClientPreRender", root)
+assert(#targets==5 and targets[5]==4)
+table.remove(targets)
 deliver("onClientPedDamage", npc, false, 49, 3, 5)
 deliver("onClientPreRender", root)
 assert(#targets == 4 and released == 4)
 now = now + 350
 deliver("onClientPreRender", root)
 assert(#targets == 5)
+local facing, motion = "npchlc_traffic:socialFacing", "npchlc_traffic:activityMotion"
+setElementData(npc, motion, {"idle_chat",false,10,1000,10,"PED"})
+deliver("onClientElementDataChange", npc, motion)
+assert(released == 5)
+setElementData(npc, facing, other)
+deliver("onClientElementDataChange", npc, facing)
+deliver("npc_hlc:control", resourceRoot, npc, 7, nextWalk, npc)
+removeElementData(npc, motion)
+deliver("onClientElementDataChange", npc, motion)
+deliver("onClientPreRender", root)
+assert(#targets == 5)
+removeElementData(npc, facing)
+deliver("onClientElementDataChange", npc, facing)
+deliver("onClientPreRender", root)
+assert(#targets == 6)
+
 """
 
 LOAD = """
@@ -249,35 +282,205 @@ function benchStep()
 end
 """
 
+NATIVE_MEDIC_PROBE = """
+function verifyNativeMedicHandoff()
+    local graph=PedAI.graph
+    local mx,my,mz=379.938,1246.2159,-200.016
+    local profile=TrafficPopulation.sample(graph.population,mx,my,mz,12,0)
+    assert(profile.pedestrianGroupId==33)
+    local eligible=0
+    for _,node in ipairs(graph.nodes) do
+        if node.kind=="pedestrian" and node.scene=="underground" then
+            for i=1,node.linkCount do
+                local edge=graph.links[node.firstLink+i]
+                local target=graph.nodes[edge.to+1]
+                local x,y,z=TrafficAmbient.samplePedestrianEdge(node,target,edge,mx,my,60,0,128,mz)
+                if x and math.abs(z-mz)<=3 then
+                    local distance=getDistanceBetweenPoints2D(x,y,mx,my)
+                    if distance>35 and distance<60 then eligible=eligible+1 end
+                end
+            end
+        end
+    end
+    assert(eligible>0,"MALL1 has no same-floor spawn candidates")
+    local dim=728
+    local car=assert(createVehicle(416,18,0,3))
+    local medic=assert(createPed(274,0.55,0,3))
+    local casualty=assert(createPed(23,0,0,3))
+    for _,e in ipairs({car,medic,casualty}) do setElementDimension(e,dim) end
+    for ped,id in pairs({[medic]=12,[casualty]=23}) do
+        assert(exports.npc_hlc:enableHLCForNPC(ped,"walk"))
+        TrafficModelBindings.tag(ped,id)
+        assert(TrafficAmbient.adoptDriver(ped,nil,nil,id))
+        PedAI.attach(ped,id)
+    end
+    -- Real native ped/vehicle and death notification; the server is one sync behind.
+    local strikingCar=assert(createVehicle(411,0,-10,3))
+    setElementDimension(strikingCar,dim)
+    assert(setElementVelocity(strikingCar,0,.8,0))
+    local vx,vy,vz=TrafficRoad.pedContactMotion(strikingCar,getTickCount(),0,0,3)
+    assert(vy and vy>.79 and not TrafficRoad.pedContactMotion(strikingCar,getTickCount(),20,0,3))
+    PedRoadInjury.strike(casualty,{},strikingCar,50,0,vx,vy,vz)
+    assert(isPedDead(casualty) and not PedServices.keepCasualty(casualty))
+    destroyElement(strikingCar)
+    local road={driver=medic,vehicle=car,dimension=dim,originalVehicle=227}
+    -- A dispatched crew already owns the parked ambulance when it starts CPR.
+    PedServices.linkCrew(road,{crew=medic})
+    local now=getTickCount()
+    assert(PedServices.update(medic,12,now) and PedServices.keepCasualty(casualty))
+    for i=1,8 do PedServices.update(medic,12,now+100*i) end
+    assert(not isElement(casualty))
+    local revived
+    for _,ped in ipairs(getElementsByType("ped",resourceRoot)) do
+        if ped~=medic and getElementDimension(ped)==dim then revived=ped end
+    end
+    assert(revived and getElementHealth(revived)>0)
+    assert(PedAI.brain(medic).event.kind=="returnCar")
+    assert(PedAI.update(medic,PedAI.graph))
+    assert(exports.npc_hlc:getNPCDebugAssignment(medic)=="walkFollowElement")
+    for _,e in ipairs({medic,revived,car}) do destroyElement(e) end
+
+    local ordinary=assert(createPed(23,0,0,3))
+    setElementDimension(ordinary,dim)
+    TrafficModelBindings.tag(ordinary,23)
+    assert(exports.npc_hlc:enableHLCForNPC(ordinary,"walk"))
+    assert(TrafficAmbient.adoptDriver(ordinary,nil,nil,23))
+    PedAI.attach(ordinary,23)
+    assert(killPed(ordinary) and not PedServices.keepCasualty(ordinary))
+    local wreck=assert(createVehicle(411,50,10,3))
+    setElementDimension(wreck,dim)
+    TrafficRoad.retainPlayerVehicle(wreck)
+    assert(blowVehicle(wreck,false))
+    return ordinary,wreck
+end
+"""
+
 NATIVE_PROBE = """
-local traffic = exports.npchlc_traffic
-local hlc = exports.npc_hlc
-local loadTimer
-loadTimer = setTimer(function()
-    local status, counts, failure = traffic:getTrafficStatus()
-    if status == "loading" then return end
-    killTimer(loadTimer)
-    assert(status == "ready", tostring(failure))
-    assert(counts.peds == 5308 and counts.cars == 2701 and counts.boats == 378 and counts.links == 17652)
-    assert(traffic:getTrafficRoadStatus().range == 160, "configured traffic sync range was not applied")
-    assert(traffic:sampleTrafficFlight("fake-plane", 0, 2))
-    assert(traffic:getTrafficDynamicRoute("police-helicopter").spawnAttemptMs == 15000)
-    -- Stock MTA plane is a fixture for the matrix and lifecycle APIs only.
-    assert(not traffic:bindTrafficFixedWingModel(411))
-    assert(traffic:bindTrafficFixedWingModel(577))
+local traffic, hlc
+local controller = exports.vcs_vehicle
+local standalone = {}
+local function startPopulation()
+    local vehicles = getResourceFromName("vcs_vehicle")
+    assert(getResourceState(vehicles)=="running")
+    for _,name in ipairs({"server_coldata","npc_hlc","vcs_model","npchlc_traffic"}) do
+        local resource = assert(getResourceFromName(name))
+        assert(getResourceState(resource)~="running", "vehicle resource started "..name)
+    end
+    for i,pair in ipairs({{473,233,"CJetSki"},{484,248,"CBoat"},{577,280,"CPlane"}}) do
+        local vehicle = assert(createVehicle(pair[1],700+i*10,700,6))
+        assert(controller:bindVcsVehicle(vehicle,pair[2]))
+        assert(getElementData(vehicle,"vcs_vehicle:originalModel")==pair[2])
+        assert(controller:getVcsVehicleClass(vehicle)==pair[3])
+        standalone[i]={vehicle=vehicle,id=pair[2],class=pair[3]}
+    end
+    local handling=getVehicleHandling(standalone[1].vehicle)
+    assert(math.abs(handling.mass-978.94458)<0.01 and handling.steeringLock==40)
+    assert(standalone[1].class~=standalone[2].class and standalone[2].class~=standalone[3].class)
+    local sedan=assert(createVehicle(411,700,690,10))
+    assert(not controller:bindVcsVehicle(sedan,233) and not getElementData(sedan,"vcs_vehicle:originalModel"))
+    destroyElement(sedan)
+    assert(restartResource(vehicles))
+    setTimer(function()
+        for _,row in ipairs(standalone) do
+            assert(isElement(row.vehicle) and controller:getVcsVehicleClass(row.vehicle)==row.class)
+        end
+        for _,name in ipairs({"server_coldata","npc_hlc","vcs_model","npchlc_traffic"}) do
+            assert(startResource(getResourceFromName(name)), "could not start "..name)
+        end
+    end,400,1)
+end
+local function flightSlots()
     local slots = {}
     for _, vehicle in ipairs(getElementsByType("vehicle")) do
         local slot = getElementData(vehicle, "npchlc_traffic:flightSlot", false)
         if slot ~= false then
+            assert(slot == 0 or slot == 1 or slot == 2)
             assert(not slots[slot] and isElementFrozen(vehicle))
+            assert(getElementModel(vehicle) == 577 and getVehicleType(vehicle) == "Plane")
+            assert(getElementData(vehicle, "npchlc_traffic:originalModel") == 280)
+            assert(getElementData(vehicle, "npchlc_traffic:modelProvider") == "vcs_model")
             local matrix = getElementMatrix(vehicle)
             assert(matrix and matrix[4][3] > 0)
             slots[slot] = vehicle
         end
     end
-    assert(slots[0] and slots[1] and slots[2])
-    assert(traffic:bindTrafficFixedWingModel(false))
-    for _, vehicle in pairs(slots) do assert(not isElement(vehicle)) end
+    return slots
+end
+local loadTimer
+setTimer(startPopulation, 50, 1)
+loadTimer = setTimer(function()
+    if getResourceState(getResourceFromName("npchlc_traffic"))~="running" then return end
+    traffic, hlc = exports.npchlc_traffic, exports.npc_hlc
+    local status, counts, failure = traffic:getTrafficStatus()
+    if status == "loading" or status == "stopped" then return end
+    killTimer(loadTimer)
+    assert(status == "ready", tostring(failure))
+    for i,row in ipairs(standalone) do
+        local vehicle=assert(controller:createVcsVehicle(row.id,730+i*15,760,10))
+        assert(getElementData(vehicle,"vcs_vehicle:originalModel")==row.id)
+        assert(controller:getVcsVehicleClass(vehicle)==row.class)
+        assert(getElementModel(vehicle)==getElementModel(row.vehicle))
+        destroyElement(vehicle)
+    end
+    assert(counts.peds == 5308 and counts.cars == 2701 and counts.boats == 378 and counts.links == 17652)
+    assert(traffic:getTrafficRoadStatus().range == 160, "configured traffic sync range was not applied")
+    local corpse,wreck=traffic:verifyNativeMedicHandoff()
+    assert(isElement(corpse) and isElement(wreck))
+    local faded={}
+    addEventHandler("onElementDataChange",root,function(key)
+        if (source==corpse or source==wreck) and key=="npchlc_traffic:retiring" and getElementData(source,key) then
+            faded[source]=true
+        end
+    end)
+    local corpseFaded,wreckFaded=false,false
+    addEventHandler("onElementDestroy",root,function()
+        if source==corpse then corpseFaded=faded[source] end
+        if source==wreck then wreckFaded=faded[source] end
+    end)
+    assert(traffic:sampleTrafficFlight("fake-plane", 0, 2))
+    assert(traffic:getTrafficDynamicRoute("police-helicopter").spawnAttemptMs == 15000)
+    -- No explicit binding before this assertion: exercise the production model provider.
+    local slots = flightSlots()
+    assert(slots[0] and slots[1] and slots[2], "AIRTRAIN slots missing after ordinary startup")
+    assert(traffic:setTrafficPlanesMoving(false))
+    local paused = traffic:getTrafficAircraftStatus()
+    assert(paused.state=="paused" and paused.active==3)
+    assert(traffic:setTrafficPlanesMoving(true))
+    assert(traffic:getTrafficAircraftStatus().state=="running" and flightSlots()[1]==slots[1])
+    for original, hull in pairs({[215]=452,[233]=473,[248]=484,[249]=484,[257]=446,[264]=446}) do
+        local model = exports.vcs_model:getTrafficModelBase(original, "vehicle")
+        assert(model==hull and getVehicleType(model)=="Boat")
+    end
+    local recovered = false
+    local provider = getResourceFromName("vcs_model")
+    assert(stopResource(provider))
+    setTimer(function()
+        assert(startResource(provider))
+        local recoveryTimer
+        recoveryTimer = setTimer(function()
+            local rebound = flightSlots()
+            if not (rebound[0] and rebound[1] and rebound[2]) then return end
+            killTimer(recoveryTimer)
+            assert(not traffic:bindTrafficFixedWingModel(411))
+            assert(traffic:bindTrafficFixedWingModel(577))
+            local same = flightSlots()
+            for slot, vehicle in pairs(rebound) do assert(same[slot] == vehicle) end
+            assert(traffic:bindTrafficFixedWingModel(false))
+            for _, vehicle in pairs(rebound) do assert(not isElement(vehicle)) end
+            recovered = true
+        end, 100, 0)
+    end, 200, 1)
+
+    -- Exercise public mission exports across resources on native MTA elements.
+    local missionPed = assert(traffic:createTrafficScriptPed(23,10,10,3,0,37))
+    assert(getElementDimension(missionPed)==37 and traffic:acquireTrafficPed(missionPed))
+    assert(traffic:assignTrafficPedObjective(missionPed,"walk",12,10,3,"walk"))
+    assert(traffic:assignTrafficPedObjective(missionPed,"clear"))
+    assert(traffic:assignTrafficPedObjective(missionPed,"ignite") and isElementOnFire(missionPed))
+    assert(not traffic:assignTrafficPedObjective(missionPed,"walk",20,10,3,"run"))
+    assert(traffic:releaseTrafficPed(missionPed) and not isElementOnFire(missionPed))
+    assert(not traffic:releaseTrafficPed(missionPed) and getElementHealth(missionPed)==100)
+    destroyElement(missionPed)
 
     local pedestrian = assert(createPed(7, 0, 0, 3))
     local driver = assert(createPed(7, 0, 8, 3))
@@ -295,6 +498,7 @@ loadTimer = setTimer(function()
     assert(hlc:addNPCTask(pedestrian, {"walkToPos", 0.6, 0, 3, 0.03}))
     assert(hlc:addNPCTask(driver, {"driveToPos", 4, 8, 3, 0.03}))
     setTimer(function()
+        assert(isElement(corpse) and isElement(wreck))
         assert(completions == 2, "server fallback did not complete both tasks")
         local actors = {}
         for i = 1, 600 do
@@ -305,14 +509,35 @@ loadTimer = setTimer(function()
             assert(hlc:addNPCTask(ped, {"walkToPos", x + 700, y, 3, 0.1}))
         end
         setTimer(function()
+            assert(recovered, "AIRTRAIN failed to recover after model provider restart")
+            assert(corpseFaded and wreckFaded and not isElement(corpse) and not isElement(wreck))
             local stats = hlc:getNPCSchedulerStats()
             local moved = getElementPosition(actors[600])
             assert(moved > 50 and stats.activeTasks == 600 and stats.samples >= 100)
             assert(stats.p95Ms <= 3 and stats.p99Ms <= 8,
                 ("scheduler p95=%d ms, p99=%d ms, exhausted=%d"):format(
                     stats.p95Ms, stats.p99Ms, stats.budgetExhaustions))
-            outputServerLog(("TRAFFIC_NATIVE_PASS tasks=%d samples=%d p95=%dms p99=%dms exhausted=%d")
-                :format(stats.activeTasks, stats.samples, stats.p95Ms, stats.p99Ms, stats.budgetExhaustions))
+            local summary = ("TRAFFIC_NATIVE_PASS tasks=%d samples=%d p95=%dms p99=%dms exhausted=%d")
+                :format(stats.activeTasks, stats.samples, stats.p95Ms, stats.p99Ms, stats.budgetExhaustions)
+            -- Restart the production traffic graph while its model provider is offline.
+            -- This reproduces the opposite startup order in the same isolated server.
+            assert(stopResource(provider))
+            local population = getResourceFromName("npchlc_traffic")
+            assert(restartResource(population))
+            setTimer(function()
+                local lateTimer, started
+                lateTimer = setTimer(function()
+                    if getResourceState(population) ~= "running" or traffic:getTrafficStatus() ~= "ready" then return end
+                    if not started then
+                        started = assert(startResource(provider))
+                        return
+                    end
+                    local late = flightSlots()
+                    if not (late[0] and late[1] and late[2]) then return end
+                    killTimer(lateTimer)
+                    outputServerLog(summary)
+                end, 100, 0)
+            end, 250, 1)
         end, 6000, 1)
     end, 1800, 1)
 end, 100, 0)
@@ -328,6 +553,8 @@ def load(lua, folder, files):
 def make_server():
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
+    load(lua, VCS_VEHICLE, ["controllers/vehicle.lua", "controllers/boat.lua"])
+    lua.execute('exports={vcs_vehicle={steerBoatTraffic=function(_,...) return steerBoatTraffic(...) end}}')
     load(lua, HLC, [
         "npc_functions_s.lua", "npc_functions.lua", "npc_hlc_s.lua", "control_npc_s.lua",
         "valid_tasks_s.lua", "tasks_s.lua", "task_progress.lua", "traffic_rail.lua", "traffic_physics.lua",
@@ -375,6 +602,30 @@ def check_hlc():
     for _ = 1, 12 do drive(vehicle, rail, 100) end
     assert(vehicle.vz == -0.17)
     assert(isNPCTaskComplete(nil, vehicle, rail))
+    do
+        local hull = element("vehicle"); hull.vehicleType="Boat"
+        hull.fx, hull.fy, hull.vz = 1,0,-0.13
+        local turn = {"driveTrafficRail",-20,0,0, 0,0,0, 20,0,0, 20,20,0, 10,0,0,
+            0,20,40,0}
+        local originalAngular = setElementAngularVelocity
+        local getRotation, setRotation = getElementRotation, setElementRotation
+        hull.heading = 270
+        function getElementRotation() return 4,-3,hull.heading end
+        function setElementRotation(_,pitch,roll,heading)
+            assert(pitch == 4 and roll == -3)
+            hull.heading = heading % 360
+        end
+        function setElementAngularVelocity() error("traffic boat wrote angular velocity") end
+        for _=1,180 do
+            advanceNPCTrafficRail(hull,turn,20,nil,true)
+            assert(hull.vz==-0.13)
+            hull.x, hull.y = hull.x + hull.vx, hull.y + hull.vy
+        end
+        assert(math.abs(hull.x-20)<2 and hull.y>10 and hull.vy>math.abs(hull.vx), "boat missed waterway turn")
+        assert(math.min(hull.heading,360-hull.heading)<45, "bow failed to follow waterway turn")
+        getElementRotation, setElementRotation = getRotation, setRotation
+        setElementAngularVelocity = originalAngular
+    end
 
     local window = {"driveTrafficRail", -12,0,0, 0,0,0, 12,0,0, 24,0,0, 10,0,0.6,
         0,36,0,0, 0,48,0,0}
@@ -459,7 +710,11 @@ def check_hlc():
     moving.x, moving.y, moving.fx, moving.fy = 15, 10, 1, 0
     assert(getNPCTrafficPhysicsRejoin(route, moving) == 2)
     moving.y = 14
-    assert(not getNPCTrafficPhysicsRejoin(route, moving))
+    local rejoin, displaced = getNPCTrafficPhysicsRejoin(route, moving)
+    assert(not rejoin and displaced)
+    moving.vx = 0.12
+    rejoin, displaced = getNPCTrafficPhysicsRejoin(route, moving)
+    assert(not rejoin and not displaced)
     local railDriver, unsynced = element("ped"), element("vehicle")
     railDriver.vehicle, unsynced.driver = unsynced, railDriver
     assert(enableHLCForNPC(railDriver))
@@ -524,6 +779,31 @@ def check_hlc():
     deliver("onClientPreRender", root, 16)
     assert(inputs.vehicle_left == 0 and inputs.accelerate == 0 and not inputs.handbrake)
     vehicle.syncer = localPlayer
+    -- The incoming tangent reaches the far curb, but this green-light
+    -- route turns right. A barrier across the exit lane must still win.
+    local oldCast,oldDebug = processLineOfSight,recordNPCDebugDriving
+    local decision,exitBarrier
+    function recordNPCDebugDriving(reason) decision=reason end
+    function processLineOfSight(x,y,z,ex,ey)
+        if y<12 and ey>=12 then
+            return true,x+(ex-x)*(12-y)/(ey-y),12,z
+        end
+        if exitBarrier and x<3 and ex>=3 then
+            return true,3,y+(ey-y)*(3-x)/(ex-x),z
+        end
+        return false
+    end
+    vehicle.x,vehicle.y,vehicle.fx,vehicle.fy,vehicle.vx,vehicle.vy=0,0,0,1,0,0.18
+    for i=1,2 do
+        exitBarrier=i==2
+        resetNPCTrafficPhysicsSensor(vehicle)
+        beginNPCTrafficPhysicsFrame()
+        performTask.driveTrafficPhysics(npc,window,16,{})
+        assert((decision=="obstacle")==exitBarrier,decision)
+    end
+    processLineOfSight,recordNPCDebugDriving=oldCast,oldDebug
+    resetNPCTrafficPhysicsSensor(vehicle)
+    vehicle.vy=0
     vehicle.x, vehicle.y, vehicle.fx, vehicle.fy = 0, 7, 0, 1
     window[5][1][9] = 1
     deliver("npc_hlc:control", resourceRoot, npc, 10, window, vehicle)
@@ -636,8 +916,24 @@ def check_hlc():
     render(16)
     assert(inputs.brake_reverse == 0 and inputs.handbrake)
 
+    -- PS2 random-created cruise waits thirty seconds; other seeds keep waiting.
+    setElementData(vehicle, "npchlc_traffic:stuckReverse", 0)
+    render(31000)
+    assert(inputs.brake_reverse == 0 and inputs.handbrake)
+    setElementData(vehicle, "npchlc_traffic:stuckReverse", 400)
+    render(20)
+    render(29999)
+    assert(inputs.brake_reverse == 0 and inputs.handbrake)
+    render(1)
+    assert(inputs.brake_reverse > 0 and not inputs.handbrake)
+    render(399)
+    assert(inputs.brake_reverse > 0 and not inputs.handbrake)
+    render(1)
+    assert(inputs.brake_reverse == 0 and inputs.handbrake)
+
     local long = {"driveTrafficPhysics", 4, 12, {0,0,0}, {{3,0,0,1000,0,0,1,0,1}}}
     frontBlocked, vehicle.y, vehicle.vy = false, 0, 0.2
+    render(2050)
     deliver("npc_hlc:control", resourceRoot, npc, 12, long, vehicle)
     local speed = 10
     for _ = 1, 500 do
@@ -650,6 +946,72 @@ def check_hlc():
     function getTrafficLightState() return 2 end
     render(16)
     assert(inputs.accelerate == 0 and inputs.brake_reverse == 1)
+    local target = element("player", 10)
+    target.y, vehicle.vy = vehicle.y+15, 0
+    deliver("npc_hlc:control", resourceRoot, npc, 13, {"driveAtPed", target}, vehicle)
+    render(16)
+    assert(inputs.vehicle_right > 0 and inputs.accelerate > 0)
+    vehicle.vy = 0.2
+    deliver("npc_hlc:control", resourceRoot, npc, 14, {"stopVehicle"}, vehicle)
+    render(16)
+    assert(inputs.brake_reverse == 1 and inputs.accelerate == 0)
+
+    local function shortWindow(first)
+        local segments={}
+        for seq=first,first+7 do
+            segments[#segments+1]={seq,0,0,seq*4,0,0,1,0,0}
+        end
+        return assert(normalizeNPCTrafficPhysics({"driveTrafficPhysics",first,20,{0,(first-1)*4,0},segments}))
+    end
+    local hinted,hints
+    addEventHandler("npc_hlc:onRouteLow",root,function(first,last)
+        if first==1 then hinted,hints=now,hints+1 end
+    end)
+    for i,lag in ipairs({50,150,300}) do
+        vehicle.x,vehicle.y,vehicle.vx,vehicle.vy=0,0,0,0.3
+        hinted,hints=nil,0
+        local revision=20+i*2
+        local firstWindow=shortWindow(1)
+        deliver("npc_hlc:control",resourceRoot,npc,revision,firstWindow,vehicle)
+        local renewed=false
+        for frame=1,122 do
+            vehicle.y=vehicle.y+0.24
+            render(16)
+            assert(inputs.accelerate>0 and inputs.brake_reverse==0 and not inputs.handbrake,table.concat({i,frame,vehicle.y,hints,inputs.accelerate,inputs.brake_reverse},','))
+            if hinted and not renewed and now-hinted>=lag then
+                local index=getNPCTrafficWindowProgress(firstWindow,vehicle)
+                deliver("npc_hlc:control",resourceRoot,npc,revision+1,shortWindow(index),vehicle)
+                renewed=true
+            end
+        end
+        assert(renewed and hints==1)
+    end
+    -- Exhaust the frame budget immediately before this car's turn.
+    local blockers={}
+    local sensorTask=shortWindow(1)
+    local function saturate()
+        beginNPCTrafficPhysicsFrame()
+        for i=1,12 do
+            local car=element("vehicle")
+            car.vy=0.3
+            blockers[i],npc.vehicle=car,car
+            performTask.driveTrafficPhysics(npc,sensorTask,16,{})
+        end
+        npc.vehicle=vehicle
+    end
+    vehicle.y=0
+    now=now+250
+    beginNPCTrafficPhysicsFrame()
+    performTask.driveTrafficPhysics(npc,sensorTask,16,{})
+    now=now+90
+    saturate()
+    performTask.driveTrafficPhysics(npc,sensorTask,16,{})
+    assert(inputs.accelerate>0 and inputs.brake_reverse==0)
+    now=now+90
+    frontBlocked,rightClear=true,false
+    saturate()
+    performTask.driveTrafficPhysics(npc,sensorTask,16,{})
+    assert(inputs.brake_reverse>0 and inputs.accelerate==0)
     """)
     client.execute("""
     local vehicle = element("vehicle")
@@ -792,6 +1154,92 @@ def check_hlc():
     target.x, target.y, target.vx = -3, 3.5, 0.45
     assert(limitNPCTrafficRailMerge(vehicle, merge, 1, 0, {}, 16, 0, 0, 0, 1, 0, now) < 16)
     """)
+    load(client, VCS_VEHICLE, ["controllers/vehicle.lua","controllers/boat.lua"])
+    client.execute("""
+    exports={vcs_vehicle={
+        steerBoatTraffic=function(_,...) return steerBoatTraffic(...) end,
+        getBoatTrafficSpeedLimit=function(_,...) return getBoatTrafficSpeedLimit(...) end}}
+    function getVehicleType() return "Boat" end
+    function getElementBoundingBox() return -1,-3,-0.5,1,3,1 end
+    function processLineOfSight() return false end  -- lateral merger misses the bow ray
+    function getWaterLevel() return 0 end
+    function getElementAngularVelocity() error("ambient boat read angular velocity") end
+    function getElementRotation() return 0,0,270 end
+    function setElementAngularVelocity() error("ambient boat wrote angular velocity") end
+    function setElementVelocity(v,x,y,z) v.vx,v.vy,v.vz=x,y,z end
+    function isElementFrozen() return false end
+    function isElementStreamedIn() return true end
+    function getElementCollisionsEnabled(v) return v.collision ~= false end
+    local boat=element("vehicle")
+    boat.fx,boat.fy,boat.vz,boat["npchlc_traffic:rail"]=1,0,0.07,true
+    local ped=element("ped")
+    ped.vehicle,boat.driver=boat,ped
+    local crossing=element("vehicle",12)
+    crossing.y,crossing.fx,crossing.fy,crossing.vy=-10,0,1,0.24
+    function getElementsWithinRange() return {boat,crossing} end
+    local path={"driveTrafficRail",-60,0,0, 0,0,0, 70,0,0, 140,0,0, 16,0,0}
+    assert(getBoatTrafficSpeedLimit(boat,16)<16)
+    local earlySpeed, speedAfterClearance, releasedAt
+    local function stepHull()
+        now=now+20
+        performTask.driveTrafficRail(ped,path,20)
+        assert(boat.vz==0.07)
+        boat.x,boat.y=boat.x+boat.vx,boat.y+boat.vy
+        crossing.x,crossing.y=crossing.x+(crossing.vx or 0),crossing.y+crossing.vy
+    end
+    for frame=1,375 do
+        stepHull()
+        assert(math.abs(crossing.x-boat.x)>=4 or math.abs(crossing.y-boat.y)>=4,"crossing hulls overlapped")
+        if frame==25 then earlySpeed=boat.vx*50 end
+        if not releasedAt and crossing.y-boat.y>=16 then
+            assert(getBoatTrafficSpeedLimit(boat,16)==16)
+            releasedAt,speedAfterClearance=frame,boat.vx*50
+        elseif releasedAt and frame==releasedAt+50 then
+            local gain=boat.vx*50-speedAfterClearance
+            assert(gain>2.2 and gain<=2.501,"boat did not progressively recover cruise speed")
+        end
+    end
+    assert(earlySpeed<2 and releasedAt and math.abs(boat.vx*50-16)<0.01)
+
+    -- A second boat approaches the route diagonally from port and
+    -- settles ahead at 4 m/s. The bow ray returns no hit throughout.
+    boat,ped=element("vehicle"),element("ped")
+    boat.fx,boat.fy,boat.vz,boat["npchlc_traffic:rail"]=1,0,0.07,true
+    ped.vehicle,boat.driver=boat,ped
+    crossing.x,crossing.y,crossing.vx,crossing.vy=12,6,0.08,-0.06
+    crossing.fx,crossing.fy=0.8,-0.6
+    local mergeLimit=getBoatTrafficSpeedLimit(boat,16)
+    assert(mergeLimit<16*(1-0.2)/1.3,"merge did not predict hull contact")
+    for frame=1,200 do
+        if frame==101 then crossing.fx,crossing.fy,crossing.vy=1,0,0 end
+        stepHull()
+        -- Separating X projections suffice for these particular headings.
+        local extent=3*math.abs(crossing.fx)+math.abs(crossing.fy)
+        assert(crossing.x-boat.x>=3+extent,"merging hulls overlapped")
+        if frame==100 then assert(math.abs(crossing.y)<0.001 and boat.vx*50<12) end
+    end
+
+    -- The broad-phase square and height filters have strict upper bounds.
+    crossing.x,crossing.y,crossing.z=boat.x+6,boat.y,4.999
+    assert(getBoatTrafficSpeedLimit(boat,16)<16)
+    crossing.z=5
+    assert(getBoatTrafficSpeedLimit(boat,16)==16)
+    crossing.x,crossing.z=boat.x+15.999,0
+    assert(getBoatTrafficSpeedLimit(boat,16)<16)
+    crossing.x=boat.x+16
+    assert(getBoatTrafficSpeedLimit(boat,16)==16)
+    crossing.x,crossing.y=boat.x,boat.y+15.999
+    assert(getBoatTrafficSpeedLimit(boat,16)<16)
+    crossing.y=boat.y+16
+    assert(getBoatTrafficSpeedLimit(boat,16)==16)
+    crossing.x,crossing.y=boat.x-0.01,boat.y
+    assert(getBoatTrafficSpeedLimit(boat,16)==16)
+    crossing.x,crossing.y=boat.x+1,boat.y+10
+    assert(math.abs(getBoatTrafficSpeedLimit(boat,16)-16*8/13)<0.0001)
+    crossing.collision=false
+    assert(getBoatTrafficSpeedLimit(boat,16)==16)
+    """)
+    print("Boat hull sweeps prevented overlap in crossing and merging traffic and released the cruise limit")
     print("Client task ownership, stale revision rejection and stream-out cleanup passed")
 
     lua = make_server()
@@ -808,13 +1256,66 @@ def check_hlc():
     print("  MTA networking, native physics and client frames require live validation.")
 
 
+def check_airtrain_bounds():
+    assets = VCS_VEHICLE.parent / "vcs_model"
+    col = (assets / "airtrain.col").read_bytes()
+    signature, size = struct.unpack_from("<4sI", col)
+    radius, cx, cy, cz, *bounds = struct.unpack_from("<10f", col, 32)
+    assert signature == b"COLL" and size + 8 == len(col)
+    assert (cx, cy, cz) == (0, 0, 0)
+    for tier in ("hi", "lo", "vlo"):
+        data = (assets / f"airtrain_{tier}.dff").read_bytes()
+        start, end = 12, len(data)
+        for kind in (0x1A, 0x0F, 0x01):
+            start, end = next((a, b) for k, a, b in chunks(data, start, end) if k == kind)
+        flags, triangles, vertices, targets = struct.unpack_from("<4I", data, start)
+        assert flags == 0x10037 and targets == 1
+        offset = start + 40 + (triangles + vertices) * 8
+        for point in struct.iter_unpack("<3f", data[offset:offset + vertices * 12]):
+            assert math.dist(point, (cx, cy, cz)) <= radius + 1e-5
+            assert all(lo - 1e-5 <= x <= hi + 1e-5 for lo, x, hi in zip(bounds[:3], point, bounds[3:]))
+    print("AIRTRAIN shared pivot, sphere and box enclose all three rendered meshes")
+
+
 def check_assets(disc, vcs_pc):
+    with TemporaryDirectory() as directory:
+        rebuilt = Path(directory) / "traffic_collision_handling.lua"
+        export_collision_handling(disc, rebuilt)
+        export_service_sound(disc, rebuilt.parent)
+        sound = rebuilt.with_name("sfx_service_suspension.wav")
+        assert sound.read_bytes() == (RUNTIME / sound.name).read_bytes()
+        assert rebuilt.read_text() == (RUNTIME / rebuilt.name).read_text()
+        if vcs_pc:
+            decisions = rebuilt.with_name("traffic_crash_decisions.lua")
+            export_decisions(vcs_pc, decisions)
+            assert decisions.read_text() == (RUNTIME / decisions.name).read_text()
     data, manifest = assemble(disc, vcs_pc)
+    assert bake_jetski_rider(disc) == (VCS_VEHICLE / "data/jetski_rider.json").read_bytes()
     data_again, _ = assemble(disc, vcs_pc)
     model_resource = TRAFFIC.parent / "[model]" / "vcs_model"
     vehicle_archive = model_resource / "vehicle.img"
     if vehicle_archive.is_file():
         assets = read_archive(vehicle_archive)
+        with vehicle_archive.open("rb") as archive:
+            _, count = struct.unpack("<4sI", archive.read(8))
+            directory = {}
+            for _ in range(count):
+                sector, size, _, raw_name = struct.unpack("<IHH24s", archive.read(32))
+                directory[raw_name.rstrip(b"\0").decode("ascii")] = (sector, size)
+            for name in ("speeder", "jetski", "marquis", "rio", "squalo", "scarab"):
+                sector, size = directory[f"{name}.txd"]
+                archive.seek(sector * 2048)
+                kind, length, _ = struct.unpack("<III", archive.read(12))
+                assert kind == 0x16 and 0 < length <= size * 2048 - 12
+        provider = LuaRuntime()
+        load(provider, model_resource, ["model_catalog.lua"])
+        for original, name in ((215,"speeder"), (233,"jetski"), (248,"marquis"),
+                               (249,"rio"), (257,"squalo"), (264,"scarab")):
+            entry = provider.globals().VCS_TRAFFIC_MODEL_CATALOG[original]
+            assert entry.variant and entry.name == name and entry.kind == "vehicle"
+            assert assets[f"{name}.dff"]
+            assert any(rule["originalId"] == original and 9 <= rule["trafficClass"] <= 12
+                       for rule in data["vehicleModelRules"])
         for name, expected_axle in (("mule", 4.306), ("boxvil", 4.1525), ("benson", 3.9038),
                                     ("yankee", 5.3177), ("sanchez", 1.6396), ("pcj600", 1.6038)):
             front, rear = contact_geometry(assets[name + ".dff"])
@@ -827,9 +1328,10 @@ def check_assets(disc, vcs_pc):
     assert manifest["counts"]["nodes"] == {"boat": 378, "pedestrian": 5308, "vehicle": 2701}
     assert manifest["counts"]["directedLinks"] == {"boat": 762, "pedestrian": 11298, "vehicle": 5592}
     lua = LuaRuntime()
-    load(lua, RUNTIME, ["traffic_flight.lua", "traffic_lights.lua", "traffic_population.lua", "traffic_road_population.lua", "traffic_graph.lua"])
+    load(lua, VCS_VEHICLE, ["controllers/vehicle.lua","controllers/plane.lua"])
+    load(lua, RUNTIME, ["traffic_lights.lua", "traffic_population.lua", "traffic_road_population.lua", "traffic_graph.lua"])
     graph = lua.globals().TrafficGraph.build(lua.table_from(data, recursive=True), lua.eval("function() end"))
-    lua.execute("exports = {npc_hlc = {}}")
+    lua.execute("exports = {npc_hlc = {}}; function addEvent() end; function addEventHandler() end")
     load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_ambient.lua"])
     population = lua.globals().TrafficPopulation
     road_population = lua.globals().TrafficRoadPopulation
@@ -901,7 +1403,7 @@ def check_assets(disc, vcs_pc):
     }, function() end)
     assert(TrafficGraph.pedestrianAnchor(native, 2900, 2800, 5) == 0)
     assert(native.ambientFlight.id == "airport-loop" and not native.modelProvider)
-    assert(TrafficFlight.sample(native.ambientFlight, 0, 0))
+    assert(CPlane.SampleFlight(native.ambientFlight, 0, 0))
     TrafficModelBindings.load(native)
     assert(TrafficModelBindings.getPedestrian(7) == 7 and not TrafficModelBindings.getPedestrian(34))
     assert(TrafficModelBindings.get(411) == 411 and not TrafficModelBindings.get(171))
@@ -982,7 +1484,7 @@ def check_assets(disc, vcs_pc):
     assert two_way and one_way
 
     route = graph.routes["fake-plane"]
-    sample = lua.globals().TrafficFlight.sample
+    sample = lua.globals().CPlane.SampleFlight
     assert len(route.points) == 260
     assert not sample(route, 0, 3)
     source = next(record for record in data["routes"] if record["id"] == "fake-plane")
@@ -1005,12 +1507,118 @@ def check_assets(disc, vcs_pc):
     print("PS2 importer determinism, graph and population loading, lane geometry, signal cycle and fixed-wing phases passed")
 
 
+def check_reaction_latency():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    lua.execute("""
+        local function noop() end
+        exports={npc_hlc={clearNPCTasks=function(_,p) p.task=nil end,setNPCWalkSpeed=noop,
+            addNPCTask=function(_,p,t) assert(p.task and not p.preview); p.preview=t; return true end,
+            setNPCTask=function(_,p,t) p.task,p.issued=t,now; return true end}}
+        TrafficVisibility={track=noop,pedestrianRange=100,pedestrianMaxScale=1,pedestrianScale=function() return 1 end}
+        PedSocial={interrupt=noop}
+        PedAmbientWait={cancel=noop}
+        PedMugging={cancel=noop}
+        PedTheft={cancel=noop}
+        PedActivity={cancel=noop,leaveForThreat=noop}
+        PedVoice={emit=noop}
+        TrafficActors={isPolicePed=noop}
+        reportWantedCrime=noop
+        function getElementRotation() return 0,0,0 end
+        function getPedRotation() return 0 end
+        function isPedOnGround() return true end
+        function getPedWeapon(p) return p.weapon or 0 end
+        function getPedTotalAmmo() return 0 end
+        TrafficGraph={pedestrianAnchor=noop}
+    """)
+    load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua",
+                        "ped_ai.lua", "traffic_world.lua", "traffic_ambient.lua"])
+    lua.execute("""
+        local player=element("player",-1)
+        client=player
+        function getElementsWithinRange(_,_,_,_,kind) return kind=="player" and {player} or {} end
+        deliver("npchlc_traffic:worldProbeReady",resourceRoot)
+        TrafficAmbient.start({population={},nodes={}},function() return 0 end)
+        local crowd={}
+        for i=1,80 do
+            local p=element("ped")
+            crowd[i],p.syncer=p,player
+            local brain=PedAI.attach(p,40)
+            brain.reactionDelay=999
+            assert(TrafficAmbient.adoptDriver(p,nil,nil,40,nil,0))
+            p.task={"walkTrafficToPoint",3,0,0,1}
+            assert(brain:react("gunshot",player,22,"look",nil,1000))
+        end
+        for i=1,12 do tick() end -- finish adoption and visit the entire crowd
+        local fighter,runner=crowd[79],crowd[80]
+        local start=now
+        for _,p in ipairs(crowd) do assert(p.task and not p.issued) end
+        PedAI.brain(fighter).profile.fear=0
+        deliver("npchlc_traffic:pedHit",resourceRoot,fighter,player,0,5)
+        assert(fighter.task[1]=="killPed" and fighter.issued==start)
+        deliver("onPedDamage",fighter,5)
+        assert(fighter.task[1]=="killPed" and fighter.issued==start)
+        player.weapon=22
+        deliver("onPedDamage",runner,7)
+        deliver("npchlc_traffic:pedHit",resourceRoot,runner,player,22,7)
+        local probe=packets[#packets]
+        assert(probe.name=="npchlc_traffic:worldProbe" and probe[1][3]==runner)
+        local switched=crowd[77]
+        deliver("npchlc_traffic:pedHit",resourceRoot,switched,player,22,6)
+        local stale=packets[#packets]
+        switched.syncer=element("player")
+        deliver("npchlc_traffic:worldProbeResult",resourceRoot,stale[1][1],{-1})
+        assert(not switched.issued)
+        local changed=crowd[78]
+        deliver("npchlc_traffic:pedHit",resourceRoot,changed,player,22,6)
+        stale=packets[#packets]
+        assert(PedAI.brain(changed):react("damage",player,0,"fight"))
+        deliver("npchlc_traffic:worldProbeResult",resourceRoot,stale[1][1],{-1})
+        assert(not changed.issued)
+        now=now+17
+        deliver("npchlc_traffic:worldProbeResult",resourceRoot,probe[1][1],{-1})
+        assert(runner.task[1]=="walkTrafficToPoint" and runner.issued==start+17)
+        local ahead=packets[#packets]
+        assert(ahead[1][3]==runner and ahead[1][5].x==runner.task[2])
+        deliver("npchlc_traffic:worldProbeResult",resourceRoot,ahead[1][1],{-1})
+        assert(runner.preview[2]>runner.task[2])
+        for i=1,7 do tick() end
+        assert(PedAI.brain(crowd[1]).event.consumed==nil)
+        for i=1,12 do tick() end
+        for i=1,76 do assert(PedAI.brain(crowd[i]).event.consumed) end
+        assert(PedAI.brain(fighter).event.kind=="damage" and PedAI.brain(runner).event.kind=="damage")
+        for _,latency in ipairs({50,150,300}) do
+            local done=runner.task
+            runner.x,runner.task,runner.preview=done[2],runner.preview,nil
+            deliver("npc_hlc:onNPCTaskDone",runner,done)
+            ahead=packets[#packets]
+            assert(ahead[1][3]==runner and ahead[1][5].x==runner.task[2])
+            now=now+latency
+            runner.x=runner.x+2.5
+            deliver("npchlc_traffic:worldProbeResult",resourceRoot,ahead[1][1],{-1})
+            assert(runner.task and runner.preview and runner.preview[2]==runner.task[2]+6)
+        end
+    """)
+    print("80-ped crowd: same-tick punch dispatch, same-tick flee probe and reply dispatch, staggered hearing passed")
+
+
 def check_ambient():
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
     lua.execute('exports = {npc_hlc = {}}')
-    load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_visibility_s.lua", "traffic_model_bindings.lua", "traffic_ambient.lua"])
+    load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_visibility_s.lua", "traffic_model_bindings.lua", "ped_ai_profiles.lua",
+                        "ped_social.lua", "ped_ambient_wait.lua", "ped_mugging.lua", "ped_theft.lua", "traffic_ambient.lua"])
     lua.execute("""
+    local function noop() end
+    local attached, damage, jacker = {}, {}, {}
+    PedAI = {
+        attach=function(p,id) attached[p]=id end, detach=function(p) attached[p]=nil end,
+        damaged=function(p,loss) damage[p]=loss end, busy=function() return false end, sampleHealth=noop,
+        carjacked=function(p,player) jacker[p]=player end,
+    }
+    PedActivity = {cancel=noop, stop=noop, onSpawn=noop, update=noop, active=noop, leaveForThreat=noop}
+    function getElementRotation() return 0,0,90 end
+    exports.npc_hlc.setNPCWalkSpeed = noop
     local ambient = TrafficAmbient
     local from = {id=0, x=45, y=0, z=0, flags=0, spawnThreshold=15, rawWidth=0,
         scene="outdoor", firstLink=0, linkCount=1}
@@ -1045,6 +1653,7 @@ def check_ambient():
     TrafficRoad = {isManagedPed=function(ped) return ped == driver end}
     local created, probe = {}, nil
     local probeCount = 0
+    local resumedTasks, reachResult = {}, nil
     local headingRoll, positionRoll, blockedEndpoint = 0, 0, nil
     sourceResource = {}
     function getResourceState() return "running" end
@@ -1067,6 +1676,7 @@ def check_ambient():
         return ped
     end
     function call(_, method, player, x, y, z, model, endpoints)
+        if method == "getTrafficPedestrianReachable" then return reachResult end
         if method == "getTrafficPedestrianContext" then
             return {cap=1, streamingDistanceScale=1, groupChance=0, policeChance=0}
         end
@@ -1075,7 +1685,7 @@ def check_ambient():
             if endpoints and type(probe) == "table" then
                 for _, node in ipairs(endpoints) do
                     if node.id ~= blockedEndpoint and math.abs(node.x - x) > 1 then
-                        return {groundZ=0, visible=true, clear=true, destination=node.id}
+                        return {groundZ=probe.groundZ, visible=true, clear=true, destination=node.id}
                     end
                 end
                 return false
@@ -1090,13 +1700,32 @@ def check_ambient():
         return lower or 0
     end
     exports.npc_hlc.enableHLCForNPC = all
-    exports.npc_hlc.addNPCTask = function(_, ped, task) ped.task = task return true end
+    exports.npc_hlc.getNPCTaskCount = function(_,ped) return ped.task and 1 or 0 end
+    exports.npc_hlc.addNPCTask = function(_, ped, task) ped.task = task; resumedTasks[#resumedTasks+1]=task; return true end
     TrafficPopulation = {sample=function() return {originalModelId=34} end}
-    TrafficGraph = {pedestrianAnchor=function() return false end}
+    TrafficGraph = {pedestrianAnchor=function() return false end,pedestrianStep=function(_,id) return id,0 end}
     local graph = {population={}, nodes={from,to}, links={edge}, pedestrianCells={[30]={[25]={from,to}}}}
     assert(registerTrafficPedestrianWorld())
     assert(bindTrafficPedestrianModel(34, 7))
     ambient.start(graph, function() return 1 end)
+    do
+        local sample, resolve = TrafficPopulation.sample, TrafficModelBindings.get
+        TrafficPopulation.sample = function(_,x,y,z)
+            assert(x==11 and y==22 and z==3)
+            return {dayProfileId=0}
+        end
+        TrafficModelBindings.get = function(id) return ({[247]=473,[219]=430})[id] end
+        graph.population.records = {{values=row}}
+        graph.vehicleModelRules = {{originalId=247,trafficClass=9,frequency=1}}
+        row[24]=0
+        local model, id, class = ambient.chooseBoat(11,22,3,0,false)
+        assert(model==473 and id==247 and class==9)
+        model,id,class = ambient.chooseBoat(11,22,3,3,true)
+        assert(model==430 and id==219)
+        graph.vehicleModelRules = {}
+        assert(not ambient.chooseBoat(11,22,3,0,false))
+        row[24],TrafficPopulation.sample,TrafficModelBindings.get = 4,sample,resolve
+    end
     driver.vehicle = nil
     tick()
     assert(probeCount == 0)
@@ -1117,14 +1746,17 @@ def check_ambient():
     assert(#created == 1 and created[1].x == 45 and created[1].z == 0.7)
     assert(getElementData(created[1], "npchlc_traffic:originalModel") == 34)
     assert(ambient.isManagedPed(created[1]))
+    assert(attached[created[1]] == 34)
     assert(created[1].task[1] == "walkTrafficToPoint" and created[1].task[2] == to.x)
     local ped = created[1]
     local grounded, anchorX = false, nil
     function isPedOnGround() return grounded end
     exports.npc_hlc.clearNPCTasks = function(_, actor) actor.task = nil end
-    TrafficGraph.pedestrianAnchor = function(_, x) anchorX = x return false end
+    TrafficGraph.pedestrianEntryPoints = function(_, x) anchorX = x return {from,to} end
+    reachResult={1}
     ped.vx = 0.15
     deliver("onPedDamage", ped, 20)
+    assert(damage[ped] == 20)
     assert(not ped.task and ped.vx == 0.15)
     ped.x = 42
     now = now + 1000
@@ -1132,7 +1764,41 @@ def check_ambient():
     assert(not anchorX and not ped.task)
     grounded = true
     for _ = 1, 4 do tick() end
-    assert(anchorX == 42)
+    assert(anchorX == 42 and ped.task and ped.task[1]=="walkTrafficToPoint" and ped.task[2]==to.x)
+    -- The same handoff must work for different owners, even with a stale walk count.
+    local oldMeet=PedSocial.meet
+    PedSocial.meet=noop
+    PedMugging.update=noop
+    PedTheft.update=noop
+    graph.edition="SLUS-21590 USA v1.00"
+    for _,owner in ipairs({"seat","medical"}) do
+        local active=true
+        local function claim() return active end
+        PedActivity.active=owner=="seat" and claim or noop
+        PedActivity.update=PedActivity.active
+        PedServices={update=owner=="medical" and claim or noop}
+        local before=#resumedTasks
+        for i=1,4 do tick() end
+        assert(#resumedTasks==before)
+        ped.task,active=nil,false
+        for i=1,4 do tick() end
+        assert(#resumedTasks>before and ped.task[1]=="walkTrafficToPoint")
+    end
+    -- A separate script clearing HLC must not leave an imaginary queued walk.
+    local before=#resumedTasks
+    ped.task=nil
+    now=now+600
+    for i=1,4 do tick() end
+    assert(#resumedTasks>before and ped.task[2]==to.x)
+    -- A gunpoint wait released before this ped's next scheduler visit.
+    ambient.suspend(ped)
+    ambient.resumeWander(ped,3)
+    assert(not ped.task)
+    before,anchorX=#resumedTasks,nil
+    for i=1,4 do tick() end
+    assert(anchorX==ped.x and #resumedTasks>before and ped.task[1]=="walkTrafficToPoint")
+    graph.edition=nil
+    PedServices,PedSocial.meet=nil,oldMeet
     ped.health = 0
     deliver("onPedWasted", ped)
     assert(ambient.isManagedPed(ped) and not ped.destroyed and timers[2600])
@@ -1145,6 +1811,12 @@ def check_ambient():
     assert(ped.destroyed)
     deliver("onElementDestroy", ped)
     assert(not ambient.isManagedPed(ped))
+    assert(not attached[ped])
+    assert(ambient.adoptDriver(driver, player, car, 34))
+    assert(ambient.adoptDriver(driver, player, car, 34))
+    assert(ambient.isManagedPed(driver) and jacker[driver] == player)
+    assert(getTrafficAmbientStatus().pedestrians == 1)
+    deliver("onElementDestroy", driver)
     ambient.stop()
     assert(getTrafficAmbientStatus().pedestrians == 0 and created[1].destroyed)
 
@@ -1162,6 +1834,21 @@ def check_ambient():
     checkSpawn(6, nil, to.x)
     checkSpawn(2, nil, from.x)
     checkSpawn(2, from.id, to.x)
+    from.scene,to.scene="underground","underground"
+    from.z,to.z,player.z,player.dimension=-200,-200,-199.15,3090
+    probe.groundZ=-200
+    function setElementDimension(e,d) e.dimension=d end
+    checkSpawn(2,nil,from.x)
+    assert(created[1].dimension==3090 and math.abs(created[1].z+199.3)<0.001)
+    -- The same XY coordinates on the street must not use the mall graph.
+    player.z,player.dimension=17,0
+    created={}
+    ambient.start(graph,function() return 1 end)
+    tick(); tick()
+    assert(#created==0)
+    ambient.stop()
+    from.scene,to.scene="outdoor","outdoor"
+    from.z,to.z,player.z,probe.groundZ=0,0,0,0
     graph.links[2].flags = 0x8000
     checkSpawn(2, nil, to.x)
 
@@ -1184,13 +1871,374 @@ def check_ambient():
     print("PS2 ambient edge and model selection, asynchronous spawn admission, cap and cleanup passed")
 
 
+def check_car_service():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    lua.execute("""
+    exports={npc_hlc={},server_coldata={}}
+    function exports.npc_hlc:clearNPCTasks(p) p.task=nil end
+    function exports.npc_hlc:setNPCTask(p,t) p.task=t return true end
+    function exports.server_coldata:getModelBoundingBox() return -1,-2,-0.85,1,2,1 end
+    function getElementModel() return 445 end
+    function getVehicleType() return "Automobile" end
+    function getVehicleOccupants(c) return {[0]=c.driver,[1]=c.passenger} end
+    function getVehicleMaxPassengers() return 3 end
+    function isVehicleLocked(c) return c.locked end
+    function isVehicleBlown() return false end
+    function getPedOccupiedVehicleSeat(p) return p.seat end
+    function getVehicleVariant(c) return c.variant or 0, 255 end
+    function getPlayerMoney(p) return p.cash end
+    function takePlayerMoney(p,n) p.cash=p.cash-n return true end
+    function getPedStat(p) return p.stat or 569 end
+    function setPedStat(p,_,s) p.stat=s return true end
+    function setElementHealth(p,h) p.health=math.min(h,getPedStat(p)*0.176) end
+    function getVehicleHandling() return {turnMass=1000} end
+    function getElementAngularVelocity() return 0,0,0 end
+    function setElementAngularVelocity(c) c.rocked=true end
+    function getVehicleName() return "Admiral" end
+    PedActivity={active=function() return false end}
+    PedVoice={emit=function(p,kind) p.line=kind end}
+    TrafficPassengers={requestExit=function(p) p.exitRequested=true end}
+    """)
+    load(lua, RUNTIME, ["traffic_collision_handling.lua", "ped_car_service.lua"])
+    lua.execute("""
+    local ped,car,player,walk
+    local function step(ms) now=now+ms timers[100]() end
+    local function begin(model)
+        now=now+12000
+        ped,car,player=element("ped"),element("vehicle"),element("player")
+        ped.x,ped.y=1.55,0.32
+        walk={originalModelId=31}
+        car.driver,car.syncer,player.vehicle,ped.syncer=player,player,car,player
+        car["npchlc_traffic:originalModel"]=model or 171
+        player.cash=500
+        function getElementsWithinRange(_,_,_,_,kind) return kind=="vehicle" and {car} or {player} end
+    end
+    local function board()
+        assert(PedCarService.update(ped,walk,now) and ped.line=="serviceOffer")
+        step(1000)
+        assert(not ped.vehicle)
+        step(1)
+        step(100)
+        assert(packets[#packets].name=="npchlc_traffic:boardPassenger")
+        car.passenger,ped.vehicle,ped.seat=ped,car,1
+        step(100)
+    end
+    local function floor(material)
+        local pkt=packets[#packets]
+        assert(pkt.name=="npchlc_traffic:serviceFloor")
+        client=element("player")
+        deliver("npchlc_traffic:serviceFloorResult",resourceRoot,ped,car,pkt[1][3],material)
+        client=player
+        deliver("npchlc_traffic:serviceFloorResult",resourceRoot,ped,car,pkt[1][3],material)
+        step(1)
+    end
+    begin()
+    walk.originalModelId=26
+    assert(not PedCarService.update(ped,walk,now))
+    walk.originalModelId=31
+    ped.x=5
+    assert(not PedCarService.update(ped,walk,now))
+    ped.x=1.55
+    car.passenger=element("ped")
+    assert(not PedCarService.update(ped,walk,now))
+    car.passenger=nil
+    player.cash=100
+    assert(PedCarService.update(ped,walk,now))
+    step(1001)
+    assert(not PedCarService.update(ped,walk,now))
+    begin()
+    board()
+    step(1000)
+    assert(player.cash==500)
+    step(1)
+    assert(player.cash==499 and walk.cash==1)
+    car.vx=0.01
+    step(2000)
+    assert(not car.rocked and player.cash==498)
+    car.vx=0
+    step(3001)
+    floor(89)
+    assert(not car.rocked)
+    step(3001)
+    floor(24)
+    assert(car.rocked and player.health==101 and ped.line=="serviceAction")
+    ped.vehicle,car.passenger=nil,nil
+    local money,saved=player.cash,walk.cash
+    deliver("onVehicleExit",car,ped,1)
+    deliver("onVehicleExit",car,ped,1)
+    assert(player.cash==money-100 and walk.cash==(saved+100)%65536)
+    begin(266)
+    car.variant=1
+    board()
+    step(3001)
+    floor(24)
+    step(1)
+    assert(player.health==125 and player.line=="serviceEnd" and ped.exitRequested)
+    local saved=walk.cash
+    ped.vehicle,car.passenger=nil,nil
+    deliver("onVehicleExit",car,ped,1)
+    assert(walk.cash==saved and player.stat==711)
+    player.health=85
+    step(100)
+    assert(player.stat==569)
+    -- 1000 then 970 on an accepted site. A move during the 251..999
+    -- interval reduces it to 250, so the next valid action ends the ride.
+    begin()
+    board()
+    step(3001)
+    floor(24)
+    assert(player.health==101)
+    step(1000)
+    assert(player.health==101)
+    step(1)
+    floor(24)
+    assert(player.health==102)
+    car.vx=0.01
+    step(971)
+    car.vx=0
+    step(3001)
+    floor(24)
+    assert(player.health==102 and player.line=="serviceEnd")
+    -- The independent money clock leaves one dollar intact and shortens the interval.
+    begin()
+    board()
+    player.cash=1
+    step(1001)
+    assert(player.cash==1 and not walk.cash)
+    step(2000)
+    floor(24)
+    assert(player.line=="serviceEnd" and player.health==100)
+    begin()
+    board()
+    car.driver=nil
+    step(3001)
+    step(1)
+    assert(ped.exitRequested)
+    """)
+    print("Original service models, approach, seat confirmation, two clocks, surface, health and money passed")
+
+
+def check_vehicle_pursuit():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    load(lua, RUNTIME, ["traffic_vehicle_pursuit.lua", "traffic_pursuit_exit_c.lua", "traffic_passengers_c.lua"])
+    lua.execute("""
+    local car, ped, target = element("vehicle"), element("ped"), element("player", 6)
+    local safe = true
+    TrafficWorld = {pursuitExit = function() return safe end}
+    local p = TrafficVehiclePursuit.new(target, 0)
+    assert(not p:update(car, target, 0) and not p:update(car, target, 3999))
+    assert(p:update(car, target, 4000) == "brake")
+    car.vy = 0.06
+    assert(not p:update(car, target, 4100))
+    car.vy = 0.05
+    assert(p:update(car, target, 4200) == "exit")
+    target.x = 8
+    assert(p:update(car, target, 4250) == "chase")
+    -- Two unsuccessful passes count before the 4s no-progress timeout.
+    p = TrafficVehiclePursuit.new(target, 0)
+    car.vx, car.vy, car.fx, car.fy = 0.1, 0, 1, 0
+    for n = 1, 2 do
+        car.x = 4
+        assert(not p:update(car, target, n*1000))
+        car.x = 14
+        local decision = p:update(car, target, n*1000+100)
+        if n == 2 then assert(decision == "brake") else assert(not decision) end
+    end
+    -- A wall, an absent probe response, or an unreachable level cannot
+    -- cause an exit or an endless series of new routes.
+    for _, mode in ipairs({"blocked", "timeout"}) do
+        p = TrafficVehiclePursuit.new(target, 0)
+        safe = false
+        if mode == "timeout" then safe = nil end
+        p:update(car, target, 0)
+        local decision = p:update(car, target, 4000)
+        if mode == "timeout" then assert(not decision) decision = p:update(car, target, 5250) end
+        assert(decision == "route")
+        assert(p:update(car, target, 14000) == "end")
+    end
+
+    local floorMode, clear, water = "flat", true, false
+    function isElementStreamedIn(e) return not e.out end
+    function isVehicleWheelOnGround(e) return not e.air end
+    function isPedOnGround(e) return not e.air end
+    function isElementInWater() return false end
+    function getElementBoundingBox() return -1,-2,-0.5,1,2,1 end
+    function getWaterLevel() return water end
+    function isLineOfSightClear() return clear end
+    function processLineOfSight(x,y,top)
+        if floorMode == "hole" and x > 2 then return false end
+        return true,x,y,0,nil,0,0, floorMode == "steep" and 0.1 or 1
+    end
+    car.x, car.fx, car.fy, car.vx = 0, 0, 1, 0
+    assert(canTrafficPursuerExit(car,target))
+    clear = false
+    assert(not canTrafficPursuerExit(car,target))
+    clear, water = true, 0.6
+    assert(not canTrafficPursuerExit(car,target))
+    water, floorMode = false, "hole"
+    assert(not canTrafficPursuerExit(car,target))
+    floorMode = "steep"
+    assert(not canTrafficPursuerExit(car,target))
+    floorMode = "flat"
+    target.z = 4
+    assert(not canTrafficPursuerExit(car,target))
+    target.z = 0
+    local occupied = element("vehicle", target.x)
+    target.vehicle = occupied
+    assert(canTrafficPursuerExit(car,target))
+    occupied.air = true
+    assert(not canTrafficPursuerExit(car,target))
+    occupied.air = false
+    ped.vehicle = car
+    function getPedOccupiedVehicleSeat() return 0 end
+    function isElementSyncer() return true end
+    function setPedExitVehicle(who) who.exits = (who.exits or 0)+1 end
+    local function request()
+        deliver("npchlc_traffic:occupantExit",resourceRoot,ped,car,0,target,occupied,8,0,0)
+    end
+    car.vx=0.06
+    request()
+    assert(not ped.exits)
+    car.vx=0
+    request()
+    assert(ped.exits == 1)
+    occupied.x=9.1
+    request()
+    assert(ped.exits == 1)
+    """)
+    print("Vehicle pursuit passes, braking, native exit gates and bounded rerouting passed")
+
+
 def check_road(disc=None, vcs_pc=None):
+    client = LuaRuntime()
+    client.execute(SERVER_MOCK)
+    load(client, RUNTIME, ["traffic_visibility.lua", "traffic_world_c.lua"])
+    client.execute("""
+    localPlayer = element("player")
+    local mine, victim = element("vehicle"), element("vehicle")
+    local impulses = {}
+    function isElementSyncer(e) return e.syncer == localPlayer end
+    function getPlayerPing() return 25 end
+    function triggerServerEvent(_, _, car, other, x, y, z, nx, ny, nz, impulse)
+        assert(car == victim and other == mine and nx == 1)
+        impulses[#impulses+1] = impulse
+    end
+    localPlayer.vehicle, mine.driver = mine, localPlayer
+    setElementData(victim, TrafficVisibility.profileKey, "road")
+    setElementData(victim, "npchlc_traffic:rail", true)
+    -- A hit from the local driver gives the other car its own impulse.
+    deliver("onClientVehicleCollision", mine, victim, 120, 0, 0,0,0,-1,0,0,22)
+    assert(#impulses == 1 and impulses[1] == 22)
+    victim.syncer = localPlayer
+    deliver("onClientVehicleCollision", victim, mine, 50, 0, 0,0,0,1,0,0,120)
+    assert(#impulses == 2 and impulses[2] == 50 and getElementData(victim,"npchlc_traffic:impactPending"))
+    deliver("onClientVehicleCollision", mine, victim, 120, 0, 0,0,0,-1,0,0,50)
+    assert(#impulses == 2)
+    setElementData(victim, "npchlc_traffic:rail", false)
+    now = now + 1000
+    deliver("onClientVehicleCollision", victim, mine, 80, 0, 0,0,0,1,0,0,120)
+    assert(#impulses == 3 and impulses[3] == 80)
+    timers[350]()
+    assert(not getElementData(victim,"npchlc_traffic:impactPending"))
+    local walker=element("ped")
+    setElementData(walker,TrafficVisibility.profileKey,"pedestrian")
+    function getVehicleHandling() return {mass=1400} end
+    function getElementBoundingBox() return -1,-2,-0.5,1,2,1 end
+    function isLineOfSightClear() return true end
+    local contacts={}
+    function triggerServerEvent(name,_,ped,car,force,vertical)
+        assert(name=="npchlc_traffic:pedRoadContact" and ped==walker and car==mine)
+        contacts[#contacts+1]=force
+    end
+    mine.vy=0.15
+    local function hit(nx,ny)
+        deliver("onClientVehicleCollision",mine,walker,30,0,0,0,0,nx,ny,0,0)
+    end
+    hit(0,-1)
+    assert(#contacts==1 and math.abs(contacts[1]-10)<0.00001)
+    hit(-1,0)
+    hit(0,1)
+    walker.vy=mine.vy
+    hit(0,-1)
+    assert(#contacts==1)
+    mine.vy,walker.vy=0.3,0
+    mine.driver=nil
+    hit(0,-1)
+    assert(#contacts==1)
+    walker.syncer=localPlayer
+    hit(0,-1)
+    assert(#contacts==2 and contacts[2]>12)
+    mine.driver=localPlayer
+    function isElementStreamedIn() return true end
+    function getElementsWithinRange(x,y,z,r,kind) return kind=="vehicle" and {mine} or {walker} end
+    function getPedControlState() return false end
+    function setElementVelocity(e,x,y,z) e.vx,e.vy,e.vz=x,y,z end
+    mine.vy=0.8
+    deliver("onClientPreRender",root)
+    mine.vy=0
+    now=now+16
+    hit(0,-1)
+    assert(#contacts==3 and contacts[3]>12)
+    deliver("onClientPreRender",root)
+    assert(mine.vy>0.65 and mine.vy<0.8)
+    -- Missing native callbacks: a moving bumper crosses the pedestrian.
+    walker.y=4
+    mine.vy=.8
+    now=now+60
+    deliver("onClientPreRender",root)
+    mine.y,mine.vy=3,0
+    now=now+60
+    deliver("onClientPreRender",root)
+    assert(#contacts==4 and contacts[4]>12)
+    now=now+16
+    deliver("onClientPreRender",root)
+    assert(mine.vy>0.65)
+    -- Parallel pass outside body width, different elevation, and wall occlusion.
+    for scenario=1,3 do
+        mine.y,mine.vy,walker.x,walker.z=0,.8,scenario==1 and 1.4 or 0,scenario==2 and 3 or 0
+        function isLineOfSightClear() return scenario~=3 end
+        now=now+60
+        deliver("onClientPreRender",root)
+        mine.y=3
+        now=now+60
+        deliver("onClientPreRender",root)
+        assert(#contacts==4)
+    end
+    -- A real hood contact may report an upward normal even at high forward speed.
+    walker.x,walker.z=0,0
+    deliver("onClientVehicleCollision",mine,walker,30,0,0,5,0,0,0,1,0)
+    assert(#contacts==5 and contacts[5]>12)
+
+    -- Exercise the network entry point on the client. A waterway above a
+    -- submerged terrain face must use its actual water surface.
+    local surfaces = {[2]=0, [3]=7, [4]=7.01}
+    function getWaterLevel(x) return surfaces[x] or false end
+    function processLineOfSight() return false end
+    function getScreenFromWorldPosition() return false end
+    function getCameraMatrix() return 0, 0, 0, 1, 0, 0 end
+    local reply
+    function triggerServerEvent(name, _, id, values)
+        assert(name=="npchlc_traffic:worldProbeResult" and id==44)
+        reply = values[1]
+    end
+    deliver("npchlc_traffic:worldProbe",resourceRoot,44,"road",
+        {{1,0,0,"boat"},{2,0,0,"boat"},{3,0,0,"boat"},{4,0,0,"boat"},{2,0,0}})
+    assert(not reply[1] and reply[2][1]==0 and reply[3][1]==7 and not reply[4] and not reply[5])
+
+    """)
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
     lua.execute('exports = {npc_hlc = {}, server_coldata = {}}')
     load(lua, HLC, ["traffic_rail.lua", "traffic_physics.lua"])
     load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_visibility_s.lua", "traffic_model_bindings.lua",
-                        "traffic_graph.lua", "traffic_world.lua", "traffic_road_population.lua", "traffic_road.lua"])
+                        "traffic_graph.lua", "traffic_world.lua", "traffic_road_population.lua",
+                        "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua",
+                        "ped_carjack.lua", "traffic_passengers.lua", "traffic_collision_handling.lua", "traffic_crash_decisions.lua",
+                        "traffic_vehicle_collision.lua", "traffic_vehicle_pursuit.lua", "ped_road_injury.lua", "traffic_road.lua"])
+    load(lua,VCS_VEHICLE,["controllers/vehicle.lua","controllers/boat.lua","controllers/jetski_control.lua","vehicle_s.lua","boarding.lua","boarding_s.lua"])
+    lua.execute('exports.vcs_vehicle={bindVcsVehicle=function(_,...) return bindVcsVehicle(...) end,transferWatercraftSeat=function(_,...) return transferWatercraftSeat(...) end}; function cancelEvent() cancelled=true end; local trigger=triggerEvent; function triggerEvent(...) cancelled=false; trigger(...); return not cancelled end')
     if disc:
         data, _ = assemble(disc, vcs_pc)
         lua.globals().streetGraph = lua.table_from({
@@ -1219,6 +2267,9 @@ def check_road(disc=None, vcs_pc=None):
     function setElementDimension(e, dimension) e.dimension = dimension end
     function getTime() return 12, 59 end
     function getVehicleType() return "Automobile" end
+    function isVehicleLocked() return false end
+    function getVehicleDoorState() return 0 end
+    function getVehicleDoorOpenRatio() return 0 end
     function isVehicleBlown() return false end
     function isElementInWater() return false end
     function setElementFrozen(e, value) e.frozen = value return true end
@@ -1228,6 +2279,11 @@ def check_road(disc=None, vcs_pc=None):
     function setElementAngularVelocity(e, x, y, z) assert(x == 0.01 and y == -0.03) e.spin = z end
     function getVehicleHandling(e) return {mass=e.mass or 1000, turnMass=2500} end
     function getVehicleOccupants(vehicle) return {[0]=vehicle.driver, vehicle.passenger} end
+    function getVehicleMaxPassengers(vehicle) return vehicle.capacity or 0 end
+    function getVehicleOccupant(vehicle, seat)
+        if seat == 0 or seat == nil then return vehicle.driver end
+        if seat == 1 then return vehicle.passenger end
+    end
     function setVehicleEngineState(vehicle, enabled) vehicle.engine = enabled end
     function destroyElement(e) e.destroyed = true end
     function killTimer() end
@@ -1240,8 +2296,9 @@ def check_road(disc=None, vcs_pc=None):
     function createPed(model, x, y, z)
         return {kind="ped", model=model, x=x, y=y, z=z}
     end
-    function warpPedIntoVehicle(ped, vehicle)
-        vehicle.driver = ped
+    function warpPedIntoVehicle(ped, vehicle, seat)
+        if seat == 0 then vehicle.driver = ped else vehicle.passenger = ped end
+        ped.vehicle = vehicle
         return true
     end
     exports.server_coldata.getModelBoundingBox = function() return -1, -2, -0.6, 1, 2, 0.8 end
@@ -1257,6 +2314,13 @@ def check_road(disc=None, vcs_pc=None):
     exports.npc_hlc.getNPCTrafficPhysicsRejoin = function(_, ...) return getNPCTrafficPhysicsRejoin(...) end
     function chooseTrafficCivilianVehicle() return 400, 171, 0 end
     TrafficAmbient = {getPedestrianModel=function(id) return id == 34 and 7 or id == 14 and 23 end}
+    TrafficAmbient.adoptDriver = function(ped, player, vehicle, model, road)
+        assert(not ped.adopted and PedAI.profile(ped) and not ped.destroyed)
+        assert(model == getElementData(ped, "npchlc_traffic:originalModel"))
+        ped.adopted, ped.attacker, ped.previousCar, ped.road = true, player, vehicle, road
+        TrafficVisibility.track(ped, "pedestrian")
+        return true
+    end
     TrafficPopulation = {sample=function(_, _, _, _, _, modelSlot)
         assert(modelSlot == nil, "clock minutes must not become a model slot")
         return {pedestrianGroupId=0, vehicleDensity=1}
@@ -1304,7 +2368,186 @@ def check_road(disc=None, vcs_pc=None):
     fast.vx, fast.y = 0.45, -y
     assert(TrafficRoad.laneEntryClear(laneGraph, laneEdge, 1, 0, nil, 10))
     created[1] = nil
-    TrafficRoad.start(graph, function(kind) assert(kind == "cars") return 1 end)
+    do
+        local water = {population={pedGroups={{34}}}, pedestrianDriverMasks={["34"]=2^9},
+            nodes={}, links={edge,nextEdge,approach}, roadTurnClosures={}}
+        for index, node in ipairs({from,to,nextNode,before}) do
+            local copy = {}
+            for key, value in pairs(node) do copy[key] = value end
+            copy.kind, copy.flags, copy.x = "boat", 0x100, ({65,15,2,95})[index]
+            water.nodes[index] = copy
+        end
+        -- The inclusion test compares d² with 1.5R²; interpolation uses 1.5R.
+        assert(math.abs(TrafficRoad.crossing(water.nodes[1],water.nodes[2],0,0,40)-0.1)<1e-8)
+        water.nodes[1].x = 48
+        assert(not TrafficRoad.crossing(water.nodes[1],water.nodes[2],0,0,40))
+        water.nodes[1].x = 65
+        water.nodes[3].y = 16
+        water.nodes[3].firstLink, water.nodes[3].linkCount = 3, 1
+        water.links[4] = {id=3,from=2,to=3,lanes=1,leftLanes=0,rightLanes=1,speedClass=0}
+        local savedType = getVehicleType
+        local previousRemove = removeEventHandler
+        function removeEventHandler(name, _, callback)
+            for i, registered in ipairs(events[name] or {}) do
+                if registered == callback then table.remove(events[name],i) return true end
+            end
+        end
+        function getVehicleType(v)
+            local model = type(v)=="table" and v.model or v
+            return (model==473 or model==493 or model==484) and "Boat" or "Automobile"
+        end
+        function getPlayerWantedLevel() return 0 end
+        function TrafficAmbient.chooseBoat(x,y,z,wanted,available)
+            assert(x==player.x and y==player.y and wanted==0 and not available)
+            return 473,233,9
+        end
+        local function waterOnly(kind) return kind=="boats" and 1 or 0 end
+        local function waterProbe(z)
+            local packet = assert(packets[#packets],"water path did not reach the production probe")
+            local values = {}
+            for i,point in ipairs(packet[1][3]) do
+                assert(point[4]=="boat")
+                values[i]={z,false}
+            end
+            client = packet.owner
+            deliver("npchlc_traffic:worldProbeResult",resourceRoot,packet[1][1],{values,0,1})
+            tick()
+            return packet[1][3][1][1]
+        end
+        local function startWater()
+            packets, created = {}, {}
+            TrafficRoad.start(water,waterOnly)
+            client = player
+            deliver("npchlc_traffic:worldProbeReady",resourceRoot)
+            tick()
+        end
+        startWater()
+        waterProbe(7.01)
+        assert(#created==0,"server accepted an out-of-range water surface")
+        TrafficRoad.stop()
+        startWater()
+        local obstruction = element("vehicle",packets[1][1][3][1][1]+31)
+        created[1] = obstruction
+        waterProbe(0)
+        assert(#created==1 and getTrafficRoadStatus().boats==0)
+        TrafficRoad.stop()
+        startWater()
+        waterProbe(0)
+        local boat = assert(created[1],"no boat was created from a valid water path")
+        local captain = assert(boat.driver)
+        assert(boat.model==473 and boat["npchlc_traffic:originalModel"]==233 and captain.task)
+        assert(getTrafficRoadStatus().boats==1 and getTrafficRoadStatus().boatSpawned==1)
+        local inbound = captain.task
+        deliver("npc_hlc:onNPCTaskDone",captain,inbound)
+        assert(captain.task~=inbound and captain.task[1]=="driveTrafficRail")
+        boat.syncer = spectator
+        players[2] = spectator
+        tick()
+        assert(boat.driver==captain and getTrafficRoadStatus().boats==1)
+        local rpc="vcs_vehicle:boardWatercraft"
+        client=spectator
+        function isControlEnabled() return true end
+        function getPedContactElement() return false end
+        function removePedFromVehicle(ped)
+            ped.vehicle.driver,ped.vehicle=nil,nil
+            return true
+        end
+        spectator.x,spectator.y,spectator.z = boat.x+5,boat.y,boat.z
+        deliver(rpc,resourceRoot,boat)
+        assert(boat.driver==captain)
+        spectator.x,spectator.dimension=boat.x,47
+        deliver(rpc,resourceRoot,boat)
+        assert(boat.driver==captain)
+        spectator.dimension=0
+        local warp=warpPedIntoVehicle
+        function warpPedIntoVehicle(ped,veh,index)
+            if ped==spectator then return false end
+            return warp(ped,veh,index)
+        end
+        deliver(rpc,resourceRoot,boat)
+        assert(boat.driver==captain and captain.vehicle==boat and captain.task)
+        warpPedIntoVehicle=warp
+        deliver(rpc,resourceRoot,boat)
+        assert(boat.driver==spectator and spectator.vehicle==boat and boat.syncer==spectator)
+        client=player
+        local previousX = player.x
+        player.x = boat.x
+        deliver(rpc,resourceRoot,boat)
+        assert(boat.driver==spectator and not player.vehicle)
+        player.x = previousX
+        assert(getTrafficRoadStatus().boats==0 and not TrafficRoad.isManagedPed(captain))
+        TrafficRoad.stop()
+        assert(not boat.destroyed)
+        spectator.vehicle,spectator.x,spectator.y,spectator.z = nil,0,0,0
+        players[2], created, packets = nil, {}, {}
+        -- Ordinary Jetmax boards through native MTA events. The displaced
+        -- captain can exit before or after the player's seat notification.
+        function TrafficAmbient.chooseBoat() return 493,258,12 end
+        water.pedestrianDriverMasks["34"]=2^12
+        for _, exitFirst in ipairs({true,false}) do
+            startWater()
+            waterProbe(0)
+            local jetmax=assert(created[1])
+            local skipper=assert(jetmax.driver)
+            assert(jetmax.model==493 and jetmax["npchlc_traffic:originalModel"]==258)
+            local claimant=element("player",jetmax.x)
+            claimant.y,claimant.z=jetmax.y,jetmax.z
+            -- A passenger must leave the skipper and the synchronizer alone.
+            deliver("onVehicleStartEnter",jetmax,claimant,1)
+            deliver("onVehicleEnter",jetmax,claimant,1)
+            assert(skipper.task and jetmax.syncer==player and getTrafficRoadStatus().boats==1)
+            deliver("onVehicleStartEnter",jetmax,claimant,0,skipper,0)
+            assert(not skipper.task)
+            claimant.x=jetmax.x+20
+            now=now+600
+            tick()
+            assert(skipper.task and getTrafficRoadStatus().boats==1, "abandoned boarding stranded skipper")
+            claimant.x=jetmax.x
+            deliver("onVehicleStartEnter",jetmax,claimant,0,skipper,0)
+            skipper.vehicle,jetmax.driver=nil,nil
+            if exitFirst then deliver("onVehicleExit",jetmax,skipper,0,claimant) end
+            jetmax.driver,claimant.vehicle=claimant,jetmax
+            deliver("onVehicleEnter",jetmax,claimant,0,skipper)
+            if not exitFirst then deliver("onVehicleExit",jetmax,skipper,0,claimant) end
+            assert(skipper.adopted and skipper.attacker==claimant and not skipper.task)
+            assert(not TrafficRoad.isManagedPed(skipper) and getTrafficRoadStatus().boats==0)
+            assert(jetmax.syncer==claimant and not jetmax.frozen and not jetmax["npchlc_traffic:rail"])
+            tick()
+            TrafficRoad.stop()
+            assert(not jetmax.destroyed and not skipper.destroyed and jetmax.driver==claimant)
+        end
+        -- Marquis has its helm over 5 m aft of the origin. The same RPC
+        -- handles swimming up to the cockpit and reboarding an empty hull.
+        function TrafficAmbient.chooseBoat() return 484,248,12 end
+        startWater()
+        waterProbe(0)
+        local yacht=assert(created[1])
+        local skipper=assert(yacht.driver)
+        local swimmer=element("player",yacht.x)
+        swimmer.y,swimmer.z=yacht.y-12,yacht.z
+        local wasInWater=isElementInWater
+        function isElementInWater(e) return e==swimmer end
+        client=swimmer
+        deliver(rpc,resourceRoot,yacht)
+        assert(yacht.driver==skipper)
+        swimmer.y=yacht.y-5
+        local impostor=element("vehicle",yacht.x)
+        impostor.model,impostor.y,impostor.z=484,yacht.y,yacht.z
+        impostor["npchlc_traffic:originalModel"]=248
+        deliver(rpc,resourceRoot,impostor)
+        assert(not swimmer.vehicle)
+        deliver(rpc,resourceRoot,yacht)
+        assert(yacht.driver==swimmer and yacht.syncer==swimmer and skipper.adopted)
+        removePedFromVehicle(swimmer)
+        deliver("onVehicleExit",yacht,swimmer,0)
+        deliver(rpc,resourceRoot,yacht)
+        assert(yacht.driver==swimmer and not yacht["npchlc_traffic:rail"])
+        TrafficRoad.stop()
+        isElementInWater=wasInWater
+        created,packets = {},{}
+        getVehicleType, removeEventHandler = savedType, previousRemove
+    end
+    TrafficRoad.start(graph, function(kind) assert(kind == "cars" or kind == "boats") return 1 end)
     client = player
     deliver("npchlc_traffic:worldProbeReady", resourceRoot)
     tick()
@@ -1382,9 +2625,27 @@ def check_road(disc=None, vcs_pc=None):
     lost.syncer = nil
     tick()
     assert(lost.destroyed and lost.driver.destroyed and getTrafficRoadStatus().despawnNoSyncer == 1)
-    vehicle.passenger = player
+    vehicle.driver, driver.vehicle = player, nil
+    deliver("onVehicleEnter", vehicle, player, 0, driver)
+    deliver("onVehicleExit", vehicle, driver, 0, player)
+    assert(driver.adopted and driver.attacker == player and driver.previousCar == vehicle and not driver.task)
+    assert(not TrafficRoad.resumeDriver(driver.road))
+    TrafficAmbient.releaseDriver = function(ped)
+        assert(ped == driver and ped.adopted)
+        ped.adopted = nil
+        return true
+    end
+    vehicle.driver, driver.vehicle = driver, vehicle
+    assert(TrafficRoad.resumeDriver(driver.road))
+    assert(driver.task[1]=="driveTrafficPhysics" and driver.task[3]==25 and driver.task[6]==2)
+    assert(driver.speed==0.5 and TrafficRoad.isManagedPed(driver))
+    for _,lane in ipairs(driver.task[5]) do assert(lane[9]==0) end
+    assert(not TrafficRoad.resumeDriver(driver.road))
+    vehicle.driver, driver.vehicle = player, nil
+    deliver("onVehicleEnter", vehicle, player, 0, driver)
+    assert(not TrafficRoad.isManagedPed(driver) and not getElementData(vehicle, "npchlc_traffic:rail"))
     TrafficRoad.stop()
-    assert(driver.destroyed and not vehicle.destroyed and created[2].destroyed and getTrafficRoadStatus().vehicles == 0)
+    assert(not driver.destroyed and not vehicle.destroyed and created[2].destroyed and getTrafficRoadStatus().vehicles == 0)
     assert(not getElementData(vehicle, TrafficVisibility.profileKey))
 
     copyRoad(0, 4, 8, 6)
@@ -1406,6 +2667,7 @@ def check_road(disc=None, vcs_pc=None):
     assert(TrafficWorld.reachable(player, second, 4, destinations) == nil and #packets == 2)
     deliver("npchlc_traffic:worldProbeResult", resourceRoot, packets[2][1][1], {5})
     deliver("npchlc_traffic:worldProbeResult", resourceRoot, packets[1][1][1], {})
+    now=now+6000 -- both replies arrived promptly, but the actor scheduler was busy
     assert(TrafficWorld.reachable(player, first, 4, destinations)[1] == nil)
     assert(TrafficWorld.reachable(player, second, 4, destinations)[1] == 5)
 
@@ -1414,6 +2676,362 @@ def check_road(disc=None, vcs_pc=None):
         for index in ipairs(packet[1][3]) do values[index] = {0, false} end
         client = packet.owner
         deliver("npchlc_traffic:worldProbeResult", resourceRoot, packet[1][1], {values, 0, 1})
+    end
+
+    do
+        local picker=chooseTrafficCivilianVehicle
+        local needed=true
+        chooseTrafficCivilianVehicle=function() return 416,227,0 end
+        PedServices={needsParkedVehicle=function() return needed end}
+        players,created,packets={player},{},{}
+        TrafficRoad.start(graph,function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local routeState={railRoute={{edge=edge,lane=0}},heightOffset=0.6}
+        local route=assert(TrafficRoad.serviceRoute(routeState,22,5,0))
+        assert(#route==1 and math.abs(route[1][1]-22)<0.01 and route[1][2]~=5)
+        assert(not TrafficRoad.serviceRoute(routeState,22,5,40))
+        local ambulance=assert(created[1])
+        local medic=ambulance.driver
+        ambulance.driver,medic.vehicle=nil,nil
+        deliver("onVehicleExit",ambulance,medic,0)
+        now=now+1000
+        tick()
+        assert(not ambulance.destroyed and medic.adopted)
+        needed=false
+        deliver("onVehicleStartEnter",ambulance,player,0)
+        now=now+1000
+        tick()
+        assert(not ambulance.destroyed)
+        ambulance.driver,player.vehicle=player,ambulance
+        deliver("onVehicleEnter",ambulance,player,0)
+        now=now+9000
+        tick()
+        assert(not ambulance.destroyed)
+        ambulance.driver,player.vehicle=nil,nil
+        deliver("onVehicleExit",ambulance,player,0)
+        now=now+1000
+        tick()
+        assert(ambulance.destroyed)
+        TrafficRoad.stop()
+        chooseTrafficCivilianVehicle,PedServices=picker,nil
+    end
+    do
+        players,created,packets={player},{},{}
+        TrafficRoad.start(graph,function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local wreck=assert(created[1])
+        deliver("onVehicleExplode",wreck)
+        local blown=isVehicleBlown
+        isVehicleBlown=function(e) return e==wreck end
+        tick()
+        assert(not wreck.destroyed)
+        timers[2600]()
+        assert(getElementData(wreck,TrafficVisibility.retiringKey) and not wreck.destroyed)
+        timers[400]()
+        assert(wreck.destroyed)
+        isVehicleBlown=blown
+        TrafficRoad.stop()
+    end
+    for _,seat in ipairs({0,1}) do
+        players,created,packets={player},{},{}
+        TrafficRoad.start(graph,function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local car=assert(created[1])
+        local driver=car.driver
+        if seat==0 then car.driver,driver.vehicle=player,nil else car.passenger=player end
+        player.vehicle=car
+        deliver("onVehicleEnter",car,player,seat)
+        if seat==1 then
+            car.driver,driver.vehicle=nil,nil
+            deliver("onVehicleExit",car,driver,0)
+        end
+        now=now+31000
+        tick()
+        assert(not car.destroyed)
+        car.driver,car.passenger,player.vehicle=nil,nil,nil
+        if seat==0 then deliver("onVehicleExit",car,player,seat) end
+        -- Passenger disconnect can remove the occupant without a seat-exit callback.
+        now=now+1000
+        tick()
+        assert(not car.destroyed)
+        now=now+30000
+        tick()
+        assert(car.destroyed)
+        TrafficRoad.stop()
+    end
+    do
+        local oldFlee, oldFight, originalRandom = PedAI.passengerThreat, PedAI.vehicleThreat, math.random
+        local oldVoice = PedVoice
+        PedAI.passengerThreat = function(ped, attacker) ped.fledFrom = attacker end
+        PedAI.vehicleThreat = function(ped, attacker) ped.fought = attacker end
+        PedVoice = {emit=function(ped, kind) ped.voice = kind end}
+        for scenario = 1, 3 do
+            players, created, packets = {player}, {}, {}
+            TrafficRoad.start(graph, function() return 1 end)
+            tick()
+            answerProbe(assert(packets[1]))
+            tick()
+            local car = assert(created[1])
+            local ped = car.driver
+            ped.syncer = player
+            local speed = ped.speed * 50
+            if scenario == 3 then PedAI.profile(ped).pedType = 7 end
+            -- Live MTA reports the ray's full reach past an impacted chassis.
+            local function fireAtCar()
+                TrafficRoad.noteGunfire(player, 22, car.x, car.y+26, car.z, car.x, car.y-5, car.z)
+            end
+            TrafficRoad.noteGunfire(player, 22, car.x, car.y+26, car.z, car.x, car.y+8, car.z)
+            TrafficRoad.noteGunfire(player, 22, car.x+8, car.y+26, car.z, car.x+8, car.y-5, car.z)
+            tick()
+            assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
+            client = spectator
+            deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+            deliver("onVehicleDamage", car, 8)
+            tick()
+            assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
+            client = player
+            deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+            tick()
+            assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
+            fireAtCar()
+            if scenario == 2 then
+                -- Report and accepted bullet can precede server health sync.
+                now = now + 1250
+                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+                fireAtCar()
+                tick()
+                assert(ped.task[1] == "driveTrafficRail" and not ped.voice)
+                deliver("onVehicleDamage", car, 8)
+            else
+                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+            end
+            math.random = function(lower) return lower or (scenario == 2 and 0.1 or 0.9) end
+            tick()
+            if scenario == 1 then
+                assert(ped.task[1] == "driveTrafficPhysics" and ped.speed*50 == math.floor(speed*1.5))
+                deliver("npchlc_traffic:vehicleGunHit", resourceRoot, car, player, 22)
+                deliver("onVehicleDamage", car, 8)
+                tick()
+                assert(ped.speed*50 == math.floor(speed*1.5))
+            else
+                assert(not ped.task and (scenario == 3 or ped.voice == "fear"))
+                tick()
+                local packet = packets[#packets]
+                assert(packet.name == "npchlc_traffic:occupantExit" and packet[1][1] == ped and packet[1][3] == 0)
+                car.driver, ped.vehicle = nil, nil
+                deliver("onVehicleExit", car, ped, 0)
+                assert(ped.adopted and not ped.destroyed and not car.destroyed)
+                assert((scenario == 2 and ped.fledFrom == player) or (scenario == 3 and ped.fought == player))
+            end
+            math.random = originalRandom
+            TrafficRoad.stop()
+        end
+        PedAI.passengerThreat, PedAI.vehicleThreat, PedVoice = oldFlee, oldFight, oldVoice
+    end
+
+    do
+        local oldVoice, oldRandom, oldPicker = PedVoice, math.random, chooseTrafficCivilianVehicle
+        local oldRage = PedAI.roadRage
+        local originalType, originalJack = getVehicleType,PedAI.carjacked
+        local falls, thefts, fallenRoad = 0,0,nil
+        function removePedFromVehicle(ped)
+            local bike=ped.vehicle
+            bike.driver,ped.vehicle=nil,nil
+            deliver("onVehicleExit",bike,ped,0)
+            return true
+        end
+        TrafficAmbient.bikeFall=function(ped,impact,launch,road)
+            assert(ped.adopted and launch and road.driver==ped and impact.score>75)
+            falls,fallenRoad=falls+1,road
+        end
+        PedAI.carjacked=function(ped,thief,bike,road)
+            assert(ped.adopted and road.driver==ped and thief==player and bike==road.vehicle)
+            thefts=thefts+1
+        end
+        getVehicleType=function() return "Bike" end
+        for scenario=1,2 do
+            players,created,packets,player.vehicle={player},{},{},nil
+            TrafficRoad.start(graph,function() return 1 end)
+            tick()
+            answerProbe(assert(packets[1]))
+            tick()
+            local bike=assert(created[1])
+            local ped=bike.driver
+            if scenario==1 then
+                removePedFromVehicle(ped)
+                bike.driver,player.vehicle=player,bike
+                deliver("onVehicleEnter",bike,player,0)
+                deliver("onVehicleEnter",bike,player,0)
+                assert(thefts==1)
+            else
+                bike.syncer,client=player,player
+                local collider=element("vehicle",bike.x)
+                collider.y,collider.z,collider.vy=bike.y-2,bike.z,0.5
+                for _,impulse in ipairs({10,300,300}) do
+                    deliver("npchlc_traffic:railImpact",resourceRoot,bike,collider,bike.x,bike.y,bike.z,0,1,0,impulse)
+                    if impulse==10 then assert(bike.driver==ped and falls==0) end
+                end
+                assert(not bike.driver and falls==1 and thefts==1)
+                local releaseDriver=TrafficAmbient.releaseDriver
+                TrafficAmbient.releaseDriver=function(p) p.adopted=nil return true end
+                bike.driver,ped.vehicle=ped,bike
+                assert(TrafficRoad.resumeDriver(fallenRoad))
+                local ride=getElementData(bike,"npchlc_traffic:ride")
+                assert(ride==1)
+                now=now+10000
+                deliver("npchlc_traffic:railImpact",resourceRoot,bike,collider,bike.x,bike.y,bike.z,0,1,0,300,0)
+                assert(bike.driver==ped and falls==1 and TrafficRoad.isDriving(ped,bike))
+                deliver("npchlc_traffic:railImpact",resourceRoot,bike,collider,bike.x,bike.y,bike.z,0,1,0,300,ride)
+                assert(not bike.driver and falls==2)
+                TrafficAmbient.releaseDriver=releaseDriver
+            end
+            TrafficRoad.stop()
+        end
+        TrafficAmbient.bikeFall=nil
+        getVehicleType,PedAI.carjacked=originalType,originalJack
+        assert(TrafficVehicleCollision.damage(25, 1, "Bike") == 0)
+        assert(TrafficVehicleCollision.damage(30, 1, "Bike") == 5)
+        assert(TrafficVehicleCollision.damage(31, 1, "Bike") == 6)
+        assert(TrafficVehicleCollision.damage(31, 1, "Automobile") < 5)
+        PedVoice = {emit = function(ped, kind) assert(kind == "crash") ped.calls = (ped.calls or 0) + 1 end}
+        local typeFor = getVehicleType
+        local bike, rider, other = element("vehicle"), element("ped"), element("vehicle")
+        bike.driver, other.driver = rider, element("ped")
+        local bikeState = {vehicle=bike, driver=rider, originalVehicle=171}
+        getVehicleType = function() return "Bike" end
+        assert(not TrafficVehicleCollision.driverReaction(bikeState, other, 32, now, nil, 0,1,0))
+        assert(TrafficVehicleCollision.driverReaction(bikeState, other, 33, now, nil, 0,1,0) and rider.calls == 1)
+        getVehicleType = typeFor
+        assert(not TrafficVehicleCollision.driverReaction(bikeState, other, 33, now+1000, nil, 0,1,0))
+        PedAI.roadRage = function(ped, target, road)
+            assert(ped.adopted and target == player and road.driver == ped)
+            ped.angry = true
+        end
+        function getPlayerWantedLevel(p) return p.stars or 0 end
+        function setPlayerWanted(p, stars, reason) assert(reason == "policeCollision") p.stars = stars end
+        local function crashScenario(roll, expect, police, nativeExit)
+            chooseTrafficCivilianVehicle = function() return 400, 171, police and 13 or 0 end
+            players, created, packets, player.vehicle = {player}, {}, {}, nil
+            TrafficRoad.start(graph, function() return 1 end)
+            tick()
+            answerProbe(assert(packets[1]))
+            tick()
+            local car = assert(created[1])
+            local ped, collider = car.driver, element("vehicle", car.x)
+            ped.syncer, collider.driver, player.vehicle = player, player, collider
+            collider.y, collider.z, collider.vy = car.y-2, car.z, 0.4
+            local profile = PedAI.profile(ped)
+            profile.name = "STAT_STREET_GUY"
+            client = player
+            -- At or below the calculated-damage boundary there is only a native handoff.
+            local function report(impulse)
+                deliver("npchlc_traffic:railImpact", resourceRoot, car, collider, car.x, car.y-1, car.z, 0,1,0,impulse)
+            end
+            report(25)
+            assert(ped.task[1] == "driveTrafficPhysics" and not ped.calls)
+            report(26)
+            assert(not ped.calls)
+            local vy = car.vy
+            report(100)
+            report(100)
+            assert(ped.calls == 1 and car.vy == vy)
+            tick()
+            assert(ped.task[1] == "driveTrafficPhysics")
+            math.random = function(n) return n or roll end
+            deliver("onVehicleDamage", car, 5)
+            tick()
+            local status = getTrafficRoadStatus()
+            if police then
+                assert(player.stars == 1 and not status.crashRoadRage and ped.task[1] == "driveTrafficPhysics")
+            else
+                assert(status[expect] == 1, expect)
+                if expect == "crashRoadRage" then
+                    assert(ped.task[1] == "stopVehicle")
+                    tick()
+                    assert(packets[#packets].name ~= "npchlc_traffic:occupantExit")
+                    car.vx, car.vy, car.vz = 0, 0, 0
+                    tick()
+                    assert(packets[#packets].name == "npchlc_traffic:occupantExit")
+                    car.driver, ped.vehicle = nil, nil
+                    deliver("onVehicleExit", car, ped, 0)
+                    assert(ped.angry and ped.adopted and not car.destroyed)
+                elseif expect == "crashPursuit" then
+                    assert(ped.task[1] == "driveAtPed" and ped.task[2] == player)
+                    if nativeExit then
+                        car.vx,car.vy,car.vz,collider.vy = 0,0,0,0
+                        tick()
+                        now = now+4000
+                        tick()
+                        local function answerExit()
+                            for n = #packets, 1, -1 do
+                                local packet = packets[n]
+                                if packet.name == "npchlc_traffic:worldProbe" and packet[1][2] == "pursuitExit" then
+                                    client = packet.owner
+                                    deliver("npchlc_traffic:worldProbeResult",resourceRoot,packet[1][1],true)
+                                    return
+                                end
+                            end
+                            error("missing pursuit walkability check")
+                        end
+                        answerExit()
+                        tick()
+                        assert(ped.task[1] == "stopVehicle")
+                        tick()
+                        answerExit()
+                        tick()
+                        local packet = packets[#packets]
+                        assert(packet.name == "npchlc_traffic:occupantExit" and packet[1][4] == player)
+                        local oldFight = PedAI.vehicleThreat
+                        PedAI.vehicleThreat = function(driver,target,road)
+                            assert(driver == ped and target == player and road.vehicle == car and driver.adopted)
+                            driver.confronted = true
+                        end
+                        car.driver,ped.vehicle = nil,nil
+                        deliver("onVehicleExit",car,ped,0)
+                        assert(ped.confronted and not car.destroyed)
+                        PedAI.vehicleThreat = oldFight
+                    else
+                        player.health = 0
+                        tick()
+                        assert(ped.task[1] == "driveTrafficPhysics")
+                        player.health = 100
+                        -- Release returns a script-owned road driver to a fresh lane task.
+                        PedAI.brain(ped).scriptOwner = true
+                        TrafficRoad.driverScriptChanged(ped,true)
+                        ped.task = {"scriptTask"}
+                        tick()
+                        assert(ped.task[1] == "scriptTask")
+                        PedAI.brain(ped).scriptOwner = nil
+                        TrafficRoad.driverScriptChanged(ped,false)
+                        assert(ped.task[1] == "driveTrafficPhysics")
+                    end
+                elseif expect == "crashFlee" then
+                    assert(ped.task[3] == 40 and ped.task[6] == 2)
+                else
+                    assert(ped.task[1] == "driveTrafficPhysics" and ped.task[3] == 11)
+                end
+            end
+            TrafficRoad.stop()
+            math.random = oldRandom
+        end
+        crashScenario(0.01, "crashContinue")
+        crashScenario(0.49, "crashFlee")
+        crashScenario(0.72, "crashRoadRage")
+        crashScenario(0.99, "crashPursuit")
+        crashScenario(0.99, "crashPursuit", false, true)
+        graph.pedestrianDriverMasks['34'] = 8193
+        crashScenario(0.72, nil, true)
+        graph.pedestrianDriverMasks['34'] = 1
+        assert(TrafficVehicleCollision.chooseResponse({name="STAT_SKATER"}, 0.99) == 726)
+        assert(TrafficVehicleCollision.chooseResponse({name="STAT_TOUGH_GUY"}, 0.25) == 1031)
+        player.vehicle = nil
+        PedVoice, PedAI.roadRage, chooseTrafficCivilianVehicle = oldVoice, oldRage, oldPicker
     end
 
     copyRoad(174, 0, 12, 9)
@@ -1453,6 +3071,66 @@ def check_road(disc=None, vcs_pc=None):
     for _ = 1, 53 do tick() end
     assert(replacement.syncer == spectator and getTrafficRoadStatus().edgeSyncerHandoffs == 1)
     assert(replacement.driver.task and not getElementData(replacement, TrafficVisibility.retiringKey))
+    do
+        local ped = edgeCar.driver
+        local oldRetire = assert(timers[TrafficVisibility.fadeOutMs + 50])
+        deliver("onVehicleStartEnter", edgeCar, spectator, 0, ped)
+        assert(not getElementData(edgeCar, TrafficVisibility.retiringKey) and not ped.task)
+        oldRetire()
+        assert(not edgeCar.destroyed and not ped.destroyed and TrafficRoad.isManagedPed(ped))
+        edgeCar.driver, ped.vehicle = nil, nil
+        deliver("onVehicleExit", edgeCar, ped, 0, spectator)
+        tick()
+        assert(ped.adopted and ped.attacker == spectator and not edgeCar.destroyed)
+        edgeCar.driver = spectator
+        deliver("onVehicleEnter", edgeCar, spectator, 0, ped)
+        oldRetire()
+        assert(not ped.destroyed and not edgeCar.destroyed)
+
+        local originalTask = replacement.driver.task
+        deliver("onVehicleStartEnter", replacement, spectator, 0, replacement.driver)
+        assert(not replacement.driver.task)
+        for i=1,11 do tick() end
+        assert(not replacement.driver.task) -- the thief is still beside the door
+        spectator.x = replacement.x + 9
+        tick()
+        assert(replacement.driver.task == originalTask and not replacement.driver.adopted)
+        spectator.x = replacement.x
+        replacement.passenger = spectator
+        deliver("onVehicleEnter", replacement, spectator, 1)
+        assert(TrafficRoad.isManagedPed(replacement.driver))
+
+        local base = replacement.driver
+        replacement.capacity = 1
+        local roll = math.random
+        math.random = function(low) return low or 0.12499 end
+        assert(TrafficPassengers.count(3,171,math.random) == 3)
+        assert(TrafficPassengers.count(3,182,math.random) == 1)
+        assert(TrafficPassengers.count(3,230,math.random) == 0)
+        assert(TrafficPassengers.count(3,174,math.random) == 0)
+        assert(TrafficPassengers.count(3,175,math.random) == 1)
+        assert(TrafficPassengers.count(1,171,math.random) == 1)
+        assert(TrafficPassengers.count(3,171,function() return 0.125 end) == 0)
+        replacement.passenger = nil
+        TrafficPassengers.spawn({vehicle=replacement,originalDriver=34,dimension=0},
+            {edition="SLUS-21590 USA v1.00",fallbackDriverModelId=14},{34},0,171)
+        math.random = roll
+        local passenger = assert(replacement.passenger)
+        passenger.syncer = spectator
+        assert(TrafficRoad.isManagedPed(passenger) and PedAI.profile(passenger))
+        replacement.driver, base.vehicle = player, nil
+        deliver("onVehicleEnter",replacement,player,0,base)
+        now = now + 10000
+        TrafficPassengers.update(now)
+        assert(packets[#packets].name == "npchlc_traffic:occupantExit")
+        local observed
+        local oldThreat = PedAI.passengerThreat
+        PedAI.passengerThreat = function(ped, attacker) observed = ped == passenger and attacker == player end
+        replacement.passenger, passenger.vehicle = nil, nil
+        deliver("onVehicleExit",replacement,passenger,1,nil)
+        PedAI.passengerThreat = oldThreat
+        assert(observed and passenger.adopted and not passenger.destroyed)
+    end
     TrafficRoad.stop()
     player.x, signal = 0, 2
 
@@ -1470,7 +3148,8 @@ def check_road(disc=None, vcs_pc=None):
     signal = 0
     for _ = 1, 125 do tick() end
     assert(getTrafficRoadStatus().despawnRailStalled == 1 and getTrafficRoadStatus().vehicles == 0)
-    wedged.destroyed = true -- native fade completes before replacement admission
+    timers[TrafficVisibility.fadeOutMs + 50]()
+    assert(wedged.destroyed and wedged.driver.destroyed)
     answerProbe(packets[#packets])
     tick()
     assert(getTrafficRoadStatus().vehicles == 1 and #created == 2)
@@ -1731,7 +3410,82 @@ def check_road(disc=None, vcs_pc=None):
         TrafficRoad.stop()
     end
     """)
-    print("Collision task handoff and road spawning passed for 100 co-located and 100 distributed observers")
+    load(lua, RUNTIME, ["traffic_passengers_c.lua"])
+    lua.execute("""
+    local ped, vehicle = element("ped"), element("vehicle")
+    local attempts = 0
+    function isElementSyncer(npc) return npc.localOwner end
+    function getPedOccupiedVehicleSeat(npc) return npc.seat end
+    function setPedExitVehicle(npc) assert(npc == ped) attempts = attempts + 1 end
+    ped.vehicle, ped.seat = vehicle, 1
+    deliver("npchlc_traffic:occupantExit", resourceRoot, ped, vehicle, 1)
+    ped.localOwner = true
+    deliver("npchlc_traffic:occupantExit", resourceRoot, ped, vehicle, 1)
+    ped.seat = 0
+    deliver("npchlc_traffic:occupantExit", resourceRoot, ped, vehicle, 1)
+    ped.vehicle, ped.seat = nil, nil
+    deliver("npchlc_traffic:occupantExit", resourceRoot, ped, vehicle, 1)
+    assert(attempts == 1)
+    """)
+    print("Boat admission, water surfaces, route continuation and takeover passed")
+    print("Carjack handoff, passenger exit ownership, collision tasks and road spawning passed for 100 observers")
+
+
+def check_road_injuries():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    load(lua, RUNTIME, ["ped_road_injury.lua", "ped_ai_profiles.lua"])
+    lua.execute("""
+    local injury=PedRoadInjury
+    local matrix=getElementMatrix(element("vehicle"))
+    assert(injury.bikeScore(170,10,800,matrix,0,1,0)==0)
+    assert(injury.bikeScore(170,125,800,matrix,0,1,0)==75)
+    assert(injury.bikeScore(170,126,800,matrix,0,1,0)>75)
+    assert(injury.bikeScore(205,126,800,matrix,0,1,0)<75)
+    assert(injury.pedDamage(3,-1)==0 and injury.pedDamage(3.1,-1)==30)
+    assert(injury.pedDamage(6,0)==0 and injury.pedDamage(6.1,0)==30)
+    assert(injury.pedDamage(12,0)==30 and injury.pedDamage(12.1,0)==1000)
+    assert(PedAIStats[13].damageScale==1 and PedAIStats[17].damageScale==2.5)
+    local ped,bike,driver=element("ped"),element("vehicle"),element("player")
+    local walk={}
+    local reactions=0
+    PedAI={brain=function() return {health=100,sampled=now} end,
+        isScriptControlled=function() return false end,
+        afterRoadFall=function(p,who) assert(p==ped and who==driver); reactions=reactions+1 end}
+    TrafficAmbient={suspend=function() end}
+    PedVehicleEvasion={cancel=function() end}
+    TrafficRoad={contactVelocity=getElementVelocity}
+    function setPedAnimation(p,block,clip) p.clip=clip end
+    function isPedOnGround(p) return p.grounded end
+    function setElementVelocity(p,x,y,z) p.vx,p.vy,p.vz=x,y,z end
+    function getVehicleOccupant() return driver end
+    function killPed(p,attacker,weapon) assert(attacker==driver and weapon==50); p.health=0 end
+    function getElementModel() return 400 end
+    function getElementRotation() return 0,0,0 end
+    exports={server_coldata={getModelBoundingBox=function() return -1,-2,-0.5,1,2,1 end}}
+    local hit={score=100,impulse=200,mass=800,nx=0,ny=1,vx=0.1,vy=0.25,vz=0,attacker=driver}
+    injury.startBike(ped,walk,hit,true,{vehicle=bike})
+    assert(ped.health==95 and math.abs(ped.vy-0.1)<0.0001 and ped.vz>=8/70 and ped.vz<=15/70 and ped.clip=="BIKE_fall_off")
+    injury.startBike(ped,walk,hit,true)
+    assert(ped.health==95)
+    injury.update(ped,walk,now+3000)
+    assert(reactions==0 and ped.clip=="BIKE_fall_off")
+    ped.grounded=true
+    injury.update(ped,walk,now+3050)
+    assert(ped.clip=="getup_front")
+    injury.update(ped,walk,now+3950)
+    assert(reactions==1 and not walk.roadFall)
+    bike.vy,ped.health=0.25,85
+    injury.strike(ped,walk,bike,9,0)
+    assert(ped.vy>0.18 and ped.clip=="FALL_front")
+    timers[120]()
+    assert(ped.health==70)
+    injury.strike(ped,walk,bike,9,0)
+    assert(ped.health==70)
+    injury.strike(ped,walk,bike,15,0)
+    assert(isPedDead(ped))
+    """)
+    print("Rider ejection, grounded recovery, pedestrian momentum and damage boundaries passed")
 
 
 def check_pedestrian_avoidance():
@@ -1745,6 +3499,7 @@ def check_pedestrian_avoidance():
     a.z, b.z = 0.7, 0.7
     function isElementStreamedIn(e) return not e.virtual end
     local vehicles = {}
+    local pedestrians = {a,b}
     function getElementsWithinRange(_, _, _, radius, kind, interior, dimension)
         assert(interior == 0 and dimension == 0)
         if kind == "vehicle" then
@@ -1752,7 +3507,7 @@ def check_pedestrian_avoidance():
             return vehicles
         end
         assert(radius == 3.2)
-        return kind == "ped" and {a,b} or {}
+        return kind == "ped" and pedestrians or {}
     end
     local wall, drop
     function processLineOfSight(x, y)
@@ -1804,6 +3559,72 @@ def check_pedestrian_avoidance():
     b.z, b.fx, b.vx = 0.7, 1, 0.025
     walkNPCTrafficAroundPeds(a, forward, {})
     assert(a.target[1] == 8 and a.target[2] == 0)
+
+    -- An actor excluded from early passing must still clear physical contact.
+    setElementData(a,"npchlc_traffic:passing",{16,0})
+    b.x, b.fx, b.vx = 1.4,-1,0
+    walkNPCTrafficAroundPeds(a, forward, {})
+    assert(a.target[1] == 8)
+    b.x = 0.5
+    local bystander = element("ped",0.3)
+    bystander.y, bystander.z = 0.85,0.7
+    pedestrians[3] = bystander
+    local crowd = {}
+    walkNPCTrafficFormation(a,8,0,crowd)
+    assert(a.target and a.target[2] < -0.7)
+    now = now + 16
+    walkNPCTrafficFormation(a,8.02,0,crowd)
+    assert(crowd.detour and a.target[2] < -0.7)
+    -- Advance at walking speed through the chosen gap. The two stationary
+    -- actors occupy the original lane and its preferred passing side.
+    for frame=1,160 do
+        now = now + 50
+        walkNPCTrafficAroundPeds(a, forward, crowd)
+        if a.target then
+            local dx, dy = a.target[1]-a.x, a.target[2]-a.y
+            local step = math.min(1, 0.0625/math.sqrt(dx*dx+dy*dy))
+            a.x, a.y = a.x+step*dx, a.y+step*dy
+        end
+        assert((a.x-bystander.x)^2+(a.y-bystander.y)^2 >= 0.4^2)
+    end
+    assert(a.x > 7.9 and math.abs(a.y) < 0.05)
+    pedestrians[3] = nil
+    a.x,a.y = 0,0
+
+    local group, routes, states = {}, {}, {}
+    for i=1,4 do
+        local dir = i%2==1 and 1 or -1
+        local walker = element("ped", -dir*(i<3 and 1.5 or 2.6))
+        walker.y,walker.z,walker.fx,walker.fy = 0,0.7,dir,0
+        setElementData(walker,"npchlc_traffic:passing",{16,16})
+        group[i],routes[i],states[i] = walker,{"walkTrafficToPoint",dir*(i<3 and 8 or 6),0,0.7,0.2},{}
+    end
+    pedestrians = group
+    for frame=1,260 do
+        now = now + 50
+        for i,walker in ipairs(group) do walkNPCTrafficAroundPeds(walker,routes[i],states[i]) end
+        for _,walker in ipairs(group) do
+            walker.vx,walker.vy=0,0
+            if walker.target then
+                local dx,dy=walker.target[1]-walker.x,walker.target[2]-walker.y
+                local length=math.sqrt(dx*dx+dy*dy)
+                if length>0.001 then
+                    walker.fx,walker.fy=dx/length,dy/length
+                    local sx,sy=walker.fx*math.min(length,0.0625),walker.fy*math.min(length,0.0625)
+                    local clear=true
+                    for _,peer in ipairs(group) do
+                        if peer~=walker and (walker.x+sx-peer.x)^2+(walker.y+sy-peer.y)^2<0.45^2 then clear=false end
+                    end
+                    if clear then
+                        walker.x,walker.y=walker.x+sx,walker.y+sy
+                        walker.vx,walker.vy=sx/2.5,sy/2.5
+                    end
+                end
+            end
+        end
+    end
+    for i,walker in ipairs(group) do assert(math.abs(walker.x-routes[i][2])<0.2) end
+    pedestrians = {a,b}
 
     b.virtual = true
     local car = element("vehicle", 4)
@@ -1908,6 +3729,216 @@ def check_pedestrian_jaw(assets):
     print("All 75 mounted pedestrian rigs supply jaw pivots and preserve the facial rotation delta")
 
 
+def check_jetski_controller():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    load(lua, VCS_VEHICLE, ["controllers/vehicle.lua", "controllers/boat.lua",
+                            "controllers/jetski_control.lua", "controllers/jetski_control_c.lua", "controllers/jetski_fall.lua"])
+    lua.execute("""
+    localPlayer=element("player")
+    local hull=element("vehicle")
+    hull["vcs_vehicle:originalModel"]=233
+    hull.vx,hull.vy,hull.vz=0.3,0.4,0.01
+    local control=CJetSki:New(hull)
+    control:ProcessControlInputs(0,1,-1,0,false,1)
+    assert(math.abs(control.throttle+0.03)<0.00001 and math.abs(control.steer+0.2)<0.00001)
+    control:ProcessControlInputs(1,1,0,0,false,1)
+    assert(control.throttle==0 and control.brake==0)
+    hull.driver,localPlayer.vehicle=localPlayer,hull
+    local bar,spinX,spinY
+    local updates=0
+    local water, engine=0.3,true
+    function getWaterLevel() return water end
+    function getVehicleEngineState() return engine end
+    function getVehicleHandling() return {engineAcceleration=0} end
+    function getGravity() return 0.008 end
+    function getVehicleController(v) return v.driver end
+    function getPedControlState() return false end
+    function getVehicleComponents() return {handlebars=true} end
+    function getVehicleComponentRotation() return 2,3,4 end
+    function setVehicleComponentRotation(_,_,x,y,z) assert(x==2 and y==3) bar=z end
+    function getAnalogControlState(name) return (name=="vehicle_left" or name=="steer_forward") and 1 or 0 end
+    function isControlEnabled() return true end
+    function setVehicleHandling(v,k,values) assert(v==hull and k=="centerOfMass"); centre=values end
+    function isElementInWater() return true end
+    function getElementAngularVelocity() return spinX or 0,spinY or 0,0.05 end
+    function setElementAngularVelocity(_,x,y,z) spinX,spinY=x,y; assert(math.abs(z)<1) end
+    function setElementVelocity(v,x,y,z) v.vx,v.vy,v.vz=x,y,z; updates=(updates or 0)+1 end
+    deliver("onClientPreRender",root,20)
+    assert(spinX and spinY and math.abs(spinX)<1 and math.abs(spinY)<1)
+    assert(math.abs(bar-5.6)<0.0001 and hull.vx>0 and hull.vx<0.3 and hull.vy>0)
+    local m = getElementMatrix(hull)
+    control.throttle,control.steer=1,0
+    hull.vx,hull.vy,hull.vz=0,0,0
+    water=1
+    control:ProcessThrust(m,1)
+    assert(hull.vx==0 and math.abs(hull.vy-0.01024)<0.00001 and hull.vz==0)
+    local afterThrust=updates
+    water=-5
+    control:ProcessThrust(m,1)
+    water=1
+    m[3][3]=-1
+    control:ProcessThrust(m,1)
+    m[3][3]=1
+    engine=false
+    control:ProcessThrust(m,1)
+    assert(updates==afterThrust)
+    hull.driver=element("ped")
+    deliver("onClientPreRender",root,20)
+    assert(bar==4 and updates==afterThrust)
+    deliver("onClientPreRender",root,20)
+    assert(updates==afterThrust)
+    local banked={{0.8,0,0.6},{0,1,0},{-0.6,0,0.8},{0,0,0}}
+    hull.vx,hull.vy,hull.vz=0.25,0.4,0
+    control.immersion,control.nativeImmersion=0.3,0.3
+    control:ApplyWaterResistance(banked,1)
+    assert(hull.vz==0 and hull.vx<0.25, "banked sideslip injected a second heave impulse")
+    local matrix = getElementMatrix(hull)
+    assert(CJetSki.ImpactScore(320,1000,matrix,0,1,0,0.65) < 100)
+    assert(CJetSki.ImpactScore(321,1000,matrix,0,1,0,0.65) > 100)
+    assert(CJetSki.ImpactScore(321,1000,matrix,1,0,0,0.65) < 100)
+    """)
+    print("Standalone CJetSki player balance, handlebar, hull resistance and driver handoff passed")
+
+
+def check_jetski_rider():
+    lua = LuaRuntime()
+    lua.execute(SERVER_MOCK)
+    lua.globals().riderClips = lua.table_from(json.loads((VCS_VEHICLE/"data/jetski_rider.json").read_bytes()), recursive=True)
+    lua.execute("""
+    localPlayer=element("player")
+    ski=element("vehicle")
+    ski["npchlc_traffic:originalModel"]=233
+    function fileOpen() return {} end
+    function fileGetSize() return 1 end
+    function fileRead() return "" end
+    function fileClose() end
+    function fromJSON() return riderClips end
+    function getElementsByType() return {ski} end
+    function getVehicleOccupants(v) return v.seats end
+    function getVehicleComponents() return {} end
+    function isElementOnScreen() return true end
+    function isElementStreamedIn() return true end
+    function getPedAnimation(p) return p.block end
+    function setPedAnimation(p) p.block=nil end
+    function getElementAngularVelocity() return 0,0,0 end
+    function getPedAnalogControlState(p,control) return p[control] or 0 end
+    function bindKey(name,state,fn) assert(name=="enter_exit" and state=="down") boardKey=fn end
+    function addCommandHandler(name,fn) assert(name=="boardjetski" or name=="boardboat") boardCommand=fn end
+    function isControlEnabled() return true end
+    function isChatBoxInputActive() return false end
+    function isConsoleActive() return false end
+    function isMTAWindowActive() return false end
+    function isVehicleLocked() return false end
+    function isVehicleBlown() return false end
+    function getVehicleType() return "Boat" end
+    function isElementInWater() return true end
+    function getPedContactElement() return false end
+    function getElementsWithinRange() return {ski} end
+    function triggerServerEvent(name,origin,vehicle)
+        assert(name=="vcs_vehicle:boardWatercraft" and origin==resourceRoot and vehicle==ski)
+        requested=true
+    end
+    function setElementBoneQuaternion(p,bone,x,y,z,w)
+        assert(math.abs(x*x+y*y+z*z+w*w-1)<0.00001)
+        p.pose[bone]={x,y,z,w}
+    end
+    function updateElementRpHAnim(p) p.updates=(p.updates or 0)+1 end
+    """)
+    load(lua, VCS_VEHICLE, ["controllers/vehicle.lua","controllers/boat.lua","controllers/jetski_control.lua","controllers/jetski_control_c.lua","boarding.lua","boarding_c.lua","controllers/jetski_rider_c.lua"])
+    lua.execute("""
+    local driver=element("ped")
+    driver.pose,localPlayer.pose={},{}
+    ski.seats,ski.driver,driver.vehicle={[0]=driver},driver,ski
+    deliver("onClientResourceStart",resourceRoot)
+    function isConsoleActive() return true end
+    boardKey()
+    assert(not requested)
+    boardCommand()
+    assert(requested)
+    function isConsoleActive() return false end
+    requested=false
+    boardKey()
+    assert(requested)
+    local function frame() now=now+50 deliver("onClientPedsProcessed",root) end
+    frame()
+    assert(driver.updates==1 and driver.pose[21] and driver.pose[53])
+    local shoulder=driver.pose[32][1]
+    driver.vehicle_left=1
+    frame()
+    assert(math.abs(shoulder-driver.pose[32][1])>0.001)
+    deliver("onClientVehicleExit",ski,driver)
+    ski.seats,ski.driver,driver.vehicle={[0]=localPlayer},localPlayer,nil
+    deliver("onClientVehicleStartEnter",ski,localPlayer,0,0)
+    frame()
+    local approach=localPlayer.pose[32][1]
+    localPlayer.vehicle,localPlayer.block=ski,"SWIM"
+    deliver("onClientVehicleEnter",ski,localPlayer,0)
+    assert(not localPlayer.block and localPlayer.pose[32][1]==shoulder and approach~=shoulder)
+    deliver("vcs_vehicle:jetSkiMounted",ski,localPlayer,false)
+    frame()
+    local mount=localPlayer.pose[32][1]
+    now=now+800
+    frame()
+    assert(localPlayer.pose[32][1]==mount)
+    localPlayer.vehicle,localPlayer.block=nil,"SWIM"
+    deliver("vcs_vehicle:jetSkiMounted",ski,localPlayer,false)
+    frame()
+    assert(localPlayer.block=="SWIM")
+    localPlayer.vehicle=ski
+    frame()
+    assert(not localPlayer.block and localPlayer.pose[32][1]==shoulder)
+    now=now+1200
+    frame()
+    assert(localPlayer.pose[32][1]==shoulder and localPlayer.vehicle==ski and driver.updates==2)
+    localPlayer.vehicle_left=1
+    for i=1,30 do frame() end
+    local left=localPlayer.pose[32][1]
+    localPlayer.vehicle_left,localPlayer.vehicle_right=0,1
+    local previous=localPlayer.pose[32]
+    for i=1,30 do
+        frame()
+        local current=localPlayer.pose[32]
+        local dot=0
+        for k=1,4 do dot=dot+previous[k]*current[k] end
+        assert(math.abs(dot)>0.95, "shoulder snapped during full-lock reversal")
+        previous=current
+    end
+    assert(math.abs(left-previous[1])>0.001)
+    deliver("onClientVehicleStartExit",ski,localPlayer,0,1)
+    deliver("onClientVehicleExit",ski,localPlayer)
+    localPlayer.vehicle=nil
+    frame()
+    local during=localPlayer.updates
+    now=now+1200
+    frame()
+    assert(localPlayer.updates==during)
+    ski["npchlc_traffic:originalModel"]=248
+    localPlayer.y,localPlayer.z=-5,1
+    function isElementInWater() return false end
+    function getPedContactElement() return ski end
+    local accepted=true
+    function setPedEnterVehicle(ped,vehicle,passenger)
+        assert(ped==localPlayer and vehicle==ski and passenger==false)
+        return accepted
+    end
+    ski.driver=nil
+    requested=false
+    boardKey()
+    timers[100]()
+    assert(not requested, "an accepted native enter must retain control")
+    deliver("onClientVehicleStartEnter",ski,localPlayer,0,0)
+    now=now+900
+    timers[900]()
+    assert(not requested)
+    accepted=false
+    boardKey()
+    timers[100]()
+    assert(requested)
+    """)
+    print("JETSKI water boarding, seated swim reset, steering reversal and dismount passed")
+
+
 def check_visibility():
     lua = LuaRuntime()
     lua.execute(SERVER_MOCK)
@@ -1954,9 +3985,13 @@ def check_visibility():
     assert(car.alpha == 200)
 
     local ped, fastVehicle = element("ped", 65), element("vehicle")
-    ped[profile] = "pedestrian"
+    ped[profile] = "road"
     deliver("onClientElementStreamIn", ped)
     frame(500)
+    assert(ped.alpha == 255)
+    ped[profile] = "pedestrian"
+    deliver("onClientElementDataChange", ped, profile)
+    frame(1)
     assert(ped.alpha == 0)
     localPlayer.vehicle, fastVehicle.vx = fastVehicle, 0.6
     ped.x = 90
@@ -1989,6 +4024,84 @@ def check_visibility():
     frame(500)
     assert(car.alpha == 200)
     """)
+    load(lua,VCS_VEHICLE,["controllers/vehicle.lua","controllers/plane.lua","controllers/plane_c.lua"])
+    lua.execute("""function getThisResource() return resourceRoot end
+    exports={vcs_vehicle=setmetatable({},{__index=function(_,k) return function(_,...) return _G[k](...) end end})}""")
+    load(lua, RUNTIME, ["traffic_aircraft_c.lua"])
+    lua.execute("""
+    local slotKey = "npchlc_traffic:flightSlot"
+    local vehicle = element("vehicle")
+    vehicle[slotKey] = 0
+    vehicle[TrafficVisibility.profileKey] = "aircraft"
+    vehicle["npchlc_traffic:modelProvider"] = "vcs_model"
+    vehicle.alpha = 255
+    local px, pz, far, proxy = 0,450,1000,nil
+    function getElementsByType() return {vehicle} end
+    function getCameraMatrix() return px,0,pz end
+    function isVehicleBlown(v) return v.blown end
+    function getFarClipDistance() return far end
+    function getVehiclesLODDistance() return 400,500 end
+    function getResourceFromName() return {} end
+    function getResourceState() return "running" end
+    function getResourceExportedFunctions() return {"getTrafficFixedWingLOD"} end
+    function call(_,name,id,tier)
+        assert(name=="getTrafficFixedWingLOD" and id==280)
+        return ({hi=652,lo=653,vlo=654})[tier]
+    end
+    function engineSetModelLODDistance() return true end
+    function createObject(id)
+        assert(id>=652 and id<=654 and not isElement(proxy))
+        proxy=element("object")
+        proxy.model=id
+        return proxy
+    end
+    function destroyElement(e) e.destroyed=true end
+    function setElementCollisionsEnabled() return true end
+    function setElementStreamable(e,streamable) e.streamable=streamable return true end
+    function isElementStreamable(e) return e.streamable~=false end
+    function setElementMatrix(e, matrix) e.x,e.y,e.z = unpack(matrix[4]) return true end
+    function isElementOnScreen() return true end
+    local route={kind="fixedWing",instances=1,phaseStepMs=174762,clockPeriodMs=524288,originalModelId=280,
+        clockDuration=1,length=50,takeoffDistance=10,landingDistance=30,
+        points={{distance=0,x=0,y=0,z=0,flags=0},{distance=20,x=20,y=0,z=0,flags=0}},
+        motionEnd={kind=0,distance=0}, motionSegments={{kind=1,start=0,["end"]=1,distance=0,velocity=1,acceleration=0}}}
+    function CPlane.SampleFlight(_,clock,slot)
+        assert(slot==0)
+        return {x=0,y=0,z=450,aheadX=0,aheadY=30,rx=1,ry=0,rz=0,fx=0,fy=1,fz=0,ux=0,uy=0,uz=1}
+    end
+    deliver("onClientElementDataChange",vehicle,slotKey)
+    deliver("onClientElementStreamIn",vehicle)
+    deliver("npchlc_traffic:flightRoute",resourceRoot,route,0)
+    local function frame()
+        now=now+120
+        deliver("onClientPreRender",root)
+        return TrafficAircraftClient.debugSlots().slots[1].representation
+    end
+    assert(frame()=="near-model" and vehicle.alpha==0 and isElement(proxy) and proxy.model==652)
+    vehicle.streamed=false
+    assert(frame()=="near-model" and vehicle.alpha==0 and proxy.model==652)
+    px=60
+    assert(frame()=="middle-model" and vehicle.alpha==0 and proxy.model==653)
+    px=150
+    assert(frame()=="distant" and proxy.model==654)
+    px,pz=0,0 -- ground observer below the high-altitude segment
+    assert(frame()=="distant" and vehicle.alpha==0 and isElement(proxy) and proxy.z==450)
+    vehicle.streamed=true
+    px,pz=1,450
+    assert(frame()=="near-model" and vehicle.alpha==0 and isElement(proxy) and proxy.model==652)
+    far,pz=400,0
+    assert(frame()=="none" and vehicle.alpha==0 and not isElement(proxy))
+    far,localPlayer.dimension=1000,1
+    assert(frame()=="none")
+    localPlayer.dimension,pz=0,450
+    assert(frame()=="near-model")
+    resourceRoot["npchlc_traffic:flightHaltClock"]=760
+    deliver("onClientElementDataChange",resourceRoot,"npchlc_traffic:flightHaltClock")
+    assert(frame()=="none" and TrafficAircraftClient.debugSlots().phaseMs==760)
+    resourceRoot["npchlc_traffic:flightHaltClock"]=false
+    deliver("onClientElementDataChange",resourceRoot,"npchlc_traffic:flightHaltClock")
+    assert(frame()=="near-model")
+    """)
     print("Traffic visibility fade timing, pre-stream-out, retirement and restoration passed")
 
 
@@ -1997,12 +4110,23 @@ def check_debug_overlay():
     lua.execute(SERVER_MOCK)
     lua.execute("""
     localPlayer = element("player")
-    commands, lines = {}, {}
-    function tocolor() return 0 end
+    commands, lines, rectangles, texts = {}, {}, {}, {}
+    exports={npc_hlc={}}
+    function setTimer(callback,interval) timers[interval]=callback return callback end
+    function guiGetScreenSize() return 1280,720 end
+    function getElementsByType() return {} end
+    function isElementStreamedIn() return true end
+    function isElementOnScreen() return true end
+    function getPedBonePosition() return 30,20,1 end
+    function getPedArmor(ped) return ped.armor end
+    function dxGetTextWidth(text) return #text*5 end
+    function dxDrawRectangle(x,y,w,h,color) rectangles[#rectangles+1]={w,color,x,y} end
+    function dxDrawLine3D(...) lines[#lines+1]={...} end
+    function tocolor(r,g,b) return r*65536+g*256+b end
     function addCommandHandler(name, callback) commands[name] = callback end
     function removeEventHandler(name) events[name] = nil end
     function killTimer() end
-    function dxDrawText() end
+    function dxDrawText(text) texts[text]=true end
     function dxDrawLine(x, y, u, v) lines[#lines + 1] = {x,y,u,v} end
     function getCameraMatrix() return 0,0,0, 1,0,0 end
     function getScreenFromWorldPosition(x, y)
@@ -2011,7 +4135,7 @@ def check_debug_overlay():
     end
     function triggerServerEvent(...) request = {...} end
     """)
-    load(lua, RUNTIME, ["traffic_debug_c.lua"])
+    load(lua, RUNTIME, ["npc_debug_range.lua","npc_debug_c.lua","traffic_debug_c.lua"])
     lua.execute("""
     commands.trafficdebug("trafficdebug", "road")
     assert(request[3] == "road")
@@ -2022,10 +4146,90 @@ def check_debug_overlay():
     deliver("npchlc_traffic:debugPaths", resourceRoot, "road", {}, {}, {{{1,0,0}, {2,1,0}, {3,2,0}}})
     deliver("onClientRender", root)
     assert(#lines == 2 and lines[1][3] == lines[2][1] and lines[1][4] == lines[2][2])
+    local ped=element("ped")
+    ped.health,ped.armor=25,50
+    local row={ped,7,75,30,"fight",false,"killPed",localPlayer,50}
+    function exports.npc_hlc:getNPCDebugExecution() return {"killPed",false,1,2,3,4,5,6} end
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
+    lines={}
+    TrafficNPCDebug.draw()
+    assert(#rectangles==6 and rectangles[3][1]==25 and rectangles[3][2]==16777215)
+    assert(rectangles[6][1]==25 and rectangles[6][2]==0xAF191E and #lines>=4)
+    assert(texts["Hot temper 75"] and texts["fight > killPed"])
+    -- Two heads at the same projection must keep the same bar coordinates,
+    -- even when one has armor and the other has a longer task label.
+    local neighbor=element("ped")
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row,{neighbor,1,20,40,"pedestrian",false,"walkTrafficToPoint",false,100}})
+    rectangles={}
+    TrafficNPCDebug.draw()
+    local bars=0
+    for _,rect in ipairs(rectangles) do
+        if rect[2]==0xAF191E then
+            assert(rect[3]==275 and rect[4]==194)
+            bars=bars+1
+        end
+    end
+    assert(bars==2)
+    deliver("npchlc_traffic:npcDebugRows",resourceRoot,1,{row})
+    rectangles,lines={},{}
+    ped.armor=0
+    function exports.npc_hlc:getNPCDebugExecution() return false end
+    TrafficNPCDebug.draw()
+    assert(#rectangles==3 and #lines==0)
+    function tocolor(r,g,b,a) return a end
+    ped.x=23.5
+    rectangles={}
+    TrafficNPCDebug.draw()
+    assert(#rectangles==3 and rectangles[3][2]==128)
+    ped.x=35
+    rectangles={}
+    TrafficNPCDebug.draw()
+    assert(#rectangles==0 and #lines==0)
+    localPlayer.x=35
+    TrafficNPCDebug.draw()
+    assert(#rectangles==3)
+    ped.dimension=1
+    rectangles={}
+    TrafficNPCDebug.draw()
+    assert(#rectangles==0)
+
     commands.trafficdebug("trafficdebug")
     assert(not events.onClientRender)
     """)
-    print("Traffic debug filters, screen-space line clipping and toggle passed")
+    server = LuaRuntime()
+    server.execute(SERVER_MOCK)
+    server.execute("""
+    viewer,owner,ped=element("player"),element("player"),element("ped")
+    exports={npc_hlc={getNPCDebugAssignment=function() return "walkTrafficToPoint",7,owner end}}
+    local brain={profile={temper=75,fear=30},objectives={}}
+    PedAI={brain=function() return brain end}
+    PedActivity={debugTask=function() return "seat","approach" end}
+    function isPedInVehicle() return false end
+    """)
+    load(server,RUNTIME,["npc_debug_range.lua","npc_debug_s.lua"])
+    server.execute("""
+    client=viewer
+    deliver("npchlc_traffic:npcDebugWatch",resourceRoot,1,{ped})
+    assert(#packets==2 and packets[1].owner==viewer and packets[2].owner==owner)
+    local row=packets[1][1][2][1]
+    assert(row[1]==ped and row[2]==7 and row[3]==75 and row[5]=="seat" and row[6]=="approach")
+    local report={{ped,7,{"walkTrafficToPoint","detour",1,2,3,4,5,6}}}
+    client=element("player")
+    deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
+    assert(#packets==2)
+    client=owner
+    deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
+    assert(#packets==3 and packets[3].owner==viewer and packets[3][1][2][1][3][6]==4)
+    deliver("npc_hlc:debugAssignmentChanged",ped,8,false,false)
+    assert(#packets==4 and packets[4].name=="npchlc_traffic:npcDebugRevision")
+    deliver("npchlc_traffic:npcDebugReport",resourceRoot,viewer,1,report)
+    assert(#packets==4)
+    client=viewer
+    deliver("npchlc_traffic:npcDebugWatch",resourceRoot,1,false)
+    deliver("npc_hlc:debugAssignmentChanged",ped,9,false,false)
+    assert(#packets==4)
+    """)
+    print("Traffic overlay, HP/armor bars, routing targets, owner-only relay and revision cleanup passed")
 
 
 def available_port(kind):
@@ -2050,15 +4254,32 @@ def check_native(disc, vcs_pc):
                 TRAFFIC / name, resources / name,
                 ignore=lambda _directory, names: {"generated"} & set(names),
             )
+        copytree(ROOT / "mods/deathmatch/resources/[model]/vcs_model", resources / "vcs_model")
+        copytree(VCS_VEHICLE, resources / "vcs_vehicle")
         generated = resources / "npchlc_traffic/paths/generated"
         generated.mkdir(parents=True)
         (generated / "vcs_traffic.json").write_bytes(encode_json(data))
         (generated / "vcs_traffic.manifest.json").write_bytes(encode_json(manifest))
 
+        traffic_resource = resources / "npchlc_traffic"
+        (traffic_resource / "native_medic_probe.lua").write_text(NATIVE_MEDIC_PROBE, encoding="utf-8")
+        meta = ET.parse(traffic_resource / "meta.xml")
+        ET.SubElement(meta.getroot(), "script", src="native_medic_probe.lua", type="server")
+        ET.SubElement(meta.getroot(), "export", function="verifyNativeMedicHandoff", type="server")
+        meta.write(traffic_resource / "meta.xml", encoding="utf-8")
+
         probe = resources / "traffic_native_probe"
         probe.mkdir()
         (probe / "meta.xml").write_text('<meta><script src="probe.lua" type="server"/></meta>', encoding="utf-8")
         (probe / "probe.lua").write_text(NATIVE_PROBE, encoding="utf-8")
+        acl = ET.parse(destination / "acl.xml")
+        probe_group = ET.SubElement(acl.getroot(), "group", name="FlightProviderTest")
+        ET.SubElement(probe_group, "object", name="resource.traffic_native_probe")
+        ET.SubElement(probe_group, "acl", name="FlightProviderTest")
+        probe_rights = ET.SubElement(acl.getroot(), "acl", name="FlightProviderTest")
+        for right in ("startResource", "stopResource", "restartResource"):
+            ET.SubElement(probe_rights, "right", name=f"function.{right}", access="true")
+        acl.write(destination / "acl.xml", encoding="utf-8")
         config = ET.parse(ROOT / "mods/deathmatch/mtaserver.conf")
         root = config.getroot()
         for node in root.findall("resource"):
@@ -2073,7 +4294,7 @@ def check_native(disc, vcs_pc):
             if node is None:
                 node = ET.SubElement(root, key)
             node.text = str(value)
-        for name in ("server_coldata", "npc_hlc", "npchlc_traffic", "traffic_native_probe"):
+        for name in ("vcs_vehicle", "traffic_native_probe"):
             ET.SubElement(root, "resource", src=name, startup="1", protected="0")
         config.write(destination / "mtaserver.conf", encoding="utf-8")
 
@@ -2084,7 +4305,7 @@ def check_native(disc, vcs_pc):
             stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         ) as server:
             try:
-                deadline = perf_counter() + 30
+                deadline = perf_counter() + 90
                 while perf_counter() < deadline and server.poll() is None:
                     if server_log.exists():
                         for line in server_log.read_text(errors="replace").splitlines():
@@ -2111,13 +4332,25 @@ def main():
     if args.native and (not args.disc or not hasattr(subprocess, "CREATE_NO_WINDOW")):
         parser.error("--native requires Windows, the bundled MTA server, and --disc")
     check_hlc()
+    check_reaction_latency()
     check_ambient()
+    check_car_service()
+    check_ped_services()
+    check_vehicle_pursuit()
     check_road(args.disc, args.vcs_pc_dir)
+    check_road_injuries()
     check_pedestrian_avoidance()
     check_pedestrian_crossing()
+    check_jetski_controller()
+    check_jetski_rider()
     check_visibility()
     check_debug_overlay()
     if args.disc:
+        with TemporaryDirectory() as folder:
+            engine = Path(folder) / "jetski_engine.wav"
+            extract_jetski_engine(args.disc, engine)
+            assert engine.read_bytes() == (VCS_VEHICLE / "audio/jetski_engine.wav").read_bytes()
+        check_airtrain_bounds()
         check_assets(args.disc, args.vcs_pc_dir)
     if args.native:
         check_native(args.disc, args.vcs_pc_dir)

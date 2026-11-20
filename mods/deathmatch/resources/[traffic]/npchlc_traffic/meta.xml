@@ -1,4 +1,6 @@
 <meta>
+	<include resource="vcs_vehicle"/>
+	<min_mta_version server="1.6.0" client="1.6.0" />
 	<info author="CrystalMV" version="0.2" name="NPC traffic" type="script"/>
 	<include resource="npc_hlc"/>
 	<include resource="server_coldata"/>
@@ -9,23 +11,78 @@
 	<script src="traffic_population.lua" type="server" />
 	<script src="traffic_road_population.lua" type="server" />
 	<script src="traffic_graph.lua" type="server" />
+	<script src="ped_models/models.lua" type="shared" />
+	<script src="ped_models/groups.lua" type="shared" />
+	<script src="ped_models/jaw_c.lua" type="client" />
+	<script src="ped_animation_banks_c.lua" type="client" />
+	<script src="street_models_c.lua" type="client" />
+	<file src="ped_models/street.img" />
+	<file src="ped_models/street.ifp" />
 	<script src="traffic_model_bindings.lua" type="server" />
-	<script src="traffic_flight.lua" type="server" />
 	<script src="traffic_aircraft.lua" type="server" />
+	<script src="traffic_aircraft_c.lua" type="client" />
 	<script src="traffic_lights.lua" type="server" />
 	<script src="traffic_actors.lua" type="server" />
 	<script src="traffic_world.lua" type="server" />
+	<script src="traffic_pursuit_exit_c.lua" type="client" />
 	<script src="traffic_world_c.lua" type="client" />
 	<script src="traffic_debug.lua" type="server" />
+	<script src="npc_debug_range.lua" type="shared" />
+	<script src="npc_debug_s.lua" type="server" />
+	<script src="npc_debug_c.lua" type="client" />
 	<script src="traffic_debug_c.lua" type="client" />
+	<script src="ped_ai_profiles.lua" type="shared" />
+	<script src="ped_ai_rules.lua" type="server" />
+	<script src="ped_voice/catalog.lua" type="server" />
+	<script src="ped_voice.lua" type="server" />
+	<script src="ped_voice_c.lua" type="client" />
+	<file src="ped_voice/*.wav" />
+	<script src="ped_objectives.lua" type="server" />
+	<script src="ped_combat_navigation.lua" type="server" />
+	<script src="ped_ai_tasks.lua" type="server" />
+	<script src="ped_carjack.lua" type="server" />
+	<script src="ped_ai.lua" type="server" />
+	<script src="ped_special.lua" type="server" />
+	<script src="ped_special_c.lua" type="client" />
+	<script src="ped_ai_c.lua" type="client" />
+	<script src="ped_evasion.lua" type="shared" />
+	<script src="ped_evasion_s.lua" type="server" />
+	<script src="ped_evasion_c.lua" type="client" />
+	<script src="ped_activity_sites.lua" type="server" />
+	<script src="ped_activity.lua" type="server" />
+	<script src="ped_activity_c.lua" type="client" />
+	<file src="ped_activity/activities.ifp" />
+	<script src="ped_ambient_wait.lua" type="server" />
+	<script src="ped_mugging.lua" type="server" />
+	<script src="ped_theft.lua" type="server" />
+	<script src="ped_social.lua" type="server" />
+	<script src="ped_social_c.lua" type="client" />
+	<script src="ped_services.lua" type="server" />
+	<script src="ped_car_service.lua" type="server" />
+	<script src="ped_car_service_c.lua" type="client" />
+	<file src="sfx_service_suspension.wav" />
 	<script src="traffic_ambient.lua" type="server" />
+	<script src="traffic_passengers.lua" type="server" />
+	<script src="traffic_passengers_c.lua" type="client" />
+	<script src="traffic_collision_handling.lua" type="server" />
+	<script src="traffic_crash_decisions.lua" type="server" />
+	<script src="traffic_vehicle_collision.lua" type="server" />
+	<script src="traffic_vehicle_pursuit.lua" type="server" />
+	<script src="ped_road_injury.lua" type="server" />
 	<script src="traffic_road.lua" type="server" />
+	<script src="ped_script_control.lua" type="server" />
 	<script src="traffic_runtime.lua" type="server" />
 	<script src="wanted_rules.lua" type="server" />
 	<script src="wanted.lua" type="server" />
 	<script src="police_flight.lua" type="server" />
 	<script src="police.lua" type="server" />
 
+	<export function="setTrafficPlayerRestrained" type="server" http="false" />
+	<export function="createTrafficScriptPed" type="server" http="false" />
+	<export function="acquireTrafficPedInArea" type="server" http="false" />
+	<export function="acquireTrafficPed" type="server" http="false" />
+	<export function="releaseTrafficPed" type="server" http="false" />
+	<export function="assignTrafficPedObjective" type="server" http="false" />
 	<export function="setTrafficDensity" type="server" http="false" />
 	<export function="getTrafficDensity" type="server" http="false" />
 	<export function="getTrafficStatus" type="server" http="false" />
@@ -37,6 +94,8 @@
 	<export function="setTrafficPolicePed" type="server" http="false" />
 	<export function="sampleTrafficFlight" type="server" http="false" />
 	<export function="bindTrafficFixedWingModel" type="server" http="false" />
+	<export function="getTrafficAircraftStatus" type="server" http="false" />
+	<export function="setTrafficPlanesMoving" type="server" http="false" />
 	<export function="bindTrafficPedestrianModel" type="server" http="false" />
 	<export function="registerTrafficPedestrianWorld" type="server" http="false" />
 	<export function="getTrafficAmbientStatus" type="server" http="false" />

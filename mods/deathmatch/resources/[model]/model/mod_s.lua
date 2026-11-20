@@ -22,9 +22,13 @@ function setElementModModel(player,name)
 end
 
 addEvent("mod.server.spawnVehicle",true)
-addEventHandler("mod.server.spawnVehicle",root,function(model,parent,x,y,z) 
-    local veh = createVehicle(parent,x,y,z)
-    setElementData(veh,"mod.model",model)
+addEventHandler("mod.server.spawnVehicle",root,function(model,_,x,y,z)
+    local definition = IMG_VEHICLE[model]
+    if not definition then return end
+    local veh = createVehicle(definition.parent or 500,x,y,z)
+    if not veh then return end
+    setElementData(veh,"mod.model",model,"broadcast","deny")
+    if definition.originalId then exports.vcs_vehicle:bindVcsVehicle(veh, definition.originalId) end
     -- deal with handing 
     if IMG_VEHICLE[model].handing ~= nil then 
         print(#IMG_VEHICLE[model].handing)

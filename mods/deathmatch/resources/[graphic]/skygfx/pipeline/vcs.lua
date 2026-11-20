@@ -1,6 +1,6 @@
 VCSGraphics = {}
 local world, worldAlpha, shopShadow, prop, propAlpha, foliage, threshold, blurCross, blurDiagonal, compose
-local solidProp, fadedWorldAlpha
+local solidProp, fadedWorldAlpha, shopProp
 local thresholdUsesDepth
 local scene, bloomA, bloomB, historyA, historyB
 local width, height, bloomWidth, bloomHeight
@@ -129,6 +129,30 @@ local function startWorldAlpha()
     end
 end
 
+local function startShopProps()
+    local manifest = fileOpen("models/vcsShopTextures.txt", true)
+    if not manifest then
+        outputDebugString("SkyGfx VCS: shop prop material manifest unavailable", 1)
+        return
+    end
+    local contents = fileRead(manifest, fileGetSize(manifest))
+    fileClose(manifest)
+    local textures, seen = {}, {}
+    for line in (contents or ""):gmatch("[^\r\n]+") do
+        local texture = line:match("^%s*(t%x+)%s*$")
+        if texture and not seen[texture] then
+            textures[#textures+1], seen[texture] = texture, true
+        end
+    end
+    -- Script-spawned furniture is streamed prop geometry, including its damaged
+    -- atomic. It must use expanded prelight, rather than the world RGB555 path.
+    -- The cabinet atlas contains both solid metal and translucent glass. Only
+    -- opaque pixels may write depth; glass must leave the food behind visible.
+    shopProp = createMaterialShader(textures, {VCS_WORLD_PROP="1", VCS_SHOP_PROP="1", VCS_VERTEX_ALPHA_ONLY="1"})
+    stats.shopTextures = shopProp and #textures or 0
+    if not shopProp then outputDebugString("SkyGfx VCS: shop prop shader unavailable", 1) end
+end
+
 local function updateWorldShader(shader, v, isProp)
     if not shader then return end
     -- VCSPC's prop pipeline consumes expanded prelight and scales ambient by 128/255.
@@ -149,6 +173,7 @@ local function updateWorld(v)
     updateWorldShader(fadedWorldAlpha, v)
     updateWorldShader(shopShadow, v)
     updateWorldShader(prop, v, true)
+    updateWorldShader(shopProp, v, true)
     updateWorldShader(solidProp, v, true)
     updateWorldShader(propAlpha, v, true)
     updateWorldShader(foliage, v, true)
@@ -160,6 +185,7 @@ local function prepareWorld()
     local v = getTimeCycleValue("values")
     updateWorld(v)
     VCSWater.prepare()
+    VCSBoatWake.prepare(v)
     VCSSun.prepare(v)
 end
 
@@ -273,6 +299,7 @@ function getVcsGraphicsStats()
     return {
         world=isElement(world), alphaTextures=stats.alphaTextures or 0,
         props=isElement(prop) and isElement(solidProp), propAlpha=isElement(propAlpha), foliage=isElement(foliage),
+        shopProps=isElement(shopProp), shopTextures=stats.shopTextures or 0,
         post=isElement(compose), mode=mode, sun=VCSSun.getStats(), water=VCSWater.getStats(), vehicles=VCSVehicle.getStats(),
         captures=stats.captures, fullscreen=stats.fullscreen,
         hudFrames=stats.hudFrames or 0,
@@ -289,6 +316,7 @@ function VCSGraphics.start()
         world = nil
     end
     startWorldAlpha()
+    startShopProps()
     shopShadow = createMaterialShader({shopShadowTexture}, {VCS_WORLD_DECAL="1", VCS_VERTEX_ALPHA_ONLY="1"})
     prop = createMaterialShader(propTextures, {VCS_WORLD_PROP="1", VCS_VERTEX_ALPHA_ONLY="1"})
     solidProp = createMaterialShader(solidPropTextures, {VCS_WORLD_PROP="1", VCS_WORLD_SOLID_PROP="1"})
@@ -327,8 +355,8 @@ function VCSGraphics.start()
     end
     setColorFilter(0,0,0,0,0,0,0,0)
     setBlurLevel(0)
-    outputDebugString(("SkyGfx VCS: world=%s alphaTextures=%d post=%s bloom=%s"):format(
-        tostring(isElement(world)), stats.alphaTextures or 0, tostring(isElement(compose)),
+    outputDebugString(("SkyGfx VCS: world=%s alphaTextures=%d shopTextures=%d post=%s bloom=%s"):format(
+        tostring(isElement(world)), stats.alphaTextures or 0, stats.shopTextures or 0, tostring(isElement(compose)),
         tostring(isElement(threshold) and isElement(blurCross) and isElement(blurDiagonal))))
     addEventHandler("onClientPreRender", root, prepareWorld, false, "high-1")
     addEventHandler("onClientHUDRender", root, renderPost, false, "high")
@@ -349,6 +377,7 @@ function VCSGraphics.stop(reloading)
     release(fadedWorldAlpha)
     release(shopShadow)
     release(prop)
+    release(shopProp)
     release(solidProp)
     release(propAlpha)
     release(foliage)
@@ -359,6 +388,7 @@ function VCSGraphics.stop(reloading)
     world, worldAlpha, shopShadow, compose, threshold, blurCross, blurDiagonal = nil, nil, nil, nil, nil, nil, nil
     fadedWorldAlpha = nil
     prop, solidProp, propAlpha, foliage = nil, nil, nil, nil
+    shopProp = nil
     thresholdUsesDepth = nil
     width, height, lastValues, previousInterior, previousDimension = nil, nil, nil, nil, nil
     previousCameraInterior = nil

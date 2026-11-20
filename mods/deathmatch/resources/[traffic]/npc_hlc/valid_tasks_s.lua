@@ -5,9 +5,13 @@ local signatures = {
     walkAlongLine = "nnnnnndd",
     walkAroundBend = "nnnnnnnndd",
     walkFollowElement = "ed",
+    walkFormation = "ednn",
     shootPoint = "nnn",
     shootElement = "e",
     killPed = "pdd",
+    attackOccupiedVehicle = "pdd",
+    stopVehicle = "",
+    driveAtPed = "p",
     driveToPos = "nnnd",
     driveTrafficToPoint = "nnnd",
     driveTrafficRail = "nnnnnnnnnnnnddd",
@@ -30,6 +34,9 @@ function normalizeNPCTask(task)
             return false
         end
         signature = signature .. string.rep("dnnn", (#task - 16 - speedClasses) / 4)
+    elseif (task[1] == "killPed" or task[1] == "attackOccupiedVehicle") and #task == 5 then
+        if task[5] ~= 0 and task[5] ~= 1 then return false end
+        signature = signature .. "d"
     elseif driving and (#task == 6 or #task == 8 or #task == 14) then
         speedClasses = 1
     end

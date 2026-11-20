@@ -15,19 +15,19 @@ function getNPCTrafficPhysicsMotion(actor)
     local forward, lateral = vx * fx + vy * fy, vx * fy - vy * fx
     return {x = matrix[4][1], y = matrix[4][2], z = matrix[4][3], fx = fx, fy = fy,
         grade = matrix[2][3] / length, vx = vx, vy = vy, forward = forward, lateral = lateral,
-        unstable = forward < -0.8 or math.abs(lateral) > math.max(1.5, forward * 0.45)}
+        unstable = matrix[3][3] < 0.35 or forward < -0.8 or math.abs(lateral) > math.max(1.5, forward * 0.45)}
 end
 
 -- Traffic physics task: first sequence, base speed, previous lane centre,
--- then up to three records with link, lane, centre, unit heading, class and signal.
+-- then up to eight records with link, lane, centre, unit heading, class and signal.
 function normalizeNPCTrafficPhysics(task)
     local first, speed, anchor, segments = task[2], task[3], task[4], task[5]
     local function finite(value)
         return type(value) == "number" and value > -math.huge and value < math.huge
     end
-    if #task ~= 5 or not finite(first) or first < 1 or first % 1 ~= 0
+    if (#task ~= 5 and not (#task == 6 and task[6] == 2)) or not finite(first) or first < 1 or first % 1 ~= 0
         or not finite(speed) or speed <= 0 or type(anchor) ~= "table" or #anchor ~= 3
-        or type(segments) ~= "table" or #segments < 1 or #segments > 3 then return false end
+        or type(segments) ~= "table" or #segments < 1 or #segments > 8 then return false end
     for i = 1, 3 do if not finite(anchor[i]) then return false end end
     local copy = {}
     for i = 1, #segments do
@@ -41,7 +41,7 @@ function normalizeNPCTrafficPhysics(task)
             or signal < 0 or signal > 2 or signal % 1 ~= 0 then return false end
         copy[i] = {unpack(segment)}
     end
-    return {task[1], first, speed, {unpack(anchor)}, copy}
+    return {task[1], first, speed, {unpack(anchor)}, copy, task[6]}
 end
 
 local function distanceToSegment(x, y, z, ax, ay, az, segment)
@@ -96,10 +96,21 @@ function isNPCTrafficPhysicsOnRoute(task, index, x, y, z)
 end
 
 function canNPCTrafficPhysicsAvoid(task, index, x, y, z, dx, dy, distance, halfWidth)
-    local margin = laneTolerance - halfWidth
+    local margin = (task[6] == 2 and 2 * laneTolerance or laneTolerance) - halfWidth
     if margin <= 0 then return false end
     return routeDistance(task, index, x, y, z) <= margin ^ 2
         and routeDistance(task, index, x + dx * distance, y + dy * distance, z) <= margin ^ 2
+end
+
+function getNPCTrafficWindowProgress(task,vehicle)
+    local motion=getNPCTrafficPhysicsMotion(vehicle)
+    if not motion or motion.unstable then return 1 end
+    local index=getNPCTrafficPhysicsIndex(task,1,motion)
+    if index==1 then
+        local rejoin=findNPCTrafficPhysicsRejoin(task,1,motion.x,motion.y,motion.z,motion.fx,motion.fy)
+        if rejoin then index=getNPCTrafficPhysicsIndex(task,rejoin,motion) end
+    end
+    return index
 end
 
 function findNPCTrafficPhysicsRejoin(task, index, x, y, z, fx, fy)
@@ -121,5 +132,6 @@ function getNPCTrafficPhysicsRejoin(task, actor)
     local motion = getNPCTrafficPhysicsMotion(actor)
     if not motion or motion.unstable or motion.forward < -0.1
         or isNPCTrafficPhysicsOnRoute(task, 1, motion.x, motion.y, motion.z) then return false end
-    return findNPCTrafficPhysicsRejoin(task, 1, motion.x, motion.y, motion.z, motion.fx, motion.fy)
+    local nextLane = findNPCTrafficPhysicsRejoin(task, 1, motion.x, motion.y, motion.z, motion.fx, motion.fy)
+    return nextLane or false, not nextLane and motion.vx^2 + motion.vy^2 < 1
 end

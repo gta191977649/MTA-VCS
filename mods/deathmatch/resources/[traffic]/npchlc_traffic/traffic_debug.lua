@@ -88,7 +88,10 @@ local function collect(player, mode)
                         appendRoadConnections(connections, edge, lane)
                     end
                 end
-            elseif kind ~= "vehicle" and not seen[key] then
+            elseif kind == "boat" and edge.lanes > 0 then
+                links[#links + 1] = {node.x, node.y, node.z, target.x, target.y, target.z, kind, true, 0}
+                linkCounts[kind] = (linkCounts[kind] or 0) + 1
+            elseif kind == "pedestrian" and not seen[key] then
                 links[#links + 1] = {node.x, node.y, node.z, target.x, target.y, target.z, kind, false, 0}
                 linkCounts[kind] = (linkCounts[kind] or 0) + 1
                 seen[key] = true

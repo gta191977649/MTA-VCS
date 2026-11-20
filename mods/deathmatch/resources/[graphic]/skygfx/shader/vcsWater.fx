@@ -9,15 +9,56 @@ sampler SurfaceSampler = sampler_state {
     MipFilter = Linear;
 };
 
-#ifdef VCS_WAKE
+#ifdef VCS_BOAT_FOAM
 
-float4 wakePixel(float2 uv : TEXCOORD0, float4 color : COLOR0) : COLOR0 {
-    return tex2D(SurfaceSampler, uv) * color;
+float4x4 ViewProjection : VIEWPROJECTION;
+float FoamGain = 1;
+struct FoamVertex {
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+    float4 color : COLOR0;
+};
+FoamVertex foamVertex(FoamVertex input) {
+    input.position = mul(float4(input.position.xyz,1), ViewProjection);
+    return input;
+}
+float4 foamPixel(float2 uv : TEXCOORD0, float4 color : COLOR0) : COLOR0 {
+    float4 raster = tex2D(SurfaceSampler, uv);
+    return float4(color.rgb * raster.rgb, color.a * saturate(raster.a * FoamGain));
+}
+technique vcs_boat_foam {
+    pass P0 {
+        AlphaBlendEnable = true;
+#ifdef VCS_SPLASH_ONE
+        SrcBlend = ONE;
+#else
+        SrcBlend = SRCALPHA;
+#endif
+#ifdef VCS_SPLASH_ADDITIVE
+        DestBlend = ONE;
+#else
+        DestBlend = INVSRCALPHA;
+#endif
+        BlendOp = ADD;
+        AlphaTestEnable = false;
+        CullMode = NONE;
+        FogEnable = false;
+        ZEnable = true;
+        ZFunc = LESSEQUAL;
+        ZWriteEnable = false;
+        VertexShader = compile vs_2_0 foamVertex();
+        PixelShader = compile ps_2_0 foamPixel();
+    }
 }
 
+#elif defined(VCS_WAKE)
+
+// SA submits another strip at a sea-level constant, even on raised custom water.
+// SkyGfx renders the wake on the water mesh instead.
 technique vcs_wake {
     pass P0 {
-        PixelShader = compile ps_2_0 wakePixel();
+        ColorWriteEnable = 0;
+        ZWriteEnable = false;
     }
 }
 
@@ -92,7 +133,6 @@ float WaterScroll;
 float InverseWaterOpacity = 1.0;
 texture ReflectionTexture;
 texture WaveGridTexture;
-
 sampler WaveGridSampler = sampler_state {
     Texture = (WaveGridTexture);
     AddressU = Wrap;
@@ -177,7 +217,43 @@ float4 waterPixel(WaterPixel input) : COLOR0 {
     // native layer opacity so folding it into the same draw keeps that energy.
     float3 surface = lerp(WaterColor * base, FogColor, input.depthAlphaFog.z)
         + reflection * InverseWaterOpacity;
-    return float4(saturate(surface), input.depthAlphaFog.y);
+    float alpha = input.depthAlphaFog.y;
+    return float4(saturate(surface), alpha);
+}
+
+// Reuse the native water draw's displaced vertices and clip-space depth for the foam pass.
+texture WakeCoverage;
+texture WakeRaster;
+float3 WakeOrigin;
+float2 WakeScroll;
+float WakeActive = 0;
+sampler WakeMask = sampler_state {
+    Texture = (WakeCoverage); AddressU = Clamp; AddressV = Clamp;
+    MinFilter = Linear; MagFilter = Linear; MipFilter = None;
+};
+sampler WakePattern = sampler_state {
+    Texture = (WakeRaster); AddressU = Wrap; AddressV = Wrap;
+    MinFilter = Linear; MagFilter = Linear; MipFilter = Linear;
+};
+struct WakePixel {
+    float4 position : POSITION;
+    float3 world : TEXCOORD0;
+};
+WakePixel wakeMeshVertex(WaterVertex input) {
+    WakePixel o;
+    o.position = mul(input.position, WorldViewProjection);
+    o.world = mul(input.position, World).xyz;
+    return o;
+}
+float4 wakeMeshPixel(WakePixel input) : COLOR0 {
+    clip(WakeActive - 0.5);
+    float2 uv = (input.world.xy - WakeOrigin.xy) / 192.0;
+    float2 mask = tex2D(WakeMask,uv).rg;
+    float level = WakeOrigin.z + (mask.g * 255.0 - 128.0) * 0.25;
+    float4 foam = tex2D(WakePattern,input.world.xy * 0.25 + WakeScroll);
+    clip(min(uv,1.0-uv));
+    clip(1.0-abs(input.world.z-level));
+    return float4(saturate(WaterColor + 64.0/255.0)*foam.rgb,mask.r*foam.a);
 }
 
 technique vcs_water {
@@ -185,6 +261,18 @@ technique vcs_water {
         FogEnable = false;
         VertexShader = compile vs_2_0 waterVertex();
         PixelShader = compile ps_3_0 waterPixel();
+    }
+    pass SurfaceFoam {
+        FogEnable = false;
+        AlphaBlendEnable = true;
+        SrcBlend = SRCALPHA;
+        DestBlend = INVSRCALPHA;
+        ZEnable = true;
+        ZFunc = LESSEQUAL;
+        ZWriteEnable = false;
+        AlphaTestEnable = false;
+        VertexShader = compile vs_2_0 wakeMeshVertex();
+        PixelShader = compile ps_3_0 wakeMeshPixel();
     }
 }
 

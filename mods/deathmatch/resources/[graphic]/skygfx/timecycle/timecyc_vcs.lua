@@ -19,11 +19,16 @@ local lastSample, blendStart, lastMinute
 local interiorWeather, colour
 local lastCameraInterior, outdoorClouds
 local customSun = false
-local lightProperties = {"SpriteSize", "SpriteBrightness", "LightsOnGround",
-    "AmbientObjColor", "DirectionalColor", "Illumination"}
+local worldProperties = {"AmbientColor", "AmbientObjColor", "DirectionalColor", "Illumination",
+    "SpriteSize", "SpriteBrightness", "LightsOnGround", "PoleShadowStrength", "ShadowStrength",
+    "ShadowsOffset", "BottomCloudsColor", "CloudsAlpha", "LowCloudsColor", "WetRoads",
+    "Foggyness", "Fog", "RainFog", "WaterFog", "Rainbow", "Sandstorm"}
+local minuteTick, minuteFraction, clockFrozen, minuteDuration
+local running = false
 VCSWeather = {old=initialWeather, new=initialWeather, interpolation=1, data={}}
 
 local function readTable()
+    rows = {}
     local file = fileOpen("timecycle/timecyc_vcs.dat", true)
     if not file then return false end
     local source = fileRead(file, fileGetSize(file))
@@ -43,6 +48,34 @@ local function readTable()
         end
     end
     return #rows == 8 * 24
+end
+
+local function sampleMinute(now, clock)
+    local frozen, duration = isTimeFrozen(), math.max(getMinuteDuration(), 1)
+    if lastMinute ~= clock or not minuteTick then
+        minuteTick, minuteFraction = now, 0
+    elseif clockFrozen ~= frozen or minuteDuration ~= duration then
+        minuteTick = now - minuteFraction * duration
+    end
+    if not frozen then minuteFraction = math.min((now - minuteTick) / duration, 0.999999) end
+    clockFrozen, minuteDuration = frozen, duration
+    return minuteFraction
+end
+
+local function weatherEffects(clock, indoors)
+    local wet = (weights[2] or 0) + (weights[5] or 0)
+    local fog = weights[3] or 0
+    local extraSunny = (weights[4] or 0) + (weights[7] or 0)
+    local rainbow = 0
+    local progress = VCSWeather.interpolation
+    -- SLUS-21590 003E3720: cloudy -> sunny, before halfway, 07:00..20:59.
+    if blendStart and (VCSWeather.new == 0 or VCSWeather.new == 4 or VCSWeather.new == 7)
+            and progress < 0.5 and clock >= 420 and clock < 1260 then
+        rainbow = (fromWeights[1] or 0) * (1 - math.abs(progress - 0.25) * 4)
+    end
+    if indoors then return 0, 0, 0, 0 end
+    -- 0018CE80 uses alpha 160 * (1 - max(extra sunnyness, foggyness)).
+    return wet, fog, rainbow, 160 * (1 - math.max(extraSunny, fog))
 end
 
 local function snapshot(getter, setter, previous)
@@ -95,7 +128,9 @@ local function update(force)
     local hour, minute = getTime()
     local clock = hour * 60 + minute
     if not force and lastCameraInterior == cameraInterior and lastMinute == clock
-        and (not blendStart or now - lastSample < 100) then return end
+        and lastSample and now - lastSample < 100 then return end
+    local fraction = sampleMinute(now, clock)
+    local hourFraction = (minute + fraction) / 60
     lastSample, lastMinute, lastCameraInterior = now, clock, cameraInterior
     updateBlend(now)
     local v = {}
@@ -106,7 +141,7 @@ local function update(force)
             if weight > 0 then
                 local a = rows[weather * 24 + hour + 1][field]
                 local b = rows[weather * 24 + (hour + 1) % 24 + 1][field]
-                value = value + weight * (a + (b-a) * minute / 60)
+                value = value + weight * (a + (b-a) * hourFraction)
             end
         end
         v[field] = value
@@ -126,8 +161,9 @@ local function update(force)
         for field = 22, 28 do v[field] = 0 end
     end
     local function rgb(i) return {v[i], v[i+1], v[i+2]} end
-    local clip = indoors and v[34] or 2000
+    local clip = math.max(v[34], 1)
     local fog = math.min(v[35], clip - 1)
+    local wetRoads, fogginess, rainbow, cloudsAlpha = weatherEffects(clock + fraction, indoors)
     local waterWind = 0
     for weather, weight in pairs(weights) do
         waterWind = waterWind + weight * waterWinds[weather]
@@ -136,7 +172,8 @@ local function update(force)
         values=v, indoors=indoors, amb=rgb(1), amb_obj=rgb(4), amb_bl=rgb(7), amb_obj_bl=rgb(10),
         directional=rgb(13), dirMult=1, sky_top=rgb(16), sky_bot=rgb(19),
         sun_core=rgb(22), sun_corona=rgb(25), sun_size=v[28],
-        sprite_size=v[29], sprite_brightness=v[30], farClp=clip, fogSt=fog, fogginess=weights[3] or 0,
+        sprite_size=v[29], sprite_brightness=v[30], farClp=clip, fogSt=fog, fogginess=fogginess,
+        wetRoads=wetRoads, rain=0.5*wetRoads, rainbow=rainbow, cloudsAlpha=cloudsAlpha,
         radiosityIntensity=v[36], radiosityLimit=v[37], lightOnGround=v[38],
         cloud=rgb(39), fluffy_top=rgb(42), fluffy_bot=rgb(45),
         blur=rgb(48), blurAlpha=v[55], blurOffset=v[56],
@@ -155,6 +192,7 @@ local function update(force)
     if not customSun then applySun(v) end
     -- SLUS-21590 001A6310 installs the directional RGB and 001A7000
     -- selects object ambient for the native vehicle and pedestrian draws.
+    setWorldProperty("AmbientColor", v[1], v[2], v[3])
     setWorldProperty("AmbientObjColor", v[4], v[5], v[6])
     setWorldProperty("DirectionalColor", v[13], v[14], v[15])
     setWorldProperty("Illumination", 1)
@@ -163,10 +201,28 @@ local function update(force)
     -- before converting the corona and its ground contribution to bytes.
     setWorldProperty("SpriteBrightness", math.min(v[30], 1) * 10)
     setWorldProperty("LightsOnGround", v[38])
+    setWorldProperty("ShadowStrength", math.floor(v[31] + 0.5))
+    setWorldProperty("PoleShadowStrength", math.floor(v[33] + 0.5))
+    -- The VCS table has no SA particle-fog channels.
+    setWorldProperty("LowCloudsColor", v[39], v[40], v[41])
+    setWorldProperty("BottomCloudsColor", v[45], v[46], v[47])
+    setWorldProperty("CloudsAlpha", math.floor(cloudsAlpha + 0.5))
+    setWorldProperty("WetRoads", wetRoads)
+    setWorldProperty("Foggyness", fogginess)
+    setWorldProperty("Fog", fogginess)
+    setWorldProperty("RainFog", 0)
+    setWorldProperty("WaterFog", 0)
+    setWorldProperty("Rainbow", rainbow)
+    setWorldProperty("Sandstorm", 0)
     setFogDistance(fog)
     setFarClipDistance(clip)
     setWaterColor(v[51],v[52],v[53],v[54])
-    setRainLevel(not indoors and math.min(1, (weights[2] or 0)*0.65 + (weights[5] or 0)) or 0)
+    -- PS2 Update clamps rainy/hurricane rain to 0.5. Blend its endpoints here.
+    setRainLevel(0.5 * wetRoads)
+end
+
+local function renderWeather()
+    update(false)
 end
 
 local function interiorChanged(_, _, weather, row)
@@ -218,6 +274,7 @@ function VCSWeather.seekBlend(fraction)
 end
 
 function VCSWeather.start()
+    if running then return true end
     if not readTable() then
         rows = {}
         outputDebugString("VCS timecycle requires 192 rows of 56 numeric fields", 1)
@@ -225,6 +282,11 @@ function VCSWeather.start()
     end
     local saved = getElementData(localPlayer, reloadSnapshot, false)
     local previous = saved and saved.original
+    -- Projected streetlights and headlights need MTA's positive height bias.
+    -- Zero makes the native shadow polygons fight the road's depth buffer.
+    resetWorldProperty("ShadowsOffset")
+    restore = {}
+    lastSample, lastMinute, minuteTick, minuteFraction = nil, nil, nil, nil
     snapshot(nativeGetWeather, nativeSetWeather, previous)
     snapshot(getSkyGradient, setSkyGradient, previous)
     snapshot(getSunColor, setSunColor, previous)
@@ -233,9 +295,6 @@ function VCSWeather.start()
     snapshot(getFarClipDistance, setFarClipDistance, previous)
     snapshot(getWaterColor, setWaterColor, previous)
     snapshot(getRainLevel, setRainLevel, previous)
-    -- SA renders water fog as separate geometry around the swimmer.
-    -- VCS water already uses the timecycle fog in its surface shader.
-    setWorldProperty("WaterFog", 0)
     if saved then
         VCSWeather.reloaded = true
         VCSWeather.old, VCSWeather.new = saved.old, saved.new
@@ -247,11 +306,15 @@ function VCSWeather.start()
     addEventHandler("onClientInteriorChanged", localPlayer, interiorChanged, false, "high")
     interiorChanged(exports.interior:getInteriorState())
     update(true)
-    addEventHandler("onClientPreRender", root, function() update(false) end, false, "high")
+    addEventHandler("onClientPreRender", root, renderWeather, false, "high")
+    running = true
     return true
 end
 
 function VCSWeather.stop(reloading)
+    if not running then return end
+    running = false
+    removeEventHandler("onClientPreRender", root, renderWeather)
     removeEventHandler("onClientInteriorChanged", localPlayer, interiorChanged)
     if outdoorClouds ~= nil then
         setCloudsEnabled(outdoorClouds)
@@ -267,11 +330,11 @@ function VCSWeather.stop(reloading)
         return
     end
     if #rows == 192 then
-        resetWorldProperty("WaterFog")
-        for _, property in ipairs(lightProperties) do
+        for _, property in ipairs(worldProperties) do
             resetWorldProperty(property)
         end
     end
     for _, state in ipairs(restore) do state[1](unpack(state[2])) end
+    restore = {}
+    lastSample, lastMinute, minuteTick, minuteFraction = nil, nil, nil, nil
 end
-

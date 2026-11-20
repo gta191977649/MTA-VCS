@@ -1,6 +1,6 @@
 local zonesByScope = {}
 local mapResource
-local activeZone, activeScope, selectedTrack, entry
+local activeZone, activeScope, trackIndex, entry
 local sound, soundPath, soundVolume
 
 local function scope(interior, dimension)
@@ -124,10 +124,10 @@ local function refresh()
     end
     if zone ~= activeZone or playerScope ~= activeScope then
         activeZone, activeScope = zone, playerScope
-        selectedTrack, entry = nil, nil
+        trackIndex, entry = nil, nil
         if zone then
             local tracks = zone.playlist.tracks
-            selectedTrack = tracks[math.random(#tracks)]
+            trackIndex = math.random(#tracks)
             entry = { x, y, z }
         end
     end
@@ -136,7 +136,7 @@ local function refresh()
         return
     end
 
-    local path, gain = selectedTrack, zone.playlist.gain
+    local path, gain = zone.playlist.tracks[trackIndex], zone.playlist.gain
     local cameraX, cameraY, cameraZ = getCameraMatrix()
     local ambient = not zone.radius
     if zone.radius then
@@ -159,7 +159,8 @@ local function refresh()
     if path ~= soundPath then
         stopSound()
         soundPath = path
-        sound = playSound(path, true)
+        local looped = path ~= zone.playlist.tracks[trackIndex] or #zone.playlist.tracks == 1
+        sound = playSound(path, looped)
         if not sound then outputDebugString("Audio zones: could not play " .. path, 2) end
     end
     if isElement(sound) and volume ~= soundVolume then
@@ -167,6 +168,15 @@ local function refresh()
         soundVolume = volume
     end
 end
+
+addEventHandler("onClientSoundStopped", root, function(reason)
+    if source ~= sound or reason ~= "finished" or not activeZone then return end
+    local tracks = activeZone.playlist.tracks
+    if #tracks <= 1 or soundPath ~= tracks[trackIndex] then return end
+    trackIndex = trackIndex % #tracks + 1
+    stopSound()
+    refresh()
+end)
 
 addEventHandler("onClientInteriorChanged", localPlayer, refresh, false)
 addEventHandler("onClientPlayerWasted", localPlayer, refresh, false)

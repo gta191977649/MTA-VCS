@@ -192,7 +192,7 @@ function isNPCTrafficRailWaitingForSignal(task, x, y, z, fx, fy)
     return railSignalBlocked(task, getNPCTrafficRailSegment(task, x, y, z, fx, fy), x, y)
 end
 
-function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed)
+function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed, boat)
     local x, y, z = getElementPosition(vehicle)
     local progress = progressByVehicle[vehicle]
     if not progress or progress.task ~= task or (x - progress.x) ^ 2 + (y - progress.y) ^ 2 > 1 then
@@ -231,19 +231,24 @@ function advanceNPCTrafficRail(vehicle, task, elapsed, limitSpeed)
     progress.speed = speed >= progress.speed and math.min(speed, progress.speed + step * 0.05)
         or math.max(speed, progress.speed - step * 0.7)
     local _, _, vz = getElementVelocity(vehicle)
-    local look = math.max(0.5, progress.speed * 0.16)
-    local nx, ny = getNPCTrafficRailPreview(task, segment, t, progress.lengths, look)
+    local look = boat and math.max(2.5, progress.speed * 0.45) or math.max(0.5, progress.speed * 0.16)
+    local nx, ny, nz, nextDX, nextDY = getNPCTrafficRailPreview(task, segment, t, progress.lengths, look)
     local tx, ty = nx - x, ny - y
     local distance = math.sqrt(tx * tx + ty * ty)
     if distance < 0.001 or progress.speed <= 0 then
         setElementVelocity(vehicle, 0, 0, vz)
         return
     end
+    if localPlayer and recordNPCDebugTarget then recordNPCDebugTarget(vehicle, nx, ny, nz) end
     local speedMS = progress.speed
     if segment == count then
         local goal = points[count + 2]
         local remaining = math.sqrt((task[goal] - x)^2 + (task[goal+1] - y)^2)
         speedMS = math.min(speedMS, remaining * 1000 / math.max(1, elapsed))
+    end
+    if boat then
+        exports.vcs_vehicle:steerBoatTraffic(vehicle, tx / distance, ty / distance, dx, dy, nextDX, nextDY, look, speedMS, vz, elapsed)
+        return
     end
     setElementVelocity(vehicle, tx / distance * speedMS / 50, ty / distance * speedMS / 50, vz)
     local _, _, heading = getElementRotation(vehicle)

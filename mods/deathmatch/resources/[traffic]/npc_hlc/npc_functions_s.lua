@@ -69,6 +69,11 @@ local function queueTask(state, task)
     end
 end
 
+function getNPCTaskCount(npc)
+    local state=all_npcs[npc]
+    return state and state.tail-state.head+1 or 0
+end
+
 function addNPCTask(npc, task)
     local state = all_npcs[npc]
     task = normalizeNPCTask(task)

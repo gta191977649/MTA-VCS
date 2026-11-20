@@ -67,14 +67,38 @@ local function readChunk(image, index)
     return data:sub(1, length)
 end
 
+local aircraftLOD = {}
+
+function getTrafficFixedWingLOD(originalId, tier)
+    tier = tier or "vlo"
+    if originalId ~= 280 or not archives.vehicle or (tier ~= "hi" and tier ~= "lo" and tier ~= "vlo") then return false end
+    if aircraftLOD[tier] then return aircraftLOD[tier] end
+    local archive = archives.vehicle
+    local index = archive.indices["airtrain.txd"]
+    local data = index and readChunk(archive.image, index)
+    local texture = data and engineLoadTXD(data)
+    local id = texture and engineRequestModel("object")
+    local mesh = id and engineImportTXD(texture, id) and engineLoadDFF("airtrain_" .. tier .. ".dff")
+    local bounds = mesh and engineLoadCOL("airtrain.col")
+    if bounds and engineReplaceCOL(bounds, id) and engineReplaceModel(mesh, id) then
+        aircraftLOD[tier] = id
+        return id
+    end
+    if id then engineFreeModel(id) end
+    if bounds then destroyElement(bounds) end
+    if mesh then destroyElement(mesh) end
+    if texture then destroyElement(texture) end
+    return false
+end
+
 local function loadModel(model)
     local archive = archives[model.kind]
     local dff = archive.indices[model.name .. ".dff"]
     local txd = archive.indices[model.name .. ".txd"]
     if dff == nil or txd == nil then return false end
-    -- The catalog only accepts unique native vehicle slots. Preserve their
-    -- collision and handling while replacing the RenderWare assets.
-    local id = model.kind == "vehicle" and model.base or engineRequestModel("ped", model.base)
+    local private = model.kind == "ped" or model.variant
+    local id = model.base
+    if private then id = engineRequestModel(model.kind, model.base) end
     if not id then return false end
     -- MTA's replacement path initializes the native ped/vehicle model info.
     local textureData = readChunk(archive.image, txd)
@@ -87,7 +111,7 @@ local function loadModel(model)
     end
     local hasGlass = model.kind == "vehicle" and modelData and modelData:find("vcsglass_", 1, true) ~= nil
     if not geometry or not engineReplaceModel(geometry, id, hasGlass == true) then
-        if model.kind == "ped" then engineFreeModel(id) end
+        if private then engineFreeModel(id) end
         if texture then destroyElement(texture) end
         if geometry then destroyElement(geometry) end
         return false
@@ -111,9 +135,16 @@ end
 local function applyModel(element)
     local kind = getElementType(element)
     if not archives[kind] then return end
-    if getElementData(element, PROVIDER_KEY, false) ~= provider then return end
+    if kind == "vehicle" and getElementData(element, "mod.model", false) then return end
+    local selectedProvider = getElementData(element, PROVIDER_KEY, false)
     local originalId = getElementData(element, MODEL_KEY, false)
-    local model = models[originalId]
+    local standalone = kind == "vehicle" and getElementData(element, "vcs_vehicle:originalModel", false)
+    if selectedProvider ~= provider and (selectedProvider or not standalone) then return end
+    local model = models[standalone or originalId]
+    if standalone then
+        originalId = standalone
+        if not model or getElementModel(element) ~= model.base and getElementModel(element) ~= model.id then return end
+    end
     if not model or model.kind ~= kind or model.failed then return end
     if not model.id and not loadModel(model) then
         model.failed = true
@@ -168,8 +199,14 @@ addEventHandler("onClientElementModelChange", root, function()
     if isElementStreamedIn(source) then updateVehicleLamps(source) end
 end)
 addEventHandler("onClientElementDataChange", root, function(key)
-    if (key == MODEL_KEY or key == PROVIDER_KEY) and isElementStreamedIn(source) then
+    if (key == MODEL_KEY or key == PROVIDER_KEY or key == "vcs_vehicle:originalModel") and isElementStreamedIn(source) then
         if vehicleBindings[source] then
+            local previous = models[vehicleBindings[source]]
+            local nextId = getElementData(source, "vcs_vehicle:originalModel", false) or getElementData(source, MODEL_KEY, false)
+            if previous and previous.variant and getElementModel(source) == previous.id
+                and (nextId ~= vehicleBindings[source] or (key == PROVIDER_KEY and getElementData(source, PROVIDER_KEY, false) ~= provider)) then
+                setElementModel(source, previous.base)
+            end
             vehicleBindings[source] = nil
             triggerEvent("npc_hlc:onVehicleGroundGeometry", source)
         end
@@ -178,9 +215,16 @@ addEventHandler("onClientElementDataChange", root, function(key)
 end)
 
 addEventHandler("onClientResourceStop", resourceRoot, function()
+    for _, id in pairs(aircraftLOD) do engineFreeModel(id) end
+    for element, originalId in pairs(vehicleBindings) do
+        local model = models[originalId]
+        if model and model.variant and isElement(element) and getElementModel(element) == model.id then
+            setElementModel(element, model.base)
+        end
+    end
     for _, model in pairs(models) do
         if model.id then
-            if model.kind == "ped" then engineFreeModel(model.id)
+            if model.kind == "ped" or model.variant then engineFreeModel(model.id)
             else engineRestoreModel(model.id) end
         end
     end

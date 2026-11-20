@@ -1021,11 +1021,11 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["JETSKI"] = {
-		parent = 411,
+		originalId = 233,
+		parent = 473,
 		name = "JETSKI",
 		txd = "src/vehicle/jetski.txd",
 		dff = "src/vehicle/jetski.dff",
-		handing = "978.9,2000,0.1,0,0,0,17,1,0.1,0.15,1,194.2,3.2,17,R,P,10,0.02,0,40,0.2,3,0,0.1,0.1,0,0,0.2,0.38,25000,8004010,3,0,1,0,",
 		replace = false,
 	},
 	["POLICEM"] = {

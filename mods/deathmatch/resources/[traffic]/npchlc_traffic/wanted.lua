@@ -243,3 +243,75 @@ end, false)
 addEventHandler("onResourceStop", resourceRoot, function()
     for player, state in pairs(states) do clearParole(player, state) end
 end, false)
+-- A wanted arrest is committed by the same authority that owns wanted points.
+local entering, arrests, restrained = {}, {}, {}
+addEvent("onTrafficPlayerArrest",false)
+addEventHandler("onVehicleStartEnter",root,function(p,seat)
+    if getElementType(p)=="player" and seat==0 then entering[p]={vehicle=source,at=getTickCount()} end
+end)
+addEventHandler("onVehicleEnter",root,function(p) entering[p]=nil end)
+addEventHandler("onPlayerQuit",root,function() entering[source]=nil; arrests[source]=nil; restrained[source]=nil end)
+
+-- The game mode owns the player control state. It can report its native
+-- equivalent of 0x41 while retaining authority over jail or release.
+function setTrafficPlayerRestrained(player,active)
+    if not isPlayer(player) or type(active)~="boolean" then return false end
+    restrained[player]=active or nil
+    return true
+end
+addEventHandler("onPlayerSpawn",root,function() restrained[source],entering[source]=nil,nil end)
+local function eligibleOfficer(officer,player,allowWasted)
+    if not isElement(player) or getElementType(player)~="player" or (isPedDead(player) and not allowWasted)
+        or not isElement(officer) or not TrafficActors.isPolicePed(officer) or isPedDead(officer)
+        or getPlayerWantedLevel(player)==0 or getElementInterior(officer)~=getElementInterior(player)
+        or getElementDimension(officer)~=getElementDimension(player) then return false end
+    local x,y,z=getElementPosition(officer)
+    return getDistanceBetweenPoints3D(x,y,z,getElementPosition(player))<=65
+end
+function TrafficWanted.officerCanPursue(officer,player)
+    return eligibleOfficer(officer,player,false)
+end
+local function arrest(officer,player,now,wasted)
+    if not eligibleOfficer(officer,player,wasted) then return false end
+    local entry=entering[player]
+    local x,y,z=getElementPosition(player)
+    local officerDistance=getDistanceBetweenPoints3D(x,y,z,getElementPosition(officer))
+    local duringEntry=entry and isElement(entry.vehicle) and (now-entry.at)%4294967296<=1800
+        and not isPedInVehicle(player) and getDistanceBetweenPoints3D(x,y,z,getElementPosition(entry.vehicle))<=4
+    if not ((wasted or restrained[player]) and officerDistance<5 or duringEntry and officerDistance<1.3) then return false end
+    if arrests[player] then return false end
+    arrests[player]=officer
+    local level=getPlayerWantedLevel(player)
+    -- The game mode may cancel this event and process the arrest itself.
+    local accepted=triggerEvent("onTrafficPlayerArrest",player,officer,level,wasted and "wasted" or "alive")
+    arrests[player],entering[player]=nil,nil
+    if not accepted or not isElement(player) or not isElement(officer) then return false end
+    restrained[player]=nil
+    if not wasted then setPlayerWanted(player,0,"arrest") end
+    local ox,oy=getElementPosition(officer)
+    setPedRotation(officer,-math.deg(math.atan2(x-ox,y-oy)))
+    if getPedWeapon(officer,2)==22 then setPedWeaponSlot(officer,2) end
+    setPedAnimation(officer,"PED","ARRESTgun",1200,false,false,true,false)
+    PedVoice.emit(officer,"arrest")
+    PedVoice.emit(player,"arrested")
+    return true
+end
+
+function TrafficWanted.tryArrest(officer,player,now)
+    return arrest(officer,player,now,false)
+end
+-- The PS2 corpse branch leaves the player in its dying/wasted state.
+-- Emit the ownership notification while preserving MTA's respawn lifecycle.
+addEventHandler("onPlayerWasted",root,function()
+    local player=source
+    if not isPedDead(player) or getPlayerWantedLevel(player)==0 then return end
+    local x,y,z=getElementPosition(player)
+    local best,distance=nil,5
+    for _,officer in ipairs(getElementsWithinRange(x,y,z,5,"ped",getElementInterior(player),getElementDimension(player)) or {}) do
+        if eligibleOfficer(officer,player,true) then
+            local d=getDistanceBetweenPoints3D(x,y,z,getElementPosition(officer))
+            if d<distance then best,distance=officer,d end
+        end
+    end
+    if best then arrest(best,player,getTickCount(),true) end
+end)

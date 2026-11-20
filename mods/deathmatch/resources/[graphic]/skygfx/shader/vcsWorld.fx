@@ -92,12 +92,17 @@ technique vcs_prelit_prop {
         PixelShader = compile ps_2_0 worldPixel();
     }
 }
-#elif defined(VCS_WORLD_ALPHA)
+#elif defined(VCS_WORLD_ALPHA) || defined(VCS_SHOP_PROP)
+#ifdef VCS_SHOP_PROP
+#define COVERAGE_ALPHA_REF 255
+#else
+#define COVERAGE_ALPHA_REF 128
+#endif
 technique vcs_leeds_alpha {
     pass Coverage {
         FogEnable = false;
         AlphaTestEnable = true;
-        AlphaRef = 128;
+        AlphaRef = COVERAGE_ALPHA_REF;
         AlphaFunc = GREATEREQUAL;
         AlphaBlendEnable = true;
         SrcBlend = SRCALPHA;
@@ -109,7 +114,7 @@ technique vcs_leeds_alpha {
     pass Fringe {
         FogEnable = false;
         AlphaTestEnable = true;
-        AlphaRef = 128;
+        AlphaRef = COVERAGE_ALPHA_REF;
         AlphaFunc = LESS;
         AlphaBlendEnable = true;
         SrcBlend = SRCALPHA;

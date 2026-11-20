@@ -32,6 +32,117 @@ def chunks(data, start, end):
         yield kind, payload, start
 
 
+def airtrain_models(data):
+    """Export the original three type-5 aircraft LODs as single-atomic object clumps."""
+    _, start, end = next(chunks(data, 0, len(data)))
+    clump = list(chunks(data, start, end))
+    frame_list = next((a, b) for kind, a, b in clump if kind == 0xE)
+    frames = list(chunks(data, *frame_list))
+    identity = (1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+    names, matrices = [], []
+    for i, (_, a, b) in enumerate(frames[1:]):
+        names.append(next((data[lo:hi].rstrip(b"\0").decode("ascii")
+                           for kind, lo, hi in chunks(data, a, b) if kind == 0x253F2FE), ""))
+        values = struct.unpack_from("<12fi", data, frames[0][1] + 4 + i * 56)
+        parent = values[-1]
+        # The clump's root is replaced by the live vehicle matrix.
+        matrices.append(compose(values[:12], matrices[parent]) if parent >= 0 else identity)
+    geometry_list = next((a, b) for kind, a, b in clump if kind == 0x1A)
+    geometries = [(s, e) for kind, s, e in chunks(data, *geometry_list) if kind == 0xF]
+    parts = {}
+    for kind, a, b in clump:
+        if kind == 0x14:
+            _, offset, _ = next(chunks(data, a, b))
+            frame, geometry = struct.unpack_from("<II", data, offset)
+            parts[names[frame]] = (geometries[geometry], matrices[frame])
+
+    def object_model(geometry):
+        empty = rw_chunk(3, b"")
+        frame_list = rw_chunk(0xE, rw_chunk(1, struct.pack("<I12fiI", 1, *identity, -1, 0)) + empty)
+        geom_list = rw_chunk(0x1A, rw_chunk(1, struct.pack("<I", 1)) + geometry)
+        atomic = rw_chunk(0x14, rw_chunk(1, struct.pack("<4I", 0, 0, 5, 0)) + empty)
+        return rw_chunk(0x10, rw_chunk(1, struct.pack("<3I", 1, 0, 0)) + frame_list + geom_list + atomic + empty)
+
+    models = {}
+    vertices = []
+    for tier in ("hi", "lo", "vlo"):
+        meshes = [parts["chassis_" + tier]]
+        if tier == "hi":
+            meshes += [parts["wheel_front"], parts["wheel_rear"]]
+        geometry = merge_airtrain_meshes(data, meshes, vertices)
+        models["airtrain_" + tier + ".dff"] = object_model(geometry)
+
+    # One local-space COL1 box covers every visual tier and both wheel frames.
+    low = tuple(min(axis) for axis in zip(*vertices))
+    high = tuple(max(axis) for axis in zip(*vertices))
+    # SA offsets some object bounds by the sphere centre. Anchor the sphere
+    # at the flight pivot so those queries return the same local coordinates.
+    radius = sum(max(abs(a), abs(b)) ** 2 for a, b in zip(low, high)) ** 0.5
+    bounds = struct.pack("<10f", radius, 0, 0, 0, *low, *high)
+    box = struct.pack("<6f4B", *low, *high, 0, 0, 0, 0)
+    payload = (struct.pack("<22sH", b"airtrain", 0) + bounds + struct.pack("<3I", 0, 0, 1)
+               + box + struct.pack("<2I", 0, 0))
+    models["airtrain.col"] = struct.pack("<4sI", b"COLL", len(payload)) + payload
+    return models
+
+
+def merge_airtrain_meshes(data, meshes, aircraft_vertices):
+    """Bake aircraft part frames while preserving UVs, normals, materials and original strips."""
+    uvs, triangles, positions, normals, materials, strips = [], [], [], [], [], []
+    vertex_base, material_base, index_count = 0, 0, 0
+    for geometry, matrix in meshes:
+        fields = list(chunks(data, *geometry))
+        _, start, end = fields[0]
+        flags, faces, vertices, morphs = struct.unpack_from("<4I", data, start)
+        # The checked disc supplies one UV set, one morph target and vertex normals.
+        if (flags, morphs) != (0x10037, 1):
+            raise ValueError("Unexpected AIRTRAIN geometry format")
+        uv = start + 16
+        tri = uv + vertices * 8
+        sphere = tri + faces * 8
+        pos = sphere + 24
+        normal = pos + vertices * 12
+        if normal + vertices * 12 != end or struct.unpack_from("<2I", data, sphere + 16) != (1, 1):
+            raise ValueError("Unexpected AIRTRAIN vertex layout")
+        uvs.append(data[uv:tri])
+        for b, a, mat, c in struct.iter_unpack("<4H", data[tri:sphere]):
+            triangles.append(struct.pack("<4H", b+vertex_base, a+vertex_base, mat+material_base, c+vertex_base))
+        for axis, target in ((pos, positions), (normal, normals)):
+            for vector in struct.iter_unpack("<3f", data[axis:axis + vertices * 12]):
+                target.append(tuple(sum(vector[k] * matrix[k*3+j] for k in range(3))
+                                    + (matrix[9+j] if axis == pos else 0) for j in range(3)))
+        mat_fields = list(chunks(data, *fields[1][1:]))
+        count, = struct.unpack_from("<I", data, mat_fields[0][1])
+        if count != len(mat_fields) - 1:
+            raise ValueError("Unexpected reused AIRTRAIN material")
+        materials.extend(data[a-12:b] for _, a, b in mat_fields[1:])
+        _, a, b = next(chunks(data, *fields[2][1:]))
+        strip_type, groups, indices = struct.unpack_from("<3I", data, a)
+        if strip_type != 1:
+            raise ValueError("Expected AIRTRAIN triangle strips")
+        offset = a + 12
+        for _ in range(groups):
+            length, material = struct.unpack_from("<II", data, offset)
+            ix = struct.unpack_from(f"<{length}I", data, offset + 8)
+            strips.append(struct.pack("<II", length, material+material_base)
+                          + struct.pack(f"<{length}I", *(i+vertex_base for i in ix)))
+            offset += 8 + 4 * length
+        if offset != b:
+            raise ValueError("Unexpected AIRTRAIN bin mesh size")
+        index_count += indices
+        vertex_base += vertices
+        material_base += count
+    aircraft_vertices.extend(positions)
+    center = tuple((min(p[j] for p in positions) + max(p[j] for p in positions)) / 2 for j in range(3))
+    radius = max(sum((p[j]-center[j])**2 for j in range(3)) for p in positions)**0.5
+    geom = (struct.pack("<4I", flags, len(triangles), vertex_base, 1) + b"".join(uvs) + b"".join(triangles)
+            + struct.pack("<4fII", *center, radius, 1, 1)
+            + b"".join(struct.pack("<3f", *p) for p in positions + normals))
+    mats = rw_chunk(8, rw_chunk(1, struct.pack("<I", material_base) + b"\xff"*4*material_base) + b"".join(materials))
+    binmesh = rw_chunk(0x50E, struct.pack("<3I", 1, len(strips), index_count) + b"".join(strips))
+    return rw_chunk(0xF, rw_chunk(1, geom) + mats + rw_chunk(3, binmesh))
+
+
 def native_textures(dictionary):
     end = 12 + struct.unpack_from("<I", dictionary, 4)[0]
     return {
@@ -160,6 +271,11 @@ def complete_vehicle_textures(data, dictionary, shared, original, name, reflecti
             common[texture] = shared[texture]
         elif texture in original:
             textures[texture] = original[texture]
+        elif name == "speeder" and texture == "speeder86prop":
+            # The converted mesh retains the propeller's old material name.
+            # Its companion TXD supplies that raster under the VCS boat name.
+            source = textures["vcs_boatfin"]
+            textures[texture] = source[:32] + texture.encode("ascii").ljust(32, b"\0") + source[64:]
         elif name == "admiral" and texture == "tablica":
             source = shared["backplate"]
             common[texture] = source[:32] + b"tablica".ljust(32, b"\0") + source[64:]

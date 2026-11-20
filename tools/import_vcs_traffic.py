@@ -19,7 +19,7 @@ import tempfile
 import zlib
 
 from vcs_model_assets import (
-    adapt_pedestrian, build_img, build_texture_dictionary, complete_vehicle_textures, native_textures,
+    adapt_pedestrian, airtrain_models, build_img, build_texture_dictionary, complete_vehicle_textures, native_textures,
     original_vehicle_reflections, vehicle_material_textures, vehicle_native_raster,
 )
 from vcs_vehicle_ground import ground_catalog
@@ -57,6 +57,16 @@ ROAD_MAP = DEFAULT_OUTPUT.parents[3] / "[vcs]" / "jconv"
 MODEL_TEMPLATES = Path(__file__).resolve().parent / "vcs_model"
 CONVERTED_MODEL_RESOURCE = DEFAULT_OUTPUT.parents[3] / "[model]" / "vcs_model"
 CONVERTED_MODELS = {8: "cop", 14: "male01", 34: "hmyap", 280: "airtrain"}
+# These water models need separate client model IDs. Their server vehicles use
+# native boat hulls; in particular the old JETSKI manifest points to a car.
+WATER_MODEL_VARIANTS = {
+    215: ("speeder", 452), 233: ("jetski", 473), 248: ("marquis", 484),
+    249: ("rio", 484), 257: ("squalo", 446), 264: ("scarab", 446),
+}
+# The nine pairs installed by the initial MAIN.SCM set_gang_ped_models calls.
+# The seventh slot starts with PGANG7A/B (89/90).
+GANG_MODELS = ((91, 92), (93, 94), (95, 96), (97, 98), (99, 100),
+               (101, 102), (89, 90), (105, 106), (107, 108))
 
 
 def sha256(data):
@@ -323,7 +333,7 @@ def read_traffic_model_sources(image, models, pedestrian_ids=(), vehicle_binding
                                "textures": locate(first_texture + texture_slot),
                                "kind": "vehicle" if is_vehicle else "ped",
                                "base": vehicles[original_id]["model"] if original_id in vehicles
-                               else {8: 280, 280: 577}.get(original_id, 7)}
+                               else {8: 280, 12: 274, 13: 277, 280: 577}.get(original_id, 7)}
     return assets, entries
 
 
@@ -440,7 +450,7 @@ def read_population(image, scm):
         require(all(171 <= model <= 280 for model in group), "Invalid PS2 vehicle group model ID")
         vehicle_groups.append(group)
     data = {"zones": zones, "records": [{"id": index, "values": row} for index, row in enumerate(records)],
-            "pedGroups": ped_groups, "vehicleGroups": vehicle_groups}
+            "pedGroups": ped_groups, "vehicleGroups": vehicle_groups, "gangModels": GANG_MODELS}
     offsets = {"zoneSystem": zone_system, "populationZones": zone_offset,
                "populationRecords": record_offset, "pedestrianGroups": group_offset,
                "vehicleGroups": vehicle_group_offset, "vehicleGroupSizes": vehicle_size_offset}
@@ -601,7 +611,7 @@ def validate_pc_texture_dictionary(data, name):
     require(textures > 0, f"No native textures in {name}")
 
 
-def export_traffic_models(disc, converter, destination, population, vehicle_bindings):
+def export_traffic_models(disc, converter, destination, population, vehicle_bindings, *, street_peds=False):
     executable = converter.resolve(strict=True)
     raw_game = zlib.decompress(verify_file(disc, "PS2/GAME.DTZ", GAME_DTZ))
     model_table, = U32.unpack_from(raw_game, GATG_ROOT + 7 * 4)
@@ -609,22 +619,37 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
     palette_offset, = U32.unpack_from(raw_game, GATG_ROOT + 0x1C * 4)
     palette = table(raw_game, palette_offset, 0xF0, 3, "Pedestrian RGB palette")
     pedestrian_ids = {model for group in population["pedGroups"] for model in group if model >= 0}
+    if street_peds:
+        pedestrian_ids.update((12, 13))
+        pedestrian_ids.update(model for group in GANG_MODELS for model in group)
+    if not street_peds:
+        vehicle_bindings = list(vehicle_bindings)
+        for original_id, (name, base) in WATER_MODEL_VARIANTS.items():
+            pointer, = U32.unpack_from(raw_game, model_table + original_id * 4)
+            key, = U32.unpack_from(raw_game, pointer + 8)
+            require(key == model_name_key(name), f"Unexpected PS2 water model for {name}")
+            vehicle_bindings.append({"originalId": original_id, "model": base, "name": name})
     model_sources, _ = read_traffic_model_sources(raw_game, model_table, pedestrian_ids, vehicle_bindings)
-    templates = {name: (MODEL_TEMPLATES / name).read_bytes()
-                 for name in ("model_bindings_s.lua", "model_bindings_c.lua", "locomotion_c.lua", "jaw_c.lua",
-                              "vehicle_lamps.fx")}
-    for name in ("vehiclelights128.png", "vehiclelightson128.png"):
-        templates[name] = (MODEL_RESOURCE / "src" / "generic" / name).read_bytes()
+    if street_peds:
+        model_sources = {key: value for key, value in model_sources.items() if value["kind"] == "ped"}
     outputs = {"ped": {}, "vehicle": {}}
-    source_dir = MODEL_RESOURCE / "src" / "vehicle"
-    shared_dictionary = (source_dir / "vehshare.txd").read_bytes()
-    shared_vehicle_textures = native_textures(shared_dictionary)
-    used_common_textures = {}
-    for texture, donor in (("cubanbody128c", "CUBAN.txd"), ("ponybits_ca", "PONY.txd"),
-                           ("barracks_slats", "BARRACKS.txd"), ("barracksbits", "BARRACKS.txd")):
-        shared_vehicle_textures[texture] = native_textures((source_dir / donor).read_bytes())[texture]
-    for name, offset in (("xv_vehiclegeneric_sl", 0x55CB0), ("xv_vehiclegrunge_sl", 0x55D10)):
-        shared_vehicle_textures[name] = vehicle_native_raster(raw_game, name, offset)
+    if street_peds:
+        templates = {"jaw_c.lua": (MODEL_TEMPLATES / "jaw_c.lua").read_bytes()}
+    else:
+        templates = {name: (MODEL_TEMPLATES / name).read_bytes()
+                     for name in ("model_bindings_s.lua", "model_bindings_c.lua", "locomotion_c.lua", "jaw_c.lua",
+                                  "vehicle_lamps.fx")}
+        for name in ("vehiclelights128.png", "vehiclelightson128.png"):
+            templates[name] = (MODEL_RESOURCE / "src" / "generic" / name).read_bytes()
+        source_dir = MODEL_RESOURCE / "src" / "vehicle"
+        shared_dictionary = (source_dir / "vehshare.txd").read_bytes()
+        shared_vehicle_textures = native_textures(shared_dictionary)
+        used_common_textures = {}
+        for texture, donor in (("cubanbody128c", "CUBAN.txd"), ("ponybits_ca", "PONY.txd"),
+                               ("barracks_slats", "BARRACKS.txd"), ("barracksbits", "BARRACKS.txd")):
+            shared_vehicle_textures[texture] = native_textures((source_dir / donor).read_bytes())[texture]
+        for name, offset in (("xv_vehiclegeneric_sl", 0x55CB0), ("xv_vehiclegrunge_sl", 0x55D10)):
+            shared_vehicle_textures[name] = vehicle_native_raster(raw_game, name, offset)
     with tempfile.TemporaryDirectory(prefix="vcs-traffic-models-") as temp_dir:
         workspace = Path(temp_dir)
         game_dat = workspace / "game.dat"
@@ -719,13 +744,30 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
                         converted = adapt_pedestrian(converted, output.name, info, palette)
                     outputs[asset["kind"]][output.name] = converted
 
+    if street_peds:
+        destination.mkdir(parents=True, exist_ok=True)
+        catalog = ["StreetPedModels = {"]
+        for model, asset in model_sources.items():
+            catalog.append(f'    [{model}] = {{base={asset["base"]}, name="{asset["name"]}"}},')
+        catalog.extend(("}", ""))
+        animations, groups = convert_locomotion(raw_game, disc / "GTA3PS2.IMG", model_table, model_sources,
+                                               street_evades=True)
+        image = build_img(outputs["ped"])
+        for name, data in {"street.img": image, "street.ifp": animations,
+                           "models.lua": "\n".join(catalog).encode("ascii"), "groups.lua": groups,
+                           "jaw_c.lua": templates["jaw_c.lua"]}.items():
+            write_atomic(destination / name, data)
+        return {"models": len(model_sources), "sha256": sha256(image)}
+
     outputs["vehicle"]["vehshare.txd"] = build_texture_dictionary(used_common_textures, shared_dictionary[26:28])
     catalog = ["VCS_TRAFFIC_MODEL_CATALOG = {"]
     for original_id, asset in model_sources.items():
         kind, base = asset["kind"], asset["base"]
-        catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"}},')
+        variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS else ""
+        catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"{variant}}},')
     catalog.append("}")
     templates["model_catalog.lua"] = ("\n".join(catalog) + "\n").encode("utf-8")
+    templates.update(airtrain_models(outputs["vehicle"]["airtrain.dff"]))
     templates["vehicle_ground_catalog.lua"] = ground_catalog(
         {id: asset["name"] for id, asset in model_sources.items() if asset["kind"] == "vehicle"},
         outputs["vehicle"],
@@ -744,9 +786,15 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
              '    <script src="model_bindings_c.lua" type="client" />',
              '    <min_mta_version client="1.6.0-9.22676" />',
              '    <export function="getVcsModelBase" type="server" />',
+             '    <export function="getVcsModelIdByName" type="server" />',
              '    <export function="getVcsVehicleGroundGeometry" type="client" />',
              '    <export function="getVcsVehicleRenderMaterials" type="client" />',
              '    <export function="getTrafficModelBase" type="server" />',
+             '    <export function="getTrafficFixedWingLOD" type="client" />',
+             '    <file src="airtrain_vlo.dff" />',
+             '    <file src="airtrain_lo.dff" />',
+             '    <file src="airtrain_hi.dff" />',
+             '    <file src="airtrain.col" />',
              '    <export function="getTrafficVehicleGroundGeometry" type="client" />',
              '    <file src="traffic_locomotion.ifp" />',
              '    <file src="vehicle_lamps.fx" />',
@@ -772,12 +820,14 @@ def main():
     parser.add_argument("--convert-models", type=Path, metavar="VCSCONV",
                         help="convert the selected local traffic models using a Win32 vcsconv executable")
     parser.add_argument("--model-output", type=Path, default=CONVERTED_MODEL_RESOURCE)
+    parser.add_argument("--street-peds", type=Path, metavar="VCSCONV",
+                        help="Convert PS2 street pedestrian skins and locomotion into npchlc_traffic/ped_models")
     local_pc = Path("D:/Game/vcs_pc_edition")
     parser.add_argument("--vcs-pc-dir", type=Path, default=local_pc if local_pc.is_dir() else None,
                         help="Use the locally installed VCS PC Edition for road population density")
     args = parser.parse_args()
-    if args.verify_only and args.convert_models:
-        parser.error("--convert-models writes assets and cannot be combined with --verify-only")
+    if args.verify_only and (args.convert_models or args.street_peds):
+        parser.error("Asset conversion cannot be combined with --verify-only")
     try:
         graph, manifest = assemble(args.disc_directory, args.vcs_pc_dir)
         encoded = encode_json(graph)
@@ -787,6 +837,10 @@ def main():
                 args.disc_directory, args.convert_models, args.model_output, graph["population"], graph["modelBindings"]
             )
             manifest["sources"]["GTA3PS2.IMG"] = GTA3PS2_IMG
+        if args.street_peds:
+            manifest["streetPedestrians"] = export_traffic_models(
+                args.disc_directory, args.street_peds, DEFAULT_OUTPUT.parents[1] / "ped_models",
+                graph["population"], [], street_peds=True)
         if not args.verify_only:
             args.output.mkdir(parents=True, exist_ok=True)
             write_atomic(args.output / GRAPH_NAME, encoded)

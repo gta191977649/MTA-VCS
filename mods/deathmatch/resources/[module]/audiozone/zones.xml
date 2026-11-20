@@ -5,10 +5,6 @@
     <playlist id="city" gain="12">
         <track file="audio/city.ogg" />
     </playlist>
-    <!-- PS2 CDSTREAM track 15; ambient gain for area 4. -->
-    <playlist id="cityMall" gain="40">
-        <track file="audio/city.ogg" />
-    </playlist>
     <!-- MAIN_1:25901 registers one of music streams 24-28 at the player position. -->
     <playlist id="shops" gain="40">
         <track file="audio/mall_1.ogg" />
@@ -17,9 +13,8 @@
         <track file="audio/mall_4.ogg" />
         <track file="audio/mall_5.ogg" />
     </playlist>
-    <zone playlist="shops" radius="200" fallback="cityMall">
-        <!-- Mall map zone BOX06 from the PS2 zone table. -->
-        <box minX="316.74" minY="952.86" minZ="-247.73" maxX="515.86" maxY="1315.27" maxZ="-135.13" />
+    <!-- The dedicated mall scope covers every floor and entrance uniformly. -->
+    <zone playlist="shops">
         <portal prefix="MALL" />
     </zone>
     <zone playlist="shops" radius="200" fallback="city">

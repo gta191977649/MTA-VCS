@@ -38,6 +38,16 @@ function TrafficPopulation.build(data, checkpoint)
     requireRecord(type(data) == "table" and type(data.zones) == "table" and #data.zones > 0
         and type(data.records) == "table" and type(data.pedGroups) == "table", "data", 0)
     local index = { cells = {}, fallback = data.zones[1], records = data.records, pedGroups = data.pedGroups }
+    if data.gangModels then
+        requireRecord(#data.gangModels == 9, "gang models", 0)
+        for slot, pair in ipairs(data.gangModels) do
+            requireRecord(type(pair) == "table" and #pair == 2, "gang models", slot)
+            for _, id in ipairs(pair) do
+                requireRecord(finite(id) and id >= 0 and id % 1 == 0, "gang model", slot)
+            end
+        end
+        index.gangModels = data.gangModels
+    end
 
     for slot, group in ipairs(data.pedGroups) do
         requireRecord(type(group) == "table" and #group == 16, "ped group", slot - 1)

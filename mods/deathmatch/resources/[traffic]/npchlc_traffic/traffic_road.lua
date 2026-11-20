@@ -3,7 +3,14 @@ TrafficRoad = {}
 local HLC = exports.npc_hlc
 local models = exports.server_coldata
 local cells, vehicles, drivers, pending, cursorByPlayer = {}, {}, {}, {}, {}
+local retiring, unclaimed = {}, {}
+local ownedVehicles = {}
+local waterSeatTransfers = {}
+local PLAYER_PARKING_GRACE_MS = 30000
+local detachedBikes = {}
+local recentShots = setmetatable({}, {__mode = "k"})
 local incoming = {}
+local waterCells = {}
 local lastRoadAttempt = {}
 local observers, observerList = {}, {}
 local vehicleHead, vehicleTail, vehicleCursor
@@ -56,7 +63,12 @@ end
 function TrafficRoad.crossing(from, to, x, y, radius)
     local distanceFrom = length2D(from.x - x, from.y - y)
     local distanceTo = length2D(to.x - x, to.y - y)
-    if (distanceFrom > radius) == (distanceTo > radius) then return false end
+    if from.kind == "boat" then
+        -- 00267928 uses different radii for the crossing test and interpolation.
+        local squared = radius * radius * 1.5
+        if (distanceFrom ^ 2 - squared) * (distanceTo ^ 2 - squared) >= 0 then return false end
+        radius = radius * 1.5
+    elseif (distanceFrom > radius) == (distanceTo > radius) then return false end
     return math.abs(distanceFrom - radius) / (math.abs(distanceFrom - radius) + math.abs(distanceTo - radius))
 end
 
@@ -77,7 +89,7 @@ end
 
 local function indexRoads()
     for _, node in ipairs(graph.nodes) do
-        if node.kind == "vehicle" and node.scene == "outdoor" and not hasFlag(node, 0x20) then
+        if (node.kind == "vehicle" or node.kind == "boat") and node.scene == "outdoor" and not hasFlag(node, 0x20) then
             local i, j = math.floor(node.x / CELL_SIZE), math.floor(node.y / CELL_SIZE)
             if not cells[i] then cells[i] = {} end
             if not cells[i][j] then cells[i][j] = {} end
@@ -89,6 +101,19 @@ local function indexRoads()
                     local edges = incoming[edge.to] or {}
                     edges[#edges + 1] = edge
                     incoming[edge.to] = edges
+                    if node.kind == "boat" then
+                        -- Offshore links can cross the search area with both endpoints outside its cells.
+                        local target = graph.nodes[edge.to + 1]
+                        for cx = math.floor(math.min(node.x,target.x)/CELL_SIZE), math.floor(math.max(node.x,target.x)/CELL_SIZE) do
+                            local column = waterCells[cx] or {}
+                            waterCells[cx] = column
+                            for cy = math.floor(math.min(node.y,target.y)/CELL_SIZE), math.floor(math.max(node.y,target.y)/CELL_SIZE) do
+                                local bucket = column[cy] or {}
+                                column[cy] = bucket
+                                bucket[#bucket + 1] = edge
+                            end
+                        end
+                    end
                 end
             end
         end
@@ -161,7 +186,54 @@ function TrafficRoad.laneEntryClear(roadGraph, edge, lane, dimension, vehicle, s
     return true
 end
 
+-- 004361A8: draw from all adjoining links before relaxing the turn rules.
+local function chooseWaterLink(edge, lane, current)
+    local previous = graph.nodes[edge.from + 1]
+    local ix, iy = current.x - previous.x, current.y - previous.y
+    local inLength = length2D(ix, iy)
+    local twoWay = edge.leftLanes > 0 and edge.rightLanes > 0
+    local function accepts(candidate, stage)
+        local target = graph.nodes[candidate.to + 1]
+        if not TrafficGraph.canDriveTransition(graph, edge, candidate)
+            or target.scene ~= current.scene or (hasFlag(target, 0x20) and not hasFlag(previous, 0x20)) then return false end
+        if stage == 3 then return true end
+        if candidate.to == edge.from then return false end
+        if stage == 2 then return true end
+        if hasFlag(target, 0x10) and not hasFlag(previous, 0x10) then return false end
+        if not twoWay and (candidate.leftLanes == 0 or candidate.rightLanes == 0) then return false end
+        local ox, oy = target.x - current.x, target.y - current.y
+        local length = inLength * length2D(ox, oy)
+        if length == 0 then return false end
+        local cross = (ix * oy - iy * ox) / length
+        if cross > 0.77 then return lane == 0 end
+        if cross < -0.77 then return lane == edge.lanes - 1 end
+        return edge.lanes < 3 or (lane > 0 and lane < edge.lanes - 1)
+    end
+    if current.linkCount == 0 then return end
+    for stage = 1, 2 do
+        for attempt = 1, 14 do
+            local candidate = graph.links[current.firstLink + math.random(current.linkCount)]
+            if accepts(candidate, stage) then return candidate end
+        end
+    end
+    for offset = 1, current.linkCount do
+        local candidate = graph.links[current.firstLink + offset]
+        if accepts(candidate, 3) then return candidate end
+    end
+end
+
 local function chooseOutgoing(edge, lane, context)
+    local junction = graph.nodes[edge.to + 1]
+    if junction.kind == "boat" then
+        local nextEdge = chooseWaterLink(edge, lane, junction)
+        if not nextEdge then return false end
+        local target = graph.nodes[nextEdge.to + 1]
+        local dx, dy = target.x - junction.x, target.y - junction.y
+        if dx * dx + dy * dy >= 196 and math.random(0, 3) == 0 then
+            lane = lane + (math.random(0, 1) == 0 and -1 or 1)
+        end
+        return nextEdge, math.max(0, math.min(lane, nextEdge.lanes - 1))
+    end
     local choices, fallback = outgoingChoices(graph, edge, lane)
     local nextEdge = #choices > 0 and choices[fallback and 1 or math.random(#choices)]
     if not nextEdge then return false end
@@ -179,23 +251,50 @@ local function chooseOutgoing(edge, lane, context)
     return nextEdge, lane
 end
 
-local function finishRelease(state)
-    TrafficVisibility.releasePed(state.driver)
+local function releaseRoadControl(state)
     local vehicle = state.vehicle
-    if not isElement(vehicle) then return end
     if state.rail then
         setElementFrozen(vehicle, false)
         setElementData(vehicle, railTag, false, "broadcast", "deny")
     end
-    if TrafficVisibility.hasPlayerOccupant(vehicle) then
+end
+
+local function finishRelease(state)
+    retiring[state.vehicle] = nil
+    TrafficPassengers.release(state.vehicle)
+    PedAI.detach(state.driver)
+    TrafficVisibility.releasePed(state.driver)
+    local vehicle = state.vehicle
+    if not isElement(vehicle) then return end
+    releaseRoadControl(state)
+    if TrafficVisibility.isWreck(vehicle) then return end
+    if state.borrowed or TrafficVisibility.hasPlayerOccupant(vehicle) then
+        if not state.borrowed then
+            state.lastPlayerUse = getTickCount()
+            unclaimed[vehicle] = state.lastPlayerUse
+        end
         TrafficVisibility.detach(vehicle)
     else
         destroyElement(vehicle)
     end
 end
 
-local function release(state, fade)
-    if vehicles[state.vehicle] ~= state then return end
+local function register(state)
+    if not state.borrowed then
+        ownedVehicles[state.vehicle] = state
+        unclaimed[state.vehicle] = nil
+    end
+    detachedBikes[state.vehicle] = nil
+    state.bikeFell=nil
+    vehicles[state.vehicle], drivers[state.driver] = state, state
+    state.before, state.after = vehicleTail, nil
+    if vehicleTail then vehicleTail.after = state else vehicleHead = state end
+    vehicleTail = state
+    activeCount = activeCount + 1
+end
+
+local function unregister(state)
+    if state.pursuit then TrafficWorld.cancelPursuit(state.vehicle) end
     vehicles[state.vehicle], drivers[state.driver] = nil, nil
     activeCount = activeCount - 1
     local before, after = state.before, state.after
@@ -203,16 +302,71 @@ local function release(state, fade)
     if after then after.before = before else vehicleTail = before end
     if vehicleCursor == state then vehicleCursor = after or vehicleHead end
     state.before, state.after = nil, nil
+end
+
+local function release(state, fade)
+    if vehicles[state.vehicle] ~= state then return end
+    unregister(state)
     local vehicle = state.vehicle
     if fade and isElement(vehicle) and getElementSyncer(vehicle) and not TrafficVisibility.hasPlayerOccupant(vehicle) then
+        retiring[vehicle] = state
+        TrafficPassengers.fading(vehicle, true)
         if isElement(state.driver) then HLC:clearNPCTasks(state.driver) end
-        TrafficVisibility.retire(vehicle, state.driver, function() finishRelease(state) end)
+        TrafficVisibility.retire(vehicle, state.driver, function() finishRelease(state) end, true)
     else
         finishRelease(state)
     end
 end
 
+local function roadInteraction(vehicle)
+    local state = retiring[vehicle]
+    if state and TrafficVisibility.cancelRetirement(vehicle) then
+        retiring[vehicle] = nil
+        TrafficPassengers.fading(vehicle, false)
+        register(state)
+        state.railStall = nil
+        state.lastProgress = getTickCount()
+        return state, true
+    end
+    return vehicles[vehicle], false
+end
+
+local function yieldDriver(state, player, claimed)
+    if not player and state.pursuit and state.pursuit.phase == "exit" then
+        state.evacuating = {retaliate=true, pursuitExit=true, attacker=state.pursuit.target}
+    end
+    unregister(state)
+    local vehicle, ped = state.vehicle, state.driver
+    releaseRoadControl(state)
+    TrafficVisibility.detach(vehicle)
+    if not state.evacuating or state.evacuating.roadRage or state.evacuating.pursuitExit then TrafficPassengers.driverGone(vehicle, player) end
+    if not state.borrowed then
+        unclaimed[vehicle] = getTickCount()
+        if claimed then state.lastPlayerUse = getTickCount() end
+    end
+    if isElement(ped) and not isPedDead(ped) then
+        HLC:clearNPCTasks(ped)
+        TrafficAmbient.adoptDriver(ped, player, vehicle, state.originalDriver, player and state)
+        if not player and not state.evacuating and getVehicleType(vehicle)=="Bike" then
+            detachedBikes[vehicle]={road=state,at=getTickCount()}
+        end
+        if not player and state.evacuating and isElement(state.evacuating.attacker) then
+            if state.evacuating.roadRage then
+                PedAI.roadRage(ped, state.evacuating.attacker, state)
+            elseif state.evacuating.retaliate then
+                PedAI.vehicleThreat(ped, state.evacuating.attacker, state.evacuating.pursuitExit and state)
+            else
+                PedAI.passengerThreat(ped, state.evacuating.attacker)
+            end
+        end
+    else
+        TrafficVisibility.releasePed(ped)
+        PedAI.detach(ped)
+    end
+end
+
 local function assignTask(state, task)
+    if state.scriptPaused then return end
     if not HLC:setNPCTask(state.driver, task) then
         release(state)
         return
@@ -361,21 +515,199 @@ local function prepareSpawnRail(candidate)
     return true
 end
 
-local function followPhysics(state)
+local function resetPhysicsSequence(state)
+    local previous=state.physicsTask
+    state.physicsSequence=(state.physicsSequence or 0)+(previous and #previous[5] or 0)+1
+end
+
+local function followPhysics(state, extending)
     local route, start = state.railRoute, state.railStart
     fillRoute(state, 3)
+    local vx,vy=getElementVelocity(state.vehicle)
+    local horizon=2*math.max(state.cruiseSpeed,50*length2D(vx,vy))
+    local px,py=getElementPosition(state.vehicle)
+    local metres=0
     local segments = {}
-    for index = 1, math.min(3, #route) do
+    for index = 1, 8 do
+        if index>3 and (metres>=horizon or state.pursuit) then break end
+        if not route[index] and index>3 then fillRoute(state,index) end
         local item = route[index]
+        if not item then break end
         local x, y, z = unpack(item.point)
+        metres=metres+length2D(x-px,y-py)
+        px,py=x,y
         local dx, dy = edgeDirection(item.edge)
         segments[index] = {item.edge.id, item.lane, x, y, z + state.heightOffset, dx, dy,
-            item.speedClass or item.edge.speedClass, signalGroup(item.edge)}
+            item.speedClass or item.edge.speedClass, state.drivingStyle == 2 and 0 or signalGroup(item.edge)}
     end
+    if extending and #segments<=#state.physicsTask[5] then return end
     local task = {"driveTrafficPhysics", state.physicsSequence, state.cruiseSpeed,
-        {start[1], start[2], start[3] + state.heightOffset}, segments}
+        {start[1], start[2], start[3] + state.heightOffset}, segments, state.drivingStyle}
     state.physicsTask = task
     return assignTask(state, task)
+end
+
+-- Rebuild only the route when an incident moved the vehicle to another street.
+-- Walk legal directed lane connections and stop on the first reachable lane
+-- within dismount range. Never use the body itself as a driving waypoint.
+function TrafficRoad.serviceRoute(state,x,y,z)
+    local first=state.railRoute and state.railRoute[1]
+    if not first then return end
+    local queue={{edge=first.edge,lane=first.lane}}
+    local seen={[first.edge.id]=true}
+    local index=1
+    while index<=#queue and index<=512 do
+        local item=queue[index]
+        local ax,ay,az=TrafficGraph.lanePoint(graph,item.edge,item.lane)
+        if ax then
+            local a,b=graph.nodes[item.edge.from+1],graph.nodes[item.edge.to+1]
+            local dx,dy=b.x-a.x,b.y-a.y
+            local t=math.max(-0.5,math.min(0.5,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy)))
+            local tx,ty,tz=ax+t*dx,ay+t*dy,az+t*(b.z-a.z)
+            if (tx-x)^2+(ty-y)^2<22^2 and math.abs(tz-z)<5 then
+                local path={{tx,ty,tz+state.heightOffset}}
+                local parent=item.parent
+                while parent do
+                    table.insert(path,1,parent.point)
+                    parent=parent.parent
+                end
+                return path
+            end
+            item.point={ax,ay,az+state.heightOffset}
+            for _,edge in ipairs(outgoingChoices(graph,item.edge,item.lane)) do
+                if not seen[edge.id] then
+                    seen[edge.id]=true
+                    queue[#queue+1]={edge=edge,lane=math.min(item.lane,edge.lanes-1),parent=item}
+                end
+            end
+        end
+        index=index+1
+    end
+end
+
+local function rejoinRoadAtVehicle(state, maxOffset)
+    local matrix = getElementMatrix(state.vehicle)
+    if not matrix then return end
+    local x,y,z = unpack(matrix[4])
+    local fx,fy = unpack(matrix[2])
+    local best, score
+    for i = math.floor((x-60)/CELL_SIZE), math.floor((x+60)/CELL_SIZE) do
+        for j = math.floor((y-60)/CELL_SIZE), math.floor((y+60)/CELL_SIZE) do
+            for _, node in ipairs(cells[i] and cells[i][j] or {}) do
+                local count = node.kind == (state.boat and "boat" or "vehicle") and node.linkCount or 0
+                for k = 1,count do
+                    local edge = graph.links[node.firstLink+k]
+                    for lane = 0,edge.lanes-1 do
+                        local px,py,pz = TrafficGraph.lanePoint(graph,edge,lane)
+                        if px and math.abs(z-pz) < 7 then
+                            local dx,dy = edgeDirection(edge)
+                            local along = (x-px)*dx + (y-py)*dy
+                            local halfLength = length2D(px-node.x,py-node.y)
+                            local beyond = math.max(0,math.abs(along)-halfLength)
+                            local offset = ((x-px)*dy-(y-py)*dx)^2 + beyond^2 + (z-pz)^2
+                            local cost = offset + 20*(1-fx*dx-fy*dy)
+                            if (not maxOffset or offset <= maxOffset^2) and (not score or cost < score) then
+                                best,score = {edge=edge,lane=lane,x=x,y=y,dx=dx,dy=dy},cost
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    if best and prepareSpawnRail(best) then
+        state.railPrevious, state.railStart, state.railRoute = best.rail.railPrevious, best.rail.railStart, best.rail.railRoute
+        return true
+    end
+end
+
+function TrafficRoad.isDriving(ped,car)
+    local state=vehicles[car]
+    return state and state.driver==ped and getVehicleOccupant(car,0)==ped or false
+end
+
+-- 0x001FF680 rejoins the road system after objective 0x12 completes.
+function TrafficRoad.resumeDriver(state, stolen)
+    local car, ped = state.vehicle, state.driver
+    if not graph or vehicles[car] or not isElement(car) or getVehicleOccupant(car,0) ~= ped
+        or not TrafficAmbient.releaseDriver(ped) then return false end
+    if getVehicleType(car)=="Bike" then
+        state.ride=(state.ride or 0)+1
+        setElementData(car,"npchlc_traffic:ride",state.ride,"broadcast","deny")
+    end
+    local afterRage = stolen or state.evacuating and (state.evacuating.roadRage or state.evacuating.pursuitExit)
+    state.jacker, state.jackStarted, state.evacuating = nil, nil, nil
+    state.damagePending, state.awaitingImpactAt, state.gunHit, state.lossAt = nil, nil, nil, nil
+    state.rail, state.railTask, state.railMotion, state.railStall = false, nil, nil, nil
+    -- The two native enter-driver completions set different cruise speeds.
+    state.physicsSequence, state.cruiseSpeed = 1, afterRage and 10 or 25
+    state.drivingStyle = not afterRage and 2 or nil
+    state.crashDecision, state.collisionLossAt, state.pursuit = nil, nil, nil
+    state.panicDriving = nil
+    rejoinRoadAtVehicle(state)
+    register(state)
+    HLC:clearNPCTasks(ped)
+    local owner = getElementSyncer(ped)
+    if not getElementSyncer(car) and isElement(owner) then setElementSyncer(car,owner,false) end
+    HLC:setNPCDriveSpeed(ped, state.cruiseSpeed / 50)
+    setVehicleEngineState(car,true)
+    TrafficVisibility.track(car,"road")
+    TrafficVisibility.track(ped,"road")
+    if state.boat then
+        state.rail = true
+        setElementData(car, railTag, true, "broadcast", "deny")
+        followRail(state)
+        return vehicles[car] == state
+    end
+    return followPhysics(state)
+end
+
+-- 0x002D9860 finishes a successful civilian theft with mission 1, cruise 10.
+function TrafficRoad.driveStolenCar(ped,car,originalDriver)
+    if not graph or vehicles[car] or retiring[car] then return false end
+    local _,_,minimumZ = models:getModelBoundingBox(getElementModel(car))
+    local boat = getVehicleType(car) == "Boat"
+    local height = boat and 0 or math.max(0,-(minimumZ or 0))
+    local state = {vehicle=car,driver=ped,dimension=getElementDimension(car),
+        originalDriver=originalDriver,originalVehicle=getElementData(car,"npchlc_traffic:originalModel",false),
+        boat=boat,heightOffset=height,centreHeight=height,borrowed=getElementParent(car) ~= getResourceDynamicElementRoot(getThisResource())}
+    if not rejoinRoadAtVehicle(state) then return false end
+    return TrafficRoad.resumeDriver(state,true)
+end
+
+function TrafficRoad.driverScriptChanged(ped, controlled)
+    local state = drivers[ped]
+    if not state then return end
+    if controlled and not state.scriptPaused then
+        if PedServices then PedServices.relinquish(ped) end
+        TrafficWorld.cancelPursuit(state.vehicle)
+        releaseRoadControl(state)
+        state.rail, state.railTask, state.railMotion = false, nil, nil
+        state.scriptPaused, state.pursuit, state.evacuating = true, nil, nil
+        state.crashDecision, state.gunHit, state.jacker, state.damagePending = nil, nil, nil, nil
+    elseif not controlled and state.scriptPaused then
+        state.scriptPaused = nil
+        if not isElement(state.vehicle) then
+            unregister(state)
+            if isElement(ped) and not isPedDead(ped) then
+                TrafficAmbient.adoptDriver(ped,nil,nil,state.originalDriver)
+            end
+        elseif getVehicleOccupant(state.vehicle, 0) == ped then
+            rejoinRoadAtVehicle(state)
+            if state.boat then
+                state.rail = true
+                setElementData(state.vehicle, railTag, true, "broadcast", "deny")
+                followRail(state)
+            else
+                resetPhysicsSequence(state)
+                followPhysics(state)
+            end
+        else
+            local occupant = getVehicleOccupant(state.vehicle, 0)
+            local taken = isElement(occupant) and getElementType(occupant) == "player"
+            yieldDriver(state, taken and occupant or nil, taken)
+        end
+    end
 end
 
 local function advancePhysics(state, steps)
@@ -386,9 +718,32 @@ local function advancePhysics(state, steps)
     followPhysics(state)
 end
 
+addEvent("npchlc_traffic:routeLow",true)
+addEventHandler("npchlc_traffic:routeLow",resourceRoot,function(vehicle,first,last)
+    local state=vehicles[vehicle]
+    if not state or not client or client~=getElementSyncer(vehicle) or state.rail or state.scriptPaused
+        or state.jacker or state.pursuit or state.evacuating or getVehicleOccupant(vehicle,0)~=state.driver then return end
+    local task=state.physicsTask
+    if not task or task[2]~=first or first+#task[5]-1~=last or state.hintedTask==task then return end
+    state.hintedTask=task
+    local index=HLC:getNPCTrafficWindowProgress(task,vehicle)
+    local steps=math.min(index-1,#state.railRoute-1)
+    if steps>0 then advancePhysics(state,steps) else followPhysics(state,true) end
+end,false)
+
+addEvent("npchlc_traffic:cruiseStuck", true)
+addEventHandler("npchlc_traffic:cruiseStuck", resourceRoot, function(vehicle)
+    local state = vehicles[vehicle]
+    if not state or state.scriptPaused or not client or client ~= getElementSyncer(vehicle) or state.rail or not state.canReverse
+        or state.drivingStyle == 2 or state.jacker or state.pursuit or state.evacuating
+        or not state.stoppedAt or (getTickCount() - state.stoppedAt) % 4294967296 < 29000 then return end
+    state.drivingStyle = 2
+    followPhysics(state)
+end, false)
+
 local function taskDone(task)
     local state = drivers[source]
-    if not state then return end
+    if not state or state.scriptPaused or state.jacker or state.evacuating then return end
     local route = state.railRoute
     if state.rail and task[1] == "driveTrafficRail" then
         if #route < 2 then release(state, true) return end
@@ -402,6 +757,52 @@ end
 
 local function finite(value)
     return type(value) == "number" and value > -math.huge and value < math.huge
+end
+
+function TrafficRoad.contactVelocity(car,now)
+    local vx,vy,vz=getElementVelocity(car)
+    local observer=observers[getVehicleOccupant(car,0)]
+    if observer and observer.impactVehicle==car then
+        for _,s in ipairs(observer.impactSamples) do
+            if (now-s.tick)%4294967296<=180 and s.x*s.x+s.y*s.y+s.z*s.z>vx*vx+vy*vy+vz*vz then
+                vx,vy,vz=s.x,s.y,s.z
+            end
+        end
+    elseif vehicles[car] then
+        local motion=vehicles[car].railMotion
+        if motion and (now-motion.tick)%4294967296<=180 then return motion.vx,motion.vy,motion.vz end
+    end
+    return vx,vy,vz
+end
+
+-- Validate the reported contact against a recent observed vehicle segment.
+function TrafficRoad.pedContactMotion(car,now,x,y,z)
+    local cx,cy,cz=getElementPosition(car)
+    local vx,vy,vz=TrafficRoad.contactVelocity(car,now)
+    local matched=false
+    local function onSegment(ax,ay,az,bx,by,bz)
+        local dx,dy,dz=bx-ax,by-ay,bz-az
+        local t=math.max(0,math.min(1,((x-ax)*dx+(y-ay)*dy+(z-az)*dz)/math.max(.001,dx*dx+dy*dy+dz*dz)))
+        return (x-ax-t*dx)^2+(y-ay-t*dy)^2+(z-az-t*dz)^2<=8^2
+    end
+    local observer=observers[getVehicleOccupant(car,0)]
+    if observer and observer.impactVehicle==car then
+        for _,s in ipairs(observer.impactSamples) do
+            local dt=(now-s.tick)%4294967296
+            if s.px and dt<=400 and s.dimension==getElementDimension(car) and s.interior==getElementInterior(car)
+                and (s.px-cx)^2+(s.py-cy)^2+(s.pz-cz)^2<=(8+dt*.05*math.sqrt(s.x*s.x+s.y*s.y+s.z*s.z))^2
+                and onSegment(s.px,s.py,s.pz,cx,cy,cz) then
+                if s.x*s.x+s.y*s.y+s.z*s.z>vx*vx+vy*vy+vz*vz then vx,vy,vz=s.x,s.y,s.z end
+                matched=true
+            end
+        end
+    end
+    if matched then return vx,vy,vz end
+    if onSegment(cx,cy,cz,cx-vx*12,cy-vy*12,cz-vz*12) then return vx,vy,vz end
+    -- A driver's reliable contact event may arrive before their next position
+    -- sync. Only project the current synchronized velocity, for at most 120 ms.
+    local dx,dy,dz=getElementVelocity(car)
+    if onSegment(cx,cy,cz,cx+dx*6,cy+dy*6,cz+dz*6) then return dx,dy,dz end
 end
 
 local function sampleRailVelocity(state, x, y, z, now)
@@ -476,7 +877,7 @@ local function applyImpactMotion(state, collider, contact)
 end
 
 local function switchToPhysics(state, collider, contact)
-    if not state.rail then return end
+    if not state.rail or state.boat or state.jacker or state.evacuating then return end
     local vehicle = state.vehicle
     local x, y, z = getElementPosition(vehicle)
     local _, _, yaw = getElementRotation(vehicle)
@@ -499,11 +900,16 @@ local function switchToPhysics(state, collider, contact)
 end
 
 addEvent("npchlc_traffic:railImpact", true)
-addEventHandler("npchlc_traffic:railImpact", resourceRoot, function(vehicle, other, x, y, z, nx, ny, nz)
-    local state = vehicles[vehicle]
-    if not client or not state then return end
-    if not state.rail and (not state.awaitingImpactAt
-        or (getTickCount() - state.awaitingImpactAt) % 4294967296 > 600) then return end
+addEventHandler("npchlc_traffic:railImpact", resourceRoot, function(vehicle, other, x, y, z, nx, ny, nz, impulse,ride)
+    local detached = detachedBikes[vehicle]
+    local state = vehicles[vehicle] or detached and detached.road
+    if not client or not state or state.boat or state.scriptPaused or state.jacker or state.evacuating then return end
+    local now = getTickCount()
+    if detached and (now-detached.at)%4294967296>1200 then return end
+    local bike=getVehicleType(vehicle)=="Bike"
+    if bike and (ride or 0)~=(state.ride or 0) then return end
+    local awaitingImpact = state.awaitingImpactAt and (now - state.awaitingImpactAt) % 4294967296 <= 600
+    if not state.rail and not awaitingImpact and (not finite(impulse) or impulse <= 0 or not bike and impulse <= 25) then return end
     if getElementDimension(client) ~= state.dimension or getElementInterior(client) ~= 0 then return end
     local owner = client == getElementSyncer(vehicle)
     local otherVehicle = isElement(other) and other ~= vehicle and getElementType(other) == "vehicle"
@@ -521,29 +927,335 @@ addEventHandler("npchlc_traffic:railImpact", resourceRoot, function(vehicle, oth
         local agreement = nx * (vx - ox) + ny * (vy - oy) + nz * (vz - oz)
         if agreement < 0 then nx, ny, nz = -nx, -ny, -nz end
     end
+    if otherVehicle and finite(impulse) and not detached then
+        if TrafficVehicleCollision.driverReaction(state, other, impulse, now,
+            observers[getVehicleOccupant(other, 0)], nx, ny, nz) then
+            record("vehicleCrashReactions")
+        end
+    end
     local contact = {x, y, z, nx, ny, nz}
-    if state.rail then
+    local fall
+    local driver=getVehicleOccupant(vehicle,0)
+    if bike and finite(impulse) and impulse>0 and not state.bikeFell and (not driver or driver==state.driver) then
+        local mass=graph.edition=="SLUS-21590 USA v1.00" and TrafficVehicleMass[state.originalVehicle] or getVehicleHandling(vehicle).mass
+        local svx,svy,svz=TrafficRoad.contactVelocity(vehicle,now)
+        local ox,oy,oz=0,0,0
+        if otherVehicle then ox,oy,oz=TrafficRoad.contactVelocity(other,now) end
+        local relative=math.sqrt((ox-svx)^2+(oy-svy)^2+(oz-svz)^2)
+        impulse=math.min(impulse,2*mass*relative)
+        local score=PedRoadInjury.bikeScore(state.originalVehicle,impulse,mass,getElementMatrix(vehicle),nx,ny,nz)
+        if score>75 then
+            local attacker=otherVehicle and getVehicleOccupant(other,0)
+            if attacker and not TrafficVehicleCollision.struckByDriver(state,other,observers[attacker],now,nx,ny,nz) then attacker=nil end
+            fall={score=score,impulse=impulse,mass=mass,nx=nx,ny=ny,vx=svx,vy=svy,vz=svz,attacker=attacker}
+        end
+    end
+    if not detached and state.rail then
         switchToPhysics(state, otherVehicle and other or nil, contact)
-    else
+    elseif not detached and awaitingImpact then
         state.awaitingImpactAt = nil
         applyImpactMotion(state, otherVehicle and other or nil, contact)
     end
+    if fall and isElement(state.driver) and not isPedDead(state.driver) then
+        local aboard=getPedOccupiedVehicle(state.driver)
+        if aboard and aboard~=vehicle then return end
+        state.bikeFell=true
+        if aboard and not removePedFromVehicle(state.driver) then state.bikeFell=nil return end
+        TrafficPassengers.bikeFall(vehicle,fall)
+        if vehicles[vehicle]==state then yieldDriver(state,nil,false) end
+        detachedBikes[vehicle]=nil
+        TrafficAmbient.bikeFall(state.driver,fall,aboard==vehicle,state)
+    end
 end, false)
+
+-- The server exposes loss, the client exposes the cause, and weapon fire
+-- identifies the shooter. All three observations may arrive in different frames.
+function TrafficRoad.noteGunfire(shooter, weapon, ex, ey, ez, sx, sy, sz)
+    if not graph then return end
+    if not sx then sx, sy, sz = getElementPosition(shooter) end
+    local shots = recentShots[shooter] or {cursor=0}
+    shots.cursor = shots.cursor % 8 + 1
+    shots[shots.cursor] = {weapon=weapon, tick=getTickCount(), x=ex, y=ey, z=ez, sx=sx, sy=sy, sz=sz}
+    recentShots[shooter] = shots
+end
+
+addEvent("npchlc_traffic:vehicleGunHit", true)
+addEventHandler("npchlc_traffic:vehicleGunHit", resourceRoot, function(vehicle, attacker, weapon)
+    local state = vehicles[vehicle]
+    if not state or state.boat or state.scriptPaused or not client or state.evacuating or state.panicDriving or not isElement(attacker)
+        or (getElementType(attacker) ~= "player" and getElementType(attacker) ~= "ped")
+        or (client ~= attacker and client ~= getElementSyncer(vehicle))
+        or not finite(weapon) or not PedAIRules.ranged(weapon)
+        or getElementDimension(attacker) ~= state.dimension or getElementInterior(attacker) ~= 0 then return end
+    local x, y, z = getElementPosition(vehicle)
+    state.gunHit = {attacker=attacker, weapon=weapon, tick=getTickCount(), x=x, y=y, z=z}
+end, false)
+
+-- MTA can report the end of the weapon's reach beyond the struck vehicle.
+local function shotCrossesVehicle(shot, x, y, z)
+    local dx, dy, dz = shot.x-shot.sx, shot.y-shot.sy, shot.z-shot.sz
+    local squaredLength = dx*dx + dy*dy + dz*dz
+    if squaredLength == 0 then return false end
+    local t = ((x-shot.sx)*dx + (y-shot.sy)*dy + (z-shot.sz)*dz) / squaredLength
+    t = math.max(0, math.min(t, 1))
+    return (shot.sx+t*dx-x)^2 + (shot.sy+t*dy-y)^2 + (shot.sz+t*dz-z)^2 <= 5^2
+end
+
+local function gunHitConfirmed(state, now)
+    local hit = state.gunHit
+    if not hit then return false end
+    if not isElement(hit.attacker) or (now - hit.tick) % 4294967296 > 1200 then
+        state.gunHit = nil
+        return false
+    end
+    if not state.lossAt or (now - state.lossAt) % 4294967296 > 1200 then return false end
+    local x, y, z = hit.x, hit.y, hit.z
+    for _, shot in ipairs(recentShots[hit.attacker] or {}) do
+        if shot.weapon == hit.weapon and (now - shot.tick) % 4294967296 <= 1200 then
+            if finite(shot.x) and finite(shot.y) and finite(shot.z) then
+                if shotCrossesVehicle(shot, x, y, z) then return true end
+            elseif getElementType(hit.attacker) == "ped" then
+                local ax, ay, az = getElementPosition(hit.attacker)
+                if (ax-x)^2 + (ay-y)^2 + (az-z)^2 <= 400^2 then return true end
+            end
+        end
+    end
+    return false
+end
+
+local function reactToVehicleGunHit(state)
+    local attacker = state.gunHit.attacker
+    state.gunHit, state.lossAt = nil, nil
+    -- 0x003ef910 diverts emergency/police responses before the civilian branch.
+    local model = state.originalVehicle
+    if model == 0x105 or model == 0xdb or model == 0xcf or model == 0xea then return end
+    local profile = PedAI.profile(state.driver)
+    local retaliate = profile and profile.pedType >= 7 and profile.pedType <= 15
+        and getElementType(attacker) == "player"
+    if not retaliate and math.random() > 0.5 then
+        state.panicDriving = true
+        state.cruiseSpeed = math.floor(state.cruiseSpeed * 1.5)
+        HLC:setNPCDriveSpeed(state.driver, state.cruiseSpeed / 50)
+        if state.rail then switchToPhysics(state) else followPhysics(state) end
+        return
+    end
+    state.evacuating = {attacker=attacker, retaliate=retaliate}
+    HLC:clearNPCTasks(state.driver)
+    releaseRoadControl(state)
+    TrafficPassengers.vehicleUnderFire(state.vehicle, attacker, retaliate)
+    if not retaliate and PedVoice then PedVoice.emit(state.driver, "fear") end
+end
+
+local function targetNearby(state, target)
+    if not isElement(target) or isPedDead(target) or getElementDimension(target) ~= state.dimension
+        or getElementInterior(target) ~= 0 then return false end
+    local x, y, z = getElementPosition(state.vehicle)
+    return getDistanceBetweenPoints3D(x, y, z, getElementPosition(getPedOccupiedVehicle(target) or target)) <= 65
+end
+
+local function resumeCruise(state)
+    TrafficWorld.cancelPursuit(state.vehicle)
+    state.pursuit = nil
+    rejoinRoadAtVehicle(state)
+    resetPhysicsSequence(state)
+    followPhysics(state)
+end
+
+local function followPursuitRoute(state)
+    if not rejoinRoadAtVehicle(state, 15) then return false end
+    local tx, ty, tz = getElementPosition(state.pursuit.actor)
+    local route = state.railRoute
+    for i = #route + 1, 4 do
+        local prev = route[i-1]
+        local selected, best
+        for _, edge in ipairs(outgoingChoices(graph, prev.edge, prev.lane)) do
+            local lane = math.min(prev.lane, edge.lanes - 1)
+            local point = laneCentre(edge, lane)
+            if point then
+                local score = (point[1]-tx)^2 + (point[2]-ty)^2 + (point[3]-tz)^2
+                if not best or score < best then
+                    selected, best = {edge=edge, lane=lane, point=point}, score
+                end
+            end
+        end
+        if not selected then break end
+        route[i] = selected
+    end
+    resetPhysicsSequence(state)
+    return followPhysics(state)
+end
+
+local function updatePursuit(state, owner, now)
+    local pursuit = state.pursuit
+    if not targetNearby(state, pursuit.target) then return resumeCruise(state) end
+    local action = pursuit:update(state.vehicle, owner, now)
+    if action == "end" then
+        resumeCruise(state)
+    elseif action == "route" then
+        TrafficWorld.cancelPursuit(state.vehicle)
+        if not followPursuitRoute(state) then resumeCruise(state) end
+    elseif action == "brake" then
+        assignTask(state, {"stopVehicle"})
+    elseif action == "chase" then
+        TrafficWorld.cancelPursuit(state.vehicle)
+        assignTask(state, {"driveAtPed", pursuit.target})
+    elseif action == "exit" then
+        TrafficPassengers.requestExit(state.driver, state.vehicle, 0, pursuit.target,
+            pursuit.actor, pursuit.anchorX, pursuit.anchorY, pursuit.anchorZ)
+    end
+end
+
+local function decideAfterCrash(state, now)
+    local incident = state.crashDecision
+    if (now - incident.at) % 4294967296 > 900 or not targetNearby(state, incident.target) then
+        state.crashDecision = nil
+        return
+    end
+    if not state.collisionLossAt or (now - state.collisionLossAt) % 4294967296 > 900 then return end
+    state.crashDecision, state.collisionLossAt = nil, nil
+    local response = TrafficVehicleCollision.chooseResponse(PedAI.profile(state.driver), math.random())
+    if response == 1031 then
+        -- CTaskComplexRoadRage leaves only the offended driver, then seeks
+        -- the driver responsible for the collision.
+        state.evacuating = {roadRage = true, attacker = incident.target}
+        assignTask(state, {"stopVehicle"})
+        record("crashRoadRage")
+    elseif response == 726 then
+        state.panicDriving, state.drivingStyle, state.cruiseSpeed = true, 2, 40
+        HLC:setNPCDriveSpeed(state.driver, 40 / 50)
+        followPhysics(state)
+        record("crashFlee")
+    elseif response == 729 then
+        state.pursuit = TrafficVehiclePursuit.new(incident.target, now)
+        assignTask(state, {"driveAtPed", incident.target})
+        record("crashPursuit")
+    else
+        record("crashContinue")
+    end
+end
 
 addEventHandler("onVehicleDamage", root, function(loss)
     local vehicle = source
     local state = vehicles[vehicle]
-    if not state or not state.rail or state.damagePending or loss <= 0 then return end
+    if not state or state.boat or state.scriptPaused or loss <= 0 then return end
+    state.lossAt = getTickCount()
+    state.collisionLossAt = state.lossAt
+    if not state.rail or state.evacuating or state.damagePending then return end
     -- Damage and the contact report may arrive in either order.
     state.damagePending = true
     setTimer(function()
+        state.damagePending = nil
         if vehicles[vehicle] == state and state.rail then switchToPhysics(state) end
     end, 150, 1)
 end)
 
-addEventHandler("onVehicleEnter", root, function(driver, seat)
-    local state = vehicles[source]
-    if state and seat == 0 and getElementType(driver) == "player" then release(state) end
+addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked, door)
+    if getElementType(player) ~= "player" then return end
+    local owned = ownedVehicles[source]
+    if owned then owned.boardingAt = getTickCount() end
+    local entry=detachedBikes[source]
+    if seat==0 and entry and (getTickCount()-entry.at)%4294967296<=1200 and jacked==entry.road.driver then
+        detachedBikes[source]=nil
+        entry.road.jacker,entry.road.jackDoor=player,door or 0
+        PedAI.carjacked(entry.road.driver,player,source,entry.road)
+        return
+    end
+    local state, restored = roadInteraction(source)
+    if not state or state.scriptPaused then return end
+    if seat == 0 and (jacked == state.driver or getVehicleOccupant(source, 0) == state.driver) then
+        if state.pursuit then TrafficWorld.cancelPursuit(source) end
+        state.pursuit = nil
+        state.jacker, state.jackStarted = player, getTickCount()
+        state.jackDoor = door or 0
+        state.quickDrag = PedCarjack.quickDrag(source,state.originalVehicle,state.jackDoor)
+        HLC:clearNPCTasks(state.driver)
+    elseif restored then
+        assignTask(state, state.railTask or state.physicsTask)
+    end
+end, true, "low")
+
+addEventHandler("onVehicleExit", root, function(ped, seat, jacker)
+    if waterSeatTransfers[source] then return end
+    local owned = ownedVehicles[source]
+    if owned and not TrafficVisibility.isWreck(source) and getElementType(ped)=="player" then
+        owned.lastPlayerUse = getTickCount()
+        if not vehicles[source] and not retiring[source] then unclaimed[source] = owned.lastPlayerUse end
+    end
+    if seat ~= 0 then return end
+    local state = vehicles[source] or retiring[source]
+    if not state or state.scriptPaused or state.driver ~= ped or not isElement(ped) or isPedDead(ped) then return end
+    state = roadInteraction(source)
+    local player = isElement(jacker) and getElementType(jacker) == "player" and jacker or state.jacker
+    yieldDriver(state, player, false)
+end)
+
+addEventHandler("onVehicleEnter", root, function(player, seat)
+    if waterSeatTransfers[source] or getElementType(player) ~= "player" then return end
+    local owned = ownedVehicles[source]
+    if owned then owned.lastPlayerUse = getTickCount() end
+    if seat == 0 and owned and owned.boat and getElementSyncer(source) ~= player then
+        -- A second observer may still own the unoccupied-boat sync when the captain leaves.
+        setElementSyncer(source, player, false)
+    end
+    local detached=detachedBikes[source]
+    if seat==0 and detached and (getTickCount()-detached.at)%4294967296<=1200 then
+        detachedBikes[source]=nil
+        local road=detached.road
+        if isElement(road.driver) and not isPedDead(road.driver) and not isPedInVehicle(road.driver) then
+            road.jacker=player
+            PedAI.carjacked(road.driver,player,source,road)
+        end
+    end
+    local state, restored = roadInteraction(source)
+    if not state or state.scriptPaused then return end
+    if seat == 0 then
+        yieldDriver(state, player, true)
+    elseif restored then
+        assignTask(state, state.railTask or state.physicsTask)
+    end
+end)
+
+-- Native enter can refuse an open watercraft while the player is swimming.
+-- The caller validates the boarding position. Keep seat ownership and traffic state atomic here.
+function TrafficRoad.isAmbientWatercraft(vehicle)
+    local state = ownedVehicles[vehicle]
+    return state and state.boat == true or false
+end
+
+function TrafficRoad.boardWatercraft(player, vehicle)
+    if not isElement(player) or getElementType(player) ~= "player" or isPedDead(player)
+        or getPedOccupiedVehicle(player) or not isElement(vehicle) or getElementType(vehicle) ~= "vehicle"
+        or (getVehicleType(vehicle) ~= "Boat" and getElementData(vehicle,"mod.model",false) ~= "JETSKI")
+        or getElementDimension(player) ~= getElementDimension(vehicle) or getElementInterior(player) ~= getElementInterior(vehicle)
+        or isVehicleLocked(vehicle) or isVehicleBlown(vehicle) or waterSeatTransfers[vehicle] then return false end
+    local state = vehicles[vehicle] or retiring[vehicle]
+    local driver = getVehicleOccupant(vehicle, 0)
+    if state and (not state.boat or state.driver ~= driver or state.scriptPaused or state.jacker and state.jacker ~= player)
+        or driver and (not state or getElementType(driver) ~= "ped" or isPedDead(driver)
+            or PedAI.isScriptControlled(driver)) then return false end
+
+    waterSeatTransfers[vehicle] = true
+    local boarded = exports.vcs_vehicle:transferWatercraftSeat(player, vehicle, driver)
+    waterSeatTransfers[vehicle] = nil
+    if not boarded then return false end
+    if state then
+        state = roadInteraction(vehicle)
+        if state then
+            state.jacker, state.jackDoor, state.quickDrag = player, 0, false
+            yieldDriver(state,player,true)
+        end
+    elseif ownedVehicles[vehicle] then
+        ownedVehicles[vehicle].lastPlayerUse = getTickCount()
+    end
+    return true
+end
+
+-- Only the population owner can release its NPC and retire its route task.
+addEventHandler("vcs_vehicle:onWatercraftBoardRequest", root, function(player)
+    if TrafficRoad.isAmbientWatercraft(source) then
+        cancelEvent()
+        TrafficRoad.boardWatercraft(player, source)
+    end
 end)
 
 local function vehicleClassSpeed(class, roll, length)
@@ -639,20 +1351,42 @@ end
 local function spawn(candidate, ground, player)
     local x, y, dimension = candidate.x, candidate.y, candidate.dimension
     for _, kind in ipairs({"vehicle", "ped", "player"}) do
-        local nearby = getElementsWithinRange(x, y, ground, 10, kind, 0, dimension)
+        local nearby = getElementsWithinRange(x, y, ground, candidate.boat and kind == "vehicle" and 40 or 10, kind, 0, dimension)
         if not nearby or #nearby > 0 then record("occupied") return end
     end
-    local model, original, class = chooseTrafficCivilianVehicle(x, y, ground, false)
+    local model, original, class, incident
+    local vcsServices = PedServices and graph.edition == "SLUS-21590 USA v1.00"
+    if candidate.boat then
+        local wanted = getPlayerWantedLevel(player)
+        local available = false
+        if wanted >= 2 then
+            local response = TrafficWantedRules.getPoliceResponse(wanted)
+            local cops, units = 0, 0
+            for _, state in pairs(vehicles) do
+                if state.dimension == dimension and state.lawEnforcer then units = units + 1 end
+            end
+            for _, ped in ipairs(getElementsWithinRange(x,y,ground,TRAFFIC_AREA_RADIUS,"ped",0,dimension) or {}) do
+                if TrafficActors.isPolicePed(ped) and not isPedDead(ped) then cops = cops + 1 end
+            end
+            available = response and units < response.pursuitVehicleLimit and cops < response.pursuitPedLimit
+        end
+        model, original, class = TrafficAmbient.chooseBoat(candidate.playerX,candidate.playerY,candidate.playerZ,wanted,available)
+    else
+        if vcsServices then model,original,class,incident=PedServices.dispatch(x,y,ground,dimension,player) end
+        if not model then model,original,class=chooseTrafficCivilianVehicle(x,y,ground,false) end
+    end
     if not model then record("modelUnavailable") return end
     local kind = getVehicleType(model)
     -- 0x00430290 has a separate construction branch for VCS model type 6.
     -- MTA's native bike uses the same throttle, brake and steering inputs.
-    if kind ~= "Automobile" and kind ~= "Bike" then record("modelUnavailable") return end
+    if candidate.boat and kind ~= "Boat" or not candidate.boat and kind ~= "Automobile" and kind ~= "Bike" then
+        record("modelUnavailable") return
+    end
 
     local profile = TrafficPopulation.sample(graph.population,
         candidate.playerX, candidate.playerY, candidate.playerZ, (getTime()))
     local group = profile and graph.population.pedGroups[profile.pedestrianGroupId + 1]
-    local originalDriver = TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
+    local originalDriver = vcsServices and (PedServices.crewModel(original) or PedServices.policeCrewModel(original)) or TrafficRoad.chooseDriver(group, graph.pedestrianDriverMasks, class,
         math.random(0, 15), TrafficAmbient.getPedestrianModel, graph.fallbackDriverModelId)
     if not originalDriver then record("modelUnavailable") return end
     local driverModel = TrafficAmbient.getPedestrianModel(originalDriver)
@@ -663,7 +1397,7 @@ local function spawn(candidate, ground, player)
         record("modelUnavailable")
         return
     end
-    local centreHeight = math.max(0, -minimumZ)
+    local centreHeight = candidate.boat and 0 or math.max(0, -minimumZ)
     local z = ground + centreHeight
     if syncerDistanceSquared(player, x, y, z, dimension) > syncRadius ^ 2 then record("noSyncer") return end
     local rotation = -math.deg(math.atan2(candidate.dx, candidate.dy))
@@ -688,27 +1422,45 @@ local function spawn(candidate, ground, player)
         return
     end
     setVehicleEngineState(vehicle, true)
-    local cruiseSpeed = vehicleClassSpeed(class, math.random(), maximumY - minimumY)
+    local cruiseSpeed = class == 23 and math.floor(12 + math.random() * 4)
+        or vehicleClassSpeed(class, math.random(), maximumY - minimumY)
+    if candidate.boat and math.random(0, 127) < 40 then
+        cruiseSpeed = cruiseSpeed + 10
+        setElementData(vehicle, "npchlc_traffic:boatStyle", 2, "broadcast", "deny")
+    end
     HLC:setNPCDriveSpeed(driver, cruiseSpeed / 50)
     local state = candidate.rail
+    state.boat = candidate.boat
     state.vehicle, state.driver, state.dimension = vehicle, driver, dimension
+    state.originalDriver, state.originalVehicle = originalDriver, original
+    -- 0x00431D34 sets the law-enforcer flag on these traffic classes.
+    state.lawEnforcer = class == 13 or class == 23 or class == 24
     -- The spawn ground belongs to this XY only. Subsequent rail samples
     -- carry the packed path height plus chassis clearance.
     state.heightOffset, state.centreHeight = centreHeight, centreHeight
     state.cruiseSpeed, state.rail = cruiseSpeed, true
+    if not state.boat and graph.edition == "SLUS-21590 USA v1.00" then
+        -- The PS2 tests three bits of the vehicle's fixed seed in UpdateCarAI.
+        state.canReverse = math.random(0, 7) == 0
+        setElementData(vehicle, "npchlc_traffic:stuckReverse", state.canReverse and 400 or 0, "broadcast", "deny")
+    end
     sampleRailVelocity(state, x, y, z, getTickCount())
-    vehicles[vehicle], drivers[driver] = state, state
-    state.before = vehicleTail
-    if vehicleTail then vehicleTail.after = state else vehicleHead = state end
-    vehicleTail = state
-    activeCount = activeCount + 1
+    register(state)
+    PedAI.attach(driver, graph.modelIdSpace ~= "mta" and originalDriver or nil)
+    if class == 23 then setTrafficPolicePed(driver, true) end
     setElementFrozen(vehicle, false)
     setElementData(vehicle, railTag, true, "broadcast", "deny")
     followRail(state)
     if not vehicles[vehicle] then record("creationFailed") return false end
     TrafficVisibility.track(vehicle, "road")
     TrafficVisibility.track(driver, "road")
+    if vcsServices and PedServices.crewModel(original) then
+        PedServices.linkCrew(state,incident,true)
+    else
+        TrafficPassengers.spawn(state, graph, group, class, original)
+    end
     record("spawned")
+    if state.boat then record("boatSpawned") end
     return true
 end
 
@@ -765,14 +1517,18 @@ local function scanSpawnPhase(player, x, y, z, searchStarted, attempts)
     local dimension = getElementDimension(player)
     local choices, num = {}, 0
     local now = getTickCount()
-    local startX, startY = math.floor((originX - radius) / CELL_SIZE), math.floor((originY - radius) / CELL_SIZE)
-    local sizeX = math.floor((originX + radius) / CELL_SIZE) - startX + 1
-    local sizeY = math.floor((originY + radius) / CELL_SIZE) - startY + 1
+    local cars, boats = density("cars") > 0, density("boats") > 0 and next(waterCells) ~= nil
+    local searchRadius = boats and radius * 1.5 or radius
+    local startX, startY = math.floor((originX - searchRadius) / CELL_SIZE), math.floor((originY - searchRadius) / CELL_SIZE)
+    local sizeX = math.floor((originX + searchRadius) / CELL_SIZE) - startX + 1
+    local sizeY = math.floor((originY + searchRadius) / CELL_SIZE) - startY + 1
     local visited = {}
     local function consider(edge)
         if edge.lanes == 0 or visited[edge] then return end
         visited[edge] = true
         local from, to = graph.nodes[edge.from + 1], graph.nodes[edge.to + 1]
+        local boat = from.kind == "boat"
+        if boat and not boats or not boat and not cars then return end
         if to.scene ~= "outdoor" or hasFlag(to, 0x20) then return end
         local t = TrafficRoad.crossing(from, to, originX, originY, radius)
         if not t then return end
@@ -789,7 +1545,7 @@ local function scanSpawnPhase(player, x, y, z, searchStarted, attempts)
             choices[slot] = {x = px, y = py, z = pz, dx = dx, dy = dy, edge = edge, lane = lane,
                 -- 0x00430290 takes the lower of the two endpoint thresholds.
                 dimension = dimension, threshold = math.min(from.spawnThreshold, to.spawnThreshold),
-                playerX = x, playerY = y, playerZ = z, range = range}
+                playerX = x, playerY = y, playerZ = z, range = range, boat = boat}
         end
     end
     local cellCount = sizeX * sizeY
@@ -798,12 +1554,19 @@ local function scanSpawnPhase(player, x, y, z, searchStarted, attempts)
         local index = (phase + cursor) % cellCount
         local column = cells[startX + index % sizeX]
         local bucket = column and column[startY + math.floor(index / sizeX)]
-        if bucket then
+        local waterColumn = boats and waterCells[startX + index % sizeX]
+        local water = waterColumn and waterColumn[startY + math.floor(index / sizeX)]
+        if water then
+            for _, edge in ipairs(water) do consider(edge) end
+        end
+        if cars and bucket then
             for i = 0, math.min(#bucket, MAX_NODES_PER_LOCAL_CELL) - 1 do
                 if i % 16 == 0 and (getTickCount() - searchStarted) % 4294967296 >= SEARCH_BUDGET_MS then break end
                 local node = bucket[(i + phase) % #bucket + 1]
-                for offset = 1, node.linkCount do consider(graph.links[node.firstLink + offset]) end
-                for _, edge in ipairs(incoming[node.id] or {}) do consider(edge) end
+                if node.kind == "vehicle" then
+                    for offset = 1, node.linkCount do consider(graph.links[node.firstLink + offset]) end
+                    for _, edge in ipairs(incoming[node.id] or {}) do consider(edge) end
+                end
             end
         end
     end
@@ -906,7 +1669,7 @@ local function candidateInRange(candidate, x, y, vx, vy, visible)
     local squared = dx * dx + dy * dy
     local fastFront = candidate.range.front and candidate.range.speed and candidate.range.speed > FAST_SPEED
     return (visible ~= false or fastFront) and squared >= 100 ^ 2 and squared <= syncRadius ^ 2
-        or visible ~= true and squared <= 60 ^ 2
+        or visible ~= true and squared <= (candidate.boat and 90 or 60) ^ 2
 end
 
 local function updateObservers()
@@ -931,6 +1694,8 @@ local function updateObservers()
             observer.impactIndex = observer.impactIndex % 4 + 1
             local sample = observer.impactSamples[observer.impactIndex] or {}
             sample.x, sample.y, sample.z, sample.tick = vx * speed / 50, vy * speed / 50, vz or 0, now
+            sample.px,sample.py,sample.pz=getElementPosition(occupant)
+            sample.dimension,sample.interior=dimension,interior
             observer.impactSamples[observer.impactIndex] = sample
         elseif occupant ~= observer.impactVehicle then
             observer.impactVehicle = nil
@@ -985,6 +1750,12 @@ local function areaCap(x, y, z, densityFactor)
     return math.min(MAX_PER_TRAFFIC_AREA, TrafficRoadPopulation.zoneTarget(profile, densityFactor))
 end
 
+local function boatCap(x, y, z)
+    if not next(waterCells) or density("boats") <= 0 then return 0 end
+    local profile = TrafficPopulation.sample(graph.population, x, y, z, (getTime()))
+    return profile and math.min(MAX_PER_TRAFFIC_AREA, TrafficRoadPopulation.zoneTarget(profile, density("boats"))) or 0
+end
+
 local function consumeReady(densityFactor)
     local created = 0
     local admissions = {}
@@ -997,7 +1768,8 @@ local function consumeReady(densityFactor)
             local admission = admissions[batch]
             if not admission then
                 local x, y, z, vx, vy = batchPosition(player, batch)
-                admission = {x = x, y = y, z = z, vx = vx, vy = vy, cap = x and areaCap(x, y, z, densityFactor)}
+                admission = {x = x, y = y, z = z, vx = vx, vy = vy,
+                    cap = x and areaCap(x, y, z, densityFactor), boatCap = x and boatCap(x, y, z)}
                 admissions[batch] = admission
             end
             local x, y, z = admission.x, admission.y, admission.z
@@ -1010,14 +1782,16 @@ local function consumeReady(densityFactor)
                 record("staleProbe")
                 finishBatch(player, batch)
             elseif activeCount >= MAX_SERVER_VEHICLES
-                or admission.count >= admission.cap then
+                or admission.count >= math.max(admission.cap, admission.boatCap) then
                 record(activeCount >= MAX_SERVER_VEHICLES and "globalCapacity" or "capacity")
                 finishBatch(player, batch)
             else
                 local index, result = batch.nextProbe, batch.result
                 local candidate, probe = batch.points[index], result.probes[index]
-                if not probe then
-                    record("groundRejected")
+                if admission.count >= (candidate.boat and admission.boatCap or admission.cap) then
+                    record("capacity")
+                elseif not probe then
+                    record(candidate.boat and "boatWaterRejected" or "groundRejected")
                 elseif not candidateInRange(candidate, x, y, admission.vx or result.viewX,
                     admission.vy or result.viewY, probe.visible) then
                     record("visibilityRejected")
@@ -1085,7 +1859,7 @@ local function dispatchProbes(densityFactor, urgent)
             end
             if not shared then
                 seen[#seen + 1] = proposal
-                local cap = areaCap(x, y, z, densityFactor)
+                local cap = math.max(areaCap(x, y, z, densityFactor), boatCap(x, y, z))
                 if cap > 0 then
                     local cx, cy = densityCentre(player, x, y)
                     local count = localVehicleCount(cx, cy, z, proposal.dimension)
@@ -1188,18 +1962,113 @@ local function tick()
     if previousHour == 23 and hour == 0 then gameDay = gameDay % 7 + 1 end
     previousHour = hour
     local now = getTickCount()
+    TrafficPassengers.update(now)
+    for vehicle,entry in pairs(detachedBikes) do
+        if (now-entry.at)%4294967296>1200 or not isElement(vehicle) then
+            detachedBikes[vehicle]=nil
+            local ped=entry.road.driver
+            if isElement(vehicle) and isElement(ped) and not isPedDead(ped) and not isPedInVehicle(ped)
+                and not getVehicleOccupant(vehicle,0) and not PedAI.isScriptControlled(ped) then
+                TrafficAmbient.bikeFall(ped,{},false,entry.road)
+            end
+        end
+    end
+    for vehicle, checkedAt in pairs(unclaimed) do
+        local state = ownedVehicles[vehicle]
+        if not state or not isElement(vehicle) then
+            unclaimed[vehicle], ownedVehicles[vehicle] = nil, nil
+        elseif (now - checkedAt) % 4294967296 >= 1000 then
+            unclaimed[vehicle] = now
+            if TrafficVisibility.hasPlayerOccupant(vehicle) then
+                state.lastPlayerUse = now
+            elseif not state.boardingAt or (now - state.boardingAt) % 4294967296 > 8000 then
+                local x, y, z = getElementPosition(vehicle)
+                local nearby = getElementsWithinRange(x, y, z, syncRadius, "player",
+                    getElementInterior(vehicle), getElementDimension(vehicle))
+                local service = state.originalVehicle == 227 or state.originalVehicle == 194
+                local expired = state.lastPlayerUse and (now - state.lastPlayerUse) % 4294967296 >= PLAYER_PARKING_GRACE_MS
+                local brain = isElement(state.driver) and PedAI.brain(state.driver)
+                local event = brain and brain.event
+                local reserved = event and (event.road == state or event.originalRoad == state)
+                if service and PedServices then reserved = reserved or PedServices.needsParkedVehicle(state) end
+                if not reserved and ((nearby and #nearby == 0) or expired or service) then
+                    unclaimed[vehicle], ownedVehicles[vehicle] = nil, nil
+                    destroyElement(vehicle)
+                end
+            end
+        end
+    end
     for _ = 1, math.min(MAX_CLEANUP_PER_TICK, activeCount) do
         local state = vehicleCursor or vehicleHead
         if not state or state.checkedAt == now then break end
         state.checkedAt = now
         vehicleCursor = state.after or vehicleHead
         local vehicle = state.vehicle
-        if not isElement(vehicle) or not isElement(state.driver) or isPedDead(state.driver) or isVehicleBlown(vehicle)
-            or isElementInWater(vehicle) or getVehicleOccupant(vehicle, 0) ~= state.driver then
+        local scripted = PedAI.isScriptControlled and PedAI.isScriptControlled(state.driver)
+        if scripted and not state.scriptPaused then TrafficRoad.driverScriptChanged(state.driver, true) end
+        if state.scriptPaused and isElement(state.driver) and not isPedDead(state.driver) then
+            if not scripted then TrafficRoad.driverScriptChanged(state.driver, false) end
+        elseif not isElement(vehicle) or not isElement(state.driver) or isPedDead(state.driver) or isVehicleBlown(vehicle)
+            or not state.boat and isElementInWater(vehicle) then
             release(state)
+        elseif not state.jacker and not state.evacuating and getVehicleOccupant(vehicle,0)==state.driver
+            and not state.boat and PedServices and graph.edition=="SLUS-21590 USA v1.00" and PedServices.inVehicle(state,now,switchToPhysics,followPhysics) then
+            state.lastProgress=now
+        elseif state.evacuating then
+            local occupant = getVehicleOccupant(vehicle, 0)
+            if occupant ~= state.driver then
+                local taken = isElement(occupant) and getElementType(occupant) == "player"
+                yieldDriver(state, taken and occupant or nil, taken)
+            elseif state.evacuating.roadRage and not targetNearby(state, state.evacuating.attacker) then
+                state.evacuating = nil
+                followPhysics(state)
+            elseif (not state.evacuating.roadRage or length2D(getElementVelocity(vehicle)) <= 0.05)
+                and (not state.evacuating.requested or (now - state.evacuating.requested) % 4294967296 >= 1500) then
+                state.evacuating.requested = now
+                if not TrafficPassengers.requestExit(state.driver, vehicle, 0) then
+                    local x, y, z = getElementPosition(vehicle)
+                    local observers = getElementsWithinRange(x, y, z, syncRadius, "player", 0, state.dimension)
+                    if observers and #observers == 0 then release(state) end
+                end
+            end
+        elseif state.jacker then
+            -- MTA reports start/exit/enter, but no event for a player abandoning the door.
+            local elapsed = (now - state.jackStarted) % 4294967296
+            local abandoned = not isElement(state.jacker)
+            if not abandoned and elapsed >= 500 then
+                local x,y,z = getElementPosition(state.jacker)
+                local vx,vy,vz = getElementPosition(vehicle)
+                abandoned = getDistanceBetweenPoints3D(x,y,z,vx,vy,vz) > 7
+            end
+            if elapsed >= 8000 or abandoned or elapsed >= 500 and getVehicleOccupant(vehicle,0) ~= state.driver then
+                local player = state.jacker
+                state.jacker, state.jackStarted, state.railStall = nil, nil, nil
+                if getVehicleOccupant(vehicle, 0) == state.driver then
+                    if state.rail and state.damagePending then
+                        switchToPhysics(state)
+                    else
+                        assignTask(state, state.railTask or state.physicsTask)
+                    end
+                else
+                    local occupant = getVehicleOccupant(vehicle, 0)
+                    local taken = isElement(occupant) and getElementType(occupant) == "player"
+                    yieldDriver(state, taken and occupant or isElement(player) and player or nil, taken)
+                end
+            end
+        elseif getVehicleOccupant(vehicle, 0) ~= state.driver then
+            local occupant = getVehicleOccupant(vehicle, 0)
+            local taken = isElement(occupant) and getElementType(occupant) == "player"
+            yieldDriver(state, taken and occupant or nil, taken)
         else
             local x, y, z = getElementPosition(vehicle)
             local syncer = getElementSyncer(vehicle)
+            if not state.rail and (not state.progressX or (x - state.progressX)^2 + (y - state.progressY)^2 >= 1) then
+                state.progressX, state.progressY, state.lastProgress = x, y, now
+            end
+            if state.canReverse and not state.rail and state.drivingStyle ~= 2 then
+                if length2D(getElementVelocity(vehicle)) > 0.018 then state.stoppedAt = nil
+                else state.stoppedAt = state.stoppedAt or now end
+            end
             local distance = syncerDistanceSquared(syncer, x, y, z, state.dimension)
             if not syncer then
                 record("despawnNoSyncer")
@@ -1215,23 +2084,39 @@ local function tick()
                     record(atEdge and "despawnEdgeStalled" or "despawnRailStalled")
                     release(state, true)
                 end
-            elseif (now - state.lastProgress) % 4294967296 > MAX_LIFETIME_WITHOUT_PROGRESS then
+            elseif (now - state.lastProgress) % 4294967296 > (state.rail and MAX_LIFETIME_WITHOUT_PROGRESS or 60000) then
                 record("despawnStalled")
                 release(state, true)
+            elseif state.gunHit and gunHitConfirmed(state, now) then
+                if state.pursuit then TrafficWorld.cancelPursuit(vehicle) end
+                state.crashDecision, state.pursuit = nil, nil
+                reactToVehicleGunHit(state)
+            elseif state.crashDecision then
+                decideAfterCrash(state, now)
+            elseif state.pursuit then
+                updatePursuit(state, syncer, now)
             elseif state.rail then
                 sampleRailVelocity(state, x, y, z, now)
             elseif state.physicsTask then
-                local rejoin = HLC:getNPCTrafficPhysicsRejoin(state.physicsTask, vehicle)
+                local rejoin, displaced = HLC:getNPCTrafficPhysicsRejoin(state.physicsTask, vehicle)
                 if rejoin then
                     record("physicsRejoins")
                     advancePhysics(state, rejoin - 1)
+                elseif displaced and (not state.rejoinAttempt or (now - state.rejoinAttempt) % 4294967296 >= 2000) then
+                    state.rejoinAttempt = now
+                    if rejoinRoadAtVehicle(state, 12) then
+                        state.physicsSequence = state.physicsSequence + #state.physicsTask[5]
+                        record("physicsRejoins")
+                        followPhysics(state)
+                    end
                 end
             end
         end
     end
     local densityFactor = density("cars")
-    local urgent = refreshPending(now, densityFactor)
-    if not densityFactor or densityFactor <= 0 then
+    local combinedDensity = math.max(densityFactor, density("boats"))
+    local urgent = refreshPending(now, combinedDensity)
+    if combinedDensity <= 0 then
         readyBatches, readyHead, readyTail = {}, 1, 0
         return
     end
@@ -1241,7 +2126,8 @@ local function tick()
 end
 
 function getTrafficRoadStatus()
-    local status = {vehicles = activeCount, densityProfile = densityMode or "zone", range = syncRadius}
+    local status = {vehicles = activeCount, boats = 0, densityProfile = densityMode or "zone", range = syncRadius}
+    for _, state in pairs(vehicles) do if state.boat then status.boats = status.boats + 1 end end
     status.observers, status.readyObservers, status.pendingObservers = #observerList, 0, 0
     for _, player in ipairs(observerList) do
         if TrafficWorld.isReady(player) then status.readyObservers = status.readyObservers + 1 end
@@ -1260,7 +2146,7 @@ function getTrafficRoadStatus()
 end
 
 function TrafficRoad.isManagedPed(ped)
-    return drivers[ped] ~= nil
+    return drivers[ped] ~= nil or TrafficPassengers.isManaged(ped)
 end
 
 function TrafficRoad.appendDebugRails(player, links, radius)
@@ -1299,6 +2185,25 @@ function TrafficRoad.start(loadedGraph, getDensity, requestedMode)
     timer = setTimer(tick, UPDATE_MS, 0)
 end
 
+addEventHandler("onVehicleExplode",root,function()
+    local car=source
+    if not ownedVehicles[car] or TrafficVisibility.isWreck(car) then return end
+    unclaimed[car]=nil
+    roadInteraction(car) -- cancel a pending population fade before starting the wreck clock
+    TrafficVisibility.keepWreck(car,"road")
+end)
+
+addEventHandler("onElementDestroy",root,function()
+    ownedVehicles[source], unclaimed[source] = nil, nil
+end)
+
+-- A pursuit helicopter can outlive its AI pilot when a player takes a seat.
+function TrafficRoad.retainPlayerVehicle(vehicle)
+    local now = getTickCount()
+    ownedVehicles[vehicle] = {vehicle=vehicle, lastPlayerUse=now}
+    unclaimed[vehicle] = now
+end
+
 function TrafficRoad.stop()
     if timer then
         killTimer(timer)
@@ -1306,9 +2211,21 @@ function TrafficRoad.stop()
         removeEventHandler("onPlayerQuit", root, disconnected)
     end
     for _, state in pairs(vehicles) do release(state) end
+    for vehicle, state in pairs(retiring) do
+        if isElement(vehicle) then TrafficVisibility.cancelRetirement(vehicle) end
+        finishRelease(state)
+    end
+    for vehicle in pairs(unclaimed) do
+        if isElement(vehicle) and not TrafficVisibility.hasPlayerOccupant(vehicle) then destroyElement(vehicle) end
+    end
+    unclaimed, ownedVehicles = {}, {}
+    recentShots = setmetatable({}, {__mode = "k"})
+    detachedBikes = {}
+    TrafficPassengers.stop()
     for player, batch in pairs(pending) do finishBatch(player, batch) end
     graph, density, timer, vehicleCursor, densityMode = nil, nil, nil, nil, nil
     cells, incoming, pending, cursorByPlayer, lastRoadAttempt = {}, {}, {}, {}, {}
+    waterCells = {}
     activeCount, nextPlayer = 0, 0
     vehicleHead, vehicleTail = nil, nil
     gameDay, previousHour = 4, nil

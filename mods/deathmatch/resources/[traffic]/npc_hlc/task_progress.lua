@@ -1,5 +1,13 @@
 local completion = {}
 
+function getNPCFormationSlot(task)
+    local matrix = getElementMatrix(task[2])
+    if not matrix then return end
+    local right,forward,pos = matrix[1],matrix[2],matrix[4]
+    return pos[1]+right[1]*task[4]+forward[1]*task[5],
+        pos[2]+right[2]*task[4]+forward[2]*task[5], pos[3], forward[1],forward[2]
+end
+
 function isNPCTrafficWalkTask(name)
     return name == "walkTrafficToPoint" or name == "walkTrafficCrossing"
 end
@@ -22,7 +30,7 @@ function getNPCControlElement(npc, task)
     local vehicle = getPedOccupiedVehicle(npc)
     local name = task[1]
     if name == "driveToPos" or name == "driveTrafficToPoint" or name == "driveTrafficRail" or name == "driveTrafficPhysics"
-        or name == "driveAlongLine" or name == "driveAroundBend" then
+        or name == "driveAlongLine" or name == "driveAroundBend" or name == "driveAtPed" or name == "stopVehicle" then
         return vehicle and getVehicleOccupant(vehicle, 0) == npc and vehicle or false
     end
     if name == "waitForGreenLight" and vehicle then
@@ -71,6 +79,8 @@ function completion.walkFollowElement(npc, _, task)
     return isPedInVehicle(npc) or not isElement(task[2])
 end
 
+completion.walkFormation = completion.walkFollowElement
+
 function completion.shootElement(_, _, task)
     return not isElement(task[2])
 end
@@ -79,8 +89,16 @@ function completion.killPed(npc, _, task)
     return isPedInVehicle(npc) or not isElement(task[2]) or getElementHealth(task[2]) < 1
 end
 
+function completion.attackOccupiedVehicle(npc, actor, task)
+    return completion.killPed(npc, actor, task) or not getPedOccupiedVehicle(task[2])
+end
+
 function completion.driveToPos(_, actor, task)
     return actor and closeToPoint(actor, task, true)
+end
+
+function completion.driveAtPed(_, _, task)
+    return not isElement(task[2]) or isPedDead(task[2])
 end
 
 function completion.driveTrafficToPoint(_, actor, task)

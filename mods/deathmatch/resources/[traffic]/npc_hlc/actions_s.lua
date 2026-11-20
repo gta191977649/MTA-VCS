@@ -9,6 +9,7 @@ function configureNPCFallbackCollision()
 end
 
 local function stepToPoint(actor, tx, ty, tz, elapsed, driveSpeed, x, y, z, pace)
+    recordNPCDebugFallback(actor, tx, ty, tz)
     local dx, dy, dz = tx - x, ty - y, tz - z
     local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
     if distance == 0 then return end

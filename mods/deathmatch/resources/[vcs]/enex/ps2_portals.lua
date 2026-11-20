@@ -11,6 +11,7 @@ local children = {}
 local triggers = {}
 local previousRoute
 local transition
+local passageSerial=0
 local cooldown = 0
 local blockedShape
 
@@ -69,6 +70,7 @@ end
 
 local function finish(target, success)
     local current = transition
+    if not current then return end
     transition = nil
     if current.timer and isTimer(current.timer) then killTimer(current.timer) end
     if success then
@@ -85,7 +87,9 @@ local function finish(target, success)
         setElementPosition(localPlayer, current.x, current.y, current.z)
         setElementRotation(localPlayer, 0, 0, current.heading)
         blockedShape = current.sourceShape
-        outputDebugString("VCS: interior collision did not stream for " .. target.name, 2)
+        local reason = current.authorized and "interior collision did not stream"
+            or "server passage authorization timed out"
+        outputDebugString("VCS: " .. reason .. " for " .. target.name, 2)
     end
     setElementFrozen(localPlayer, current.frozen)
     cooldown = getTickCount() + 1800
@@ -104,24 +108,40 @@ local function travel(target, routeId, entering, shape)
     }
     setElementFrozen(localPlayer, true)
     fadeCamera(false, 0.3)
+    passageSerial=passageSerial+1
+    transition.serial,transition.target=passageSerial,target
+    transition.timer=setTimer(function() finish(target,false) end,4000,1)
+    triggerServerEvent("enex:requestPassage",resourceRoot,routeId,entering,passageSerial)
+end
+
+addEvent("enex:passageReady",true)
+addEventHandler("enex:passageReady",resourceRoot,function(serial)
+    if not transition or transition.serial~=serial or transition.authorized then return end
+    transition.authorized=true
+    local target=transition.target
+    killTimer(transition.timer)
     transition.timer = setTimer(function()
         setElementDimension(localPlayer, target.dimension)
         setElementInterior(localPlayer, target.interior)
         setElementPosition(localPlayer, target.spawnX, target.spawnY, target.floorZ + 0.85)
         setElementRotation(localPlayer, 0, 0, target.heading)
+        if enginePreloadWorldArea then
+            enginePreloadWorldArea(target.spawnX, target.spawnY, target.floorZ, "collisions")
+        end
         local attempts = 0
         transition.timer = setTimer(function()
             attempts = attempts + 1
             local landingX, landingY, landingZ = findLanding(target)
             if landingX then
                 setElementPosition(localPlayer, landingX, landingY, landingZ)
+                triggerServerEvent("enex:landed",resourceRoot,serial,landingX,landingY,landingZ)
                 finish(target, true)
             elseif attempts >= 24 then
                 finish(target, false)
             end
         end, 250, 24)
     end, 350, 1)
-end
+end,false)
 
 local function parsePortal(xml, name, label)
     local result = {name = name, label = label}
@@ -170,7 +190,7 @@ end
 local function loadPortals()
     cleanup()
     if not fileExists(PORTAL_FILE) then return end
-    local document = xmlLoadFile(PORTAL_FILE)
+    local document = xmlLoadFile(PORTAL_FILE, true)
     if not document then
         outputDebugString("VCS: could not read PS2 interior portals.", 1)
         return

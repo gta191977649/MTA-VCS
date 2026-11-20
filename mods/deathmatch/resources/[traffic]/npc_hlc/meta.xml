@@ -1,4 +1,5 @@
 <meta>
+	<include resource="vcs_vehicle"/>
 	<min_mta_version server="1.6.0-9.22815" />
 	<info author="CrystalMV" version="0.1" name="NPC high-level control" description="Higher level control over peds" type="script" />
 	<script src="npc_functions_s.lua"	type="server"	/>
@@ -18,6 +19,8 @@
 	<script src="math.lua"				type="client" 	/>
 	<script src="const.lua"				type="server"	/>
 	<script src="const.lua"				type="client" 	/>
+	<export function="getNPCDebugAssignment" type="server" />
+	<export function="getNPCDebugExecution" type="client" />
 	<export function="enableHLCForNPC"		type="server" http="false" />
 	<export function="disableHLCForNPC"		type="server" http="false" />
 	<export function="isHLCEnabled"			type="server" http="false" />
@@ -31,6 +34,7 @@
 	<export function="setNPCDriveSpeed"		type="server" http="false" />
 	<export function="getNPCDriveSpeed"		type="server" http="false" />
 	<export function="getNPCDriveSpeed"		type="client" http="false" />
+	<export function="getNPCTaskCount" type="server" http="false" />
 	<export function="addNPCTask"			type="server" http="false" />
 	<export function="clearNPCTasks"		type="server" http="false" />
 	<export function="setNPCTask"			type="server" http="false" />
@@ -40,6 +44,7 @@
 	<export function="isNPCTrafficRailWaitingForSignal" type="server" http="false" />
 	<export function="getNPCTrafficRailDebugPoints" type="server" http="false" />
 	<export function="getNPCTrafficPhysicsRejoin" type="server" http="false" />
+	<export function="getNPCTrafficWindowProgress" type="server" http="false" />
 
 	<script src="traffic_rail.lua" type="shared" />
 	<script src="traffic_physics.lua" type="shared" />

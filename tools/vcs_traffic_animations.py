@@ -13,6 +13,8 @@ FRAME = (struct.Struct("<5e"), struct.Struct("<8e"))
 ANP3_RATE = 60
 SECTOR_SIZE = 2048
 NATIVE_LOCOMOTION = ("Walk_civi", "run_civi", "sprint_panic", "idle_stance")
+EVADE_ASSOCIATIONS = {0x0C: "idle_tired", 0x95: "roadcross", 0x0F: "idle_taxi", 0x84: "getup", 0x87: "getup_front", 0x91: "ev_step",
+                      0x92: "ev_dive", 0x9C: "handsup", 0x9D: "handscower"}
 BONE_TAGS = {6: 8, 2000: 35, 2001: 25, 2002: 44, 2003: 54}
 
 
@@ -62,7 +64,7 @@ def rotation_sampler(frames):
     return at
 
 
-def read_animation(data, tree):
+def read_animation(data, tree, upper_body=False):
     sequence, raw_name, count, duration = TREE.unpack_from(data, tree)
     name = name_of(raw_name)
     end_tick = round(duration * ANP3_RATE)
@@ -89,6 +91,8 @@ def read_animation(data, tree):
 
     # The converted DFF attaches the thighs to the pelvis as SA does. Fold
     # the former animated spine parent's rotation into both thigh tracks.
+    if upper_body and tracks and tracks.keys().isdisjoint({0, 1, 2, 41, 51}):
+        return tracks
     if not {0, 1, 2, 41, 51} <= tracks.keys():
         raise ValueError(f"{name}: incomplete PS2 locomotion hierarchy")
     spine = rotation_sampler(tracks[2])
@@ -142,7 +146,7 @@ def write_ifp(animations):
     return struct.pack("<4sI", b"ANP3", len(package)) + package
 
 
-def convert_locomotion(image, archive_path, model_table, pedestrian_ids):
+def convert_locomotion(image, archive_path, model_table, pedestrian_ids, *, street_evades=False):
     # GATG root slot 0x18 points to the PS2 animation manager. Its association
     # arrays precede the embedded animation hierarchy and block pointers.
     manager = u32(image, 0x80)
@@ -189,5 +193,47 @@ def convert_locomotion(image, archive_path, model_table, pedestrian_ids):
         catalog.append(f"    [{group}] = {{{entries}}},")
     catalog.extend(("}", "VCS_TRAFFIC_PEDESTRIAN_GROUPS = {"))
     catalog.extend(f"    [{model}] = {group}," for model, group in models.items())
-    catalog.extend(("}", ""))
+    catalog.append("}")
+    if street_evades:
+        index = block_indices["ped"]
+        data, addresses = block_trees(image, archive_path, index, blocks + index * 48, trees)
+        offsets = {name_of(data[tree + 4:tree + 28]): tree for tree in addresses}
+        catalog.append("VCS_TRAFFIC_EVADE_CLIPS = {")
+        for ordinal, name in EVADE_ASSOCIATIONS.items():
+            address = associations + ordinal * 56
+            if u32(image, address) != ordinal or name_of(image[address+4:address+48]) != name:
+                raise ValueError(f"Unexpected PS2 pedestrian association at {ordinal:#x}")
+            tracks = read_animation(data, offsets[name])
+            root = tracks[0]
+            duration = round(root[-1][0] * 1000 / ANP3_RATE)
+            catalog.append(f"    {name} = {{duration={duration}, motion={{")
+            # The syncer can apply full root motion to the entity. Observers
+            # already receive its position and need the in-place rendition.
+            x0, y0, _ = root[0][2]
+            for tick, _, (x, y, _) in root:
+                ms = round(tick * 1000 / ANP3_RATE)
+                catalog.append(f"        {{{ms}, {x-x0:.6f}, {y-y0:.6f}}},")
+            catalog.append("    }},")
+            animations[f"{name}_root"] = dict(tracks)
+            tracks[0] = [(tick, rotation, (0, 0, z)) for tick, rotation, (_, _, z) in root]
+            animations[name] = tracks
+            if name in ("handsup", "handscower"):
+                # Preserve the original raise, then hold until the longest PS2
+                # gunpoint wait. MTA can play this once with freezeLastFrame off.
+                animations[f"{name}_wait"] = {
+                    bone: [*frames, (6 * ANP3_RATE, *frames[-1][1:])]
+                    for bone, frames in tracks.items()
+                }
+        catalog.append("}")
+        for group, ordinal, expected, alias in ((26, 0xDF, "cpr", "service_cpr"), (0, 0x97, "arrestgun", "service_arrest")):
+            _, raw_block, first, count = GROUP.unpack_from(image, manager + group * GROUP.size)
+            record = next(address for i in range(first, first + count)
+                          if u32(image, address := associations + i * 56) == ordinal)
+            if name_of(image[record+4:record+48]) != expected:
+                raise ValueError(f"Unexpected PS2 service animation {ordinal:#x}")
+            idx = block_indices[name_of(raw_block)]
+            source, entries = block_trees(image, archive_path, idx, blocks + idx * 48, trees)
+            tree = next(t for t in entries if name_of(source[t+4:t+28]) == expected)
+            animations[alias] = read_animation(source, tree)
+    catalog.append("")
     return write_ifp(animations), "\n".join(catalog).encode("ascii")

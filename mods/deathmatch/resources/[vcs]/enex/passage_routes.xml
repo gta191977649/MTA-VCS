@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='utf-8'?>
+<portals>
+    <pair id="JS_22" name="JS">
+        <portal x="-1157.00000" y="-700.10000" z="10.60000" yaw="0.00000" width="1.00" depth="1.00" interior="0" dimension="0" spawnX="-1157.00000" spawnY="-699.10000" floorZ="10.56830" heading="0.0" />
+        <portal x="-1157.00000" y="-702.50000" z="10.40105" yaw="0.00000" width="1.00" depth="1.00" interior="1" dimension="1266" spawnX="-1157.00000" spawnY="-701.50000" floorZ="10.40105" heading="229.6" timecycle="18" />
+    </pair>
+    <pair id="MALL1" name="MALL1" source="PUHELP_1103">
+        <portal x="378.75900" y="1257.16000" z="17.47138" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="378.75900" spawnY="1261.16000" floorZ="17.06269" heading="0.00000" />
+        <portal x="379.93800" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="379.93800" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL2" name="MALL2" source="PUHELP_1103">
+        <portal x="449.42400" y="1257.16000" z="17.27212" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="449.42400" spawnY="1261.16000" floorZ="16.93191" heading="0.00000" />
+        <portal x="448.45900" y="1250.21590" z="-200.86600" yaw="180.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="448.45900" spawnY="1246.21590" floorZ="-200.86600" heading="180.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL3" name="MALL3" source="PUHELP_1103">
+        <portal x="478.30500" y="1124.48210" z="16.55756" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="480.30500" spawnY="1124.48210" floorZ="16.20849" heading="270.00000" />
+        <portal x="471.52000" y="1123.55600" z="-200.86601" yaw="90.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="467.52000" spawnY="1123.55600" floorZ="-200.86601" heading="90.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL4" name="MALL4" source="PUHELP_1103">
+        <portal x="449.64500" y="995.69400" z="17.27631" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="449.64500" spawnY="991.69400" floorZ="17.26645" heading="180.00000" />
+        <portal x="448.55100" y="1003.07800" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="448.55100" spawnY="1007.07800" floorZ="-200.86601" heading="0.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL5" name="MALL5" source="PUHELP_1103">
+        <portal x="379.18200" y="994.72100" z="17.26645" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="379.18200" spawnY="990.72100" floorZ="17.26645" heading="180.00000" />
+        <portal x="379.58000" y="1002.34400" z="-200.86601" yaw="0.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="379.58000" spawnY="1006.34400" floorZ="-200.86601" heading="0.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL6" name="MALL6" source="PUHELP_1103">
+        <portal x="349.44000" y="1123.68300" z="17.25287" yaw="90.00000" width="2" depth="2" interior="0" dimension="0" spawnX="345.44000" spawnY="1123.68300" floorZ="17.25287" heading="90.00000" />
+        <portal x="356.66700" y="1124.77600" z="-200.86581" yaw="270.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="360.66700" spawnY="1124.77600" floorZ="-200.86581" heading="270.00000" timecycle="10" />
+    </pair>
+    <pair id="MALL7" name="MALL7" source="PUHELP_1103">
+        <portal x="365.12000" y="1210.09900" z="24.24030" yaw="90.00000" width="2" depth="2" interior="0" dimension="0" spawnX="361.12000" spawnY="1210.09900" floorZ="24.16433" heading="90.00000" />
+        <portal x="366.00100" y="1210.10400" z="-194.63086" yaw="270.00000" width="2" depth="2" interior="0" dimension="3090" spawnX="370.00100" spawnY="1210.10400" floorZ="-194.63086" heading="270.00000" timecycle="10" />
+    </pair>
+    <pair id="ARMYH" name="ARMYH" source="SAFEHOU_830">
+        <portal x="-1648.87000" y="-262.50000" z="13.47207" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1648.87000" spawnY="-261.00000" floorZ="13.48041" heading="0.00000" />
+        <portal x="-1648.89000" y="-265.02000" z="14.41965" yaw="180.00000" width="2" depth="2" interior="1" dimension="1282" spawnX="-1648.89000" spawnY="-266.52000" floorZ="14.41965" heading="180.00000" timecycle="4" />
+    </pair>
+    <pair id="SFDOCK" name="SFDOCK" source="SAFEHOU_830">
+        <portal x="-812.22040" y="-1184.66740" z="10.03635" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-810.72040" spawnY="-1184.66740" floorZ="10.02346" heading="270.00000" />
+        <portal x="-807.34800" y="-1178.50500" z="12.71519" yaw="85.66420" width="2" depth="2" interior="1" dimension="274" spawnX="-808.84371" spawnY="-1178.39160" floorZ="12.71519" heading="85.66420" timecycle="19" />
+    </pair>
+    <pair id="COMPO" name="COMPO" source="SAFEHOU_830">
+        <portal x="-1079.47400" y="358.16290" z="10.22737" yaw="90.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1080.97400" spawnY="358.16290" floorZ="10.22737" heading="90.00000" />
+        <portal x="-1076.32630" y="358.09350" z="10.82881" yaw="206.78180" width="2" depth="2" interior="1" dimension="1314" spawnX="-1075.65041" spawnY="356.75441" floorZ="10.82881" heading="206.78180" timecycle="20" />
+    </pair>
+    <pair id="SAFE_BEACH" name="SAFE_BEACH" source="SAFEHOU_830">
+        <portal x="259.88000" y="-170.07000" z="10.60798" yaw="247.12000" width="2" depth="2" interior="0" dimension="0" spawnX="261.26198" spawnY="-170.65320" floorZ="10.59189" heading="247.12000" />
+        <portal x="251.34380" y="-162.06320" z="27.91318" yaw="222.89200" width="2" depth="2" interior="1" dimension="306" spawnX="252.36473" spawnY="-163.16216" floorZ="27.91318" heading="222.89200" timecycle="21" />
+    </pair>
+    <pair id="SAFE_BEACH_ROOF" name="SAFE_BEACH_ROOF" source="SAFEHOU_830">
+        <portal x="254.62140" y="-164.35610" z="27.90747" yaw="336.11720" width="2" depth="2" interior="0" dimension="0" spawnX="255.22870" spawnY="-162.98454" floorZ="27.90747" heading="336.11720" />
+        <portal x="245.76950" y="-159.45800" z="32.50597" yaw="156.54450" width="2" depth="2" interior="1" dimension="306" spawnX="245.17244" spawnY="-160.83405" floorZ="32.50597" heading="156.54450" timecycle="21" />
+    </pair>
+    <pair id="DTNAMU" name="DTNAMU" source="AMMUNAT_1512">
+        <portal x="-679.26000" y="1198.50000" z="10.03065" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-679.26000" spawnY="1197.00000" floorZ="10.03065" heading="180.00000" />
+        <portal x="-679.29000" y="1204.00000" z="10.03102" yaw="0.00000" width="2" depth="2" interior="1" dimension="1234" spawnX="-679.29000" spawnY="1205.50000" floorZ="10.03102" heading="0.00000" timecycle="0" />
+    </pair>
+    <pair id="WSAMMN" name="WSAMMN" source="AMMUNAT_701">
+        <portal x="-57.30000" y="-1480.20000" z="9.40608" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-55.80000" spawnY="-1480.20000" floorZ="9.40608" heading="270.00000" />
+        <portal x="-60.70000" y="-1479.70000" z="9.43225" yaw="90.00000" width="2" depth="2" interior="1" dimension="226" spawnX="-62.20000" spawnY="-1479.70000" floorZ="9.43225" heading="90.00000" timecycle="0" />
+    </pair>
+    <pair id="VPSHOO" name="VPSHOO" source="SRANGEH">
+        <portal x="-710.00000" y="-1541.80000" z="11.39665" yaw="64.91000" width="2" depth="2" interior="0" dimension="0" spawnX="-711.35846" spawnY="-1541.16394" floorZ="11.38932" heading="64.91000" />
+        <portal x="-685.31000" y="-1550.65000" z="29.93642" yaw="90.00000" width="2" depth="2" interior="1" dimension="114" spawnX="-686.81000" spawnY="-1550.65000" floorZ="29.93642" heading="90.00000" timecycle="2" />
+    </pair>
+    <pair id="JERRY" name="JERRY" source="SAFEHOU_7804">
+        <portal x="-1604.56010" y="-132.32000" z="13.80432" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1604.56010" spawnY="-133.82000" floorZ="13.80541" heading="180.00000" />
+        <portal x="-1604.56900" y="-126.78200" z="14.40379" yaw="0.00000" width="2" depth="2" interior="1" dimension="1346" spawnX="-1604.56900" spawnY="-125.28200" floorZ="14.40379" heading="0.00000" timecycle="4" />
+    </pair>
+    <pair id="LANCE_HIDEOUT" name="LANCE_HIDEOUT" source="LAN_C3_6663">
+        <portal x="-84.33000" y="-1576.43010" z="9.41593" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-84.33000" spawnY="-1574.93010" floorZ="9.42007" heading="0.00000" />
+        <portal x="-86.00000" y="-1592.66000" z="13.19736" yaw="345.00000" width="2" depth="2" interior="1" dimension="434" spawnX="-85.61177" spawnY="-1591.21111" floorZ="13.19736" heading="345.00000" timecycle="8" />
+    </pair>
+    <pair id="VCN" name="VCN" source="WARPSPO">
+        <portal x="-410.49110" y="1117.34330" z="10.10000" yaw="179.60000" width="3" depth="3" interior="0" dimension="0" spawnX="-410.26970" spawnY="1114.92820" floorZ="10.02532" heading="179.60000" />
+        <portal x="-447.67350" y="1128.20000" z="55.60000" yaw="282.00000" width="3" depth="3" interior="0" dimension="0" spawnX="-445.43800" spawnY="1128.20680" floorZ="55.65086" heading="282.00000" />
+    </pair>
+    <pair id="HOS" name="HOS" source="WARPSPO">
+        <portal x="-814.40000" y="1116.50000" z="11.30000" yaw="0.00000" width="3" depth="3" interior="0" dimension="0" spawnX="-814.20000" spawnY="1119.30000" floorZ="11.37650" heading="0.00000" />
+        <portal x="-825.60000" y="1112.60000" z="24.30000" yaw="90.00000" width="3" depth="3" interior="0" dimension="0" spawnX="-828.60000" spawnY="1112.80000" floorZ="24.31400" heading="90.00000" />
+    </pair>
+    <pair id="SHOPMON_00" name="Mal Viento" source="SHOPMON_195">
+        <portal x="-1008.91160" y="-331.78100" z="9.72762" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1008.91160" spawnY="-333.78100" floorZ="9.72762" heading="180.00000" />
+        <portal x="-1734.96494" y="629.35499" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3000" spawnX="-1734.96494" spawnY="631.35499" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_01" name="Curve" source="SHOPMON_195">
+        <portal x="-917.38260" y="847.67640" z="10.05299" yaw="270.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-915.38260" spawnY="847.67640" floorZ="10.06703" heading="270.00000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3001" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_02" name="Verdi Groceries" source="SHOPMON_195">
+        <portal x="-845.30450" y="-638.86930" z="10.12846" yaw="60.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-847.03655" spawnY="-637.86930" floorZ="10.14897" heading="60.00000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3002" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_03" name="Hardcore Pawn" source="SHOPMON_195">
+        <portal x="-1119.74000" y="-670.72000" z="10.69608" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1119.74000" spawnY="-672.72000" floorZ="10.73209" heading="180.00000" />
+        <portal x="-1734.96494" y="629.35499" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3003" spawnX="-1734.96494" spawnY="631.35499" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_04" name="Electric Boulevard" source="SHOPMON_195">
+        <portal x="-968.76470" y="-592.45300" z="10.58570" yaw="100.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-970.73432" spawnY="-592.80030" floorZ="10.51452" heading="100.00000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3004" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_05" name="Curve" source="SHOPMON_195">
+        <portal x="-1157.77920" y="-337.73380" z="9.39894" yaw="192.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1157.36338" spawnY="-339.69010" floorZ="9.43890" heading="192.00000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3005" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_06" name="Nalgas Grandes" source="SHOPMON_195">
+        <portal x="-1076.04000" y="-84.77000" z="10.36408" yaw="274.50000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1074.04617" spawnY="-84.61308" floorZ="10.36473" heading="274.50000" />
+        <portal x="-1734.96494" y="629.35499" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3006" spawnX="-1734.96494" spawnY="631.35499" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_07" name="Fidl" source="SHOPMON_195">
+        <portal x="-867.09700" y="-148.66000" z="10.03874" yaw="269.80000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-865.09701" spawnY="-148.66698" floorZ="10.03874" heading="269.80000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3007" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_08" name="Hermit" source="SHOPMON_195">
+        <portal x="-1029.90000" y="156.90000" z="10.21733" yaw="29.44000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1030.88302" spawnY="158.64174" floorZ="10.21399" heading="29.44000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3008" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_09" name="Fidl" source="SHOPMON_195">
+        <portal x="-993.34610" y="309.50390" z="10.21738" yaw="48.60000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-994.84632" spawnY="310.82652" floorZ="10.21420" heading="48.60000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3009" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_10" name="Mal Viento" source="SHOPMON_195">
+        <portal x="-731.33000" y="396.51000" z="10.06069" yaw="79.47000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-733.29632" spawnY="396.87550" floorZ="10.06069" heading="79.47000" />
+        <portal x="-1734.96494" y="629.35499" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3010" spawnX="-1734.96494" spawnY="631.35499" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_11" name="Verdi Groceries" source="SHOPMON_195">
+        <portal x="-628.81000" y="648.09000" z="10.13809" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-628.81000" spawnY="646.09000" floorZ="10.03120" heading="180.00000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3011" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_12" name="Hermit" source="SHOPMON_195">
+        <portal x="-650.19770" y="1198.52750" z="10.03065" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-650.19770" spawnY="1196.52750" floorZ="10.03065" heading="180.00000" />
+        <portal x="-1735.90028" y="629.41650" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3012" spawnX="-1735.90028" spawnY="631.41650" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_13" name="Electric Boulevard" source="SHOPMON_195">
+        <portal x="-762.38920" y="1194.87940" z="10.03065" yaw="184.74000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-762.22393" spawnY="1192.88624" floorZ="10.03065" heading="184.74000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3013" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_14" name="Mal Viento" source="SHOPMON_195">
+        <portal x="-588.47000" y="1127.12000" z="10.03443" yaw="326.70000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-587.37195" spawnY="1128.79161" floorZ="10.02771" heading="326.70000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3014" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_15" name="Gorilla Salad" source="SHOPMON_195">
+        <portal x="-734.78010" y="1326.18200" z="10.72002" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-734.78010" spawnY="1324.18200" floorZ="10.72002" heading="180.00000" />
+        <portal x="-1734.96270" y="629.31515" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3015" spawnX="-1734.96270" spawnY="631.31515" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_16" name="Nalgas Grandes" source="SHOPMON_195">
+        <portal x="-320.30940" y="1372.89260" z="10.66877" yaw="180.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-320.30940" spawnY="1370.89260" floorZ="10.63580" heading="180.00000" />
+        <portal x="-1734.96494" y="629.35499" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3016" spawnX="-1734.96494" spawnY="631.35499" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_17" name="Mal Viento" source="SHOPMON_195">
+        <portal x="376.02780" y="759.37910" z="10.70684" yaw="273.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="378.02506" spawnY="759.48377" floorZ="10.70684" heading="273.00000" />
+        <portal x="1158.63235" y="-243.64501" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3017" spawnX="1158.63235" spawnY="-241.64501" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_18" name="Electric Boulevard" source="SHOPMON_195">
+        <portal x="326.10390" y="204.09800" z="10.35881" yaw="311.18000" width="2" depth="1.2" interior="0" dimension="0" spawnX="327.60919" spawnY="205.41485" floorZ="10.36776" heading="311.18000" />
+        <portal x="1158.63459" y="-243.68485" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3018" spawnX="1158.63459" spawnY="-241.68485" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_19" name="Gorilla Salad" source="SHOPMON_195">
+        <portal x="451.61640" y="-415.28040" z="9.20680" yaw="86.36000" width="2" depth="1.2" interior="0" dimension="0" spawnX="449.62043" spawnY="-415.15343" floorZ="9.26247" heading="86.36000" />
+        <portal x="1158.63459" y="-243.68485" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3019" spawnX="1158.63459" spawnY="-241.68485" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_20" name="Hermit" source="SHOPMON_195">
+        <portal x="197.46000" y="-412.53000" z="10.03542" yaw="84.49000" width="2" depth="1.2" interior="0" dimension="0" spawnX="195.46924" spawnY="-412.33796" floorZ="10.03182" heading="84.49000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3020" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_21" name="Verdi Groceries" source="SHOPMON_195">
+        <portal x="385.35540" y="-616.70630" z="9.14668" yaw="69.18000" width="2" depth="1.2" interior="0" dimension="0" spawnX="383.48600" spawnY="-615.99543" floorZ="9.14668" heading="69.18000" />
+        <portal x="1158.63459" y="-243.68485" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3021" spawnX="1158.63459" spawnY="-241.68485" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_22" name="Nalgas Grandes" source="SHOPMON_195">
+        <portal x="266.02770" y="-835.21290" z="9.15353" yaw="244.50000" width="2" depth="1.2" interior="0" dimension="0" spawnX="267.83287" spawnY="-836.07392" floorZ="9.14899" heading="244.50000" />
+        <portal x="1158.63459" y="-243.68485" z="150.00569" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3022" spawnX="1158.63459" spawnY="-241.68485" floorZ="150.00569" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_23" name="Fidl" source="SHOPMON_195">
+        <portal x="123.65760" y="-905.33650" z="9.39696" yaw="105.90000" width="2" depth="1.2" interior="0" dimension="0" spawnX="121.73412" spawnY="-905.88442" floorZ="9.38718" heading="105.90000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3023" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_24" name="Curve" source="SHOPMON_195">
+        <portal x="224.80760" y="-1007.42710" z="9.41805" yaw="259.28000" width="2" depth="1.2" interior="0" dimension="0" spawnX="226.77270" spawnY="-1007.79912" floorZ="9.42814" heading="259.28000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3024" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_25" name="Hardcore Pawn" source="SHOPMON_195">
+        <portal x="87.27000" y="-974.16000" z="9.41001" yaw="254.11000" width="2" depth="1.2" interior="0" dimension="0" spawnX="89.19358" spawnY="-974.70758" floorZ="9.41742" heading="254.11000" />
+        <portal x="1158.63235" y="-243.64501" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3025" spawnX="1158.63235" spawnY="-241.64501" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_26" name="Hermit" source="SHOPMON_195">
+        <portal x="70.09000" y="-1196.67000" z="9.42668" yaw="137.33000" width="2" depth="1.2" interior="0" dimension="0" spawnX="68.73445" spawnY="-1198.14054" floorZ="9.42668" heading="137.33000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3026" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_27" name="Gorilla Salad" source="SHOPMON_195">
+        <portal x="196.05000" y="-1151.24000" z="9.42227" yaw="256.20000" width="2" depth="1.2" interior="0" dimension="0" spawnX="197.99227" spawnY="-1151.71707" floorZ="9.44130" heading="256.20000" />
+        <portal x="1158.63235" y="-243.64501" z="150.00000" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3027" spawnX="1158.63235" spawnY="-241.64501" floorZ="150.00000" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_28" name="Electric Boulevard" source="SHOPMON_195">
+        <portal x="124.77950" y="-1471.93460" z="9.24763" yaw="246.90000" width="2" depth="1.2" interior="0" dimension="0" spawnX="126.61914" spawnY="-1472.71927" floorZ="9.23924" heading="246.90000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3028" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="SHOPMON_29" name="Hermit" source="SHOPMON_195">
+        <portal x="397.56460" y="818.59020" z="10.73027" yaw="270.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="399.56460" spawnY="818.59020" floorZ="10.72196" heading="270.00000" />
+        <portal x="1157.69701" y="-243.58350" z="147.19629" yaw="0.00002" width="2" depth="1.2" interior="1" dimension="3029" spawnX="1157.69701" spawnY="-241.58350" floorZ="147.19629" heading="0.00002" timecycle="0" />
+    </pair>
+    <pair id="KING_KNUTS_DOWNTOWN" name="King Knuts, Downtown" source="LAN_B2_20511">
+        <portal x="-884.25000" y="797.02000" z="10.07956" yaw="270.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-882.65000" spawnY="797.02000" floorZ="10.06666" heading="270.00000" />
+        <portal x="-885.75000" y="797.02000" z="10.07910" yaw="90.00000" width="2" depth="1.2" interior="1" dimension="3030" spawnX="-887.34000" spawnY="797.55000" floorZ="10.07910" heading="90.00000" timecycle="0" />
+    </pair>
+    <pair id="KING_KNUTS_LITTLE_HAITI" name="King Knuts, Little Haiti" source="TAXI_8785 + KINGHN">
+        <portal x="-1059.84000" y="83.68000" z="10.44408" yaw="90.00000" width="2" depth="1.2" interior="0" dimension="0" spawnX="-1061.94150" spawnY="83.68390" floorZ="10.21869" heading="90.00000" />
+        <portal x="-885.75000" y="797.02000" z="10.07910" yaw="90.00000" width="2" depth="1.2" interior="1" dimension="3031" spawnX="-887.34000" spawnY="797.55000" floorZ="10.07910" heading="90.00000" timecycle="0" />
+    </pair>
+</portals>

@@ -2,6 +2,7 @@
     <include resource="frontend"/>
     <include resource="eagleLoader"/>
     <script src="server.lua" type="server"/>
+    <file src="passage_routes.xml" download="false"/>
     <script src="lib.lua" type="client"/>
     <script src="anim.lua" type="client"/>
     <script src="ps2_portals.lua" type="client"/>

@@ -35,9 +35,20 @@ end
 
 local function track(element)
     local profile = getElementData(element, visibility.profileKey, false)
+    if profile == "aircraft" and type(getElementData(element, "npchlc_traffic:flightSlot", false)) == "number" then
+        forget(element, true)
+        return
+    end
     local range = distances[profile]
     if not range then forget(element, true) return end
-    if visible[element] or not isElementStreamedIn(element) then return end
+    local state = visible[element]
+    if state then
+        if profile ~= state.profile then
+            state.profile, state.range, state.sample = profile, range, nil
+        end
+        return
+    end
+    if not isElementStreamedIn(element) then return end
     local kind = getElementType(element)
     if kind ~= "ped" and kind ~= "vehicle" then return end
     visible[element] = {base = getElementAlpha(element), alpha = 0, start = getTickCount(),
@@ -57,7 +68,7 @@ addEventHandler("onClientElementModelChange", root, function()
 end)
 addEventHandler("onClientElementDataChange", root, function(name)
     if source == resourceRoot and name == visibility.roadRangeKey then updateRoadRange() end
-    if name == visibility.profileKey then track(source) end
+    if name == visibility.profileKey or name == "npchlc_traffic:flightSlot" then track(source) end
     if name == visibility.retiringKey and isElementStreamedIn(source) then
         local state = visible[source]
         if getElementData(source, visibility.retiringKey, false) then

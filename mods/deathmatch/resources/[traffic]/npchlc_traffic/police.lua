@@ -31,9 +31,10 @@ end
 local function finishPursuit(pursuit)
     TrafficVisibility.releasePed(pursuit.pilot)
     local helicopter = pursuit.heli
-    if not isElement(helicopter) then return end
+    if not isElement(helicopter) or TrafficVisibility.isWreck(helicopter) then return end
     if pursuit.taken or TrafficVisibility.hasPlayerOccupant(helicopter) then
         TrafficVisibility.detach(helicopter)
+        TrafficRoad.retainPlayerVehicle(helicopter)
     elseif not getVehicleOccupant(helicopter, 0) then
         destroyElement(helicopter)
     end
@@ -45,7 +46,7 @@ local function removePursuit(player, fade)
     pursuits[player] = nil
     stats.active = stats.active - 1
     local helicopter = pursuit.heli
-    if fade and isElement(helicopter) and getElementSyncer(helicopter)
+    if fade and isElement(helicopter) and not TrafficVisibility.isWreck(helicopter) and getElementSyncer(helicopter)
         and not TrafficVisibility.hasPlayerOccupant(helicopter) then
         TrafficVisibility.retire(helicopter, pursuit.pilot, function() finishPursuit(pursuit) end)
     else

@@ -233,6 +233,31 @@ function TrafficGraph.pedestrianAnchor(graph, x, y, z, previousId)
     return best
 end
 
+-- A completed objective may leave a pedestrian off the navigation graph.
+-- Return a short list in nearest-first order for the syncer's visibility test.
+function TrafficGraph.pedestrianEntryPoints(graph,x,y,z,excluded)
+    local candidates={}
+    for cx=cell(x-45,30),cell(x+45,30) do
+        local column=graph.pedestrianCells[cx]
+        for cy=cell(y-45,25),cell(y+45,25) do
+            for _,node in ipairs(column and column[cy] or {}) do
+                local dz=node.z-z
+                local distance=(node.x-x)^2+(node.y-y)^2+dz^2*4
+                if node.id~=excluded and node.linkCount>0 and math.abs(dz)<4 and distance<=45^2
+                    and math.floor(node.flags/32)%2==0 and math.floor(node.flags/512)%2==0 then
+                    candidates[#candidates+1]={id=node.id,x=node.x,y=node.y,z=node.z,distance=distance}
+                end
+            end
+        end
+    end
+    table.sort(candidates,function(a,b)
+        if a.distance==b.distance then return a.id<b.id end
+        return a.distance<b.distance
+    end)
+    while #candidates>8 do candidates[#candidates]=nil end
+    return candidates
+end
+
 -- The ordinary-ped branch of 0x00267308, after it chooses the anchor
 -- node and checks static line of sight. Reachability comes from the caller.
 function TrafficGraph.pedestrianStep(graph, nodeId, heading, reachableNodeIds)

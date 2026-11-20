@@ -1,0 +1,10 @@
+<meta>
+    <info name="VCS world placements" type="script" />
+    <include resource="vcs_model" />
+    <include resource="vcs_vehicle" />
+    <script src="car_park/spawns.lua" type="server" />
+    <script src="car_park/server.lua" type="server" />
+    <script src="pickups/weapons.lua" type="server" />
+    <script src="pickups/server.lua" type="server" />
+    <script src="collectables/balloons.lua" type="server" />
+</meta>

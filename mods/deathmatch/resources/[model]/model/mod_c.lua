@@ -92,6 +92,14 @@ function getVehicleName(source)
 end
 initModels() 
 
+-- Newly created boats can stream before the model tag arrives.
+addEventHandler("onClientElementDataChange", root, function(key)
+    if key == "mod.model" and getElementType(source) == "vehicle" and isElementStreamedIn(source) then
+        local model = getElementData(source, key)
+        if IMG_VEHICLE[model] and IMG_VEHICLE[model].pointer then setElementModModel(source, model) end
+    end
+end)
+
 
 -- sync
 addEventHandler( "onClientElementStreamIn", root,

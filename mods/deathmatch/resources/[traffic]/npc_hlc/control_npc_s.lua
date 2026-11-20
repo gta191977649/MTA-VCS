@@ -16,6 +16,23 @@ local function elapsedMs(now, before)
     return (now - before) % 4294967296
 end
 
+addEvent("npc_hlc:debugAssignmentChanged", false)
+
+function getNPCDebugAssignment(npc)
+    local state = all_npcs[npc]
+    if not state then return false end
+    state.debugReadAt = getTickCount()
+    local task = state.tasks[state.head]
+    return task and task[1] or false, state.revision or 0, state.owner or false, state.debugFallback or false
+end
+
+function recordNPCDebugFallback(actor, x, y, z)
+    local state = actorStates[actor]
+    if state and state.debugReadAt and elapsedMs(getTickCount(),state.debugReadAt)<1000 and state.assignedTask then
+        state.debugFallback = {state.assignedTask[1], false, x, y, z, false, false, false}
+    end
+end
+
 local function sendTask(player, state, task)
     triggerClientEvent(player, "npc_hlc:control", resourceRoot,
         state.npc, state.revision, task or false, task and state.actor or false, task and state.preview or false)
@@ -29,10 +46,14 @@ local function updateAssignment(state, actor, owner, task, preview)
     if actor then actorStates[actor] = state end
 
     revision = revision + 1
+    state.debugFallback = nil
     state.revision = revision
     state.actor, state.owner, state.assignedTask, state.preview = actor, owner, task, preview
     if previousOwner and previousOwner ~= owner and isElement(previousOwner) then
         sendTask(previousOwner, state, false)
+    end
+    if state.debugReadAt and elapsedMs(getTickCount(),state.debugReadAt)<1000 then
+        triggerEvent("npc_hlc:debugAssignmentChanged",state.npc,revision,task and task[1] or false,owner or false)
     end
     if owner then
         addElementDataSubscriber(state.npc, "npc_hlc:profile", owner)
@@ -98,10 +119,27 @@ local function cycleNPCs()
         local task, actor = state.assignedTask, state.actor
         local elapsed = math.min(MAX_FALLBACK_ELAPSED, elapsedMs(getTickCount(), state.lastMovement))
         if task then
-            if isNPCTaskComplete(state.npc, actor, task, true) then
+            local passed=false
+            if actor and state.preview and task[1]=="walkTrafficToPoint" then
+                local x,y,z=getElementPosition(actor)
+                if state.sampledWalk==task and state.walkOwner==state.owner then
+                    local dx,dy,dz=x-state.walkX,y-state.walkY,z-state.walkZ
+                    local length=dx*dx+dy*dy+dz*dz
+                    if length>0 and length<=36 then
+                        local t=math.max(0,math.min(1,((task[2]-x)*dx+(task[3]-y)*dy+(task[4]-z)*dz)/length+1))
+                        passed=(state.walkX+t*dx-task[2])^2+(state.walkY+t*dy-task[3])^2+
+                            (state.walkZ+t*dz-task[4])^2<=task[5]^2
+                    end
+                end
+                state.sampledWalk,state.walkOwner,state.walkX,state.walkY,state.walkZ=task,state.owner,x,y,z
+            else
+                state.sampledWalk=nil
+            end
+            if passed or isNPCTaskComplete(state.npc, actor, task, true) then
                 completeTask(state, task)
             elseif not clientDrivenTraffic[task[1]] and actor and not state.owner and not getElementSyncer(actor)
                 and getElementHealth(actor) >= 1 and elapsed >= FALLBACK_INTERVAL then
+                state.debugFallback = nil
                 state.lastMovement = getTickCount()
                 performTask[task[1]](state.npc, task, elapsed * gameSpeed)
                 if isNPCTaskComplete(state.npc, actor, task, true) then completeTask(state, task) end

@@ -23,16 +23,13 @@ local function continueLoad()
     elseif coroutine.status(graphLoader) == "dead" then
         graphLoader = nil
         graph, status = result, "ready"
+        PedAI.graph = graph
         TrafficDebug.setGraph(graph)
         TrafficModelBindings.load(graph, get("npchlc_traffic.modelProvider"))
         TrafficLights.start()
-        local route = graph.ambientFlight
-        if route and route.originalModelId then
-            local aircraftModel = TrafficModelBindings.get(route.originalModelId)
-            if aircraftModel then bindTrafficFixedWingModel(aircraftModel) end
-        end
-        TrafficAircraft.start(route)
+        TrafficAircraft.start(graph.ambientFlight, graph.routes)
         TrafficAmbient.start(graph, getTrafficDensity)
+        if PedServices then PedServices.start(graph) end
         TrafficRoad.start(graph, getTrafficDensity, get("npchlc_traffic.roadPopulationMode"))
         TrafficPolice.start(graph)
         local counts = graph.counts
@@ -63,6 +60,7 @@ addEventHandler("onResourceStop", resourceRoot, function()
     if loadTimer then
         killTimer(loadTimer)
     end
+    if PedServices then PedServices.stop() end
     TrafficPolice.stop()
     TrafficRoad.stop()
     TrafficAmbient.stop()
@@ -124,7 +122,7 @@ function sampleTrafficFlight(routeId, clockMs, slot)
     if not route or route.kind ~= "fixedWing" then
         return false
     end
-    return TrafficFlight.sample(route, clockMs, slot) or false
+    return TrafficAircraft.sample(routeId, clockMs, slot)
 end
 
 function getTrafficDynamicRoute(routeId)

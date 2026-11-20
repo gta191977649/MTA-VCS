@@ -176,7 +176,7 @@ addCommandHandler("wea",
         UI:showTextBox("Weather Set.",3000)
     end
 )
-addCommandHandler("anim",function() 
+addCommandHandler("debugdooranim",function()
     setPedAnimation(localPlayer,"ped","walk_doorpartial")
 end)
 

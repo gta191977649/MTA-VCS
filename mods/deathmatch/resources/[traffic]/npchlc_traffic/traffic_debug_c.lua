@@ -9,7 +9,7 @@ local signalColor = tocolor(255, 87, 103, 250)
 local connectionColor = tocolor(255, 188, 64, 175)
 local background = tocolor(0, 0, 0, 180)
 local foreground = tocolor(255, 255, 255, 240)
-local modes = {all = true, road = true, ped = true, boat = true}
+local modes = {all = true, road = true, ped = true, boat = true, plane = true}
 local cameraX, cameraY, cameraZ, forwardX, forwardY, forwardZ
 
 local function drawProjectedLine(ax, ay, az, bx, by, bz, color, width)
@@ -32,6 +32,7 @@ local function drawProjectedLine(ax, ay, az, bx, by, bz, color, width)
 end
 
 local function update()
+    if mode == "plane" then return end
     local x, y = getElementPosition(localPlayer)
     local interior, dimension = getElementInterior(localPlayer), getElementDimension(localPlayer)
     local now = getTickCount()
@@ -44,10 +45,32 @@ local function update()
     triggerServerEvent("npchlc_traffic:debugRequest", resourceRoot, mode)
 end
 
+local function drawAircraft()
+    local status = TrafficAircraftClient.debugSlots()
+    local cx, cy, cz = getCameraMatrix()
+    local lines = {("AIRTRAIN   %s   %d/%d"):format(status.state, status.active, status.expected)}
+    for _, plane in ipairs(status.slots) do
+        local label = ("Slot %d   %s"):format(plane.slot, plane.representation)
+        if plane.x and cx then
+            local distance = getDistanceBetweenPoints3D(cx, cy, cz, plane.x, plane.y, plane.z)
+            label = ("%s   phase %.1fs   XYZ %.0f %.0f %.0f   camera %.0fm"):format(
+                label, plane.phaseMs / 1000, plane.x, plane.y, plane.z, distance)
+            local sx, sy = getScreenFromWorldPosition(plane.x, plane.y, plane.z)
+            if sx then dxDrawText("AIRTRAIN " .. plane.slot, sx, sy, sx, sy, foreground, 1, "default-bold", "center") end
+        end
+        lines[#lines + 1] = label
+    end
+    local message = table.concat(lines, "\n")
+    dxDrawText(message, 19, 19, 0, 0, background, 1, "default-bold")
+    dxDrawText(message, 18, 18, 0, 0, foreground, 1, "default-bold")
+end
+
 local function draw()
+    if mode == "plane" then drawAircraft() return end
     local message = "Traffic debug / " .. mode .. "   Lane connections: orange   Active routes: light yellow   Ped: green   Boat: blue   Signal: red"
     dxDrawText(message, 19, 19, 0, 0, background, 1, "default-bold")
     dxDrawText(message, 18, 18, 0, 0, foreground, 1, "default-bold")
+    TrafficNPCDebug.draw()
     if not nodes then return end
     local cx, cy, cz, tx, ty, tz = getCameraMatrix()
     if not cx then return end
@@ -72,7 +95,8 @@ local function draw()
             local dx, dy = d - a, e - b
             local length = math.sqrt(dx * dx + dy * dy)
             if length > 0.1 then
-                local mx, my, mz = (a + d) * 0.5, (b + e) * 0.5, (c + f) * 0.5
+                local fraction = kind == "boat" and 0.35 or 0.5
+                local mx, my, mz = a + dx * fraction, b + dy * fraction, c + (f - c) * fraction
                 local vx, vy = dx / length, dy / length
                 local arrowColor = light > 0 and signalColor or color
                 drawProjectedLine(mx - vx + vy * 0.6, my - vy - vx * 0.6, mz, mx + vx, my + vy, mz, arrowColor, 3)
@@ -103,11 +127,12 @@ end, false)
 addCommandHandler("trafficdebug", function(_, filter)
     filter = filter and filter:lower()
     if filter and not modes[filter] and filter ~= "off" then
-        outputChatBox("/trafficdebug [all|road|ped|boat|off]", 255, 188, 64)
+        outputChatBox("/trafficdebug [all|road|ped|boat|plane|off]", 255, 188, 64)
         return
     end
     if mode and (not filter or filter == "off") then
         removeEventHandler("onClientRender", root, draw)
+        TrafficNPCDebug.stop()
         killTimer(timer)
         mode, timer, nodes, links, connections = nil, nil, nil, nil, nil
         return
@@ -116,6 +141,11 @@ addCommandHandler("trafficdebug", function(_, filter)
     if not mode then
         addEventHandler("onClientRender", root, draw)
         timer = setTimer(update, 750, 0)
+    end
+    if filter == "plane" then
+        if mode and mode ~= "plane" then TrafficNPCDebug.stop() end
+    elseif not mode or mode == "plane" then
+        TrafficNPCDebug.start()
     end
     mode, nodes, links, connections, lastX = filter or "all", nil, nil, nil, nil
     update()

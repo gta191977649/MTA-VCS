@@ -37,10 +37,10 @@ function VCSWater.start()
     end
 
     local wakeTexture = loadTexture("waterwake")
+    VCSBoatWake.start(wakeTexture, surface)
     if wakeTexture then
         wake = dxCreateShader("shader/vcsWater.fx", {VCS_WAKE="1"}, 12, 0, false, "world,other")
-        if wake and not (dxSetShaderValue(wake, "SurfaceTexture", wakeTexture)
-                and engineApplyShaderToWorldTexture(wake, "waterwake", nil, false)) then
+        if wake and not engineApplyShaderToWorldTexture(wake, "waterwake", nil, false) then
             destroyElement(wake)
             wake = nil
         end
@@ -101,6 +101,7 @@ function VCSWater.restoreGraphics()
 end
 
 function VCSWater.stop()
+    VCSBoatWake.stop()
     if waterValues then
         setWaterColor(waterValues[51], waterValues[52], waterValues[53], waterValues[54])
     end
@@ -116,5 +117,6 @@ function VCSWater.stop()
 end
 
 function VCSWater.getStats()
-    return {surface=isElement(surface), wake=isElement(wake), waveGrid=lastWaveUpdate ~= nil}
+    return {surface=isElement(surface), wake=isElement(wake), waveGrid=lastWaveUpdate ~= nil,
+        boatWake=VCSBoatWake.getStats()}
 end

@@ -21,6 +21,14 @@ def main():
         function getElementInterior(element) return element.interior or 0 end
         function getElementDimension(element) return element.dimension or 0 end
         function getElementPosition(element) return element.x or 0, 0, 0 end
+        function getDistanceBetweenPoints3D(x,_,_,tx) return math.abs(x-tx) end
+        function isPedDead(element) return element.dead end
+        function isPedInVehicle(element) return element.inVehicle end
+        function setPedRotation() end
+        function getPedWeapon(_,slot) return slot==2 and 22 or 0 end
+        function setPedWeaponSlot(p,slot) p.slot=slot end
+        function setPedAnimation() end
+        PedVoice = {emit=function() end}
         function getPlayerWantedLevel(element) return element.level end
         function setPlayerWantedLevel(element, level) element.level = level return true end
         function setElementData(element, key, value, mode, policy)
@@ -30,6 +38,7 @@ def main():
         end
         function removeElementData(element, key) element[key] = nil end
         function getElementsByType() return {player, other} end
+        function getElementsWithinRange() return {policePed} end
         function getTickCount() return now end
         function addEvent(name, remote) registered[name] = remote end
         function addEventHandler(name, target, handler)
@@ -37,7 +46,13 @@ def main():
             table.insert(handlers[name], handler)
         end
         function triggerEvent(name, element, old, new, reason)
-            assert(registered[name] == false and name == "onPlayerWanted")
+            assert(registered[name] == false)
+            if name == "onTrafficPlayerArrest" then
+                assert(element==player and old==policePed and new==player.level)
+                lastArrest=reason
+                return not cancelArrest
+            end
+            assert(name == "onPlayerWanted")
             table.insert(events, {element, old, new, reason})
             if onWanted then onWanted(element, old, new, reason) end
         end
@@ -119,6 +134,7 @@ def main():
         policeDistance = 17.9
         for _ = 1, 22 do tick(1001) end
         assert(getPlayerWanted(player) == 1)
+
         policeDistance = 18
         for _ = 1, 21 do tick(1001) end
         assert(getPlayerWanted(player) == 0 and events[#events][4] == "decay")
@@ -153,6 +169,31 @@ def main():
         policePed.dimension = 0
         fire("onPedWasted", policePed, 0, player, 22)
         assert(getPlayerWanted(player) == 1)
+
+        local car={kind="vehicle"}
+        assert(not TrafficWanted.tryArrest(policePed,player,getTickCount()))
+        fire("onVehicleStartEnter",car,player,0)
+        policePed.x=1.3
+        assert(not TrafficWanted.tryArrest(policePed,player,getTickCount()))
+        policePed.x=1.29
+        cancelArrest=true
+        assert(not TrafficWanted.tryArrest(policePed,player,getTickCount()) and player.level==1)
+        cancelArrest=false
+        fire("onVehicleStartEnter",car,player,0)
+        assert(TrafficWanted.tryArrest(policePed,player,getTickCount()) and player.level==0 and policePed.slot==2)
+        assert(setPlayerWanted(player,1))
+        assert(setTrafficPlayerRestrained(player,true))
+        policePed.x=5
+        assert(not TrafficWanted.tryArrest(policePed,player,getTickCount()))
+        policePed.x=4.99
+        assert(TrafficWanted.tryArrest(policePed,player,getTickCount()) and player.level==0)
+        player.dead=true
+        assert(setPlayerWanted(player,2))
+        fire("onPlayerWasted",player)
+        assert(lastArrest=="wasted" and player.level==2)
+        player.dead=false
+        fire("onPlayerSpawn",player)
+        assert(player.level==0)
     ''')
     print("VCS wanted rules and MTA adapter passed")
 

@@ -2,6 +2,8 @@ local samples = setmetatable({}, {__mode = "k"})
 local diagnostics = setmetatable({}, {__mode = "k"})
 local debugging = false
 local sensorBudget = 12
+local deferred = setmetatable({}, {__mode="k"})
+local frame, reserved, missed = 0,0,0
 local SAMPLE_MS = 75
 local BRAKING = 3 -- Conservative MTA braking envelope, in world units/s².
 local STALL_MS = 1000
@@ -9,9 +11,12 @@ local REVERSE_MS = 700 -- VCS PC 0x0041FC57, ordinary cruise traffic.
 local AVOID_DISTANCE = 4
 local AVOID_ANGLE = math.rad(15)
 local RECOVERY_SPEED = 2.5
+addEvent("npc_hlc:onCruiseStuck", false)
+addEvent("npc_hlc:onRouteLow",false)
 
 function beginNPCTrafficPhysicsFrame()
     sensorBudget = 12
+    frame,reserved,missed=frame+1,math.min(6,missed),0
 end
 
 function resetNPCTrafficPhysicsSensor(vehicle)
@@ -32,22 +37,12 @@ local function vehicleExtents(vehicle)
     return a and c and math.max(-a, c) or 1, b and d and math.max(-b, d) or 2
 end
 
-local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed)
-    local longitudinal = dx * motion.fx + dy * motion.fy
-    local lateral = dx * motion.fy - dy * motion.fx
-    local bumper = math.abs(longitudinal) * length + math.abs(lateral) * width
-    local halfWidth = math.abs(longitudinal) * width + math.abs(lateral) * length
-    local grade = math.max(-0.3, math.min(0.3, motion.grade)) * longitudinal
-    -- Start just inside the bumper so a contact at its edge remains visible.
-    local inset = 0.35
-    local origin = bumper - inset
-    local z = motion.z + grade * origin
+local function scanStrip(vehicle, x0, y0, z, dx, dy, halfWidth, sweep, grade, travelled, speed)
     local limit, nearest, cause = math.huge, math.huge, "clear"
     for offset = -1, 1 do
         local side = offset * halfWidth * 0.85
-        local x = motion.x + dx * origin + dy * side
-        local y = motion.y + dy * origin - dx * side
-        local sweep = range + inset
+        local x = x0 + dy * side
+        local y = y0 - dx * side
         local hit, hx, hy, _, element = processLineOfSight(x, y, z, x + dx * sweep, y + dy * sweep, z + grade * sweep,
             true, true, true, true, false, false, false, false, vehicle)
         if hit then
@@ -57,7 +52,7 @@ local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed)
                 local vx, vy = getElementVelocity(element)
                 leader = math.max(0, (vx * dx + vy * dy) * 50)
             end
-            local gap = math.max(0, (hx - x) * dx + (hy - y) * dy - inset)
+            local gap = math.max(0, travelled + (hx - x) * dx + (hy - y) * dy)
             local candidate = stopSpeed(gap, leader, speed)
             local hitCause = kind == "vehicle" and "following"
                 or (kind == "ped" or kind == "player") and "pedestrian" or "obstacle"
@@ -68,6 +63,60 @@ local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed)
         end
     end
     return limit, cause, nearest
+end
+
+local function scanBumper(vehicle, motion, dx, dy, width, length, range, speed)
+    local sign = dx * motion.fx + dy * motion.fy < 0 and -1 or 1
+    local offset = sign * (length - 0.35)
+    local grade = math.max(-0.3, math.min(0.3, motion.grade))
+    return scanStrip(vehicle, motion.x + motion.fx * offset, motion.y + motion.fy * offset,
+        motion.z + grade * offset, dx, dy, width, range + 0.35, grade * sign, -0.35, speed)
+end
+
+-- Near a turn the steering target can already point across the junction while
+-- the bumper is still facing into it. Sweep from the actual bumper, rounding
+-- toward the steering target before extending the braking sightline.
+local function scanRoute(vehicle, motion, dx, dy, width, length, range, speed, lane, nextLane)
+    local dot = dx * motion.fx + dy * motion.fy
+    local radius = math.max(3, length * 1.5)
+    local straight = 0
+    if dot > 0.985 then
+        local nextDot = nextLane and dx*nextLane[6]+dy*nextLane[7]
+        if not nextDot or nextDot > 0.985 then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed) end
+        local bendAngle = math.acos(math.max(-1, math.min(1, nextDot)))
+        local remaining = (lane[3]-motion.x)*dx + (lane[4]-motion.y)*dy - length
+        straight = math.max(0, remaining - radius * math.tan(math.min(bendAngle, math.pi/2)/2))
+        if straight >= range then return scanBumper(vehicle,motion,dx,dy,width,length,range,speed) end
+        dx,dy = nextLane[6],nextLane[7]
+        dot = dx * motion.fx + dy * motion.fy
+    end
+    local angle = math.atan2(motion.fx * dy - motion.fy * dx, dot)
+    local bend = math.min(radius * math.abs(angle), range-straight)
+    local steps = math.max(1, math.ceil(bend / radius / math.rad(25)))
+    local heading = math.atan2(motion.fy, motion.fx)
+    local grade = math.max(-0.3, math.min(0.3, motion.grade))
+    local x,y = motion.x + motion.fx*(length-0.35), motion.y + motion.fy*(length-0.35)
+    local z = motion.z + grade*(length-0.35)
+    local limit,cause,gap = math.huge,"clear",math.huge
+    local travelled = -0.35
+    if straight > 0 then
+        limit,cause,gap = scanStrip(vehicle,x,y,z,motion.fx,motion.fy,width,straight,grade,travelled,speed)
+        x,y,z=x+motion.fx*straight,y+motion.fy*straight,z+grade*straight
+        travelled=travelled+straight
+    end
+    for i=1,steps+1 do
+        local turn = math.min(i-0.5,steps) * bend / (steps*radius)
+        local yaw = heading + (angle<0 and -turn or turn)
+        local ux,uy = math.cos(yaw),math.sin(yaw)
+        local distance = i<=steps and 2*radius*math.sin(bend/(2*radius*steps)) or range-straight-bend+0.35
+        local slope = grade*(motion.fx*ux+motion.fy*uy)
+        local cap,reason,clearance = scanStrip(vehicle,x,y,z,ux,uy,width,distance,slope,travelled,speed)
+        if cap<limit then limit,cause=cap,reason end
+        gap=math.min(gap,clearance)
+        x,y,z=x+ux*distance,y+uy*distance,z+slope*distance
+        travelled=travelled+distance
+    end
+    return limit,cause,gap
 end
 
 -- Calculate the time interval in which one axis of two moving bounds overlaps.
@@ -134,12 +183,42 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
         and (motion.x - previous.x) ^ 2 + (motion.y - previous.y) ^ 2 < 1 then
         return previous.limit, previous.cause, previous.avoidAngle
     end
-    if sensorBudget == 0 then return 0, "sensor budget", 0 end
+    local priority=deferred[vehicle]==frame-1
+    if sensorBudget==0 or not priority and sensorBudget<=reserved then
+        if deferred[vehicle]~=frame then missed=missed+1 end
+        deferred[vehicle]=frame
+        if previous and previous.sequence==sequence and previous.cause=="clear"
+            and (now-previous.tick)%4294967296<=150 and previous.dx*dx+previous.dy*dy>0.995
+            and previous.routeX*routeX+previous.routeY*routeY>0.995 and previous.fx*motion.fx+previous.fy*motion.fy>0.995
+            and previous.nextLink==(task[5][index+1] and task[5][index+1][1]) and math.abs(motion.z-previous.z)<0.5 then
+            local shift=math.sqrt((motion.x-previous.x)^2+(motion.y-previous.y)^2)
+            if shift<=2 and previous.range-shift>=speed^2/(2*BRAKING)+speed*0.15+2 then
+                return math.huge,"clear",0
+            end
+        end
+        return 0,"Sensor budget",0
+    end
+    if priority then reserved=math.max(0,reserved-1) end
+    deferred[vehicle]=nil
     sensorBudget = sensorBudget - 1
     local width, length = vehicleExtents(vehicle)
     local range = math.min(120, math.max(8, speed ^ 2 / (2 * BRAKING) + speed * 0.15 + 4))
-    local limit, cause, gap = scanBumper(vehicle, motion, routeX, routeY, width, length, range, speed)
+    local limit, cause, gap = scanRoute(vehicle, motion, routeX, routeY, width, length, range, speed,
+        task[5][index],task[5][index+1])
     local avoidAngle = 0
+    if task[6] == 2 and allowAvoid and cause == "following" and limit < task[3] then
+        local angle = math.atan2(routeY,routeX)
+        local reach = math.min(range,math.max(7,speed*1.4))
+        for side = -1, 1, 2 do
+            local offset = side * math.min(math.rad(25),math.atan2(3.25,reach))
+            local ax, ay = math.cos(angle+offset), math.sin(angle+offset)
+            local sideLimit = scanBumper(vehicle,motion,ax,ay,width,length,reach,speed)
+            if sideLimit > limit and canNPCTrafficPhysicsAvoid(task,index,motion.x,motion.y,motion.z,ax,ay,reach,width) then
+                limit, cause, avoidAngle = math.min(sideLimit,task[3]), "avoiding", offset
+                break
+            end
+        end
+    end
     if allowAvoid and cause == "obstacle" and gap <= AVOID_DISTANCE and speed <= RECOVERY_SPEED then
         local angle = math.atan2(routeY, routeX)
         for side = -1, 1, 2 do
@@ -156,7 +235,9 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
         end
     end
     if speed > 0.6 and dx * routeX + dy * routeY < 0.999 then
-        local emergencyRange = math.max(2, speed ^ 2 / (2 * BRAKING) + speed * 0.15 + 2)
+        -- The tangent checks immediate drift during steering. Longer range
+        -- braking is already covered along the turning path above.
+        local emergencyRange = math.max(2, speed * 0.35)
         local emergency, hazard = scanBumper(vehicle, motion, dx, dy, width, length, math.min(range, emergencyRange), speed)
         if emergency < limit then limit, cause = emergency, hazard end
     end
@@ -167,7 +248,8 @@ local function trafficLimit(vehicle, motion, routeX, routeY, task, index, allowA
     if crossing < limit then limit, cause = crossing, "crossing" end
     samples[vehicle] = {tick = now, sequence = sequence, dx = dx, dy = dy, fx = motion.fx, fy = motion.fy,
         routeX = routeX, routeY = routeY, limit = limit, speed = speed, cause = cause, avoidAngle = avoidAngle,
-        allowAvoid = allowAvoid, x = motion.x, y = motion.y}
+        allowAvoid = allowAvoid, x = motion.x, y = motion.y,z=motion.z,range=range,
+        nextLink=task[5][index+1] and task[5][index+1][1]}
     return limit, cause, avoidAngle
 end
 
@@ -190,13 +272,14 @@ local function applyInputs(npc, vehicle, motion, progress, steer, speed, reason,
     end
     local moving = motion.forward > 0.5
     local urgent = reason == "obstacle" or reason == "following" or reason == "crossing"
-        or reason == "pedestrian" or reason == "signal" or reason == "sensor budget"
+        or reason == "pedestrian" or reason == "signal" or reason == "Sensor budget"
     local brake = moving and (speed == 0 and 1
         or math.max(0, math.min(urgent and 1 or 0.5, -error * (urgent and 0.25 or 0.05)))) or 0
     if throttle > 0 then brake = 0 end
     if reversing then brake = math.max(0, math.min(1, (1.5 + motion.forward) * 0.6)) end
     local handbrake = speed == 0 and not moving and not reversing and reason ~= "sliding"
     setNPCVehicleInputs(npc, steer, throttle - brake, handbrake)
+    recordNPCDebugDriving(reason=="cruise" and progress.usingPreview and "Route preview" or reason, speed > 0)
     if debugging then
         local action = reversing and "reverse" or progress.reverseAt and "rear check"
             or progress.rejoinAt and "rejoin" or "follow"
@@ -214,10 +297,10 @@ local function runReverse(npc, vehicle, motion, progress, now, signalClosed)
     local reason, rear
     if signalClosed then
         reason = "signal"
-    elseif elapsedSince(now, progress.reverseAt) >= REVERSE_MS then
+    elseif elapsedSince(now, progress.reverseAt) >= (progress.reverseDuration or REVERSE_MS) then
         reason = "reverse complete"
     elseif sensorBudget == 0 then
-        reason = "sensor budget"
+        reason = "Sensor budget"
     else
         sensorBudget = sensorBudget - 1
         local width, length = vehicleExtents(vehicle)
@@ -270,17 +353,29 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     local sequence = task[2] + index - 1
     if progress.sequence ~= sequence then progress.stalledAt = nil end
     progress.sequence = sequence
+    progress.usingPreview = index>1 and lane~=nil
     if motion.unstable or not onRoute then
         progress.stalledAt = nil
-        applyInputs(npc, vehicle, motion, progress, 0, 0, motion.unstable and "sliding" or "route")
+        applyInputs(npc, vehicle, motion, progress, 0, 0, motion.unstable and "sliding" or not lane and "Awaiting route" or "route")
         return
     end
 
     local dx, dy = lane[3] - x, lane[4] - y
     local distance = math.sqrt(dx * dx + dy * dy)
+    local remainingPath=distance
+    for i=index+1,#task[5] do
+        local a,b=task[5][i-1],task[5][i]
+        remainingPath=remainingPath+math.sqrt((a[3]-b[3])^2+(a[4]-b[4])^2)
+    end
+    local last=task[2]+#task[5]-1
+    if remainingPath<math.max(task[3],motion.forward) and (progress.hintedFirst~=task[2] or progress.hintedLast~=last) then
+        progress.hintedFirst,progress.hintedLast=task[2],last
+        triggerEvent("npc_hlc:onRouteLow",vehicle,task[2],last)
+    end
     local forward = math.atan2(fy, fx)
     local direct = distance > 0.01 and math.atan2(dy, dx) - forward or 0
     if distance <= 40 then dx, dy = dx - 0.4 * distance * lane[6], dy - 0.4 * distance * lane[7] end
+    recordNPCDebugTarget(npc, x + dx, y + dy, lane[5])
     local length = math.sqrt(dx * dx + dy * dy)
     local routeX, routeY = lane[6], lane[7]
     if length > 0.01 then routeX, routeY = dx / length, dy / length end
@@ -311,13 +406,24 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     local obstacle, cause, avoidAngle = trafficLimit(vehicle, motion, routeX, routeY, task, index,
         not signalClosed and remaining > AVOID_DISTANCE)
     if obstacle < speed then speed, reason = obstacle, cause end
-    -- This task is assigned on impact when the road vehicle leaves rail cruise.
-    if not signalClosed and reason == "obstacle" and speed == 0
-        and motion.vx ^ 2 + motion.vy ^ 2 < 0.6 ^ 2 then
+    if not nextLane then
+        local terminalSpeed=math.sqrt(2*BRAKING*remainingPath)
+        if terminalSpeed<speed then speed,reason=terminalSpeed,"Awaiting route" end
+    end
+    -- Random-created VCS cruise cars are excluded from the short reverse
+    -- used by other missions. 0x0042A364 permits a 400 ms reverse after a
+    -- thirty-second stall for one fixed seed class. Keep queued cars at red.
+    local ambientReverse = getElementData(vehicle, "npchlc_traffic:stuckReverse", false)
+    local ps2Cruise = type(ambientReverse) == "number"
+    local waiting = reason == "obstacle" or ps2Cruise and reason == "following"
+    if not signalClosed and waiting and speed == 0 and ambientReverse ~= 0
+        and motion.vx ^ 2 + motion.vy ^ 2 < (ps2Cruise and 0.9^2 or 0.6^2) then
         if not progress.stalledAt or (x - progress.stalledX) ^ 2 + (y - progress.stalledY) ^ 2 > 0.5 ^ 2 then
             progress.stalledAt, progress.stalledX, progress.stalledY = now, x, y
-        elseif elapsedSince(now, progress.stalledAt) >= STALL_MS then
+        elseif elapsedSince(now, progress.stalledAt) >= (ps2Cruise and 30000 or STALL_MS) then
+            progress.reverseDuration = ps2Cruise and ambientReverse or REVERSE_MS
             progress.reverseAt = now
+            if ps2Cruise then triggerEvent("npc_hlc:onCruiseStuck", vehicle) end
             runReverse(npc, vehicle, motion, progress, now, false)
             return
         end
