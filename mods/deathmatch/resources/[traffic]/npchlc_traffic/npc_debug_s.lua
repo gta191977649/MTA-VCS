@@ -56,22 +56,21 @@ addEventHandler("npchlc_traffic:npcDebugWatch",resourceRoot,function(generation,
         local ped=peds[i]
         if nearby(ped,client) and not watch[ped] then
             local brain=PedAI.brain(ped)
-            if brain or getElementParent(ped)==getResourceDynamicElementRoot(getThisResource()) then
-                local task,revision,owner,fallback,taskStyle=hlc:getNPCDebugAssignment(ped)
-                local kind,phase,native=describe(ped,brain)
-                local style,vehicle=driving(ped,taskStyle)
-                local profile=brain and brain.profile or PedAI.profile(ped) or PedAIRules.profile()
-                local group=PedAITypes[profile.pedType]
-                local entry={ped,revision or 0}
-                watch[ped]=entry
-                rows[#rows+1]={ped,revision or 0,profile.temper,profile.fear,kind or "idle",
-                    type(phase)=="string" and phase or false,task or false,owner or false,
-                    getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100,fallback or false,style,vehicle,
-                    group and group.name or "UNKNOWN",native or false}
-                if owner and owner~=client then
-                    owners[owner]=owners[owner] or {}
-                    table.insert(owners[owner],entry)
-                end
+            local task,revision,owner,fallback,taskStyle=hlc:getNPCDebugAssignment(ped)
+            local kind,phase,native=describe(ped,brain)
+            if not kind and not brain then kind=revision and "HLC" or "No traffic controller" end
+            local style,vehicle=driving(ped,taskStyle)
+            local profile=brain and brain.profile or PedAI.profile(ped)
+            local group=profile and PedAITypes[profile.pedType]
+            local entry={ped,revision or 0}
+            watch[ped]=entry
+            rows[#rows+1]={ped,revision or 0,profile and profile.temper or false,profile and profile.fear or false,kind or "idle",
+                type(phase)=="string" and phase or false,task or false,owner or false,
+                getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100,fallback or false,style,vehicle,
+                group and group.name or "UNKNOWN",native or false}
+            if owner and owner~=client then
+                owners[owner]=owners[owner] or {}
+                table.insert(owners[owner],entry)
             end
         end
     end

@@ -363,7 +363,16 @@ function giveMeWeapon(weapon, amount)
 	end
 end
 
-function giveMeVehicles(vehID)
+function giveMeVehicles(id, provider)
+    local vehID = id
+    if provider == 'vcs' and type(id) == 'number' then
+        vehID = exports.vcs_model:getVcsModelBase(id, 'vehicle')
+    elseif provider == 'dlc' and type(id) == 'string' then
+        vehID = exports.model:getDlcVehicleBase(id)
+    elseif provider ~= nil then
+        return
+    end
+    if type(vehID) ~= 'number' or vehID < 400 or vehID > 611 then return end
 	if not isElement(source) then return end
 	local px, py, pz, prot
 	local element = getPedOccupiedVehicle(source) or source
@@ -375,11 +384,19 @@ function giveMeVehicles(vehID)
 	local vehicleList = g_PlayerData[source].vehicles
 	if not vehID then return end
 	if not table.find(getOption('vehicles.disallowed'), vehID) then
-		if #vehicleList >= getOption('vehicles.maxperplayer') then unloadVehicle(vehicleList[1]) end
 		local vehPos = posVector+vehMatrix.right*3
-		local vehicle = Vehicle(vehID, vehPos, rotVector) or false
+		local vehicle
+        if provider == 'vcs' then
+            vehicle = exports.vcs_vehicle:createVcsVehicle(id, vehPos.x, vehPos.y, vehPos.z, 0, 0, prot)
+        else
+            vehicle = Vehicle(vehID, vehPos, rotVector)
+            if vehicle and provider == 'dlc' then
+                setElementData(vehicle, 'mod.model', id, 'broadcast', 'deny')
+            end
+        end
 		if vehicle then
-			vehicle.interior = source.interior
+            if #vehicleList >= getOption('vehicles.maxperplayer') then unloadVehicle(vehicleList[1]) end
+            vehicle.interior = source.interior
 			vehicle.dimension = source.dimension
 			if vehicle.vehicleType == "Bike" then vehicle.velocity = Vector3(0,0,-0.01) end
 			table.insert(vehicleList, vehicle)
@@ -533,7 +550,7 @@ addEventHandler('onVehicleExplode', root,
 	end
 )
 
-function unloadVehicle(vehicle)
+function unloadVehicle(vehicle, destroying)
 	if not g_VehicleData[vehicle] then
 		return
 	end
@@ -548,10 +565,14 @@ function unloadVehicle(vehicle)
 		table.removevalue(g_PlayerData[creator].vehicles, vehicle)
 	end
 	g_VehicleData[vehicle] = nil
-	if isElement(vehicle) then
+	if destroying ~= true and isElement(vehicle) then
 		destroyElement(vehicle)
 	end
 end
+
+addEventHandler('onElementDestroy', root, function()
+    if g_VehicleData[source] then unloadVehicle(source, true) end
+end)
 
 function quitHandler(player)
 	if g_PlayerData[source].blip and isElement(g_PlayerData[source].blip) then

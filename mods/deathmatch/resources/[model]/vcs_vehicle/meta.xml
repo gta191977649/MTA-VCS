@@ -4,6 +4,7 @@
     <script src="controllers/vehicle.lua" type="shared" />
     <script src="controllers/police_siren_c.lua" type="client" />
     <script src="controllers/bfinjection_c.lua" type="client" />
+    <script src="controllers/rhino_c.lua" type="client" />
     <script src="controllers/boat.lua" type="shared" />
     <script src="controllers/jetski_control.lua" type="shared" />
     <script src="controllers/jetski_fall.lua" type="shared" />

@@ -3,6 +3,8 @@
     <min_mta_version client="1.6.0-9.22741" server="1.6.0-9.22676"/>
     <include resource="frontend"/>
     <include resource="interior"/>
+    <include resource="vcs"/>
+    <script src="stadium.lua" type="shared"/>
     <script src="timeline.lua" type="client"/>
     <script src="actor_data.lua" type="client"/>
     <script src="actor.lua" type="client"/>

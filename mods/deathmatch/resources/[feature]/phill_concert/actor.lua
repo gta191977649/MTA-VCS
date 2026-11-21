@@ -36,7 +36,8 @@ function destroyConcertCast(scene)
 end
 
 local function place(element)
-    setElementInterior(element, 3)
+    setElementInterior(element, ConcertStadium.interior)
+    setElementDimension(element, ConcertStadium.dimension)
     setElementCollisionsEnabled(element, false)
     return element
 end

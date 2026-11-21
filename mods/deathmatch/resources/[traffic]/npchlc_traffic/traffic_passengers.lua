@@ -252,7 +252,19 @@ function TrafficPassengers.requestExit(ped, vehicle, seat, target, actor, x, y, 
         target or false, actor or false, x or false, y or false, z or false, exitSerial, onFoot or false, committed or false)
 end
 
+local lastSeatCheck
 function TrafficPassengers.update(now)
+    -- A native seat loss can arrive before an exit request or without its event.
+    -- Reconcile against the actual seat before leaving an on-foot actor in the passenger pool.
+    if not lastSeatCheck or (now-lastSeatCheck)%4294967296>=500 then
+        lastSeatCheck=now
+        for ped,entry in pairs(passengers) do
+            if not leaving[ped] and isElement(ped) and not isPedDead(ped)
+                and not getPedOccupiedVehicle(ped) and not PedAI.isScriptControlled(ped) then
+                adopt(entry,nil,false)
+            end
+        end
+    end
     for ped, entry in pairs(leaving) do
         if (now - entry.since) % 4294967296 >= entry.delay then
             if not isElement(ped) or isPedDead(ped) then

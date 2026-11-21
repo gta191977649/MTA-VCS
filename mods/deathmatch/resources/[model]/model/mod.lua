@@ -253,7 +253,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["ENFORCR"] = {
-		policeModel = 234,
+		catalogModel = 234,
 		parent = 427,
 		name = "ENFORCR",
 		txd = "src/vehicle/enforce.txd",
@@ -296,6 +296,7 @@ IMG_VEHICLE = {
 	["RHINO"] = {
 		parent = 432,
 		name = "RHINO",
+		catalogModel = 246,
 		txd = "src/vehicle/rhino.txd",
 		dff = "src/vehicle/rhino.dff",
 		handing = "25000,250000,5,0,0,-0.5,90,1,0.8,0.5,4,80,40,150,4,D,5,0.5,0,35,1,0.05,0,0.3,-0.15,0.5,0,1.12,0.09,110000,8,3,0,1,0,",
@@ -694,7 +695,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["FBIRANC"] = {
-		policeModel = 268,
+		catalogModel = 268,
 		parent = 490,
 		name = "FBIRANC",
 		txd = "src/vehicle/fbiran.txd",
@@ -791,7 +792,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["VICECHE"] = {
-		policeModel = 204,
+		catalogModel = 204,
 		parent = 597,
 		name = "VICECHE",
 		txd = "src/vehicle/cheetah.txd",
@@ -832,7 +833,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["ELECTRP"] = {
-		policeModel = 191,
+		catalogModel = 191,
 		parent = 523,
 		name = "ELECTRP",
 		txd = "src/vehicle/electrap.txd",
@@ -921,7 +922,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["FBICAR"] = {
-		policeModel = 193,
+		catalogModel = 193,
 		parent = 598,
 		name = "FBICAR",
 		txd = "src/vehicle/fbicar.txd",
@@ -1034,7 +1035,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["POLICEM"] = {
-		policeModel = 207,
+		catalogModel = 207,
 		parent = 596,
 		name = "POLICEM",
 		txd = "src/vehicle/policem.txd",
@@ -1092,3 +1093,19 @@ end
 
 
 print(string.format("Total %d custom mod is defined.",total_ped + total_veh))
+
+function getDlcVehicleCatalog()
+    local entries = {}
+    for key, model in pairs(IMG_VEHICLE) do
+        local name = model.dff:match("([^/]+)%.dff$")
+        if name and fileExists(model.dff) and fileExists(model.txd) then
+            entries[key] = {name = name:lower(), base = model.parent or 500}
+        end
+    end
+    return entries
+end
+
+function getDlcVehicleBase(key)
+    local model = IMG_VEHICLE[key]
+    return model and (model.parent or 500)
+end

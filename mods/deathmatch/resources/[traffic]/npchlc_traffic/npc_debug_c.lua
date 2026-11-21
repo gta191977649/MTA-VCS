@@ -23,8 +23,8 @@ end
 local function update()
     local px,py,pz=getElementPosition(localPlayer)
     local visible={}
-    for _,ped in ipairs(getElementsByType("ped",resourceRoot,true)) do
-        if isElementOnScreen(ped) and TrafficNPCDebugRange.alpha(ped,localPlayer,px,py,pz)>0 then
+    for _,ped in ipairs(getElementsByType("ped",root,true)) do
+        if not isElementLocal(ped) and isElementOnScreen(ped) and TrafficNPCDebugRange.alpha(ped,localPlayer,px,py,pz)>0 then
             visible[#visible+1]=ped
         end
     end
@@ -132,15 +132,18 @@ local function drawLabel(labels,ped,row,x,bottom,caption,sample,colors)
     local style,vehicle=row[11],row[12]
     local driver=type(style)=="number" and isElement(vehicle) and getPedOccupiedVehicle(ped)==vehicle
         and getVehicleOccupant(vehicle,0)==ped
-    local top=bottom-(driver and 89 or 75)
+    local hasProfile=type(row[3])=="number" and type(row[4])=="number"
+    local top=bottom-61-(driver and 14 or 0)-(hasProfile and 14 or 0)
     labels[#labels+1]={"["..(row[13] or "UNKNOWN").."]",x,top,colors.white,"center",1,colors.dark}
-    top=top+14
-    local hot=row[3]>row[4]
-    local temper=(hot and "Hot temper " or "Temper ")..row[3]
-    local fear="  Fear "..row[4]
-    local w1,w2=dxGetTextWidth(temper,1,"default-bold"),dxGetTextWidth(fear,1,"default-bold")
-    labels[#labels+1]={temper,x-w2/2,top,hot and colors.red or colors.white,"center",1,colors.dark}
-    labels[#labels+1]={fear,x+w1/2,top,colors.white,"center",1,colors.dark}
+    if hasProfile then
+        top=top+14
+        local hot=row[3]>row[4]
+        local temper=(hot and "Hot temper " or "Temper ")..row[3]
+        local fear="  Fear "..row[4]
+        local w1,w2=dxGetTextWidth(temper,1,"default-bold"),dxGetTextWidth(fear,1,"default-bold")
+        labels[#labels+1]={temper,x-w2/2,top,hot and colors.red or colors.white,"center",1,colors.dark}
+        labels[#labels+1]={fear,x+w1/2,top,colors.white,"center",1,colors.dark}
+    end
     if driver then
         top=top+14
         local label="Driving style "..style
@@ -164,7 +167,11 @@ function TrafficNPCDebug.draw()
             local colors=palette(alpha)
             local hx,hy,hz=getPedBonePosition(ped,8)
             local x,y
-            if hx then x,y=getScreenFromWorldPosition(hx,hy,hz+0.2) end
+            if not hx then
+                hx,hy,hz=getElementPosition(ped)
+                hz=hz+0.8
+            end
+            x,y=getScreenFromWorldPosition(hx,hy,hz+0.2)
             if x then
                 local sample=row[10]
                 if row[8]==localPlayer then sample=hlc:getNPCDebugExecution(ped,row[2])

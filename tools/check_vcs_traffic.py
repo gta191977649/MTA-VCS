@@ -20,9 +20,9 @@ from import_vcs_traffic import ROAD_MAP, assemble, encode_json
 from vehicle_impact_import import export as export_collision_handling, export_decisions, export_service_sound
 from ped_services_check import main as check_ped_services
 from vcs_model_assets import chunks, vehicle_material_textures
-from vcs_police_materials import POLICE_MODELS
+from vcs_police_materials import POLICE_MODELS, atomic_geometry
 from vcs_road_collision import ground_height, lane_centres, road_surfaces
-from vcs_vehicle_ground import contact_geometry, read_archive
+from vcs_vehicle_ground import contact_geometry, read_archive, wheel_radius
 from vcs_jetski_rider import bake as bake_jetski_rider
 from vcs_jetski_engine import extract as extract_jetski_engine
 
@@ -153,6 +153,7 @@ tick()
 assert(#completed == 2)
 
 addEventHandler("npc_hlc:onNPCTaskDone", npc, function()
+    if source~=npc then return end
     assert(setNPCTask(npc, {"walkToPos", 12, 0, 0, 0.01}))
 end)
 assert(setNPCTask(npc, {"walkToPos", 0.1, 0, 0, 0.01}))
@@ -182,6 +183,25 @@ assert(arrivals==1)
 clearNPCTasks(officer)
 deliver("npc_hlc:driverDoorArrival",officer,vehicle,27)
 assert(arrivals==1)
+local walker=element("ped")
+walker.syncer=a
+assert(enableHLCForNPC(walker))
+assert(setNPCTask(walker,{"walkTrafficToPoint",3,0,0,.35}))
+assert(addNPCTask(walker,{"walkTrafficToPoint",6,0,0,.35}))
+local revision=all_npcs[walker].revision
+deliver("npc_hlc:walkArrival",walker,revision)
+assert(getNPCTaskCount(walker)==2) -- owner too far from the waypoint
+walker.x=2.55
+client=b
+deliver("npc_hlc:walkArrival",walker,revision)
+client=a
+deliver("npc_hlc:walkArrival",walker,revision-1)
+assert(getNPCTaskCount(walker)==2)
+deliver("npc_hlc:walkArrival",walker,revision)
+assert(getNPCTaskCount(walker)==1)
+deliver("npc_hlc:walkArrival",walker,revision)
+assert(getNPCTaskCount(walker)==1)
+disableHLCForNPC(walker)
 client=nil
 """
 
@@ -201,6 +221,7 @@ function makeNPCWalkToPos() issued = issued + 1 end
 function releaseNPCActions() released = released + 1 end
 function stopAllNPCActions() stopped = stopped + 1 end
 function triggerServerEvent(name, eventSource, changes)
+    if name=="npc_hlc:walkArrival" then assert(eventSource==npc and type(changes)=="number");return end
     assert(name == "npc_hlc:watchProfiles" and eventSource == resourceRoot and changes[1][1] == npc)
 end
 deliver("onClientResourceStart", resourceRoot)
@@ -1867,6 +1888,34 @@ def check_ped_personalities(disc):
     print("Verified all 161 PS2 ped model assignments, 42 complete PEDSTATS records and visual skin overrides")
 
 
+def check_rhino_wheels(mesh):
+    clump = list(chunks(mesh, 12, len(mesh)))
+    frame_list = next((a, b) for kind, a, b in clump if kind == 0xE)
+    header, *frames = chunks(mesh, *frame_list)
+    positions = {}
+    for index, (_, start, end) in enumerate(frames):
+        name = next((mesh[a:b].rstrip(b"\0").decode("ascii") for kind, a, b in chunks(mesh, start, end)
+                     if kind == 0x253F2FE), "")
+        positions[name] = struct.unpack_from("<3f", mesh, header[1] + 40 + index * 56)
+    expected = set()
+    for side, x in (("l", -1.55), ("r", 1.55)):
+        for axle, y in (("f", 2.356), ("m", -0.757), ("b", -2.357)):
+            visual = "vcs_wheel_" + side + axle
+            expected.add(visual)
+            for name in (visual, "wheel_" + side + axle + "_dummy"):
+                assert all(math.isclose(a, b, abs_tol=0.001) for a, b in
+                           zip(positions[name], (x, y, -0.45))), (name, positions[name])
+    assert {name for name in positions if name.startswith("vcs_wheel_")} == expected
+    geometries = {atomic_geometry(mesh, name.encode())[1] for name in expected}
+    assert len(geometries) == 1
+    _, wheel, _ = next(chunks(mesh, *geometries.pop()))
+    assert struct.unpack_from("<I", mesh, wheel + 4)[0] == 203
+    _, native_template = atomic_geometry(mesh, b"wheel")
+    assert wheel_radius(mesh, native_template) == 0  # SA duplicates this mesh on slot 432.
+    for _, _, radius in contact_geometry(mesh):
+        assert math.isclose(radius, 0.75, abs_tol=0.001)
+
+
 def check_assets(disc, vcs_pc):
     check_ped_personalities(disc)
     with TemporaryDirectory() as directory:
@@ -1900,6 +1949,9 @@ def check_assets(disc, vcs_pc):
                 assert kind == 0x16 and 0 < length <= size * 2048 - 12
         provider = LuaRuntime()
         load(provider, model_resource, ["model_catalog.lua"])
+        rhino = provider.globals().VCS_TRAFFIC_MODEL_CATALOG[246]
+        assert rhino.base == 432 and rhino.name == "rhino" and not rhino.variant
+        check_rhino_wheels(assets["rhino.dff"])
         for original, (name, parent) in POLICE_MODELS.items():
             entry = provider.globals().VCS_TRAFFIC_MODEL_CATALOG[original]
             assert entry.name == name and entry.base == parent and bool(entry.variant) == (original == 218)
@@ -2118,7 +2170,7 @@ def check_reaction_latency():
     lua.execute(SERVER_MOCK)
     lua.execute("""
         local function noop() end
-        exports={npc_hlc={clearNPCTasks=function(_,p) p.task=nil end,setNPCWalkSpeed=noop,
+        exports={npc_hlc={isHLCEnabled=function() return true end,clearNPCTasks=function(_,p) p.task=nil end,setNPCWalkSpeed=noop,
             addNPCTask=function(_,p,t) assert(p.task and not p.preview); p.preview=t; return true end,
             setNPCTask=function(_,p,t) p.task,p.issued=t,now; return true end}}
         TrafficVisibility={track=noop,pedestrianRange=100,pedestrianMaxScale=1,pedestrianScale=function() return 1 end}
@@ -2225,6 +2277,7 @@ def check_ambient():
     }
     PedActivity = {cancel=noop, stop=noop, onSpawn=noop, update=noop, active=noop, leaveForThreat=noop}
     function getElementRotation() return 0,0,90 end
+    exports.npc_hlc.isHLCEnabled = function() return true end
     exports.npc_hlc.setNPCWalkSpeed = noop
     local ambient = TrafficAmbient
     local from = {id=0, x=45, y=0, z=0, flags=0, spawnThreshold=15, rawWidth=0,
@@ -2419,7 +2472,11 @@ def check_ambient():
     deliver("onElementDestroy", ped)
     assert(not ambient.isManagedPed(ped))
     assert(not attached[ped])
+    local enrollments = 0
+    exports.npc_hlc.isHLCEnabled = function(_,p) return p.enrolled end
+    exports.npc_hlc.enableHLCForNPC = function(_,p) enrollments=enrollments+1; p.enrolled=true; return true end
     assert(ambient.adoptDriver(driver, player, car, 34))
+    assert(attached[driver]==34 and enrollments==1)
     assert(ambient.adoptDriver(driver, player, car, 34))
     assert(ambient.isManagedPed(driver) and jacker[driver] == player)
     assert(getTrafficAmbientStatus().pedestrians == 1)
@@ -4007,6 +4064,17 @@ def check_road(disc=None, vcs_pc=None):
         deliver("onVehicleExit",replacement,passenger,1,nil)
         PedAI.passengerThreat = oldThreat
         assert(observed and passenger.adopted and not passenger.destroyed)
+
+        -- Native seat loss without an exit request or onVehicleExit notification.
+        math.random = function(low) return low or 0.12499 end
+        TrafficPassengers.spawn({vehicle=replacement,originalDriver=34,dimension=0},
+            {edition="SLUS-21590 USA v1.00",fallbackDriverModelId=14},{34},0,171)
+        math.random = roll
+        passenger = assert(replacement.passenger)
+        replacement.passenger,passenger.vehicle=nil,nil
+        now=now+500
+        TrafficPassengers.update(now)
+        assert(passenger.adopted and not TrafficPassengers.isManaged(passenger))
     end
     TrafficRoad.stop()
     player.x, signal = 0, 2
@@ -4723,6 +4791,33 @@ def check_pedestrian_avoidance():
     pedestrians[3] = nil
     a.x,a.y = 0,0
 
+    -- Both shoulders are occupied. The runner must retreat to get around the group.
+    b.x,b.y = 1.25,0
+    local left,right = element("ped",0.25),element("ped",0.25)
+    left.y,right.y,left.z,right.z = 0.85,-0.85,0.7,0.7
+    pedestrians[3],pedestrians[4] = left,right
+    for _,ped in ipairs(pedestrians) do setElementData(ped,"npchlc_traffic:passing",{16,16}) end
+    local escape = {}
+    walkNPCTrafficAroundPeds(a,forward,escape)
+    assert(not a.target)
+    local minX,maxSide = 0,0
+    for frame=1,400 do
+        now=now+50
+        walkNPCTrafficAroundPeds(a,forward,escape)
+        if a.target then
+            local dx,dy=a.target[1]-a.x,a.target[2]-a.y
+            local step=math.min(1,0.0625/math.max(0.001,math.sqrt(dx*dx+dy*dy)))
+            a.x,a.y=a.x+dx*step,a.y+dy*step
+        end
+        minX,maxSide=math.min(minX,a.x),math.max(maxSide,math.abs(a.y))
+        for _,other in ipairs({b,left,right}) do
+            assert((a.x-other.x)^2+(a.y-other.y)^2 >= 0.45^2)
+        end
+    end
+    assert(minX<0 and maxSide>0.85 and a.x>7.9)
+    a.x,a.y=0,0
+    pedestrians[3],pedestrians[4]=nil,nil
+
     local group, routes, states = {}, {}, {}
     for i=1,4 do
         local dir = i%2==1 and 1 or -1
@@ -4795,10 +4890,13 @@ def check_pedestrian_avoidance():
     end
     assert(detour.action == "TASK_SIMPLE_GO_TO_POINT" and a.target[1] == 8 and a.target[2] == 0)
 
+    -- A driver just outside the body can walk directly out of its safety margin.
+    assert(not findNPCTrafficVehicleInPath(a,car.x,1.05,a.z,0,1,3))
+    assert(findNPCTrafficVehicleInPath(a,car.x,1.05,a.z,0,-1,3)==car)
     a.x, a.y, car.vx = 0, 0, 0.1
     local moving = {}
     walkNPCTrafficAroundPeds(a, forward, moving)
-    assert(moving.action == "TASK_SIMPLE_STAND_STILL" and not a.target)
+    assert(moving.action == "Yield to moving vehicle" and not a.target)
     car.z, now = 5, now + 250
     walkNPCTrafficAroundPeds(a, forward, moving)
     assert(a.target[1] == 8 and a.target[2] == 0)

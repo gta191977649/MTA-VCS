@@ -35,3 +35,16 @@ Run `hot-504983` photographed the same sequence from the driver's side. The mode
 The server and client script logs contained no Lua errors during the acceptance window. Startup emitted existing placement and deprecated-resource warnings. The server validated the source resource, scene tag, player and successful JPEG status for each linked image. Single-client runs exercised owner execution and server reconciliation. A transfer between two real clients was outside these live measurements.
 
 
+
+## Walking queue and vehicle-hit handoff
+
+A real MTA client connected to an isolated loopback server on 21 November 2026. A temporary Lua resource recorded server queue depth, task revision, sync owner, client walking input, seat exit, and attributed damage.
+
+| Case | Observation |
+| --- | --- |
+| Walking queue | A model 23 civilian walked eight alternating three-unit legs. Server queue depth fell from 8 to 0 in 17 seconds. The seven intermediate heads had depths 7 through 1 and distinct revisions. The executor continued through each turn. |
+| Ambient pedestrian | A production-spawned civilian (model 69) walked 20.66 units from its initial observation through multiple walking assignments. The live overlay displayed a walking goal and an active owner. [Golf course](walking-queue-golf.jpg) |
+| Attack on an occupied vehicle | A bat strike registered 7.5 vehicle damage on the server. The same model 17 driver (temper 70, fear 30) received a brake order 129 ms later. The seat exit followed 980 ms after the observed brake order. The next combat assignment was observed 109 ms after exit and the first attributed melee damage 395 ms after exit. Task assignments were sampled and these timings describe this encounter. [At the driver's door](vehicle-hit-queue-exit.jpg) |
+| Scheduler load | The isolated native regression exercised 600 tasks over 114 scheduler samples. The 95th percentile tick was 3 ms and the 99th percentile was 5 ms. The scheduler hit its budget 71 times. |
+
+The fix addresses delayed queue refills, walking waypoints passed between server samples, and confirmed path obstructions. The screenshot from the original report has no queue revision trace or clearance sample to identify which condition applied at that location.

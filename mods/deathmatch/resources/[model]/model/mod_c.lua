@@ -33,8 +33,8 @@ function initModels()
     end
 
     for key,val in pairs(IMG_VEHICLE) do 
-        if val.policeModel then
-            -- vcs_model owns the mesh on the synchronized emergency parent.
+        if val.catalogModel then
+            -- vcs_model owns the mesh on the synchronized native parent.
             val.pointer = val.parent
         elseif val.replace == nil or val.replace == false then
             if val.parent ~= nil then
@@ -50,6 +50,7 @@ function initModels()
                 print(string.format("vehicle %s is import.",val.name))
             end
         else -- deal with replace vehicle
+            val.pointer = val.parent
             local txd = engineLoadTXD(val.txd)
             engineImportTXD(txd, val.parent)
             local dff = engineLoadDFF(val.dff)
@@ -67,7 +68,7 @@ function setElementModModel(element,model)
         setElementModel(element,id)
     elseif type == "vehicle" then 
         local definition = IMG_VEHICLE[model]
-        if definition and not definition.policeModel then setElementModel(element,definition.pointer) end
+        if definition and not definition.catalogModel then setElementModel(element,definition.pointer) end
     else 
         print("[MOD]: Unsupported element type!")
     end

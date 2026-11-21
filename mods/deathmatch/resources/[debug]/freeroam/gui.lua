@@ -128,7 +128,7 @@ function _planWindow(wnd, baseWnd, parentWnd, x, y, maxHeightInLine)
 				maxTabHeight = tab.height
 			end
 		end
-		wnd.height = maxTabHeight
+		wnd.height = maxTabHeight + 26
 	end
 
 	if classInfo[wndClass].isContainer then
@@ -189,9 +189,9 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 	elseif wndClass == 'chk' then
 		elem = guiCreateCheckBox(relX, relY, relWidth, relHeight, wnd.text or wnd.id or '', false, true, parentWnd.element)
 	elseif wndClass == 'tbp' then
-		elem = guiCreateTabPanel(relX, relY, relWidth, relHeight, true, parentWnd.element)
+		elem = exports.frontend:createMenuTabPanel(relX, relY, relWidth, relHeight, parentWnd.element)
 	elseif wndClass == 'tab' then
-		elem = guiCreateTab(text, parentWnd.element)
+		elem = exports.frontend:createMenuTab(wnd.text, parentWnd.element)
 	elseif wndClass == 'lst' then
 		elem = guiCreateGridList(relX, relY, relWidth, relHeight, true, parentWnd.element)
 		if wnd.columns then
@@ -201,7 +201,11 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 			end
 		end
 	elseif wndClass == 'img' then
-		elem = guiCreateStaticImage(relX, relY, relWidth, relHeight, wnd.src or '', true, parentWnd.element)
+		if wnd.viceCityMap then
+            elem = exports.frontend:createViceCityMapImage(relX, relY, relWidth, relHeight, parentWnd.element)
+        else
+            elem = guiCreateStaticImage(relX, relY, relWidth, relHeight, wnd.src or '', true, parentWnd.element)
+        end
 	elseif wndClass == 'txt' then
 		elem = guiCreateEdit(relX, relY, relWidth, relHeight, wnd.text or '', true, parentWnd.element)
 		if wnd.onchanged then
@@ -242,8 +246,9 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 	if wnd.onclick then
 		if wndClass == 'img' then
 			clickhandler = function(btn, state, x, y)
-				local imgX, imgY = getControlScreenPos(wnd)
-				wnd.onclick((x - imgX)/wnd.width, (y - imgY)/wnd.height, btn)
+				local imgX, imgY = dgsGetPosition(wnd.element, false, true)
+				local width, height = guiGetSize(wnd.element, false)
+				wnd.onclick((x - imgX)/width, (y - imgY)/height, btn)
 			end
 		else
 			clickhandler = function() wnd.onclick() end
@@ -283,8 +288,9 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 		local doubleclickhandler
 		if wndClass == 'img' then
 			doubleclickhandler = function(btn, state, x, y)
-				local imgX, imgY = getControlScreenPos(wnd)
-				wnd.ondoubleclick((x - imgX)/wnd.width, (y - imgY)/wnd.height)
+				local imgX, imgY = dgsGetPosition(wnd.element, false, true)
+				local width, height = guiGetSize(wnd.element, false)
+				wnd.ondoubleclick((x - imgX)/width, (y - imgY)/height)
 			end
 		else
 			doubleclickhandler = wnd.ondoubleclick
@@ -304,19 +310,6 @@ end
 
 function isWindowOpen(wnd)
 	return wnd.element and guiGetVisible(wnd.element)
-end
-
-function getControlScreenPos(wnd)
-	local x, y = 0, 0
-	local curX, curY
-	local curWnd = wnd
-	while curWnd do
-		curX, curY = guiGetPosition(curWnd.element, false)
-		x = x + curX
-		y = y + curY
-		curWnd = curWnd.parent
-	end
-	return x, y
 end
 
 function closeWindow(...)
@@ -716,6 +709,7 @@ function _updateBindedGridList(gridlist, listdata, expandLastLevel, isContinuati
 		end
 
 		guiGridListClear(gridlist)
+		if #toDisplay == 0 then return end
 
 		-- set update event if necessary
 		if not expandLastLevel and toDisplay[1][1] ~= 'group' then

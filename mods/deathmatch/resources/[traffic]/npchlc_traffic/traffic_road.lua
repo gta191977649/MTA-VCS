@@ -1589,6 +1589,15 @@ local function updatePursuit(state, owner, now)
     end
 end
 
+function TrafficRoad.pursuitExitReady(car,owner,target)
+    local state=vehicles[car]
+    if state and state.pursuit and state.pursuit.target==target and getElementSyncer(car)==owner
+        and not state.jacker and not state.evacuating and getVehicleOccupant(car,0)==state.driver and not isPedDead(state.driver)
+        and not PedAI.isScriptControlled(state.driver) then
+        updatePursuit(state,owner,getTickCount())
+    end
+end
+
 -- Directed state includes the arriving lane because a legal turn at the same
 -- junction may differ by lane. The queue and its parent links are bounded.
 function TrafficRoad.findPolicePath(roadGraph,first,lane,destination,allowFirst)

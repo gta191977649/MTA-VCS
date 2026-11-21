@@ -179,22 +179,22 @@ end)
 
 onEvent("inside", function(id)
     if not session or session.id ~= id then return end
-    setCameraInterior(3)
+    setCameraInterior(ConcertStadium.interior)
     setCameraMatrix(-1548.17, 1335.58, -221.78, -1549.13, 1335.53, -222.05)
+    local scene = session
     local attempts = 0
     session.stageTimer = setTimer(function()
+        if session ~= scene or scene.finishing then return end
         attempts = attempts + 1
-        local hit = processLineOfSight(-1574.58, 1337.27, -227,
+        local hit, _, _, _, floor = processLineOfSight(-1574.58, 1337.27, -227,
             -1574.58, 1337.27, -234, true, false, false, true, false)
-        if getElementInterior(localPlayer) == 3 and (hit or attempts >= 50) then
-            killTimer(session.stageTimer)
-            if not hit then
-                outputChatBox("Stadium floor collision was not detected. Check the vcs map loader.", 255, 205, 225)
-                if not session.debug then
-                    finish()
-                    return
-                end
-            end
+        local ready = hit and isElement(floor)
+            and getElementInterior(floor) == ConcertStadium.interior
+            and getElementDimension(floor) == ConcertStadium.dimension
+            and getElementInterior(localPlayer) == ConcertStadium.interior
+            and getElementDimension(localPlayer) == ConcertStadium.dimension
+        if ready then
+            killTimer(scene.stageTimer)
             local loaded, asset = makeConcertCast(session)
             if not loaded then
                 outputChatBox("Concert could not load " .. asset .. ".", 255, 205, 225)
@@ -203,6 +203,12 @@ onEvent("inside", function(id)
             end
             renderTimeline(session, session.start)
             send("stageReady", id)
+        elseif attempts >= 100 then
+            killTimer(scene.stageTimer)
+            outputDebugString("[phill_concert] Stadium collision did not stream in interior "
+                .. ConcertStadium.interior .. ", dimension " .. ConcertStadium.dimension, 2)
+            exports.frontend:showTextBox("The concert stadium could not load. Please try again.", 3000)
+            finish()
         end
     end, 100, 100)
 end)

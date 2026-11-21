@@ -50,7 +50,7 @@ local function setActive(npc, enabled)
         activeIndex[last] = index
         active[#active] = nil
         activeIndex[npc] = nil
-        if renderCursor > index then renderCursor = index end
+        -- Continue the round robin when earlier actors leave the active list.
     end
 end
 
@@ -171,6 +171,11 @@ local function cycleNPCs(elapsed)
             and not isPedDead(npc) and getNPCWalkSpeed(npc) then
             if state.usePreview and state.preview then task = state.preview end
             local complete = isNPCTaskComplete(npc, actor, task)
+            if complete and not state.usePreview and not state.arrivalSent and isNPCTrafficWalkTask(task[1])
+                and not isPedInVehicle(npc) then
+                state.arrivalSent=true
+                triggerServerEvent("npc_hlc:walkArrival",npc,state.revision)
+            end
             if complete and state.preview and not state.usePreview then
                 state.usePreview, task = true, state.preview
                 complete = isNPCTaskComplete(npc, actor, task)
@@ -193,9 +198,23 @@ local function cycleNPCs(elapsed)
                     or task[1] == "walkFollowElement" or task[1] == "killPed" or task[1] == "attackOccupiedVehicle"
                     or task[1] == "approachDriverDoor" then
                     local walk = state.walkProgress
+                    walk.action=nil
                     performTask[task[1]](npc, task, elapsed, walk)
+                    -- A completed, unsuccessful detour search is actionable.
+                    -- Never replace a route solely because a crossing or moving car needs time.
+                    if task[1]=="walkTrafficToPoint" and not state.usePreview
+                        and (walk.action=="Waiting for clear path" or walk.action=="Waiting for pedestrian clearance") then
+                        local now=getTickCount()
+                        state.blockedSince=state.blockedSince or now
+                        if (now-state.blockedSince)%4294967296>=750 then
+                            triggerServerEvent("npc_hlc:walkBlocked",npc,state.revision)
+                            state.blockedSince=now
+                        end
+                    else
+                        state.blockedSince=nil
+                    end
                     if sample then
-                        sample.action = (sample.x or walk.action == "TASK_SIMPLE_STAND_STILL") and walk.action or nil
+                        sample.action = (sample.x or walk.waiting or walk.action == "TASK_SIMPLE_STAND_STILL") and walk.action or nil
                         if state.usePreview then sample.action="Route preview" end
                         if sample.x and (walk.detour or walk.carDetour or walk.localRoute) then
                             sample.gx, sample.gy, sample.gz = walk.goalX, walk.goalY, walk.goalZ

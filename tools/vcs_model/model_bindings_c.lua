@@ -8,12 +8,22 @@ local lampShaders = {}
 local lampBindings = {}
 local replacedVehicleModels = {}
 local vehicleRenderMaterials = {}
-local policeVehicles = {[191]=true, [193]=true, [204]=true, [207]=true, [234]=true, [268]=true}
+local legacyCatalogVehicles = {[191]=true, [193]=true, [204]=true, [207]=true, [234]=true, [246]=true, [268]=true}
 local lampTextures = {
     vehiclelights128 = "vehiclelights128.png",
     vehiclelightson128 = "vehiclelightson128.png",
 }
 addEvent("npc_hlc:onVehicleGroundGeometry", false)
+
+function getVcsVehicleCatalog()
+    local entries = {}
+    for id, model in pairs(models) do
+        if model.kind == "vehicle" then
+            entries[model.name] = {id = id, base = model.base, textKey = model.textKey}
+        end
+    end
+    return entries
+end
 
 function getVcsVehicleRenderMaterials(modelId)
     return vehicleRenderMaterials[tonumber(modelId)] or false
@@ -117,6 +127,11 @@ local function loadModel(model)
         if geometry then destroyElement(geometry) end
         return false
     end
+    if model.kind == "vehicle" and model.name == "rhino" then
+        -- SLUS-21590 model 246 uses a 1.5-unit diameter on both axles.
+        model.previousWheelSizes = getVehicleModelWheelSize(id)
+        setVehicleModelWheelSize(id, "all_wheels", 1.5)
+    end
     model.id = id
     if model.kind == "ped" then
         model.jawPivot = getTrafficJawBindPivot(modelData)
@@ -140,7 +155,12 @@ local function applyModel(element)
     local selectedProvider = getElementData(element, PROVIDER_KEY, false)
     local originalId = getElementData(element, MODEL_KEY, false)
     local standalone = kind == "vehicle" and getElementData(element, "vcs_vehicle:originalModel", false)
-    if kind == "vehicle" and getElementData(element, "mod.model", false) and not policeVehicles[standalone] then return end
+    if kind == "vehicle" and getElementData(element, "mod.model", false) and not legacyCatalogVehicles[standalone] then return end
+    -- Slot 432 also serves untagged Rhinos created by native MTA resources.
+    if kind == "vehicle" and not selectedProvider and not standalone
+            and (not originalId or originalId == 246) and getElementModel(element) == 432 then
+        standalone = 246
+    end
     if selectedProvider ~= provider and (selectedProvider or not standalone) then return end
     local model = models[standalone or originalId]
     if standalone then
@@ -234,6 +254,11 @@ addEventHandler("onClientResourceStop", resourceRoot, function()
         if model.id then
             if model.kind == "ped" or model.variant then engineFreeModel(model.id)
             else engineRestoreModel(model.id) end
+            if model.previousWheelSizes then
+                for axle, size in pairs(model.previousWheelSizes) do
+                    setVehicleModelWheelSize(model.id, axle, size)
+                end
+            end
         end
     end
     for _, archive in pairs(archives) do destroyElement(archive.image) end

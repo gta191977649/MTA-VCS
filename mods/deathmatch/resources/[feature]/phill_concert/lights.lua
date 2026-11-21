@@ -19,7 +19,8 @@ local function addLight(fixtures, kind, x, y, orbitRadius, speed)
     local r, g, b, radius = unpack(palette[kind])
     local element = createLight(0, x, y, lightZ, radius, r, g, b)
     if not element then return end
-    setElementInterior(element, 3)
+    setElementInterior(element, ConcertStadium.interior)
+    setElementDimension(element, ConcertStadium.dimension)
     fixtures[#fixtures + 1] = {element = element, x = x, y = y, radius = orbitRadius, speed = speed}
     return element
 end

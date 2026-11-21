@@ -50,6 +50,20 @@ local function spawnGround(x, y, z, endpoints)
     return false
 end
 
+-- An off-graph escape must have walkable ground across the proposed step.
+local function supportedEscape(x,y,z,node,ped)
+    local previous
+    for i=0,4 do
+        local t=i/4
+        local px,py=x+(node.x-x)*t,y+(node.y-y)*t
+        local hit,_,_,height,_,_,_,normal=processLineOfSight(px,py,z+1.4,px,py,z-2.2,
+            true,false,false,true,false,false,false,false,ped)
+        if not hit or normal and normal<.7 or previous and math.abs(height-previous)>.65 then return false end
+        previous=height
+    end
+    return true
+end
+
 local function reachableNodes(ped, candidates, origin)
     if not isElement(ped) or not isElementStreamedIn(ped) then return false end
     local x, y, z = getElementPosition(ped)
@@ -57,10 +71,13 @@ local function reachableNodes(ped, candidates, origin)
     local result = {}
     local interior,dimension=getElementInterior(ped),getElementDimension(ped)
     local indoors=interior~=0 or z < -50
+    local graphRoute=false
     for _, node in ipairs(candidates) do
-        if pedestrianLine(x, y, z, node, ped)
+        if (node.id>=0 or not graphRoute) and pedestrianLine(x, y, z, node, ped)
+            and (node.id>=0 or supportedEscape(x,y,z,node,ped))
             and (not indoors or indoorFloor(node.x,node.y,node.z,interior,dimension)) then
             result[#result + 1] = node.id
+            if node.id>=0 and (node.x-x)^2+(node.y-y)^2>1 then graphRoute=true end
         end
     end
     return result

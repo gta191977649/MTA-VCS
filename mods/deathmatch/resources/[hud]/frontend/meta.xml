@@ -22,6 +22,14 @@
     <script src="skill_bar_c.lua" type="client" cache="false"/>
     
 
+    <file src="res/vice_city_map.png" />
+    <script src="freeroam_c.lua" type="client" />
+    <export function="createViceCityMapImage" type="client" />
+    <export function="viceCityMapToWorld" type="client" />
+    <export function="worldToViceCityMap" type="client" />
+    <export function="getVehicleSpawnMenuGroups" type="client" />
+    <export function="createMenuTabPanel" type="client" />
+    <export function="createMenuTab" type="client" />
     <script src="menu_c.lua" type="client" cache="false"/>
     <script src="stats_c.lua" type="client" cache="false"/>
     <script src="race_c.lua" type="client" cache="false"/>

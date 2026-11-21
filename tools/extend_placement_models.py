@@ -27,7 +27,7 @@ for name in sorted(wanted):
  entries[name+'.dff']=dff; entries[name+'.txd']=txd
  shared.update(common)
  variant = '' if name == 'policem' else ', variant = true'
- additions.append(f'    [{ids[0]}] = {{kind = "vehicle", base = {base}, name = "{name}"{variant}}},')
+ additions.append(f'    [{ids[0]}] = {{kind = "vehicle", base = {base}, name = "{name}"{variant}, textKey = "{v.vehicle_text_key(raw,table,ids[0])}"}},')
  print(name,ids[0],base)
 entries['vehshare.txd']=build_texture_dictionary(shared,entries['vehshare.txd'][26:28])
 (p/'vehicle.img').write_bytes(build_img(entries)); (p/'model_catalog.lua').write_text(cat.rsplit('}',1)[0]+'\n'.join(additions)+'\n}\n')

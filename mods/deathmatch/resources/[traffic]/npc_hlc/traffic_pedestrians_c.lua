@@ -35,11 +35,33 @@ local function corridor(npc, x, y, z, tx, ty, tz, cars)
     return true
 end
 
-local function directLeg(npc,x,y,z,gx,gy,gz,cars)
+local function corridorFree(neighbors, x, y, tx, ty)
+    if not neighbors then return true end
+    local dx, dy = tx-x, ty-y
+    for _, other in ipairs(neighbors) do
+        local px, py = other.x-x, other.y-y
+        local along = px*dx + py*dy
+        -- A neighbor behind the step must not prevent walking out of an overlap.
+        if along > 0 then
+            local t = math.min(1, along/(dx*dx+dy*dy))
+            if (px-t*dx)^2+(py-t*dy)^2 < PASS_DISTANCE^2 then return false end
+        end
+    end
+    return true
+end
+
+local function directLeg(npc,x,y,z,gx,gy,gz,cars,neighbors)
     local dx,dy = gx-x,gy-y
     local length=math.sqrt(dx*dx+dy*dy)
     local t=math.min(1,3.6/math.max(0.01,length))
-    return corridor(npc,x,y,z,x+dx*t,y+dy*t,z+((gz or z)-z)*t,cars)
+    local tx,ty=x+dx*t,y+dy*t
+    if not corridorFree(neighbors,x,y,tx,ty) then return false end
+    if corridor(npc,x,y,z,tx,ty,z+((gz or z)-z)*t,cars) then return true end
+    -- Graph Z may be at pavement level. Retry a blocked ray at the walker's
+    -- height above the local floor so the ground itself cannot mimic a wall.
+    local floor=ground(npc,x,y,z)
+    local endFloor=floor and ground(npc,tx,ty,z+((gz or z)-z)*t)
+    return endFloor and corridor(npc,x,y,z,tx,ty,endFloor+z-floor,cars) or false
 end
 
 local function startSearch(npc,x,y,z,dx,dy)
@@ -49,7 +71,7 @@ local function startSearch(npc,x,y,z,dx,dy)
     return {x=x,y=y,dx=dx,dy=dy,height=z-floor,open={origin},seen={[0]=true},count=0}
 end
 
-local function expandSearch(npc,search,gx,gy,gz)
+local function expandSearch(npc,search,gx,gy,gz,neighbors)
     for _=1,8 do
         local open=search.open
         if #open==0 or search.count>=160 then return false end
@@ -58,7 +80,7 @@ local function expandSearch(npc,search,gx,gy,gz)
         local node=table.remove(open,best)
         search.count=search.count+1
         -- A short clear leg is sufficient to resume the ordinary obstacle scan.
-        if node.parent and directLeg(npc,node.x,node.y,node.z,gx,gy,gz,true)
+        if node.parent and directLeg(npc,node.x,node.y,node.z,gx,gy,gz,true,neighbors)
             and (node.x-gx)^2+(node.y-gy)^2 < (search.x-gx)^2+(search.y-gy)^2 then
             local points={}
             while node.parent do points[#points+1]=node;node=node.parent end
@@ -74,6 +96,7 @@ local function expandSearch(npc,search,gx,gy,gz)
                 local mid=ground(npc,(node.x+x)/2,(node.y+y)/2,node.z)
                 if floor and mid and math.abs(floor+search.height-node.z)<=0.45
                     and math.abs(mid+search.height-node.z)<=0.45
+                    and corridorFree(neighbors,node.x,node.y,x,y)
                     and corridor(npc,node.x,node.y,node.z,x,y,floor+search.height,true) then
                     local cost=node.cost+CELL
                     local distance=math.sqrt((gx-x)^2+(gy-y)^2)
@@ -83,26 +106,6 @@ local function expandSearch(npc,search,gx,gy,gz)
             end
         end
     end
-end
-
-local function walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace)
-    local points=state.localRoute
-    local point=points and points[#points]
-    if point and (point.x-x)^2+(point.y-y)^2<0.20^2 then
-        points[#points]=nil
-        point=points[#points]
-    end
-    if not point then state.localRoute,state.checked=nil,nil;return false end
-    if not state.checked or (now-state.checked)%4294967296>=SCAN_MS then
-        state.checked=now
-        if directLeg(npc,x,y,z,gx,gy,gz,true) or not corridor(npc,x,y,z,point.x,point.y,point.z,true) then
-            state.localRoute,state.checked=nil,nil
-            return false
-        end
-    end
-    state.action="Walk around obstacle"
-    makeNPCWalkToPos(npc,point.x,point.y,pace)
-    return true
 end
 
 local function findBlocker(npc, x, y, z, dx, dy, distance, passingReady, target)
@@ -147,19 +150,28 @@ local function findBlocker(npc, x, y, z, dx, dy, distance, passingReady, target)
     return closest, neighbors
 end
 
-local function corridorFree(neighbors, blocker, x, y, tx, ty)
-    local dx, dy = tx-x, ty-y
-    for _, other in ipairs(neighbors) do
-        if other.ped ~= blocker then
-            local px, py = other.x-x, other.y-y
-            local along = px*dx + py*dy
-            -- A neighbor behind the step must not prevent walking out of an overlap.
-            if along > 0 then
-                local t = math.min(1, along/(dx*dx+dy*dy))
-                if (px-t*dx)^2+(py-t*dy)^2 < PASS_DISTANCE^2 then return false end
-            end
+local function walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace,target)
+    local points=state.localRoute
+    local point=points and points[#points]
+    if point and (point.x-x)^2+(point.y-y)^2<0.20^2 then
+        points[#points]=nil
+        point=points[#points]
+    end
+    if not point then state.localRoute,state.checked=nil,nil;return false end
+    if not state.checked or (now-state.checked)%4294967296>=SCAN_MS then
+        state.checked=now
+        local dx,dy = gx-x,gy-y
+        local distance = math.max(0.01, math.sqrt(dx*dx+dy*dy))
+        local _,neighbors = findBlocker(npc,x,y,z,dx/distance,dy/distance,distance,false,target)
+        if directLeg(npc,x,y,z,gx,gy,gz,true,neighbors)
+            or not corridorFree(neighbors,x,y,point.x,point.y)
+            or not corridor(npc,x,y,z,point.x,point.y,point.z,true) then
+            state.localRoute,state.checked=nil,nil
+            return false
         end
     end
+    state.action="Walk around obstacle"
+    makeNPCWalkToPos(npc,point.x,point.y,pace)
     return true
 end
 
@@ -191,11 +203,11 @@ local function chooseSide(npc, blocker, neighbors, x, y, z, dx, dy)
     for side = first, -first, -2*first do
         local sx, sy = dy * SIDE_STEP * side, -dx * SIDE_STEP * side
         local tx, ty = x + sx + dx * forward, y + sy + dy * forward
-        if corridorFree(neighbors, blocker, x, y, tx, ty)
-            and corridorFree(neighbors, blocker, tx, ty, tx+dx, ty+dy)
-            and clearStep(npc, x, y, z, tx, ty, floor)
-            and clearStep(npc, tx, ty, z, tx + dx, ty + dy, floor) then
-            if not headOn or clearStep(blocker, ox, oy, oz, ox - sx - dx * forward, oy - sy - dy * forward, otherFloor) then
+        if corridorFree(neighbors, x, y, tx, ty)
+            and corridorFree(neighbors, tx, ty, tx+dx, ty+dy)
+            and clearStep(npc, x, y, z, tx, ty, floor,true)
+            and clearStep(npc, tx, ty, z, tx + dx, ty + dy, floor,true) then
+            if not headOn or clearStep(blocker, ox, oy, oz, ox - sx - dx * forward, oy - sy - dy * forward, otherFloor,true) then
                 return tx, ty, sx, sy
             end
             if not available then available = {tx, ty, sx, sy} end
@@ -261,21 +273,29 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
     if not state.goalX or (formation and (gx-state.goalX)^2+(gy-state.goalY)^2 > 4)
         or (not formation and (state.goalX ~= gx or state.goalY ~= gy or state.goalZ ~= gz)) then
         state.goalX, state.goalY, state.goalZ = gx, gy, gz
+        state.crowdedAt = nil
         state.detour, state.blocker, state.checked, state.waiting = nil, nil, nil, nil
         state.carDetour,state.localRoute,state.search,state.retryAt = nil,nil,nil,nil
     end
-    if state.localRoute and walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace) then return end
+    if state.localRoute and walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace,target) then return end
     if state.carDetour then
-        if followCarDetour(npc, state.carDetour, x, y, z, now, pace) then return end
+        if followCarDetour(npc, state.carDetour, x, y, z, now, pace) then
+            state.action="TASK_COMPLEX_WALK_ROUND_CAR"
+            return
+        end
         state.carDetour, state.checked = nil, nil
     end
     if state.detour then
-        if followDetour(npc, state, x, y, z, now, pace) then return end
+        if followDetour(npc, state, x, y, z, now, pace) then
+            state.action="TASK_COMPLEX_AVOID_OTHER_PED_WHILE_WANDERING"
+            return
+        end
         state.detour, state.blocker, state.checked = nil, nil, nil
     end
     local scanInterval = state.search and 50 or SCAN_MS
     if not state.checked or (now - state.checked) % 4294967296 >= scanInterval then
         state.checked = now
+        state.waitForCar=nil
         local vehicle, box = findNPCTrafficVehicleInPath(npc, x, y, z, dx, dy, distance, target)
         local blockedCar = false
         if vehicle then
@@ -290,7 +310,8 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
                 state.search=nil
                 return
             elseif moving then
-                state.action = "TASK_SIMPLE_STAND_STILL"
+                state.waitForCar=true
+                state.action = "Yield to moving vehicle"
                 stopNPCWalkingActions(npc)
                 return
             end
@@ -307,19 +328,30 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
             local tx, ty = chooseSide(npc, blocker, neighbors, x, y, z, dx, dy)
             if tx then
                 state.passedAt, state.passDelay = now, math.random(500,699)
+                state.search,state.retryAt,state.crowdedAt=nil,nil,nil
                 state.detour = {x = tx, y = ty, dx = dx, dy = dy, started = now, step = true}
                 state.action = "TASK_COMPLEX_AVOID_OTHER_PED_WHILE_WANDERING"
                 makeNPCWalkToPos(npc, tx, ty, pace)
                 return
             end
-        elseif blockedCar or not directLeg(npc,x,y,z,gx,gy,gz,false) then
+        end
+        -- A crowd can close both immediate passing lanes while leaving an exit
+        -- behind the walker. Use the same bounded search as for static obstacles.
+        if blocker then
+            state.crowdedAt = state.crowdedAt or now
+        else
+            state.crowdedAt = nil
+        end
+        if blocker and (now-state.crowdedAt)%4294967296 < 400 then
+            state.search = nil
+        elseif blocker or blockedCar or not directLeg(npc,x,y,z,gx,gy,gz,false) then
             state.waiting=true
             if not state.retryAt or (now-state.retryAt)%4294967296>=1000 then
                 state.search=state.search or startSearch(npc,x,y,z,dx,dy)
-                local path=state.search and expandSearch(npc,state.search,gx,gy,gz)
+                local path=state.search and expandSearch(npc,state.search,gx,gy,gz,neighbors)
                 if path then
                     state.localRoute,state.search,state.retryAt=path,nil,nil
-                    walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace)
+                    walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace,target)
                     return
                 elseif path==false or not state.search then
                     state.search,state.retryAt=nil,now
@@ -330,7 +362,8 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
         end
     end
     if state.waiting then
-        state.action = "TASK_SIMPLE_STAND_STILL"
+        state.action = state.waitForCar and "Yield to moving vehicle" or state.search and "Finding obstacle detour"
+            or state.blocker and "Waiting for pedestrian clearance" or "Waiting for clear path"
         stopNPCWalkingActions(npc)
     else
         state.action = "TASK_SIMPLE_GO_TO_POINT"

@@ -88,7 +88,8 @@ local function setActive(state, enabled)
         last.index = index
         active[#active] = nil
         state.index = nil
-        if cursor > index then cursor = index end
+        -- The swapped-in state gets its turn after wraparound. Rewinding here
+        -- lets churn near the head starve states beyond the per-tick budget.
     end
 end
 
@@ -129,6 +130,33 @@ local function completeTask(state, task)
     end
 end
 
+-- A walking owner can pass a waypoint between two position sync packets.
+-- Accept only the current head and a nearby server position from that owner.
+addEvent("npc_hlc:walkArrival", true)
+addEventHandler("npc_hlc:walkArrival", root, function(order)
+    local state = all_npcs[source]
+    local task = state and state.assignedTask
+    if not client or not task or not isNPCTrafficWalkTask(task[1]) or order ~= state.revision
+        or state.owner ~= client or state.actor ~= source or getElementSyncer(source) ~= client
+        or isPedDead(source) or isPedInVehicle(source) then return end
+    local x,y=getElementPosition(source)
+    if (x-task[2])^2+(y-task[3])^2 <= (task[5]+0.75)^2 then completeTask(state,task) end
+end)
+
+addEvent("npc_hlc:walkBlocked",true)
+addEvent("npc_hlc:onWalkBlocked",false)
+addEventHandler("npc_hlc:walkBlocked",root,function(order)
+    local state=all_npcs[source]
+    local task=state and state.assignedTask
+    if not client or not task or task[1]~="walkTrafficToPoint" or state.revision~=order
+        or state.actor~=source or state.owner~=client or getElementSyncer(source)~=client
+        or isPedInVehicle(source) or isPedDead(source) then return end
+    local now=getTickCount()
+    if state.blockedAt and elapsedMs(now,state.blockedAt)<750 then return end
+    state.blockedAt=now
+    triggerEvent("npc_hlc:onWalkBlocked",source,task)
+end)
+
 local function cycleNPCs()
     local now = getTickCount()
     local gameSpeed = getGameSpeed()
@@ -151,12 +179,11 @@ local function cycleNPCs()
             if actor and state.preview and task[1]=="walkTrafficToPoint" then
                 local x,y,z=getElementPosition(actor)
                 if state.sampledWalk==task and state.walkOwner==state.owner then
-                    local dx,dy,dz=x-state.walkX,y-state.walkY,z-state.walkZ
-                    local length=dx*dx+dy*dy+dz*dz
+                    local dx,dy=x-state.walkX,y-state.walkY
+                    local length=dx*dx+dy*dy
                     if length>0 and length<=36 then
-                        local t=math.max(0,math.min(1,((task[2]-x)*dx+(task[3]-y)*dy+(task[4]-z)*dz)/length+1))
-                        passed=(state.walkX+t*dx-task[2])^2+(state.walkY+t*dy-task[3])^2+
-                            (state.walkZ+t*dz-task[4])^2<=task[5]^2
+                        local t=math.max(0,math.min(1,((task[2]-x)*dx+(task[3]-y)*dy)/length+1))
+                        passed=(state.walkX+t*dx-task[2])^2+(state.walkY+t*dy-task[3])^2<=task[5]^2
                     end
                 end
                 state.sampledWalk,state.walkOwner,state.walkX,state.walkY,state.walkZ=task,state.owner,x,y,z

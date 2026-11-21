@@ -6,6 +6,7 @@ local models, pending, actors = {}, {}, {}
 local playerIndex = 0
 local pendingCursor
 local actorCount = 0
+local actorHead, actorTail, actorCursor
 local attemptInterval = 50
 local attemptTimeout = 2000
 local blockedRouteTimeout = 8000
@@ -315,12 +316,29 @@ local function collectCandidate(player, context, targeted, stinger)
     end
 end
 
+local function trackActor(ped,state)
+    actors[ped]=state
+    state.ped,state.previous=ped,actorTail
+    if actorTail then actorTail.following=state else actorHead=state end
+    actorTail=state
+    actorCount=actorCount+1
+end
+
+local function untrackActor(ped)
+    local state=actors[ped]
+    local before,after=state.previous,state.following
+    if before then before.following=after else actorHead=after end
+    if after then after.previous=before else actorTail=before end
+    if actorCursor==state then actorCursor=after or actorHead end
+    actors[ped],state.previous,state.following=nil,nil,nil
+    actorCount=actorCount-1
+end
+
 local function removeActor(ped, fade)
     local state = actors[ped]
     if not state then return end
     if PedCarService then PedCarService.relinquish(ped) end
-    actors[ped] = nil
-    actorCount = actorCount - 1
+    untrackActor(ped)
     PedSocial.interrupt(ped,state)
     PedActivity.cancel(ped)
     PedAI.detach(ped)
@@ -341,7 +359,7 @@ local function walkToNode(ped, state, target, heading, from, link)
     local task = signalized and {"walkTrafficCrossing", target.x, target.y, target.z, 0.45, from.x, from.y}
         or {"walkTrafficToPoint", target.x, target.y, target.z, 1}
     if not hlc:addNPCTask(ped, task) then return false end
-    if state.queued == 0 then state.crossing = signalized else state.nextCrossing = signalized end
+    if state.queued == 0 then state.crossing,state.headAnchor = signalized,target.id else state.nextCrossing = signalized end
     state.anchor, state.heading, state.queued = target.id, heading, state.queued + 1
     state.blockedSince, state.retryAt = nil, nil
     if state.queued == 1 then
@@ -392,8 +410,7 @@ local function saveActor(player, candidate)
     local state = {owner = player, queued = 0, originalModelId = candidate.originalModelId}
     local heading = headingFor(target.x - candidate.finalX, target.y - candidate.finalY)
     if not walkToNode(ped, state, target, heading) then destroyElement(ped) return end
-    actors[ped] = state
-    actorCount = actorCount + 1
+    trackActor(ped,state)
     TrafficVisibility.track(ped, "pedestrian")
     PedAI.attach(ped, graph.modelIdSpace ~= "mta" and candidate.originalModelId or nil, candidate.populationType)
     if candidate.police then
@@ -461,10 +478,12 @@ end
 function TrafficAmbient.adoptDriver(ped, player, vehicle, originalModelId, roadState, recoveryMs)
     if not graph or not isElement(ped) or isPedDead(ped) then return false end
     if actors[ped] then return true end
+    if not hlc:isHLCEnabled(ped) and not hlc:enableHLCForNPC(ped,"walk") then return false end
+    PedAI.attach(ped, graph.modelIdSpace ~= "mta" and originalModelId or nil)
     local _, _, rotation = getElementRotation(ped)
-    actors[ped] = {owner = player or getElementSyncer(ped), queued = 0, hitAt = recoveryMs and getTickCount(), recoveryMs = recoveryMs,
-        originalModelId = originalModelId, heading = math.floor(-rotation / 45 + 0.5) % 8}
-    actorCount = actorCount + 1
+    trackActor(ped,{owner = player or getElementSyncer(ped), queued = 0, rejoining = true, blockedSince = getTickCount(),
+        hitAt = recoveryMs and getTickCount(), recoveryMs = recoveryMs,
+        originalModelId = originalModelId, heading = math.floor(-rotation / 45 + 0.5) % 8})
     hlc:clearNPCTasks(ped)
     hlc:setNPCWalkSpeed(ped, "walk")
     TrafficVisibility.track(ped, "pedestrian")
@@ -474,8 +493,7 @@ end
 
 function TrafficAmbient.releaseDriver(ped)
     if not actors[ped] then return false end
-    actors[ped] = nil
-    actorCount = actorCount - 1
+    untrackActor(ped)
     PedActivity.cancel(ped)
     return true
 end
@@ -567,7 +585,6 @@ local function advancePedestrian(ped, state)
     return walkToNode(ped, state, target, heading, node, link)
 end
 
-local actorCursor
 local function resetWalk(state)
     state.queued, state.blockedSince, state.retryAt = 0, nil, nil
     state.crossing, state.nextCrossing, state.anchor = nil, nil, nil
@@ -738,10 +755,11 @@ end
 local function updateActors()
     local now = getTickCount()
     for _ = 1, math.min(8, actorCount) do
-        if actorCursor and not actors[actorCursor] then actorCursor = nil end
-        local ped, state = next(actors, actorCursor)
-        actorCursor = ped
-        if not ped then break end
+        local state=actorCursor or actorHead
+        if not state or state.visitedAt==now then break end
+        state.visitedAt=now
+        actorCursor=state.following or actorHead
+        local ped=state.ped
         if PedAI.isScriptControlled and PedAI.isScriptControlled(ped) then
             state.behaviorOwned=true
             if PedServices then PedServices.relinquish(ped) end
@@ -903,12 +921,48 @@ local function tick()
     continueCandidate(player, candidate)
 end
 
+-- Refill a consumed walking segment as soon as its collision probe returns.
+-- Special objectives and crossing waits retain ownership of their own queue.
+function TrafficAmbient.walkProbeReady(ped, owner)
+    local state=actors[ped]
+    if not state or state.queued>=2 or state.wait or state.behaviorOwned or state.hitAt or state.roadFall
+        or not isElement(ped) or isPedDead(ped) or isPedInVehicle(ped)
+        or PedAI.busy(ped) or PedAI.isScriptControlled and PedAI.isScriptControlled(ped)
+        or owner and owner~=(getElementSyncer(ped) or state.owner) then return end
+    if advancePedestrian(ped,state)==false then state.retryAt=getTickCount() end
+end
+
 local function onTaskDone(task)
     local actor = actors[source]
     if not actor or PedAI.isScriptControlled and PedAI.isScriptControlled(source) or (task[1] ~= "walkTrafficToPoint" and task[1] ~= "walkTrafficCrossing") then return end
-    actor.queued = math.max(0, actor.queued - 1)
+    if actor.queued == 0 then return end
+    actor.queued = actor.queued - 1
+    actor.headAnchor = actor.queued>0 and actor.anchor or nil
     actor.crossing, actor.nextCrossing = actor.nextCrossing, nil
     if actor.queued == 0 then actor.blockedSince = getTickCount() end
+    TrafficAmbient.walkProbeReady(source)
+end
+
+local function onWalkBlocked(task)
+    local ped=source
+    local state=actors[ped]
+    local brain=state and PedAI.brain(ped)
+    if not brain or brain.scriptOwner or state.wait or state.hitAt or state.roadFall then return end
+    local event=brain.event
+    if event then
+        local point=event.intent=="flee" and event.task
+        if not point or task[2]~=point.x or task[3]~=point.y then return end
+        event.failedPoint=point
+        event.task,event.preview,event.probe,event.routeCheck=nil,nil,nil,nil
+        hlc:clearNPCTasks(ped)
+        TrafficAmbient.wakeReaction(ped,event)
+    elseif not state.behaviorOwned and state.queued>0 then
+        state.failedAnchor=state.headAnchor
+        hlc:clearNPCTasks(ped)
+        resetWalk(state)
+        state.rejoining,state.blockedSince=true,getTickCount()
+        TrafficAmbient.walkProbeReady(ped)
+    end
 end
 
 local function onDestroy()
@@ -918,8 +972,7 @@ local function onDestroy()
         PedAmbientWait.cancel(source, actors[source])
         PedMugging.cancel(source, actors[source])
         PedTheft.cancel(source, actors[source])
-        actors[source] = nil
-        actorCount = actorCount - 1
+        untrackActor(source)
     end
 end
 
@@ -938,6 +991,7 @@ end
 function TrafficAmbient.start(loadedGraph, getDensity)
     graph, density = loadedGraph, getDensity
     if not graph.population then return end
+    addEventHandler("npc_hlc:onWalkBlocked", root, onWalkBlocked)
     addEventHandler("npc_hlc:onNPCTaskDone", root, onTaskDone)
     addEventHandler("onPedDamage", root, onDamage)
     addEventHandler("onElementDestroy", root, onDestroy)
@@ -948,6 +1002,7 @@ end
 function TrafficAmbient.stop()
     if timer then
         killTimer(timer)
+        removeEventHandler("npc_hlc:onWalkBlocked", root, onWalkBlocked)
         removeEventHandler("npc_hlc:onNPCTaskDone", root, onTaskDone)
         removeEventHandler("onPedDamage", root, onDamage)
         removeEventHandler("onElementDestroy", root, onDestroy)

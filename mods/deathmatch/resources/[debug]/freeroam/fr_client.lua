@@ -1038,8 +1038,7 @@ function fillInPosition(relX, relY, btn)
 		return
 	end
 
-	local x = relX*6000 - 3000
-	local y = 3000 - relY*6000
+	local x, y = exports.frontend:viceCityMapToWorld(relX, relY)
 	local hit, hitX, hitY, hitZ
 	hit, hitX, hitY, hitZ = processLineOfSight(x, y, 3000, x, y, -3000)
 	setControlNumbers(wndSetPos, { x = x, y = y, z = hitZ or 0 })
@@ -1090,7 +1089,7 @@ local function retryTeleport(elem,x,y,z,isVehicle,distanceToGround)
 	local hit, groundX, groundY, groundZ = processLineOfSight(x, y, 3000, x, y, -3000)
 	if hit then
 		local waterZ = getWaterLevel(x, y, 100)
-		z = (waterZ and math.max(groundZ, waterZ) or groundZ) + distanceToGround
+		z = waterZ and math.max(groundZ, waterZ) or groundZ
 		setElementPosition(elem,x, y, z + distanceToGround)
 		setCameraPlayerMode()
 		setGravity(grav)
@@ -1141,7 +1140,7 @@ function setPlayerPosition(x, y, z, skipDeadCheck)
 			fadeCamera(false)
 		end
 		if isTimer(g_TeleportMatrixTimer) then killTimer(g_TeleportMatrixTimer) end
-		g_TeleportMatrixTimer = setTimer(setCameraMatrix, 1000, 1, x, y, z)
+		g_TeleportMatrixTimer = setTimer(setCameraMatrix, 1000, 1, x, y, z or 0)
 		if not grav then
 			grav = playerGravity
 			setGravity(0.001)
@@ -1149,6 +1148,7 @@ function setPlayerPosition(x, y, z, skipDeadCheck)
 		if isTimer(g_TeleportTimer) then killTimer(g_TeleportTimer) end
 		g_TeleportTimer = setTimer(retryTeleport,50,0,elem,x,y,z,isVehicle,distanceToGround)
 	else
+		if z == false then z = math.max(hitZ, getWaterLevel(x, y, 100) or hitZ) end
 		setElementPosition(elem,x, y, z + distanceToGround)
 		if isVehicle then
 			setTimer(calmVehicle,100,1,elem)
@@ -1205,8 +1205,9 @@ function updatePlayerBlips()
 		end
 		local x, y = getElementPosition(elem)
 		local visible = (localPlayer.interior == elem.interior and localPlayer.dimension == elem.dimension)
-		x = math.floor((x + 3000) * g_MapSide / 6000) - 4
-		y = math.floor((3000 - y) * g_MapSide / 6000) - 4
+		local u, v = exports.frontend:worldToViceCityMap(x, y)
+		x = math.floor(u * g_MapSide) - 4
+		y = math.floor(v * g_MapSide) - 4
 		guiSetPosition(player.gui.mapBlip, x, y, false)
 		guiSetPosition(player.gui.mapLabelShadow, x + 14, y - 4, false)
 		guiSetPosition(player.gui.mapLabel, x + 13, y - 5, false)
@@ -1240,7 +1241,7 @@ wndSetPos = {
 	text = 'Set position',
 	width = g_MapSide + 20,
 	controls = {
-		{'img', id='map', src='img/map.png', width=g_MapSide, height=g_MapSide, onclick=fillInPosition, ondoubleclick=setPosClick, DoubleClickSpamProtected=true},
+		{'img', id='map', viceCityMap=true, width=g_MapSide, height=g_MapSide, onclick=fillInPosition, ondoubleclick=setPosClick, DoubleClickSpamProtected=true},
 		{'txt', id='x', text='', width=60},
 		{'txt', id='y', text='', width=60},
 		{'txt', id='z', text='', width=60},
@@ -1342,7 +1343,8 @@ function warpMapInit()
 end
 
 function spawnMapDoubleClick(relX, relY)
-	setPlayerPosition(relX*6000 - 3000, 3000 - relY*6000, 0)
+	local x, y = exports.frontend:viceCityMapToWorld(relX, relY)
+	setPlayerPosition(x, y, false)
 	closeWindow(wndSpawnMap)
 end
 
@@ -1364,7 +1366,7 @@ wndSpawnMap = {
 	text = 'Select spawn position',
 	width = g_MapSide + 20,
 	controls = {
-		{'img', id='map', src='img/map.png', width=g_MapSide, height=g_MapSide, ondoubleclick=spawnMapDoubleClick},
+		{'img', id='map', viceCityMap=true, width=g_MapSide, height=g_MapSide, ondoubleclick=spawnMapDoubleClick},
 		{'lbl', text='Welcome to freeroam. Double click a location on the map to spawn.', width=g_MapSide-60, align='center'},
 		{'btn', id='close', closeswindow=true}
 	},
@@ -1434,36 +1436,53 @@ wndSetInterior = {
 ---------------------------
 -- Create vehicle window
 ---------------------------
+local nativeList = {
+    'lst', id='vehicles', width=258, height=315,
+    columns={{text='Vehicle', attr='name'}},
+    rows={xml='data/vehicles.xml', attrs={'id', 'name'}}
+}
+local vcsList = {
+    'lst', id='vcsVehicles', width=258, height=315,
+    columns={{text='Vehicle', attr='name'}}, rows={}
+}
+
+local function running(name)
+    local resource = getResourceFromName(name)
+    return resource and getResourceState(resource) == 'running'
+end
+
+local function refreshVehicleList()
+    local catalog = running('vcs_model') and exports.vcs_model:getVcsVehicleCatalog() or {}
+    local legacy = running('model') and exports.model:getDlcVehicleCatalog() or {}
+    local rows = exports.frontend:getVehicleSpawnMenuGroups(catalog, legacy)
+    bindGridListToTable(vcsList, rows, false)
+end
+
 function createSelectedVehicle(leaf)
-	if not leaf then
-		leaf = getSelectedGridListLeaf(wndCreateVehicle, 'vehicles')
-		if not leaf then
-			return
-		end
-	end
-	server.giveMeVehicles(leaf.id)
+    if not leaf then
+        local tab = guiGetSelectedTab(getControl(wndCreateVehicle, 'vehicleTabs'))
+        local active = tab == vcsList.parent.element and vcsList or nativeList
+        leaf = getSelectedGridListLeaf(active)
+    end
+    if leaf and leaf.id then server.giveMeVehicles(leaf.id, leaf.provider) end
+end
+
+for _, list in ipairs({nativeList, vcsList}) do
+    list.onitemdoubleclick = createSelectedVehicle
+    list.DoubleClickSpamProtected = true
 end
 
 wndCreateVehicle = {
-	'wnd',
-	text = 'Create vehicle',
-	width = 300,
-	controls = {
-		{
-			'lst',
-			id='vehicles',
-			width=280,
-			height=340,
-			columns={
-				{text='Vehicle', attr='name'}
-			},
-			rows={xml='data/vehicles.xml', attrs={'id', 'name'}},
-			onitemdoubleclick=createSelectedVehicle,
-			DoubleClickSpamProtected=true,
-		},
-		{'btn', id='create', onclick=createSelectedVehicle, ClickSpamProtected=true},
-		{'btn', id='close', closeswindow=true}
-	}
+    'wnd', text='Create vehicle', width=300,
+    controls={
+        {'tbp', id='vehicleTabs', width=280, tabs={
+            {id='sa', text='San Andreas', controls={nativeList}},
+            {id='vcs', text='VCS Vehicles', controls={vcsList}}
+        }},
+        {'btn', id='create', onclick=createSelectedVehicle, ClickSpamProtected=true},
+        {'btn', id='close', closeswindow=true}
+    },
+    oncreate=refreshVehicleList
 }
 
 function createVehicleCommand(cmd, ...)

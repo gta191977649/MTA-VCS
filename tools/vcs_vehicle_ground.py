@@ -51,7 +51,7 @@ def contact_geometry(data):
             continue
         _, atom, _ = next(chunks(data, start, end))
         frame, geometry = struct.unpack_from("<2I", data, atom)
-        if names[frame].startswith("wheel"):
+        if names[frame].startswith(("wheel", "vcs_wheel_")):
             # Some authored wheel atomics are displaced inside a dummy. The
             # radius alone cannot describe those meshes at runtime.
             if names[frame] == "wheel":
@@ -68,7 +68,7 @@ def contact_geometry(data):
         if not axle:
             return None
         y, z = poses[names.index(axle)][10:12]
-        radius = radii.get(axle, radii.get("wheel"))
+        radius = radii.get("vcs_wheel_r" + prefix, radii.get(axle, radii.get("wheel")))
         axles.append((y, z, radius))
     return axles if axles[0][0] > axles[1][0] else None
 

@@ -15,6 +15,9 @@ function PedTaskManager:hasRangedWeapon()
     return PedAIRules.ranged(getPedWeapon(self.ped)) and getPedTotalAmmo(self.ped) > 0
 end
 
+local diagonal=math.sqrt(.5)
+local escapeDirections={{1,0},{diagonal,diagonal},{diagonal,-diagonal},{0,1},{0,-1}}
+
 local function fleeDestination(ped, graph, event, origin)
     local x, y, z = getElementPosition(ped)
     if origin then x,y,z=origin.x,origin.y,origin.z end
@@ -38,28 +41,32 @@ local function fleeDestination(ped, graph, event, origin)
         for offset = 1, node.linkCount do
             local link = graph.links[node.firstLink + offset]
             local dest = graph.nodes[link.to + 1]
-            if math.floor(dest.flags / 32) % 2 == 0 then
+            if math.floor(dest.flags / 32) % 2 == 0 and (not event.failedPoint or dest.id~=event.failedPoint.id) then
                 candidates[#candidates + 1] = {id = dest.id, x = dest.x, y = dest.y, z = dest.z}
             end
         end
     end
-    if #candidates == 0 then
-        -- Open spaces can be off the pedestrian graph. Probe a short step against the streamed world.
-        candidates[1] = {id = -1, x = x + dx * 6, y = y + dy * 6, z = z}
+    -- Keep graph links first. If all are occluded (often by the car the
+    -- driver just left), also test short exits away and to either side.
+    for i,direction in ipairs(escapeDirections) do
+        if #candidates>=15 then break end
+        local c,s=direction[1],direction[2]
+        candidates[#candidates+1]={id=-i,x=x+6*(dx*c-dy*s),y=y+6*(dy*c+dx*s),z=z}
     end
     local key = "flee/" .. tostring(anchor)
     if origin then key=key.."/"..origin.x.."/"..origin.y end
-    local reachable = TrafficWorld.reachable(owner, ped, key, candidates,origin,nil,event)
+    local reachable,tested = TrafficWorld.reachable(owner, ped, key, candidates,origin,nil,event)
     if type(reachable) ~= "table" then return end
     local best, bestScore = nil, -math.huge
     local ids = {}
     for _, id in ipairs(reachable) do ids[id] = true end
-    for _, dest in ipairs(candidates) do
-        if ids[dest.id] then
+    local failed=event.failedPoint
+    for _, dest in ipairs(tested or candidates) do
+        if ids[dest.id] and (not failed or (dest.x-failed.x)^2+(dest.y-failed.y)^2>1) then
             local vx, vy = dest.x - x, dest.y - y
             local len = math.sqrt(vx * vx + vy * vy)
             if len > 1 then
-                local score = (vx * dx + vy * dy) / len
+                local score = (vx * dx + vy * dy) / len + (dest.id>=0 and 3 or 0)
                 if score > bestScore then best, bestScore = dest, score end
             end
         end

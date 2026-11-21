@@ -65,7 +65,14 @@ function findNPCTrafficVehicleInPath(npc, x, y, z, dx, dy, distance, target)
                 local start = pointInVehicleSpace(box, x, y)
                 local target = pointInVehicleSpace(box, x + dx * lookahead, y + dy * lookahead)
                 local entry = hits(box, start, target)
-                if entry and (not closest or entry < closest) then
+                -- A just-exited driver can already stand in the clearance
+                -- margin. A step away from that face does not enter the car.
+                local outward = entry==0 and (
+                    start[1]<=box.minX+.35 and target[1]<start[1] or
+                    start[1]>=box.maxX-.35 and target[1]>start[1] or
+                    start[2]<=box.minY+.35 and target[2]<start[2] or
+                    start[2]>=box.maxY-.35 and target[2]>start[2])
+                if entry and not outward and (not closest or entry < closest) then
                     nearest, closest, nearestBox = vehicle, entry, box
                 end
             end

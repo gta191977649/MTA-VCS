@@ -22,6 +22,7 @@ from vcs_model_assets import (
     adapt_pedestrian, airtrain_models, build_img, build_texture_dictionary, complete_vehicle_textures, native_textures,
     original_vehicle_reflections, vehicle_material_textures, vehicle_native_raster,
 )
+from vcs_rhino import restore_rhino
 from vcs_vehicle_ground import ground_catalog
 from vcs_police_materials import POLICE_MODELS, SHARED_SURFACES, source_motorcycle_beacon, source_siren_bar
 from vcs_traffic_animations import convert_locomotion
@@ -236,6 +237,11 @@ def read_fake_plane(image):
 
 def model_name_key(name):
     return zlib.crc32(name.upper().encode("ascii")) ^ 0xFFFFFFFF
+
+
+def vehicle_text_key(image, model_table, model_id):
+    offset, = U32.unpack_from(image, model_table + model_id * 4)
+    return image[offset + 0x158:offset + 0x160].split(b"\0")[0].decode("ascii")
 
 
 def read_vehicle_bindings(image, resource):
@@ -695,7 +701,9 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
                             f"PS2 material conversion failed for {name}: {result.stderr.strip()}")
                     original_geometry = original_dff.read_bytes()
                     reflections = original_vehicle_reflections(original_geometry)
-                    if name == "policem":
+                    if original_id == 246:
+                        geometry, dictionary = restore_rhino(geometry, dictionary, raw_game, model_table, workspace, executable)
+                    elif name == "policem":
                         geometry = source_siren_bar(geometry, original_geometry)
                     elif name == "electrap":
                         geometry = source_motorcycle_beacon(geometry, original_geometry)
@@ -777,7 +785,8 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
     for original_id, asset in model_sources.items():
         kind, base = asset["kind"], asset["base"]
         variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS or original_id == 218 else ""
-        catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"{variant}}},')
+        label = f', textKey = "{vehicle_text_key(raw_game, model_table, original_id)}"' if kind == "vehicle" else ""
+        catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"{variant}{label}}},')
     catalog.append("}")
     templates["model_catalog.lua"] = ("\n".join(catalog) + "\n").encode("utf-8")
     templates.update(airtrain_models(outputs["vehicle"]["airtrain.dff"]))
@@ -798,6 +807,7 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
              '    <script src="vehicle_ground_catalog.lua" type="client" />',
              '    <script src="model_bindings_c.lua" type="client" />',
              '    <min_mta_version client="1.6.0-9.22676" />',
+             '    <export function="getVcsVehicleCatalog" type="client" />',
              '    <export function="getVcsModelBase" type="server" />',
              '    <export function="getVcsModelIdByName" type="server" />',
              '    <export function="getVcsVehicleGroundGeometry" type="client" />',

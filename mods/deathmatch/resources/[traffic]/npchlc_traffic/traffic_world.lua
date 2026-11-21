@@ -28,7 +28,7 @@ local function query(player, kind, slot, key, acceptable, ...)
     if reusable then
         if pending.finished then
             playerRequests[slot] = nil
-            return pending.result
+            return pending.result,pending.candidates
         end
         return nil
     end
@@ -115,17 +115,19 @@ function TrafficWorld.reachable(player, ped, nodeId, candidates, origin, rejoini
     if getDistanceBetweenPoints3D(px, py, pz, x, y, z) > MAX_ACTOR_DISTANCE then return false end
     local ids = {}
     for _, candidate in ipairs(candidates) do ids[candidate.id] = true end
-    ids.direct = reaction and reaction.kind=="damage" and isElement(reaction.target)
+    ids.direct = reaction and (reaction.kind=="damage" or reaction.kind=="vehicleThreat" or reaction.kind=="roadRage" or reaction.kind=="carjack") and isElement(reaction.target)
         and getElementType(reaction.target)=="player"
     local key = rejoining and nodeId .. "/rejoin" or origin and nodeId .. "/ahead" or nodeId
     local slots=requests[player]
     if slots and slots[ped] and slots[ped].reaction~=reaction then slots[ped]=nil end
-    local result=query(player, "reach", ped, key, ids, ped, candidates, origin)
+    local result,checked=query(player, "reach", ped, key, ids, ped, candidates, origin)
     local pending=requests[player] and requests[player][ped]
-    if reaction and pending and pending.key==key then
-        pending.reaction,pending.ped,pending.fixedOrigin=reaction,ped,origin~=nil
+    if pending and pending.key==key then
+        pending.candidates=pending.candidates or candidates
+        pending.fixedOrigin=origin~=nil
+        if reaction then pending.reaction,pending.ped=reaction,ped end
     end
-    return result
+    return result,checked
 end
 
 function TrafficWorld.cancelPursuit(car)
@@ -192,6 +194,9 @@ addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, re
         local tx, ty, tz = getElementPosition(p.actor)
         pending.result = (x-p.x)^2 + (y-p.y)^2 + (z-p.z)^2 <= 2^2
             and (p.onFoot or (tx-p.tx)^2 + (ty-p.ty)^2 + (tz-p.tz)^2 <= 1)
+        if pending.result and TrafficRoad and TrafficRoad.pursuitExitReady then
+            TrafficRoad.pursuitExitReady(p.car,client,p.target)
+        end
     elseif pending.kind == "reach" and type(result) == "table" and #result <= 15 then
         local reachable = {}
         for _, nodeId in ipairs(result) do
@@ -209,6 +214,8 @@ addEventHandler("npchlc_traffic:worldProbeResult", resourceRoot, function(id, re
             if not brain or brain.event~=event or not isElement(event.target) then return end
             event.probe=nil
             TrafficAmbient.wakeReaction(ped,event)
+        elseif TrafficAmbient and TrafficAmbient.walkProbeReady then
+            TrafficAmbient.walkProbeReady(slot,client)
         end
     end
 end, false)
