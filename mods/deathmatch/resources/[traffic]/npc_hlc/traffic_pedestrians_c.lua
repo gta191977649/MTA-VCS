@@ -81,8 +81,8 @@ local function startSearch(npc,x,y,z,dx,dy)
     return {x=x,y=y,dx=dx,dy=dy,height=z-floor,open={origin},seen={[0]=true},count=0}
 end
 
-local function expandSearch(npc,search,gx,gy,gz,neighbors)
-    for _=1,8 do
+local function expandSearch(npc,search,gx,gy,gz,neighbors,budget)
+    for _=1,budget do
         local open=search.open
         if #open==0 or search.count>=160 then return false end
         local best=1
@@ -321,7 +321,7 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
     if not state.goalX or (formation and (gx-state.goalX)^2+(gy-state.goalY)^2 > 4)
         or (not formation and (state.goalX ~= gx or state.goalY ~= gy or state.goalZ ~= gz)) then
         state.goalX, state.goalY, state.goalZ = gx, gy, gz
-        state.crowdedAt = nil
+        state.meetingAt = nil
         state.detour, state.blocker, state.checked, state.waiting = nil, nil, nil, nil
         state.carDetour,state.localRoute,state.search,state.retryAt = nil,nil,nil,nil
     end
@@ -376,7 +376,7 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
             local tx, ty = chooseSide(npc, blocker, neighbors, x, y, z, dx, dy)
             if tx then
                 state.passedAt, state.passDelay = now, math.random(500,699)
-                state.search,state.retryAt,state.crowdedAt=nil,nil,nil
+                state.search,state.retryAt=nil,nil
                 state.detour = {x = tx, y = ty, dx = dx, dy = dy, started = now, step = true}
                 state.action = "TASK_COMPLEX_AVOID_OTHER_PED_WHILE_WANDERING"
                 makeNPCWalkToPos(npc, tx, ty, pace)
@@ -385,18 +385,23 @@ local function walkAroundPeds(npc, gx, gy, gz, state, pace, formation, target)
         end
         -- A crowd can close both immediate passing lanes while leaving an exit
         -- behind the walker. Use the same bounded search as for static obstacles.
-        if blocker then
-            state.crowdedAt = state.crowdedAt or now
+        local groupInPath = #neighbors >= 2 and not corridorFree(neighbors,x,y,
+            x+dx*math.min(distance,2),y+dy*math.min(distance,2))
+        local vx,vy=0,0
+        if blocker then vx,vy=getElementVelocity(blocker) end
+        if blocker and #neighbors==1 and (state.meetingAt or vx*vx+vy*vy>0.000001) then
+            state.meetingAt=state.meetingAt or now
         else
-            state.crowdedAt = nil
+            state.meetingAt=nil
         end
-        if blocker and (now-state.crowdedAt)%4294967296 < 400 then
-            state.search = nil
-        elseif blocker or blockedCar or not directLeg(npc,x,y,z,gx,gy,gz,false) then
+        if state.meetingAt and (now-state.meetingAt)%4294967296<400 then
+            state.search=nil
+        elseif blocker or groupInPath or blockedCar or not directLeg(npc,x,y,z,gx,gy,gz,false) then
             state.waiting=true
             if not state.retryAt or (now-state.retryAt)%4294967296>=1000 then
                 state.search=state.search or startSearch(npc,x,y,z,dx,dy)
-                local path=state.search and expandSearch(npc,state.search,gx,gy,gz,neighbors)
+                local path=state.search and expandSearch(npc,state.search,gx,gy,gz,neighbors,
+                    groupInPath and state.search.count == 0 and 24 or 8)
                 if path then
                     state.localRoute,state.search,state.retryAt=path,nil,nil
                     walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace,target)

@@ -4840,9 +4840,15 @@ def check_pedestrian_avoidance():
     left.y,right.y,left.z,right.z = 0.85,-0.85,0.7,0.7
     pedestrians[3],pedestrians[4] = left,right
     for _,ped in ipairs(pedestrians) do setElementData(ped,"npchlc_traffic:passing",{16,16}) end
+    -- A stationary group still occupies the corridor when the walker's
+    -- personality mask excludes its members from anticipatory passing.
+    setElementData(a,"npchlc_traffic:passing",{16,0})
+    walkNPCTrafficAroundPeds(a,forward,{})
+    assert(a.target and a.target[1]<a.x)
+    setElementData(a,"npchlc_traffic:passing",{16,16})
     local escape = {}
     walkNPCTrafficAroundPeds(a,forward,escape)
-    assert(not a.target)
+    assert(a.target and a.target[1]<a.x, "take the open exit on the first crowd scan")
     local minX,maxSide = 0,0
     for frame=1,400 do
         now=now+50
