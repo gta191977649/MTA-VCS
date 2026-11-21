@@ -33,7 +33,14 @@ function getNPCDebugExecution(npc, revision)
         samples[npc] = sample
     end
     sample.requested = getTickCount()
-    if not sample.task then return false end
+    if not sample.task then
+        -- A viewer may start sampling between frames or just after a preview
+        -- revision. Report execution only if this assignment actually ran.
+        if state.executedAt and (sample.requested-state.executedAt)%4294967296<250 then
+            return {state.executedTask,state.walkProgress.action or false,false,false,false,false,false,false,state.executedComplete}
+        end
+        return false
+    end
     return {sample.task, sample.action or false, sample.x or false, sample.y or false,
         sample.z or false, sample.gx or false, sample.gy or false, sample.gz or false,
         sample.waitingForServer or false}
@@ -180,9 +187,16 @@ local function cycleNPCs(elapsed)
                 state.usePreview, task = true, state.preview
                 complete = isNPCTaskComplete(npc, actor, task)
             end
+            state.executedAt,state.executedTask,state.executedComplete=getTickCount(),task[1],complete==true
             if sample then sample.task = task[1] end
             if complete then
-                if task[1] == "driveTrafficToPoint" and task[9] and task[12] == 0 then
+                if task.flee and task[1]=="walkTrafficToPoint" and not isPedInVehicle(npc) then
+                    local walk=state.walkProgress
+                    steerNPCFlight(npc,walk,walk.flightDX or 0,walk.flightDY or 0)
+                    if sample then sample.action=walk.action end
+                    state.executedComplete=false
+                    controlled[npc]=true
+                elseif task[1] == "driveTrafficToPoint" and task[9] and task[12] == 0 then
                     performTask.driveTrafficToPoint(npc, task, elapsed, true)
                     controlled[npc] = true
                 else
@@ -194,7 +208,7 @@ local function cycleNPCs(elapsed)
             else
                 if task[1] == "driveTrafficPhysics" or task[1] == "driveAtPed" or task[1] == "drivePoliceBlock" then
                     performTask[task[1]](npc, task, elapsed, state.driveProgress)
-                elseif isNPCTrafficWalkTask(task[1]) or task[1] == "walkFormation" or task[1] == "walkToPos"
+                elseif isNPCTrafficWalkTask(task[1]) or task[1] == "fleeFromPoint" or task[1] == "walkFormation" or task[1] == "walkToPos"
                     or task[1] == "walkFollowElement" or task[1] == "killPed" or task[1] == "attackOccupiedVehicle"
                     or task[1] == "approachDriverDoor" then
                     local walk = state.walkProgress
@@ -226,6 +240,7 @@ local function cycleNPCs(elapsed)
                 controlled[npc] = true
             end
         else
+            state.executedAt=nil
             stopControl(npc, true)
             if next(state.driveProgress) then state.driveProgress = {} end
             if next(state.walkProgress) then state.walkProgress = {} end

@@ -326,6 +326,20 @@ def check():
         local result
         function triggerServerEvent(_,_,ped,token,value) result=value end
         handlers.onClientResourceStart()
+        local motion="npchlc_traffic:activityMotion"
+        local animation,clip
+        function getPedAnimation() return animation,clip end
+        function setPedAnimation(_,b,c) animation,clip=b,c;return true end
+        source[motion]={"seat_up",false,9,1000}
+        handlers.onClientElementDataChange(motion)
+        assert(animation==TrafficAnimationBanks.activity)
+        animation,clip="ped","run_wuzi"
+        source[motion]=nil
+        handlers.onClientElementDataChange(motion)
+        assert(not animation)
+        animation,clip="ped","run_wuzi"
+        handlers.onClientElementDataChange(motion)
+        assert(animation=="ped") -- no activity owns this association
         local probe = handlers["npchlc_traffic:activityProbe"]
         local site = {"seat","stonebench1",0,0,0,0,0,0,0}
         probe({},1,site,true)

@@ -64,6 +64,8 @@ function completion.walkToPos(npc, actor, task)
     return isPedInVehicle(npc) or closeToPoint(actor, task, false)
 end
 
+function completion.fleeFromPoint(npc) return isPedInVehicle(npc) end
+
 completion.walkTrafficToPoint = completion.walkToPos
 completion.walkTrafficCrossing = completion.walkToPos
 

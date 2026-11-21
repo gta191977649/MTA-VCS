@@ -75,10 +75,11 @@ local function fleeDestination(ped, graph, event, origin)
 end
 
 function PedTaskManager:flee(graph,event,now)
+    hlc:setNPCWalkSpeed(self.ped,"sprint")
     local owner=getElementSyncer(self.ped)
     if event.routeOwner and event.routeOwner~=owner then
         self:clear()
-        event.task,event.preview,event.probe=nil,nil,nil
+        event.task,event.preview,event.probe,event.steering=nil,nil,nil,nil
     end
     event.routeOwner=owner
     if not event.task then event.preview=nil end
@@ -87,6 +88,7 @@ function PedTaskManager:flee(graph,event,now)
         if not event.routeCheck or (x-event.routeX)^2+(y-event.routeY)^2>=0.25 then
             event.routeCheck,event.routeX,event.routeY=now,x,y
         elseif (now-event.routeCheck)%4294967296>=4000 then
+            event.failedPoint=event.task
             self:clear()
             event.task,event.preview,event.routeCheck,event.probe=nil,nil,nil,nil
         end
@@ -95,7 +97,17 @@ function PedTaskManager:flee(graph,event,now)
     event.probe=now
     if not event.task then
         local first=fleeDestination(self.ped,graph,event)
-        if not first or not hlc:setNPCTask(self.ped,{"walkTrafficToPoint",first.x,first.y,first.z,1}) then return end
+        if not first then
+            if event.intent=="flee" and not event.steering then
+                local tx,ty
+                if event.origin then tx,ty=event.origin[1],event.origin[2]
+                else tx,ty=getElementPosition(event.target) end
+                event.steering=hlc:setNPCTask(self.ped,{"fleeFromPoint",tx,ty})
+            end
+            return
+        end
+        if not hlc:setNPCTask(self.ped,{"walkTrafficToPoint",first.x,first.y,first.z,1,flee=true}) then return end
+        event.steering=nil
         event.task,event.issued=first,now
     end
     if not event.intent then -- Fire owns its own lifetime and completion.
@@ -104,7 +116,7 @@ function PedTaskManager:flee(graph,event,now)
         return
     end
     local nextPoint=fleeDestination(self.ped,graph,event,event.task)
-    if nextPoint and hlc:addNPCTask(self.ped,{"walkTrafficToPoint",nextPoint.x,nextPoint.y,nextPoint.z,1}) then
+    if nextPoint and hlc:addNPCTask(self.ped,{"walkTrafficToPoint",nextPoint.x,nextPoint.y,nextPoint.z,1,flee=true}) then
         event.preview=nextPoint
     end
 end
@@ -157,8 +169,8 @@ function PedTaskManager:execute(graph, event, now)
         event.task = true
         return
     end
-    hlc:setNPCWalkSpeed(ped, event.pace or "run")
     if event.intent == "fight" then
+        hlc:setNPCWalkSpeed(ped,event.pace or "run")
         if PedCombatNavigation and PedCombatNavigation.update(self,event,graph,now) then return end
         local armed = self:hasRangedWeapon()
         if armed and PedSpecial then PedSpecial.sampleAim(ped) end

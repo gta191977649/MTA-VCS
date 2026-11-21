@@ -4,7 +4,7 @@ local turn = "npchlc_traffic:activityHeading"
 local turning, reports = {}, {}
 local ifp
 local chatClips = {idle_chat="IDLE_chat", xpressscratch="XPRESSscratch"}
-local playingChat = {}
+local playing = {}
 local clips = {
     idle_chat=true, idle_hbhb=true, xpressscratch=true, roadcross=true, fucku=true, atm=true, seat_down=true, seat_idle=true, seat_up=true, emp_bar_clean=true,
     emp_bar_idle=true, emp_bar_look=true, sunbathe=true, sunbathe_sit=true,
@@ -15,15 +15,20 @@ local function apply(ped, catchUp)
     local data = getElementData(ped, motion, false)
     local chat = type(data) == "table" and data[6] == "PED" and chatClips[data[1]]
     if chat or (ifp and type(data) == "table" and clips[data[1]]) then
-        playingChat[ped] = chat or nil
-        setPedAnimation(ped, chat and "PED" or block, chat or data[1], chat and data[4] or -1,
+        local applied=setPedAnimation(ped, chat and "PED" or block, chat or data[1], chat and data[4] or -1,
             data[2], false, false, not chat, 160)
+        if applied then playing[ped]=chat or block end
         if catchUp then triggerServerEvent("npchlc_traffic:activityClock",resourceRoot,ped,data[3]) end
     else
         local current, clip = getPedAnimation(ped)
-        if current == block or (playingChat[ped] and current and current:lower()=="ped"
-            and clip and clip:lower()==playingChat[ped]:lower()) then setPedAnimation(ped) end
-        playingChat[ped] = nil
+        local owned=playing[ped]
+        -- At the frozen end of a custom IFP, MTA may report its native
+        -- ped/run_wuzi association instead of the activity block and clip.
+        if owned and (not current or current==block or current:lower()=="ped" and clip
+            and (clip:lower()==owned:lower() or owned==block and clip:lower()=="run_wuzi")) then
+            setPedAnimation(ped)
+        end
+        playing[ped] = nil
     end
 end
 
@@ -85,8 +90,8 @@ addEventHandler("onClientElementStreamIn", root, function()
     turning[source] = getElementData(source,turn,false) or nil
     if getElementData(source, motion, false) then apply(source,true) end
 end)
-addEventHandler("onClientElementStreamOut", root, function() turning[source],reports[source],playingChat[source] = nil,nil,nil end)
-addEventHandler("onClientElementDestroy", root, function() turning[source],reports[source],playingChat[source] = nil,nil,nil end)
+addEventHandler("onClientElementStreamOut", root, function() turning[source],reports[source],playing[source] = nil,nil,nil end)
+addEventHandler("onClientElementDestroy", root, function() turning[source],reports[source],playing[source] = nil,nil,nil end)
 
 local function expectedProp(site)
     for _, kind in ipairs({"building","object"}) do

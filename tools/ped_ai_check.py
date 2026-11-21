@@ -222,7 +222,7 @@ def main():
         assert(PedAI.update(listener, graph) and listener.speed == nil)
         now = now + 1100
         assert(PedAI.update(listener, graph) and listener.speed == "sprint")
-        assert(PedAI.update(outer, graph) and outer.speed == "walk")
+        assert(PedAI.update(outer, graph) and outer.speed == "sprint")
         -- Only the two actual frightened pedestrians should vocalize.
         assert(#voices == beforeVoices + 2 and #crimes == beforeCrime)
         assert(PedAI.update(listener, graph) and #voices == beforeVoices + 2)

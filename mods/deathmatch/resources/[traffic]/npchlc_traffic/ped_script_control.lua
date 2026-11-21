@@ -187,7 +187,6 @@ local function execute(brain,graph,now)
         job.intent = "fight"
         brain.tasks:execute(graph,job,now)
     elseif job.order == "flee" then
-        hlc:setNPCWalkSpeed(ped,"run")
         brain.tasks:flee(graph,job,now)
     elseif job.order == "walk" then
         local x,y,z = getElementPosition(ped)

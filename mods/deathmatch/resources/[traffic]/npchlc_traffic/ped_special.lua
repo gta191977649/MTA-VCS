@@ -207,7 +207,6 @@ function PedSpecial.update(ped,graph)
         setFire(ped,false)
     else
         if not fire.origin and not sameWorld(fire.target,ped) then fire.origin = {getElementPosition(ped)} end
-        exports.npc_hlc:setNPCWalkSpeed(ped,"sprint")
         brain.tasks:flee(graph,fire,now)
     end
     return true

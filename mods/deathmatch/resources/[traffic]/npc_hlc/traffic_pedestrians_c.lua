@@ -4,8 +4,8 @@ local PASS_DISTANCE = 0.65
 local SIDE_STEP = 0.85
 local WALK_SPEED = 1.25
 
-local function ground(ped, x, y, z)
-    local hit, _, _, height, _, _, _, normalZ = processLineOfSight(x, y, z + 0.2, x, y, z - 1.25,
+local function ground(ped, x, y, z, descent)
+    local hit, _, _, height, _, _, _, normalZ = processLineOfSight(x, y, z + 0.2, x, y, z - 1.25 - (descent or 0),
         true, false, false, true, false, false, false, false, ped)
     if hit and (not normalZ or normalZ >= 0.7) then return height end
 end
@@ -57,11 +57,21 @@ local function directLeg(npc,x,y,z,gx,gy,gz,cars,neighbors)
     local tx,ty=x+dx*t,y+dy*t
     if not corridorFree(neighbors,x,y,tx,ty) then return false end
     if corridor(npc,x,y,z,tx,ty,z+((gz or z)-z)*t,cars) then return true end
-    -- Graph Z may be at pavement level. Retry a blocked ray at the walker's
-    -- height above the local floor so the ground itself cannot mimic a wall.
+    -- Imported stair nodes have integer Z. A ray starting at node Z can be
+    -- underneath the next tread. Follow the floor from the walker instead.
     local floor=ground(npc,x,y,z)
-    local endFloor=floor and ground(npc,tx,ty,z+((gz or z)-z)*t)
-    return endFloor and corridor(npc,x,y,z,tx,ty,endFloor+z-floor,cars) or false
+    if not floor then return false end
+    local height=z-floor
+    local steps=math.max(1,math.ceil(length*t/.65))
+    local px,py,pz=x,y,z
+    for i=1,steps do
+        local nx,ny=x+(tx-x)*i/steps,y+(ty-y)*i/steps
+        local nextFloor=ground(npc,nx,ny,pz,.55)
+        if not nextFloor or math.abs(nextFloor-floor)>.55
+            or not corridor(npc,px,py,pz,nx,ny,nextFloor+height,cars) then return false end
+        px,py,pz,floor=nx,ny,nextFloor+height,nextFloor
+    end
+    return true
 end
 
 local function startSearch(npc,x,y,z,dx,dy)
@@ -173,6 +183,44 @@ local function walkLocalRoute(npc,state,x,y,z,gx,gy,gz,now,pace,target)
     state.action="Walk around obstacle"
     makeNPCWalkToPos(npc,point.x,point.y,pace)
     return true
+end
+
+-- During flight the syncer can steer immediately while a graph probe is in flight.
+-- Sample the floor along each heading to follow stairs without stepping off a ledge.
+local flightTurns={0,45,-45,90,-90,135,-135,180}
+function steerNPCFlight(npc,state,dx,dy)
+    local x,y,z=getElementPosition(npc)
+    local now=getTickCount()
+    if not state.flightAt or (now-state.flightAt)%4294967296>=150 then
+        state.flightAt,state.flightX,state.flightY=now,nil,nil
+        local len=math.sqrt(dx*dx+dy*dy)
+        if len<.01 then
+            local heading=math.rad(getPedRotation(npc))
+            dx,dy=-math.sin(heading),math.cos(heading)
+        else dx,dy=dx/len,dy/len end
+        local _,peers=findBlocker(npc,x,y,z,dx,dy,2,false)
+        local base=ground(npc,x,y,z)
+        for _,turn in ipairs(flightTurns) do
+            if not base then break end
+            local angle=math.rad(turn)
+            local fx,fy=dx*math.cos(angle)-dy*math.sin(angle),dy*math.cos(angle)+dx*math.sin(angle)
+            local tx,ty=x+1.5*fx,y+1.5*fy
+            local mid=ground(npc,x+.75*fx,y+.75*fy,z,.55)
+            local floor=mid and ground(npc,tx,ty,z+mid-base,.55)
+            if floor and math.abs(mid-base)<=.55 and math.abs(floor-mid)<=.55
+                and corridorFree(peers,x,y,tx,ty) and corridor(npc,x,y,z,tx,ty,z+floor-base,true) then
+                state.flightX,state.flightY=tx,ty
+                break
+            end
+        end
+    end
+    if state.flightX then
+        state.action="Flee away from threat"
+        makeNPCWalkToPos(npc,state.flightX,state.flightY)
+    else
+        state.action="Finding escape direction"
+        stopNPCWalkingActions(npc)
+    end
 end
 
 local function stillBlocking(npc, other, x, y, z, dx, dy, distance)

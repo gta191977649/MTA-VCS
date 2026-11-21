@@ -281,6 +281,7 @@ deliver("onClientPreRender", root)
 deliver("npc_hlc:control", resourceRoot, npc, 6, nextWalk, npc)
 deliver("onClientPreRender", root)
 assert(table.concat(targets, ",") == "2,4,4,4" and released == 3 and stopped == 0)
+assert(getNPCDebugExecution(npc,6)[1]=="walkTrafficToPoint")
 function isPedOnGround() return true end
 deliver("onClientPedDamage", npc, localPlayer, 0, 3, 5)
 deliver("onClientPreRender", root)
@@ -350,6 +351,21 @@ triggerServerEvent=previousReport
 setPedRotation=previousRotation
 deliver("npc_hlc:control",resourceRoot,npc,11,false,false)
 walkNPCTrafficFormation=oldWalk
+-- A fleeing owner that reaches a node before the next server assignment
+-- keeps moving in its escape direction while the arrival is acknowledged.
+npc.x,npc.y=0,0
+local flight={"walkTrafficToPoint",2,0,0,.25,flee=true}
+deliver("npc_hlc:control",resourceRoot,npc,12,flight,npc)
+deliver("onClientPreRender",root)
+local continued=false
+function steerNPCFlight(ped,walk,dx,dy)
+    assert(ped==npc and dx>0 and dy==0)
+    continued=true
+    walk.action="Flee away from threat"
+end
+npc.x=2
+deliver("onClientPreRender",root)
+assert(continued and not getNPCDebugExecution(npc,12)[9])
 
 """
 
@@ -2170,7 +2186,7 @@ def check_reaction_latency():
     lua.execute(SERVER_MOCK)
     lua.execute("""
         local function noop() end
-        exports={npc_hlc={isHLCEnabled=function() return true end,clearNPCTasks=function(_,p) p.task=nil end,setNPCWalkSpeed=noop,
+        exports={npc_hlc={isHLCEnabled=function() return true end,clearNPCTasks=function(_,p) p.task=nil end,setNPCWalkSpeed=function(_,p,pace) p.pace=pace end,
             addNPCTask=function(_,p,t) assert(p.task and not p.preview); p.preview=t; return true end,
             setNPCTask=function(_,p,t) p.task,p.issued=t,now; return true end}}
         TrafficVisibility={track=noop,pedestrianRange=100,pedestrianMaxScale=1,pedestrianScale=function() return 1 end}
@@ -2227,16 +2243,16 @@ def check_reaction_latency():
         local stale=packets[#packets]
         switched.syncer=element("player")
         deliver("npchlc_traffic:worldProbeResult",resourceRoot,stale[1][1],{-1})
-        assert(not switched.issued)
+        assert(switched.task[1]=="fleeFromPoint" and switched.issued==start)
         local changed=crowd[78]
         deliver("npchlc_traffic:pedHit",resourceRoot,changed,player,22,6)
         stale=packets[#packets]
         assert(PedAI.brain(changed):react("damage",player,0,"fight"))
         deliver("npchlc_traffic:worldProbeResult",resourceRoot,stale[1][1],{-1})
-        assert(not changed.issued)
+        assert(not changed.task and changed.issued==start)
         now=now+17
         deliver("npchlc_traffic:worldProbeResult",resourceRoot,probe[1][1],{-1})
-        assert(runner.task[1]=="walkTrafficToPoint" and runner.issued==start+17)
+        assert(runner.task[1]=="walkTrafficToPoint" and runner.issued==start+17 and runner.pace=="sprint")
         local ahead=packets[#packets]
         assert(ahead[1][3]==runner and ahead[1][5].x==runner.task[2])
         deliver("npchlc_traffic:worldProbeResult",resourceRoot,ahead[1][1],{-1})
@@ -4721,6 +4737,33 @@ def check_pedestrian_avoidance():
     function stopNPCWalkingActions(ped) ped.target = nil end
     local forward = {"walkTrafficToPoint", 8, 0, 0.7, 0.2}
     local backward = {"walkTrafficToPoint", -8, 0, 0.7, 0.2}
+    -- Stair nodes can sit below collision after integer Z import. Movement
+    -- may follow the treads but must not cross a solid wall at body height.
+    local savedGround,savedSight=processLineOfSight,isLineOfSightClear
+    local function slope(x) return .4*x end
+    function processLineOfSight(x,y,top,_,__,bottom)
+        local z=slope(x)
+        return top>=z and bottom<=z,x,y,z,nil,0,0,.93
+    end
+    function isLineOfSightClear(x,y,z,tx,ty,tz) return z>slope(x) and tz>slope(tx) end
+    pedestrians={a}
+    local stairs={"walkTrafficToPoint",3,0,0,0.2}
+    walkNPCTrafficAroundPeds(a,stairs,{})
+    assert(a.target and a.target[1]==3)
+    a.x,a.z=3,2.2
+    local down={"walkTrafficToPoint",0,0,-.5,.2}
+    walkNPCTrafficAroundPeds(a,down,{})
+    assert(a.target and a.target[1]==0)
+    steerNPCFlight(a,{},-1,0)
+    assert(a.target and a.target[1]<2 and a.target[2]==0)
+    a.x,a.z=0,.7
+    steerNPCFlight(a,{},1,0)
+    assert(a.target and a.target[1]>1 and a.target[2]==0)
+    function isLineOfSightClear() return false end
+    steerNPCFlight(a,{},1,0)
+    assert(not a.target)
+    processLineOfSight,isLineOfSightClear=savedGround,savedSight
+    pedestrians={a,b}
     local pa, pb = {}, {}
     walkNPCTrafficAroundPeds(a, forward, pa)
     walkNPCTrafficAroundPeds(b, backward, pb)

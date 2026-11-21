@@ -165,7 +165,7 @@ def check():
         function isElementStreamedIn() return true end
         function getElementData(p,k) return p[k] end
         function getPedAnimation(p) return p.block,p.clip end
-        function setPedAnimation(p,block,clip) p.block,p.clip=block,clip end
+        function setPedAnimation(p,block,clip) p.block,p.clip=block,clip; return true end
         function setPedAnimationProgress(p,_,t) p.progress=t end
         function triggerServerEvent(_,_,p,revision) p.revision=revision end
     """)

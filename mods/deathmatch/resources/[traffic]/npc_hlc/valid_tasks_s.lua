@@ -1,4 +1,5 @@
 local signatures = {
+    fleeFromPoint = "nn",
     walkToPos = "nnnd",
     walkTrafficToPoint = "nnnd",
     walkTrafficCrossing = "nnndnn",
@@ -54,6 +55,7 @@ function normalizeNPCTask(task)
     end
 
     local normalized = {task[1]}
+    if task[1]=="walkTrafficToPoint" and task.flee==true then normalized.flee=true end
     if task[1] == "driveTrafficRail" then normalized.style = task.style end
     for index = 1, #signature do
         local rule = signature:sub(index, index)

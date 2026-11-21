@@ -10,7 +10,7 @@ local watchTimes = {}
 local cursor, revision = 1, 0
 local timings = {}
 local timingIndex, budgetExhaustions = 1, 0
-local clientDrivenTraffic = {driveTrafficToPoint = true, driveTrafficRail = true, driveTrafficPhysics = true}
+local clientDrivenTraffic = {fleeFromPoint=true, driveTrafficToPoint = true, driveTrafficRail = true, driveTrafficPhysics = true}
 
 local function elapsedMs(now, before)
     return (now - before) % 4294967296
@@ -176,7 +176,7 @@ local function cycleNPCs()
         local task, actor = state.assignedTask, state.actor
         if task then
             local passed=false
-            if actor and state.preview and task[1]=="walkTrafficToPoint" then
+            if actor and (state.preview or task.flee) and task[1]=="walkTrafficToPoint" then
                 local x,y,z=getElementPosition(actor)
                 if state.sampledWalk==task and state.walkOwner==state.owner then
                     local dx,dy=x-state.walkX,y-state.walkY

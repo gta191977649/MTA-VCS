@@ -4,9 +4,22 @@ function performTask.walkToPos(npc, task, _, progress)
     walkNPCTrafficAroundPeds(npc, task, progress)
 end
 
+function performTask.fleeFromPoint(npc, task, _, progress)
+    local x,y=getElementPosition(npc)
+    steerNPCFlight(npc,progress,x-task[2],y-task[3])
+end
+
 function performTask.walkTrafficToPoint(npc, task, _, progress)
     progress.runningCrossing = nil
+    if task.flee then
+        local x,y=getElementPosition(npc)
+        progress.flightDX,progress.flightDY=task[2]-x,task[3]-y
+    end
     walkNPCTrafficAroundPeds(npc, task, progress)
+    if task.flee and progress.waiting and not progress.waitForCar and not progress.localRoute
+        and not progress.detour and not progress.carDetour then
+        steerNPCFlight(npc,progress,progress.flightDX,progress.flightDY)
+    end
 end
 
 function performTask.walkTrafficCrossing(npc, task, _, progress)

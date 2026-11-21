@@ -21,7 +21,7 @@ local function describe(ped,brain)
         end
         return "Road rage",event.maneuver,native
     end
-    if event and event.intent=="flee" and event.probe and not event.task then
+    if event and event.intent=="flee" and event.probe and not event.task and not event.steering then
         return "flee","Awaiting route"
     end
     if event and (event.intent or event.order) then return event.intent or event.order,event.task end
