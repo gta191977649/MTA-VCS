@@ -590,7 +590,7 @@
     <building posX="-22.953686" posY="-1514.974609" posZ="12.348667" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="washvegy2413" />
     <building posX="-102.681862" posY="-1616.379028" posZ="10.845713" rotX="0.000000" rotY="-0.000000" rotZ="-103.999988" interior="0" dimension="0" id="new_bushsm" />
     <building posX="-89.008751" posY="-1605.401367" posZ="10.845713" rotX="0.000000" rotY="-0.000000" rotZ="-103.999988" interior="0" dimension="0" id="new_bushsm" />
-    <building posX="344.732574" posY="-243.193176" posZ="36.684135" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="lodris_wheel" uniqueID="11253" />
+    <object forceObject="true" lowLOD="true" posX="344.732574" posY="-243.193176" posZ="36.684135" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="lodris_wheel" uniqueID="11253" />
     <building posX="221.292557" posY="-224.871567" posZ="-2.340917" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodrbits13c" uniqueID="11272" />
     <building posX="539.317871" posY="80.287933" posZ="35.254303" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lod_hotel01" uniqueID="11369" />
     <building posX="412.021515" posY="-658.346924" posZ="17.725641" rotX="0.000000" rotY="-0.000000" rotZ="-23.000004" interior="0" dimension="0" id="lodcolony_hot_f1b2c" uniqueID="11188" />
@@ -2230,7 +2230,7 @@
     <building posX="392.693634" posY="-349.247986" posZ="8.977684" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="ocndbridge" lodParent="loddbridge" uniqueID="11252" />
     <building posX="534.799683" posY="-373.819061" posZ="9.956432" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="odnroad06_dy" />
     <building posX="471.208710" posY="-440.314697" posZ="9.741184" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="odalleyground5_dy" />
-    <building posX="342.189087" posY="-243.189011" posZ="36.895248" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="ferris_wheel" lodParent="lodris_wheel" uniqueID="11253" />
+    <object forceObject="true" frozen="true" streamable="false" posX="342.189087" posY="-243.189011" posZ="36.895248" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="ferris_wheel" lodParent="lodris_wheel" uniqueID="11253" />
     <building posX="484.981659" posY="-454.150330" posZ="20.895014" rotX="-0.492987" rotY="-1.161513" rotZ="22.995003" interior="0" dimension="0" id="deco_buildkb25" lodParent="lodo_buildkb25" uniqueID="11254" />
     <building posX="466.094391" posY="-504.675049" posZ="15.106627" rotX="0.000000" rotY="-0.000000" rotZ="-11.399991" interior="0" dimension="0" id="nt_aircon1dbl_443e0" />
     <building posX="455.990967" posY="-485.815033" posZ="15.628222" rotX="-0.000000" rotY="-0.000000" rotZ="170.000000" interior="0" dimension="0" id="nt_aircon1_01_d110f" />

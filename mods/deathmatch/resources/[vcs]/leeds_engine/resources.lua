@@ -8,6 +8,7 @@ vcsResources = {
     { "font" },
     { "wanted" },
     { "frontend" },
+    { "marker" },
     { "mradar" },
     { "garage" },
     { "enex" },
@@ -25,6 +26,8 @@ vcsResources = {
     { "npc_hlc" },
     { "vcs_model", ifInstalled = true },
     { "npchlc_traffic" },
+    { "mission" },
+    { "funfield" },
     { "placement" },
     { "vcs_credit" },
 

@@ -1,14 +1,15 @@
-local rows = {}
+local rows, leftRows = {}, {}
 local theme = getHudTheme()
 local labelStyle = {size = 17, color = theme.muted, maxLines = 1}
 local valueStyle = {size = 17, color = theme.foreground, align = "right", maxLines = 1}
 
-function showLeftTextForPlayer(title, value, place)
+function showLeftTextForPlayer(title, value, place, side)
+    local slots = side == "left" and leftRows or rows
     local single = value == nil or (type(value) == "number" and place == nil)
     local slot = Hud.slot(single and value or place)
     if not slot or type(title) ~= "string" then return false end
     if not single and type(value) ~= "string" and type(value) ~= "number" then return false end
-    rows[slot] = {
+    slots[slot] = {
         owner = Hud.owner(),
         label = not single and {text = title, style = labelStyle} or nil,
         value = {text = single and title or tostring(value), style = valueStyle},
@@ -16,10 +17,11 @@ function showLeftTextForPlayer(title, value, place)
     return true
 end
 
-function hideLeftTextForPlayer(place)
+function hideLeftTextForPlayer(place, side)
+    local slots = side == "left" and leftRows or rows
     local slot = Hud.slot(place)
-    if not slot or not rows[slot] then return false end
-    rows[slot] = nil
+    if not slot or not slots[slot] or (side == "left" and slots[slot].owner ~= Hud.owner()) then return false end
+    slots[slot] = nil
     return true
 end
 
@@ -30,13 +32,15 @@ addEventHandler("hideClientLeftTextForPlayer", localPlayer, hideLeftTextForPlaye
 
 addEventHandler("onClientResourceStop", root, function(resource)
     local owner = getResourceName(resource)
-    for slot, row in pairs(rows) do
-        if row.owner == owner then rows[slot] = nil end
+    for _,slots in ipairs({rows,leftRows}) do
+        for slot,row in pairs(slots) do
+            if row.owner == owner then slots[slot] = nil end
+        end
     end
 end)
 
-function Hud.drawTaskText(screen, slot, left, right, y, width)
-    local row = rows[slot]
+function Hud.drawTaskText(screen, slot, left, right, y, width, side)
+    local row = (side == "left" and leftRows or rows)[slot]
     if not row then return false end
     local valueWidth = width
     if row.label then

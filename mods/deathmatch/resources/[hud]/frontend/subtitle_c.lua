@@ -1,4 +1,4 @@
-local style = {face = "gametext", nativeScale = 0.61, align = "center", maxLines = 4}
+local style = {face = "gametext", nativeScale = 0.55, align = "center", maxLines = 4}
 
 function showCaptionForPlayer(text, timer)
     local duration = Hud.number(timer, 1000)
@@ -7,8 +7,8 @@ function showCaptionForPlayer(text, timer)
     return Hud.set("caption", text, duration, style)
 end
 
-function hideCaptionForPlayer()
-    return Hud.clear("caption")
+function hideCaptionForPlayer(onlyCaller)
+    return Hud.clear("caption",onlyCaller==true and Hud.owner() or nil)
 end
 
 addEvent("showClientCaption", true)

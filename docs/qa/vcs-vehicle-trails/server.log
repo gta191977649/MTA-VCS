@@ -1,0 +1,58 @@
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : VCS lamp trails isolated acceptance
+= Server IP address: 127.0.0.1
+= Server port      : 60376
+= 
+= Log file         : ..66968226600/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 52149
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-22 02:26:09] File 'settings.xml' not present, creating new node.
+[2026-11-22 02:26:12] Resources: 13 loaded, 0 failed
+[2026-11-22 02:26:12] Starting resources...
+[2026-11-22 02:26:12] Server minclientversion is now 1.3.4
+[2026-11-22 02:26:12] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed.
+[2026-11-22 02:26:12] Some files in 'skygfx' use deprecated functions.
+[2026-11-22 02:26:12] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-22 02:26:12] Server minclientversion is now 1.6.0-9.22676
+[2026-11-22 02:26:13] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-22 02:26:13] WARNING: <owner_email_address> not set
+[2026-11-22 02:26:13] Server started and is ready to accept connections!
+[2026-11-22 02:26:13] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-22 02:26:13] Type 'help' for a list of commands.
+[2026-11-22 02:26:14] INFO: [npchlc_traffic] Loaded 5308 pedestrian, 2701 road and 378 boat nodes, 17652 links and 1 routes.
+[2026-11-22 02:26:20] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-22 02:26:20] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-22 02:26:27] TRAIL_QA CLIENT_READY
+[2026-11-22 02:26:28] INFO: nurupo    Loaded vcs In: 5.39 Seconds
+[2026-11-22 02:26:43] TRAIL_QA BEGIN front-full
+[2026-11-22 02:26:48] TRAIL_QA RESULT front-full [{"total":1110,"maximum":10,"frames":120,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":10,"active":true,"lamps":16,"samples":2,"failures":0}}]
+[2026-11-22 02:26:48] TRAIL_QA BEGIN rear-full
+[2026-11-22 02:26:49] TRAIL_QA SCREENSHOT run1-player-front-full-orbit
+[2026-11-22 02:26:53] TRAIL_QA RESULT rear-full [{"total":1130,"maximum":12,"frames":120,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":10,"active":true,"lamps":17,"samples":2,"failures":0}}]
+[2026-11-22 02:26:53] TRAIL_QA BEGIN front-reduced
+[2026-11-22 02:26:53] TRAIL_QA SCREENSHOT run1-player-rear-full-orbit
+[2026-11-22 02:26:58] TRAIL_QA RESULT front-reduced [{"total":990,"maximum":10,"frames":121,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:26:58] TRAIL_QA BEGIN front-off
+[2026-11-22 02:26:58] TRAIL_QA SCREENSHOT run1-player-front-reduced-orbit
+[2026-11-22 02:27:03] TRAIL_QA RESULT front-off [{"total":770,"maximum":10,"frames":121,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:27:03] TRAIL_QA BEGIN damaged
+[2026-11-22 02:27:03] TRAIL_QA SCREENSHOT run1-player-front-off-orbit
+[2026-11-22 02:27:08] TRAIL_QA RESULT damaged [{"total":305,"maximum":5,"frames":120,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:27:08] TRAIL_QA BEGIN lights-off
+[2026-11-22 02:27:08] TRAIL_QA SCREENSHOT run1-player-damaged-orbit
+[2026-11-22 02:27:13] TRAIL_QA RESULT lights-off [{"total":0,"maximum":0,"frames":121,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:27:13] TRAIL_QA BEGIN disabled
+[2026-11-22 02:27:18] TRAIL_QA RESULT disabled [{"total":0,"maximum":0,"frames":121,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":false,"lamps":0,"samples":0,"failures":0}}]
+[2026-11-22 02:27:18] TRAIL_QA BEGIN reenabled
+[2026-11-22 02:27:23] TRAIL_QA RESULT reenabled [{"total":560,"maximum":10,"frames":121,"driver":true,"npc":false,"model":400,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:27:23] TRAIL_QA BEGIN model
+[2026-11-22 02:27:23] TRAIL_QA SCREENSHOT run1-player-reenabled-orbit
+[2026-11-22 02:27:28] TRAIL_QA RESULT model [{"total":320,"maximum":5,"frames":121,"driver":true,"npc":false,"model":411,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":29,"samples":0,"failures":0}}]
+[2026-11-22 02:27:28] TRAIL_QA BEGIN npc
+[2026-11-22 02:27:28] TRAIL_QA SCREENSHOT run1-player-model-orbit
+[2026-11-22 02:27:37] QUIT: nurupo left the game [Quit] 

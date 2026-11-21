@@ -100,6 +100,7 @@
 	<export function="acquireTrafficPedInArea" type="server" http="false" />
 	<export function="acquireTrafficPed" type="server" http="false" />
 	<export function="releaseTrafficPed" type="server" http="false" />
+	<export function="isMissionPedSeated" type="server" http="false" />
 	<export function="assignTrafficPedObjective" type="server" http="false" />
 	<export function="setTrafficDensity" type="server" http="false" />
 	<export function="getTrafficDensity" type="server" http="false" />
@@ -109,6 +110,12 @@
 	<export function="chooseTrafficPedestrianStep" type="server" http="false" />
 	<export function="findTrafficPedestrianAnchor" type="server" http="false" />
 	<export function="setNPCTrafficRoute" type="server" http="false" />
+	<export function="acquireMissionTrafficDriver" type="server" http="false" />
+	<export function="driveMissionTrafficTo" type="server" http="false" />
+	<export function="cruiseMissionTraffic" type="server" http="false" />
+	<export function="getMissionTrafficRoad" type="server" http="false" />
+	<export function="getTrafficNodePosition" type="server" http="false" />
+	<export function="getTrafficIslandAt" type="server" http="false" />
 	<export function="setNPCTrafficDrivingStyle" type="server" http="false" />
 	<export function="setTrafficPolicePed" type="server" http="false" />
 	<export function="sampleTrafficFlight" type="server" http="false" />

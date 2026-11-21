@@ -1,3 +1,8 @@
+-- The PS2 map's water.dat is streamed by eagleLoader. Loading the legacy
+-- polygons as well consumes native water slots and leaves race routes dry.
+local map = getResourceFromName("vcs")
+if map and (getResourceState(map) == "running" or getResourceState(map) == "starting") then return end
+
 setWaterLevel(-10000)
 
 Water = {

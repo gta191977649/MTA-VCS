@@ -22,7 +22,9 @@
     <script src="pipeline/postfx.lua" type="client" cache="false"/>
     <script src="pipeline/worldPipe.lua" type="client" cache="false"/>
     <script src="pipeline/vcsSun.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsMarker.lua" type="client" cache="false"/>
     <script src="pipeline/vcsVehicle.lua" type="client" cache="false"/>
+    <script src="pipeline/vcsVehicleTrails.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatSheet.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatParticles.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatWake.lua" type="client" cache="false"/>
@@ -58,7 +60,9 @@
     <file src="shader/mta-helper.fx" type="client"/>
     <file src="shader/vcsWorld.fx" type="client"/>
     <file src="shader/vcsSun.fx" type="client"/>
+    <file src="shader/vcsMarker.fx" type="client"/>
     <file src="shader/vcsVehicle.fx" type="client"/>
+    <file src="shader/vcsVehicleTrails.fx" type="client"/>
     <file src="shader/vcsWater.fx" type="client"/>
     <file src="models/vcsAlphaTextures.txt" type="client"/>
     <file src="models/vcsShopTextures.txt" type="client"/>
@@ -101,7 +105,11 @@
     <export function="stop" type="client"/>
     <export function="setVcsPostProcessing" type="client"/>
     <export function="getVcsGraphicsStats" type="client"/>
+    <export function="getVcsRenderedSun" type="client"/>
+    <export function="getVcsSunDirection" type="client"/>
     <export function="getTimeCycleValue" type="client"/>
+    <export function="createVcsMarkerMaterial" type="client"/>
+    <export function="getVcsMarkerLighting" type="client"/>
     <export function="getVcsWeather" type="client"/>
     <export function="getOutdoorWeather" type="client"/>
     <export function="setVcsWeather" type="client"/>

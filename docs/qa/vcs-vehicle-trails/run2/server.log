@@ -1,0 +1,68 @@
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : VCS lamp trails isolated acceptance
+= Server IP address: 127.0.0.1
+= Server port      : 60376
+= 
+= Log file         : ..66968226600/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 52149
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-22 02:33:33] Compacting accounts database 'internal.db' ...
+[2026-11-22 02:33:33] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-22 02:33:36] Resources: 14 loaded, 0 failed
+[2026-11-22 02:33:36] Compacting database 'registry.db' ...
+[2026-11-22 02:33:36] Starting resources...
+[2026-11-22 02:33:36] Server minclientversion is now 1.6.0-9.21938
+[2026-11-22 02:33:36] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed.
+[2026-11-22 02:33:36] Some files in 'skygfx' use deprecated functions.
+[2026-11-22 02:33:36] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-22 02:33:36] Server minclientversion is now 1.6.0-9.22676
+[2026-11-22 02:33:37] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-22 02:33:37] WARNING: <owner_email_address> not set
+[2026-11-22 02:33:37] Server started and is ready to accept connections!
+[2026-11-22 02:33:37] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-22 02:33:37] Type 'help' for a list of commands.
+[2026-11-22 02:33:38] INFO: [npchlc_traffic] Loaded 5308 pedestrian, 2701 road and 378 boat nodes, 17652 links and 1 routes.
+[2026-11-22 02:33:41] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-22 02:33:41] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-22 02:33:48] TRAIL_QA CLIENT_READY
+[2026-11-22 02:33:49] INFO: nurupo    Loaded vcs In: 4.85 Seconds
+[2026-11-22 02:34:04] TRAIL_QA GROUND 10.607559204102
+[2026-11-22 02:34:04] TRAIL_QA BEGIN front-full
+[2026-11-22 02:34:08] TRAIL_QA SCREENSHOT run2-player-front-full-orbit
+[2026-11-22 02:34:09] TRAIL_QA RESULT front-full [{"total":1169,"maximum":30,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":29,"active":true,"lamps":26,"samples":5,"failures":0}}]
+[2026-11-22 02:34:09] TRAIL_QA BEGIN rear-full
+[2026-11-22 02:34:12] TRAIL_QA SCREENSHOT run2-player-rear-full-orbit
+[2026-11-22 02:34:14] TRAIL_QA RESULT rear-full [{"total":2433,"maximum":30,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":16,"active":true,"lamps":24,"samples":4,"failures":0}}]
+[2026-11-22 02:34:15] TRAIL_QA BEGIN front-reduced
+[2026-11-22 02:34:18] TRAIL_QA SCREENSHOT run2-player-front-reduced-orbit
+[2026-11-22 02:34:20] TRAIL_QA RESULT front-reduced [{"total":3262,"maximum":41,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":26,"active":true,"lamps":32,"samples":4,"failures":0}}]
+[2026-11-22 02:34:20] TRAIL_QA BEGIN front-off
+[2026-11-22 02:34:23] TRAIL_QA SCREENSHOT run2-player-front-off-orbit
+[2026-11-22 02:34:25] TRAIL_QA RESULT front-off [{"total":2081,"maximum":30,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":25,"active":true,"lamps":32,"samples":4,"failures":0}}]
+[2026-11-22 02:34:26] TRAIL_QA BEGIN damaged
+[2026-11-22 02:34:29] TRAIL_QA SCREENSHOT run2-player-damaged-orbit
+[2026-11-22 02:34:31] TRAIL_QA RESULT damaged [{"total":1485,"maximum":25,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":15,"active":true,"lamps":27,"samples":3,"failures":0}}]
+[2026-11-22 02:34:31] TRAIL_QA BEGIN lights-off
+[2026-11-22 02:34:34] TRAIL_QA SCREENSHOT run2-player-lights-off-orbit
+[2026-11-22 02:34:36] TRAIL_QA RESULT lights-off [{"total":144,"maximum":10,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":5,"active":true,"lamps":31,"samples":1,"failures":0}}]
+[2026-11-22 02:34:37] TRAIL_QA BEGIN disabled
+[2026-11-22 02:34:40] TRAIL_QA SCREENSHOT run2-player-disabled-orbit
+[2026-11-22 02:34:42] TRAIL_QA RESULT disabled [{"total":0,"maximum":0,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":false,"lamps":0,"samples":0,"failures":0}}]
+[2026-11-22 02:34:42] TRAIL_QA BEGIN reenabled
+[2026-11-22 02:34:45] TRAIL_QA SCREENSHOT run2-player-reenabled-orbit
+[2026-11-22 02:34:48] TRAIL_QA RESULT reenabled [{"total":1155,"maximum":20,"frames":119,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":10,"active":true,"lamps":27,"samples":2,"failures":0}}]
+[2026-11-22 02:34:48] TRAIL_QA BEGIN model
+[2026-11-22 02:34:51] TRAIL_QA SCREENSHOT run2-player-model-orbit
+[2026-11-22 02:34:53] TRAIL_QA RESULT model [{"total":1377,"maximum":24,"frames":120,"driver":true,"npc":false,"model":596,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":24,"active":true,"lamps":30,"samples":6,"failures":0}}]
+[2026-11-22 02:34:54] TRAIL_QA BEGIN npc
+[2026-11-22 02:34:56] TRAIL_QA SCREENSHOT run2-npc-npc-orbit
+[2026-11-22 02:35:19] TRAIL_QA RESULT npc [{"total":8400,"maximum":20,"frames":720,"driver":false,"npc":true,"model":596,"npcSegments":8920,"npcFrames":749,"failed":false,"stats":{"segments":15,"active":true,"lamps":26,"samples":3,"failures":0}}]
+[2026-11-22 02:35:19] TRAIL_QA NPC_OBSERVED
+[2026-11-22 02:35:19] TRAIL_QA ASSERTIONS_PASS
+[2026-11-22 02:35:19] TRAIL_QA FINISH
+[2026-11-22 02:35:22] TRAIL_QA COMPLETE

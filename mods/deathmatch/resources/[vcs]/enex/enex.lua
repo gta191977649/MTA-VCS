@@ -11,10 +11,10 @@ function createEnex(x1,y1,z1,rot,w1,w2,x2,y2,z2,rot2,int,flag,name)
     local swx, swy = getPositionFromOffsetByPosRot(x1, y1, z1, 0.0, 0.0, rot, w1/2, -w2/2, 0.0)
 
     --[[
-    createMarker(nwx, nwy, z1, "cylinder", 0.4)
-    createMarker(sex, sey, z1, "cylinder", 0.4)
-    createMarker(nex, ney, z1, "cylinder", 0.4)
-    createMarker(swx, swy, z1, "cylinder", 0.4)
+    exports.marker:createMarker(nwx, nwy, z1, "cylinder", 0.4)
+    exports.marker:createMarker(sex, sey, z1, "cylinder", 0.4)
+    exports.marker:createMarker(nex, ney, z1, "cylinder", 0.4)
+    exports.marker:createMarker(swx, swy, z1, "cylinder", 0.4)
     --]]
 
     local colshape = createColPolygon (x1,y1, nwx, nwy,sex, sey, nex, ney,swx, swy)
@@ -26,7 +26,7 @@ function createEnex(x1,y1,z1,rot,w1,w2,x2,y2,z2,rot2,int,flag,name)
         flag = tonumber(flag),
         name = name,
     }
-    local marker = createMarker(x1,y1,z1+2,"arrow",1.5,0,255,255,100)
+    local marker = exports.marker:createMarker(x1,y1,z1+2,"arrow",1.5,0,255,255,100)
     setElementParent(marker,enexElement)
     setElementInterior(marker,int)
     setElementInterior(colshape,int)

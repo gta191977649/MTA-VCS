@@ -1,0 +1,11 @@
+[2026-11-21 17:18:29] INFO: Definition mtraffic1 is using native behavior model 1350.
+[2026-11-21 17:18:29] INFO: Definition mtraffic2 is using native behavior model 1351.
+[2026-11-21 17:18:29] INFO: Expanded the building pool from 13000 to 21199 for 9158 candidate placements.
+[2026-11-21 17:18:30] INFO: Eagle: vcs created 7657 buildings and 3632 objects from 11289 placements.
+[2026-11-21 17:18:30] INFO: Parsed 212 water quads from :vcs/water.dat
+[2026-11-21 17:18:30] INFO: Wrote debug to: debug.txt
+[2026-11-21 17:19:19] INFO: eagleLoader: leaving active map streaming limits to session cleanup
+INFO: Logging to this file ended
+[2026-11-21 17:19:26] INFO: MTA Version: 1.7.0-7.27005.0
+[2026-11-21 17:19:26] INFO: SKYGFX DEBUG LOADED
+[2026-11-21 17:19:26] INFO: SkyGfx VCS: world=true alphaTextures=358 shopTextures=22 post=true bloom=true

@@ -1,6 +1,7 @@
 <meta>
     <export function="getDlcVehicleCatalog" type="client"/>
     <export function="getDlcVehicleBase" type="server"/>
+    <export function="bindDlcReplacementPaint" type="server"/>
     <include resource="vcs_vehicle"/>
     <include resource="vcs_model"/>
 

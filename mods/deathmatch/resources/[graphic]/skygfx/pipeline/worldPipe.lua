@@ -8,6 +8,18 @@ trianglestrip.quad1x1 = {
     {1, -1, 0, tocolor(255, 255, 255), 1, 0},
     {1, 1, 0, tocolor(255, 255, 255), 1, 1}
 }
+local function vcsSunVector()
+    local hour,minute=getTime()
+    local angle=(minute+60*hour+minute/60)*0.0043633231
+    local sx,sy,sz=0.7+math.sin(angle),-0.7,0.2-math.cos(angle)
+    return sx,sy,sz,hour>=5 and hour<=19 and sz>0 and getRainLevel()<0.2
+end
+function getVcsSunDirection()
+    local sx,sy,sz,visible=vcsSunVector()
+    local length=math.sqrt(sx*sx+sy*sy+sz*sz)
+    return sx/length,sy/length,sz/length,visible
+end
+
 function doSunFX() 
 	if not sunShader then return end
     -- check time rage
@@ -19,12 +31,7 @@ function doSunFX()
         dxSetShaderValue( sunShader, "sSunColor2", c2r / 255, c2g / 255, c2b / 255, 1  )
         dxSetShaderValue( sunShader, "sSunSize", sunSize  )
         -- update the sun position
-        local h,m =	getTime()
-        s = m
-        sunAngle = (m + 60 * h + s/60.0) * 0.0043633231;
-        x = 0.7 + math.sin(sunAngle);
-        y = -0.7;
-        z = 0.2 - math.cos(sunAngle);
+        local x,y,z=vcsSunVector()
         dxSetShaderValue( sunShader, "sSunVec",{x,y,z} )
         dxDrawMaterialPrimitive3D( "trianglestrip", sunShader, false, unpack( trianglestrip.quad1x1 ) )	
 

@@ -10,8 +10,10 @@
     <export function="reportWantedEvent" type="server" />
     <export function="reportWantedCrime" type="server" />
     <export function="suspendPlayerWanted" type="server" />
+    <export function="getPlayerWantedCap" type="server" />
     <export function="setPlayerWantedCap" type="server" />
     <export function="setPlayerCrimeMultiplier" type="server" />
+    <export function="getPlayerCrimeMultiplier" type="server" />
     <export function="setPlayerPoliceOverride" type="server" />
     <export function="getPlayerPoliceResponse" type="server" />
     <export function="getWantedResponseForLevel" type="server" />

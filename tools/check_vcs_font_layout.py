@@ -18,7 +18,8 @@ STYLES = (
     ("Vehicle", "showGameText('Cheetah', 'VEHICLE_NAME', 0)", "fancytext", 1),
     ("Interior", "showGameText('Ocean View Hotel', 'LOCATION_NAME', 0)", "fancytext", 1),
     ("Help box", "showTextBox('Press ~X~ to enter the building.~n~Press again to leave.', 0, false)", "gametext", .6),
-    ("Subtitle", "showCaptionForPlayer('We have to get out of here.', 0)", "gametext", .61),
+    ("Subtitle", "showCaptionForPlayer('We have to get out of here.', 0)", "gametext", .55),
+    ("Mission passed", "showGameText('MISSION PASSED!', 'missionPassed', 2000)", "bigtext", 1),
     *((f"GameText {index}", f"showGameTextForPlayer('GameText {index}', {index}, 3000)", face, scale)
       for index, (face, scale) in enumerate((
           ("bigtext", 1), ("fancytext", 1.2), ("bigtext", 1), ("gametext", 1), ("gametext", 1),
@@ -95,10 +96,99 @@ def rgba(color):
     return tuple(color[i] for i in (1, 2, 3, 4))
 
 
+def check_vehicle_mission_hud():
+    """Run the mission event against frontend and measure the submitted atlas text."""
+    lua = make_runtime()
+    for name in ("user_display_c.lua", "lefttext_c.lua", "bar_c.lua"):
+        lua.execute((FRONTEND / name).read_text(encoding="utf-8"))
+    lua.execute("""
+        local events = {}
+        function addEventHandler(key, _, callback) events[key] = callback end
+        function getElementDimension() return 0 end
+        function getElementInterior() return 0 end
+        function getResourceFromName(name) return name end
+        exports.frontend = setmetatable({}, {__index=function(_, key)
+            return function(_, ...) return _G[key](...) end
+        end})
+        function CFont:draw(text, name, x, y, size, color, shadow, aspect)
+            recordText(text, x, y, x + self:width(text, size, name) * (aspect or 1))
+        end
+        function missionHud(...) events["mission:hud"](...) end
+        function startMission() events["mission:start"]("Taxi Driver",17) end
+        function endMission() events["mission:end"](false,false,17) end
+    """)
+    mission = FRONTEND.parents[1] / "[mission]/mission/main_c.lua"
+    lua.execute(mission.read_text(encoding="utf-8"))
+    state = lua.globals()
+    state.startMission()
+    state.tick += 10000
+    face = json.loads((ASSETS / "manifest.json").read_bytes())["fonts"]["gametext"]
+    pitch = math.ceil(face["lineHeight"] * .6)
+    for width, height in RESOLUTIONS:
+        state.screenWidth, state.screenHeight = width, height
+        runs = []
+        state.recordText = lambda text, x, y, end: runs.append((text, x, y, end))
+        rects = []
+        state.dxDrawRectangle = lambda x, y, w, h, *_: rects.append((x, y, w, h))
+        sx, sy, *_ = reference_layout(width, height)
+        sx, sy = sx * 640 / 480, sy * 448 / 272
+        for seconds, fares in ((75, 3), (None, 123456)):
+            runs.clear()
+            rects.clear()
+            state.missionHud("taxi", 1, seconds, "Fares", fares, "Tip", 80, 17)
+            state.handlers.render()
+            rows = ([("Time", "1:15")] if seconds else []) + [("Fares", str(fares)), ("Tip", "")]
+            for row, (label, value) in enumerate(rows):
+                y = (100 + 20 * row) * sy
+                glyphs = sorted((run for run in runs if math.isclose(run[2], y)), key=lambda run: run[1])
+                assert "".join(run[0] for run in glyphs) == label + value, (width, height, runs)
+                label_width = sum(math.ceil(face["glyphs"][str(ord(c))][1] * .6) for c in label)
+                label_end = width - max(75, 24 + len(value) * pitch + 4) * sx
+                assert math.isclose(glyphs[0][1], label_end - label_width * sx, abs_tol=.01)
+                if value:
+                    for index, c in enumerate(value):
+                        centered = (face["lineHeight"] - face["glyphs"][str(ord(c))][1]) * .3
+                        x = width - (24 + (len(value) - index) * pitch - centered) * sx
+                        assert math.isclose(glyphs[len(label)+index][1], x, abs_tol=.01)
+            fill = (width - 66*sx, (101 + 20*(len(rows)-1))*sy, 41*.8*sx, 11*sy)
+            assert any(all(math.isclose(a, b) for a, b in zip(rect, fill)) for rect in rects), rects
+    lua.execute("""
+        sourceResource = "garage"
+        assert(showCaptionForPlayer("Servicing vehicle",0))
+        assert(showGameText("Garage", "garage",10000))
+        assert(showTextBox("Garage doors",10000,false))
+        sourceResource = "mission"
+        startMission()
+        assert(Hud.message("big1",tick).owner=="mission")
+        endMission()
+        assert(not Hud.message("big1",tick))
+        assert(Hud.message("caption",tick).owner=="garage")
+        assert(Hud.message("garage",tick).owner=="garage")
+        assert(Hud.message("help",tick).owner=="garage")
+    """)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    check_vehicle_mission_hud()
+    lua = make_runtime()
+    lua.execute("""
+        showGameText("MISSION PASSED!", "missionPassed", 2000)
+        showCaptionForPlayer("Destination", 2000)
+        for _, sample in ipairs({{0,0},{250,0.5},{500,1},{2499,1},{2750,0.5}}) do
+            local entry, opacity = Hud.message("missionPassed",sample[1])
+            assert(entry and opacity==sample[2])
+            assert(entry.style.align=="center" and entry.style.valign=="center")
+        end
+        assert(not Hud.message("missionPassed",3000))
+        for _, at in ipairs({0,1,250,1999}) do
+            local entry, opacity = Hud.message("caption",at)
+            assert(entry and opacity==1)
+        end
+        assert(not Hud.message("caption",2000))
+    """)
     manifest = json.loads((ASSETS / "manifest.json").read_bytes())
     assert manifest["fonts"].keys() == {"fancytext", "gametext", "bigtext", "pagertext"}
     assets = {}

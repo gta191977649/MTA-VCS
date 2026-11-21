@@ -22,10 +22,13 @@ addEventHandler("showClientTextBox", localPlayer, showTextBox, false)
 Hud.onRender(function(screen, now)
     local _, sx, sy = CWidescreenSupport:playerHud()
     local y, x = 20 * sy / screen.scale, 28 * sx / screen.scale
+    if Hud.cinematicInset then
+        y=math.max(y,(Hud.cinematicInset(screen.width*screen.scale,screen.height*screen.scale)+16)/screen.scale)
+    end
     local width = 220 * sx / screen.scale
     local entry, opacity = Hud.message("help", now)
     if entry and opacity > 0 and not Hud.hasPriorityGameText(now) then
         y = y + Hud.text(screen, entry, x, y, width, opacity) + 18
     end
     screen.helpBottom = y
-end)
+end,"help")

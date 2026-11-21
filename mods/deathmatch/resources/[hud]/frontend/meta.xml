@@ -3,9 +3,18 @@
     <include resource="dgs"/>
     <include resource="font"/>
     <script src="font.lua" type="client" cache="false"/>
+    <script src="world_markers_c.lua" type="client" cache="false"/>
+    <script src="world_cable_c.lua" type="client" cache="false"/>
+    <export function="setRescueWinchVisible" type="client" />
+    <export function="registerWorldMarkerAssets" type="client" />
+    <export function="setWorldMarker" type="client" />
+    <export function="getWorldMarkerState" type="client" />
     <script src="font_atlas_c.lua" type="client" cache="false"/>
     <script src="widescreen_c.lua" type="client" cache="false"/>
     <script src="hud_c.lua" type="client" cache="false"/>
+    <script src="cinematic_c.lua" type="client" cache="false"/>
+    <export function="setCinematicPresentation" type="client" />
+    <export function="getCinematicPresentation" type="client" />
     <script src="player_hud_c.lua" type="client" cache="false"/>
     <script src="textbox.lua" type="server"/>
     <script src="textbox_c.lua" type="client" cache="false"/>
@@ -62,6 +71,8 @@
     <export function="showVcsPager" type="client" />
     <export function="hideVcsPager" type="client" />
     <export function="showVcsCountdown" type="client" />
+    <export function="showVehicleMissionHud" type="client" />
+    <export function="hideVehicleMissionHud" type="client" />
     <export function="hideVcsCountdown" type="client" />
     <export function="getVcsPlayerHudVisible" type="client" />
     <export function="setVcsPlayerHudVisible" type="client" />

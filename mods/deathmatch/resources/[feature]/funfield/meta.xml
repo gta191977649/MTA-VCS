@@ -1,0 +1,22 @@
+<meta>
+    <info name="VCS Chunder Wheel" type="script" author="MTA-VCS" />
+    <min_mta_version client="1.6.0-9.22862" server="1.6.0-9.22815" />
+    <include resource="vcs" />
+    <include resource="radio" />
+    <include resource="frontend" />
+    <include resource="marker" />
+    <include resource="npchlc_traffic" />
+    <script src="wheel.lua" type="shared" cache="false" />
+    <script src="server.lua" type="server" />
+    <script src="camera_paths.lua" type="client" cache="false" />
+    <script src="camera_plan.lua" type="client" cache="false" />
+    <script src="camera.lua" type="client" cache="false" />
+    <script src="client.lua" type="client" cache="false" />
+    <file src="assets/carriage.dff" />
+    <file src="assets/carriage.txd" />
+    <file src="assets/carriage.col" />
+    <file src="assets/riders.ifp" />
+    <file src="assets/seat_pose.json" />
+    <file src="assets/greeting_pose.json" />
+    <export function="getFerrisWheelState" type="shared" />
+</meta>

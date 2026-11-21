@@ -1,0 +1,43 @@
+[2026-11-22 02:26:15] INFO: eagleLoader: leaving active map streaming limits to session cleanup
+INFO: Logging to this file ended
+[2026-11-22 02:26:20] INFO: MTA Version: 1.7.0-7.27005.0
+[2026-11-22 02:26:21] ERROR: skygfx\timecycle\debug.lua:3: exports: Call to non-running server resource (dgs) [string "?"]
+[2026-11-22 02:26:21] INFO: SKYGFX DEBUG LOADED
+[2026-11-22 02:26:21] INFO: SkyGfx VCS: world=true alphaTextures=358 shopTextures=22 post=true bloom=true
+[2026-11-22 02:26:23] INFO: eagleLoader: applied IMG name override for 'vcs' (3 archive entries).
+[2026-11-22 02:26:23] INFO: eagleLoader: prepared 4 IMG archive(s) / 9901 file entries for 'vcs'.
+[2026-11-22 02:26:23] INFO: Skipping reserved SA model ID 6694 for logical ID vcs_model_4196
+[2026-11-22 02:26:28] INFO: Definition mtraffic1 is using native behavior model 1350.
+[2026-11-22 02:26:28] INFO: Definition mtraffic2 is using native behavior model 1351.
+[2026-11-22 02:26:28] INFO: Expanded the building pool from 13000 to 20731 for 9156 candidate placements.
+[2026-11-22 02:26:28] INFO: Eagle: vcs created 7655 buildings and 3634 objects from 11289 placements.
+[2026-11-22 02:26:28] INFO: Parsed 212 water quads from :vcs/water.dat
+[2026-11-22 02:26:28] INFO: Wrote debug to: debug.txt
+[2026-11-22 02:27:37] INFO: eagleLoader: leaving active map streaming limits to session cleanup
+INFO: Logging to this file ended
+[2026-11-22 02:27:46] INFO: eagleLoader: applied IMG name override for 'vcs' (3 archive entries).
+[2026-11-22 02:27:46] INFO: eagleLoader: prepared 4 IMG archive(s) / 9901 file entries for 'vcs'.
+[2026-11-22 02:27:46] INFO: Skipping reserved SA model ID 6694 for logical ID vcs_model_4196
+[2026-11-22 02:27:53] INFO: MTA Version: 1.7.0-7.27005.0
+[2026-11-22 02:27:53] INFO: SKYGFX DEBUG LOADED
+[2026-11-22 02:27:53] INFO: SkyGfx VCS: world=true alphaTextures=358 shopTextures=22 post=true bloom=true
+[2026-11-22 02:27:53] INFO: Definition mtraffic1 is using native behavior model 1350.
+[2026-11-22 02:27:53] INFO: Definition mtraffic2 is using native behavior model 1351.
+[2026-11-22 02:27:53] INFO: Expanded the building pool from 13000 to 20731 for 9156 candidate placements.
+[2026-11-22 02:27:54] INFO: Eagle: vcs created 7655 buildings and 3634 objects from 11289 placements.
+[2026-11-22 02:27:54] INFO: Parsed 212 water quads from :vcs/water.dat
+[2026-11-22 02:27:54] INFO: Wrote debug to: debug.txt
+[2026-11-22 02:30:02] INFO: eagleLoader: leaving active map streaming limits to session cleanup
+INFO: Logging to this file ended
+[2026-11-22 02:30:10] INFO: eagleLoader: applied IMG name override for 'vcs' (3 archive entries).
+[2026-11-22 02:30:10] INFO: eagleLoader: prepared 4 IMG archive(s) / 9901 file entries for 'vcs'.
+[2026-11-22 02:30:10] INFO: Skipping reserved SA model ID 6694 for logical ID vcs_model_4196
+[2026-11-22 02:30:16] INFO: MTA Version: 1.7.0-7.27005.0
+[2026-11-22 02:30:16] INFO: SKYGFX DEBUG LOADED
+[2026-11-22 02:30:16] INFO: SkyGfx VCS: world=true alphaTextures=358 shopTextures=22 post=true bloom=true
+[2026-11-22 02:30:16] INFO: Definition mtraffic1 is using native behavior model 1350.
+[2026-11-22 02:30:16] INFO: Definition mtraffic2 is using native behavior model 1351.
+[2026-11-22 02:30:16] INFO: Expanded the building pool from 13000 to 20731 for 9156 candidate placements.
+[2026-11-22 02:30:17] INFO: Eagle: vcs created 7655 buildings and 3634 objects from 11289 placements.
+[2026-11-22 02:30:17] INFO: Parsed 212 water quads from :vcs/water.dat
+[2026-11-22 02:30:17] INFO: Wrote debug to: debug.txt

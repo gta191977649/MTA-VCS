@@ -16,6 +16,7 @@
     <script src="audio/SoundAttenuationTable.lua" type="client" />
     <script src="controllers/engine_audio_c.lua" type="client" />
     <script src="controllers/jetski_engine_c.lua" type="client" />
+    <script src="data/paint.lua" type="server" />
     <script src="vehicle_s.lua" type="server" />
     <script src="controllers/jetski_rider_c.lua" type="client" />
     <script src="controllers/plane_s.lua" type="server" />
@@ -33,6 +34,9 @@
     <export function="getVcsVehicleClass" type="shared" />
     <export function="getVcsHandlingData" type="server" http="false" />
     <export function="configureVcsDashboardBeacon" type="server" />
+    <export function="bindVcsVehiclePaint" type="server" />
+    <export function="setVcsVehiclePaint" type="server" />
+    <export function="resprayVcsVehicle" type="server" />
     <export function="bindVcsVehicle" type="server" />
     <export function="createVcsVehicle" type="server" />
     <export function="transferWatercraftSeat" type="server" />

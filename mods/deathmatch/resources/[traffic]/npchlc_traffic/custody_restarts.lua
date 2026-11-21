@@ -85,6 +85,11 @@ end
 
 TrafficCustody = {}
 
+function getTrafficIslandAt(x,y,z)
+    if type(x)~="number" or type(y)~="number" or type(z)~="number" then return false end
+    return islandAt(x,y,z)
+end
+
 function TrafficCustody.restartPoint(x, y, z)
     local island = islandAt(x, y, z)
     local nearest, sameIsland

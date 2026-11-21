@@ -55,8 +55,8 @@ function Hud.clamp(value)
     return math.max(0, math.min(1, value))
 end
 
-function Hud.onRender(callback)
-    renderers[#renderers + 1] = callback
+function Hud.onRender(callback, channel)
+    renderers[#renderers + 1] = {draw=callback,channel=channel or "gameplay"}
 end
 
 function setGameplayUiVisible(visible)
@@ -66,6 +66,10 @@ function setGameplayUiVisible(visible)
 end
 
 function isGameplayUiVisible()
+    return Hud.baseUiVisible() and not (Hud.cinematicActive and Hud.cinematicActive())
+end
+
+function Hud.baseUiVisible()
     return not next(hiddenBy) and not isMainMenuActive() and not isPlayerMapVisible()
 end
 
@@ -282,12 +286,15 @@ addEventHandler("onClientResourceStop", root, function(resource)
 end)
 
 addEventHandler("onClientRender", root, function()
-    if not isGameplayUiVisible() then return end
+    if not Hud.baseUiVisible() then return end
     local width, height = guiGetScreenSize()
     local _, sx, sy = CWidescreenSupport:playerHud()
     local scale = sy * 272 / 720
     local screen = {width = width / scale, height = height / scale, scale = scale, margin = 32,
         fontScaleY = sy / scale, textAspect = sx / sy}
     local now = getTickCount()
-    for _, render in ipairs(renderers) do render(screen, now) end
+    local cinematic=Hud.cinematicActive and Hud.cinematicActive()
+    for _, render in ipairs(renderers) do
+        if not cinematic or render.channel=="help" then render.draw(screen, now) end
+    end
 end)

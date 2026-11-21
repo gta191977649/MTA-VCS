@@ -1,0 +1,46 @@
+{
+  "edition": "SLUS-21590 USA v1.00",
+  "model": 7069,
+  "executableSha256": "3b43be57d60a29df35e41504d67bbf728d5ce2fc5aab6bbf928cbbc5963fe547",
+  "gameDtzSha256": "570a7504048e8a0187b04b20fec63fc57c404c74b84e7d3ee19df8daab1a365b",
+  "animations": {
+    "156": "handsup",
+    "164": "seat_idle"
+  },
+  "assets": {
+    "carriage.dff": {
+      "sector": 12907,
+      "sectors": 6,
+      "sourceSha256": "bdc8b03a5200b227b470aec645f0eb3e59352f54283c4348adf29612d3fee882",
+      "size": 21723,
+      "sha256": "51c5e2c94e286a9eb99508c11df7565ae86242bae826e05c9ca60a9cbebead99"
+    },
+    "carriage.txd": {
+      "sector": 12900,
+      "sectors": 7,
+      "sourceSha256": "a064fe6a23987ae838626185578959d1b095488cb42034503c981064100742a3",
+      "size": 91048,
+      "sha256": "0a7622f67bcf0ef0d43579705f92c26ad9e5b09f90d85603664bd99846c894b9"
+    },
+    "carriage.col": {
+      "size": 1876,
+      "sha256": "c35cdf0d572f121efcbf36c589887615499191b82a3b18c841d7e395885fd2bf"
+    },
+    "riders.ifp": {
+      "size": 16590,
+      "sha256": "0e07ce4061fdc52f97efd246cbd350ba0def03cc7daf63bcad8912dbd3d1e5da"
+    },
+    "seat_pose.json": {
+      "size": 52007,
+      "sha256": "1902023366af03599456ca87f95493d0a51807fc590e5bb278bc83e00c2e1c13"
+    },
+    "greeting_pose.json": {
+      "size": 14877,
+      "sha256": "67cbecd2e33b7b71cafa7f13ff81caeed52ed1f5d6bba5cb4167ec1d08b7092f"
+    }
+  },
+  "collisionStream": 8368,
+  "derivedAnimations": {
+    "seat_handsup": "handsup upper body with seat_idle pelvis and legs"
+  }
+}

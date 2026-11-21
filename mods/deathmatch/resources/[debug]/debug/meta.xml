@@ -17,6 +17,7 @@
     <export function="addDebugMessage" type="client"/>
     <include resource="skygfx"/>
     <include resource="frontend"/>
+    <include resource="marker"/>
 
     <min_mta_version client="1.5.8-9.20797"></min_mta_version>
 </meta>

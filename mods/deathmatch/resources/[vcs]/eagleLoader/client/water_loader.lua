@@ -162,9 +162,13 @@ end
 
 addEventHandler("onClientElementDimensionChange", localPlayer, function(old, new)
     if old ~= 0 or new == 0 then return end
-    -- MTA drops the polygons as the dimension changes. Reclaim their private
-    -- vertices one slot at a time before the next exterior can recreate them.
-    for _, state in pairs(activeWaterMaps) do parkWaterSlots(state, new) end
+    -- MTA switches the native water manager and camera together. The player
+    -- event comes before that switch for spawnPlayer and after it for a
+    -- dimension RPC. Reclaim vertices in the dimension where GTA has them.
+    local managerDimension = getElementDimension(getCamera())
+    for _, state in pairs(activeWaterMaps) do
+        parkWaterSlots(state, managerDimension ~= 0 and managerDimension or nil)
+    end
 end, false)
 
 function stopStreamedWater(resourceName)

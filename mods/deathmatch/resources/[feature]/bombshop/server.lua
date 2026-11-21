@@ -1,5 +1,4 @@
 local price = 500
-local detonator = 40
 local owners, bombs = {}, {}
 
 local function sendMessage(player, key)
@@ -7,18 +6,16 @@ local function sendMessage(player, key)
 end
 
 local function removeBomb(vehicle)
-    local player = bombs[vehicle]
-    if not player then return end
+    local bomb = bombs[vehicle]
+    if not bomb then return end
     bombs[vehicle] = nil
+    if isTimer(bomb.timer) then killTimer(bomb.timer) end
+    local player = bomb.owner
     local inventory = owners[player]
     inventory.vehicles[vehicle] = nil
-    if next(inventory.vehicles) then return end
-    owners[player] = nil
+    if not next(inventory.vehicles) then owners[player] = nil end
     if isElement(player) then
-        if inventory.issued and getPedWeapon(player, 8) ~= 39 and getPedWeapon(player, 12) == detonator then
-            takeWeapon(player, detonator)
-        end
-        triggerClientEvent(player, "bombshop:armed", resourceRoot, false)
+        triggerClientEvent(player, "bombshop:state", resourceRoot, vehicle, false)
     end
 end
 
@@ -49,45 +46,48 @@ function bombGarageService(stage, id, player, vehicle)
         return false
     end
 
-    local hasDetonator = getPedWeapon(player, 12) == detonator
-    if not hasDetonator and not giveWeapon(player, detonator, 1, false) then
-        givePlayerMoney(player, price)
-        return false
-    end
     local inventory = owners[player]
     if not inventory then
-        inventory = {vehicles = {}, issued = not hasDetonator}
+        inventory = {vehicles = {}}
         owners[player] = inventory
-    elseif not hasDetonator then
-        inventory.issued = true
     end
     inventory.vehicles[vehicle] = true
-    bombs[vehicle] = player
+    bombs[vehicle] = {owner = player, active = false}
     sendMessage(player, "GA_23")
-    triggerClientEvent(player, "bombshop:armed", resourceRoot, true, true)
+    triggerClientEvent(player, "bombshop:state", resourceRoot, vehicle, "fitted", true)
     return true
 end
 
-addEvent("bombshop:detonate", true)
-addEventHandler("bombshop:detonate", resourceRoot, function()
-    if not client or not owners[client] or isPedDead(client) or isPedInVehicle(client)
-        or getPedWeapon(client) ~= detonator then return end
-
-    local worldInterior, worldDimension = getElementInterior(client), getElementDimension(client)
-    local targets = {}
-    for vehicle in pairs(owners[client].vehicles) do
-        if isElement(vehicle) and not isVehicleBlown(vehicle)
-            and getElementInterior(vehicle) == worldInterior and getElementDimension(vehicle) == worldDimension then
-            targets[#targets + 1] = vehicle
-        end
-    end
-    for _, vehicle in ipairs(targets) do
-        removeBomb(vehicle)
-        if blowVehicle(vehicle) then
-            exports.wanted:reportWantedEvent(client, 13, vehicle)
-        end
-    end
+addEvent("bombshop:activate", true)
+addEventHandler("bombshop:activate", resourceRoot, function()
+    if not client or isPedDead(client) then return end
+    local vehicle = getPedOccupiedVehicle(client)
+    local bomb = bombs[vehicle]
+    if not bomb or bomb.owner ~= client or bomb.active or getVehicleOccupant(vehicle, 0) ~= client
+        or isVehicleBlown(vehicle) then return end
+    bomb.active = true
+    triggerClientEvent(client, "bombshop:state", resourceRoot, vehicle, "active")
 end, false)
+
+-- SLUS-21590 0x0013A7C8: an armed ignition bomb starts a 1000 ms fuse
+-- when a driver next occupies the car. The driver who armed it is not exempt.
+addEventHandler("onVehicleEnter", root, function(ped, seat)
+    local vehicle = source
+    local bomb = bombs[vehicle]
+    if not bomb then return end
+    if seat == 0 and bomb.active and not bomb.timer then
+        bomb.timer = setTimer(function()
+            if bombs[vehicle] ~= bomb or not isElement(vehicle) then return end
+            local owner = bomb.owner
+            removeBomb(vehicle)
+            if blowVehicle(vehicle) and isElement(owner) then
+                exports.wanted:reportWantedEvent(owner, 13, vehicle)
+            end
+        end, 1000, 1)
+    elseif ped == bomb.owner and seat == 0 then
+        triggerClientEvent(ped, "bombshop:state", resourceRoot, vehicle, bomb.active and "active" or "fitted")
+    end
+end)
 
 addEventHandler("onVehicleExplode", root, function() removeBomb(source) end)
 addEventHandler("onVehicleRespawn", root, function() removeBomb(source) end)
@@ -97,7 +97,9 @@ addEventHandler("onPlayerWasted", root, function() removeOwnersBombs(source) end
 
 addEventHandler("onPlayerResourceStart", root, function(resource)
     if resource == getThisResource() and owners[source] then
-        triggerClientEvent(source, "bombshop:armed", resourceRoot, true)
+        for vehicle in pairs(owners[source].vehicles) do
+            triggerClientEvent(source, "bombshop:state", resourceRoot, vehicle, bombs[vehicle].active and "active" or "fitted")
+        end
     end
 end)
 

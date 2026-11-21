@@ -72,7 +72,6 @@ function removeFromList(this)
 	this.m_prev.m_next = this.m_next
 end
 --]]
-textMarker = createMarker(0, 0, 0, "cylinder", 1, 255, 255, 255, 255)
 function CRubbish:render() 
     for type,mat in pairs(self.gpRubbishTexture) do
         local tempBufferIndicesStored = 0
@@ -137,7 +136,6 @@ function CRubbish:render()
                         TempBufferIndicesStored += 6;
                     ]]
                     dxDrawLine3D(pos.x + vx1 + vx2, pos.y + vy1 + vy2, pos.z,pos.x + vx1 - vx2, pos.y + vy1 - vy2, pos.z)
-                    setElementPosition(textMarker, pos.x + vx1 + vx2, pos.y + vy1 + vy2, pos.z)
                     dxDrawMaterialPrimitive3D("trianglestrip", mat, false, unpack( SheetPrimitive ) )
 
                 end

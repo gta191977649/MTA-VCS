@@ -1,5 +1,6 @@
 <meta>
     <include resource="frontend"/>
+    <include resource="marker"/>
     <include resource="eagleLoader"/>
     <script src="server.lua" type="server"/>
     <file src="passage_routes.xml" download="false"/>

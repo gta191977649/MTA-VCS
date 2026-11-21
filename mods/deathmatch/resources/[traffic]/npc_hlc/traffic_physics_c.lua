@@ -603,6 +603,15 @@ function performTask.driveTrafficPhysics(npc, task, elapsed, progress)
     if applySirenYield(npc, vehicle, motion, progress,task) then return end
     local now = getTickCount()
     local x, y, z, fx, fy = motion.x, motion.y, motion.z, motion.fx, motion.fy
+    if task.mission and not motion.unstable then
+        -- An off-road impact can leave a scripted driver pointing into a
+        -- building. A short, rear-obstacle-checked reverse frees the nose.
+        if not progress.missionMoveAt or (x-progress.missionX)^2+(y-progress.missionY)^2>2^2 then
+            progress.missionX,progress.missionY,progress.missionMoveAt=x,y,now
+        elseif not progress.reverseAt and elapsedSince(now,progress.missionMoveAt)>8000 then
+            progress.reverseAt,progress.reverseDuration,progress.missionMoveAt=now,1200,now
+        end
+    end
     local start = math.max(1, (progress.sequence or task[2]) - task[2] + 1)
     local abandoned = getElementData(vehicle, "npchlc_traffic:abandonedBlocker", false)
     if not canMoveAbandonedBlocker(abandoned) then abandoned = nil end

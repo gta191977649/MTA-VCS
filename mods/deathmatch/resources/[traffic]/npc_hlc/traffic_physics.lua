@@ -41,7 +41,9 @@ function normalizeNPCTrafficPhysics(task)
             or signal < 0 or signal > 2 or signal % 1 ~= 0 then return false end
         copy[i] = {unpack(segment)}
     end
-    return {task[1], first, speed, {unpack(anchor)}, copy, task[6]}
+    local normalized={task[1], first, speed, {unpack(anchor)}, copy, task[6]}
+    if task.mission==true then normalized.mission=true end
+    return normalized
 end
 
 local function distanceToSegment(x, y, z, ax, ay, az, segment)

@@ -5,6 +5,7 @@ local CROSSHAIR_SHADER_NAME = "crosshair.fx"
 local CROSSHAIR_REGULAR_ENABLED = true
 local CROSSHAIR_REGULAR_TEXTURE_NAME = "sitem16"
 local CROSSHAIR_REGULAR_TEXTURE
+local regularShader
 
 local CROSSHAIR_CAMERA_ENABLED = true
 local CROSSHAIR_CAMERA_SIZE = SCREEN_HEIGHT
@@ -48,11 +49,12 @@ local function initCrosshairRegular()
 
 	if not CROSSHAIR_REGULAR_ENABLED or not CROSSHAIR_REGULAR_TEXTURE then return false end
 
-	local shader = dxCreateShader(CROSSHAIR_SHADER_NAME, 0, 0, false, "world,other")
-	if not shader then return false end
-
-	dxSetShaderValue(shader, "gTexture", CROSSHAIR_REGULAR_TEXTURE)
-	engineApplyShaderToWorldTexture(shader, CROSSHAIR_REGULAR_TEXTURE_NAME)
+	if not isElement(regularShader) then
+		regularShader = dxCreateShader(CROSSHAIR_SHADER_NAME, 0, 0, false, "world,other")
+		if not regularShader then return false end
+		engineApplyShaderToWorldTexture(regularShader, CROSSHAIR_REGULAR_TEXTURE_NAME)
+	end
+	dxSetShaderValue(regularShader, "gTexture", CROSSHAIR_REGULAR_TEXTURE)
 
 	return true
 end
@@ -156,6 +158,16 @@ end
 local function drawCrosshair()
 
 	if not isPlayerCrosshairVisible() then return true end
+	if not isElement(CROSSHAIR_REGULAR_TEXTURE) then
+		local frontend = getResourceFromName("frontend")
+		if not frontend or getResourceState(frontend) ~= "running" then return end
+		CROSSHAIR_REGULAR_TEXTURE = exports.frontend:getPs2HudTexture(CROSSHAIR_REGULAR_TEXTURE_NAME)
+		CROSSHAIR_CAMERA_TEXTURE = exports.frontend:getPs2HudTexture("viewfinder_128")
+		CROSSHAIR_ROCKET_TEXTURE = exports.frontend:getPs2HudTexture("siterocket")
+		CROSSHAIR_SNIPER_TEXTURE = exports.frontend:getPs2HudTexture("sitesniper")
+		if not isElement(CROSSHAIR_REGULAR_TEXTURE) then return end
+		initCrosshairRegular()
+	end
 
 	local weapon = getPedWeapon(localPlayer)
 
@@ -171,12 +183,6 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 local function initCrosshair()
-	CROSSHAIR_REGULAR_TEXTURE = exports.frontend:getPs2HudTexture(CROSSHAIR_REGULAR_TEXTURE_NAME)
-	CROSSHAIR_CAMERA_TEXTURE = exports.frontend:getPs2HudTexture("viewfinder_128")
-	CROSSHAIR_ROCKET_TEXTURE = exports.frontend:getPs2HudTexture("siterocket")
-	CROSSHAIR_SNIPER_TEXTURE = exports.frontend:getPs2HudTexture("sitesniper")
-	initCrosshairRegular()
-
 	addEventHandler("onClientHUDRender", root, drawCrosshair)
 
 	return true

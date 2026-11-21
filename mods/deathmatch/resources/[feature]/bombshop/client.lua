@@ -1,5 +1,23 @@
 local tutorialKey = "bombshop:helpSeen"
-local pickup, armed
+local pickup
+local bombs = {}
+local function showActivationPrompt()
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    if not vehicle or getVehicleOccupant(vehicle, 0) ~= localPlayer or bombs[vehicle] ~= "fitted" then return end
+    local bindings = getBoundKeys("fire") or {}
+    local keys = {}
+    for key in pairs(bindings) do
+        keys[#keys + 1] = key
+    end
+    table.sort(keys)
+    if #keys == 0 then
+        exports.frontend:showTextBox("Bind the Fire control in MTA Settings to activate the ignition bomb.", 8000)
+        return
+    end
+    local key = bindings.mouse1 and "mouse1" or keys[1]
+    local control = "#1EFFFF" .. key:upper() .. "#FFFFFF (Fire)"
+    exports.frontend:showTextBox("Press " .. control .. " to activate the ignition bomb. It will explode when the next driver enters.", 8000)
+end
 local garageText = {
     GA_4 = "Car bombs are $500 each.",
     GA_5 = "That vehicle's already fitted with a bomb.",
@@ -23,7 +41,7 @@ addEventHandler("onClientPickupHit", root, function(player, matchingDimension)
     if source ~= pickup or player ~= localPlayer or not matchingDimension or getElementInterior(player) ~= 0 then return end
     dismissTutorial()
     exports.frontend:showTextBox("Any car you drive into this garage\n"
-        .. "will be fitted with a #1EFFFFremote bomb#FFFFFF.\nCost: #1EFFFF$500.", 8000)
+        .. "will be fitted with a #1EFFFFignition bomb#FFFFFF.\nCost: #1EFFFF$500.", 8000)
 end)
 
 addEvent("bombshop:text", true)
@@ -32,22 +50,27 @@ addEventHandler("bombshop:text", resourceRoot, function(key)
     if text then exports.frontend:showGameText(text, "garage", 4000) end
 end, false)
 
-addEvent("bombshop:armed", true)
-addEventHandler("bombshop:armed", resourceRoot, function(state, installed)
-    armed = state
-    if installed then
-        dismissTutorial()
-        exports.frontend:showTextBox(exports.frontend:getVcsText("GA_8") or
-            "Use the detonator to activate the bomb.", 4000)
+addEvent("bombshop:state", true)
+addEventHandler("bombshop:state", resourceRoot, function(vehicle, state, installed)
+    bombs[vehicle] = state or nil
+    if installed then dismissTutorial() end
+    if state == "active" then
+        exports.frontend:showTextBox("Bomb activated. Exit the vehicle. The next driver to enter will trigger the bomb - including you.", 8000)
+    elseif state == "fitted" then
+        showActivationPrompt()
     end
 end, false)
 
+addEventHandler("onClientPlayerVehicleEnter", localPlayer, showActivationPrompt)
+addEventHandler("onClientElementDestroy", root, function() bombs[source] = nil end)
+
 addEventHandler("onClientKey", root, function(key, pressed)
-    if not pressed or not armed or getPedWeapon(localPlayer) ~= 40 or isPedInVehicle(localPlayer)
-        or isChatBoxInputActive() or isConsoleActive() or isMainMenuActive() then return end
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    if not pressed or not vehicle or bombs[vehicle] ~= "fitted" or isPedDead(localPlayer)
+        or getVehicleOccupant(vehicle, 0) ~= localPlayer
+        or isCursorShowing() or isChatBoxInputActive() or isConsoleActive() or isMainMenuActive() then return end
     local fireKeys = getBoundKeys("fire")
     if not fireKeys or not fireKeys[key] then return end
-    -- The game must not consume the SA satchel detonator before the server checks it.
     cancelEvent()
-    triggerServerEvent("bombshop:detonate", resourceRoot)
+    triggerServerEvent("bombshop:activate", resourceRoot)
 end)

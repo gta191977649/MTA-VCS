@@ -1,0 +1,51 @@
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : VCS marker isolated acceptance
+= Server IP address: 127.0.0.1
+= Server port      : 54636
+= 
+= Log file         : ..01612704700/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 57788
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-21 17:18:23] File 'settings.xml' not present, creating new node.
+[2026-11-21 17:18:24] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-21 17:18:25] Resources: 12 loaded, 0 failed
+[2026-11-21 17:18:25] Starting resources...
+[2026-11-21 17:18:26] Server minclientversion is now 1.6.0-9.21938
+[2026-11-21 17:18:27] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed before Tuesday.
+[2026-11-21 17:18:27] Some files in 'skygfx' use deprecated functions.
+[2026-11-21 17:18:27] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-21 17:18:27] Server minclientversion is now 1.6.0-9.22620
+[2026-11-21 17:18:27] MARKER_CONSUMERS_SERVER_PASS
+[2026-11-21 17:18:27] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-21 17:18:27] WARNING: <owner_email_address> not set
+[2026-11-21 17:18:27] Server started and is ready to accept connections!
+[2026-11-21 17:18:27] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-21 17:18:27] Type 'help' for a list of commands.
+[2026-11-21 17:19:24] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-21 17:19:24] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-21 17:19:26] MARKER_QA_CLIENT_READY nurupo
+[2026-11-21 17:19:26] MARKER_QA_CREATED checkpoint actual=checkpoint visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED ring actual=ring visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED cylinder actual=cylinder visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED arrow actual=arrow visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED corona actual=corona visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED arrow2 actual=arrow2 visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED pointer actual=pointer visible=true
+[2026-11-21 17:19:26] MARKER_QA_CREATED cylinder2 actual=cylinder2 visible=true
+[2026-11-21 17:19:28] MARKER_QA_CLIENT_RESULT all-styles [ [ "checkpoint", "ring", "cylinder", "arrow", "corona", "arrow2", "pointer", "cylinder2" ] ]
+[2026-11-21 17:19:28] MARKER_QA_CLIENT_RESULT style-snapshot arrow render=[ { "visible": true, "phase": -0.2548656596045145, "alpha": 200, "y": -2400, "x": 1488, "scale": 2.98931405653928, "z": 15.81876951093116, "height": 2.98931405653928, "angle": 34.50000000000001, "nativeType": 1, "elapsed": 1578 } ]
+[2026-11-21 17:19:28] MARKER_QA_CLIENT_RESULT initial-and-client-lifecycle-pass
+[2026-11-21 17:19:28] MARKER_QA_CLIENT_RESULT migrated-consumers-pass portals=104
+[2026-11-21 17:19:28] MARKER_QA_CLIENT_RESULT animation-samples [{"before":{"visible":true,"phase":-0.2548656596045145,"alpha":200,"y":-2400,"x":1488,"scale":2.98931405653928,"z":15.81876951093116,"height":2.98931405653928,"angle":34.50000000000001,"nativeType":1,"elapsed":1578},"after":{"visible":true,"phase":0.9882575677307495,"alpha":200,"y":-2400,"x":1488,"scale":2.282143601916573,"z":16.70273257920955,"height":2.282143601916573,"angle":209.7500000000001,"nativeType":1,"elapsed":2279}}]
+[2026-11-21 17:19:31] MARKER_QA_SCREENSHOT run1-all-types-front-phase1
+[2026-11-21 17:19:32] MARKER_QA_SCREENSHOT run1-all-types-front-phase2
+[2026-11-21 17:19:33] MARKER_QA_CLIENT_RESULT mutation-pass
+[2026-11-21 17:19:35] MARKER_QA_SCREENSHOT run1-mutated-blip-on-side
+[2026-11-21 17:19:37] MARKER_QA_CLIENT_RESULT destruction-pass
+[2026-11-21 17:19:38] MARKER_QA_SERVER_COMPLETE
+[2026-11-21 17:19:38] MARKER_QA_CLIENT_RESULT finish-pass

@@ -45,7 +45,7 @@ local white = tocolor(255, 255, 255)
 local oxygenFill, oxygenEmpty = tocolor(0, 30, 119), tocolor(0, 15, 59)
 
 function getVcsPlayerHudVisible()
-    return visible
+    return visible and not (Hud.cinematicActive and Hud.cinematicActive())
 end
 
 function setVcsPlayerHudVisible(value)
@@ -143,17 +143,20 @@ function CHud:drawPlayer(now)
         sx, sy, false)
 
     local barX, barWidth, barHeight = x(162.2), 56.2 * sx, 16.8 * sy
-    local maxHealth = math.max(1, 100 + (getPedStat(localPlayer, 24) - 569) / 4.31)
+    local maxHealth = math.max(1, getPedStat(localPlayer, 24) * 0.176)
     if (health >= 10 or now % 600 < 300) and canDraw(now, healthChanged, 650) then
         bar(barX, (65.5 + hudOffsetY) * sy, barWidth, barHeight, health / maxHealth, "bar_inside2")
     end
     local maxAir = 1000 + (getPedStat(localPlayer, 22) + getPedStat(localPlayer, 225)) * 1.5
     local air = getPedOxygenLevel(localPlayer) or maxAir
     local vehicle = getPedOccupiedVehicle(localPlayer)
+    local swimEnergy = getElementData(localPlayer,"mission:swimEnergy",false)
+    if type(swimEnergy)=="number" and not vehicle then air=math.min(air,maxAir*swimEnergy/100) end
     if (vehicle and isElementInWater(vehicle)) or (isElementInWater(localPlayer) and air < maxAir - 1) then
         bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, air / maxAir, "bar_inside1", oxygenFill, oxygenEmpty)
     elseif armour > 0 and canDraw(now, armourChanged, 650) then
-        bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, armour / 100, "bar_inside1")
+        bar(barX, (45.5 + hudOffsetY) * sy, barWidth, barHeight, (armour + (getElementData(localPlayer,"mission:extraArmour",false) or 0))
+            / (getElementData(localPlayer,"mission:maxArmour",false) or 100), "bar_inside1")
     end
 
     local weapon = getPedWeapon(localPlayer)
@@ -187,7 +190,12 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
     for _, name in ipairs({"hudnumbers", "bar_inside1", "bar_inside1dark", "bar_inside2", "bar_inside2dark", "bar_outline"}) do
         if not CFont:texture(name) then return end
     end
-    wanted, parole = exports.wanted:getLocalWantedSnapshot()
+    wanted, parole = getPlayerWantedLevel() or 0, 0
+    local wantedResource = getResourceFromName("wanted")
+    if wantedResource and getResourceState(wantedResource) == "running" then
+        local level, suspended = exports.wanted:getLocalWantedSnapshot()
+        wanted, parole = tonumber(level) or wanted, tonumber(suspended) or 0
+    end
     local previous = getElementData(localPlayer, reloadSnapshot, false)
     if previous then
         original = previous

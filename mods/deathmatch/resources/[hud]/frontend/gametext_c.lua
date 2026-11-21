@@ -25,7 +25,10 @@ local styles = {
     [8] = location,
     VEHICLE_NAME = title,
     LOCATION_NAME = location,
+    missionPassed = {slot = "missionPassed", face = "bigtext", y = 136, nativeScale = 1,
+        align = "center", valign = "center", fadeIn = 500, fadeOut = 500},
     garage = {slot = "garage", y = 175, nativeScale = 1},
+    raceCountdown = {slot="raceCountdown",face="bigtext",y=150,nativeScale=1},
     radio = {slot = "radio", face = "fancytext", y = 7, nativeScale = 1, color = radioBlue},
     radioTuning = {slot = "radio", face = "fancytext", y = 7, nativeScale = 1, color = radioTuningBlue},
 }
@@ -67,10 +70,10 @@ addEvent("showClientGameText", true)
 addEventHandler("showClientGameText", localPlayer, showGameTextForPlayer, false)
 
 local drawOrder = {"location", "vehicle", "garage", "radio", "big3", "big4", "big5", "big1",
-    "big0", "big7", "big2", "big6"}
+    "big0", "raceCountdown", "big7", "big2", "big6", "missionPassed"}
 
 function Hud.hasPriorityGameText(now)
-    return Hud.message("big2", now) ~= nil or Hud.message("big0", now) ~= nil
+    return Hud.message("big2", now) ~= nil or Hud.message("big0", now) ~= nil or Hud.message("missionPassed", now) ~= nil
 end
 
 Hud.onRender(function(screen, now)
@@ -88,7 +91,9 @@ Hud.onRender(function(screen, now)
                 y = screen.height - (272 - entry.style.y) * screen.fontScaleY
             end
             local width = math.min(screen.width - 96, 864)
-            if slot == "big0" then
+            if slot == "missionPassed" then
+                y = screen.height / 2
+            elseif slot == "big0" then
                 if Hud.message("big2", now) then y = screen.height * 135 / 272 end
                 y = y - (1 - opacity) * 90
             elseif slot == "big7" and Hud.message("big2", now) then

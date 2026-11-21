@@ -1600,11 +1600,11 @@ end
 
 -- Directed state includes the arriving lane because a legal turn at the same
 -- junction may differ by lane. The queue and its parent links are bounded.
-function TrafficRoad.findPolicePath(roadGraph,first,lane,destination,allowFirst)
+function TrafficRoad.findPolicePath(roadGraph,first,lane,destination,allowFirst,searchLimit)
     local queue={{edge=first,lane=lane}}
     local seen={[first.id*8+lane]=true}
     local head=1
-    while head<=#queue and head<=128 do
+    while head<=#queue and head<=(searchLimit or 128) do
         local item=queue[head]
         local edge=item.edge
         local atGoal=(edge.from==destination.from and edge.to==destination.to)
@@ -1631,7 +1631,7 @@ function TrafficRoad.findPolicePath(roadGraph,first,lane,destination,allowFirst)
                 for _,nextEdge in ipairs(outgoingChoices(roadGraph,edge,exitLane)) do
                     local nextLane=math.min(exitLane,nextEdge.lanes-1)
                     local key=nextEdge.id*8+nextLane
-                    if not seen[key] and #queue<256 then
+                    if not seen[key] and #queue<(searchLimit or 256) then
                         seen[key]=true
                         queue[#queue+1]={edge=nextEdge,lane=nextLane,parent=item,parentLane=exitLane}
                     end
@@ -1651,10 +1651,10 @@ local function roadProjection(edge,x,y)
     return a.x+dx*t,a.y+dy*t,a.z+(b.z-a.z)*t,t
 end
 
-function TrafficRoad.nearestPursuitRoad(x,y,z,fx,fy)
+function TrafficRoad.nearestPursuitRoad(x,y,z,fx,fy,range)
     local best,cost
     local seen={}
-    local range=30
+    range=range or 30
     for cx=math.floor((x-range)/CELL_SIZE),math.floor((x+range)/CELL_SIZE) do
         local col=chaseCells[cx]
         for cy=math.floor((y-range)/CELL_SIZE),math.floor((y+range)/CELL_SIZE) do
@@ -1685,6 +1685,31 @@ function TrafficRoad.nearestPursuitRoad(x,y,z,fx,fy)
         end
     end
     return best
+end
+
+-- Mission drivers use the same legal turn choices and lane centres as traffic.
+function getMissionTrafficRoad(x,y,z)
+    if not graph or not finite(x) or not finite(y) or not finite(z) or math.abs(x)>16384 or math.abs(y)>16384 then return false end
+    -- SCM 01B5 projects the authored point to a car node even when the
+    -- dispatch location is deep inside an off-road block or the docks.
+    local edge = TrafficRoad.nearestPursuitRoad(x,y,z,nil,nil,240)
+    if not edge then return false end
+    local ax,ay,az = TrafficGraph.lanePoint(graph,edge,0)
+    local from,to = graph.nodes[edge.from+1],graph.nodes[edge.to+1]
+    local px,py,pz = roadProjection(edge,x,y)
+    local dx,dy = edgeDirection(edge)
+    return px+ax-(from.x+to.x)/2,py+ay-(from.y+to.y)/2,pz,math.deg(math.atan2(-dx,dy))
+end
+
+local function missionDriverEdge(ped)
+    local brain = isElement(ped) and PedAI.brain(ped)
+    if not graph or not brain or brain.scriptOwner~=sourceResource then return end
+    local car = getPedOccupiedVehicle(ped)
+    if not car or getVehicleOccupant(car)~=ped then return end
+    local matrix = getElementMatrix(car)
+    if not matrix then return end
+    local x,y,z = unpack(matrix[4])
+    return TrafficRoad.nearestPursuitRoad(x,y,z,matrix[2][1],matrix[2][2]),car
 end
 
 local function validPursuitStep(step)
@@ -1727,6 +1752,73 @@ local function pursuitCorner(previous,item,point)
         cx,cy=cx-3*dx,cy-3*dy
     end
     return {cx,cy,b.z}
+end
+
+local function waypointsForRoadPath(path,matrix,tx,ty)
+    local x,y=unpack(matrix[4])
+    local route={}
+    for i,item in ipairs(path) do
+        local point=laneCentre(item.edge,item.lane)
+        local previous=path[i-1]
+        local destPoint
+        if i==#path and tx then
+            local ex,ey,ez=roadProjection(item.edge,tx,ty)
+            local a,b=graph.nodes[item.edge.from+1],graph.nodes[item.edge.to+1]
+            destPoint={ex+point[1]-(a.x+b.x)/2,ey+point[2]-(a.y+b.y)/2,ez}
+        end
+        if previous then
+            local corner=pursuitCorner(previous,item,point)
+            if corner then
+                local before=route[#route] and route[#route].point or {x,y}
+                if (corner[1]-before[1])^2+(corner[2]-before[2])^2>5^2 then
+                    route[#route+1]={edge=previous.edge,lane=previous.lane,point=corner}
+                end
+            end
+        end
+        point=destPoint or point
+        if i>1 or #path==1 or (point[1]-x)*matrix[2][1]+(point[2]-y)*matrix[2][2]>1 then
+            route[#route+1]={edge=item.edge,lane=item.lane,point=point}
+        end
+    end
+    return route
+end
+
+local function assignMissionRoadPath(ped,car,path,speed,tx,ty)
+    if not path then return false end
+    local route=waypointsForRoadPath(path,getElementMatrix(car),tx,ty)
+    local segments={}
+    for i,item in ipairs(route) do
+        local x,y,z=unpack(item.point)
+        local dx,dy=edgeDirection(item.edge)
+        segments[i]={item.edge.id,item.lane,x,y,z,dx,dy,item.edge.speedClass or 0,signalGroup(item.edge,2)}
+    end
+    return TrafficActors.driveMissionPath(ped,segments,speed)
+end
+
+function driveMissionTrafficTo(ped,x,y,z,speed)
+    local first,car=missionDriverEdge(ped)
+    speed=speed or 25
+    if not first or not finite(speed) or speed<=0 or not finite(x) or not finite(y) or not finite(z)
+        or math.abs(x)>16384 or math.abs(y)>16384 then return false end
+    local destination=TrafficRoad.nearestPursuitRoad(x,y,z,nil,nil,240)
+    if not destination then return false end
+    local startX,startY=getElementPosition(car)
+    local _,_,_,at=roadProjection(first,startX,startY)
+    local _,_,_,goal=roadProjection(first,x,y)
+    local path=TrafficRoad.findPolicePath(graph,first,0,destination,goal>=at,#graph.links*3)
+    return assignMissionRoadPath(ped,car,path,speed,x,y)
+end
+
+function cruiseMissionTraffic(ped,speed)
+    local first,car=missionDriverEdge(ped)
+    if not first or not finite(speed) or speed<=0 then return false end
+    local path={{edge=first,lane=0}}
+    for i=1,8 do
+        local options=outgoingChoices(graph,path[#path].edge,0)
+        if #options==0 then break end
+        path[#path+1]={edge=options[math.random(#options)],lane=0}
+    end
+    return assignMissionRoadPath(ped,car,path,speed)
 end
 
 function TrafficRoad.updatePursuitRoute(state,actor,now)
@@ -1808,30 +1900,7 @@ function TrafficRoad.updatePursuitRoute(state,actor,now)
         record("policeRouteMisses")
         return
     end
-    local route={}
-    for i,item in ipairs(path) do
-        local point=laneCentre(item.edge,item.lane)
-        local previous=path[i-1]
-        local destPoint
-        if i==#path then
-            local ex,ey,ez=roadProjection(item.edge,tx,ty)
-            local a,b=graph.nodes[item.edge.from+1],graph.nodes[item.edge.to+1]
-            destPoint={ex+point[1]-(a.x+b.x)/2,ey+point[2]-(a.y+b.y)/2,ez}
-        end
-        if previous then
-            local corner=pursuitCorner(previous,item,point)
-            if corner then
-                local before=route[#route] and route[#route].point or {x,y}
-                if (corner[1]-before[1])^2+(corner[2]-before[2])^2>5^2 then
-                    route[#route+1]={edge=previous.edge,lane=previous.lane,point=corner}
-                end
-            end
-        end
-        point=destPoint or point
-        if i>1 or #path==1 or (point[1]-x)*matrix[2][1]+(point[2]-y)*matrix[2][2]>1 then
-            route[#route+1]={edge=item.edge,lane=item.lane,point=point}
-        end
-    end
+    local route=waypointsForRoadPath(path,matrix,tx,ty)
     state.railStart,state.railRoute={x,y,z-state.heightOffset},route
     p.path,p.arrived,p.failedAt,p.dest,p.tx,p.ty,p.order=true,nil,nil,dest.edge,tx,ty,p.mission
     p.waiting=nil

@@ -1,4 +1,4 @@
--- MAIN.txt mission INITCG; source line, global, model, x, y, z, angle, initial generations.
+-- MAIN.txt mission INITCG; source line, global, model, x, y, z, angle, initial generations, factory and alternate paint variations, generator flags and delays.
 CAR_PARK_SPAWNS = {
     {40638, 956, "hueyhosp", -832.3, 1105.9, 25.7, 270.0, 101, -1, -1, 0, 0, 1, 0, 10000},
     {40639, 957, "hueyhosp", -185.8, -992.4, 11.3, 13.0, 101, -1, -1, 0, 0, 1, 0, 10000},

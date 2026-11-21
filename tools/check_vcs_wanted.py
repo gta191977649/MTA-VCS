@@ -383,6 +383,11 @@ def main():
                 assert(row.policeHelicopters == ((stars>=3 and not flags.suppressPolice and not flags.suppressGarage) and 1 or 0))
             end
         end
+        fire("onPlayerQuit",other)
+        assert(not api:getPlayerWantedCap(other) and not api:setPlayerCrimeMultiplier(other,1))
+        local readLevel=getPlayerWantedLevel
+        function getPlayerWantedLevel(p) assert(p~=other,"wanted timer retained a departed player"); return readLevel(p) end
+        tick(250)
     """)
     # Exercise the syncer's native-task gate independently of server authorization.
     client = LuaRuntime()

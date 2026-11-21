@@ -5,6 +5,8 @@
     <min_mta_version client="1.6.0-9.22676" />
     <file src="eagleZones.txt" type="client" />
     <file src="eagleLoader-imgs.xml" type="client" />
+    <script src="water_s.lua" type="server" />
+    <export function="getVcsWaterQuadLevel" type="server" />
     <file src="water.dat" type="client" />
     <file src="zones/beach/beach.definition" type="client" />
     <file src="zones/beach/beach.map" type="client" />

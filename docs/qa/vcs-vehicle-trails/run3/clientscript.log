@@ -1,0 +1,12 @@
+[2026-11-22 02:35:55] INFO: MTA Version: 1.7.0-7.27005.0
+[2026-11-22 02:35:55] INFO: SKYGFX DEBUG LOADED
+[2026-11-22 02:35:55] INFO: SkyGfx VCS: world=true alphaTextures=358 shopTextures=22 post=true bloom=true
+[2026-11-22 02:35:57] INFO: eagleLoader: applied IMG name override for 'vcs' (3 archive entries).
+[2026-11-22 02:35:57] INFO: eagleLoader: prepared 4 IMG archive(s) / 9901 file entries for 'vcs'.
+[2026-11-22 02:35:57] INFO: Skipping reserved SA model ID 6694 for logical ID vcs_model_4196
+[2026-11-22 02:36:01] INFO: Definition mtraffic1 is using native behavior model 1350.
+[2026-11-22 02:36:01] INFO: Definition mtraffic2 is using native behavior model 1351.
+[2026-11-22 02:36:01] INFO: Expanded the building pool from 13000 to 20731 for 9156 candidate placements.
+[2026-11-22 02:36:02] INFO: Eagle: vcs created 7655 buildings and 3634 objects from 11289 placements.
+[2026-11-22 02:36:02] INFO: Parsed 212 water quads from :vcs/water.dat
+[2026-11-22 02:36:02] INFO: Wrote debug to: debug.txt

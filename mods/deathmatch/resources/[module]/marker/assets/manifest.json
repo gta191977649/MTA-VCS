@@ -1,0 +1,328 @@
+{
+  "edition": "SLUS-21590 USA v1.00",
+  "executableSha256": "3b43be57d60a29df35e41504d67bbf728d5ce2fc5aab6bbf928cbbc5963fe547",
+  "gameDtzSha256": "570a7504048e8a0187b04b20fec63fc57c404c74b84e7d3ee19df8daab1a365b",
+  "tableOffset": 3878332,
+  "models": {
+    "1": {
+      "clumpOffset": 3696788,
+      "atomicOffset": 4095388,
+      "geometryOffset": 4032352,
+      "texture": "xv_white_sl",
+      "vertices": 48,
+      "triangles": 68,
+      "bounds": [
+        [
+          -0.43672847747802734,
+          0.43672847747802734
+        ],
+        [
+          -0.16780346632003784,
+          0.16780346632003784
+        ],
+        [
+          -0.6991326808929443,
+          0.7096412181854248
+        ]
+      ],
+      "geometryFlags": 65655,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        149,
+        149,
+        149,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    },
+    "2": {
+      "clumpOffset": 4033936,
+      "atomicOffset": 3680648,
+      "geometryOffset": 4133504,
+      "texture": "xv_white_sl",
+      "vertices": 48,
+      "triangles": 68,
+      "bounds": [
+        [
+          -0.43672847747802734,
+          0.43672847747802734
+        ],
+        [
+          -0.16780346632003784,
+          0.16780346632003784
+        ],
+        [
+          -0.6991326808929443,
+          0.7096412181854248
+        ]
+      ],
+      "geometryFlags": 65655,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        149,
+        149,
+        149,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    },
+    "3": {
+      "clumpOffset": 4137740,
+      "atomicOffset": 4137768,
+      "geometryOffset": 4141216,
+      "texture": "xv_white_sl",
+      "vertices": 48,
+      "triangles": 68,
+      "bounds": [
+        [
+          -0.43672847747802734,
+          0.43672847747802734
+        ],
+        [
+          -0.5509153604507446,
+          0.8578585386276245
+        ],
+        [
+          -0.16780346632003784,
+          0.16780346632003784
+        ]
+      ],
+      "geometryFlags": 65655,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        149,
+        149,
+        149,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    },
+    "6": {
+      "clumpOffset": 4107424,
+      "atomicOffset": 4107632,
+      "geometryOffset": 4137824,
+      "texture": "zonewhite64",
+      "vertices": 144,
+      "triangles": 160,
+      "bounds": [
+        [
+          -0.5001907348632812,
+          0.5001907348632812
+        ],
+        [
+          -0.49825283885002136,
+          0.49825283885002136
+        ],
+        [
+          5.40614128112793e-05,
+          1.980675220489502
+        ]
+      ],
+      "geometryFlags": 65591,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    },
+    "7": {
+      "clumpOffset": 4107704,
+      "atomicOffset": 4108448,
+      "geometryOffset": 4135104,
+      "texture": "zonewhite64",
+      "vertices": 133,
+      "triangles": 150,
+      "bounds": [
+        [
+          -0.5009231567382812,
+          0.5009231567382812
+        ],
+        [
+          -0.49893948435783386,
+          0.49893948435783386
+        ],
+        [
+          0.000408172607421875,
+          1.9809072017669678
+        ]
+      ],
+      "geometryFlags": 65591,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    },
+    "8": {
+      "clumpOffset": 4140560,
+      "atomicOffset": 4140768,
+      "geometryOffset": 4150896,
+      "texture": "ringborderblur",
+      "vertices": 160,
+      "triangles": 160,
+      "bounds": [
+        [
+          -2.3423209190368652,
+          2.3423209190368652
+        ],
+        [
+          -0.3462424576282501,
+          0.3462424576282501
+        ],
+        [
+          -2.3423209190368652,
+          2.3423209190368652
+        ]
+      ],
+      "geometryFlags": 65655,
+      "hasPrelight": false,
+      "hasNormals": true,
+      "originalMaterialColor": [
+        149,
+        149,
+        149,
+        255
+      ],
+      "vertexColorRanges": [
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          255,
+          255
+        ]
+      ]
+    }
+  },
+  "textures": {
+    "xv_white_sl": {
+      "offset": 358592,
+      "width": 8,
+      "height": 8,
+      "sha256": "f0e1c8ef3bdc28093427b22e79dbc84a53ff22d74eb0756bfccfb50d12282cda"
+    },
+    "zonewhite64": {
+      "offset": 690896,
+      "width": 64,
+      "height": 64,
+      "sha256": "1d5b3bfd51d3574e4cdfc19bc974a34d8dfd60f76cf0c953775f3d36f9c1f6fc"
+    },
+    "ringborderblur": {
+      "offset": 407904,
+      "width": 16,
+      "height": 16,
+      "sha256": "200a31a44afe887ada06a5b6bf7e6b1aad6fb703d81d32c8d8b5ab8f9fa46f1e"
+    },
+    "coronaringa": {
+      "offset": 535920,
+      "width": 32,
+      "height": 32,
+      "sha256": "101f784a63142cdb4397f39191f42c042d6501c0a32d9be2fac1624785186d6f"
+    }
+  }
+}

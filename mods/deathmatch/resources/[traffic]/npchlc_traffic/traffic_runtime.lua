@@ -128,3 +128,9 @@ end
 function getTrafficDynamicRoute(routeId)
     return graph and graph.dynamicRoutes[routeId] or false
 end
+
+function getTrafficNodePosition(nodeId)
+    local node = graph and type(nodeId) == "number" and graph.nodes[nodeId + 1]
+    if node then return node.x, node.y, node.z end
+    return false
+end

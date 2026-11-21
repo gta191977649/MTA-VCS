@@ -219,6 +219,8 @@ local function update(force)
     setWaterColor(v[51],v[52],v[53],v[54])
     -- PS2 Update clamps rainy/hurricane rain to 0.5. Blend its endpoints here.
     setRainLevel(0.5 * wetRoads)
+    -- Keep SA heat distortion disabled throughout the VCS weather pipeline.
+    setHeatHaze(0)
 end
 
 local function renderWeather()
@@ -295,6 +297,7 @@ function VCSWeather.start()
     snapshot(getFarClipDistance, setFarClipDistance, previous)
     snapshot(getWaterColor, setWaterColor, previous)
     snapshot(getRainLevel, setRainLevel, previous)
+    snapshot(getHeatHaze, setHeatHaze, previous)
     if saved then
         VCSWeather.reloaded = true
         VCSWeather.old, VCSWeather.new = saved.old, saved.new

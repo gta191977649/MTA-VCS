@@ -27,7 +27,10 @@ def load_lua():
         end
         function start() for _, handler in ipairs(startup) do handler() end end
         function guiGetScreenSize() return screenWidth, screenHeight end
-        function getResourceFromName(name) return name == "mradar" and "mradar" or false end
+        function getResourceFromName(name)
+            if name == "mradar" or name == "frontend" or (name == "wanted" and not wantedOffline) then return name end
+            return false
+        end
         function getResourceState() return "running" end
         function getElementData() return false end
         function getElementHealth() return armed and 55 or 80 end
@@ -102,7 +105,7 @@ def render_radar(assets, diameter):
     return radar, mask
 
 
-def render_view(lua, assets, width, height, armed=False, submerged=False):
+def render_view(lua, assets, width, height, armed=False, submerged=False, expected_stars=6):
     globals_ = lua.globals()
     globals_.screenWidth, globals_.screenHeight = width, height
     globals_.armed = armed
@@ -156,7 +159,7 @@ def render_view(lua, assets, width, height, armed=False, submerged=False):
     # 0x0031EF08 supplies the 14-unit star width. Keep it square on every viewport.
     star_top = money[0][2] + money[0][4] + 3 * scale_y
     stars = [draw for draw in draws if draw[0] == "hudnumbers" and math.isclose(draw[2], star_top)]
-    assert len(stars) == 6
+    assert len(stars) == expected_stars
     for index, (_, star_x, star_y, star_w, star_h) in enumerate(stars):
         assert math.isclose((width - star_x) / scale_x, (480 - 441 + index * 13.5) / 480 * 640)
         assert math.isclose(star_y - money[0][2] - money[0][4], 3 * scale_y)
@@ -207,6 +210,10 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(args.output)
     render_view(lua, assets, 1920, 1080, submerged=True)
+    for startup_state in ("wantedOffline = true", "wantedOffline = false; exports.wanted.getLocalWantedSnapshot = function() return false end"):
+        lua.execute(startup_state + "; start()")
+        render_view(lua, assets, 960, 720, expected_stars=2)
+    lua.execute("exports.wanted.getLocalWantedSnapshot = function() return 6, 0 end; start()")
     print("Oxygen and armour bar colors verified")
     if args.detail_output:
         frame = render_view(lua, assets, 1920, 1080, armed=True)

@@ -4,6 +4,8 @@ local npc = exports.npc_hlc
 local actors = {}
 local maxRouteNodes = 4096
 local arrivalTolerance = 1
+local missionSequence = 0
+local progressTimer
 local routeDoneEvent = "npchlc_traffic:onNPCTrafficRouteDone"
 local landVehicle = { Automobile = true, Bike = true, Bicycle = true, ["Monster Truck"] = true, Quad = true }
 local interiorScenes = { [0] = "outdoor", [3] = "underground" }
@@ -52,8 +54,17 @@ local function nextWaypoint(ped, actor)
         finish(ped, actor, false)
         return false
     end
-    route.task = { kind == "pedestrian" and "walkToPos" or "driveTrafficToPoint",
-        waypoint.x, waypoint.y, waypoint.z, arrivalTolerance }
+    if route.mission then
+        local previous=route.nodes[route.index-1]
+        local anchor=previous and {previous[3],previous[4],previous[5]} or route.anchor
+        local segments={}
+        for i=route.index,math.min(#route.nodes,route.index+7) do segments[#segments+1]=route.nodes[i] end
+        route.task={"driveTrafficPhysics",route.sequence+route.index,route.speed,anchor,segments,2}
+        route.task.mission=true
+    else
+        route.task = { kind == "pedestrian" and "walkToPos" or "driveTrafficToPoint",
+            waypoint.x, waypoint.y, waypoint.z, arrivalTolerance }
+    end
     if not npc:setNPCTask(ped, route.task) then
         finish(ped, actor, false)
         return false
@@ -69,6 +80,26 @@ local function findRouteLink(graph, from, to)
         end
     end
     return false
+end
+
+function TrafficActors.driveMissionPath(ped, segments, speed)
+    local kind, vehicle = getTravelKind(ped)
+    if kind ~= "vehicle" or not segments or not segments[1] then return false end
+    local actor = actors[ped] or {}
+    actors[ped] = actor
+    actor.route = {nodes=segments,index=1,kind=kind,vehicle=vehicle,interior=getElementInterior(ped),mission=true,
+        speed=speed,anchor={getElementPosition(vehicle)},sequence=missionSequence,lastMoved=getTickCount()}
+    missionSequence=missionSequence+#segments+1
+    return nextWaypoint(ped, actor)
+end
+
+function TrafficActors.endMissionPath(ped)
+    local actor = actors[ped]
+    if actor and actor.route and actor.route.mission then
+        actor.route = nil
+        if not actor.police then actors[ped] = nil end
+        npc:clearNPCTasks(ped)
+    end
 end
 
 function TrafficActors.startRoute(graph, ped, nodeIds, loop)
@@ -179,7 +210,9 @@ local function onTaskDone(task)
         return
     end
     -- NPCHLC is a separate resource. The event crosses the Lua VM boundary.
-    for index = 1, #expected do
+    -- Physics windows are copied between resources. Their sequence number
+    -- identifies the window even when its nested lane records have been copied.
+    for index = 1, route.mission and 2 or #expected do
         if task[index] ~= expected[index] then
             return
         end
@@ -192,13 +225,32 @@ local function onPedRemoved()
     actors[source] = nil
 end
 
+local function checkMissionProgress()
+    local now=getTickCount()
+    for ped,actor in pairs(actors) do
+        local route=actor.route
+        if route and route.mission and isElement(route.vehicle) then
+            local x,y=getElementPosition(route.vehicle)
+            if not getElementSyncer(route.vehicle) or not route.sampleX or
+                (x-route.sampleX)^2+(y-route.sampleY)^2>3^2 then
+                route.sampleX,route.sampleY,route.lastMoved=x,y,now
+            elseif (now-route.lastMoved)%4294967296>45000 then
+                npc:clearNPCTasks(ped)
+                finish(ped,actor,false)
+            end
+        end
+    end
+end
+
 function TrafficActors.start()
+    progressTimer=setTimer(checkMissionProgress,3000,0)
     addEventHandler("npc_hlc:onNPCTaskDone", root, onTaskDone)
     addEventHandler("onPedWasted", root, onPedRemoved, true, "low")
     addEventHandler("onElementDestroy", root, onPedRemoved)
 end
 
 function TrafficActors.stop()
+    if isTimer(progressTimer) then killTimer(progressTimer) end
     removeEventHandler("npc_hlc:onNPCTaskDone", root, onTaskDone)
     removeEventHandler("onPedWasted", root, onPedRemoved)
     removeEventHandler("onElementDestroy", root, onPedRemoved)

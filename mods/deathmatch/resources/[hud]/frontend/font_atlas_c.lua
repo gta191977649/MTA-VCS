@@ -72,6 +72,23 @@ function CFont:width(text, size, name)
     return width * size / face.cellHeight
 end
 
+-- SLUS 00261600 centres fixed-pitch glyphs in cells. Both modes advance
+-- by the ceiling of the scaled width before projecting to screen pixels.
+function CFont:scriptCounterRun(text, fixed)
+    local face = self:face("gametext")
+    if not face then return end
+    local run = {width = 0}
+    for char in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        local item = glyph(face, char)
+        if item then
+            local advance = fixed and face.lineHeight or item[2]
+            run[#run+1] = {char, run.width + (advance - item[2]) * 0.3}
+            run.width = run.width + math.ceil(advance * 0.6)
+        end
+    end
+    return run
+end
+
 function CFont:draw(text, name, x, y, size, color, shadow, horizontalScale, white)
     local face = self:face(name)
     if not face then return false end

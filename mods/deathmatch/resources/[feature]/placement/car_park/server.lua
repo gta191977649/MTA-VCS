@@ -22,7 +22,7 @@ local function spawnParked(row)
     if not id then return false, "unavailable model " .. name end
     local base = exports.vcs_model:getVcsModelBase(id, "vehicle")
     if not base then return false, "unavailable model " .. name end
-    local vehicle = exports.vcs_vehicle:createVcsVehicle(id, x, y, z + SPAWN_LIFT, 0, 0, angle)
+    local vehicle = exports.vcs_vehicle:createVcsVehicle(id, x, y, z + SPAWN_LIFT, 0, 0, angle, row[9], row[10])
     if not vehicle then return false, "creation failed for " .. name end
     local space = {interior = row.interior or 0, dimension = row.dimension or 0}
     parkedSpaces[vehicle] = space
@@ -41,12 +41,14 @@ end
 addEventHandler("onResourceStart", resourceRoot, function()
     local missing, created = {}, 0
     for _, row in ipairs(CAR_PARK_SPAWNS) do
-        if row[8] > 0 then
+        -- SAFEHOU_4601 enables generator $995 for the Prawn Island studio.
+        -- The standalone world exposes its Crash! activity without a story save.
+        if row[8] > 0 or row[2] == 995 then
             local ok, reason = spawnParked(row)
             if ok then created = created + 1 else missing[reason] = (missing[reason] or 0) + 1 end
         end
     end
-    outputDebugString("[car_park] Spawned " .. created .. " initially enabled script generators.")
+    outputDebugString("[car_park] Spawned " .. created .. " script generators.")
     for reason, count in pairs(missing) do
         outputDebugString("[car_park] " .. reason .. " (" .. count .. " locations)", 2)
     end

@@ -1,0 +1,134 @@
+{
+  "server_port": 56666,
+  "production_sha256": {
+    "camera_paths.lua": "4d96b94ebcaf6b0d0be733192ad10f51b8d37e3c6ac138aff142abde92d6b429",
+    "camera_plan.lua": "84b5f4804fb1fd1b639cc4f10f5aec78f74759e0959366c17479e02024f24779",
+    "camera.lua": "80e38b86160f6a31729ef52f2f3f543a149526c76560f031761dc894311ffd29",
+    "client.lua": "f0f2088c34e160cea39dbb68d5c35be65ac567993633846d2cc4091f8a257d0e",
+    "meta.xml": "35141e9d9a937aa7de4f15ebcda18c61fdf3beaba12753774a2f9e0e40e2a98d"
+  },
+  "runs": {
+    "clearance-day": {
+      "samples": 209,
+      "shots": [
+        "city-lookout",
+        "exit-platform",
+        "greeting",
+        "height",
+        "neighboring-riders",
+        "quiet-farewell",
+        "seated-introduction",
+        "skyline-light",
+        "vice-point-reveal",
+        "waterfront",
+        "wheel-scale"
+      ],
+      "uncertified": 0,
+      "blocked": 0,
+      "path_changes": [],
+      "motion": null,
+      "rain": null,
+      "vcs_weather": null,
+      "motion_acceptance": false
+    },
+    "verified-sunset": {
+      "samples": 123,
+      "shots": [
+        "city-lookout",
+        "greeting",
+        "height",
+        "neighboring-riders",
+        "quiet-farewell",
+        "seated-introduction",
+        "skyline-light",
+        "vice-point-reveal",
+        "waterfront",
+        "wheel-scale"
+      ],
+      "uncertified": 0,
+      "blocked": 0,
+      "path_changes": [],
+      "motion": {
+        "pathChanges": 0,
+        "maxPitch": 3.6154311,
+        "maxLens": 2.073643,
+        "maxYaw": 7.2587137,
+        "samples": 6273,
+        "maxFov": 805.18915
+      },
+      "rain": null,
+      "vcs_weather": null,
+      "motion_acceptance": false,
+      "motion_note": "Early probe included intentional cut/ownership transients in its rate maximum; use final-night and vcs-rain-final for within-shot rate acceptance."
+    },
+    "final-night": {
+      "samples": 80,
+      "shots": [
+        "city-lookout",
+        "greeting",
+        "height",
+        "neighboring-riders",
+        "quiet-farewell",
+        "seated-introduction",
+        "skyline-light",
+        "vice-point-reveal",
+        "waterfront",
+        "wheel-scale"
+      ],
+      "uncertified": 0,
+      "blocked": 0,
+      "path_changes": [],
+      "motion": {
+        "pathChanges": 0,
+        "maxPitch": 3.1250055,
+        "maxLens": 2.0766571,
+        "maxYaw": 5.5875955,
+        "samples": 4242,
+        "maxFov": 3.8965106
+      },
+      "rain": null,
+      "vcs_weather": null,
+      "motion_acceptance": true
+    },
+    "vcs-rain-final": {
+      "samples": 83,
+      "shots": [
+        "city-lookout",
+        "greeting",
+        "height",
+        "neighboring-riders",
+        "quiet-farewell",
+        "seated-introduction",
+        "skyline-light",
+        "vice-point-reveal",
+        "waterfront",
+        "wheel-scale"
+      ],
+      "uncertified": 0,
+      "blocked": 0,
+      "path_changes": [],
+      "motion": {
+        "pathChanges": 0,
+        "maxPitch": 2.2657936,
+        "maxLens": 2.0848022,
+        "fovPeak": {
+          "after": 64.185974,
+          "beforeTime": 611.38757,
+          "expectedAfter": 64.226784,
+          "age": 3406.6057,
+          "before": 64.094795,
+          "key": "7:height",
+          "expectedBefore": 64.185974,
+          "afterTime": 611.40717,
+          "delta": 19.610901
+        },
+        "maxYaw": 4.5582271,
+        "samples": 4392,
+        "maxFov": 4.6493988
+      },
+      "rain": 0.5,
+      "vcs_weather": 2,
+      "motion_acceptance": true
+    }
+  }
+}

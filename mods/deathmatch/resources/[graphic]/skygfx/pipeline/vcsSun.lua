@@ -54,6 +54,26 @@ local function sunDirection(clock)
     return x/length, 1/length, z/length
 end
 
+local function renderClock(now)
+    local hour, min = getTime()
+    local clock = hour * 60 + min
+    if minute ~= clock or now < minuteTick then minute, minuteTick = clock, now end
+    if not isTimeFrozen() then
+        clock = clock + math.min((now-minuteTick) / math.max(getMinuteDuration(), 1), 1)
+    end
+    return clock
+end
+
+-- Forecast the sky anchor independently of the current camera's visibility.
+function getVcsRenderedSun(seconds)
+    local values = VCSWeather.data.values
+    if not active or not values or VCSWeather.data.indoors or getCameraInterior() ~= 0 then return false end
+    local clock = renderClock(getTickCount())
+    if not isTimeFrozen() then clock = clock + (seconds or 0)*1000/math.max(1,getMinuteDuration()) end
+    local x,y,z = sunDirection(clock % 1440)
+    return x,y,z,z > 0 and values[28]*values[29] > 0 and math.max(values[25],values[26],values[27]) >= 32 and getRainLevel() < .2
+end
+
 function VCSSun.start()
     texture = dxCreateTexture("txd/vcs-coronastar.png", "argb", false, "clamp")
     shader = dxCreateShader("shader/vcsSun.fx")
@@ -198,12 +218,7 @@ function VCSSun.prepare(values)
     end
 
     local now = getTickCount()
-    local hour, min = getTime()
-    local clock = hour * 60 + min
-    if minute ~= clock or now < minuteTick then minute, minuteTick = clock, now end
-    if not isTimeFrozen() then
-        clock = clock + math.min((now-minuteTick) / math.max(getMinuteDuration(), 1), 1)
-    end
+    local clock = renderClock(now)
     local sx, sy, sz = sunDirection(clock)
     -- SLUS-21590 registers the core at z > -0.2 and the halo at z > 0.
     if sz <= -0.2 then VCSSun.resetVisibility() return end

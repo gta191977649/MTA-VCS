@@ -1,5 +1,6 @@
 local rules = WantedRules
 local states = {}
+local departing = setmetatable({}, {__mode="k"})
 local pendingEvents = {}
 local publishing = false
 local paroleKey = "nspray:paroleStars"
@@ -20,7 +21,7 @@ local function elapsed(now, thenTick)
 end
 
 local function isPlayer(player)
-    return isElement(player) and getElementType(player) == "player"
+    return isElement(player) and not departing[player] and getElementType(player) == "player"
 end
 
 local function publish(player, state, level, reason)
@@ -248,11 +249,17 @@ end
 addEvent("onPlayerWanted", false)
 addEvent("onPlayerPoliceResponseChange", false)
 
-addEventHandler("onPlayerJoin", root, function() observe(source, getTickCount()) end)
+local function forgetPlayer(player)
+    local state = states[player]
+    if state then buckets[state.bucket][player] = nil end
+    states[player] = nil
+end
+addEventHandler("onPlayerJoin", root, function() departing[source]=nil observe(source, getTickCount()) end)
 addEventHandler("onPlayerQuit", root, function()
-    local state = states[source]
-    if state then buckets[state.bucket][source] = nil end
-    states[source] = nil
+    -- Another resource can still see a valid element during its own quit handler.
+    -- Prevent a final cleanup call from enrolling that player again.
+    departing[source]=true
+    forgetPlayer(source)
 end)
 addEventHandler("onPlayerWasted", root, function()
     local state = observe(source, getTickCount())
@@ -279,7 +286,9 @@ addEventHandler("onResourceStart", resourceRoot, function()
     local bucket = 1
     setTimer(function()
         local tick = getTickCount()
-        for player in pairs(buckets[bucket]) do updatePlayer(player, tick) end
+        for player in pairs(buckets[bucket]) do
+            if isPlayer(player) then updatePlayer(player,tick) else forgetPlayer(player) end
+        end
         bucket = bucket % #buckets + 1
     end, 50, 0)
 end, false)
@@ -309,11 +318,21 @@ function resetPlayerWanted(player, reason)
     return writePoints(player, state, 0, reason or "reset")
 end
 
+function getPlayerWantedCap(player)
+    if not isPlayer(player) then return false end
+    return observe(player,getTickCount()).cap or 6
+end
+
 function setPlayerWantedCap(player, maximum)
     if not isPlayer(player) or not ceilings[maximum] then return false end
     local state = observe(player, getTickCount())
     state.cap, state.ceiling = maximum, ceilings[maximum]
     return writePoints(player, state, state.points, "cap")
+end
+
+function getPlayerCrimeMultiplier(player)
+    if not isPlayer(player) then return false end
+    return observe(player, getTickCount()).multiplier or 1
 end
 
 function setPlayerCrimeMultiplier(player, multiplier)

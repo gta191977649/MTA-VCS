@@ -1,6 +1,6 @@
 local price = 6000
 local x, y, z = -1056.27, 1330.77, 12.58
-createMarker(x, y, z - 1, "cylinder", 1.6, 245, 88, 145, 150)
+exports.marker:createMarker(x, y, z - 1, "cylinder", 1.6, 245, 88, 145, 150)
 local entrance = createColSphere(x, y, z, 1.6)
 local sessions = {}
 local leaveFirst = {}

@@ -442,18 +442,24 @@ def main():
     vm.execute((resources / "[traffic]/npchlc_traffic/ped_models/models.lua").read_text(encoding="utf-8"))
     vm.execute((resources / "[traffic]/npchlc_traffic/traffic_model_bindings.lua").read_text(encoding="utf-8"))
     vm.globals().handlingData = (resources / "[model]/vcs_vehicle/data/handling.dat").read_text(encoding="ascii")
+    vm.execute((resources / "[model]/vcs_vehicle/data/paint.lua").read_text(encoding="utf-8"))
     vm.execute((resources / "[model]/vcs_vehicle/vehicle_s.lua").read_text(encoding="utf-8"))
     vm.execute("""
         function getResourceFromName() return false end
         function getThisResource() return {} end
         function getResourceName() return "npchlc_traffic" end
         function getElementType(e) return e.kind end
+        function getElementData(e,k) return e[k] end
         local reads,writes=0,0
         function fileOpen(path,readonly) assert(path=="data/handling.dat" and readonly);return {} end
         function fileGetSize() return #handlingData end
         function fileRead(_,size) assert(size==#handlingData);reads=reads+1;return handlingData end
         function fileClose() end
         exports.vcs_vehicle={getVcsHandlingData=getVcsHandlingData,
+            bindVcsVehiclePaint=function(_,car,id)
+                assert(car["npchlc_traffic:originalModel"]==id)
+                car.painted=true
+            end,
             configureVcsDashboardBeacon=function(_,e,id) return configureVcsDashboardBeacon(e,id) end}
         function getVehicleHandling(e) return e end
         function setVehicleHandling(e,key,value) e[key]=value;writes=writes+1;return true end
@@ -474,6 +480,7 @@ def main():
             assert(TrafficModelBindings.get(original)==base)
             local car={kind="vehicle"}
             TrafficModelBindings.tag(car,original)
+            assert(car.painted)
             local row=expected[original]
             if row then
                 assert(car.mass==row[1] and car.maxVelocity==row[2] and car.engineAcceleration==row[3]*.4 and car.driveType==row[4])

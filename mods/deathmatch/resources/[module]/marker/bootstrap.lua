@@ -1,0 +1,1 @@
+MarkerNativeColor=setMarkerColor

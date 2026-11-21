@@ -1,5 +1,5 @@
 <meta>
-    <info name="VCS Bomb Shop" type="script" description="Remote car bombs"/>
+    <info name="VCS Bomb Shop" type="script" description="Ignition car bombs"/>
     <include resource="garage"/>
     <include resource="wanted"/>
     <include resource="frontend"/>

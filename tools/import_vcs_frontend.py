@@ -32,6 +32,12 @@ SOUNDS = {
     "money": ((209, b"SFX_MONEY_LEFT"), (210, b"SFX_MONEY_RIGHT")),
     # SLUS DrawPager event 0x65 -> frontend audio dispatch 0x1C5794.
     "pager": ((230, b"pagermono"),),
+    # PS2 opcode 00D9 (00366500) -> frontend dispatcher 001C55C0.
+    # Race ticks and gate pickups submit 222/223 plus centered sample 221.
+    "race_gate": ((222, b"SFX_PART_MISSION"), (223, b"SFX_PART_MISSION")),
+    "race_gate_center": ((221, b"SFX_PART_MISSION"),),
+    "race_go": ((173, b"SFX_GO_LEFT"), (174, b"SFX_GO_RIGHT")),
+    "race_go_center": ((172, b"SFX_GO_CENTRE"),),
     "timer": ((276, b"Timer"),),
     "radio_click": ((235, b"SFX_RADIO_CLICK."),),
     "radio_dial1": ((236, b"SFX_RADIO_DIAL_1"),),
@@ -45,6 +51,8 @@ MENU_SOUNDS = {
     "select": ((7, b"SFX_FE_SELECT"),),
 }
 VAG_FILTERS = ((0, 0), (60, 0), (115, -52), (98, -55), (122, -60))
+MISSION_STREAM = "AUDIO/MUSIC/MISCOM2.VB"
+MISSION_STREAM_HASH = "415695b8fb4b88d247d309c30a828e8149930a7c61e866fb288dc9f6d4d8c658"
 
 
 def u32(data, offset):
@@ -162,6 +170,40 @@ def decode_vag(data):
     return samples
 
 
+def encode_wave(channels, rate):
+    pcm = b"".join(struct.pack("<" + "h" * len(channels), *frame) for frame in zip(*channels))
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as wav:
+        wav.setparams((len(channels), 2, rate, 0, "NONE", "not compressed"))
+        wav.writeframes(pcm)
+    return buffer.getvalue()
+
+
+def import_mission_tune(disc, files):
+    # 022B at 0x003667B0 queues stream 109 + argument. The IOP stream table
+    # in CDSTREAM.IRX starts at file offset 0x64B0 and uses 40-byte records.
+    index = 110
+    table = (disc / "MODULES/CDSTREAM.IRX").read_bytes()
+    record = table[0x64B0 + 40 * index:0x64B0 + 40 * (index + 1)].split(b"\0")[0]
+    if record != b"\\AUDIO\\MUSIC\\MISCOM2.VB;1":
+        raise ValueError("Unexpected SLUS-21590 mission stream")
+    source = (disc / MISSION_STREAM).read_bytes()
+    interleave, rate = 8192, 32000
+    if sha256(source) != MISSION_STREAM_HASH or len(source) % (2 * interleave):
+        raise ValueError("Unexpected MISCOM2.VB payload")
+    channels = []
+    for channel in range(2):
+        blocks = range(channel * interleave, len(source), 2 * interleave)
+        samples = decode_vag(b"".join(source[start:start + interleave] for start in blocks))
+        if len(samples) != len(source) // 32 * 28:
+            raise ValueError("Incomplete mission stream")
+        channels.append(samples)
+    encoded = encode_wave(channels, rate)
+    files["sfx_mission_passed.wav"] = encoded
+    return {"source": MISSION_STREAM, "sourceSha256": MISSION_STREAM_HASH, "streamIndex": index,
+            "channels": 2, "sampleRate": rate, "interleaveBytes": interleave, "sha256": sha256(encoded)}
+
+
 def import_sound_bank(disc, files, bank_number, sounds):
     bank = f"AUDIO/SET0/SFX{bank_number}_PS"
     index = (disc / f"{bank}.SDT").read_bytes()
@@ -183,12 +225,7 @@ def import_sound_bank(disc, files, bank_number, sounds):
                                 "label": label.decode(), "sha256": sha256(vag)})
             if len(rates) != 1 or len({len(samples) for samples in channels}) != 1:
                 raise ValueError(f"Channel mismatch in {name}")
-            pcm = b"".join(struct.pack("<" + "h" * len(channels), *frame) for frame in zip(*channels))
-            buffer = io.BytesIO()
-            with wave.open(buffer, "wb") as wav:
-                wav.setparams((len(channels), 2, rates.pop(), 0, "NONE", "not compressed"))
-                wav.writeframes(pcm)
-            encoded = buffer.getvalue()
+            encoded = encode_wave(channels, rates.pop())
             files[f"sfx_{name}.wav"] = encoded
             output[name] = {"source": bank + ".RAW", "indexSource": bank + ".SDT", "channels": records,
                             "sha256": sha256(encoded)}
@@ -198,7 +235,18 @@ def import_sound_bank(disc, files, bank_number, sounds):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("disc_directory", type=Path)
+    parser.add_argument("--mission-passed-only", action="store_true", help="Update the mission tune and its manifest entry")
     args = parser.parse_args()
+    output = RESOURCE / "ps2"
+    if args.mission_passed_only:
+        manifest = json.loads((output / "manifest.json").read_bytes())
+        if manifest.get("sourceSha256") != GAME_HASH:
+            parser.error("Expected the existing SLUS-21590 frontend manifest")
+        files = {}
+        manifest["sounds"]["mission_passed"] = import_mission_tune(args.disc_directory, files)
+        write_files(output, files, manifest)
+        print("Imported mission_passed from MISCOM2.VB")
+        return
     source = args.disc_directory / "PS2/GAME.DTZ"
     compressed = source.read_bytes()
     if sha256(compressed) != GAME_HASH:
@@ -207,7 +255,6 @@ def main():
     if image[:8] != b"GATG\x01\0\0\0" or u32(image, 8) != len(image):
         parser.error("Invalid GAME.DTZ resource image")
 
-    output = RESOURCE / "ps2"
     files, textures = {}, {}
     def save_texture(data, name, entry, raster, texture_format, source_name, base=0):
         width, height, rgba, pixel_offset, palette_offset = decode_texture(data, raster, texture_format)
@@ -252,9 +299,15 @@ def main():
     files["gxt.json"] = json.dumps(read_gxt(gxt), ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     sounds = import_sound_bank(args.disc_directory, files, 0, SOUNDS)
     sounds.update(import_sound_bank(args.disc_directory, files, 3, MENU_SOUNDS))
+    sounds["mission_passed"] = import_mission_tune(args.disc_directory, files)
     manifest = {"edition": "SLUS-21590 USA v1.00", "source": "PS2/GAME.DTZ", "sourceSha256": GAME_HASH,
                 "textures": textures, "fonts": fonts, "text": {"source": "AMERICAN.GXT", "sha256": sha256(gxt)},
                 "archive": {"source": "GTA3PS2.IMG", "sha256": archive_hash}, "sounds": sounds}
+    write_files(output, files, manifest)
+    print(f"Imported {len(textures)} textures, {len(fonts)} font tables and {len(sounds)} sounds into {output}")
+
+
+def write_files(output, files, manifest):
     files["manifest.json"] = (json.dumps(manifest, sort_keys=True, separators=(",", ":")) + "\n").encode()
     output.mkdir(parents=True, exist_ok=True)
     for name, content in files.items():
@@ -262,7 +315,6 @@ def main():
         temporary = path.with_suffix(".tmp")
         temporary.write_bytes(content)
         temporary.replace(path)
-    print(f"Imported {len(textures)} textures, {len(fonts)} font tables and {len(sounds)} sounds into {output}")
 
 
 if __name__ == "__main__":

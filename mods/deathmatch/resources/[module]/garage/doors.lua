@@ -127,6 +127,7 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
     end
     findDoors()
     setTimer(findDoors, 1000, 0)
+    triggerServerEvent("garage:doorsReady", resourceRoot)
 end)
 
 addEventHandler("onClientPreRender", root, function()

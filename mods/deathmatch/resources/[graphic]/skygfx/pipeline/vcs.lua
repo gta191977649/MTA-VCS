@@ -194,6 +194,7 @@ end
 
 local function restoreGraphics()
     clearHistory()
+    VCSVehicleTrails.reset()
     VCSVehicle.invalidate()
     VCSWater.restoreGraphics()
     VCSSun.resetVisibility()
@@ -260,6 +261,8 @@ local function bindHistory(target, weight)
 end
 
 local function renderPost()
+    -- Submit lamp streaks before capturing the scene, including in post-FX off mode.
+    VCSVehicleTrails.render()
     stats.hudFrames = (stats.hudFrames or 0) + 1
     stats.captures, stats.fullscreen, stats.bloomPasses, stats.historyWrites = 0, 0, 0, 0
     if isMainMenuActive() then
@@ -328,6 +331,7 @@ function getVcsGraphicsStats()
         props=isElement(prop) and isElement(solidProp), propAlpha=isElement(propAlpha), foliage=isElement(foliage),
         shopProps=isElement(shopProp), shopTextures=stats.shopTextures or 0,
         post=isElement(compose), mode=mode, sun=VCSSun.getStats(), water=VCSWater.getStats(), vehicles=VCSVehicle.getStats(),
+        vehicleTrails=VCSVehicleTrails.getStats(),
         captures=stats.captures, fullscreen=stats.fullscreen,
         hudFrames=stats.hudFrames or 0,
         bloomPasses=stats.bloomPasses, historyWrites=stats.historyWrites,
@@ -353,6 +357,7 @@ function VCSGraphics.start()
     if not foliage then outputDebugString("SkyGfx VCS: foliage shader unavailable", 2) end
     VCSSun.start()
     VCSVehicle.start()
+    VCSVehicleTrails.start()
     VCSWater.start()
     compose = dxCreateShader("shader/vcsPost.fx")
     if compose then
@@ -398,6 +403,7 @@ function VCSGraphics.stop(reloading)
     releaseTargets()
     VCSSun.stop(reloading)
     VCSVehicle.stop()
+    VCSVehicleTrails.stop()
     VCSWater.stop()
     release(world)
     release(worldAlpha)

@@ -1,15 +1,19 @@
 # Placement coverage
 
 Source: US PS2 MAIN.txt. `car_park/spawns.lua` retains all 199 INITCG
-records and the first INITCG switch state. Only initially enabled generators
-are instantiated; later mission/progress switches are not implemented.
+records and the first INITCG switch state. Placement spawns initially enabled
+generators plus the studio Coach ($995) for Crash! in the standalone world.
+The original SAFEHOU script enables this Coach as the story progresses.
 Vehicle names resolve through the live vcs_model catalog and all vehicles use
 the vcs_vehicle factory. The 17 additional parked-car models are packaged with
 private client IDs to avoid replacing models sharing the same native hull.
 Run tools/extend_placement_models.py after regenerating the traffic model resource.
 SA physics settles vehicles from a 1 m
 lift; original generator ground queries and per-model offsets are not yet
-reproduced. Original colors, alarm and lock chances are retained as data only.
+reproduced. The hospital Air Ambulance generators use the model's default
+white primary paint (255, 255, 255) and dark red secondary paint (176, 0, 0).
+The vehicle factory resolves this default when creating original model 189.
+Placement retains the remaining generator colour, alarm and lock fields as data.
 
 `pickups/weapons.lua` contains the 52 fixed INITPU weapon locations. Compatible
 SA weapons are used as approximations; unsupported VCS-only weapons are logged.

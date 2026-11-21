@@ -1,0 +1,68 @@
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : VCS lamp trails isolated acceptance
+= Server IP address: 127.0.0.1
+= Server port      : 60376
+= 
+= Log file         : ..66968226600/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 52149
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-22 02:38:26] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-22 02:38:27] Resources: 14 loaded, 0 failed
+[2026-11-22 02:38:27] Starting resources...
+[2026-11-22 02:38:27] Server minclientversion is now 1.6.0-9.21938
+[2026-11-22 02:38:27] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed before Tuesday.
+[2026-11-22 02:38:27] Some files in 'skygfx' use deprecated functions.
+[2026-11-22 02:38:27] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-22 02:38:27] Server minclientversion is now 1.6.0-9.22676
+[2026-11-22 02:38:28] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-22 02:38:28] WARNING: <owner_email_address> not set
+[2026-11-22 02:38:28] Server started and is ready to accept connections!
+[2026-11-22 02:38:28] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-22 02:38:28] Type 'help' for a list of commands.
+[2026-11-22 02:38:30] INFO: [npchlc_traffic] Loaded 5308 pedestrian, 2701 road and 378 boat nodes, 17652 links and 1 routes.
+[2026-11-22 02:38:33] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-22 02:38:33] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-22 02:38:40] TRAIL_QA CLIENT_READY
+[2026-11-22 02:38:41] INFO: nurupo    Loaded vcs In: 5.18 Seconds
+[2026-11-22 02:38:55] TRAIL_QA GROUND 9.8810043334961
+[2026-11-22 02:38:55] TRAIL_QA BEGIN front-full
+[2026-11-22 02:38:59] TRAIL_QA SCREENSHOT run4-player-front-full-orbit
+[2026-11-22 02:39:00] TRAIL_QA RESULT front-full [{"total":1200,"maximum":10,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":10,"active":true,"lamps":22,"samples":2,"failures":0}}]
+[2026-11-22 02:39:01] TRAIL_QA BEGIN rear-full
+[2026-11-22 02:39:04] TRAIL_QA SCREENSHOT run4-player-rear-full-orbit
+[2026-11-22 02:39:06] TRAIL_QA RESULT rear-full [{"total":4210,"maximum":40,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":30,"active":true,"lamps":30,"samples":6,"failures":0}}]
+[2026-11-22 02:39:06] TRAIL_QA BEGIN front-reduced
+[2026-11-22 02:39:09] TRAIL_QA SCREENSHOT run4-player-front-reduced-orbit
+[2026-11-22 02:39:11] TRAIL_QA RESULT front-reduced [{"total":2540,"maximum":30,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":20,"active":true,"lamps":28,"samples":4,"failures":0}}]
+[2026-11-22 02:39:12] TRAIL_QA BEGIN front-off
+[2026-11-22 02:39:15] TRAIL_QA SCREENSHOT run4-player-front-off-orbit
+[2026-11-22 02:39:17] TRAIL_QA RESULT front-off [{"total":1769,"maximum":15,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":12,"active":true,"lamps":28,"samples":2,"failures":0}}]
+[2026-11-22 02:39:17] TRAIL_QA BEGIN damaged
+[2026-11-22 02:39:20] TRAIL_QA SCREENSHOT run4-player-damaged-orbit
+[2026-11-22 02:39:22] TRAIL_QA RESULT damaged [{"total":726,"maximum":15,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":7,"active":true,"lamps":28,"samples":2,"failures":0}}]
+[2026-11-22 02:39:23] TRAIL_QA BEGIN lights-off
+[2026-11-22 02:39:26] TRAIL_QA SCREENSHOT run4-player-lights-off-orbit
+[2026-11-22 02:39:28] TRAIL_QA RESULT lights-off [{"total":590,"maximum":10,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":true,"lamps":28,"samples":0,"failures":0}}]
+[2026-11-22 02:39:28] TRAIL_QA BEGIN disabled
+[2026-11-22 02:39:31] TRAIL_QA SCREENSHOT run4-player-disabled-orbit
+[2026-11-22 02:39:33] TRAIL_QA RESULT disabled [{"total":0,"maximum":0,"frames":120,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":0,"active":false,"lamps":0,"samples":0,"failures":0}}]
+[2026-11-22 02:39:34] TRAIL_QA BEGIN reenabled
+[2026-11-22 02:39:37] TRAIL_QA SCREENSHOT run4-player-reenabled-orbit
+[2026-11-22 02:39:39] TRAIL_QA RESULT reenabled [{"total":2050,"maximum":20,"frames":121,"driver":true,"npc":false,"model":420,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":20,"active":true,"lamps":30,"samples":4,"failures":0}}]
+[2026-11-22 02:39:39] TRAIL_QA BEGIN model
+[2026-11-22 02:39:42] TRAIL_QA SCREENSHOT run4-player-model-orbit
+[2026-11-22 02:39:44] TRAIL_QA RESULT model [{"total":1580,"maximum":20,"frames":121,"driver":true,"npc":false,"model":596,"npcSegments":0,"npcFrames":0,"failed":false,"stats":{"segments":10,"active":true,"lamps":29,"samples":2,"failures":0}}]
+[2026-11-22 02:39:45] TRAIL_QA BEGIN npc
+[2026-11-22 02:39:45] TRAIL_QA NPC_SERVER [{"assignment":"driveTrafficRail","driver":"ped","originalModel":224,"model":440}]
+[2026-11-22 02:39:48] TRAIL_QA SCREENSHOT run4-npc-npc-orbit
+[2026-11-22 02:40:09] TRAIL_QA NPC_SERVER [{"assignment":"driveTrafficPhysics","driver":"ped","originalModel":206,"model":439}]
+[2026-11-22 02:40:10] TRAIL_QA RESULT npc [{"total":13410,"maximum":30,"frames":720,"driver":false,"npc":true,"model":596,"npcSegments":13688,"npcFrames":750,"failed":false,"stats":{"segments":15,"active":true,"lamps":25,"samples":3,"failures":0}}]
+[2026-11-22 02:40:10] TRAIL_QA NPC_OBSERVED
+[2026-11-22 02:40:10] TRAIL_QA ASSERTIONS_PASS
+[2026-11-22 02:40:10] TRAIL_QA FINISH
+[2026-11-22 02:40:13] TRAIL_QA COMPLETE

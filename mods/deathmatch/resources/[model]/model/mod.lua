@@ -784,6 +784,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["SPEED2"] = {
+		paintModel = 185,
 		parent = 452,
 		name = "SPEED2",
 		txd = "src/vehicle/speeder2.txd",
@@ -874,6 +875,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["CHOLO"] = {
+		paintModel = 265,
 		parent = 475,
 		name = "CHOLO",
 		txd = "src/vehicle/chollo.txd",
@@ -898,6 +900,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["IDAHO"] = {
+		paintModel = 199,
 		parent = 491,
 		name = "IDAHO",
 		txd = "src/vehicle/idaho.txd",
@@ -947,6 +950,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["GANGBUR"] = {
+		paintModel = 269,
 		parent = 505,
 		name = "GANGBUR",
 		txd = "src/vehicle/gangbur.txd",
@@ -971,6 +975,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["6WEELAT"] = {
+		paintModel = 170,
 		parent = 411,
 		name = "6WEELAT",
 		txd = "src/vehicle/6atv.txd",
@@ -979,7 +984,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["SENTXS"] = {
-		parent = 411,
+		parent = 405,
 		name = "SENTXS",
 		txd = "src/vehicle/sentxs.txd",
 		dff = "src/vehicle/sentxs.dff",
@@ -1011,6 +1016,7 @@ IMG_VEHICLE = {
 		replace = true,
 	},
 	["MOPED"] = {
+		paintModel = 202,
 		parent = 462,
 		name = "MOPED",
 		txd = "src/vehicle/mop50.txd",
@@ -1019,6 +1025,7 @@ IMG_VEHICLE = {
 		replace = false,
 	},
 	["BOBO"] = {
+		paintModel = 208,
 		parent = 411,
 		name = "BOBO",
 		txd = "src/vehicle/bobo.txd",

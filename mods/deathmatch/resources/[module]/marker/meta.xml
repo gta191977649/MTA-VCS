@@ -1,0 +1,28 @@
+<meta>
+    <info name="VCS world markers" author="MTA-VCS" type="script" />
+    <min_mta_version client="1.6.0-9.22620" server="1.6.0-9.22620" />
+    <include resource="frontend" />
+    <include resource="skygfx" />
+    <script src="bootstrap.lua" type="shared" cache="false" />
+    <script src="shared.lua" type="shared" cache="false" />
+    <script src="assets/meshes.lua" type="client" cache="false" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" cache="false" />
+    <file src="assets/xv_white_sl.png" />
+    <file src="assets/zonewhite64.png" />
+    <file src="assets/ringborderblur.png" />
+    <file src="assets/coronaringa.png" />
+    <export function="createMarker" type="shared" />
+    <export function="getMarkerTypes" type="shared" />
+    <export function="getMarkerType" type="shared" />
+    <export function="setMarkerType" type="shared" />
+    <export function="getMarkerColor" type="shared" />
+    <export function="setMarkerColor" type="shared" />
+    <export function="setMarkerTarget" type="shared" />
+    <export function="setMarkerAnimation" type="shared" />
+    <export function="setMarkerVisibleTo" type="server" />
+    <export function="isMarkerVisibleTo" type="server" />
+    <export function="setMarkerBlipVisible" type="shared" />
+    <export function="isMarkerBlipVisible" type="shared" />
+    <export function="getMarkerBlip" type="shared" />
+</meta>

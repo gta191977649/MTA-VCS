@@ -24,6 +24,21 @@ local function getPrice(vehicle, wanted)
     return (wanted > 0 or getElementHealth(vehicle) < repairThreshold) and price or 0
 end
 
+local function respray(vehicle)
+    if exports.vcs_vehicle:resprayVcsVehicle(vehicle) then
+        local red, green, blue = getVehicleColor(vehicle, true)
+        return {red, green, blue}
+    end
+    local colors = {getVehicleColor(vehicle, true)}
+    local paint
+    repeat
+        paint = paintColors[math.random(#paintColors)]
+    until paint[1] ~= colors[1] or paint[2] ~= colors[2] or paint[3] ~= colors[3]
+    colors[1], colors[2], colors[3] = unpack(paint)
+    setVehicleColor(vehicle, unpack(colors))
+    return paint
+end
+
 local function settle(id, player, vehicle)
     local wanted = exports.wanted:getPlayerWanted(player)
     local cost = getPrice(vehicle, wanted)
@@ -36,13 +51,7 @@ local function settle(id, player, vehicle)
         return
     end
 
-    local colors = {getVehicleColor(vehicle, true)}
-    local paint
-    repeat
-        paint = paintColors[math.random(#paintColors)]
-    until paint[1] ~= colors[1] or paint[2] ~= colors[2] or paint[3] ~= colors[3]
-    colors[1], colors[2], colors[3] = unpack(paint)
-    setVehicleColor(vehicle, unpack(colors))
+    local paint = respray(vehicle)
     local garage = exports.garage:getGarage(id)
     triggerClientEvent(root, "nspray:sprayEffect", resourceRoot, player,
         garage.bay, garage.floor, garage.interior, garage.dimension, paint)

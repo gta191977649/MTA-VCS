@@ -61,7 +61,7 @@ def main():
             setNPCTask=function(_,p,t) submits=submits+1; p.task=t; return true end}}
     """)
     for name in ("ped_ai_profiles", "ped_ai_rules", "ped_objectives", "ped_combat_navigation", "ped_ai_tasks", "ped_ai",
-                 "ped_carjack", "ped_special", "ped_script_control"):
+                 "ped_carjack", "ped_special", "traffic_actors", "ped_script_control"):
         vm.execute((RESOURCE / (name + ".lua")).read_text(encoding="utf-8-sig"))
     vm.execute("""
         local slots=PedObjectives.new()

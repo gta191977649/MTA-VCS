@@ -172,14 +172,18 @@ function TrafficModelBindings.tag(element, originalId, scripted, populationType)
                 if not sameHandling(current[field],value) then setVehicleHandling(element,field,value) end
             end
         end
+        setElementData(element,"npchlc_traffic:originalModel",originalId,"broadcast","deny")
         local vehicleType = getVehicleType(element)
+        local bound
         if vehicleType == "Boat" or vehicleType == "Plane" then
-            exports.vcs_vehicle:bindVcsVehicle(element, originalId)
+            bound = exports.vcs_vehicle:bindVcsVehicle(element, originalId)
         end
+        if not bound and not nativePeds then exports.vcs_vehicle:bindVcsVehiclePaint(element,originalId) end
         local limit = steeringLimits and steeringLimits[tostring(originalId)]
         if type(limit) == "number" and limit > 0 and limit <= 1 then
             setElementData(element, "npchlc_traffic:steeringLimit", limit, "broadcast", "deny")
         end
+    else
+        setElementData(element, "npchlc_traffic:originalModel", originalId, "broadcast", "deny")
     end
-    setElementData(element, "npchlc_traffic:originalModel", originalId, "broadcast", "deny")
 end

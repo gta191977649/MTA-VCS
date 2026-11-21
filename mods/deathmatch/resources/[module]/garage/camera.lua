@@ -1,6 +1,5 @@
 local shot
 local enterTime, exitTime = 650, 550
-local mapResource = getResourceFromName("vcs")
 
 local function viewAngles(x, y, z, lookX, lookY, lookZ)
     local dx, dy, dz = lookX - x, lookY - y, lookZ - z
@@ -112,7 +111,7 @@ local function returnToFollow(x, y, z)
     local lx, ly, lz = x, y, z + shot.followLookZ
     local cx, cy, cz = x + dx, y + dy, z + shot.followZ
     local hit, hx, hy, hz = processLineOfSight(lx, ly, lz, cx, cy, cz,
-        true, false, false, true, false, false, true, shot.vehicle)
+        true, false, false, true, false, false, true, false, shot.vehicle)
     if hit then
         cx, cy, cz = lx + 0.85 * (hx - lx), ly + 0.85 * (hy - ly), lz + 0.85 * (hz - lz)
     end
@@ -120,7 +119,8 @@ local function returnToFollow(x, y, z)
 end
 
 addEventHandler("onClientPreRender", root, function()
-    if getResourceState(mapResource) ~= "running" then
+    local mapResource = getResourceFromName("vcs")
+    if not mapResource or getResourceState(mapResource) ~= "running" then
         restoreCamera()
         return
     end

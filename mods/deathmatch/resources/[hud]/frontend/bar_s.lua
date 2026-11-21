@@ -24,7 +24,7 @@ function showNpcHealthBar(player, ped, label, slot, maxHealth)
         return false
     end
     local slots = targets[player] or {}
-    slots[slot] = {owner = owner, ped = ped}
+    slots[slot] = {owner = owner, ownerRoot = getResourceRootElement(sourceResource or getThisResource()), ped = ped}
     targets[player] = slots
     return true
 end
@@ -58,11 +58,10 @@ addEventHandler("onPlayerQuit", root, function()
     targets[source] = nil
 end)
 
-addEventHandler("onResourceStop", root, function(resource)
-    local owner = "server:" .. getResourceName(resource)
+addEventHandler("onResourceStop", root, function()
     for player, slots in pairs(targets) do
         for slot, bar in pairs(slots) do
-            if bar.owner == owner then clearTarget(player, slots, slot) end
+            if bar.ownerRoot == source then clearTarget(player, slots, slot) end
         end
     end
 end)

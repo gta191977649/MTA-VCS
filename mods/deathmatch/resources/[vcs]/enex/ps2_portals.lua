@@ -178,7 +178,7 @@ local function createPortal(from, to, routeId, entering)
     setColPolygonHeight(shape, from.z - 1.2, from.z + 2.2)
     setElementInterior(shape, from.interior)
     setElementDimension(shape, from.dimension)
-    local marker = createMarker(from.x, from.y, from.z + 1.5, "arrow", 1.3, 0, 255, 255, 125)
+    local marker = exports.marker:createMarker(from.x, from.y, from.z + 1.5, "arrow", 1.3, 0, 255, 255, 125)
     setElementInterior(marker, from.interior)
     setElementDimension(marker, from.dimension)
     children[#children + 1] = shape

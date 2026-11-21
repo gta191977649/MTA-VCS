@@ -1,5 +1,5 @@
 local providers, bays, catalog = {}, {}, {}
-local mapResource = getResourceFromName("vcs")
+local doorViewers = {}
 local parkingSpeedSquared = 0.015 ^ 2
 local serviceTime = 2000
 for _, definition in ipairs(VCS_GARAGES) do catalog[definition.id] = definition end
@@ -114,6 +114,12 @@ local function doorPosition(bay, now)
     return bay.doorFrom + (bay.doorTo - bay.doorFrom) * progress
 end
 
+local function broadcastDoor(...)
+    for player in pairs(doorViewers) do
+        triggerClientEvent(player, "garage:door", resourceRoot, ...)
+    end
+end
+
 -- SLUS-21590 0x41ECD8/0x41FB14 and 0x41FDD8/0x4203A0. The original
 -- timestep is in 1/50 s units, so straight doors close at 2 m/s and open at 1.75 m/s.
 local function moveDoor(bay, destination, now)
@@ -122,8 +128,7 @@ local function moveDoor(bay, destination, now)
     local duration = math.ceil(math.abs(destination - from) * bay.config.lift * 1000 / speed)
     if now >= bay.doorStart + bay.doorDuration then bay.motorStart = now end
     bay.doorFrom, bay.doorTo, bay.doorStart, bay.doorDuration = from, destination, now, duration
-    triggerClientEvent(root, "garage:door", resourceRoot, bay.config.id, from, destination,
-        duration, now - bay.motorStart)
+    broadcastDoor(bay.config.id, from, destination, duration, now - bay.motorStart)
     return duration
 end
 
@@ -138,7 +143,7 @@ local function reset(bay)
     release(bay)
     bay.attempted = {}
     bay.doorFrom, bay.doorTo, bay.doorStart, bay.doorDuration = 1, 1, 0, 0
-    triggerClientEvent(root, "garage:door", resourceRoot, bay.config.id, 1, 1, 0)
+    broadcastDoor(bay.config.id, 1, 1, 0)
 end
 
 local function runService(bay, stage, player, vehicle)
@@ -236,24 +241,33 @@ end
 
 addEventHandler("onResourceStart", resourceRoot, function()
     setTimer(function()
-        if getResourceState(mapResource) ~= "running" then return end
+        local mapResource = getResourceFromName("vcs")
+        if not mapResource or getResourceState(mapResource) ~= "running" then return end
         local now = getTickCount()
         for _, bay in pairs(bays) do updateBay(bay, now) end
     end, 100, 0)
 end)
 
-addEventHandler("onPlayerResourceStart", root, function(resource)
-    if resource ~= getThisResource() then return end
+addEvent("garage:doorsReady", true)
+addEventHandler("garage:doorsReady", resourceRoot, function()
+    if source ~= resourceRoot or not client or doorViewers[client] then return end
+    doorViewers[client] = true
     local now = getTickCount()
     for id, bay in pairs(bays) do
         local remaining = math.max(0, bay.doorStart + bay.doorDuration - now)
-        triggerClientEvent(source, "garage:door", resourceRoot, id,
+        triggerClientEvent(client, "garage:door", resourceRoot, id,
             doorPosition(bay, now), bay.doorTo, remaining, remaining > 0 and now - bay.motorStart or nil)
     end
-end)
+end, false)
+addEventHandler("onPlayerQuit", root, function() doorViewers[source] = nil end)
 
 addEventHandler("onResourceStop", root, function(stopped)
-    if stopped == getThisResource() or stopped == mapResource then
+    if stopped == getThisResource() then
+        -- The client stop handler resets the local door and audio.
+        for _, bay in pairs(bays) do release(bay) end
+        return
+    end
+    if getResourceName(stopped) == "vcs" then
         for _, bay in pairs(bays) do reset(bay) end
         return
     end

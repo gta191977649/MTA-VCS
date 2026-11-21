@@ -1,11 +1,44 @@
-local PlayerModModel = {}
-addEventHandler("onResourceStart", resourceRoot, function()
-    for _, vehicle in ipairs(getElementsByType("vehicle")) do
-        local definition = IMG_VEHICLE[getElementData(vehicle, "mod.model", false)]
-        if definition and definition.catalogModel then
-            exports.vcs_vehicle:bindVcsVehicle(vehicle, definition.catalogModel)
-        end
+local function paintModel(definition)
+    if definition.paintModel then return definition.paintModel end
+    local name = definition.dff:match("([^/]+)%.dff$")
+    if name == "phoenix" then name = "pheonix" end
+    return exports.vcs_model:getVcsModelIdByName(name, "vehicle")
+end
+
+local function bindModelVehicle(vehicle)
+    local definition = IMG_VEHICLE[getElementData(vehicle,"mod.model",false)]
+    if not definition then return end
+    local originalId = definition.catalogModel or definition.originalId
+    if originalId then return exports.vcs_vehicle:bindVcsVehicle(vehicle,originalId) end
+    -- Legacy definitions own their meshes and sometimes use a different SA hull.
+    originalId = paintModel(definition)
+    if originalId then return exports.vcs_vehicle:bindVcsVehiclePaint(vehicle,originalId) end
+end
+
+-- Only these definitions actually replace a public SA slot in mod_c.lua.
+-- Some boat and BMX slots are shared and cannot identify an untagged spawn.
+local replacements = {}
+for _,definition in pairs(IMG_VEHICLE) do
+    if definition.replace and not definition.catalogModel and definition.parent then
+        local slot = definition.parent
+        if replacements[slot] == nil then replacements[slot] = definition
+        else replacements[slot] = false end
     end
+end
+
+function bindDlcReplacementPaint(vehicle)
+    if not isElement(vehicle) or getElementType(vehicle) ~= "vehicle" then return false end
+    local definition = replacements[getElementModel(vehicle)]
+    if not definition or not fileExists(definition.dff) or not fileExists(definition.txd) then return false end
+    local id = definition.originalId or paintModel(definition)
+    return id and exports.vcs_vehicle:bindVcsVehiclePaint(vehicle,id) or false
+end
+
+addEventHandler("onElementDataChange",root,function(key)
+    if not client and key=="mod.model" and getElementType(source)=="vehicle" then bindModelVehicle(source) end
+end)
+addEventHandler("onResourceStart",resourceRoot,function()
+    for _,vehicle in ipairs(getElementsByType("vehicle")) do bindModelVehicle(vehicle) end
 end)
 function initModels() 
     -- process vehicle handing
@@ -36,10 +69,8 @@ addEventHandler("mod.server.spawnVehicle",root,function(model,_,x,y,z)
     local veh = createVehicle(definition.parent or 500,x,y,z)
     if not veh then return end
     setElementData(veh,"mod.model",model,"broadcast","deny")
-    local originalId = definition.catalogModel or definition.originalId
-    if originalId then exports.vcs_vehicle:bindVcsVehicle(veh, originalId) end
     -- deal with handing 
-    if not definition.catalogModel and definition.handing ~= nil then
+    if not definition.catalogModel and type(definition.handing) == "string" then
         print(#IMG_VEHICLE[model].handing)
         applyVehicleCustomHanding(veh,IMG_VEHICLE[model].handing) 
     end

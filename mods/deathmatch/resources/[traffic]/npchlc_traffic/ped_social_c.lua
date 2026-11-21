@@ -13,6 +13,21 @@ addEventHandler("npchlc_traffic:boardPassenger",resourceRoot,function(ped,car)
         setPedEnterVehicle(ped,car,true)
     end
 end,false)
+addEvent("npchlc_traffic:missionEntry",true)
+addEventHandler("npchlc_traffic:missionEntry",resourceRoot,function(ped,car,seat)
+    if isElement(ped) and isElementSyncer(ped) and not isPedInVehicle(ped) and isElement(car)
+        and isElementStreamedIn(car) and not isVehicleLocked(car) and not getVehicleOccupant(car,seat) then
+        setPedEnterVehicle(ped,car,seat ~= 0)
+    end
+end,false)
+
+addEvent("npchlc_traffic:cancelMissionEntry",true)
+addEventHandler("npchlc_traffic:cancelMissionEntry",resourceRoot,function(ped)
+    if isElement(ped) and isElementSyncer(ped) and not isPedInVehicle(ped) then
+        setPedAnimation(ped,"PED","IDLE_stance",180,false,false,false,false,0)
+    end
+end,false)
+
 local facingKey = "npchlc_traffic:socialFacing"
 local partners = {}
 

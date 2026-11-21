@@ -67,6 +67,7 @@ function getElementHealth(e) return e.health end
 function setElementHealth(e,value) e.health=value end
 function setPedStat(e,id,value) e[id]=value return true end
 function getVehicleType(e) return e.vehicleType or "Automobile" end
+function setVehicleColor(e,...) e.colors={...}; return true end
 function isPedDead(e) return e.health == 0 end
 function getPedOccupiedVehicle(e) return e.vehicle end
 function isPedInVehicle(e) return e.vehicle ~= nil end
@@ -2991,8 +2992,8 @@ def check_road(disc=None, vcs_pc=None):
     assert(not response(3,4,0,0,.1,0,1,0,1,.1)) -- cone dot exactly .8
     assert(not response(0,4,0,0,.1,0,.7,0,1,.1)) -- heading dot exactly .7
     """)
-    load(lua,VCS_VEHICLE,["controllers/vehicle.lua","controllers/boat.lua","controllers/jetski_control.lua","vehicle_s.lua","boarding.lua","boarding_s.lua"])
-    lua.execute('exports.vcs_vehicle={bindVcsVehicle=function(_,...) return bindVcsVehicle(...) end,transferWatercraftSeat=function(_,...) return transferWatercraftSeat(...) end}; function cancelEvent() cancelled=true end; local trigger=triggerEvent; function triggerEvent(...) cancelled=false; trigger(...); return not cancelled end')
+    load(lua,VCS_VEHICLE,["controllers/vehicle.lua","controllers/boat.lua","controllers/jetski_control.lua","data/paint.lua","vehicle_s.lua","boarding.lua","boarding_s.lua"])
+    lua.execute('exports.vcs_vehicle={bindVcsVehicle=function(_,...) return bindVcsVehicle(...) end,bindVcsVehiclePaint=function(_,...) return bindVcsVehiclePaint(...) end,transferWatercraftSeat=function(_,...) return transferWatercraftSeat(...) end}; function cancelEvent() cancelled=true end; local trigger=triggerEvent; function triggerEvent(...) cancelled=false; trigger(...); return not cancelled end')
     if disc:
         data, _ = assemble(disc, vcs_pc)
         lua.globals().streetGraph = lua.table_from({

@@ -1,18 +1,90 @@
-local progress, npcBars = {}, {}
+local progress, leftProgress, npcBars = {}, {}, {}
 local theme = getHudTheme()
 local barLabel = {size = 24, align = "right", maxLines = 1}
+local missionRows, missionOwner = {}, nil
+local counterSilver = {200, 200, 200}
 
-function showProgressBarForPlayer(text, amount, place)
-    local slot, percent = Hud.slot(place), Hud.number(amount)
-    if not slot or not percent or type(text) ~= "string" then return false end
-    progress[slot] = {label = {text = text, style = barLabel}, amount = percent / 100, owner = Hud.owner()}
+function showVehicleMissionHud(seconds, level, label, value, bar, percent)
+    local owner = Hud.owner()
+    if missionOwner and missionOwner ~= owner then return false end
+    if seconds then
+        seconds = Hud.number(seconds)
+        if not seconds or seconds < 0 then return false end
+        seconds = math.floor(seconds)
+    end
+    if level and not Hud.number(level) then return false end
+    if label and (type(label) ~= "string" or (type(value) ~= "string" and not Hud.number(value))) then return false end
+    if bar then
+        percent = Hud.number(percent)
+        if type(bar) ~= "string" or not percent then return false end
+    end
+    missionOwner = owner
+    local rows = {}
+    if seconds then
+        local clock = ("%d:%02d"):format(math.floor(seconds / 60) % 100, seconds % 60)
+        rows[#rows+1] = {label = "Time", value = clock, color = theme.accent}
+    end
+    if level then rows[#rows+1] = {label = "Level", value = tostring(level), color = counterSilver} end
+    if label then rows[#rows+1] = {label = label, value = tostring(value), color = counterSilver} end
+    if bar then rows[#rows+1] = {label = bar, amount = Hud.clamp(percent / 100), color = counterSilver} end
+    missionRows = rows
     return true
 end
 
-function hideProgressBarForPlayer(place)
+function hideVehicleMissionHud()
+    if missionOwner ~= Hud.owner() then return false end
+    missionRows, missionOwner = {}, nil
+    return true
+end
+
+local function drawRun(run, right, top, sx, sy, size, ink)
+    local left = right - run.width * sx
+    for _, glyph in ipairs(run) do
+        CFont:draw(glyph[1], "gametext", left + glyph[2] * sx, top, size, ink, nil, sx / sy)
+    end
+end
+
+-- SLUS 00320C08 / 00320F28, HUD coordinates in the 480 x 272 reference viewport.
+function COnscreenTimer:drawVehicleMissionRows(screen, width, sx, sy, y)
+    if #missionRows == 0 then return y end
+    local font = CFont:face("gametext")
+    if not font then return y end
+    local size = font.cellHeight * 0.6 * sy
+    for _, row in ipairs(missionRows) do
+        local ink = Hud.color(row.color)
+        local labelInset = 75
+        if row.value then
+            row.valueRun = row.valueRun or CFont:scriptCounterRun(row.value, true)
+            drawRun(row.valueRun, width - 24 * sx, y * sy, sx, sy, size, ink)
+            labelInset = math.max(labelInset, 24 + row.valueRun.width + 4)
+        else
+            local scale = screen.scale
+            Hud.rect(screen, (width - 67*sx)/scale, y*sy/scale, 43*sx/scale, 13*sy/scale, theme.track)
+            if row.amount > 0 then
+                Hud.rect(screen, (width - 66*sx)/scale, (y+1)*sy/scale,
+                    41*row.amount*sx/scale, 11*sy/scale, row.color)
+            end
+        end
+        row.labelRun = row.labelRun or CFont:scriptCounterRun(row.label, false)
+        drawRun(row.labelRun, width - labelInset * sx, y * sy, sx, sy, size, ink)
+        y = y + 20
+    end
+    return y
+end
+
+function showProgressBarForPlayer(text, amount, place, side)
+    local slots = side == "left" and leftProgress or progress
+    local slot, percent = Hud.slot(place), Hud.number(amount)
+    if not slot or not percent or type(text) ~= "string" then return false end
+    slots[slot] = {label = {text = text, style = barLabel}, amount = percent / 100, owner = Hud.owner()}
+    return true
+end
+
+function hideProgressBarForPlayer(place, side)
+    local slots = side == "left" and leftProgress or progress
     local slot = Hud.slot(place)
-    if not slot or not progress[slot] then return false end
-    progress[slot] = nil
+    if not slot or not slots[slot] or (side == "left" and slots[slot].owner ~= Hud.owner()) then return false end
+    slots[slot] = nil
     return true
 end
 
@@ -61,19 +133,22 @@ addEventHandler("onClientPedWasted", root, clearPed)
 
 addEventHandler("onClientResourceStop", root, function(resource)
     local owner = getResourceName(resource)
+    if missionOwner == owner then missionRows, missionOwner = {}, nil end
     for slot, bar in pairs(npcBars) do
         if bar.owner == owner then npcBars[slot] = nil end
     end
-    for slot, bar in pairs(progress) do
-        if bar.owner == owner then progress[slot] = nil end
+    for _,slots in ipairs({progress,leftProgress}) do
+        for slot,bar in pairs(slots) do
+            if bar.owner == owner then slots[slot] = nil end
+        end
     end
 end)
 
 -- CHud's script counter draws a black border and separate back/fill quads.
-function COnscreenTimer:drawMeter(screen, bar, row, amount, ink)
+function COnscreenTimer:drawMeter(screen, bar, row, amount, ink, leftX)
     local screenWidth, sx, sy = CWidescreenSupport:playerHud()
     local scale = screen.scale
-    local x = (screenWidth - 66 * sx) / scale
+    local x = leftX or (screenWidth - 66 * sx) / scale
     local y = row * sy / scale
     local width, height = 41 * sx / scale, 11 * sy / scale
     local borderX, borderY = sx / scale, sy / scale
@@ -87,13 +162,28 @@ Hud.onRender(function(screen, now)
     if Hud.message("garage", now) then return end
     local viewportWidth, sx, sy = CWidescreenSupport:playerHud()
     local right = (viewportWidth - 25 * sx) / screen.scale
-    local y = (Hud.message("timer", now) and 122 or 101)
+    local countdown = Hud.message("timer", now)
+    local y = countdown and 122 or 101
+    if #missionRows > 0 then
+        y = COnscreenTimer:drawVehicleMissionRows(screen, viewportWidth, sx, sy, countdown and 120 or 100)
+    end
     for slot = 1, 3 do
         if Hud.drawTaskText(screen, slot, right - 312, right, y * sy / screen.scale, 312) then y = y + 20 end
         local bar = progress[slot]
         if bar then
             COnscreenTimer:drawMeter(screen, bar, y, bar.amount)
             y = y + 31
+        end
+    end
+
+    local left, width = 20*sx/screen.scale, 112*sx/screen.scale
+    local leftY = 101
+    for slot=1,3 do
+        if Hud.drawTaskText(screen,slot,left,left+width,leftY*sy/screen.scale,width,"left") then leftY=leftY+20 end
+        local meter = leftProgress[slot]
+        if meter then
+            COnscreenTimer:drawMeter(screen,meter,leftY,meter.amount,nil,left+width-41*sx/screen.scale)
+            leftY=leftY+31
         end
     end
 

@@ -1,0 +1,59 @@
+<meta>
+    <info name="VCS vehicle missions" type="script" />
+    <include resource="frontend" />
+    <include resource="marker" />
+    <include resource="npchlc_traffic" />
+    <include resource="npc_hlc" />
+    <include resource="wanted" />
+    <script src="main.lua" type="server" />
+    <script src="sling.lua" type="server" />
+    <script src="profile.lua" type="server" />
+    <script src="main_c.lua" type="client" cache="false" />
+    <script src="taxi_data.lua" type="server" />
+    <script src="taxi.lua" type="server" />
+    <script src="taxi_c.lua" type="client" cache="false" />
+    <script src="vigilante_data.lua" type="server" />
+    <script src="vigilante_c.lua" type="client" cache="false" />
+    <script src="vigilante.lua" type="server" />
+    <script src="rescue_data.lua" type="server" />
+    <script src="rescue.lua" type="server" />
+    <file src="assets/ndc_helirescuerig.txd" />
+    <file src="assets/ndc_helirescuerig.dff" />
+    <script src="sling_c.lua" type="client" cache="false" />
+    <script src="rescue_c.lua" type="client" cache="false" />
+    <script src="firefighting_data.lua" type="server" />
+    <script src="firefighting.lua" type="server" />
+    <script src="firefighting_c.lua" type="client" cache="false" />
+    <file src="assets/ndc_helibucket.dff" />
+    <file src="assets/ndc_helibucket.txd" />
+    <script src="beach_data.lua" type="server" />
+    <script src="beach.lua" type="server" />
+    <script src="beach_c.lua" type="client" cache="false" />
+    <script src="vicesights_data.lua" type="server" />
+    <script src="vicesights.lua" type="server" />
+    <script src="vicesights_c.lua" type="client" cache="false" />
+    <file src="assets/dr_lifesaver.dff" />
+    <file src="assets/dr_lifesaver.txd" />
+    <script src="race_collision_c.lua" type="client" cache="false" />
+    <script src="course_gates.lua" type="server" />
+    <script src="motorsport_data.lua" type="server" />
+    <script src="motorsport.lua" type="server" />
+    <script src="motorsport_c.lua" type="client" cache="false" />
+    <script src="trials_data.lua" type="server" />
+    <script src="trials.lua" type="server" />
+    <script src="trials_c.lua" type="client" cache="false" />
+    <file src="assets/ndc_boatrampnarrow.dff" />
+    <file src="assets/ndc_boatrampnarrow.txd" />
+    <file src="assets/ndc_boatrampnarrow.col" />
+    <file src="assets/ndc_boatrampwide.dff" />
+    <file src="assets/ndc_boatrampwide.txd" />
+    <file src="assets/ndc_boatrampwide.col" />
+    <file src="assets/ndc_boatramphump.dff" />
+    <file src="assets/ndc_boatramphump.txd" />
+    <file src="assets/ndc_boatramphump.col" />
+    <script src="aerial_data.lua" type="server" />
+    <script src="aerial.lua" type="server" />
+    <file src="assets/ndc_bikerampnarrow.dff" />
+    <file src="assets/ndc_bikerampnarrow.col" />
+    <file src="assets/ndc_bikerampnarrow.txd" />
+</meta>

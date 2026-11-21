@@ -2,6 +2,41 @@ local setFire = setElementOnFire or setPedOnFire
 -- Generic SCM-style ownership. The resource which acquired the actor owns its
 -- orders until release or resource stop. Ordinary street actors stay in their pool.
 local owned = {}
+local boarding, seated = {}, {}
+addEventHandler("onVehicleEnter",root,function(ped,seat)
+    if owned[ped] then seated[ped]={car=source,seat=seat} end
+end)
+addEventHandler("onVehicleExit",root,function(ped)
+    if seated[ped] and seated[ped].car==source then seated[ped]=nil end
+end)
+
+-- MTA can report the reserved seat before the entry animation finishes.
+function isMissionPedSeated(ped,car,seat)
+    local record=seated[ped]
+    return record~=nil and record.car==car and isElement(car) and (seat==nil or record.seat==seat)
+        and getPedOccupiedVehicle(ped)==car and getVehicleOccupant(car,record.seat)==ped
+end
+local function cancelBoarding(ped)
+    local job = boarding[ped]
+    if not job then return end
+    boarding[ped] = nil
+    if isElement(ped) and job.requested and not isMissionPedSeated(ped,job.car) then
+        if getPedOccupiedVehicle(ped)==job.car then removePedFromVehicle(ped) end
+        local syncer = getElementSyncer(ped)
+        if syncer then triggerClientEvent(syncer,"npchlc_traffic:cancelMissionEntry",resourceRoot,ped) end
+    end
+end
+
+local function reserved(car, seat, except)
+    for ped, job in pairs(boarding) do
+        if ped ~= except and job.car == car and job.seat == seat then return true end
+    end
+    return false
+end
+
+addEventHandler("onVehicleStartEnter",root,function(ped,seat)
+    if reserved(source,seat,ped) then cancelEvent() end
+end)
 local hlc = exports.npc_hlc
 local function finite(v) return type(v)=="number" and math.abs(v)<math.huge end
 local function sameWorld(a,b)
@@ -30,6 +65,14 @@ local function acquire(ped,owner)
 end
 
 function acquireTrafficPed(ped) return acquire(ped,sourceResource) end
+
+function acquireMissionTrafficDriver(ped)
+    if not isElement(ped) then return false end
+    local brain = PedAI.brain(ped)
+    if not brain or brain.scriptOwner then return false end
+    local car = getPedOccupiedVehicle(ped)
+    return car and TrafficRoad.isDriving(ped,car) and acquire(ped,sourceResource) or false
+end
 
 -- The PS2 pool scans high slots first (01C4). MTA has no pool index API,
 -- so the allocator serial determines order among eligible streamed actors.
@@ -84,8 +127,10 @@ end
 
 local function release(brain)
     local ped = brain.ped
-    owned[ped],brain.scriptOwner = nil,nil
+    cancelBoarding(ped)
+    owned[ped],seated[ped],brain.scriptOwner = nil,nil,nil
     if not isElement(ped) then return end
+    TrafficActors.endMissionPath(ped)
     if brain.burning then
         setFire(ped,false)
         PedSpecial.cancel(ped)
@@ -130,12 +175,23 @@ function assignTrafficPedObjective(ped,order,target,y,z,pace)
     end
     if brain.burning then return false end
     if order == "clear" then
+        cancelBoarding(ped)
+        TrafficActors.endMissionPath(ped)
         brain.objectives:clear()
         brain.tasks:clear(true)
         return true
     end
     local job = {order=order,target=target,started=getTickCount()}
-    if order == "waitInCar" or order == "exitVehicle" then
+    if order == "enterVehicle" then
+        local old = boarding[ped]
+        if old and old.car == target and old.seat == y then return true end
+        if not sameWorld(ped,target) or getElementType(target) ~= "vehicle" or isVehicleBlown(target)
+            or not finite(y) or y % 1 ~= 0 or y < 0 or y > (getVehicleMaxPassengers(target) or 0)
+            or isPedInVehicle(ped) or getVehicleOccupant(target,y) or reserved(target,y,ped) then return false end
+
+        job.id, job.car, job.seat = y == 0 and 0x12 or 0x11,target,y
+        brain.objectives:clear()
+    elseif order == "waitInCar" or order == "exitVehicle" then
         local car = getPedOccupiedVehicle(ped)
         if not isElement(car) then return false end
         job.vehicle,job.target=car,nil
@@ -156,7 +212,12 @@ function assignTrafficPedObjective(ped,order,target,y,z,pace)
     else return false end
     if isPedInVehicle(ped) and not job.vehicle and not (brain.objectives.current and brain.objectives.current.id == 0x10) then return false end
     if not brain.objectives:request(job) then return false end
-    if brain.objectives.current == job then brain.tasks:clear() end
+    if brain.objectives.current == job then
+        TrafficActors.endMissionPath(ped)
+        cancelBoarding(ped)
+        brain.tasks:clear()
+        if order == "enterVehicle" then boarding[ped] = job end
+    end
     return true
 end
 
@@ -166,6 +227,58 @@ local function execute(brain,graph,now)
     if PedSpecial.update(ped,graph) then return end
     local job = brain.objectives.current
     if not job then return end
+    if job.order == "enterVehicle" then
+        local car, seat = job.car,job.seat
+        local aboard = getPedOccupiedVehicle(ped)
+        local confirmed = isMissionPedSeated(ped,car)
+        local occupant = isElement(car) and getVehicleOccupant(car,seat)
+        if confirmed or (aboard and aboard~=car) or not sameWorld(ped,car) or isVehicleBlown(car)
+            or (occupant and occupant~=ped) or (now-job.started)%4294967296 >= 20000 then
+            -- Native passenger entry chooses the nearest accessible door.
+            -- Reconcile a free reserved seat only after the entry animation finishes.
+            if confirmed and getPedOccupiedVehicleSeat(ped) ~= seat and not occupant then
+                warpPedIntoVehicle(ped,car,seat)
+            end
+            cancelBoarding(ped)
+            brain.tasks:clear(true)
+            brain.objectives:complete()
+        else
+            local matrix = getElementMatrix(car)
+            if not matrix then return end
+            local side = (seat == 0 or seat == 2) and -1.4 or 1.4
+            local along = seat < 2 and 0.7 or -0.8
+            local x = matrix[4][1]+side*matrix[1][1]+along*matrix[2][1]
+            local y = matrix[4][2]+side*matrix[1][2]+along*matrix[2][2]
+            local z = matrix[4][3]
+            local distance = getDistanceBetweenPoints3D(x,y,z,getElementPosition(ped))
+            -- CTaskComplexEnterCarAsPassengerTimed falls back to setting the intended seat.
+            -- The host ambulance has rear seats without native passenger door animations.
+            if seat>0 and job.firstRequest and now-job.firstRequest>=4500 and distance<=4
+                and not isVehicleLocked(car) then
+                local vx,vy,vz=getElementVelocity(car)
+                if vx*vx+vy*vy+vz*vz<0.0004 then
+                    if aboard==car then removePedFromVehicle(ped) end
+                    if not getVehicleOccupant(car,seat) and warpPedIntoVehicle(ped,car,seat) then return end
+                end
+            end
+            if aboard==car then return end
+            if distance > 3.0 then
+                if not job.nextWalk or now >= job.nextWalk then
+                    hlc:setNPCWalkSpeed(ped,"run")
+                    hlc:setNPCTask(ped,{"walkTrafficToPoint",x,y,z,0.7})
+                    job.nextWalk = now+1200
+                end
+            elseif not job.requested or now-job.requested >= 1800 then
+                local syncer = getElementSyncer(ped)
+                if syncer then
+                    brain.tasks:clear(true)
+                    triggerClientEvent(syncer,"npchlc_traffic:missionEntry",resourceRoot,ped,car,seat)
+                    job.firstRequest,job.requested,job.nextWalk = job.firstRequest or now,now,nil
+                end
+            end
+        end
+        return
+    end
     if job.vehicle then
         if getPedOccupiedVehicle(ped) ~= job.vehicle then
             brain.objectives:complete()
@@ -211,4 +324,9 @@ end,150,0)
 addEventHandler("onResourceStop",root,function(stopped)
     for _,brain in pairs(owned) do if brain.scriptOwner == stopped then release(brain) end end
 end)
-addEventHandler("onElementDestroy",root,function() owned[source]=nil end)
+addEventHandler("onElementDestroy",root,function()
+    boarding[source],owned[source],seated[source] = nil,nil,nil
+    for ped,job in pairs(boarding) do
+        if job.car == source then cancelBoarding(ped) end
+    end
+end)

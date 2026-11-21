@@ -22,9 +22,9 @@ local MAP_TILE_COLOR = tocolor(255, 255, 255, 255)
 local MAP_TILE_INTERIOR_COLOR = tocolor(0, 0, 0, 0)
 
 local RADAR_RECTANGLE = false
-local radarScreenX, radarScreenY, radarScreenWidth, radarScreenHeight = getVcsRadarRect(SCREEN_WIDTH, SCREEN_HEIGHT)
+local radarScreenX, radarScreenY, radarScreenWidth, radarScreenHeight
 -- Keep the map and mask in a square render target. Apply the VCSPC screen rectangle at draw time.
-local RADAR_HEIGHT = math.max(1, math.floor(radarScreenHeight + 0.5))
+local RADAR_HEIGHT = math.max(1, math.floor(99.2 * math.min(SCREEN_WIDTH / 640, SCREEN_HEIGHT / 480) + 0.5))
 local RADAR_WIDTH = RADAR_RECTANGLE and RADAR_HEIGHT * (3 / 2) or RADAR_HEIGHT
 local RADAR_TILES_RT_SIZE = RADAR_RECTANGLE and getDistanceBetweenPoints2D(0, 0, RADAR_WIDTH, RADAR_HEIGHT) or RADAR_HEIGHT
 local radarScaleX, radarScaleY
@@ -369,6 +369,7 @@ end
 
 -- Radar.cpp: CRadar::LoadTextures() // 0x5827D0
 -- Hud.cpp: CHud::Initialise() // 0x5BA850
+local loadedRadarTile
 local function loadTexturesRadar()
 
 	for id, name in pairs(RADAR_SPRITE_TEXTURE_NAMES) do
@@ -393,6 +394,7 @@ local function loadTexturesRadar()
 		end
 	end
 
+	loadedRadarTile = drawData.mapTileTextures[0][0]
 	return true
 end
 
@@ -1556,6 +1558,13 @@ end
 
 local function draw()
 
+	-- The PS2 textures belong to frontend and are destroyed when it restarts.
+	if not isElement(loadedRadarTile) then
+		local frontend = getResourceFromName("frontend")
+		if not frontend or getResourceState(frontend) ~= "running" or not loadTexturesRadar() then return end
+		drawData.areRenderTargetsReady = false
+	end
+
 	drawData.cursorPrevPos = drawData.cursorCurrPos
 	drawData.cursorCurrPos = { getCursorAbsolutePosition() }
 
@@ -1586,8 +1595,6 @@ local function interiorChanged(_, _, weather)
 end
 
 local function initRadar()
-
-	if not loadTexturesRadar() then return false end
 
 	local previous = getElementData(localPlayer, reloadSnapshot, false)
 	if previous then

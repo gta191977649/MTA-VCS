@@ -1,0 +1,3 @@
+FUNFIELD_MOTION_PASS: 12 stop targets; 20/30/60/144 fps; 30-minute stability; Lua syntax; asset hashes
+FUNFIELD_PLAYERS_PASS: exclusive seats; F stand release; vehicle-entry cancellation; world/death/spawn cleanup
+FUNFIELD_CAMERA_PASS: two loops at 20/30/60/144 fps; both rows/all heights; ten distinct shots; authored FOV/yaw/pitch; letterbox framing; bounded paths; full-shot collision planning; locked paths; obstruction rate limits; UI ownership; menu pause; F handoff; platform loop; external camera suspension; no jump binding

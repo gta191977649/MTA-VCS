@@ -11,7 +11,12 @@ local reloadSnapshot = "leeds_engine:radioHud"
 local radioReady = false
 local vehicle, selected, tuned = nil, 0, 0
 local switchTimer, streamTimer, effect, effectIndex
-local active, prepared, fading, online
+local driving, cinema = {}, {}
+-- Wave 103, Flash FM, Emotion 98.3 and V-Rock in disc station order IDs.
+local rideStations = {6, 1, 9, 2}
+local rideStation, lastRideStation
+local online, cinemaMode
+local envelope = 0
 
 local function destroy(element)
     if isElement(element) then destroyElement(element) end
@@ -21,14 +26,20 @@ local function kill(timer)
     if isTimer(timer) then killTimer(timer) end
 end
 
+local function clearSegments(channel)
+    for _,key in ipairs({"active","prepared","fading"}) do
+        local segment=channel[key]
+        channel[key]=nil
+        destroy(segment and segment.sound)
+    end
+end
+
 local function clearPlayback()
     kill(streamTimer)
     streamTimer = nil
-    local old, nextSound, tail, stream = active, prepared, fading, online
-    active, prepared, fading, online = nil, nil, nil, nil
-    destroy(old and old.sound)
-    destroy(nextSound and nextSound.sound)
-    destroy(tail and tail.sound)
+    clearSegments(driving)
+    local stream=online
+    online=nil
     destroy(stream)
 end
 
@@ -61,7 +72,7 @@ local function playEffect(power)
     end
 end
 
-local function loadSegment(station, index)
+local function loadSegment(channel, station, index)
     local segment = station.segments[index]
     local data = RadioPack.readSegment(pack, segment)
     if not data then return nil end
@@ -69,6 +80,15 @@ local function loadSegment(station, index)
     if not isElement(sound) then return nil end
     setSoundVolume(sound, 0)
     setSoundPaused(sound, true)
+    if channel == cinema then
+        setSoundEffectEnabled(sound,"parameq",true)
+        setSoundEffectParameter(sound,"parameq","center",300)
+        setSoundEffectParameter(sound,"parameq","bandwidth",18)
+        setSoundEffectParameter(sound,"parameq","gain",-4)
+        setSoundEffectEnabled(sound,"reverb",true)
+        setSoundEffectParameter(sound,"reverb","reverbMix",-19)
+        setSoundEffectParameter(sound,"reverb","reverbTime",600)
+    end
     return {sound = sound, station = station, index = index, seconds = segment.seconds}
 end
 
@@ -76,52 +96,92 @@ local function nextSegment(current)
     return current.index % #current.station.segments + 1
 end
 
-local function advance(elapsed, crossfade)
-    local previous = active
-    local incoming = prepared or loadSegment(previous.station, nextSegment(previous))
-    prepared = nil
+local function advance(channel, elapsed, crossfade, gain)
+    local previous = channel.active
+    local incoming = channel.prepared or loadSegment(channel, previous.station, nextSegment(previous))
+    channel.prepared = nil
     if not incoming then
-        unavailable("unable to decode next segment")
+        if channel==driving then unavailable("unable to decode next segment") else clearSegments(channel) end
         return
     end
-    active = incoming
+    channel.active = incoming
     if elapsed > 0 then setSoundPosition(incoming.sound, elapsed) end
     if crossfade then
-        fading = previous
+        channel.fading = previous
     else
         destroy(previous.sound)
-        setSoundVolume(incoming.sound, volume)
+        setSoundVolume(incoming.sound, gain)
     end
     setSoundPaused(incoming.sound, false)
 end
 
-local function updatePlayback()
-    if not active or not isElement(active.sound) then return end
-    local position = getSoundPosition(active.sound)
+local function updatePlayback(channel,gain)
+    if not channel.active or not isElement(channel.active.sound) then return end
+    local position = getSoundPosition(channel.active.sound)
     if not position then return end
 
-    if fading and not isElement(fading.sound) then
-        fading = nil
-        setSoundVolume(active.sound, volume)
+    if channel.fading and not isElement(channel.fading.sound) then
+        channel.fading = nil
+        setSoundVolume(channel.active.sound, gain)
     end
-    if fading then
+    if channel==cinema and not channel.fading then setSoundVolume(channel.active.sound,gain) end
+    if channel.fading then
         local fade = math.min(1, position / RadioPack.overlap)
-        setSoundVolume(active.sound, fade * volume)
-        setSoundVolume(fading.sound, (1 - fade) * volume)
+        setSoundVolume(channel.active.sound, fade * gain)
+        setSoundVolume(channel.fading.sound, (1 - fade) * gain)
         if fade == 1 then
-            destroy(fading.sound)
-            fading = nil
+            destroy(channel.fading.sound)
+            channel.fading = nil
         end
     end
 
-    local remaining = active.seconds - position
-    if not fading and remaining <= 0 then
+    local remaining = channel.active.seconds - position
+    if not channel.fading and remaining <= 0 then
         local elapsed = -remaining
-        advance(elapsed, elapsed < RadioPack.overlap)
-    elseif not prepared and not active.prefetched and remaining <= prefetchSeconds then
-        active.prefetched = true
-        prepared = loadSegment(active.station, nextSegment(active))
+        advance(channel, elapsed, elapsed < RadioPack.overlap,gain)
+    elseif not channel.prepared and not channel.active.prefetched and remaining <= prefetchSeconds then
+        channel.active.prefetched = true
+        channel.prepared = loadSegment(channel, channel.active.station, nextSegment(channel.active))
     end
+end
+
+local function startBroadcast(channel,id,gain)
+    local station = pack and pack.stations[id]
+    if not station then
+        return false
+    end
+    local time = getRealTime()
+    local seconds = time.hour * 3600 + time.minute * 60 + time.second
+    local frame = (seconds * RadioPack.rate) % station.total
+    local index = math.floor(frame / RadioPack.segmentFrames) + 1
+    channel.active = loadSegment(channel, station, index)
+    if not channel.active then
+        return false
+    end
+    local position = (frame % RadioPack.segmentFrames) / RadioPack.rate
+    setSoundPosition(channel.active.sound, position)
+    setSoundVolume(channel.active.sound, gain)
+    setSoundPaused(channel.active.sound, false)
+    return true
+end
+
+function setCinematicRadio(mode)
+    if mode~="playing" and mode~="paused" and mode~="off" then return false end
+    cinemaMode=mode
+    if mode=="playing" and not cinema.active then
+        if not rideStation then
+            local choices={}
+            for _,id in ipairs(rideStations) do
+                if id~=lastRideStation then choices[#choices+1]=id end
+            end
+            rideStation=choices[math.random(#choices)]
+        end
+        if not startBroadcast(cinema,rideStation,0) then return false end
+        lastRideStation=rideStation
+    elseif mode=="off" and not cinema.active then
+        rideStation=nil
+    end
+    return true
 end
 
 local function startStation(id)
@@ -141,24 +201,10 @@ local function startStation(id)
         end, 12000, 1)
         return
     end
-    local station = pack and pack.stations[id]
-    if not station then
-        unavailable("PS2 audio pack is unavailable")
+    if not startBroadcast(driving,id,volume) then
+        unavailable("unable to start " .. stations[id])
         return
     end
-    local time = getRealTime()
-    local seconds = time.hour * 3600 + time.minute * 60 + time.second
-    local frame = (seconds * RadioPack.rate) % station.total
-    local index = math.floor(frame / RadioPack.segmentFrames) + 1
-    active = loadSegment(station, index)
-    if not active then
-        unavailable("unable to decode " .. stations[id])
-        return
-    end
-    local position = (frame % RadioPack.segmentFrames) / RadioPack.rate
-    setSoundPosition(active.sound, position)
-    setSoundVolume(active.sound, volume)
-    setSoundPaused(active.sound, false)
     display(stationLabel(id), false, true)
 end
 
@@ -254,15 +300,30 @@ addEventHandler("onClientElementDestroy", root, function()
 end)
 
 addEventHandler("onClientPlayerWasted", localPlayer, leaveVehicle)
-addEventHandler("onClientPreRender", root, updatePlayback)
+addEventHandler("onClientPreRender", root, function(delta)
+    updatePlayback(driving,volume)
+    if not cinema.active then return end
+    if cinemaMode=="playing" then envelope=math.min(1,envelope+delta/3000)
+    else envelope=math.max(0,envelope-delta/2000) end
+    if envelope==0 and cinemaMode~="playing" then
+        clearSegments(cinema)
+        if cinemaMode=="off" then rideStation=nil end
+        return
+    end
+    updatePlayback(cinema,volume*.2*envelope*envelope*(3-2*envelope))
+end)
 
 addEventHandler("onClientSoundStopped", root, function(reason)
     if reason ~= "finished" then return end
-    if active and source == active.sound then
-        if fading then destroy(fading.sound) end
-        fading = nil
-        advance(0, false)
-    elseif source == online then
+    for _,channel in ipairs({driving,cinema}) do
+        if channel.active and source == channel.active.sound then
+            destroy(channel.fading and channel.fading.sound)
+            channel.fading=nil
+            advance(channel,0,false,channel==driving and volume or volume*.2*envelope*envelope*(3-2*envelope))
+            return
+        end
+    end
+    if source == online then
         unavailable("Smooth 95.3 disconnected")
     end
 end)
@@ -280,6 +341,7 @@ end)
 
 addEventHandler("onClientResourceStop", resourceRoot, function()
     radioReady = false
+    clearSegments(cinema)
     leaveVehicle()
     if pack then
         fileClose(pack.file)

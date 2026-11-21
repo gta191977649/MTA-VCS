@@ -45,7 +45,12 @@ end
 |---|---|
 | `acquireTrafficPed(ped)` | Takes control of an existing traffic NPC and suspends its street activity or driving task. |
 | `acquireTrafficPedInArea(x1,y1,x2,y2,z,interior,dimension,civilians,gangs,special,previous)` | Searches the rectangle within a Z difference of 5, newest creation first. Returns the first NPC element matching the requested categories. |
-| `assignTrafficPedObjective(ped,order,...)` | Supports walk, attack, flee, follow, waitInCar, exitVehicle, and clear. waitInCar takes milliseconds. Zero means wait indefinitely. On expiry the native exit action takes over. Special orders are ignite, extinguish, and cashEligible. clear removes tasks while retaining control of the actor. |
+| `assignTrafficPedObjective(ped,order,...)` | Supports walk, attack, flee, follow, enterVehicle, waitInCar, exitVehicle, and clear. enterVehicle takes a vehicle and a seat index (0 for the driver). waitInCar takes milliseconds. Zero means wait indefinitely. On expiry the native exit action takes over. Special orders are ignite, extinguish, and cashEligible. clear removes tasks while retaining control of the actor. |
+| `isMissionPedSeated(ped,vehicle[,seat])` | Checks the completed native entry event and current occupancy. Use this to credit a passenger pickup. |
+| `acquireMissionTrafficDriver(ped)` | Exclusively acquires an unclaimed ambient road driver for a mission. |
+| `getMissionTrafficRoad(x,y,z)` | Returns a nearby lane position and heading for a road dispatch. |
+| `driveMissionTrafficTo(ped,x,y,z,speed)` and `cruiseMissionTraffic(ped,speed)` | Assign a road route to a script-owned driver. Releasing the driver ends its mission route. |
+| `getTrafficNodePosition(nodeId)` | Returns the world coordinates of a traffic graph node, including one returned by `findTrafficPedestrianAnchor`. |
 | `releaseTrafficPed(ped)` | Returns the NPC to traffic control. A surviving actor's health is restored to 100. An interrupted flee objective can resume. |
 
 ## Regression checks

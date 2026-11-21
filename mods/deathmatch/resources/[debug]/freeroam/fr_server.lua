@@ -392,6 +392,9 @@ function giveMeVehicles(id, provider)
             vehicle = Vehicle(vehID, vehPos, rotVector)
             if vehicle and provider == 'dlc' then
                 setElementData(vehicle, 'mod.model', id, 'broadcast', 'deny')
+            elseif vehicle and not provider then
+                local dlc = getResourceFromName("model")
+                if dlc and getResourceState(dlc) == "running" then exports.model:bindDlcReplacementPaint(vehicle) end
             end
         end
 		if vehicle then

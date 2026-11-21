@@ -1,0 +1,162 @@
+{
+  "client_sha256": "2a54a84ca549777eddb271d352923f16f06f0dc1bb22bdba0a438714913e3dc8",
+  "server_port": 61632,
+  "samples": [
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.0841536e-05,
+      "animation": [
+        false
+      ],
+      "samples": 86,
+      "model": 21,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.0841536e-05,
+      "animation": [
+        false
+      ],
+      "samples": 143,
+      "model": 21,
+      "angle": "threequarter",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 1.8950184e-05,
+      "animation": [
+        false
+      ],
+      "samples": 88,
+      "model": 105,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 1.8950184e-05,
+      "animation": [
+        false
+      ],
+      "samples": 145,
+      "model": 105,
+      "angle": "threequarter",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 2.3990155e-05,
+      "animation": [
+        false
+      ],
+      "samples": 87,
+      "model": 0,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 2.3990155e-05,
+      "animation": [
+        false
+      ],
+      "samples": 144,
+      "model": 0,
+      "angle": "threequarter",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.3002514e-05,
+      "animation": [
+        false
+      ],
+      "samples": 259,
+      "model": 0,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "greeting",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 2.9485267e-05,
+      "animation": [
+        false
+      ],
+      "samples": 88,
+      "model": 7,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.266826e-05,
+      "animation": [
+        false
+      ],
+      "samples": 154,
+      "model": 7,
+      "angle": "threequarter",
+      "kind": "NATIVE_FACE",
+      "pose": "idle",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.266826e-05,
+      "animation": [
+        false
+      ],
+      "samples": 307,
+      "model": 7,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "greeting",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 3,
+      "maxRelativeJawError": 3.266826e-05,
+      "animation": [
+        false
+      ],
+      "samples": 330,
+      "model": 7,
+      "angle": "threequarter",
+      "kind": "NATIVE_FACE",
+      "pose": "greeting",
+      "minNativeQuaternionDot": 1
+    },
+    {
+      "seated": 1,
+      "maxRelativeJawError": 3.266826e-05,
+      "animation": [
+        false
+      ],
+      "samples": 567,
+      "model": 7,
+      "angle": "front",
+      "kind": "NATIVE_FACE",
+      "pose": "reseated",
+      "minNativeQuaternionDot": 1
+    }
+  ]
+}

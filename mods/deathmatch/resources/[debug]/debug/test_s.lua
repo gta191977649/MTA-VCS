@@ -45,7 +45,7 @@ addCommandHandler ( "save",function(source,cmd)
     local fileHandle = fileCreate("pos.txt")             -- attempt to create a new file
     if fileHandle then                          
         local x,y,z = getElementPosition(source)    
-        --createMarker ( x , y, z, "checkpoint", 5, 255, 0, 0, 170 )      -- check if the creation succeeded
+        --exports.marker:createMarker(x, y, z, "checkpoint", 5, 255, 0, 0, 170)
         local rx,ry,rz = getElementRotation ( source )
         fileWrite(fileHandle,string.format("%f,%f,%f,%f",x,y,z,rz))     -- write a text line
         fileClose(fileHandle)                             -- close the file once you're done with it

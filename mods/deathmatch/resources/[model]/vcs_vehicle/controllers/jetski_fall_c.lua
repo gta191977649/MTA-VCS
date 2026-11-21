@@ -32,5 +32,8 @@ addEventHandler("onClientVehicleCollision", root, function(other, impulse, _, x,
     local previous = lastReport[source]
     if previous and (now-previous.tick)%4294967296 < 150 and impulse <= previous.impulse then return end
     lastReport[source] = {tick=now,impulse=impulse}
-    triggerServerEvent("vcs_vehicle:jetSkiImpact",resourceRoot,source,other,impulse,x,y,z,nx,ny,nz)
+    -- Static world geometry has no shared element ID. Only a synchronized
+    -- vehicle contributes its own velocity to the server's impact calculation.
+    local collider=isElement(other) and getElementType(other)=="vehicle" and not isElementLocal(other) and other or false
+    triggerServerEvent("vcs_vehicle:jetSkiImpact",resourceRoot,source,collider,impulse,x,y,z,nx,ny,nz)
 end)

@@ -60,6 +60,7 @@ textureListTable.txddb = {}
 SKYGFX = {
     profile = "VCS",
     vcsReducedEffects = false,
+    vehicleLightTrails = true, -- PS2 VCS vehicle lamp streaks, independent of post-processing
     -- start by default
     autoStart = true,
     -- vehicle
