@@ -87,6 +87,7 @@ def verify_encounters():
         function Mission.forParticipant(p,token) return token==17 and p and p.run end
         function Mission.driverOf(v) return getVehicleOccupant(v,0) end
         function Mission.register(id,definition) assert(id=="vigilante"); vig=definition end
+        function Mission.entityArrow(r,e,c,blip) assert(blip);local m=entity();m.attached,m.viewer,m.r,m.g,m.blue=e,r.player,unpack(c);return Mission.track(r,m) end
         function Mission.track(r,e) r.elements[e]=true; return e end
         function Mission.pay(r,m) r.money=r.money+m end
         function Mission.finishLevel(r,amount) assert(amount==0); r.level=r.level+1 end
@@ -124,7 +125,7 @@ def verify_encounters():
                 local count=pattern==4 and 2+tier*2 or cars*(pattern==3 and 2 or tier+1)
                 assert(#r.cars==cars and #r.suspects==count)
                 assert(r.message:find("~r~Suspects~w~",1,true))
-                local b=r.suspects[1].blip
+                local b=r.suspects[1].marker
                 assert(b.viewer==r.player and b.g==0)
                 if pattern==4 then
                     assert(b.attached==r.suspects[1].ped and b.r==174 and b.blue==0)

@@ -1,5 +1,6 @@
 -- Local spring for each streamed helicopter attachment.
 local length = 31 * 6 / 32
+local maxExtension = length + 0.5
 local function step(s, dt, x, y, z)
     local dx, dy, dz = s.x-x, s.y-y, s.z-z
     local distance = math.sqrt(dx*dx+dy*dy+dz*dz)
@@ -54,6 +55,16 @@ local function update(s,now)
     end
     s.lastX,s.lastY,s.lastZ,s.time = x,y,z,now
     dx,dy,dz = s.x-x,s.y-y,s.z-z
+    -- Hard stop after spring integration and observer correction. A sudden
+    -- pilot position update must not stretch the visible cable beyond reach.
+    local reach=math.sqrt(dx*dx+dy*dy+dz*dz)
+    if reach>maxExtension then
+        local nx,ny,nz=dx/reach,dy/reach,dz/reach
+        dx,dy,dz=nx*maxExtension,ny*maxExtension,nz*maxExtension
+        s.x,s.y,s.z=x+dx,y+dy,z+dz
+        local outward=math.max(0,(s.vx-s.ax)*nx+(s.vy-s.ay)*ny+(s.vz-s.az)*nz)
+        s.vx,s.vy,s.vz=s.vx-outward*nx,s.vy-outward*ny,s.vz-outward*nz
+    end
     local function localOffset(axis)
         return dx*axis[1]+dy*axis[2]+dz*axis[3]
     end

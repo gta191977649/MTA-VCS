@@ -2,7 +2,7 @@ local cars = {200,195,224,176,171}
 local crews = {{0},{1},{2},{3},{3,1},{2,3},{2,4},{4,4,1},{4,4,1},{4,4,1},{4,4,2}}
 local firstSite, lastSite = {1,13,30,49,68},{12,29,48,67,79}
 local pad = {-742.272,858.7609,11.781}
-local blue, yellow = {0,0,255,225},{255,215,0,150}
+local blue, pink = {0,0,255,225},{237,130,180,150}
 
 local function discard(e)
     if isElement(e) then destroyElement(e) end
@@ -15,7 +15,7 @@ local function putInWorld(r,e)
 end
 
 local function fire(r,x,y,z,entity,kind)
-    local marker = Mission.marker(r,x,y,z,entity and "arrow" or "arrow2",0.65,blue,true)
+    local marker = Mission.marker(r,x,y,z,entity and "arrow" or "arrow2",0.65,kind=="roof" and pink or blue,true)
     if not marker then return false end
     if entity then attachElements(marker,entity,0,0,1.5) end
     setElementData(marker,"mission:fireTarget",{r.token,entity or false},"broadcast","deny")
@@ -276,7 +276,7 @@ local function airTick(r,now)
     if left==0 then
         r.returning=true
         setElementData(r.bucket,"mission:bucketSpraying",false,"broadcast","deny")
-        r.padMarker=Mission.marker(r,pad[1],pad[2],pad[3]-1,"cylinder",10,yellow,true)
+        r.padMarker=Mission.marker(r,pad[1],pad[2],pad[3]-1,"cylinder",10,pink,true)
         Mission.message(r,"All fires extinguished. Return to the ~y~fire station~w~ for appraisal.")
     end
 end

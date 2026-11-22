@@ -20,6 +20,11 @@ def check_client_effects():
         function getElementInterior(e) return 0 end
         function getElementPosition(e) assert(isElement(e)) return 0,0,0 end
         function getElementData(e,k) return e[k] end
+        now,draws=100,0
+        function getTickCount() return now end
+        function dxCreateTexture() texture={} return texture end
+        function dxDrawMaterialLine3D(_,_,z) draws=draws+1;lowest=math.min(lowest or z,z) end
+        function tocolor() return 0 end
         function setElementPosition() end
         function setElementDimension() end
         function setElementInterior() end
@@ -39,29 +44,39 @@ def check_client_effects():
         local b={kind="object",stream=true,[tag]=7350,[spray]=true}
         for _,e in ipairs({m,n,b}) do event("onClientElementStreamIn",e) end
         timer.fn()
-        assert(#fx==2 and fx[1].name=="fire_med" and fx[2].name=="water_hydrant")
+        event("onClientPreRender",root)
+        assert(#fx==1 and fx[1].name=="fire_med" and draws==2)
+        now=now+180
+        event("onClientPreRender",root)
+        assert(draws>2 and lowest < -1,"the spray must fall below the bucket")
         m[target]=false
         event("onClientElementDataChange",m,target)
-        assert(fx[1].gone and not fx[2].gone)
+        assert(fx[1].gone)
         b[tag]=false
         event("onClientElementDataChange",b,tag)
-        assert(fx[2].gone)
+        local before=draws
+        event("onClientPreRender",root)
+        assert(before==draws and texture.gone)
         MissionRunToken="second"
         b[tag]=7350
         event("onClientElementStreamIn",b)
         timer.fn()
-        assert(#fx==4 and not fx[3].gone and not fx[4].gone)
+        event("onClientPreRender",root)
+        assert(#fx==2 and not fx[2].gone and draws>before)
         event("mission:end",resourceRoot,false,false,"first")
-        assert(not fx[3].gone)
+        assert(not fx[2].gone)
         event("mission:end",resourceRoot,false,false,"second")
-        assert(fx[3].gone)
+        assert(fx[2].gone)
         event("onClientElementStreamOut",n)
         event("onClientElementDestroy",b)
-        assert(fx[4].gone and timer.stopped)
+        assert(timer.stopped)
         event("onClientElementStreamIn",b)
         timer.fn()
+        event("onClientPreRender",root)
         event("onClientResourceStop",resourceRoot)
-        assert(timer.stopped and fx[5].gone)
+        before=draws
+        event("onClientPreRender",root)
+        assert(timer.stopped and draws==before and texture.gone)
     """)
 
 

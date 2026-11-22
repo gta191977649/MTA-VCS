@@ -55,6 +55,7 @@ function Mission.driverOf(v) return getVehicleOccupant(v,0) end
 function Mission.register(id,t)activities[id]=t end
 function Mission.track(r,e)return e end
 function Mission.marker(r,x,y,z,t,size,c,blip)local m=obj("marker",x,y,z);m.owner=r;m.size=size;return m end
+function Mission.entityArrow(r,e,c,blip) assert(blip==false);local m=obj("marker");m.target=e;return m end
 function Mission.selectCourse(r,opt,fn)r.select=fn;r.options=opt end
 function Mission.courseRecord(r,key)return {wins=r.wins or 0} end
 function Mission.recordCourse(r,key,t)r.record=t end
@@ -98,6 +99,7 @@ local function grid(r)
     for i,rival in ipairs(r.rivals)do assert(rival.car.gridPaint==i-1) end
     race.tick(r,now+10);assert(r.countCue==3)
     now=now+3050;race.tick(r,now)
+    for _,rival in ipairs(r.rivals) do assert(rival.marker.target==rival.ped) end
     assert(r.countCue==0 and not r.vehicle.frozen and r.gate.owner==r and r.arrow.nextPoint)
 end
 local total=0

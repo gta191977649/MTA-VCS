@@ -63,7 +63,7 @@ Use these exports for visual properties:
 | `setMarkerTarget(marker, x, y, z)` | Orients arrows/hoops toward a world point |
 | `setMarkerTarget(marker, false)` | Clears the target |
 | `setMarkerAnimation(marker, options)` | Replaces animation overrides; `{}` restores defaults |
-| `setMarkerBlipVisible(marker, boolean)` | Creates/removes an attached minimap blip; default `false` |
+| `setMarkerBlipVisible(marker, boolean [, alpha])` | Creates/removes an attached minimap blip (hidden by default). Optional alpha (0–255) overrides world marker alpha and persists across visibility changes. |
 | `isMarkerBlipVisible(marker)` | Whether a blip is requested |
 | `getMarkerBlip(marker)` | Blip element, or `false` |
 | `setMarkerVisibleTo(marker, element, boolean)` | Server-only viewer visibility rule |

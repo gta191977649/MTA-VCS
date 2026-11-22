@@ -19,21 +19,14 @@ end
 local function focus(r, element, red)
     local t = r.taxi
     clearElement(t, "focus")
-    local blip = createBlipAttachedTo(element, 0, 2, red and 255 or 0, red and 40 or 0,
-        red and 40 or 255, 255, 0, 65535, r.player)
-    if blip then
-        setElementDimension(blip, getElementDimension(element))
-        setElementInterior(blip, getElementInterior(element))
-        Mission.track(r, blip)
-        t.focus = blip
-    end
+    t.focus=Mission.entityArrow(r,element,red and {255,40,40,255} or {0,0,255,255},true)
 end
 
 local function setStop(r, stop, message)
     local t = r.taxi
     clearElement(t, "goal")
     local p = stop.curb
-    t.goal = Mission.marker(r, p[1], p[2], p[3], "cylinder", 5, {235,210,65,135}, true)
+    t.goal = Mission.marker(r, p[1], p[2], p[3], "cylinder", 5, {237,130,180,135}, true)
     t.stop = stop
     Mission.message(r, message .. stop.name .. ".")
 end
@@ -385,7 +378,9 @@ local function handleStop(r,now)
     elseif t.phase=="shopReturn" and now>=t.readyAt then
         restoreView(r)
         t.phase="reboard"
+        focus(r,t.ped)
     elseif t.phase=="reboard" and board(r,23) then
+        clearElement(t,"focus")
         restoreView(r)
         if t.kind=="robbery" then
             exports.npchlc_traffic:setPlayerWanted(r.player,math.min(6,(exports.npchlc_traffic:getPlayerWanted(r.player) or 0)+2),"Taxi getaway")
@@ -435,7 +430,7 @@ local function tick(r,now)
     elseif t.returnBy then
         t.returnBy,t.lastSeconds=nil,nil
         clearElement(t,"focus")
-        if t.phase=="pickup" and isElement(t.ped) then focus(r,t.ped) end
+        if (t.phase=="pickup" or t.phase=="reboard") and isElement(t.ped) then focus(r,t.ped) end
         if t.phase=="tail" and isElement(t.car) then focus(r,t.car,true) end
     end
     if t.phase=="repair" then

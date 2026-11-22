@@ -1,4 +1,5 @@
 local effects, buckets = {}, {}
+local sprayTexture
 local updater, update
 local stopping=false
 local function updateTimer()
@@ -20,8 +21,11 @@ local function clearFire(marker)
 end
 
 local function clearBucket(element)
-    if isElement(buckets[element]) then destroyElement(buckets[element]) end
     buckets[element]=nil
+    if sprayTexture and not next(buckets) then
+        destroyElement(sprayTexture)
+        sprayTexture=nil
+    end
 end
 
 local function remove(element)
@@ -124,37 +128,55 @@ update=function()
     for marker,effect in pairs(effects) do
         if isElement(marker) then drawFire(marker,effect,x,y,z) else clearFire(marker) end
     end
-    for bucket,flow in pairs(buckets) do
-        local visible=isElement(bucket) and getElementData(bucket,"mission:bucketSpraying",false)
-            and getElementDimension(bucket)==getElementDimension(localPlayer)
-            and getElementInterior(bucket)==getElementInterior(localPlayer)
-        if visible then
-            local bx,by,bz=getElementPosition(bucket)
-            if not isElement(flow) then
-                flow=createEffect("water_hydrant",bx,by,bz-1,180,0,0,100,false)
-                if flow then
-                    setElementDimension(flow,getElementDimension(bucket))
-                    setElementInterior(flow,getElementInterior(bucket))
-                    buckets[bucket]=flow
-                end
-            end
-        elseif not isElement(bucket) then
-            clearBucket(bucket)
-        elseif isElement(flow) then
-            destroyElement(flow)
-            buckets[bucket]=false
-        end
-    end
     sendControls()
     updateTimer()
 end
 
--- Follow the locally simulated bucket each rendered frame while spraying.
+-- Emit from the moving rope end at PS2 frame cadence. Once released, a
+-- droplet falls in world space independently of subsequent helicopter motion.
 addEventHandler("onClientPreRender",root,function()
+    local now=getTickCount()
     for bucket,flow in pairs(buckets) do
-        if isElement(flow) then
+        local visible=getElementDimension(bucket)==getElementDimension(localPlayer)
+            and getElementInterior(bucket)==getElementInterior(localPlayer)
+        local spraying=visible and getElementData(bucket,"mission:bucketSpraying",false)
+        if spraying or flow then
             local x,y,z=getElementPosition(bucket)
-            setElementPosition(flow,x,y,z-1)
+            z=z-1
+            if not flow or now<flow.time then
+                flow={particles={},nextEmission=now,x=x,y=y,z=z,time=now}
+                buckets[bucket]=flow
+            end
+            if spraying then
+                sprayTexture=sprayTexture or dxCreateTexture("assets/bucket_spray.png")
+                flow.nextEmission=math.max(flow.nextEmission,now-100)
+                while flow.nextEmission<=now do
+                    local u=math.min(1,(now-flow.nextEmission)/math.max(1,now-flow.time))
+                    for i=1,2 do
+                        local angle=math.rad((flow.nextEmission*0.7+i*180)%360)
+                        table.insert(flow.particles,{at=flow.nextEmission,x=x+(flow.x-x)*u,y=y+(flow.y-y)*u,
+                            z=z+(flow.z-z)*u,vx=math.cos(angle),vy=math.sin(angle),vz=i==1 and -4 or -2})
+                    end
+                    flow.nextEmission=flow.nextEmission+1000/30
+                end
+            else
+                flow.nextEmission=now
+            end
+            flow.x,flow.y,flow.z,flow.time=x,y,z,now
+            for i=#flow.particles,1,-1 do
+                local drop=flow.particles[i]
+                local t=(now-drop.at)/1000
+                if t>=0.9 or not visible then
+                    table.remove(flow.particles,i)
+                elseif sprayTexture then
+                    local px,py=drop.x+drop.vx*t,drop.y+drop.vy*t
+                    local pz=drop.z+drop.vz*t-4.905*t*t
+                    local width=0.35+t
+                    dxDrawMaterialLine3D(px,py,pz+width,px,py,pz-width,sprayTexture,width,
+                        tocolor(210,234,255,190*(1-t/0.9)))
+                end
+            end
+            if not spraying and #flow.particles==0 then buckets[bucket]=false end
         end
     end
 end)

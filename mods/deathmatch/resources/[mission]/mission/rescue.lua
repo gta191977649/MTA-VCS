@@ -1,4 +1,4 @@
-local blue, yellow = {0, 0, 255, 225}, {255, 215, 0, 135}
+local blue = {0, 0, 255, 225}
 local airSkins = {19, 16, 58, 56, 37, 38}
 local hospitalPink = {237, 130, 180, 135}
 local sling = {{0,1.2,180},{0,-1.2,0},{1.2,0,90},{-1.2,0,270}}
@@ -106,7 +106,7 @@ local function updateHospital(r,x,y)
         discard(r.dropMarker)
     elseif not isElement(r.dropMarker) then
         local h = r.hospital
-        r.dropMarker = Mission.marker(r,h[1],h[2],h[3]-0.8,"cylinder",r.air and 5 or 6,r.air and yellow or hospitalPink,true)
+        r.dropMarker = Mission.marker(r,h[1],h[2],h[3]-0.8,"cylinder",r.air and 5 or 6,hospitalPink,true)
     end
 end
 
@@ -127,7 +127,7 @@ local function addPatient(r,px,py,pz,site)
     if r.air then
         setElementFrozen(ped,true)
         local swimmer=site==26 or site==55 or site==58 or site==60
-        setPedAnimation(ped,swimmer and "SWIM" or "PED",swimmer and "Swim_Tread" or "handsup",-1,true,false,false,false)
+        Mission.servicePose(ped,swimmer and "oj_swim_wave" or "oj_heli_wave")
     end
     markPatient(r,patient)
     return true
@@ -302,7 +302,7 @@ local function airPatient(r,p,now,speed,m)
                     return
                 end
                 p.slot=slot
-                setPedAnimation(p.ped,"PED","handsup",-1,false,false,false,true)
+                Mission.servicePose(p.ped,"oj_rescue_ped")
                 repair(r.vehicle,75)
                 boarded(r,p)
                 return
@@ -314,7 +314,7 @@ local function airPatient(r,p,now,speed,m)
         if px and speed<6 and math.abs(px-h[1])<3 and math.abs(py-h[2])<3 and math.abs(pz-h[3])<6 then
             p.slot=nil
             detachElements(p.ped)
-            setPedAnimation(p.ped)
+            Mission.servicePose(p.ped,nil)
             setElementPosition(p.ped,px,py,h[3])
             setElementCollisionsEnabled(p.ped,true)
             discharge(r,p,now)

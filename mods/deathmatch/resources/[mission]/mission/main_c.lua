@@ -7,7 +7,7 @@ local function frontendRunning()
     return resource and getResourceState(resource)=="running"
 end
 
-local function clearHud(keepPayout)
+local function clearHud(preserveResult)
     entryPrompt=nil
     courseMenu=nil
     active=false
@@ -17,7 +17,8 @@ local function clearHud(keepPayout)
     exports.frontend:hideCaptionForPlayer(true)
     exports.frontend:hideGameText(1)
     exports.frontend:hideGameText("raceCountdown")
-    if keepPayout~=true then exports.frontend:hideGameText("missionPassed") end
+    exports.frontend:hideGameText("missionPassed")
+    if preserveResult~=true then exports.frontend:hideGameText("missionResult") end
     exports.frontend:showTextBox(false)
 end
 
@@ -47,7 +48,7 @@ addEventHandler("onClientVehicleExit",root,function(player,seat)
 end)
 addEvent("mission:start",true)
 addEventHandler("mission:start",resourceRoot,function(title,token)
-    clearHud()
+    clearHud(true)
     active = true
     MissionRunToken = token
     if frontendRunning() then exports.frontend:showGameTextForPlayer(title,1,3000) end
@@ -58,10 +59,10 @@ addEventHandler("mission:message",resourceRoot,function(message,token)
     exports.frontend:showCaptionForPlayer(message,4000)
 end,false)
 addEvent("mission:end",true)
-addEventHandler("mission:end",resourceRoot,function(message,keepPayout,token)
+addEventHandler("mission:end",resourceRoot,function(message,passed,token)
     if token~=MissionRunToken then return end
-    clearHud(keepPayout)
-    if message and frontendRunning() then exports.frontend:showCaptionForPlayer(message,4000) end
+    clearHud()
+    if message and frontendRunning() then exports.frontend:showVehicleMissionResult(passed,message) end
 end,false)
 addEvent("mission:help",true)
 addEventHandler("mission:help",resourceRoot,function(token,text,duration)

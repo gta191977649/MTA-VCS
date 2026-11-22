@@ -66,7 +66,7 @@ local function showGate(r)
     local nextIsFinish=a.index+1==#a.points
     if nextP and not (a.cfg.kind=="combat" and nextIsFinish) then
         local color=nextIsFinish and green or pink
-        a.nextBlip=Mission.track(r,createBlip(nextP[1],nextP[2],nextP[3],0,1,color[1],color[2],color[3],160,0,65535,r.player))
+        a.nextBlip=Mission.track(r,createBlip(nextP[1],nextP[2],nextP[3],0,1,color[1],color[2],color[3],255,0,65535,r.player))
         if a.nextBlip then
             setElementDimension(a.nextBlip,r.dimension)
             setElementInterior(a.nextBlip,r.interior)

@@ -22,11 +22,11 @@ function MarkerChanged(element)
     local state=MarkerRecords[element]
     if state.blipVisible then
         if not isElement(state.blip) then
-            state.blip=createBlipAttachedTo(element,0,2,unpack(state.color))
+            state.blip=createBlipAttachedTo(element,0,2,MarkerBlipColor(state))
             if state.blip then setElementParent(state.blip,element) end
         end
         if isElement(state.blip) then
-            setBlipColor(state.blip,unpack(state.color))
+            setBlipColor(state.blip,MarkerBlipColor(state))
             setElementVisibleTo(state.blip,root,false)
             for _,player in ipairs(getElementsByType("player")) do
                 setElementVisibleTo(state.blip,player,visibleTo(state,player))

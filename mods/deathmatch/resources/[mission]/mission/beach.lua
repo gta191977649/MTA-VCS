@@ -105,13 +105,13 @@ local function beginWave(r,now)
             setElementData(t.car,"mission:beachRoad",r.player,"broadcast","deny")
         else
             -- The sea coordinates in MAIN are spawn heights above the 6 m ocean.
-            t.actor=ped(r,b.job=="medic" and 46 or 64,p[1],p[2],b.job=="medic" and p[3] or 5.55)
+            t.actor=ped(r,b.job=="medic" and 46 or 64,p[1],p[2],b.job=="medic" and p[3] or 5.9)
             if not t.actor then return Mission.fail(r,"A rescue target is unavailable.") end
             setElementFrozen(t.actor,true)
             if b.job=="medic" then setPedAnimation(t.actor,"CRACK","crckidle2",-1,true,false,false,false)
-            else setPedAnimation(t.actor,"SWIM","Swim_Tread",-1,true,false,false,false) end
+            else Mission.servicePose(t.actor,"oj_swim_wave") end
         end
-        t.marker=mark(r,t.car or t.actor,b.job=="bikers" and red or blue)
+        t.marker=mark(r,t.actor,b.job=="bikers" and red or blue)
         if not t.marker then return Mission.fail(r,"The patrol location could not be marked.") end
         total=total+math.floor(distance(r.player,t.actor)*1000/6)
     end
@@ -241,9 +241,10 @@ local function throwRing(r,side,now)
     if not ring then return end
     setElementAlpha(ring,0)
     setElementCollisionsEnabled(ring,false)
+    setElementData(ring,"mission:throwSide",side,"broadcast","deny")
     setElementData(ring,"mission:attachmentModel",7375,"broadcast","deny")
     attachElements(ring,b.helper,0,0.45,0.4)
-    setPedAnimation(b.helper,"GRENADE","WEAPON_throw",900,false,false,false,false)
+    Mission.servicePose(b.helper,side==-1 and "amb_ls_thw_floatl" or "amb_ls_thw_float")
     b.throw={ring=ring,at=now,side=side}
 end
 addEvent("mission:throwPreserver",true)
@@ -286,7 +287,7 @@ local function swimmerTick(r,now)
         setElementData(flight.ring,"mission:preserverFlight",{
             x=flight.origin[1],y=flight.origin[2],z=flight.origin[3],
             vx=flight.dx*flight.speed,vy=flight.dy*flight.speed,vz=flight.vz,
-            gravity=20,waterAt=flight.waterAt,age=elapsed,side=flight.side
+            gravity=20,waterAt=flight.waterAt,start=flight.at+700,age=elapsed,side=flight.side
         },"broadcast","deny")
     end
     local travel=math.min(flight.waterAt,elapsed/1000)

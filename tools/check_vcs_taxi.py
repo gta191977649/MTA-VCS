@@ -94,6 +94,7 @@ function Mission.hud(r,label,value,bar,amount) r.hud={label,value,bar,amount} en
 function Mission.marker(r,x,y,z,style,size,rgba,blip)
     assert(style=="cylinder" and size==5 and blip);return entity("marker",x,y,z)
 end
+function Mission.entityArrow(r,e,color,blip) assert(blip);local m=entity("marker");m.target=e;return m end
 function Mission.taxiFare(r,amount) r.money=r.money+amount end
 function Mission.fail(r,why) r.failed=why end
 function Mission.message(r,m) r.message=m end
@@ -124,7 +125,7 @@ function dispatch(r,roll,fares)
     local t=r.taxi
     t.fares=fares or 0
     if t.fares>0 then r.deadline=clock+90000 end
-    tick(r);assert(t.phase=="pickup" and r.leases[prospective])
+    tick(r);assert(t.phase=="pickup" and r.leases[prospective] and t.focus.target==prospective)
     setElementPosition(r.vehicle,getElementPosition(prospective))
     tick(r);assert(prospective.car==r.vehicle)
     local original=math.random

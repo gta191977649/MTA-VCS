@@ -61,6 +61,7 @@
     <file src="arial.ttf" type="client"/>
     
 
+    <export function="showVehicleMissionResult" type="client" />
     <export function="showPayoutGameText" type="shared" />
     <export function="getFont" type="client" />
     <export function="getHudTheme" type="client" />

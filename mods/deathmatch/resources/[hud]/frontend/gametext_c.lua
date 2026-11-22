@@ -27,6 +27,8 @@ local styles = {
     LOCATION_NAME = location,
     missionPassed = {slot = "missionPassed", face = "bigtext", y = 136, nativeScale = 1,
         align = "center", valign = "center", fadeIn = 500, fadeOut = 500},
+    missionResult = {slot="missionResult",y=136,face="bigtext",nativeScale=1,color=theme.accent,
+        align="center",valign="center",fadeIn=500,fadeOut=500},
     garage = {slot = "garage", y = 175, nativeScale = 1},
     raceCountdown = {slot="raceCountdown",face="bigtext",y=150,nativeScale=1},
     radio = {slot = "radio", face = "fancytext", y = 7, nativeScale = 1, color = radioBlue},
@@ -55,6 +57,19 @@ function showGameText(text, styleName, duration)
     return Hud.set(style.slot, text, duration, style)
 end
 
+local resultReason = {face="gametext",nativeScale=0.8,color=theme.accent,align="center",maxLines=3}
+
+function showVehicleMissionResult(passed,reason)
+    if type(reason)~="string" or reason=="" then return false end
+    local title = passed and (getVcsText("M_PASSN") or "MISSION PASSED!")
+        or (getVcsText("M_FAIL") or "MISSION FAILED!")
+    local style=styles.missionResult
+    Hud.set(style.slot,title,4000,style)
+    Hud.message(style.slot,getTickCount()).reason={text=reason,style=resultReason}
+    if passed then CAudioEngine:playMissionPassedMusic() end
+    return true
+end
+
 function hideGameText(styleName)
     local style = styles[styleName]
     return style and Hud.clear(style.slot, Hud.owner()) or false
@@ -70,10 +85,10 @@ addEvent("showClientGameText", true)
 addEventHandler("showClientGameText", localPlayer, showGameTextForPlayer, false)
 
 local drawOrder = {"location", "vehicle", "garage", "radio", "big3", "big4", "big5", "big1",
-    "big0", "raceCountdown", "big7", "big2", "big6", "missionPassed"}
+    "big0", "raceCountdown", "big7", "big2", "big6", "missionPassed", "missionResult"}
 
 function Hud.hasPriorityGameText(now)
-    return Hud.message("big2", now) ~= nil or Hud.message("big0", now) ~= nil or Hud.message("missionPassed", now) ~= nil
+    return Hud.message("big2", now) ~= nil or Hud.message("big0", now) ~= nil or Hud.message("missionPassed", now) ~= nil or Hud.message("missionResult", now) ~= nil
 end
 
 Hud.onRender(function(screen, now)
@@ -99,7 +114,15 @@ Hud.onRender(function(screen, now)
             elseif slot == "big7" and Hud.message("big2", now) then
                 y = screen.height * 175 / 272
             end
-            Hud.text(screen, entry, x, y, width, opacity)
+            if slot=="missionResult" then
+                y=screen.height*0.46
+                local height=Hud.text(screen,entry,x,y,screen.width*0.92,opacity)
+                if entry.reason then
+                    Hud.text(screen,entry.reason,x,y+height/2+2*screen.fontScaleY,screen.width*0.92,opacity)
+                end
+            else
+                Hud.text(screen, entry, x, y, width, opacity)
+            end
         end
     end
 end)

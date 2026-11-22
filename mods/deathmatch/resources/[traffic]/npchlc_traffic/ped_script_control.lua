@@ -243,38 +243,40 @@ local function execute(brain,graph,now)
             brain.tasks:clear(true)
             brain.objectives:complete()
         else
-            local matrix = getElementMatrix(car)
-            if not matrix then return end
-            local side = (seat == 0 or seat == 2) and -1.4 or 1.4
-            local along = seat < 2 and 0.7 or -0.8
-            local x = matrix[4][1]+side*matrix[1][1]+along*matrix[2][1]
-            local y = matrix[4][2]+side*matrix[1][2]+along*matrix[2][2]
-            local z = matrix[4][3]
-            local distance = getDistanceBetweenPoints3D(x,y,z,getElementPosition(ped))
-            -- CTaskComplexEnterCarAsPassengerTimed falls back to setting the intended seat.
-            -- The host ambulance has rear seats without native passenger door animations.
-            if seat>0 and job.firstRequest and now-job.firstRequest>=4500 and distance<=4
-                and not isVehicleLocked(car) then
+            local cx,cy,cz=getElementPosition(car)
+            local px,py,pz=getElementPosition(ped)
+            local distance=getDistanceBetweenPoints3D(cx,cy,cz,px,py,pz)
+            -- Let the native enter-car task route around the body and open the
+            -- door. Walking straight to the far door competes with that task.
+            if distance>9.5 and not aboard then
+                if not job.walkX or (cx-job.walkX)^2+(cy-job.walkY)^2>1 then
+                    hlc:setNPCWalkSpeed(ped,"run")
+                    hlc:setNPCTask(ped,{"walkTrafficToPoint",cx,cy,cz,4})
+                    job.walkX,job.walkY=cx,cy
+                end
+                job.firstRequest,job.requested=nil,nil
+                return
+            end
+            if job.walkX then
+                brain.tasks:clear(true)
+                job.walkX,job.walkY=nil,nil
+            end
+
+            -- Timed passenger entry for inaccessible seats (e.g. ambulance rear).
+            -- Only finish beside a stopped vehicle, after giving native entry time.
+            if seat>0 and job.firstRequest and (now-job.firstRequest)%4294967296>=(aboard and 9500 or 4500)
+                and distance<=3.8 and math.abs(pz-cz)<1.8 and not isVehicleLocked(car) then
                 local vx,vy,vz=getElementVelocity(car)
                 if vx*vx+vy*vy+vz*vz<0.0004 then
                     if aboard==car then removePedFromVehicle(ped) end
                     if not getVehicleOccupant(car,seat) and warpPedIntoVehicle(ped,car,seat) then return end
                 end
             end
-            if aboard==car then return end
-            if distance > 3.0 then
-                if not job.nextWalk or now >= job.nextWalk then
-                    hlc:setNPCWalkSpeed(ped,"run")
-                    hlc:setNPCTask(ped,{"walkTrafficToPoint",x,y,z,0.7})
-                    job.nextWalk = now+1200
-                end
-            elseif not job.requested or now-job.requested >= 1800 then
-                local syncer = getElementSyncer(ped)
-                if syncer then
-                    brain.tasks:clear(true)
-                    triggerClientEvent(syncer,"npchlc_traffic:missionEntry",resourceRoot,ped,car,seat)
-                    job.firstRequest,job.requested,job.nextWalk = job.firstRequest or now,now,nil
-                end
+            if aboard then return end
+            local syncer=getElementSyncer(ped)
+            if syncer and (syncer~=job.syncer or not job.requested or (now-job.requested)%4294967296>=1800) then
+                triggerClientEvent(syncer,"npchlc_traffic:missionEntry",resourceRoot,ped,car,seat)
+                job.firstRequest,job.requested,job.syncer=job.firstRequest or now,now,syncer
             end
         end
         return

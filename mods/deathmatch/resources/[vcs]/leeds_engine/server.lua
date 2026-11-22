@@ -84,7 +84,8 @@ local function loadScripts()
         local started = 0
         for _, entry in ipairs(selected) do
             local resource = getResourceFromName(entry.name)
-            if resource and getResourceState(resource) == "loaded" and startResource(resource, true) then
+            local state = resource and getResourceState(resource)
+            if state == "running" or (state == "loaded" and startResource(resource, true)) then
                 started = started + 1
             else
                 log("Could not start " .. entry.name .. " after the stop phase.", 1)

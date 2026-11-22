@@ -53,6 +53,8 @@ def check():
         function isControlEnabled() return true end
         function isElement(e) return type(e)=="table" and e.kind ~= nil and not e.deadElement end
         function getElementType(e) return e.kind end
+        function attachElements(m,e) m.target=e return true end
+        function getElementAttachedTo(m) return m.target end
         function getElementData(e,k) return e[k] or false end
         function setElementData(e,k,v) e[k]=v end
         function hasElementData(e,k) return e[k]~=nil end
@@ -81,6 +83,7 @@ def check():
         function givePlayerMoney(p,amount) p.cash=p.cash+amount end
         function triggerClientEvent(p,event,_,...)
             p.last=event
+            if event=="mission:end" and select(2,...) then p.passes=(p.passes or 0)+1 end
             if event=="mission:payout" then p.banners=p.banners+1 end
         end
         function outputDebugString(reason) error(reason) end
@@ -304,6 +307,14 @@ def check():
             local ma=Mission.marker(ra,1,2,3,"arrow2",1,nil,true)
             local mb=Mission.marker(rb,1,2,3,"arrow2",1,nil,true)
             assert(ma.viewer==a and mb.viewer==b and ma.blip and mb.blip)
+            ra.vehicle.x,ra.vehicle.y,ra.vehicle.z=1,2,3
+            Mission.showReturnVehicle(ra,ra.vehicle)
+            local arrow=ra.returnMarker
+            assert(arrow.target==ra.vehicle and arrow.viewer==a and arrow.blip)
+            Mission.showReturnVehicle(ra,ra.vehicle)
+            assert(ra.returnMarker==arrow)
+            Mission.clearReturnVehicle(ra)
+            assert(arrow.deadElement and not ra.returnMarker)
             Mission.endRun(a)
             assert(ma.deadElement and not mb.deadElement and Mission.active(rb) and ambient.released)
             assert(Mission.claimSite(rb,"shared-position"))
@@ -318,7 +329,7 @@ def check():
                         Mission.finishLevel(rb,100)
                         Mission.finishLevel(rb,100)
                     end
-                    assert(not Mission.active(rb) and b.cash==pass*500+500 and b.banners==1)
+                    assert(not Mission.active(rb) and b.cash==pass*500+500 and b.passes==pass and b.banners==0)
                     drive(b,model)
                     rb=b.run
                 end
@@ -383,7 +394,7 @@ def check_boarding():
         function getElementData() return false end
         function getElementHealth() return 100 end
         function getElementPosition() return 1.4,0.7,0 end
-        function getDistanceBetweenPoints3D() return 0 end
+        function getDistanceBetweenPoints3D() return carDistance or 0 end
         function getElementMatrix() return {{1,0,0},{0,1,0},{0,0,1},{0,0,0}} end
         function getElementSyncer() return "client" end
         function triggerClientEvent(_,name,_,ped,car,seat) report={name,ped,car,seat} end
@@ -396,7 +407,7 @@ def check_boarding():
             return true
         end
         setElementHealth=noop
-        exports={npc_hlc={clearNPCTasks=noop,setNPCWalkSpeed=noop}}
+        exports={npc_hlc={clearNPCTasks=noop,setNPCWalkSpeed=noop,setNPCTask=function() walks=(walks or 0)+1 end}}
         TrafficVisibility,TrafficAmbient,TrafficRoad={},{suspend=noop},{}
         TrafficActors={endMissionPath=noop}
         PedVehicleEvasion,PedCarjack={cancel=noop},{cancelExtraction=noop}
@@ -423,6 +434,10 @@ def check_boarding():
         source=car
         events.onVehicleStartEnter(b,1)
         assert(blocked)
+        carDistance=12
+        advance();advance()
+        assert(walks==1 and not report)
+        carDistance=8
         advance()
         assert(report[1]=="npchlc_traffic:missionEntry" and report[4]==1)
         assert(assignTrafficPedObjective(a,"clear"))
@@ -442,7 +457,7 @@ def check_boarding():
         assert(acquireTrafficPed(c) and assignTrafficPedObjective(c,"enterVehicle",car,3))
         advance()
         assert(report[1]=="npchlc_traffic:missionEntry" and not isMissionPedSeated(c,car,3))
-        clock=clock+4600
+        carDistance=1.5;clock=clock+4600
         advance()
         assert(isMissionPedSeated(c,car,3) and car[1]==b)
     """)
@@ -502,7 +517,8 @@ def check_client():
         assert(row[1]==299 and row[2]==5 and row[3]=="Kills" and row[4]==12 and not row[5])
         events["mission:message"]("Take the patient to the hospital.",18)
         assert(calls.showCaptionForPlayer[1]=="Take the patient to the hospital.")
-        events["mission:end"](false,false,18)
+        events["mission:end"]("Time is up!",false,18)
+        assert(calls.showVehicleMissionResult[1]==false and calls.showVehicleMissionResult[2]=="Time is up!")
         assert(calls.hideVehicleMissionHud and calls.hideCaptionForPlayer[1] and not MissionRunToken)
         calls.showVehicleMissionHud,calls.showPayoutGameText,calls.showCaptionForPlayer=nil,nil,nil
         events["mission:hud"]("vigilante",5,299,"Kills",12,false,0,18)

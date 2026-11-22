@@ -122,7 +122,7 @@ assert(not t.ready)
 send(a.player,"mission:beachRoad",a.token,t.car,t.point[3])
 assert(t.ready and not t.car.frozen)
 send(b.player,"mission:beachBikeHit",a.token,t.car);assert(not t.fellAt)
-send(a.player,"mission:beachBikeHit",a.token,t.car);assert(t.fellAt and not t.actor.car)
+send(a.player,"mission:beachBikeHit",a.token,t.car);assert(t.fellAt and not t.actor.car and t.marker.parent==t.actor)
 step(a);assert(isElement(t.actor));step(a,1200);assert(not isElement(t.actor))
 for i=1,3 do local target=next(a.beach.targets);exit(target.actor);step(a) end
 assert(a.level==5 and a.paid==0 and b.level==4 and isElement(q.actor))
@@ -255,7 +255,7 @@ def verify_cleanup():
         function addEventHandler(name,_,handler) handlers[name]=handler end
         function fire(name,e,...) source=e;handlers[name](...) end
     """)
-    for name in ("main","beach_data","beach","vicesights_data","vicesights"):
+    for name in ("main","service_poses","beach_data","beach","vicesights_data","vicesights"):
         lua.execute((MISSION/(name+".lua")).read_text(encoding="utf-8-sig"))
     lua.execute("""
         function getElementModel(e) return e.model end
@@ -314,7 +314,7 @@ def verify_cleanup():
         assert(isElement(b.throw.ring));clock=clock+901;update()
         fire("onPlayerWasted",p);assert(p.ended);clean(p,car)
         local r,p,car=setup("vicesights");exit(p);update()
-        assert(isElement(r.returnBlip));r.deadline=clock-1;update()
+        assert(isElement(r.returnMarker));r.deadline=clock-1;update()
         assert(p.ended);clean(p,car)
         local r,p,car=setup("vicesights");fire("onResourceStop",resourceRoot);clean(p,car)
     """)
@@ -379,7 +379,7 @@ def verify_client_cleanup():
 def main():
     lua=LuaRuntime()
     lua.execute(HOST)
-    for name in ("beach_data","beach","vicesights_data","vicesights"):
+    for name in ("service_poses","beach_data","beach","vicesights_data","vicesights"):
         path=MISSION/(name+".lua")
         lua.execute(path.read_text(encoding="utf-8-sig"),name=str(path))
     lua.execute(CHECKS)

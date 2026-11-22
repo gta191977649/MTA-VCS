@@ -7,24 +7,18 @@ local function distance(a,b)
     return getDistanceBetweenPoints3D(x,y,z,getElementPosition(b))
 end
 
-local function clearBlip(record)
-    if record.blip then record.run.elements[record.blip]=nil end
-    if isElement(record.blip) then destroyElement(record.blip) end
-    record.blip = nil
+local function clearMarker(record)
+    if record.marker then record.run.elements[record.marker]=nil end
+    if isElement(record.marker) then destroyElement(record.marker) end
+    record.marker = nil
 end
 
 local function mark(r,record,element)
-    if isElement(record.blip) and getElementAttachedTo(record.blip)==element then return end
-    clearBlip(record)
+    if isElement(record.marker) and getElementAttachedTo(record.marker)==element then return end
+    clearMarker(record)
     -- Match the frontend's ~b~ vehicle and ~r~ suspect objective colors.
     local vehicleTarget = element ~= record.ped
-    local blip = createBlipAttachedTo(element,0,2,vehicleTarget and 0 or 174,0,
-        vehicleTarget and 255 or 0,255,0,65535,r.player)
-    if blip then
-        setElementDimension(blip,getElementDimension(element))
-        setElementInterior(blip,getElementInterior(element))
-        record.blip = Mission.track(r,blip)
-    end
+    record.marker=Mission.entityArrow(r,element,vehicleTarget and {0,0,255,255} or {174,0,0,255},true)
 end
 
 local function clearWave(r)
@@ -36,7 +30,7 @@ local function clearWave(r)
     for _,s in ipairs(r.suspects or {}) do
         suspects[s.ped] = nil
         if s.displaced then Mission.release(r,s.displaced) end
-        clearBlip(s)
+        clearMarker(s)
         r.elements[s.ped]=nil
         if isElement(s.ped) then destroyElement(s.ped) end
     end
@@ -349,7 +343,7 @@ local function tick(r,now)
                 if s.displaced then Mission.release(r,s.displaced); s.displaced=nil end
                 local reward=r.level<5 and 10 or r.level<10 and 30 or 50
                 s.caught=true
-                clearBlip(s)
+                clearMarker(s)
                 r.kills=r.kills+1
                 Mission.pay(r,reward)
                 Mission.message(r,"Suspect takedown! Reward: $"..reward)

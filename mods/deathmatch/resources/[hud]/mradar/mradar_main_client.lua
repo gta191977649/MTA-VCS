@@ -801,19 +801,22 @@ local function getRadarSpriteBlipSize(spriteId, size)
 	size = size / RADAR_BLIP_SIZE_GTASA_DEFAULT * RADAR_BLIP_SIZE
 
 	if spriteId == RADAR_SPRITE.CENTRE then return size * RADAR_BLIP_CENTRE_SIZE_MULTIPLIER end
-	if spriteId == RADAR_SPRITE.NONE then return size * RADAR_BLIP_TRACE_SIZE_MULTIPLIER end
 	return size
 end
 
-local function drawRadarTrace(x, y, z, r, g, b, a, size, postGUI)
+local function drawRadarTrace(x, y, z, r, g, b, a, traceSize, scale, postGUI, squareFillScale)
 	local shape = getRadarSpriteBlipTraceFromHeight(z)
 	local border, ink = tocolor(0, 0, 0, a), tocolor(r, g, b, a)
-	local radius = size / 2
-	local fill = math.max(0, radius - 1)
 	if shape == RADAR_TRACE.NORMAL then
+		-- Scale the colored square and its outline in screen space.
+		local fill = traceSize * scale * squareFillScale
+		local radius = fill + scale
+		local size = 2 * radius
 		dxDrawRectangle(x - radius, y - radius, size, size, border, postGUI)
 		return dxDrawRectangle(x - fill, y - fill, 2 * fill, 2 * fill, ink, postGUI)
 	end
+	local radius = traceSize / RADAR_BLIP_SIZE_GTASA_DEFAULT * 18 * RADAR_BLIP_TRACE_SIZE_MULTIPLIER * scale / 2
+	local fill = math.max(0, radius - 1)
 	local direction = shape == RADAR_TRACE.LOW and -1 or 1
 	dxDrawPrimitive("trianglelist", postGUI, {x, y + direction * radius, border},
 		{x - radius, y - direction * radius, border}, {x + radius, y - direction * radius, border})
@@ -828,13 +831,13 @@ local function drawRadarSprite(spriteId, x, y, z, r, g, b, a, size, rot)
 	x = radarScreenX + x * radarScaleX
 	y = radarScreenY + y * radarScaleY
 	rot = rot and (math.deg(drawData.playerCameraAngle) - rot) or 0
-	size = getRadarSpriteBlipSize(spriteId, size) * radarScaleX
 	a = a * RADAR_BLIP_ALPHA_MULTIPLIER
 
 	local texture = drawData.radarSpriteTextures[spriteId]
 	if spriteId == RADAR_SPRITE.NONE then
-		return drawRadarTrace(x, y, z, r, g, b, a, size, false)
+		return drawRadarTrace(x, y, z, r, g, b, a, size, math.min(radarScreenWidth, radarScreenHeight) / 99.2, false, 2)
 	end
+	size = getRadarSpriteBlipSize(spriteId, size) * radarScaleX
 	if not texture then return false end
 
 	-- for CENTRE blip center is [0.5, 2/3]
@@ -1152,14 +1155,14 @@ local function drawBigMapSprite(spriteId, x, y, z, r, g, b, a, size, rot)
 
 	x, y = transformWorldToBigMapScreenView(x, y)
 	rot = rot and (-rot) or 0
-	size = getRadarSpriteBlipSize(spriteId, size)
 	a = a * drawData.bigMapAlphaMultiplier
 
 	local texture = drawData.radarSpriteTextures[spriteId]
 	if spriteId == RADAR_SPRITE.NONE then
 		drawData.bigMapDrawnSprites[spriteId] = true
-		return drawRadarTrace(x, y, z, r, g, b, a, size, BIGMAP_POST_GUI)
+		return drawRadarTrace(x, y, z, r, g, b, a, size, RADAR_WIDTH / 99.2, BIGMAP_POST_GUI, 1)
 	end
+	size = getRadarSpriteBlipSize(spriteId, size)
 	if not texture then return false end
 
 	-- for MAP_HERE blip center is [0.5, 0.0]

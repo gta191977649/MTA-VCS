@@ -22,10 +22,10 @@ function MarkerChanged(element)
     local state=MarkerRecords[element]
     if state.blipVisible then
         if not isElement(state.blip) then
-            state.blip=createBlipAttachedTo(element,0,2,unpack(state.color))
+            state.blip=createBlipAttachedTo(element,0,2,MarkerBlipColor(state))
             if state.blip then setElementParent(state.blip,element) end
         end
-        if isElement(state.blip) then setBlipColor(state.blip,unpack(state.color)) end
+        if isElement(state.blip) then setBlipColor(state.blip,MarkerBlipColor(state)) end
     elseif isElement(state.blip) then
         destroyElement(state.blip)
         state.blip=nil

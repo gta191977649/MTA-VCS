@@ -91,7 +91,7 @@ def read_animation(data, tree, upper_body=False):
 
     # The converted DFF attaches the thighs to the pelvis as SA does. Fold
     # the former animated spine parent's rotation into both thigh tracks.
-    if upper_body and tracks and tracks.keys().isdisjoint({0, 1, 2, 41, 51}):
+    if upper_body and tracks and tracks.keys().isdisjoint({0, 1, 41, 51}):
         return tracks
     if not {0, 1, 2, 41, 51} <= tracks.keys():
         raise ValueError(f"{name}: incomplete PS2 locomotion hierarchy")
@@ -122,8 +122,8 @@ def block_trees(image, archive_path, index, offset, embedded_trees):
     return data, struct.unpack_from(f"<{count}I", data, 32)
 
 
-def write_ifp(animations):
-    package = bytearray(struct.pack("<24sI", b"vcs_traffic_locomotion", len(animations)))
+def write_ifp(animations, block=b"vcs_traffic_locomotion"):
+    package = bytearray(struct.pack("<24sI", block, len(animations)))
     for name, tracks in sorted(animations.items()):
         animation = bytearray()
         frame_bytes = 0

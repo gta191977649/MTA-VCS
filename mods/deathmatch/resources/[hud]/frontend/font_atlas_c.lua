@@ -124,6 +124,13 @@ function CAudioEngine:reportFrontendAudioEvent(name)
     return playSound("ps2/sfx_" .. name .. ".wav", false)
 end
 
+local missionMusic
+function CAudioEngine:playMissionPassedMusic()
+    if isElement(missionMusic) then stopSound(missionMusic) end
+    missionMusic=self:reportFrontendAudioEvent("mission_passed")
+    return missionMusic
+end
+
 function playVcsFrontendSound(name)
     return type(name) == "string" and CAudioEngine:reportFrontendAudioEvent(name) or false
 end

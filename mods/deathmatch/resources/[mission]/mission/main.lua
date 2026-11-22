@@ -155,26 +155,30 @@ function Mission.marker(run, x, y, z, style, size, color, blip)
         Mission.track(run, marker)
         setElementInterior(marker, run.interior)
         setElementDimension(marker, run.dimension)
-        if blip then exports.marker:setMarkerBlipVisible(marker, true) end
+        exports.marker:setMarkerBlipVisible(marker, blip == true, 255)
     end
     return marker
 end
 
+-- The marker renderer places entity arrows above the ped or vehicle bounds.
+function Mission.entityArrow(run,target,color,blip)
+    if not isElement(target) then return end
+    local x,y,z=getElementPosition(target)
+    local marker=Mission.marker(run,x,y,z+1,"arrow",1.5,color,blip)
+    if not marker then return end
+    if attachElements(marker,target,0,0,1) then return marker end
+    destroyElement(marker)
+end
+
 function Mission.clearReturnVehicle(run)
-    if isElement(run.returnBlip) then destroyElement(run.returnBlip) end
-    run.returnBlip=nil
+    if isElement(run.returnMarker) then destroyElement(run.returnMarker) end
+    run.returnMarker=nil
 end
 
 function Mission.showReturnVehicle(run,vehicle)
-    if isElement(run.returnBlip) and getElementAttachedTo(run.returnBlip)==vehicle then return end
+    if isElement(run.returnMarker) and getElementAttachedTo(run.returnMarker)==vehicle then return end
     Mission.clearReturnVehicle(run)
-    if not isElement(vehicle) then return end
-    local blip=createBlipAttachedTo(vehicle,0,2,0,0,255,255,0,65535,run.player)
-    if blip then
-        setElementInterior(blip,run.interior)
-        setElementDimension(blip,run.dimension)
-        run.returnBlip=Mission.track(run,blip)
-    end
+    run.returnMarker=Mission.entityArrow(run,vehicle,{0,0,255,255},true)
 end
 
 function Mission.message(run, text)
@@ -198,7 +202,7 @@ local function updateHud(run, now, force)
     end
 end
 
-function Mission.endRun(player, message, silent, keepPayout)
+function Mission.endRun(player, message, silent, passed)
     local run = runs[player]
     if not run then return end
     runs[player],run.silent,prompted[player] = nil,silent,nil
@@ -213,7 +217,7 @@ function Mission.endRun(player, message, silent, keepPayout)
     Mission.releaseSites(run)
     for element in pairs(run.elements) do if isElement(element) then destroyElement(element) end end
     if isElement(player) and not silent then
-        triggerClientEvent(player, "mission:end", resourceRoot, message or false,keepPayout==true,run.token)
+        triggerClientEvent(player, "mission:end", resourceRoot, message or false,passed==true,run.token)
     end
 end
 
@@ -277,7 +281,7 @@ local function toggle(player)
     if run then
         local replacement = replacementActivity(player,run,vehicle)
         if replacement then
-            Mission.endRun(player)
+            Mission.endRun(player,run.definition.title.." cancelled.")
             Mission.startActivity(player,replacement.id,vehicle)
             return
         end
@@ -374,8 +378,8 @@ addEventHandler("onElementDestroy",root,function()
     local run = owners[source]
     if run then run.elements[source],run.leases[source],owners[source] = nil,nil,nil end
 end)
-addEventHandler("traffic:onPlayerBusted",root,function() Mission.endRun(source,"Mission failed.") end)
-addEventHandler("onPlayerWasted", root, function() Mission.endRun(source, "Mission failed.") end)
+addEventHandler("traffic:onPlayerBusted",root,function() Mission.endRun(source,"You were busted.") end)
+addEventHandler("onPlayerWasted", root, function() Mission.endRun(source, "You were wasted.") end)
 addEventHandler("onPlayerQuit", root, function() Mission.endRun(source,nil,true) lastAction[source],readyClients[source],prompted[source] = nil,nil,nil end)
 local runtimeDependencies={marker=true,wanted=true,npchlc_traffic=true,npc_hlc=true,vcs_vehicle=true}
 addEventHandler("onResourceStop", root, function(stopped)

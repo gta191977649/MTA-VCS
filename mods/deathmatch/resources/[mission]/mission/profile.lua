@@ -51,13 +51,14 @@ function Mission.finishCourse(run,course,metrics,payout,won,outcome)
     run.courseFinished = true
     if not storeCourse(run,course,metrics,won) then return Mission.fail(run,"Your result could not be saved.") end
     Mission.pay(run,payout)
-    if won then Mission.notify(run,"mission:payout",run.token,payout and payout>0 and payout or nil) end
     if metrics and metrics.time then
         local seconds=math.floor(metrics.time/1000)
         local clock=("%d:%02d"):format(math.floor(seconds/60),seconds%60)
         outcome=(outcome or (won and "New course record!" or "You failed to beat the target time.")).."  "..clock
     end
-    Mission.endRun(run.player,outcome or (won and "Course complete." or "Course finished."),false,won)
+    outcome=outcome or (won and "Course complete." or "You missed the target.")
+    if won and payout and payout>0 then outcome=outcome.."  $"..payout end
+    Mission.endRun(run.player,outcome,false,won)
     return true
 end
 
@@ -176,8 +177,7 @@ function Mission.finishLevel(run, amount)
         run.level = level+1
         if complete then
             exports.wanted:setPlayerWanted(run.player,0,run.id)
-            if first then Mission.notify(run,"mission:payout",run.token,500) end
-            Mission.endRun(run.player,first and "All runs complete. Bonus $500." or "All runs complete.",false,first)
+            Mission.endRun(run.player,first and "All runs complete. Bonus $500." or "All runs complete.",false,true)
             return false
         end
         Mission.message(run,("Level %d completed. Bonus: $%d"):format(level,amount or 0))

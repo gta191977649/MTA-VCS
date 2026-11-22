@@ -126,7 +126,8 @@ def check_sling():
         function setElementAttachedOffsets(h,x,y,z) h.x,h.y,h.z=x,y,z end
         function getVehicleOccupant(v) return v.driver end
         reports=0
-        function triggerServerEvent(_,_,token,hook)
+        function triggerServerEvent(_,_,token,hook,x,y,z)
+            assert(x*x+y*y+z*z <= 6.313^2)
             assert(token=="live" and hook.parent.driver==localPlayer)
             reports=reports+1
         end
@@ -150,6 +151,9 @@ def check_sling():
             end
             assert(reports-before>80 and reports-before<=145)
             assert(forward and math.abs(h.x)<0.04 and math.abs(h.z+5.8125)<0.08)
+            v.x=v.x+15
+            advance(dt)
+            assert(h.x*h.x+h.y*h.y+h.z*h.z <= 6.313^2)
             v.x,v.z=200,80
             advance(dt)
             assert(math.abs(h.x)<0.03 and h.z==-5.8125)
@@ -317,6 +321,8 @@ def main():
     lua.execute("pathGraph=TrafficGraph.build(sourceGraph,function() end)")
     lua.execute("function addEvent() end function addEventHandler() end")
     lua.execute((MISSION / "sling.lua").read_text())
+    lua.execute("function removeElementData(e,key) e[key]=nil end")
+    lua.execute((MISSION / "service_poses.lua").read_text())
     lua.execute((MISSION / "rescue_data.lua").read_text())
     lua.execute((MISSION / "rescue.lua").read_text())
     check_client_rig()

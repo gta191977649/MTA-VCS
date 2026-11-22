@@ -113,7 +113,7 @@ addEventHandler("onClientPreRender",root,function()
                     rig.released=releaseTicks[hook] or getTickCount()
                     if getElementAttachedTo(rig.object) then detachElements(rig.object) end
                 elseif isElement(guard) and getElementType(guard)=="ped" then
-                    local x,y,z=getPedBonePosition(guard,25)
+                    local x,y,z=getPedBonePosition(guard,getElementData(hook,"mission:throwSide",false)==-1 and 35 or 25)
                     if x then
                         if getElementAttachedTo(rig.object) then detachElements(rig.object) end
                         rig.hand={x,y,z}
@@ -124,7 +124,9 @@ addEventHandler("onClientPreRender",root,function()
             end
             local f=rig.flight
             if f then
-                local t=math.min(f.waterAt,((getTickCount()-rig.released)%4294967296+f.age)/1000)
+                local receivedAge=(getTickCount()-rig.released)%4294967296+f.age
+                local age=math.max(receivedAge,f.start and MissionVisualElapsed(f.start) or 0)
+                local t=math.min(f.waterAt,age/1000)
                 local x,y,z=f.x+f.vx*t,f.y+f.vy*t,f.z+f.vz*t-0.5*f.gravity*t*t
                 if rig.hand then
                     -- Carry the animated hand offset into the first frames of flight.

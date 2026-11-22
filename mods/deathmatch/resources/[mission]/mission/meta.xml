@@ -6,6 +6,9 @@
     <include resource="npc_hlc" />
     <include resource="wanted" />
     <script src="main.lua" type="server" />
+    <file src="assets/service_animations.ifp" />
+    <script src="service_poses.lua" type="server" />
+    <script src="service_poses_c.lua" type="client" cache="false" />
     <script src="sling.lua" type="server" />
     <script src="profile.lua" type="server" />
     <script src="main_c.lua" type="client" cache="false" />
@@ -25,6 +28,7 @@
     <script src="firefighting.lua" type="server" />
     <script src="firefighting_c.lua" type="client" cache="false" />
     <file src="assets/ndc_helibucket.dff" />
+    <file src="assets/bucket_spray.png" />
     <file src="assets/ndc_helibucket.txd" />
     <script src="beach_data.lua" type="server" />
     <script src="beach.lua" type="server" />

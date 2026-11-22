@@ -11,9 +11,7 @@ function showPayoutGameText(cash)
     if title then message = "~Y~" .. title .. (cash and "~n~$~1~" or "") end
     if cash then message = message:gsub("~1~",string.format("%d",cash)) end
     showGameText(message,"missionPassed",2000)
-    if not CAudioEngine:reportFrontendAudioEvent("mission_passed") then
-        CAudioEngine:reportFrontendAudioEvent("money")
-    end
+    CAudioEngine:playMissionPassedMusic()
     return true
 end
 addEvent("ui.mission.showpayout",true)

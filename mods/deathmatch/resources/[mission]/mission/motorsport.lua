@@ -30,7 +30,7 @@ local function drawGate(r)
         r.arrow=Mission.marker(r,p[1],p[2],p[3]+4.75,"pointer",3.2,{237,130,180,200},false)
         if r.arrow then exports.marker:setMarkerTarget(r.arrow,n[1],n[2],n[3]) end
         -- The following checkpoint has a dim radar dot without a world cylinder.
-        r.preview=Mission.track(r,createBlip(n[1],n[2],n[3],0,2,237,130,180,120,0,65535,r.player))
+        r.preview=Mission.track(r,createBlip(n[1],n[2],n[3],0,2,237,130,180,255,0,65535,r.player))
         if r.preview then setElementDimension(r.preview,r.dimension) end
     end
 end
@@ -155,7 +155,12 @@ local function raceTick(r,now)
         end
         if r.unfreeze then setElementFrozen(car,false) r.unfreeze=false end
         r.elapsedFrom,r.lapStart,r.lap,r.index,r.phase=now,now,1,1,"racing"
-        for _,s in ipairs(r.rivals) do setElementFrozen(s.car,false) drive(r,s,now) end
+        for _,s in ipairs(r.rivals) do
+            -- RACEHUB_5808 uses display 1 for race rivals (world arrow only).
+            s.marker=Mission.entityArrow(r,s.ped,{0,0,255,255},false)
+            setElementFrozen(s.car,false)
+            drive(r,s,now)
+        end
         Mission.releaseSite(r,"turismo/grid/"..c.key)
         Mission.countdown(r,0)
         drawGate(r)
@@ -178,7 +183,9 @@ local function raceTick(r,now)
                 s.index=s.index+1
                 if s.index>#c.checkpoints then s.index,s.lap=1,s.lap+1 end
             end
-            if s.lap>c.laps then exports.npc_hlc:setNPCTask(s.ped,{"stopVehicle"})
+            if s.lap>c.laps then
+                if isElement(s.marker) then destroyElement(s.marker) end
+                exports.npc_hlc:setNPCTask(s.ped,{"stopVehicle"})
             elseif atAim or now>=s.refresh then drive(r,s,now) end
         end
     end

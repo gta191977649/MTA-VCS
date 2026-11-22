@@ -17,7 +17,9 @@ addEvent("npchlc_traffic:missionEntry",true)
 addEventHandler("npchlc_traffic:missionEntry",resourceRoot,function(ped,car,seat)
     if isElement(ped) and isElementSyncer(ped) and not isPedInVehicle(ped) and isElement(car)
         and isElementStreamedIn(car) and not isVehicleLocked(car) and not getVehicleOccupant(car,seat) then
-        setPedEnterVehicle(ped,car,seat ~= 0)
+        local task=getPedTask(ped,"primary",3)
+        if task=="TASK_COMPLEX_ENTER_CAR_AS_PASSENGER" or task=="TASK_COMPLEX_ENTER_CAR_AS_DRIVER" then return end
+        setPedEnterVehicle(ped,car,seat)
     end
 end,false)
 

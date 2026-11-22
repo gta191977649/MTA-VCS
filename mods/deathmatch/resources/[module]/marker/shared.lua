@@ -132,9 +132,18 @@ function setMarkerAnimation(element,options)
     return true
 end
 
-function setMarkerBlipVisible(element,visible)
+function MarkerBlipColor(state)
+    local color=state.color
+    return color[1],color[2],color[3],state.blipAlpha or color[4]
+end
+
+function setMarkerBlipVisible(element,visible,alpha)
     local state=MarkerRecords[element]
     if not state or type(visible)~="boolean" then return false end
+    if alpha~=nil then
+        if not MarkerFinite(alpha) or alpha<0 or alpha>255 or alpha%1~=0 then return false end
+        state.blipAlpha=alpha
+    end
     state.blipVisible=visible
     MarkerChanged(element)
     return true
