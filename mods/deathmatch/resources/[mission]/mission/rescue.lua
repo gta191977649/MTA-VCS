@@ -220,6 +220,7 @@ end
 
 local function discharge(r,p,now)
     p.state="saved"
+    Mission.checkpointCue(r)
     r.aboard, r.saved = r.aboard-1,r.saved+1
     local h = r.hospital
     exports.npchlc_traffic:assignTrafficPedObjective(p.ped,"walk",h[4],h[5],h[6],"walk")

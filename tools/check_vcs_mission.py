@@ -549,9 +549,47 @@ def check_client():
     """)
 
 
+def check_warning_audio():
+    lua = LuaRuntime()
+    lua.execute("""
+        Hud={onRender=function()end, owner=function() return "mission" end, number=function(v,d) return tonumber(v) or d end}
+        clock,count=0,0
+        function getTickCount() return clock end
+        function addEventHandler() end
+        function addEvent() end
+        function getHudTheme() return {} end
+        function Hud.set(_,label,duration) entry={owner="mission",text=label,started=clock,duration=duration};return true end
+        function Hud.message() return entry end
+        function Hud.clear() entry=nil end
+        CAudioEngine={reportFrontendAudioEvent=function(_,name) assert(name=="timer");count=count+1 end}
+    """)
+    for script in ("user_display_c.lua", "bar_c.lua"):
+        lua.execute((RESOURCES / "[hud]/frontend" / script).read_text())
+    lua.execute("""
+        showVcsCountdown("Time",11000)
+        for ms=0,11000,50 do
+            clock=ms
+            COnscreenTimer:updateSound(clock)
+            if ms==1000 then showVcsCountdown("Time",10000) end
+        end
+        assert(count==10)
+        count=0
+        for _,s in ipairs({11,10,10,9,14,10,1,0}) do
+            assert(showVehicleMissionHud(s,false,false,false,false,false,true))
+        end
+        assert(count==4)
+        hideVehicleMissionHud()
+        for s=0,12 do showVehicleMissionHud(s,false,false,false,false,false,false) end
+        assert(count==4)
+        showVehicleMissionHud(10,false,false,false,false,false,true)
+        assert(count==5)
+    """)
+
+
 if __name__ == "__main__":
     check()
     check_boarding()
     check_client()
+    check_warning_audio()
     print("Mission bindings, profile separation, duplicate rewards, perks and reconnect checks passed.")
 

@@ -254,6 +254,7 @@ end
 local function pay(r,now)
     local t=r.taxi
     t.fares=t.fares+1
+    Mission.checkpointCue(r)
     local fare=math.max(5,math.floor((t.firstDistance+t.secondDistance)/30))
     if t.tip then
         local bonus=t.leg==2 and (t.secondDistance*0.9*t.tip/100+t.savedTip)/(t.firstDistance*0.9)

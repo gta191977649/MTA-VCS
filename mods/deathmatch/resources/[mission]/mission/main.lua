@@ -194,11 +194,12 @@ end
 local function updateHud(run, now, force)
     local seconds = run.deadline and math.max(0, math.ceil((run.deadline-now)/1000))
         or run.elapsedFrom and math.max(0,math.floor((now-run.elapsedFrom)/1000))
-    local signature = table.concat({run.level,seconds or "",run.label or "",run.value or "",run.barLabel or "",run.percent or ""}, "|")
+    local countdown = run.deadline and true or false
+    local signature = table.concat({run.level,tostring(countdown),seconds or "",run.label or "",run.value or "",run.barLabel or "",run.percent or ""}, "|")
     if force or signature ~= run.lastHud then
         run.lastHud = signature
         Mission.notify(run, "mission:hud", run.id, run.level, seconds or false,
-            run.label or false, run.value or "", run.barLabel or false, run.percent or 0,run.token)
+            run.label or false, run.value or "", run.barLabel or false, run.percent or 0,run.token,countdown)
     end
 end
 
@@ -302,8 +303,8 @@ function Mission.countdown(run,value)
     Mission.notify(run,"mission:raceCue",run.token,value)
 end
 
-function Mission.checkpointCue(run)
-    Mission.notify(run,"mission:raceCue",run.token,"checkpoint")
+function Mission.checkpointCue(run,lapComplete)
+    Mission.notify(run,"mission:raceCue",run.token,lapComplete and "lap" or "checkpoint")
 end
 
 function Mission.selectCourse(run, options, callback)

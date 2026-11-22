@@ -65,7 +65,7 @@ function Mission.switchVehicle(r,v)r.vehicle=v return true end
 function Mission.vehicleAvailable(r,v)return not v.owner or v.owner==r end
 function Mission.hud(r,k,v)r.hud={k,v}end
 function Mission.countdown(r,n)r.countCue=n end
-function Mission.checkpointCue(r)r.cues=(r.cues or 0)+1 end
+function Mission.checkpointCue(r,lap) r.cues=(r.cues or 0)+1; if lap then r.lapCues=(r.lapCues or 0)+1 end end
 function Mission.message(r,text)r.text=text end
 function Mission.notify()end
 function Mission.showReturnVehicle(r,v)r.returnBlip=v end
@@ -125,7 +125,7 @@ for i,c in ipairs(TurismoCourses)do
         end
     end
     assert(r.finish and r.finish.t.time>1000 and r.finish.t.lap<=r.finish.t.time)
-    assert(r.cues==#c.checkpoints*c.laps)
+    assert(r.cues==#c.checkpoints*c.laps and r.lapCues==c.laps)
     if i==2 then assert(r.finish.t.position==2 and r.finish.cash==0)
     else assert(r.finish.t.position==1 and r.finish.cash==c.prize) end
 end

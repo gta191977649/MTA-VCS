@@ -115,7 +115,7 @@ def check():
                     end
                 end
             end
-            assert(not r.failed and r.finished and r.finished>0 and r.cues==n,id)
+            assert(not r.failed and r.finished and r.finished>0 and r.cues==n-((a.cfg.kind=="air" or a.cfg.kind=="play") and 1 or 0),id)
             assert(drones==(id=="skywolf" and 12 or 0))
             assert(swapped==(a.cfg.kind=="relay" and 2 or 0))
             def.stop(r)

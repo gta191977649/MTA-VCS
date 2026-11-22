@@ -97,6 +97,7 @@ end
 function Mission.entityArrow(r,e,color,blip) assert(blip);local m=entity("marker");m.target=e;return m end
 function Mission.taxiFare(r,amount) r.money=r.money+amount end
 function Mission.fail(r,why) r.failed=why end
+function Mission.checkpointCue(r) r.cues=(r.cues or 0)+1 end
 function Mission.message(r,m) r.message=m end
 function Mission.model(v) return v.model end
 function Mission.driverOf(v) return getVehicleOccupant(v,0) end
@@ -173,7 +174,7 @@ tick(r,1000)
 local tip=80-12*100/(0.9*t.firstDistance)
 assert(math.abs(t.tip-tip)<0.001 and r.hud[4]==math.floor(tip))
 local expected=math.floor(math.max(5,math.floor(t.firstDistance/30))*(1.25+3*tip/100))
-finishFare(r);assert(r.money==expected and t.fares==1 and prospective.released)
+finishFare(r);assert(r.money==expected and t.fares==1 and r.cues==1 and prospective.released)
 -- Non-tipped fare and fifth-in-a-row payout are independent.
 r=run();dispatch(r,2,4);t=r.taxi
 for i=1,5 do r.vehicle.health=r.vehicle.health-51;tick(r,100) end

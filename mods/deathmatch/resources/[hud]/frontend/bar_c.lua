@@ -1,10 +1,10 @@
 local progress, leftProgress, npcBars = {}, {}, {}
 local theme = getHudTheme()
 local barLabel = {size = 24, align = "right", maxLines = 1}
-local missionRows, missionOwner = {}, nil
+local missionRows, missionOwner, lastCountdownSecond = {}, nil, nil
 local counterSilver = {200, 200, 200}
 
-function showVehicleMissionHud(seconds, level, label, value, bar, percent)
+function showVehicleMissionHud(seconds, level, label, value, bar, percent, countdown)
     local owner = Hud.owner()
     if missionOwner and missionOwner ~= owner then return false end
     if seconds then
@@ -19,6 +19,7 @@ function showVehicleMissionHud(seconds, level, label, value, bar, percent)
         if type(bar) ~= "string" or not percent then return false end
     end
     missionOwner = owner
+    lastCountdownSecond = COnscreenTimer:warnAtSecond(countdown ~= false and seconds, lastCountdownSecond)
     local rows = {}
     if seconds then
         local clock = ("%d:%02d"):format(math.floor(seconds / 60) % 100, seconds % 60)
@@ -33,7 +34,7 @@ end
 
 function hideVehicleMissionHud()
     if missionOwner ~= Hud.owner() then return false end
-    missionRows, missionOwner = {}, nil
+    missionRows, missionOwner, lastCountdownSecond = {}, nil, nil
     return true
 end
 
@@ -133,7 +134,7 @@ addEventHandler("onClientPedWasted", root, clearPed)
 
 addEventHandler("onClientResourceStop", root, function(resource)
     local owner = getResourceName(resource)
-    if missionOwner == owner then missionRows, missionOwner = {}, nil end
+    if missionOwner == owner then missionRows, missionOwner, lastCountdownSecond = {}, nil, nil end
     for slot, bar in pairs(npcBars) do
         if bar.owner == owner then npcBars[slot] = nil end
     end

@@ -208,7 +208,7 @@ local function raceTick(r,now)
     local radius=r.lap==c.laps and r.index==#c.checkpoints and 15 or 12
     local x,y=getElementPosition(car)
     if math.abs(x-gate[1])<=radius and math.abs(y-gate[2])<=radius then
-        Mission.checkpointCue(r)
+        Mission.checkpointCue(r,r.index==#c.checkpoints)
         if r.index==#c.checkpoints then
             local lap=now-r.lapStart
             r.bestLap=math.min(r.bestLap or lap,lap)

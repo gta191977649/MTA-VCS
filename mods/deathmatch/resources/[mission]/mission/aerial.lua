@@ -248,8 +248,8 @@ local function tick(r,now)
         for i,marker in pairs(a.pickups) do
             if CourseGates.crossed(r,now,a.points[i],4) then
                 if not a.startTime then a.startTime,r.deadline=now,now+a.limit end
-                Mission.checkpointCue(r)
                 a.collected=a.collected+1
+                if a.collected<#a.points then Mission.checkpointCue(r) end
                 drop(marker)
                 a.pickups[i]=nil
                 Mission.hud(r,"Checkpoints",("%d/%d"):format(a.collected,#a.points))
@@ -261,7 +261,7 @@ local function tick(r,now)
     a.startTime=r.elapsedFrom
     if next(a.targets) then return checkTargets(r,now) end
     if not CourseGates.crossed(r,now,a.points[a.index],a.reach) then return end
-    Mission.checkpointCue(r)
+    if a.cfg.kind~="air" or a.index<#a.points then Mission.checkpointCue(r) end
     local passed=a.index
     a.index=passed+1
     if a.index>#a.points then return finish(r,now) end

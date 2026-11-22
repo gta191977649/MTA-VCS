@@ -97,6 +97,7 @@ local function groundResult(r,f,saved,now)
     discard(f.marker)
     f.done=true
     if saved then
+        Mission.checkpointCue(r)
         r.deadline=r.deadline+(f.kind=="car" and 5000 or 10000)
         r.saved=r.saved+1
     else

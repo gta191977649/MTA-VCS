@@ -41,24 +41,34 @@ local function remainingTime(entry, now)
     return entry.duration - (now - entry.started) % 4294967296
 end
 
+-- A bonus can move a countdown backwards into a previously displayed second.
+function COnscreenTimer:warnAtSecond(seconds, previous, threshold)
+    if seconds and seconds > 0 and seconds < (threshold or 11) and (not previous or seconds < previous) then
+        CAudioEngine:reportFrontendAudioEvent("timer")
+    end
+    return seconds
+end
+
 function COnscreenTimer:updateSound(now)
     local entry = Hud.message("timer", now)
     if not entry then return end
-    local seconds = math.floor(remainingTime(entry, now) / 1000)
-    if seconds < entry.warningSeconds and entry.lastSecond ~= seconds then
-        CAudioEngine:reportFrontendAudioEvent("timer")
-    end
-    entry.lastSecond = seconds
+    local seconds = math.ceil(remainingTime(entry, now) / 1000)
+    entry.lastSecond = self:warnAtSecond(seconds, entry.lastSecond, entry.warningSeconds)
 end
 
 function showVcsCountdown(label, duration, warningSeconds)
     duration = Hud.number(duration)
     warningSeconds = Hud.number(warningSeconds, 11)
     if not duration or duration <= 0 or warningSeconds < 0 or type(label) ~= "string" then return false end
-    if not Hud.set("timer", label == "" and " " or label, duration, timerStyle) then return false end
     local now = getTickCount()
+    local previous = Hud.message("timer", now)
+    label = label == "" and " " or label
+    if not Hud.set("timer", label, duration, timerStyle) then return false end
     local entry = Hud.message("timer", now)
     if not entry then return true end
+    if previous and previous.owner == entry.owner and previous.text == label then
+        entry.lastSecond = previous.lastSecond
+    end
     entry.warningSeconds = warningSeconds
     COnscreenTimer:updateSound(now)
     return true
@@ -72,7 +82,7 @@ function COnscreenTimer:draw(screen, now)
     local entry = Hud.message("timer", now)
     if not entry or Hud.message("garage", now) then return end
     local remaining = remainingTime(entry, now)
-    local seconds = math.floor(remaining / 1000)
+    local seconds = math.ceil(remaining / 1000)
     local flashing = seconds < entry.warningSeconds
     local phase = remaining % 1000
     if flashing and remaining >= 750 and (phase >= 750 or phase <= 250) then return end

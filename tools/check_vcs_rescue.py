@@ -295,6 +295,7 @@ def main():
         function Mission.marker(r,x,y,z) return {x=x,y=y,z=z} end
         function Mission.model(car) return car.model end
         function Mission.fail(r,text) r.failure=text end
+        function Mission.checkpointCue(r) r.cues=(r.cues or 0)+1 end
         function Mission.finishLevel(r,amount) r.amount,r.level=amount,r.level+1 end
         function start(id,level,location)
             location=location or {-823,1167,10}
@@ -373,7 +374,7 @@ def main():
         step(r)
         assert(p.state=="saved" and r.aboard==0 and r.saved==1)
         step(r,10200)
-        assert(p.ped.destroyed and r.saved==1 and not r.failure)
+        assert(p.ped.destroyed and r.cues==1 and r.saved==1 and not r.failure)
         sit(r.player,nil)
         step(r)
         assert(r.allowReplacement)
@@ -418,7 +419,7 @@ def main():
         h=RescueData.helipads[2]
         setElementPosition(r.vehicle,h[1],h[2],h[3]+31*6/32+1.4)
         step(r)
-        assert(r.hospital==h and r.saved==4 and r.amount==6000 and r.level==16)
+        assert(r.hospital==h and r.saved==4 and r.cues==4 and r.amount==6000 and r.level==16)
         step(r,5100)
         assert(#r.patients==4 and #r.recentSites==5 and r.saved==0)
         local heli=r.vehicle

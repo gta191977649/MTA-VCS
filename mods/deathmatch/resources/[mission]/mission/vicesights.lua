@@ -132,6 +132,7 @@ local function tick(r,now)
             destroyElement(t.sights[t.viewing])
             t.sights[t.viewing],t.viewing=nil,nil
             t.remaining=t.remaining-1
+            Mission.checkpointCue(r)
             t.fun=math.min(100,t.fun+20)
             if t.remaining==0 then
                 t.base=Mission.marker(r,home[1],home[2],home[3],"cylinder",6,pink,true)

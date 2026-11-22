@@ -148,6 +148,7 @@ def main():
         function Mission.switchVehicle(r,v) r.vehicle=v return true end
         function Mission.active(r) return r.active end
         function Mission.marker(r,x,y,z) return createObject(0,x,y,z) end
+        function Mission.checkpointCue(r) r.cues=(r.cues or 0)+1 end
         function Mission.finishLevel(r,amount)
             r.pay=(r.pay or 0)+amount
             if r.air and r.level==5 then r.active=false end
@@ -213,7 +214,7 @@ def main():
         local victim=a.fires[2]
         assert(victim and victim.entity.job=="exitVehicle" and a.level==2)
         input(a,true) tick(a)
-        assert(a.level==3 and a.pay==60 and victim.done)
+        assert(a.level==3 and a.pay==60 and victim.done and a.cues==3 and not b.cues)
         local expected={0,1,2,3,4,4,4,5,5,5,6,9,9,9,10}
         for level,n in ipairs(expected) do
             local run=start("firefighter",level)

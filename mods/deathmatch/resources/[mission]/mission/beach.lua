@@ -54,7 +54,9 @@ local function completeTarget(r,t)
     local level=r.level
     if Mission.finishLevel(r,0) then
         Mission.message(r,("Level %d passed!"):format(level))
+        Mission.checkpointCue(r)
         b.nextWave=getTickCount()+8000
+        if level%5==0 and level~=15 then b.checkpointAt=b.nextWave-4000 end
         if not wreck(b.buggy) then setElementHealth(b.buggy,1000) end
     end
 end
@@ -360,6 +362,10 @@ local function tick(r,now)
         return
     end
     if b.nextWave then
+        if b.checkpointAt and now>=b.checkpointAt then
+            b.checkpointAt=nil
+            Mission.checkpointCue(r)
+        end
         if now>=b.nextWave then beginWave(r,now) end
         return
     end

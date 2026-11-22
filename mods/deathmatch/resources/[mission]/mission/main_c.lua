@@ -1,5 +1,6 @@
 local active = false
 local entryPrompt, enteredDriverVehicle
+local lastGateCue
 local courseMenu
 
 local function frontendRunning()
@@ -10,6 +11,7 @@ end
 local function clearHud(preserveResult)
     entryPrompt=nil
     courseMenu=nil
+    lastGateCue=nil
     active=false
     MissionRunToken=nil
     if not frontendRunning() then return end
@@ -75,12 +77,18 @@ addEventHandler("mission:payout",resourceRoot,function(token,amount)
 end,false)
 addEvent("mission:raceCue",true)
 addEventHandler("mission:raceCue",resourceRoot,function(token,value)
-    if token~=MissionRunToken or not frontendRunning() then return end
+    if not active or token~=MissionRunToken or not frontendRunning() then return end
     local go=value==0 or value=="GO" or value=="GO!"
-    if value~="checkpoint" then
+    if value~="checkpoint" and value~="lap" then
         exports.frontend:showGameText(go and "GO!" or tostring(value),"raceCountdown",go and 1500 or 1000)
     end
-    local sample=go and "race_go" or "race_gate"
+    local sample=(go or value=="lap") and "race_go" or "race_gate"
+    if sample=="race_gate" then
+        -- SLUS 001C5844 suppresses rapid repeats for five PS2 frames.
+        local now=getTickCount()
+        if lastGateCue and (now-lastGateCue)%4294967296<1000*5/30 then return end
+        lastGateCue=now
+    end
     exports.frontend:playVcsFrontendSound(sample)
     exports.frontend:playVcsFrontendSound(sample.."_center")
 end,false)
@@ -125,10 +133,10 @@ end)
 addEvent("mission:clearUi",true)
 addEventHandler("mission:clearUi",resourceRoot,function() clearHud() end,false)
 addEvent("mission:hud",true)
-addEventHandler("mission:hud",resourceRoot,function(id,level,seconds,label,value,bar,percent,token)
+addEventHandler("mission:hud",resourceRoot,function(id,level,seconds,label,value,bar,percent,token,countdown)
     if not active or token~=MissionRunToken or not frontendRunning() then return end
     local showLevel = id == "vigilante" or id == "paramedic" or id == "airrescue" or id == "beachpatrol" or id == "firefighter"
-    exports.frontend:showVehicleMissionHud(seconds, showLevel and level or false, label, value, bar, percent)
+    exports.frontend:showVehicleMissionHud(seconds, showLevel and level or false, label, value, bar, percent, countdown)
 end,false)
 addEventHandler("onClientResourceStart",root,function(started)
     if source==resourceRoot or started==getResourceFromName("frontend") then

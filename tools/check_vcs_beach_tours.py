@@ -84,6 +84,7 @@ function Mission.forParticipant(p,token,id) local r=byOwner[p];return r and r.to
 function Mission.driverOf(v) return getVehicleOccupant(v,0) end
 function Mission.register(id,def) definitions[id]=def end
 function Mission.fail(r,why) r.failed=why end
+function Mission.checkpointCue(r) r.cues=(r.cues or 0)+1 end
 function Mission.message(r,m) r.message=m end
 function Mission.notify(r,event,token,v) assert(token==r.token);r.photo=v end
 function Mission.hud(r,l,v,b,n) r.hud=n end
@@ -125,7 +126,12 @@ send(b.player,"mission:beachBikeHit",a.token,t.car);assert(not t.fellAt)
 send(a.player,"mission:beachBikeHit",a.token,t.car);assert(t.fellAt and not t.actor.car and t.marker.parent==t.actor)
 step(a);assert(isElement(t.actor));step(a,1200);assert(not isElement(t.actor))
 for i=1,3 do local target=next(a.beach.targets);exit(target.actor);step(a) end
-assert(a.level==5 and a.paid==0 and b.level==4 and isElement(q.actor))
+assert(a.level==5 and a.cues==1 and not b.cues and a.paid==0 and b.level==4 and isElement(q.actor))
+step(a,8000)
+for i=1,4 do local target=next(a.beach.targets);exit(target.actor);step(a) end
+assert(a.level==6 and a.cues==2)
+step(a,3999);assert(a.cues==2)
+step(a,1);step(a);assert(a.cues==3 and not b.cues)
 local medic=make("beachpatrol",3)
 setElementPosition(medic.vehicle,getElementPosition(medic.beach.helper))
 step(medic);step(medic)
@@ -175,7 +181,7 @@ for level=1,5 do
     setElementPosition(tour.vehicle,-1236.1198,-924.8318,14.8681)
     step(tour);assert(tour.level==level+1)
 end
-assert(tour.paid>5000 and other.level==1 and other.tour.remaining==3)
+assert(tour.paid>5000 and tour.cues==18 and not other.cues and other.level==1 and other.tour.remaining==3)
 exit(other.player);step(other);clock=clock+30001;other.def.tick(other,clock)
 assert(other.failed:find("too long"))
 local bored=make("vicesights")
