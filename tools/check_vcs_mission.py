@@ -94,7 +94,7 @@ def check():
             wanted={setPlayerWanted=function(_,p,n) p.wanted=n end},
             frontend={showTextBox=function()end,
             showPayoutGameText=function(_,p) p.banners=p.banners+1 end},
-            npchlc_traffic={releaseTrafficPed=function(_,ped) ped.released=true end}}
+            npchlc_traffic={isTrafficPlayerInCustody=function() return false end,releaseTrafficPed=function(_,ped) ped.released=true end}}
         function player(serial)
             local p={kind="player",serial=serial,cash=0,banners=0}
             fire("onPlayerJoin",p)
@@ -409,7 +409,7 @@ def check_boarding():
         setElementHealth=noop
         exports={npc_hlc={clearNPCTasks=noop,setNPCWalkSpeed=noop,setNPCTask=function() walks=(walks or 0)+1 end}}
         TrafficVisibility,TrafficAmbient,TrafficRoad={},{suspend=noop},{}
-        TrafficActors={endMissionPath=noop}
+        TrafficActors={endMissionPath=noop};TrafficRace={release=noop}
         PedVehicleEvasion,PedCarjack={cancel=noop},{cancelExtraction=noop}
         PedSpecial={interrupt=noop,update=function() return false end}
         PedAI={brain=function(p) return p.brain end}

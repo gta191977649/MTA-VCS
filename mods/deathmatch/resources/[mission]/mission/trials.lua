@@ -32,11 +32,7 @@ local function drawGate(r)
     if not r.gate then return Mission.fail(r,"The next checkpoint could not be placed.") end
     if not finish then
         exports.marker:setMarkerTarget(r.gate,q[1],q[2],q[3]-0.7)
-        r.preview=Mission.track(r,createBlip(q[1],q[2],q[3]-0.7,0,2,237,130,180,255,0,65535,r.player))
-        if r.preview then
-            setElementInterior(r.preview,r.interior)
-            setElementDimension(r.preview,r.dimension)
-        end
+        r.preview=CourseGates.nextBlip(r,q,-0.7,false)
     end
 end
 

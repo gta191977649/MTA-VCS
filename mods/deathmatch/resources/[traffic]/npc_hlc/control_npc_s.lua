@@ -17,6 +17,7 @@ local function elapsedMs(now, before)
 end
 
 addEvent("npc_hlc:debugAssignmentChanged", false)
+addEvent("npc_hlc:onRaceVehicleReposition",false)
 
 addEvent("npc_hlc:driverDoorArrival",true)
 addEvent("npc_hlc:onDriverDoorArrival",false)
@@ -30,6 +31,7 @@ addEventHandler("npc_hlc:driverDoorArrival",root,function(car,order)
 end)
 
 local function taskDrivingStyle(task)
+    if task and task[1] == "driveRaceToPoint" then return 2 end
     if task and task[1] == "driveTrafficPhysics" then return task[6] or 0 end
     if task and task[1] == "driveTrafficRail" then return task.style or 0 end
 end
@@ -49,14 +51,15 @@ function recordNPCDebugFallback(actor, x, y, z)
     end
 end
 
-local function sendTask(player, state, task)
+local function sendTask(player, state, task, roadPose)
     triggerClientEvent(player, "npc_hlc:control", resourceRoot,
-        state.npc, state.revision, task or false, task and state.actor or false, task and state.preview or false)
+        state.npc, state.revision, task or false, task and state.actor or false, task and state.preview or false, roadPose)
 end
 
 local function updateAssignment(state, actor, owner, task, preview)
     if owner == state.owner and actor == state.actor and task == state.assignedTask and preview == state.preview then return end
     local previousOwner = state.owner
+    local acquired = owner and (previousOwner ~= owner or state.actor ~= actor)
     if previousOwner ~= owner or state.actor ~= actor then state.lastMovement = getTickCount() end
     if state.actor and actorStates[state.actor] == state then actorStates[state.actor] = nil end
     if actor then actorStates[actor] = state end
@@ -73,7 +76,17 @@ local function updateAssignment(state, actor, owner, task, preview)
     end
     if owner then
         addElementDataSubscriber(state.npc, "npc_hlc:profile", owner)
-        sendTask(owner, state, task)
+        local roadPose
+        if acquired and task and (task[1]=="driveRaceToPoint" or task[1]=="driveTrafficPhysics"
+            or task[1]=="driveTrafficRail") then
+            local x,y,z=getElementPosition(actor)
+            local _,_,yaw=getElementRotation(actor)
+            local height,pitch,roll,clearance=getVcsRoadVehiclePose(actor,x,y,z,yaw)
+            if height and math.abs(height-z)<1.5 then
+                roadPose={x,y,height,pitch,roll,clearance,yaw}
+            end
+        end
+        sendTask(owner, state, task, roadPose)
     end
 end
 
@@ -190,9 +203,11 @@ local function cycleNPCs()
             else
                 state.sampledWalk=nil
             end
-            if passed or isNPCTaskComplete(state.npc, actor, task, true) then
+            if (task.race or task[1]=="driveRaceToPoint") and restoreFallenRaceVehicle(state,actor,task) then
+                state.lastMovement=visit
+            elseif passed or isNPCTaskComplete(state.npc, actor, task, true) then
                 completeTask(state, task)
-            elseif not clientDrivenTraffic[task[1]] and actor and not state.owner and state.lastMovement == previousMovement
+            elseif (task.race or not clientDrivenTraffic[task[1]]) and actor and not state.owner and state.lastMovement == previousMovement
                 and elapsedMs(visit, previousMovement) >= FALLBACK_INTERVAL
                 and not getElementSyncer(actor) and getElementHealth(actor) >= 1 then
                 local elapsed = math.min(MAX_FALLBACK_ELAPSED, elapsedMs(visit, state.lastMovement))

@@ -12,6 +12,8 @@ def main():
         root, resourceRoot = {}, {}
         local handlers = {}
         now, timerCount = 0, 0
+        function addEvent() end
+        function triggerEvent() end
         function addEventHandler(event, _, fn) handlers[event] = fn end
         function emit(event, p) source = p; handlers[event](); source = nil end
         function setTimer(fn, interval)
@@ -64,6 +66,28 @@ def main():
             return true
         end}}
     """)
+    wasted = traffic.parent.parent / "[module]" / "wasted"
+    lua.execute((wasted / "restart.lua").read_text(encoding="utf-8"))
+    lua.execute("""
+        exports.wasted = {
+            ActivateWeaponBuyback = function(_, p, reason) assert(reason == "busted"); p.buyback = reason end,
+            GetLevelFromPosition = function(_, ...) return GetLevelFromPosition(...) end,
+            FindClosestPoliceRestartPoint = function(_, ...) return FindClosestPoliceRestartPoint(...) end,
+            ConfiscatePlayerWeapons = function(_, p, reason)
+                assert(reason == 'busted')
+                p.confiscated = p.weapons
+                takeAllWeapons(p)
+            end
+        }
+        for _, h in ipairs({
+            {-884.49, -470.41, 12.0774, 270}, {-822.83, 1149.01, 11.3765, 0},
+            {493.5, 703.1, 11.1, 90}, {-135.5, -978, 10.5, 281.7}
+        }) do
+            local x,y,z,r = FindClosestHospitalRestartPoint(h[1],h[2],h[3])
+            assert(x==h[1] and y==h[2] and z==h[3]+1 and r==h[4])
+        end
+        assert(FindClosestHospitalRestartPoint(-200,-600,12) == -884.49)
+    """)
     for name in ("custody_restarts.lua", "custody.lua"):
         lua.execute((traffic / name).read_text(encoding="utf-8"))
     lua.execute("""
@@ -110,7 +134,7 @@ def main():
         step(7000)
         step(7512)
         step(10512)
-        assert(p.money == 1000 and p.resets == 1 and p.frozen and timer.killed)
+        assert(p.money == 1000 and p.resets == 1 and p.weapons == 0 and p.confiscated == nil and p.buyback == "busted" and p.frozen and timer.killed)
         assert(TrafficCustody.begin(p,6))
         step(12561)
         step(14608)

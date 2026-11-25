@@ -8,9 +8,29 @@ local function frontendRunning()
     return resource and getResourceState(resource)=="running"
 end
 
+-- RACEHUB_27311 / 27455 frame the route board from its front face.
+local cameras = {
+    mainla={-1053,-794.385,12.421, -1050.625,-794.385,12.421},
+    beach={248.529+2.5*math.cos(math.rad(-15)),-304.109+2.5*math.sin(math.rad(-15)),12.421,
+        248.529,-304.109,12.421},
+}
+local previewCamera
+
+local function closeCourseChoice(frontendStopped)
+    local canDraw=not frontendStopped and frontendRunning()
+    courseMenu=nil
+    if previewCamera then
+        if isElement(previewCamera.target) then setCameraTarget(previewCamera.target)
+        else setCameraMatrix(unpack(previewCamera.matrix)) end
+        previewCamera=nil
+        if canDraw then exports.frontend:showRaceCoursePreview(false) end
+    end
+    if canDraw then exports.frontend:showTextBox(false) end
+end
+
 local function clearHud(preserveResult)
     entryPrompt=nil
-    courseMenu=nil
+    closeCourseChoice()
     lastGateCue=nil
     active=false
     MissionRunToken=nil
@@ -21,7 +41,6 @@ local function clearHud(preserveResult)
     exports.frontend:hideGameText("raceCountdown")
     exports.frontend:hideGameText("missionPassed")
     if preserveResult~=true then exports.frontend:hideGameText("missionResult") end
-    exports.frontend:showTextBox(false)
 end
 
 addEventHandler("onClientVehicleEnter",root,function(player,seat)
@@ -58,7 +77,8 @@ end,false)
 addEvent("mission:message",true)
 addEventHandler("mission:message",resourceRoot,function(message,token)
     if not active or token~=MissionRunToken or not frontendRunning() then return end
-    exports.frontend:showCaptionForPlayer(message,4000)
+    if message==false then exports.frontend:hideCaptionForPlayer(true)
+    else exports.frontend:showCaptionForPlayer(message,4000) end
 end,false)
 addEvent("mission:end",true)
 addEventHandler("mission:end",resourceRoot,function(message,passed,token)
@@ -96,23 +116,32 @@ end,false)
 local function showCourseChoice()
     local menu = courseMenu
     if menu and frontendRunning() then
-        exports.frontend:showTextBox(("%s (%d/%d)~n~Left / Right to browse. Enter to select."):format(
-            menu.options[menu.index],menu.index,#menu.options),0,false)
+        local option=menu.options[menu.index]
+        if type(option)=="table" and cameras[option.board] then
+            if not previewCamera then
+                previewCamera={target=getCameraTarget(), matrix={getCameraMatrix()}}
+                setCameraMatrix(unpack(cameras[option.board]))
+            end
+            exports.frontend:showRaceCoursePreview(option)
+            exports.frontend:showTextBox("Left / Right to browse.~n~Enter to race.~n~Backspace to exit.",0,false)
+        else
+            exports.frontend:showTextBox(("%s (%d/%d)~n~Left / Right to browse. Enter to select."):format(
+                option,menu.index,#menu.options),0,false)
+        end
     end
 end
 
 addEvent("mission:courseMenu",true)
-addEventHandler("mission:courseMenu",resourceRoot,function(token,id,options,serial)
+addEventHandler("mission:courseMenu",resourceRoot,function(token,id,options,serial,initialIndex)
     if token ~= MissionRunToken or #options == 0 then return end
-    courseMenu = {id=id,index=1,options=options,serial=serial}
+    courseMenu = {id=id,index=initialIndex or 1,options=options,serial=serial}
     showCourseChoice()
 end,false)
 
 addEvent("mission:courseSelected",true)
 addEventHandler("mission:courseSelected",resourceRoot,function(token,serial)
     if token==MissionRunToken and courseMenu and courseMenu.serial==serial then
-        courseMenu=nil
-        if frontendRunning() then exports.frontend:showTextBox(false) end
+        closeCourseChoice()
     end
 end,false)
 
@@ -120,12 +149,15 @@ addEventHandler("onClientKey",root,function(key,pressed)
     local menu = courseMenu
     if not menu or not pressed or isChatBoxInputActive() or isConsoleActive() then return end
     if key == "arrow_l" or key == "arrow_r" then
-        menu.index = (menu.index-1+(key=="arrow_l" and -1 or 1)) % #menu.options+1
+        local step=key=="arrow_l" and -1 or 1
+        if menu.id=="turismo" then menu.index=math.max(1,math.min(#menu.options,menu.index+step))
+        else menu.index=(menu.index-1+step)%#menu.options+1 end
         showCourseChoice()
-    elseif key == "enter" or key == "num_enter" then
-        courseMenu = nil
-        if frontendRunning() then exports.frontend:showTextBox(false) end
-        triggerServerEvent("mission:courseChoice",resourceRoot,MissionRunToken,menu.id,menu.index,menu.serial)
+    elseif key == "enter" or key == "num_enter" or (key=="backspace" and (menu.id=="turismo" or menu.id=="golf")) then
+        closeCourseChoice()
+        local choice=menu.index
+        if key=="backspace" then choice=false end
+        triggerServerEvent("mission:courseChoice",resourceRoot,MissionRunToken,menu.id,choice,menu.serial)
     else return end
     cancelEvent()
 end)
@@ -133,10 +165,10 @@ end)
 addEvent("mission:clearUi",true)
 addEventHandler("mission:clearUi",resourceRoot,function() clearHud() end,false)
 addEvent("mission:hud",true)
-addEventHandler("mission:hud",resourceRoot,function(id,level,seconds,label,value,bar,percent,token,countdown)
+addEventHandler("mission:hud",resourceRoot,function(id,level,seconds,label,value,bar,percent,token,countdown,secondCounter)
     if not active or token~=MissionRunToken or not frontendRunning() then return end
     local showLevel = id == "vigilante" or id == "paramedic" or id == "airrescue" or id == "beachpatrol" or id == "firefighter"
-    exports.frontend:showVehicleMissionHud(seconds, showLevel and level or false, label, value, bar, percent, countdown)
+    exports.frontend:showVehicleMissionHud(seconds, showLevel and level or false, label, value, bar, percent, countdown, secondCounter)
 end,false)
 addEventHandler("onClientResourceStart",root,function(started)
     if source==resourceRoot or started==getResourceFromName("frontend") then
@@ -144,13 +176,37 @@ addEventHandler("onClientResourceStart",root,function(started)
     end
 end)
 addEventHandler("onClientResourceStop",resourceRoot,clearHud)
+addEventHandler("onClientResourceStop",root,function(stopped)
+    if stopped==getResourceFromName("frontend") and courseMenu and courseMenu.id=="turismo" then
+        local menu=courseMenu
+        closeCourseChoice(true)
+        triggerServerEvent("mission:courseChoice",resourceRoot,MissionRunToken,menu.id,false,menu.serial)
+    end
+end)
 
-local function protectMissionActor(attacker)
-    if not isElement(attacker) then return end
-    if getElementType(attacker)=="vehicle" then attacker=getVehicleController(attacker) end
-    if not isElement(attacker) or getElementType(attacker)~="player" then return end
+local function protectMissionActor(attacker,weapon,_,_,_,_,tyre)
     local owner=getElementData(source,"mission:actorOwner",false)
-    if owner and attacker~=owner then cancelEvent() end
+    if not owner then return end
+    local vehicleHit=isElement(attacker) and getElementType(attacker)=="vehicle"
+    if vehicleHit then attacker=getVehicleController(attacker) end
+    local rival=getElementData(source,"mission:turismoRival",false)
+    if rival and rival~="recovering" then
+        if rival=="driver" then
+            local armed=type(weapon)=="number" and (weapon>=1 and weapon<=18 or weapon>=22 and weapon<=42)
+            if vehicleHit or attacker~=owner or not armed then
+                cancelEvent()
+            elseif attacker==localPlayer and MissionRunToken then
+                triggerServerEvent("mission:turismoWeaponHit",resourceRoot,MissionRunToken,source,weapon)
+            end
+            return
+        end
+        local protectedCar=rival=="racing" and (weapon==18 or weapon==37 or tyre and tyre>=0)
+        if attacker~=owner or protectedCar then
+            cancelEvent()
+        end
+    elseif isElement(attacker) and getElementType(attacker)=="player" and attacker~=owner then
+        cancelEvent()
+    end
 end
 addEventHandler("onClientPedDamage",root,protectMissionActor,true,"high")
 addEventHandler("onClientVehicleDamage",root,protectMissionActor,true,"high")

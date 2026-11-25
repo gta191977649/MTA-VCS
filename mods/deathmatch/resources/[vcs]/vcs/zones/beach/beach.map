@@ -2746,7 +2746,7 @@
     <building posX="338.294983" posY="-245.446899" posZ="10.831021" rotX="-5.129501" rotY="0.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6967" />
     <building posX="338.420105" posY="-240.694717" posZ="10.831021" rotX="-5.129501" rotY="0.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6967" />
     <building posX="315.951111" posY="-211.317398" posZ="13.913506" rotX="-0.000000" rotY="-0.000000" rotZ="165.000013" interior="0" dimension="0" id="pm_roofarc1" />
-    <building posX="248.497986" posY="-304.100159" posZ="12.421000" rotX="89.999998" rotY="-90.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_5522" />
+    <building posX="248.497986" posY="-304.100159" posZ="12.421000" rotX="90.000000" rotY="0.000000" rotZ="75.000000" interior="0" dimension="0" id="vcs_model_5522" />
     <building posX="295.287842" posY="-220.464371" posZ="14.942383" rotX="-0.000000" rotY="-0.000000" rotZ="172.789734" interior="0" dimension="0" id="vcs_model_6993_f082e" />
     <building posX="295.112061" posY="-220.624847" posZ="14.942383" rotX="0.000000" rotY="-0.000000" rotZ="-97.210256" interior="0" dimension="0" id="vcs_model_6993_2d196" />
     <building posX="295.429443" posY="-220.659637" posZ="14.942383" rotX="-0.000000" rotY="-0.000000" rotZ="82.789737" interior="0" dimension="0" id="vcs_model_6993_f082e" />

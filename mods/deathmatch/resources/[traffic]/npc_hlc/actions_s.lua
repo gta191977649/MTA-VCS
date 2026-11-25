@@ -8,6 +8,69 @@ function configureNPCFallbackCollision()
     end
 end
 
+local raceBounds={}
+local function raceFootprint(car)
+    local model=getElementModel(car)
+    local bounds=raceBounds[model]
+    if not bounds and collisionResource and getResourceState(collisionResource)=="running" then
+        bounds={call(collisionResource,"getModelBoundingBox",model)}
+        raceBounds[model]=bounds
+    end
+    return getNPCTrafficModelFootprint(car,unpack(bounds or {}))
+end
+
+-- Use the same swept vehicle footprints as the streamed style-2 controller.
+-- A stopped finisher can occupy the exact centreline of the incoming lane.
+local function raceNearby(car,x,y,z,range)
+    local others={}
+    for _,other in ipairs(getElementsWithinRange(x,y,z,range,"vehicle",getElementInterior(car),getElementDimension(car))) do
+        if other~=car then
+            local box=raceFootprint(other)
+            if box and math.abs(box.z-z)<8 then
+                box.vx,box.vy=getNPCTrafficVelocity(other,getTickCount(),box.x,box.y)
+                box.parked=box.vx^2+box.vy^2<.3^2 and not getVehicleOccupant(other,0)
+                others[#others+1]=box
+            end
+        end
+    end
+    return others
+end
+
+function getRaceFallbackTarget(car,x,y,z,tx,ty,tz,speed,cruise,road)
+    local dx,dy=tx-x,ty-y
+    local length=math.sqrt(dx*dx+dy*dy)
+    if length<1 then return tx,ty,tz end
+    local reach=math.min(length,12+math.min(12,speed*0.6))
+    local others=raceNearby(car,x,y,z,math.sqrt(2)*getNPCRaceLeadRange(speed)+8)
+    if #others==0 then return tx,ty,tz end
+    local own=raceFootprint(car)
+    if not own then return tx,ty,tz end
+    local function roadClear(cx,cy,fx,fy,span)
+        local traffic=getResourceFromName("npchlc_traffic")
+        if traffic and getResourceState(traffic)=="running"
+            and not call(traffic,"isMissionRacePassingLane",cx,cy,z,fx,fy,span,own.width) then return false end
+        local previous=getVcsGroundHeight(cx,cy,z-0.7)
+        if not previous then return false end
+        for step=1,math.ceil(span/3) do
+            local d=math.min(span,step*3)
+            local last=math.min(span,(step-1)*3)
+            for side=-1,1 do
+                local h=getVcsGroundHeight(cx+fx*d+fy*side*own.width,cy+fy*d-fx*side*own.width,previous)
+                if not h or math.abs(h-previous)>1.4 then return false end
+                local sx,sy=cx+fy*side*own.width,cy-fx*side*own.width
+                if not isVcsRoadPassClear(sx+fx*last,sy+fy*last,previous+0.7,sx+fx*d,sy+fy*d,h+0.7) then return false end
+            end
+            previous=getVcsGroundHeight(cx+fx*d,cy+fy*d,previous)
+            if not previous then return false end
+        end
+        return true
+    end
+    local function corridorTraffic(range) return raceNearby(car,x,y,z,range) end
+    local ax,ay,cap=getNPCRaceOvertake(own,others,dx/length,dy/length,speed,cruise or speed,roadClear,corridorTraffic,road)
+    if ax then return x+ax*reach,y+ay*reach,z+(tz-z)*reach/length,cap end
+    return tx,ty,tz
+end
+
 local function stepToPoint(actor, tx, ty, tz, elapsed, driveSpeed, x, y, z, pace)
     recordNPCDebugFallback(actor, tx, ty, tz)
     local dx, dy, dz = tx - x, ty - y, tz - z

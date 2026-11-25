@@ -1,5 +1,29 @@
 UI = exports.frontend
 
+local godPlayers = {}
+
+function isPlayerInGodMode(player)
+    return godPlayers[player] == true
+end
+
+addCommandHandler("god", function(player)
+    if not isElement(player) or getElementType(player) ~= "player" then return end
+    godPlayers[player] = true
+    setElementData(player, "god", true, "broadcast", "deny")
+    setElementOnFire(player, false)
+    UI:showTextBox(player, "Godmode", 3000)
+end)
+
+addEventHandler("onPlayerQuit", root, function()
+    godPlayers[source] = nil
+end)
+
+addEventHandler("onResourceStop", resourceRoot, function()
+    for player in pairs(godPlayers) do
+        if isElement(player) then removeElementData(player, "god") end
+    end
+end)
+
 addCommandHandler("wanted", function(player, _, value, extra)
     if not isElement(player) or getElementType(player) ~= "player" then return end
     if extra or not value or not value:match("^[1-6]$") then

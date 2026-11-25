@@ -1,5 +1,6 @@
 <meta>
     <include resource="wanted" />
+    <include resource="wasted" />
 	<include resource="vcs_vehicle"/>
 	<min_mta_version server="1.6.0" client="1.6.0" />
 	<info author="CrystalMV" version="0.2" name="NPC traffic" type="script"/>
@@ -83,6 +84,7 @@
 	<script src="ped_road_injury.lua" type="server" />
 	<script src="traffic_road.lua" type="server" />
 	<script src="ped_script_control.lua" type="server" />
+	<script src="mission_race_s.lua" type="server" />
 	<script src="traffic_runtime.lua" type="server" />
 	<script src="custody_restarts.lua" type="server" />
 	<script src="custody.lua" type="server" />
@@ -94,6 +96,7 @@
 	<script src="police_response_s.lua" type="server" />
 	<script src="police.lua" type="server" />
 
+	<export function="isTrafficPlayerInCustody" type="server" http="false" />
 	<export function="setTrafficPlayerFreeBail" type="server" />
 	<export function="setTrafficPlayerRestrained" type="server" http="false" />
 	<export function="createTrafficScriptPed" type="server" http="false" />
@@ -111,9 +114,15 @@
 	<export function="findTrafficPedestrianAnchor" type="server" http="false" />
 	<export function="setNPCTrafficRoute" type="server" http="false" />
 	<export function="acquireMissionTrafficDriver" type="server" http="false" />
+	<export function="startMissionRaceDriver" type="server" http="false" />
+	<export function="setMissionRaceTarget" type="server" http="false" />
+	<export function="setMissionTrafficDensity" type="server" http="false" />
+	<export function="stopMissionRaceDriver" type="server" http="false" />
 	<export function="driveMissionTrafficTo" type="server" http="false" />
 	<export function="cruiseMissionTraffic" type="server" http="false" />
 	<export function="getMissionTrafficRoad" type="server" http="false" />
+	<export function="clearAreaOfCars" type="server" http="false" />
+	<export function="isMissionRacePassingLane" type="server" http="false" />
 	<export function="getTrafficNodePosition" type="server" http="false" />
 	<export function="getTrafficIslandAt" type="server" http="false" />
 	<export function="setNPCTrafficDrivingStyle" type="server" http="false" />

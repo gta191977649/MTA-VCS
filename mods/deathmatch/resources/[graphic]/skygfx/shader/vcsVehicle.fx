@@ -87,6 +87,7 @@ technique vcs_vehicle_glass {
 #else
 
 texture Reflection;
+#include "pointLights.fx"
 float ReflectionWeight;
 float3 FogColor;
 float2 FogRange;
@@ -125,6 +126,7 @@ VehiclePixel vehicleVertex(VehicleVertex input) {
     float3 viewNormal = mul(normal, (float3x3)gView);
     output.reflectionUv = float2(viewNormal.x, -viewNormal.y) * 0.5 + 0.5;
     output.color = MTACalcGTAVehicleDiffuse(normal, input.color);
+    output.color.rgb = saturate(output.color.rgb + GetFireLighting(mul(input.position, gWorld).xyz));
     output.color.a = gDiffuseMaterialSource == 0 ? gMaterialDiffuse.a : input.color.a;
     output.fog = saturate((output.position.w - FogRange.x) / max(FogRange.y - FogRange.x, 1));
     return output;

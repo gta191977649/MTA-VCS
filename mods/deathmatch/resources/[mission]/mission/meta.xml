@@ -2,8 +2,10 @@
     <info name="VCS vehicle missions" type="script" />
     <include resource="frontend" />
     <include resource="marker" />
+    <include resource="fire" />
     <include resource="npchlc_traffic" />
     <include resource="npc_hlc" />
+    <include resource="server_coldata" />
     <include resource="wanted" />
     <script src="main.lua" type="server" />
     <file src="assets/service_animations.ifp" />
@@ -12,6 +14,20 @@
     <script src="sling.lua" type="server" />
     <script src="profile.lua" type="server" />
     <script src="main_c.lua" type="client" cache="false" />
+    <script src="golf_data.lua" type="shared" cache="false" />
+    <script src="golf.lua" type="server" />
+    <script src="golf_c.lua" type="client" cache="false" />
+    <file src="assets/golf.ifp" />
+    <file src="assets/bouy.dff" />
+    <file src="assets/bouy.txd" />
+    <file src="assets/ndc_golfball.dff" />
+    <file src="assets/ndc_golfball.txd" />
+    <file src="assets/golfclub.dff" />
+    <file src="assets/golfclub.txd" />
+    <file src="assets/golf_swing.wav" />
+    <file src="assets/golf_strike.wav" />
+    <file src="assets/golf_water.wav" />
+    <file src="assets/golf_buoy.wav" />
     <script src="taxi_data.lua" type="server" />
     <script src="taxi.lua" type="server" />
     <script src="taxi_c.lua" type="client" cache="false" />
@@ -40,7 +56,9 @@
     <file src="assets/dr_lifesaver.txd" />
     <script src="race_collision_c.lua" type="client" cache="false" />
     <script src="course_gates.lua" type="server" />
+    <script src="louise_data.lua" type="server" />
     <script src="motorsport_data.lua" type="server" />
+    <script src="turismo_recovery.lua" type="server" />
     <script src="motorsport.lua" type="server" />
     <script src="motorsport_c.lua" type="client" cache="false" />
     <script src="trials_data.lua" type="server" />

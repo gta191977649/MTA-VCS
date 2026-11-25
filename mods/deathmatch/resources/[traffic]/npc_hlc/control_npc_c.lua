@@ -111,7 +111,7 @@ local function onStreamOut()
     stopControl(source, true)
     samples[source] = nil
     local state = assignments[source]
-    if state then state.driveProgress, state.walkProgress = {}, {} end
+    if state then state.driveProgress, state.walkProgress, state.roadContact = {}, {}, nil end
     setActive(source, false)
 end
 
@@ -128,12 +128,12 @@ local function flushProfiles()
     if #changes > 0 then triggerServerEvent("npc_hlc:watchProfiles", resourceRoot, changes) end
 end
 
-local function updateTask(npc, revision, task, actor, preview)
+local function updateTask(npc, revision, task, actor, preview, roadPose)
     if not isElement(npc) then return end
     local current = assignments[npc]
     if current and revision <= current.revision then return end
     local continuous = task and (isNPCTrafficWalkTask(task[1]) or task[1] == "driveTrafficToPoint"
-        or task[1] == "driveTrafficRail" or task[1] == "driveTrafficPhysics")
+        or task[1] == "driveTrafficRail" or task[1] == "driveTrafficPhysics" or task[1] == "driveRaceToPoint")
         and current and current.task and (current.task[1] == task[1]
             or isNPCTrafficWalkTask(current.task[1]) and isNPCTrafficWalkTask(task[1])) and actor == current.actor
     if not continuous then stopControl(npc, true) end
@@ -143,6 +143,8 @@ local function updateTask(npc, revision, task, actor, preview)
         keepDrive=task[2]>=first and task[2]<first+#current.task[5]
     end
     assignments[npc] = {revision = revision, task = task, actor = actor, preview = preview,
+        roadContact = current and current.actor == actor and task and current.roadContact or nil,
+        roadPose = roadPose or (current and current.actor == actor and task and current.roadPose),
         driveProgress = keepDrive and current.driveProgress or {},
         walkProgress = continuous and current.walkProgress or {}}
     setActive(npc, task and isElementStreamedIn(npc))
@@ -176,6 +178,11 @@ local function cycleNPCs(elapsed)
         elseif isElement(actor) and isElementStreamedIn(actor) and isElementSyncer(actor)
             and getNPCControlElement(npc, task) == actor and getElementHealth(actor) >= 1
             and not isPedDead(npc) and getNPCWalkSpeed(npc) then
+            if state.roadContact ~= true and (task[1]=="driveRaceToPoint" or task[1]=="driveTrafficPhysics"
+                or task[1]=="driveTrafficRail") then
+                state.roadContact = settleNPCRoadHandoff(actor, state.roadContact,state.roadPose)
+                if state.roadContact==true then state.roadPose=nil end
+            end
             if state.usePreview and state.preview then task = state.preview end
             local complete = isNPCTaskComplete(npc, actor, task)
             if complete and not state.usePreview and not state.arrivalSent and isNPCTrafficWalkTask(task[1])
@@ -206,7 +213,7 @@ local function cycleNPCs(elapsed)
                         or task[1] == "driveTrafficPhysics")
                 end
             else
-                if task[1] == "driveTrafficPhysics" or task[1] == "driveAtPed" or task[1] == "drivePoliceBlock" then
+                if task[1] == "driveRaceToPoint" or task[1] == "driveTrafficPhysics" or task[1] == "driveAtPed" or task[1] == "drivePoliceBlock" then
                     performTask[task[1]](npc, task, elapsed, state.driveProgress)
                 elseif isNPCTrafficWalkTask(task[1]) or task[1] == "fleeFromPoint" or task[1] == "walkFormation" or task[1] == "walkToPos"
                     or task[1] == "walkFollowElement" or task[1] == "killPed" or task[1] == "attackOccupiedVehicle"
@@ -241,6 +248,7 @@ local function cycleNPCs(elapsed)
             end
         else
             state.executedAt=nil
+            state.roadContact=nil
             stopControl(npc, true)
             if next(state.driveProgress) then state.driveProgress = {} end
             if next(state.walkProgress) then state.walkProgress = {} end
@@ -250,6 +258,11 @@ local function cycleNPCs(elapsed)
 end
 
 function initNPCControl()
+    addEventHandler("npc_hlc:onVehicleGroundGeometry",root,function()
+        local driver=getVehicleOccupant(source,0)
+        local state=driver and assignments[driver]
+        if state and state.actor==source then state.roadContact=nil end
+    end)
     addEvent("npc_hlc:control", true)
     addEventHandler("npc_hlc:control", resourceRoot, updateTask, false)
     addEventHandler("onClientPreRender", root, cycleNPCs)

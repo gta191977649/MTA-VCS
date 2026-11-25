@@ -34,6 +34,7 @@ local function restore()
         else
             exports.interior:setOutdoorWeather(unpack(previous.weather))
         end
+        setElementData(localPlayer, "phill_concert:weatherOverride", false, false)
     end
     if previous.controls then
         for control, enabled in pairs(previous.controls) do toggleControl(control, enabled) end
@@ -223,6 +224,7 @@ onEvent("play", function(id)
         setPlayerHudComponentVisible(component, false)
     end
     if not session.debug then showChat(false) end
+    setElementData(localPlayer, "phill_concert:weatherOverride", true, false)
     session.worldTime = {getTime()}
     session.weather = {exports.interior:getOutdoorWeather()}
     if skygfxRunning() then

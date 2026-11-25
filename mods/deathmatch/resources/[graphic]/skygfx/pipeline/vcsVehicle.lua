@@ -209,6 +209,7 @@ function VCSVehicle.start()
         local shader = dxCreateShader("shader/vcsVehicle.fx", 12, 0, false, "vehicle")
         if shader and dxSetShaderValue(shader, "Reflection", map)
                 and dxSetShaderValue(shader, "ReflectionWeight", 0) then
+            CPointLights.Register(shader)
             -- VCS's half-strength coefficient expressed as a GS FIX value.
             reflectors[shader] = math.floor(coefficient * 128 / 200) / 128
             reflectionShaders[coefficient] = shader

@@ -103,13 +103,6 @@ addCommandHandler("getlang",function(cmd,lang)
     outputChatBox(LANG:getLanguage())
         UI:showTextBox("LANG SET",3000)
 end)
-local god = false
-
-addCommandHandler("god",function(cmd) 
-    god = true
-    setElementData(localPlayer,"god",true)
-    UI:showTextBox("Godemode",3000)
-end) 
 
 local freecam = false
 local radarVisibility
@@ -148,12 +141,15 @@ addCommandHandler("freecam",function(cmd)
 end) 
 
 
-function stopDamage ()
-    if god == true then 
+function stopDamage (_, weapon)
+    if getElementData(localPlayer,"god",false) == true then
         cancelEvent()
+        if weapon == 37 and isElementOnFire(localPlayer) then
+            setElementOnFire(localPlayer, false)
+        end
     end
 end
-addEventHandler ( "onClientPlayerDamage", getRootElement(), stopDamage )
+addEventHandler ( "onClientPlayerDamage", localPlayer, stopDamage )
 
 addCommandHandler("dev",
     function()

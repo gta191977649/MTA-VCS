@@ -1,0 +1,294 @@
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:26:04] File 'settings.xml' not present, creating new node.
+[2026-11-25 14:26:07] ERROR: Problem with resource: font; Failed to link to dgs
+[2026-11-25 14:26:07] ERROR: Problem with resource: frontend; Failed to link to dgs
+[2026-11-25 14:26:07] ERROR: Problem with resource: marker; 
+[2026-11-25 14:26:07] Resources: 10 loaded, 3 failed
+[2026-11-25 14:26:07] Starting resources...
+[2026-11-25 14:26:07] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:26:08] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:26:08] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:26:08] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:26:08] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:26:08] WARNING: <owner_email_address> not set
+[2026-11-25 14:26:08] Server started and is ready to accept connections!
+[2026-11-25 14:26:08] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:26:08] Type 'help' for a list of commands.
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:26:28] Compacting accounts database 'internal.db' ...
+[2026-11-25 14:26:29] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-25 14:26:30] Resources: 14 loaded, 0 failed
+[2026-11-25 14:26:30] Compacting database 'registry.db' ...
+[2026-11-25 14:26:30] Starting resources...
+[2026-11-25 14:26:31] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:26:31] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:26:31] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:26:31] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:26:31] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:26:31] WARNING: <owner_email_address> not set
+[2026-11-25 14:26:31] Server started and is ready to accept connections!
+[2026-11-25 14:26:31] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:26:31] Type 'help' for a list of commands.
+[2026-11-25 14:26:39] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-25 14:26:39] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-25 14:26:44] QA_READY
+[2026-11-25 14:26:45] INFO: nurupo    Loaded vcs In: 3.11 Seconds
+[2026-11-25 14:27:07] QA_SAMPLE huey [{"water":false,"z":14.15,"ground":10.049355,"model":19779,"bottom":-1.673799,"pending":[-783.38,923.28003,10.15,179],"gap":2.426846,"frozen":true}]
+[2026-11-25 14:27:09] QA_SHOT huey-parked-side ok
+[2026-11-25 14:27:27] QA_SAMPLE hospital [{"water":false,"z":29.700001,"ground":24.313999,"model":19782,"bottom":-1.636802,"pending":[-832.29999,1105.9,25.700001,1],"gap":3.7491996,"frozen":true}]
+[2026-11-25 14:27:28] QA_SHOT hospital-parked-side ok
+[2026-11-25 14:27:47] QA_SAMPLE admiral [{"water":false,"z":18.700001,"ground":13.664926,"model":445,"bottom":-0.83924568,"pending":[-988.20001,-1135.1,14.7,46],"gap":4.1958294,"frozen":true}]
+[2026-11-25 14:27:48] QA_SHOT admiral-parked-side ok
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:27:53] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-25 14:27:54] Resources: 14 loaded, 0 failed
+[2026-11-25 14:27:54] Starting resources...
+[2026-11-25 14:27:54] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:27:54] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:27:54] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:27:54] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:27:55] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:27:55] WARNING: <owner_email_address> not set
+[2026-11-25 14:27:55] Server started and is ready to accept connections!
+[2026-11-25 14:27:55] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:27:55] Type 'help' for a list of commands.
+[2026-11-25 14:28:04] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-25 14:28:04] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-25 14:28:09] QA_READY
+[2026-11-25 14:28:11] INFO: nurupo    Loaded vcs In: 3.40 Seconds
+[2026-11-25 14:28:32] QA_SAMPLE huey [{"bottom":-1.673799,"loaded":true,"pending":[-783.38,923.28003,10.15,179],"gap":2.426846,"water":false,"z":14.15,"model":19779,"ground":10.049355,"children":0,"frozen":true}]
+[2026-11-25 14:28:35] QA_SHOT huey-parked-side ok
+[2026-11-25 14:28:52] QA_SAMPLE hospital [{"bottom":-1.636802,"loaded":true,"pending":[-832.29999,1105.9,25.700001,1],"gap":3.7491996,"water":false,"z":29.700001,"model":19782,"ground":24.313999,"children":0,"frozen":true}]
+[2026-11-25 14:28:53] QA_SHOT hospital-parked-side ok
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:28:58] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-25 14:28:59] Resources: 14 loaded, 0 failed
+[2026-11-25 14:28:59] Starting resources...
+[2026-11-25 14:28:59] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:28:59] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:28:59] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:28:59] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:28:59] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:28:59] WARNING: <owner_email_address> not set
+[2026-11-25 14:28:59] Server started and is ready to accept connections!
+[2026-11-25 14:28:59] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:28:59] Type 'help' for a list of commands.
+[2026-11-25 14:29:08] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-25 14:29:08] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-25 14:29:12] QA_READY
+[2026-11-25 14:29:13] INFO: nurupo    Loaded vcs In: 2.46 Seconds
+[2026-11-25 14:29:35] QA_SAMPLE huey [{"bottom":-1.673799,"loaded":true,"pending":false,"gap":0.12496901,"water":false,"z":11.848123,"model":19779,"ground":10.049355,"children":0,"frozen":false}]
+[2026-11-25 14:29:38] QA_SHOT huey-parked-side ok
+[2026-11-25 14:29:55] QA_SAMPLE hospital [{"bottom":-1.636802,"loaded":true,"pending":false,"gap":0.30832744,"water":false,"z":26.259129,"model":19782,"ground":24.313999,"children":0,"frozen":false}]
+[2026-11-25 14:29:57] QA_SHOT hospital-parked-side ok
+[2026-11-25 14:30:15] QA_SAMPLE admiral [{"bottom":-0.83924568,"loaded":true,"pending":false,"gap":0.10975945,"water":false,"z":14.613931,"model":445,"ground":13.664926,"children":0,"frozen":false}]
+[2026-11-25 14:30:17] QA_SHOT admiral-parked-side ok
+[2026-11-25 14:30:35] QA_SAMPLE mall-bmx [{"bottom":-0.49078736,"loaded":true,"pending":false,"gap":false,"water":false,"z":-83.893066,"model":19784,"ground":false,"children":0,"frozen":false}]
+[2026-11-25 14:30:37] QA_SHOT mall-bmx-parked-side ok
+[2026-11-25 14:30:55] QA_SAMPLE dinghy [{"bottom":-0.01842168,"loaded":true,"pending":false,"gap":false,"water":6,"z":5.7659187,"model":473,"ground":false,"children":0,"frozen":false}]
+[2026-11-25 14:30:56] QA_SHOT dinghy-parked-side ok
+[2026-11-25 14:31:00] QA_DONE
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:31:38] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-25 14:31:39] Resources: 15 loaded, 0 failed
+[2026-11-25 14:31:39] Starting resources...
+[2026-11-25 14:31:39] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:31:39] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:31:39] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:31:39] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:31:39] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed.
+[2026-11-25 14:31:39] Some files in 'skygfx' use deprecated functions.
+[2026-11-25 14:31:39] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-25 14:31:39] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:31:39] WARNING: <owner_email_address> not set
+[2026-11-25 14:31:39] Server started and is ready to accept connections!
+[2026-11-25 14:31:39] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:31:39] Type 'help' for a list of commands.
+[2026-11-25 14:31:47] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-25 14:31:47] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-25 14:31:53] QA_READY
+[2026-11-25 14:31:55] INFO: nurupo    Loaded vcs In: 3.51 Seconds
+[2026-11-25 14:32:16] QA_SAMPLE huey [{"bottom":-1.673799,"loaded":true,"pending":false,"gap":0.019999981,"water":false,"z":11.743154,"model":19779,"ground":10.049355,"children":0,"frozen":true}]
+[2026-11-25 14:32:19] QA_SHOT huey-parked-side ok
+[2026-11-25 14:32:37] QA_SAMPLE hospital [{"bottom":-1.636802,"loaded":true,"pending":false,"gap":0.019999266,"water":false,"z":25.9708,"model":19782,"ground":24.313999,"children":0,"frozen":true}]
+[2026-11-25 14:32:38] QA_SHOT hospital-parked-side ok
+[2026-11-25 14:32:56] QA_SAMPLE admiral [{"bottom":-0.83924568,"loaded":true,"pending":false,"gap":-0.017531276,"water":false,"z":14.48664,"model":445,"ground":13.664926,"children":0,"frozen":true}]
+[2026-11-25 14:32:58] QA_SHOT admiral-parked-side ok
+[2026-11-25 14:33:17] QA_SAMPLE mall-bmx [{"bottom":-0.49078736,"loaded":true,"pending":false,"gap":0.038173825,"water":false,"z":-200.04056,"model":19784,"ground":-200.56952,"children":0,"frozen":true}]
+[2026-11-25 14:33:18] QA_SHOT mall-bmx-parked-side ok
+[2026-11-25 14:33:37] QA_SAMPLE dinghy [{"bottom":-0.01842168,"loaded":true,"pending":false,"gap":false,"water":6,"z":5.7661676,"model":473,"ground":false,"children":0,"frozen":false}]
+[2026-11-25 14:33:38] QA_SHOT dinghy-parked-side ok
+[2026-11-25 14:33:57] QA_SAMPLE huey-respawn [{"bottom":-1.673799,"loaded":true,"pending":false,"gap":0.019999981,"water":false,"z":11.743154,"model":19779,"ground":10.049355,"children":0,"frozen":true}]
+[2026-11-25 14:33:58] QA_SHOT huey-respawn-side ok
+[2026-11-25 14:34:00] QA_ENTRY released=false
+[2026-11-25 14:34:00] QA_DONE
+==================================================================
+= Multi Theft Auto: San Andreas v1.7-untested-27005 [64 bit]
+==================================================================
+= Server name      : Vice City Stories Freeroam
+= Server IP address: 127.0.0.1
+= Server port      : 63723
+= 
+= Log file         : ..qa-yattea1y/mods/deathmatch/logs/server.log
+= Maximum players  : 32
+= HTTP port        : 51439
+= Voice Chat       : Disabled
+= Bandwidth saving : Medium
+==================================================================
+[2026-11-25 14:34:43] Resource 'dgs' requests some acl rights. Use the command 'aclrequest list dgs'
+[2026-11-25 14:34:44] Resources: 15 loaded, 0 failed
+[2026-11-25 14:34:44] Starting resources...
+[2026-11-25 14:34:44] Server minclientversion is now 1.6.0-9.22676
+[2026-11-25 14:34:44] INFO: [car_park] Spawned 186 script generators.
+[2026-11-25 14:34:44] INFO: [placement] Spawned 32 weapon pickups using SA weapon equivalents.
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon GAFF (2 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon MPLNG (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SKORPION (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon INGRAMSL (2 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUDDYSHOT (2 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon SHOTGSPA (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon KNIFECUR (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon M249 (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BINOCULARS (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon LASER (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BUTT_KNIFE (3 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon BOMB (1 locations)
+[2026-11-25 14:34:44] WARNING: placement\pickups\server.lua:23: [placement] Unsupported weapon HANDAXE (3 locations)
+[2026-11-25 14:34:45] WARNING: skygfx/fx/rotor/rotor_v2.lua(Line 51) [Client] getHelicopterRotorSpeed is deprecated and may not work in future versions. Please replace with getVehicleRotorSpeed before Tuesday.
+[2026-11-25 14:34:45] Some files in 'skygfx' use deprecated functions.
+[2026-11-25 14:34:45] Use the 'upgrade' command to perform a basic upgrade of resources.
+[2026-11-25 14:34:45] Authorized serial account protection is enabled for the ACL group(s): `Admin`  See http://multitheftauto.com/authserial
+[2026-11-25 14:34:45] WARNING: <owner_email_address> not set
+[2026-11-25 14:34:45] Server started and is ready to accept connections!
+[2026-11-25 14:34:45] To stop the server, type 'shutdown' or press Ctrl-C
+[2026-11-25 14:34:45] Type 'help' for a list of commands.
+[2026-11-25 14:34:53] CONNECT: nurupo connected (IP: 127.0.0.1  Serial: AFCAE8208EBBB75A57219D902BD01234  Version: 1.7.0-7.27005.0)
+[2026-11-25 14:34:53] JOIN: nurupo joined the game (IP: 127.0.0.1)
+[2026-11-25 14:34:58] QA_READY
+[2026-11-25 14:35:00] INFO: nurupo    Loaded vcs In: 3.27 Seconds
+[2026-11-25 14:35:21] QA_SAMPLE huey [{"bottom":-1.673799,"loaded":true,"pending":false,"gap":0.019999981,"water":false,"z":11.743154,"model":19779,"ground":10.049355,"children":0,"frozen":true}]
+[2026-11-25 14:35:24] QA_SHOT huey-parked-side ok
+[2026-11-25 14:35:41] QA_SAMPLE huey-respawn [{"bottom":-1.673799,"loaded":true,"pending":false,"gap":0.019999981,"water":false,"z":11.743154,"model":19779,"ground":10.049355,"children":0,"frozen":true}]
+[2026-11-25 14:35:42] QA_SHOT huey-respawn-side ok
+[2026-11-25 14:35:45] QA_ENTRY occupied=true released=true
+[2026-11-25 14:35:45] QA_DONE

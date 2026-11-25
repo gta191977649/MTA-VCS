@@ -1,5 +1,12 @@
 PedRoadInjury = {}
 
+local function nativeLoss(ped,damage)
+    if getElementData(ped,"npchlc_traffic:spawnHealth",false) then
+        return damage*TrafficModelBindings.nativeDamageScale
+    end
+    return damage
+end
+
 -- CBike::VehicleDamage, SLUS_215.90 00336934..00336B14 (ambient rider).
 function PedRoadInjury.bikeScore(model, impulse, mass, matrix, x,y,z)
     if not matrix or not mass or mass<=0 then return 0 end
@@ -28,7 +35,7 @@ function PedRoadInjury.startBike(ped,walk,impact,launch,road,passenger)
         setPedAnimation(ped,"PED","BIKE_fall_off",-1,false,false,false,true)
         setElementVelocity(ped,impact.vx+impact.nx*kick,impact.vy+impact.ny*kick,
             impact.vz+(8+7*math.random())/70)
-        local hp = getElementHealth(ped)-impact.score*0.05
+        local hp = getElementHealth(ped)-nativeLoss(ped,impact.score*0.05)
         if hp<=0 then killPed(ped,impact.attacker or nil,49) else setElementHealth(ped,hp) end
     end
 end
@@ -101,11 +108,14 @@ function PedRoadInjury.strike(ped,walk,car,impulse,normalZ,vx,vy,vz)
     local damage=PedRoadInjury.pedDamage(math.min(impulse,70*(speed+0.05)*1.5),normalZ)
     if damage==0 then return end
     local last=walk.carContact
+    if last and last.lethal then return end
     if last and last.car==car and (now-last.at)%4294967296<1000 and damage<=last.damage then return end
     local brain=PedAI.brain(ped)
     local health=getElementHealth(ped)
     local baseline=brain and brain.health and (now-brain.sampled)%4294967296<=250 and math.max(health,brain.health) or health
-    walk.carContact={car=car,at=now,damage=damage}
+    local remaining=baseline-nativeLoss(ped,damage)
+    local receipt={car=car,at=now,damage=damage,lethal=remaining<1}
+    walk.carContact=receipt
     local driver=getVehicleOccupant(car,0)
     if driver and getElementType(driver) == "player" then
         exports.wanted:reportWantedEvent(driver, TrafficActors.isPolicePed(ped) and 10 or 9, ped)
@@ -113,22 +123,24 @@ function PedRoadInjury.strike(ped,walk,car,impulse,normalZ,vx,vy,vz)
     TrafficAmbient.suspend(ped)
     PedVehicleEvasion.cancel(ped)
     local tx,ty,tz=pedestrianVelocity(ped,car,damage,vx,vy,vz)
-    if damage>=baseline then
-        killPed(ped,driver or nil,damage==1000 and 50 or 49)
-        setElementVelocity(ped,tx,ty,tz)
-        return
+    if not receipt.lethal then
+        setPedAnimation(ped,"PED","FALL_front",-1,false,false,false,true)
+        walk.roadFall={attacker=driver,started=now,downTime=1000}
     end
-    setPedAnimation(ped,"PED","FALL_front",-1,false,false,false,true)
     setElementVelocity(ped,tx,ty,tz)
-    walk.roadFall={attacker=driver,started=now,downTime=1000}
-    -- Let native damage arrive first. Apply only the outstanding loss; never
-    -- restore HP lost to another source in the intervening frame.
-    local receipt=walk.carContact
-    setTimer(function()
-        if walk.carContact==receipt and isElement(ped) and not isPedDead(ped)
-            and not PedAI.isScriptControlled(ped) then
-            local remaining=baseline-damage
-            if getElementHealth(ped)>remaining then setElementHealth(ped,remaining) end
+    -- The syncer may already have sent damage or death for this contact.
+    local function finishImpact()
+        if walk.carContact~=receipt or not isElement(ped) then return end
+        receipt.lethal=false
+        if isPedDead(ped) or PedAI.isScriptControlled(ped) then return end
+        if remaining<1 then
+            killPed(ped,isElement(driver) and driver or nil,damage==1000 and 50 or 49)
+        elseif getElementHealth(ped)>remaining then
+            setElementHealth(ped,remaining)
         end
-    end,120,1)
+    end
+    local syncer=getElementSyncer(ped)
+    if syncer then setTimer(finishImpact,120+getPlayerPing(syncer),1)
+    elseif receipt.lethal then finishImpact()
+    else setTimer(finishImpact,120,1) end
 end

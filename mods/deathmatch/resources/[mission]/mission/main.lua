@@ -74,6 +74,10 @@ function Mission.forParticipant(player, token, id)
         and getElementInterior(player)==run.interior then return run end
 end
 
+function Mission.runForActor(actor)
+    return owners[actor]
+end
+
 function Mission.participants(run)
     return run.participants
 end
@@ -187,19 +191,21 @@ function Mission.message(run, text)
     end
 end
 
-function Mission.hud(run, label, value, barLabel, percent)
+function Mission.hud(run, label, value, barLabel, percent, secondCounter)
     run.label, run.value, run.barLabel, run.percent = label, value, barLabel, percent
+    run.secondCounter = secondCounter
 end
 
 local function updateHud(run, now, force)
     local seconds = run.deadline and math.max(0, math.ceil((run.deadline-now)/1000))
         or run.elapsedFrom and math.max(0,math.floor((now-run.elapsedFrom)/1000))
     local countdown = run.deadline and true or false
-    local signature = table.concat({run.level,tostring(countdown),seconds or "",run.label or "",run.value or "",run.barLabel or "",run.percent or ""}, "|")
+    local signature = table.concat({run.level,tostring(countdown),seconds or "",run.label or "",run.value or "",run.barLabel or "",run.percent or "",
+        run.secondCounter and run.secondCounter.label or "",run.secondCounter and run.secondCounter.value or ""}, "|")
     if force or signature ~= run.lastHud then
         run.lastHud = signature
         Mission.notify(run, "mission:hud", run.id, run.level, seconds or false,
-            run.label or false, run.value or "", run.barLabel or false, run.percent or 0,run.token,countdown)
+            run.label or false, run.value or "", run.barLabel or false, run.percent or 0,run.token,countdown,run.secondCounter or false)
     end
 end
 
@@ -241,7 +247,8 @@ end
 
 function Mission.startActivity(player, id, vehicle)
     local def = definitions[id]
-    if not def or runs[player] or not isElement(player) or isPedDead(player) then return false end
+    if not def or runs[player] or not isElement(player) or isPedDead(player)
+        or exports.npchlc_traffic:isTrafficPlayerInCustody(player) then return false end
     if vehicle then
         if not Mission.vehicleAvailable(nil, vehicle) or Mission.driverOf(vehicle) ~= player
             or isVehicleBlown(vehicle) then return false end
@@ -279,6 +286,7 @@ local function toggle(player)
     local run = runs[player]
     local vehicle = getPedOccupiedVehicle(player)
     if vehicle and enteringVehicle[player]==vehicle then return end
+    if run and run.definition.sideActivity then return end
     if run then
         local replacement = replacementActivity(player,run,vehicle)
         if replacement then
@@ -298,6 +306,7 @@ local function toggle(player)
     if def then Mission.startActivity(player, def.id, vehicle) end
 end
 Mission.toggle = toggle
+function Mission.isPlayerBusy(player) return runs[player] ~= nil end
 function Mission.active(run) return runs[run.player] == run end
 function Mission.countdown(run,value)
     Mission.notify(run,"mission:raceCue",run.token,value)
@@ -307,11 +316,11 @@ function Mission.checkpointCue(run,lapComplete)
     Mission.notify(run,"mission:raceCue",run.token,lapComplete and "lap" or "checkpoint")
 end
 
-function Mission.selectCourse(run, options, callback)
+function Mission.selectCourse(run, options, callback, initialIndex)
     if not Mission.active(run) or #options == 0 then return false end
     run.menuSerial = (run.menuSerial or 0)+1
-    run.courseMenu = {options=options, select=callback}
-    return Mission.notify(run,"mission:courseMenu",run.token,run.id,options,run.menuSerial)
+    run.courseMenu = {options=options, select=callback, initialIndex=initialIndex or 1}
+    return Mission.notify(run,"mission:courseMenu",run.token,run.id,options,run.menuSerial,run.courseMenu.initialIndex)
 end
 
 addEvent("mission:courseChoice",true)
@@ -319,7 +328,9 @@ addEventHandler("mission:courseChoice",resourceRoot,function(token,id,index,seri
     if source ~= resourceRoot or not client then return end
     local run = Mission.forParticipant(client,token,id)
     local menu = run and run.courseMenu
-    if not menu or run.menuSerial ~= serial or type(index) ~= "number" or index % 1 ~= 0 or not menu.options[index] then return end
+    if not menu or run.menuSerial ~= serial then return end
+    if index==false and (id=="turismo" or id=="golf") then return Mission.endRun(client) end
+    if type(index) ~= "number" or index % 1 ~= 0 or not menu.options[index] then return end
     run.courseMenu = nil
     Mission.notify(run,"mission:courseSelected",token,serial)
     invoke(run, menu.select, index)
@@ -351,7 +362,7 @@ addEventHandler("mission:ready", resourceRoot, function()
     prompted[client] = nil
     local run = runs[client]
     if run then Mission.notify(run,"mission:start",run.definition.title,run.token) updateHud(run, getTickCount(), true)
-        if run.courseMenu then Mission.notify(run,"mission:courseMenu",run.token,run.id,run.courseMenu.options,run.menuSerial) end
+        if run.courseMenu then Mission.notify(run,"mission:courseMenu",run.token,run.id,run.courseMenu.options,run.menuSerial,run.courseMenu.initialIndex) end
     end
 end, false)
 addEvent("mission:driverEntered",true)
@@ -385,9 +396,12 @@ addEventHandler("onPlayerQuit", root, function() Mission.endRun(source,nil,true)
 local runtimeDependencies={marker=true,wanted=true,npchlc_traffic=true,npc_hlc=true,vcs_vehicle=true}
 addEventHandler("onResourceStop", root, function(stopped)
     if source==resourceRoot then
+        Mission.stopping=true
         for player in pairs(runs) do Mission.endRun(player,nil,true) end
     elseif stopped and runtimeDependencies[getResourceName(stopped)] then
+        Mission.stopping=true
         for player in pairs(runs) do Mission.endRun(player,"Mission interrupted.") end
+        Mission.stopping=nil
     end
 end)
 setTimer(function()

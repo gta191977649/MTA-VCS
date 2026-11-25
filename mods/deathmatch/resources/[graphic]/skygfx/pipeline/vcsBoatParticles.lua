@@ -4,7 +4,6 @@ VCSBoatParticles = {}
 
 local carSplash, boatSplash = 0x2C, 0x2D
 local period, step = 1000/30, 50/30
-local particles, lastDraw, remainder = {}, nil, 0
 local profiles = {}
 local displacement = {0.75,0.9,0.75, 0.95,1,0.95, 0.4,0.7,0.4}
 local planing = {0.7,0.9,0.7, 0.95,1,0.95, 0.6,0.7,0.6}
@@ -45,6 +44,10 @@ local collisionBoxes={
     [264]={-1.92500007, -6.02204418, -1.3249886, 1.92500007, 6.04643631, 1.50669932},
     [277]={-1.51551962, -4.67060184, -0.290123701, 1.53156805, 4.56741619, 3.39254069},
 }
+
+function VCSBoatParticles.hasHull(original)
+    return profiles[tonumber(original)]~=nil
+end
 
 function VCSBoatParticles.hull(boat,state)
     local model=getElementModel(boat)
@@ -94,34 +97,23 @@ local function sampleImmersion(s,m)
     return volume/(9*(s.top-s.bottom))
 end
 
-local function jitter()
-    return math.random(-10,9)/10
-end
-
-local function spawn(kind,frame,x,y,z,vx,vy,vz,size,spin,angle,opacity,values,dim)
-    if #particles>=750 then return end -- PS2 global CParticle pool capacity.
+local function spawn(kind,frame,x,y,z,vx,vy,vz,size,spin,angle,opacity,values)
     local car=kind==carSplash
     local rgbScale,dirScale=car and .5 or .6,car and .5 or .85
     local function tint(i)
         return math.min(255,rgbScale*(values[i]+dirScale*values[12+i]))
     end
-    local variation=car and .04 or .01
-    particles[#particles+1]={kind=kind,frame=frame,updates=0,age=0,
-        x=x+(car and .5*jitter() or 0),y=y+(car and .5*jitter() or 0),z=z,
-        vx=vx+variation*jitter(),vy=vy+variation*jitter(),vz=vz,size=size,
-        angle=math.rad(angle),spin=math.rad(spin*(math.random(2)==1 and -1 or 1)),
-        brightness=car and 196 or 128,alpha=196,
-        r=tint(1),g=tint(2),b=tint(3),opacity=opacity,dimension=dim}
+    AddParticle(kind,x,y,z,vx,vy,vz,size,tint(1),tint(2),tint(3),255,spin,angle,frame,nil,opacity)
 end
 
-local function emitAt(boat,state,m,s,opacity,values,dim)
+local function emitAt(boat,state,m,s,opacity,values)
     local driver=getVehicleController(boat)
     local npc=driver and getElementType(driver)=="ped"
     local vx,vy,vz=getElementVelocity(boat)
     local speed=math.sqrt(vx*vx+vy*vy)
-    local wet=isElementInWater(boat) and m[3][3]>0
-    if not wet then s.immersion=0 return end
+    if m[3][3]<=0 then s.immersion=0 return end
     local immersion=sampleImmersion(s,m)
+    if immersion<=0 then s.immersion=0 return end
     local impact=math.floor((immersion-(s.immersion or immersion))*10000)*.0003
     s.immersion=immersion
     local p=s.p
@@ -139,8 +131,8 @@ local function emitAt(boat,state,m,s,opacity,values,dim)
                 local dy=(vy*p.carry+wy)*turn
                 local dz=(vz*p.carry+wz+p.rise*speed)*turn+impact
                 spawn(carSplash,1,x,y,water,.75*dx,.75*dy,.75*dz,gain+.1,
-                    math.random(0,9),math.random(0,89),opacity,values,dim)
-                spawn(boatSplash,0,x,y,water,dx,dy,dz,gain,0,math.random(0,44),opacity,values,dim)
+                    math.random(0,9),math.random(0,89),opacity,values)
+                spawn(boatSplash,0,x,y,water,dx,dy,dz,gain,0,math.random(0,44),opacity,values)
                 VCSBoatSheet.add(state,sign<0 and "left" or "right",x,y,water,dx,dy,dz,wx,wy,wz)
             end
         end
@@ -166,8 +158,8 @@ local function emitAt(boat,state,m,s,opacity,values,dim)
     local side,fore=math.sin(angle),math.cos(angle)
     local dx=(m[1][1]*side+m[2][1]*fore-m[3][1]*math.abs(angle))*force
     local dy=(m[1][2]*side+m[2][2]*fore-m[3][2]*math.abs(angle))*force
-    spawn(boatSplash,0,x,y,z+.5,dx,dy,.015,1.25,math.random(0,4),math.random(0,89),opacity,values,dim)
-    spawn(carSplash,3,x,y,z+.5,dx*.75,dy*.75,.01125,.5,math.random(0,29),math.random(0,44),opacity,values,dim)
+    spawn(boatSplash,0,x,y,z+.5,dx,dy,.015,1.25,math.random(0,4),math.random(0,89),opacity,values)
+    spawn(carSplash,3,x,y,z+.5,dx*.75,dy*.75,.01125,.5,math.random(0,29),math.random(0,44),opacity,values)
 end
 
 function VCSBoatParticles.emit(boat,state,now,opacity,values)
@@ -177,103 +169,14 @@ function VCSBoatParticles.emit(boat,state,now,opacity,values)
     if state.splashTime<period then return end
     local m=getElementMatrix(boat)
     local s=VCSBoatParticles.hull(boat,state)
-    local dim=getElementDimension(boat)
     local cx,cy,cz=getCameraMatrix()
-    local visible=m and s and opacity>0 and isElementOnScreen(boat)
+    local visible=m and s and opacity>0 and (getVehicleOccupant(boat,0)==localPlayer or isElementOnScreen(boat))
         and (cx-m[4][1])^2+(cy-m[4][2])^2+(cz-m[4][3])^2<4900
     while state.splashTime>=period do
         state.splashTime=state.splashTime-period
         state.splashFrame=(state.splashFrame or 0)+1
         VCSBoatSheet.step(state,step)
-        if visible then emitAt(boat,state,m,s,opacity,values,dim)
+        if visible then emitAt(boat,state,m,s,opacity,values)
         elseif s then s.immersion=nil end
     end
-end
-
-local function advance(p)
-    local car=p.kind==carSplash
-    p.age=p.age+period
-    p.x,p.y,p.z=p.x+p.vx*step,p.y+p.vy*step,p.z+p.vz*step
-    local water=getWaterLevel(p.x,p.y,p.z,true)
-    if type(water)=="number" and p.z+p.size<water then return false end
-    if p.age>(car and 2000 or 1000) then return false end
-    local expansion=(car and .06 or .075)*(1+step*math.sqrt(p.vx^2+p.vy^2+p.vz^2))
-    if p.size>1.2 then
-        p.size=p.size-expansion
-        p.vz=p.vz-.15
-    else
-        p.size=p.size+expansion
-    end
-    if p.vz>-.5 then p.vz=p.vz-.01*step end
-    p.brightness=math.max(0,p.brightness-(car and 4 or 2))
-    p.alpha=p.alpha-(car and 10 or 5)
-    p.angle=p.angle+p.spin
-    p.updates=p.updates+1
-    if car and p.updates%3==0 then p.frame=math.min(3,p.frame+1) end
-    return p.alpha>0 and p.size>0
-end
-
-local function drawGroup(material,vertices)
-    if #vertices==0 then return 0 end
-    if dxDrawMaterialPrimitive3D("trianglelist",material,"postfx",unpack(vertices)) then return #vertices/6 end
-    return 0
-end
-
-function VCSBoatParticles.draw(now,materials)
-    local elapsed=lastDraw and (now-lastDraw)%4294967296 or 0
-    lastDraw=now
-    if elapsed>2000 then particles={} end
-    remainder=remainder+math.min(elapsed,100)*getGameSpeed()
-    local ticks=math.floor(remainder/period)
-    remainder=remainder-ticks*period
-    local cx,cy,cz,tx,ty,tz,roll=getCameraMatrix()
-    local right=Vector3(ty-cy,cx-tx,0)
-    if right.length<.0001 then right=Vector3(1,0,0) else right=right/right.length end
-    local forward=Vector3(tx-cx,ty-cy,tz-cz)
-    if forward.length<.0001 then return 0 end
-    local up=right:cross(forward/forward.length)
-    local rotation=math.rad(roll or 0)
-    local statistics,batches=0,{}
-    local dim=getElementDimension(localPlayer)
-    for i=#particles,1,-1 do
-        local p=particles[i]
-        local alive=p.dimension==dim
-        for n=1,ticks do
-            if not alive then break end
-            alive=advance(p)
-        end
-        if not alive then
-            particles[i]=particles[#particles]
-            particles[#particles]=nil
-        else
-            local texture=materials[p.kind]
-            local car=p.kind==carSplash
-            local material=car and texture and texture[p.frame] or (not car and texture)
-            if material then
-                local v=batches[material] or {}
-                batches[material]=v
-                local a=p.angle+rotation
-                local c,s=math.cos(a)*p.size,math.sin(a)*p.size
-                local h,w=up*c-right*s,right*c+up*s
-                local colorPower=p.brightness/255*(car and p.opacity*p.alpha/255 or 1)
-                local color=tocolor(p.r*colorPower,p.g*colorPower,p.b*colorPower,p.alpha*p.opacity)
-                local x,y,z=p.x,p.y,p.z
-                local a1={x-w.x+h.x,y-w.y+h.y,z-w.z+h.z,color,0,0}
-                local a2={x+w.x+h.x,y+w.y+h.y,z+w.z+h.z,color,1,0}
-                local a3={x-w.x-h.x,y-w.y-h.y,z-w.z-h.z,color,0,1}
-                local a4={x+w.x-h.x,y+w.y-h.y,z+w.z-h.z,color,1,1}
-                v[#v+1],v[#v+2],v[#v+3],v[#v+4],v[#v+5],v[#v+6]=a1,a2,a3,a3,a2,a4
-                if #v>=360 then
-                    statistics=statistics+drawGroup(material,v)
-                    batches[material]={}
-                end
-            end
-        end
-    end
-    for material,vertices in pairs(batches) do statistics=statistics+drawGroup(material,vertices) end
-    return statistics
-end
-
-function VCSBoatParticles.clear()
-    particles,lastDraw,remainder={},nil,0
 end

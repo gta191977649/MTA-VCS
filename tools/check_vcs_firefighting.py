@@ -20,6 +20,12 @@ def check_client_effects():
         function getElementInterior(e) return 0 end
         function getElementPosition(e) assert(isElement(e)) return 0,0,0 end
         function getElementData(e,k) return e[k] end
+        pipeline=true
+        particles={}
+        exports={skygfx={
+            AreParticlesEnabled=function() return pipeline end,
+            AddParticle=function(_,...) particles[#particles+1]={...} end
+        }}
         now,draws=100,0
         function getTickCount() return now end
         function dxCreateTexture() texture={} return texture end
@@ -45,10 +51,32 @@ def check_client_effects():
         for _,e in ipairs({m,n,b}) do event("onClientElementStreamIn",e) end
         timer.fn()
         event("onClientPreRender",root)
-        assert(#fx==1 and fx[1].name=="fire_med" and draws==2)
+        assert(#fx==1 and fx[1].name=="fire_med" and draws==0 and #particles==20)
+        for i=1,20 do
+            local p=particles[i]
+            if i<=8 then assert(p[1]==28 and p[4]==-2 and p[7]==.03 and p[8]==1)
+            elseif i<=14 then assert(p[1]==78 and p[4]==-2 and p[7]<0)
+            else assert(p[1]==78 and p[4]==-2.2 and p[7]<0 and p[8]==.5) end
+        end
+        assert(particles[1][5]==.05 and particles[1][6]==0 and particles[13][6]==.01 and particles[19][6]==.031)
+        pipeline=false
+        now=now+34
+        event("onClientPreRender",root)
+        assert(draws==2 and #particles==20,"fallback should draw two droplets per release")
         now=now+180
         event("onClientPreRender",root)
         assert(draws>2 and lowest < -1,"the spray must fall below the bucket")
+        m[target][3]=7
+        pipeline=true
+        timer.fn()
+        assert(fx[1].gone and #fx==1,"managed fire must remove the native fallback")
+        pipeline=false
+        timer.fn()
+        assert(#fx==2 and not fx[2].gone,"a disabled graphics pipeline requires the fallback")
+        pipeline=true
+        timer.fn()
+        assert(fx[2].gone)
+        table.remove(fx,2)
         m[target]=false
         event("onClientElementDataChange",m,target)
         assert(fx[1].gone)
@@ -61,6 +89,7 @@ def check_client_effects():
         b[tag]=7350
         event("onClientElementStreamIn",b)
         timer.fn()
+        pipeline=false
         event("onClientPreRender",root)
         assert(#fx==2 and not fx[2].gone and draws>before)
         event("mission:end",resourceRoot,false,false,"first")
@@ -77,6 +106,156 @@ def check_client_effects():
         before=draws
         event("onClientPreRender",root)
         assert(timer.stopped and draws==before and texture.gone)
+    """)
+
+
+def check_fire_release():
+    lua = LuaRuntime()
+    lua.execute("""
+        root,resourceRoot,localPlayer={}, {}, {}
+        local gfx={}
+        exports={skygfx=gfx}
+        function gfx:AreParticlesEnabled() return true end
+        function gfx:PlayFireSound() started=started+1 return 23 end
+        function gfx:MoveFireSound() return true end
+        function gfx:StopFireSound(id) assert(id==23) stopped=stopped+1 return true end
+        function gfx:AddLight() end
+        function gfx:AddParticle() end
+        callbacks={}
+        function addEvent() end
+        function addEventHandler(event,el,cb) callbacks[event]=cb end
+        function getResourceFromName(name) return name end
+        function getResourceState() return "running" end
+        function getElementPosition() return 0,0,1 end
+        function getElementDimension() return 0 end
+        function getElementInterior() return 0 end
+        function getCameraMatrix() return 0,-7,2 end
+        function getPedOccupiedVehicle() return false end
+        function getPedWeapon() return 0 end
+        function getElementsByType() return {} end
+        function isElement(e) return type(e)=="table" end
+        function isElementStreamedIn() return true end
+        function getElementType() return "ped" end
+        function cancelEvent() cancelled=true end
+        function getTickCount() return 120 end
+        started,stopped=0,0
+    """)
+    lua.execute((MISSION.parents[1] / "[module]/fire/Fire.lua").read_text())
+    lua.execute("""
+        local ped={}
+        callbacks["fire:start"](9,"ped",ped,0,0,1,0.8,110,1,0,0,0)
+        callbacks["onClientPreRender"]()
+        callbacks["fire:start"](9,"ped",ped,0,0,1,0.8,110,1,0,0,0)
+        callbacks["onClientPreRender"]()
+        assert(started==1 and stopped==0)
+        source=ped
+        callbacks.onClientPedDamage(nil,37)
+        assert(cancelled)
+        callbacks["fire:stop"](9)
+        callbacks["fire:stop"](9)
+        callbacks.onClientPreRender()
+        assert(started==1 and stopped==1,"released fire must stop its existing voice exactly once")
+        cancelled=false
+        callbacks.onClientPedDamage(nil,37)
+        assert(not cancelled,"release must restore native damage for the ped")
+    """)
+
+
+def check_fire_manager():
+    lua = LuaRuntime()
+    lua.execute("""
+        root,resourceRoot,handlers,timers,messages={},{},{},{},{}
+        now=10000
+        function getTickCount() return now end
+        function addEvent() end
+        function addEventHandler(name,host,callback) handlers[name]=callback end
+        function triggerClientEvent(...) messages[#messages+1]={...} end
+        function isElement(e) return type(e)=="table" and not e.gone end
+        function getElementType(e) return e.kind end
+        function getElementPosition(e) return e.x or 0, e.y or 0, e.z or 0 end
+        function getElementDimension(e) return e.dimension or 0 end
+        function getElementInterior(e) return e.interior or 0 end
+        function getResourceFromName() return false end
+        function isPedDead(e) return e.dead end
+        function isElementInWater(e) return e.wet end
+        function getPedOccupiedVehicle(e) return false end
+        function getElementData(e,k) return e[k] end
+        function isElementOnFire(e) return e.burning end
+        function setElementOnFire(e,burning) e.burning=burning end
+        function getPedArmor(e) return e.armour end
+        function setPedArmor(e,v) e.armour=v end
+        function getElementHealth(e) return e.health end
+        function setElementHealth(e,v) e.health=v end
+        function killPed(e,killer,weapon) e.dead,e.killer,e.weapon=true,killer,weapon end
+        function getElementsWithinRange() return {} end
+        function setTimer(callback,msec) timers[msec]=callback end
+        function wasEventCancelled() return false end
+        function getDistanceBetweenPoints3D(x,y,z,a,b,c) return math.sqrt((x-a)^2+(y-b)^2+(z-c)^2) end
+        function ready(player)
+            client,source=player,resourceRoot
+            handlers["fire:ready"]()
+            client=nil
+        end
+    """)
+    lua.execute((MISSION.parents[1] / "[module]/fire/FireManager.lua").read_text())
+    lua.execute("""
+        local owner,viewer,other={kind="marker"},{kind="player"},{kind="player"}
+        local host={kind="vehicle"}
+        local id=StartScriptFire(owner,host,viewer,0.8)
+        assert(id and messages[1][1]==viewer and messages[1][4]==id)
+        assert(StartScriptFire(owner,host,viewer,0.8)==id and #messages==1)
+        source={dimension=12,interior=3}
+        handlers.onExplosion(4,8,3,1)
+        assert(messages[2][1]==root and messages[2][5]=="molotov")
+        now=10525
+        ready(other)
+        assert(#messages==3 and messages[3][1]==other and messages[3][5]=="molotov")
+        assert(messages[3][11]==525 and messages[3][13]==3 and messages[3][14]==12)
+        ready(other)
+        assert(#messages==3,"repeat snapshot throttled")
+        ready(viewer)
+        assert(#messages==5)
+        local viewerKinds={[messages[4][5]]=true,[messages[5][5]]=true}
+        assert(viewerKinds.molotov and viewerKinds.script)
+        assert(not ExtinguishPointWithWater(4,8,3,4,3,13,100),"water across dimensions")
+        assert(ExtinguishPointWithWater(4,8,3,4,3,12,100))
+        assert(messages[#messages][2]=="fire:water" and math.abs(messages[#messages][5]-0.94)<0.000001)
+        source=owner
+        handlers.onElementDestroy()
+        assert(messages[#messages][2]=="fire:stop" and messages[#messages][4]==id)
+        now=20001
+        timers[100]()
+        assert(messages[#messages][2]=="fire:stop")
+        local player={kind="player",dimension=25,health=100,armour=10}
+        source=player
+        handlers.onPlayerDamage(other,37)
+        assert(player.burning)
+        now=now+1000
+        timers[100]()
+        assert(player.armour==0 and math.abs(player.health-90.2)<0.00001)
+        now=now+2400
+        timers[100]()
+        assert(not player.burning and math.abs(player.health-(110-3333*0.06*0.33))<0.00001)
+        player["mission:fireproof"]=true
+        handlers.onPlayerDamage(other,37)
+        assert(not player.burning)
+        player["mission:fireproof"]=nil
+        handlers.onPlayerDamage(other,37)
+        assert(player.burning)
+        function getResourceFromName(name) return name=="debug" and "debug" end
+        function getResourceState() return "running" end
+        exports={debug={isPlayerInGodMode=function(_,ped) return ped==player end}}
+        local before=player.health
+        player.armour=15
+        now=now+500
+        timers[100]()
+        assert(not player.burning and player.health==before and player.armour==15)
+        source=player
+        handlers.onPlayerDamage(other,37)
+        assert(not player.burning,"godmode prevents a new ignition")
+        for n=1,40 do assert(StartScriptFire({kind="marker"},false,viewer,0.8)) end
+        assert(not StartScriptFire({kind="marker"},false,viewer,0.8))
+        assert(StartScriptFire({kind="marker",dimension=1},false,viewer,0.8))
     """)
 
 
@@ -133,6 +312,12 @@ def main():
             p.job=job return true
         end
         exports={npchlc_traffic=traffic,vcs_vehicle={},marker={setMarkerVisibleTo=function(_,m,p,v) m.visible=v end}}
+        exports.fire={}
+        function exports.fire:StartScriptFire(marker,host,owner,size)
+            assert(marker and owner and size==0.8)
+            marker.fireOwner,marker.fireHost=owner,host
+            return 1
+        end
         function exports.vcs_vehicle:createVcsVehicle(...) return createObject(...) end
         Mission={driverOf=function(v) return getVehicleOccupant(v,0) end,register=function(id,d) defs[id]=d end,track=noop,message=noop,hud=noop}
         function Mission.showReturnVehicle(r,v) r.indicator=v end
@@ -186,10 +371,13 @@ def main():
     for script in ("sling.lua", "firefighting_data.lua", "firefighting.lua"):
         lua.execute((MISSION / script).read_text())
     check_client_effects()
+    check_fire_manager()
+    check_fire_release()
     lua.execute("""
         local a,b=start("firefighter"),start("firefighter")
         assert(a.fires[1].entity~=b.fires[1].entity)
         local f=a.fires[1]
+        assert(f.marker.fireOwner==a.player and f.marker.fireHost==f.entity and f.marker["mission:fireTarget"][3])
         pos(a.player,f.x,f.y-12,f.z)
         source,client=resourceRoot,b.player
         events["mission:fireRoadReady"](a.token,f.entity,f.z+1.5)

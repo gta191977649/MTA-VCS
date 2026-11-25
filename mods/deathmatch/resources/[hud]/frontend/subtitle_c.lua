@@ -22,4 +22,4 @@ Hud.onRender(function(screen, now)
         local _, sx, sy = CWidescreenSupport:playerHud()
         Hud.text(screen, entry, screen.width / 2, 221 * sy / screen.scale, 432 * sx / screen.scale, opacity)
     end
-end)
+end,"caption")

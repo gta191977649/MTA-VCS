@@ -61,6 +61,8 @@ local function nextWaypoint(ped, actor)
         for i=route.index,math.min(#route.nodes,route.index+7) do segments[#segments+1]=route.nodes[i] end
         route.task={"driveTrafficPhysics",route.sequence+route.index,route.speed,anchor,segments,2}
         route.task.mission=true
+        route.task.race=route.race
+        if route.index+#segments-1==#route.nodes then route.task.raceExit=route.raceExit end
     else
         route.task = { kind == "pedestrian" and "walkToPos" or "driveTrafficToPoint",
             waypoint.x, waypoint.y, waypoint.z, arrivalTolerance }
@@ -82,23 +84,28 @@ local function findRouteLink(graph, from, to)
     return false
 end
 
-function TrafficActors.driveMissionPath(ped, segments, speed)
+function TrafficActors.driveMissionPath(ped, segments, speed, race, raceExit)
     local kind, vehicle = getTravelKind(ped)
     if kind ~= "vehicle" or not segments or not segments[1] then return false end
     local actor = actors[ped] or {}
     actors[ped] = actor
     actor.route = {nodes=segments,index=1,kind=kind,vehicle=vehicle,interior=getElementInterior(ped),mission=true,
-        speed=speed,anchor={getElementPosition(vehicle)},sequence=missionSequence,lastMoved=getTickCount()}
+        speed=speed,race=race,raceExit=raceExit,anchor={getElementPosition(vehicle)},sequence=missionSequence,lastMoved=getTickCount()}
     missionSequence=missionSequence+#segments+1
     return nextWaypoint(ped, actor)
 end
 
-function TrafficActors.endMissionPath(ped)
+function TrafficActors.hlcRunning()
+    local resource=getResourceFromName("npc_hlc")
+    return resource and getResourceState(resource)=="running"
+end
+
+function TrafficActors.endMissionPath(ped,replacingTask)
     local actor = actors[ped]
     if actor and actor.route and actor.route.mission then
         actor.route = nil
         if not actor.police then actors[ped] = nil end
-        npc:clearNPCTasks(ped)
+        if not replacingTask and TrafficActors.hlcRunning() then npc:clearNPCTasks(ped) end
     end
 end
 
@@ -255,7 +262,7 @@ function TrafficActors.stop()
     removeEventHandler("onPedWasted", root, onPedRemoved)
     removeEventHandler("onElementDestroy", root, onPedRemoved)
     for ped, actor in pairs(actors) do
-        if actor.route and isElement(ped) then
+        if actor.route and isElement(ped) and TrafficActors.hlcRunning() then
             npc:clearNPCTasks(ped)
         end
     end

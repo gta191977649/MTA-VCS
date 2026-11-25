@@ -9,17 +9,29 @@ local handlers={}
 root,resourceRoot={},{}
 function addEvent() end
 function addEventHandler(event,element,fn) handlers[event]=fn end
-function emit(name,...) source=resourceRoot;return handlers[name](...) end
+function emitFrom(element,name,...) source=element;return handlers[name](...) end
+function emit(name,...) return emitFrom(resourceRoot,name,...) end
 function obj(kind,x,y,z) return {kind=kind,x=x or 0,y=y or 0,z=z or 0,valid=true,hp=1000} end
 function isElement(e) return type(e)=="table" and e.valid end
 function destroyElement(e)e.valid=false end
 function getTickCount() return now end
+function getGameSpeed() return 1 end
 function getElementType(e)return e.kind end
 function getElementPosition(e)return e.x,e.y,e.z end
 function setElementPosition(e,x,y,z)e.x,e.y,e.z=x,y,z end
 function getElementRotation(e)return 0,0,e.heading or 0 end
 function setElementRotation(e,x,y,z)e.heading=z end
-function getElementMatrix(e)return {{},{},{0,0,e.up or 1}} end
+function getElementMatrix(e)return {{1,0,0},{0,1,0},{0,0,e.up or 1},{e.x,e.y,e.z}} end
+function setElementData(e,k,v)e[k]=v end
+function getElementData(e,k)return e[k] end
+function getElementSyncer()return true end
+function getVehicleWheelStates()return 0,0,0,0 end
+function getVehicleDoorState()return 0 end
+function getVehiclePanelState()return 0 end
+function setVehicleLocked() end
+function getVehicleEngineState()return true end
+function setElementInterior() end
+function triggerClientEvent() end
 function setElementDimension()end
 function getElementInterior()return 0 end
 function getElementDimension()return 0 end
@@ -34,6 +46,8 @@ function isPedDead(e)return e.hp<=0 end
 function setElementFrozen(e,v)e.frozen=v end
 function isElementFrozen(e)return e.frozen end
 function getVehicleOccupant(e)return e.driver end
+function getVehicleController(e)return e.driver end
+function getWeaponProperty()return 40 end
 function warpPedIntoVehicle(p,v)p.car=v;v.driver=p;return true end
 function getPedOccupiedVehicle(p)return p.car end
 function getVehicleType(v)return v.class end
@@ -43,7 +57,14 @@ function getPlayerMoney(p)return p.cash end
 function takePlayerMoney(p,n)p.cash=p.cash-n return true end
 function getDistanceBetweenPoints3D(x,y,z,a,b,c)return math.sqrt((x-a)^2+(y-b)^2+(z-c)^2) end
 exports={npc_hlc={},vcs_vehicle={},npchlc_traffic={},marker={}}
-function exports.npchlc_traffic:driveMissionTrafficTo(p,x,y,z,s)p.goal={x,y,z,s};return true end
+function exports.npchlc_traffic:startMissionRaceDriver(p,v,style) return p.car==v and style==2 end
+function exports.npchlc_traffic:setMissionRaceTarget(p,x,y,z,s)p.goal={x,y,z,s};return true end
+function exports.npchlc_traffic:clearAreaOfCars(x,y,z,radius,interior,dimension,car)
+    assert(car and (radius==20 or radius==100));car.clears=car.clears or {};table.insert(car.clears,{x,y,z,radius});return 0
+end
+function exports.npchlc_traffic:setMissionTrafficDensity()return true end
+function exports.npc_hlc:getVcsRoadSpawnPose()return false end
+function exports.npc_hlc:getVcsGroundHeight(_,_,z)return z end
 function exports.npc_hlc:setNPCDriveSpeed(p,s)p.speed=s end
 function exports.npc_hlc:setNPCTask(p,t)p.task=t end
 function exports.marker:setMarkerTarget(m,x,y,z)m.nextPoint={x,y,z}end
@@ -53,8 +74,9 @@ function exports.npchlc_traffic:createTrafficScriptPed(id,x,y,z)local p=obj("ped
 Mission={};activities={};local sites={}
 function Mission.driverOf(v) return getVehicleOccupant(v,0) end
 function Mission.register(id,t)activities[id]=t end
-function Mission.track(r,e)return e end
-function Mission.marker(r,x,y,z,t,size,c,blip)local m=obj("marker",x,y,z);m.owner=r;m.size=size;return m end
+function Mission.track(r,e)e.run=r;return e end
+function Mission.runForActor(e)return e.run end
+function Mission.marker(r,x,y,z,t,size,c,blip)local m=obj("marker",x,y,z);m.owner=r;m.size=size;m.blip=blip;return m end
 function Mission.entityArrow(r,e,c,blip) assert(blip==false);local m=obj("marker");m.target=e;return m end
 function Mission.selectCourse(r,opt,fn)r.select=fn;r.options=opt end
 function Mission.courseRecord(r,key)return {wins=r.wins or 0} end
@@ -89,6 +111,7 @@ local function signup(index)
     p.cash=2000;r.select(r,localIndex)
     local c=TurismoCourses[index]
     assert(r.course==c and p.cash==2000-c.fee)
+    assert(r.gate.blip and r.gate.owner==r and r.gate.x==c.grid[1] and r.gate.y==c.grid[2])
     local v=obj("vehicle",unpack(c.grid))
     v.class="Boat";warpPedIntoVehicle(p,v);race.tick(r,now);assert(not r.rivals)
     v.class=c.kind==1 and "Automobile" or "Bike"
@@ -96,31 +119,79 @@ local function signup(index)
 end
 local function grid(r)
     race.tick(r,now);assert(#r.rivals==3 and r.vehicle.frozen)
-    for i,rival in ipairs(r.rivals)do assert(rival.car.gridPaint==i-1) end
+    local clears=r.vehicle.clears
+    assert(#clears==7)
+    for i,rival in ipairs(r.rivals)do
+        assert(rival.car.gridPaint==i-1)
+        for _,j in ipairs({i,i+3})do
+            local q=clears[j];local slot=r.course.rivals[i]
+            assert(q[1]==slot[1] and q[2]==slot[2] and q[3]==slot[3] and q[4]==(j==i and 20 or 100))
+        end
+    end
+    assert(clears[7][1]==r.course.grid[1] and clears[7][4]==100)
     race.tick(r,now+10);assert(r.countCue==3)
     now=now+3050;race.tick(r,now)
     for _,rival in ipairs(r.rivals) do assert(rival.marker.target==rival.ped) end
-    assert(r.countCue==0 and not r.vehicle.frozen and r.gate.owner==r and r.arrow.nextPoint)
+    assert(#clears==7 and r.countCue==0 and not r.vehicle.frozen and r.gate.owner==r and r.arrow.nextPoint)
 end
 local total=0
+do
+    local c=LouiseQuadRace
+    local car=obj("vehicle",-971,-862,12)
+    local ped=obj("ped")
+    warpPedIntoVehicle(ped,car)
+    local rival={car=car,ped=ped,lap=1,aim=10,index=11,steerPoint="exit",
+        progressX=car.x,progressY=car.y,progressAt=1000}
+    local run={course=c,player=obj("player",0,0,10),rivals={rival}}
+    local request,notify=nil,triggerClientEvent
+    triggerClientEvent=function(_,event,_,_,_,_,x,y,z)
+        assert(event=="mission:checkRivalRecovery")
+        request={x,y,z}
+    end
+    Mission.turismoDriverReady(run,rival,7000)
+    triggerClientEvent=notify
+    local completed=c.checkpoints[10]
+    assert(request[1]==completed[4] and request[2]==completed[5] and request[3]==completed[6])
+end
 for i,c in ipairs(TurismoCourses)do
     local r=signup(i);grid(r)
     if i==1 then
         local other=signup(i);grid(other);assert(other.gate~=r.gate and other.rivals[1].car~=r.rivals[1].car)
-        other.rivals[2].ped.hp=0;race.tick(other,now);assert(other.fail and not r.fail)
+        local rival=other.rivals[1]
+        other.token,other.player.run=17,other
+        r.token,r.player.run=17,r
+        client=r.player
+        emit("mission:turismoWeaponHit",17,rival.ped,22)
+        client=other.player
+        emit("mission:turismoWeaponHit",17,rival.car,22)
+        emit("mission:turismoWeaponHit",17,obj("ped"),22)
+        assert(not other.fail and not r.fail)
+        client=other.player
+        for _,cause in ipairs({0,19,20,21,43,46,49,50,51,54}) do
+            emit("mission:turismoWeaponHit",17,rival.ped,cause)
+        end
+        assert(not other.fail and not r.fail)
+        setElementPosition(other.player,getElementPosition(rival.car))
+        emit("mission:turismoWeaponHit",18,rival.ped,22)
+        assert(not other.fail)
+        emit("mission:turismoWeaponHit",17,rival.ped,22)
+        assert(other.fail:find("attacked") and rival.ped.hp==1000 and not r.fail)
+        local death=signup(i);grid(death)
+        death.rivals[2].ped.hp=0;race.tick(death,now);assert(death.fail:find("died") and not r.fail)
     end
+    if i==2 then r.rivals[1].lap=c.laps+1;r.rivals[1].finishAt=now end
     local v=r.vehicle
-    r.player.car=nil;v.driver=nil;race.tick(r,now);assert(r.returnBlip==v and not r.gate)
+    r.player.car=nil;v.driver=nil;race.tick(r,now);assert(r.returnAt and not r.gate)
     warpPedIntoVehicle(r.player,v);race.tick(r,now);assert(not r.returnBlip and r.gate)
     for lap=1,c.laps do
         for n,gate in ipairs(c.checkpoints) do
             local s=r.rivals[1]
             assert(s.ped.goal or s.ped.task)
             -- The opponents use separately authored targets for each race leg.
-            if i==2 and s.lap<=c.laps then
-                local target=c.checkpoints[s.index];setElementPosition(s.car,target[4],target[5],target[6])
-            end
-            now=now+1200;setElementPosition(v,gate[1],gate[2],gate[3]);race.tick(r,now);total=total+1
+            -- Sample a continuous approach from outside the ring.
+            now=now+1500
+            setElementPosition(v,gate[1]-45,gate[2],gate[3]);race.tick(r,now)
+            now=now+1000;setElementPosition(v,gate[1],gate[2],gate[3]);if not r.finish then race.tick(r,now) end;total=total+1
             assert(not r.fail,r.fail)
         end
     end
@@ -179,10 +250,42 @@ v.hp=248;assert(not crash.canStart(p,v))
 return total
 """
 
+CLIENT_DAMAGE = """
+localPlayer=obj("player")
+MissionRunToken=17
+local outsider=obj("player")
+local npc=obj("ped")
+local rival=obj("ped")
+local car=obj("vehicle")
+car.driver=localPlayer
+for _,entity in ipairs({rival,car}) do entity["mission:actorOwner"]=localPlayer end
+rival["mission:turismoRival"]="driver"
+car["mission:turismoRival"]="racing"
+local reports,cancelled=0,false
+function cancelEvent() cancelled=true end
+function triggerServerEvent(name,element,token,ped,weapon)
+    assert(name=="mission:turismoWeaponHit" and element==resourceRoot)
+    assert(token==17 and ped==rival and weapon==22)
+    reports=reports+1
+end
+for _,hit in ipairs({{outsider,22},{npc,22},{car,49},{localPlayer,0},{false,51}}) do
+    cancelled=false
+    emitFrom(rival,"onClientPedDamage",unpack(hit))
+    assert(cancelled and reports==0)
+end
+emitFrom(car,"onClientVehicleDamage",localPlayer,22)
+assert(reports==0)
+cancelled=false
+emitFrom(rival,"onClientPedDamage",localPlayer,22)
+assert(not cancelled and reports==1)
+"""
+
 if __name__ == "__main__":
     lua=LuaRuntime()
     lua.execute(HOST)
-    for name in ("course_gates.lua","motorsport_data.lua","motorsport.lua"):
+    for name in ("course_gates.lua","motorsport_data.lua","louise_data.lua","turismo_recovery.lua","motorsport.lua"):
         lua.execute((MISSION/name).read_text(encoding="utf-8-sig"),name=name)
     count=lua.execute(CASES)
+    lua.execute((MISSION/"main_c.lua").read_text(encoding="utf-8-sig"),name="main_c.lua")
+    lua.execute(CLIENT_DAMAGE)
     print(f"Nine Turismo courses, {count} checkpoint crossings, both Crash/Rush payouts and run isolation passed.")

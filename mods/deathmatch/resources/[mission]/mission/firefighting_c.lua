@@ -78,6 +78,11 @@ local function drawFire(marker,effect,px,py,pz)
             triggerServerEvent("mission:fireRoadReady",resourceRoot,MissionRunToken,entity,surface)
         end
     end
+    if target[3] and exports.skygfx:AreParticlesEnabled() then
+        if isElement(effect) then destroyElement(effect) end
+        effects[marker]=false
+        return
+    end
     if isElement(entity) and getElementType(entity)=="ped" then return end
     if isElement(effect) then
         setElementPosition(effect,x,y,z)
@@ -132,30 +137,56 @@ update=function()
     updateTimer()
 end
 
+-- MAIN.SCM FIREHEL_4375, emitted for each running script frame.
+local steamDirections={
+    {.05,0},{.03,.03},{0,.05},{-.03,.03},{-.05,0},{-.03,-.03},{0,-.05},{.03,-.03}
+}
+local waterDrops={
+    {0,0,-.1,.7},{0,.01,-.12,.6},{.01,0,-.14,.4},{.01,.01,-.1,.6},{0,.01,-.06,.4},{.01,0,-.08,.6},
+    {0,0,-.06,.5},{0,.03,-.12,.5},{.03,0,-.14,.5},{.03,.03,-.1,.5},{0,.031,-.06,.5},{.03,0,-.08,.5}
+}
+local function emitBucketParticles(x,y,z)
+    for _,v in ipairs(steamDirections) do
+        exports.skygfx:AddParticle(28,x,y,z-2,v[1],v[2],.03,1)
+    end
+    for i,v in ipairs(waterDrops) do
+        exports.skygfx:AddParticle(78,x,y,z-(i<=6 and 2 or 2.2),v[1],v[2],v[3],v[4])
+    end
+end
+
 -- Emit from the moving rope end at PS2 frame cadence. Once released, a
 -- droplet falls in world space independently of subsequent helicopter motion.
 addEventHandler("onClientPreRender",root,function()
     local now=getTickCount()
+    local useParticles=next(buckets)~=nil and exports.skygfx:AreParticlesEnabled()
     for bucket,flow in pairs(buckets) do
         local visible=getElementDimension(bucket)==getElementDimension(localPlayer)
             and getElementInterior(bucket)==getElementInterior(localPlayer)
         local spraying=visible and getElementData(bucket,"mission:bucketSpraying",false)
         if spraying or flow then
             local x,y,z=getElementPosition(bucket)
-            z=z-1
             if not flow or now<flow.time then
                 flow={particles={},nextEmission=now,x=x,y=y,z=z,time=now}
                 buckets[bucket]=flow
             end
             if spraying then
-                sprayTexture=sprayTexture or dxCreateTexture("assets/bucket_spray.png")
+                if useParticles then
+                    if #flow.particles>0 then flow.particles={} end
+                else
+                    sprayTexture=sprayTexture or dxCreateTexture("assets/bucket_spray.png")
+                end
                 flow.nextEmission=math.max(flow.nextEmission,now-100)
                 while flow.nextEmission<=now do
                     local u=math.min(1,(now-flow.nextEmission)/math.max(1,now-flow.time))
-                    for i=1,2 do
-                        local angle=math.rad((flow.nextEmission*0.7+i*180)%360)
-                        table.insert(flow.particles,{at=flow.nextEmission,x=x+(flow.x-x)*u,y=y+(flow.y-y)*u,
-                            z=z+(flow.z-z)*u,vx=math.cos(angle),vy=math.sin(angle),vz=i==1 and -4 or -2})
+                    local sx,sy,sz=x+(flow.x-x)*u,y+(flow.y-y)*u,z+(flow.z-z)*u
+                    if useParticles then
+                        emitBucketParticles(sx,sy,sz)
+                    else
+                        for i=1,2 do
+                            local angle=math.rad((flow.nextEmission*0.7+i*180)%360)
+                            table.insert(flow.particles,{at=flow.nextEmission,x=sx,y=sy,z=sz-1,
+                                vx=math.cos(angle),vy=math.sin(angle),vz=i==1 and -4 or -2})
+                        end
                     end
                     flow.nextEmission=flow.nextEmission+1000/30
                 end

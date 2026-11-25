@@ -632,6 +632,8 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
         pedestrian_ids.update(model for group in GANG_MODELS for model in group)
     if not street_peds:
         vehicle_bindings = list(vehicle_bindings)
+        # The scripted VCPD Maverick has a separate mesh from the patrol Maverick.
+        vehicle_bindings.append({"originalId": 279, "model": 497, "name": "chopper"})
         vehicle_bindings = [entry for entry in vehicle_bindings if entry["originalId"] not in POLICE_MODELS]
         for original_id, (name, base) in (WATER_MODEL_VARIANTS | POLICE_MODELS).items():
             pointer, = U32.unpack_from(raw_game, model_table + original_id * 4)
@@ -671,7 +673,7 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
                 digest.update(block)
             require(digest.hexdigest() == GTA3PS2_IMG, "GTA3PS2.IMG is not the verified PS2 archive")
             for original_id, asset in model_sources.items():
-                if asset["kind"] == "vehicle" and original_id != 280:
+                if asset["kind"] == "vehicle" and original_id not in (279, 280):
                     # Reuse the project's SA-ready VCS vehicle conversions. A
                     # direct PS2 mesh conversion misses SA vehicle dummies and
                     # the embedded collision that the native renderer expects.
@@ -784,7 +786,7 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
     catalog = ["VCS_TRAFFIC_MODEL_CATALOG = {"]
     for original_id, asset in model_sources.items():
         kind, base = asset["kind"], asset["base"]
-        variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS or original_id == 218 else ""
+        variant = ", variant = true" if original_id in WATER_MODEL_VARIANTS or original_id in (218, 279) else ""
         label = f', textKey = "{vehicle_text_key(raw_game, model_table, original_id)}"' if kind == "vehicle" else ""
         catalog.append(f'    [{original_id}] = {{kind = "{kind}", base = {base}, name = "{asset["name"]}"{variant}{label}}},')
     catalog.append("}")
@@ -799,6 +801,7 @@ def export_traffic_models(disc, converter, destination, population, vehicle_bind
         {model_id for model_id, asset in model_sources.items() if asset["kind"] == "ped"},
     )
     lines = ["<meta>",
+             '    <export function="HasModelLoaded" type="client" />',
              '    <script src="model_catalog.lua" type="shared" />',
              '    <script src="model_bindings_s.lua" type="server" />',
              '    <script src="locomotion_catalog.lua" type="client" />',

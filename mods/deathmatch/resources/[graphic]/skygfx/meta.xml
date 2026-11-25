@@ -26,6 +26,20 @@
     <script src="pipeline/vcsVehicle.lua" type="client" cache="false"/>
     <script src="pipeline/vcsVehicleTrails.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatSheet.lua" type="client" cache="false"/>
+    <script src="audio/fire.lua" type="client" cache="false"/>
+    <script src="pipeline/particleData.lua" type="client" cache="false"/>
+    <script src="pipeline/particle.lua" type="client" cache="false"/>
+    <script src="pipeline/nativeFire.lua" type="client" cache="false"/>
+    <file src="shader/fireParticles.fx"/>
+    <script src="pipeline/pointLights.lua" type="client" cache="false"/>
+    <file src="shader/pointLights.fx"/>
+    <export function="AddLight" type="client"/>
+    <script src="pipeline/particleObjects.lua" type="client" cache="false"/>
+    <script src="pipeline/objectParticles.lua" type="client" cache="false"/>
+    <script src="pipeline/explosion.lua" type="client" cache="false"/>
+    <script src="pipeline/vehicleParticles.lua" type="client" cache="false"/>
+    <script src="pipeline/weaponParticles.lua" type="client" cache="false"/>
+    <script src="pipeline/particleEmitters.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatParticles.lua" type="client" cache="false"/>
     <script src="pipeline/vcsBoatWake.lua" type="client" cache="false"/>
     <script src="pipeline/vcsWater.lua" type="client" cache="false"/>
@@ -45,6 +59,15 @@
     <file src="txd/xvehicleenv128.png" type="client"/>
     <file src="txd/coronaheadlightline.png" type="client"/>
     <file src="txd/coronastar.png" type="client"/>
+    <file src="txd/vcs-particles.png"/>
+    <file src="audio/fire.wav"/>
+    <file src="audio/ped_fire.wav"/>
+    <file src="audio/flamethrower.wav"/>
+    <file src="audio/flamethrower_start.wav"/>
+    <file src="audio/explosion.wav"/>
+    <file src="audio/molotov.wav"/>
+    <file src="audio/extinguish.wav"/>
+    <file src="audio/mine.wav"/>
     <file src="txd/vcs-coronastar.png" type="client"/>
     <file src="txd/vcs-sun-optics.png" type="client"/>
     <file src="txd/vcs-waterclear256.png" type="client"/>
@@ -64,7 +87,6 @@
     <file src="shader/vcsVehicle.fx" type="client"/>
     <file src="shader/vcsVehicleTrails.fx" type="client"/>
     <file src="shader/vcsWater.fx" type="client"/>
-    <file src="models/vcsAlphaTextures.txt" type="client"/>
     <file src="models/vcsShopTextures.txt" type="client"/>
     <file src="timecycle/timecyc_vcs.dat" type="client"/>
     <file src="shader/vcsPost.fx" type="client"/>
@@ -101,6 +123,12 @@
 	<file src="models/texdb.txt" cache="false"/>
 	
 	
+    <export function="AddParticle" type="client"/>
+    <export function="AreParticlesEnabled" type="client"/>
+    <export function="PlayFireSound" type="client"/>
+    <export function="MoveFireSound" type="client"/>
+    <export function="StopFireSound" type="client"/>
+    <export function="ReportWaterExtinguish" type="client"/>
     <export function="start" type="client"/>
     <export function="stop" type="client"/>
     <export function="setVcsPostProcessing" type="client"/>

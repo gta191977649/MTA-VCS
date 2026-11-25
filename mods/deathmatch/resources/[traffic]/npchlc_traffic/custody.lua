@@ -18,6 +18,10 @@ function TrafficCustody.isActive(player)
     return active[player] ~= nil
 end
 
+function isTrafficPlayerInCustody(player)
+    return TrafficCustody.isActive(player)
+end
+
 function TrafficCustody.isArresting(officer)
     return arresting[officer] ~= nil
 end
@@ -85,11 +89,15 @@ local function restart(player, state)
     setElementHealth(player, maxHealth)
     if freeBail[player] then
         freeBail[player] = nil
+        -- 0x24C428 clears current weapons after release even on free bail.
+        -- The previous confiscation is still available at the police pickups.
+        takeAllWeapons(player)
+        exports.wasted:ActivateWeaponBuyback(player, "busted")
     else
         local fine = math.min(math.max(0, getPlayerMoney(player)), fees[state.level])
         if fine > 0 then takePlayerMoney(player, fine) end
+        exports.wasted:ConfiscatePlayerWeapons(player, "busted")
     end
-    takeAllWeapons(player)
     exports.wanted:resetPlayerWanted(player, "arrest")
     state.restarting = false
 end
@@ -123,10 +131,12 @@ addEvent("traffic:onPlayerBusted",false)
 function TrafficCustody.begin(player, level, officer)
     if active[player] or (officer and arresting[officer]) or not fees[level] or not isElement(player)
         or getElementType(player) ~= "player" or isPedDead(player) then return false end
-    local state = {level = level, started = getTickCount(), disabled = {}, froze = not isElementFrozen(player),
+    local state = {level = level, started = getTickCount(), disabled = {},
         dimension = getElementDimension(player), interior = getElementInterior(player), officer = officer}
     active[player] = state
     triggerEvent("traffic:onPlayerBusted",player)
+    -- Cancelling an organizer or cutscene can release its freeze during this event.
+    state.froze = not isElementFrozen(player)
     for _, control in ipairs(controls) do
         if isControlEnabled(player, control) then
             toggleControl(player, control, false)

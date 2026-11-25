@@ -15,6 +15,7 @@ local initialWeather = ({[4]=1,[8]=2,[9]=3,[1]=4,[6]=6})[nativeGetWeather()] or 
 local rows, restore = {}, {}
 local reloadSnapshot = "leeds_engine:weather"
 local weights, fromWeights = {[initialWeather]=1}, nil
+local blendDuration, syncedRain = 60000, nil
 local lastSample, blendStart, lastMinute
 local interiorWeather, colour
 local lastCameraInterior, outdoorClouds
@@ -105,7 +106,7 @@ end
 
 local function updateBlend(now)
     if not blendStart then return end
-    local progress = math.min((now - blendStart) / 60000, 1)
+    local progress = math.min((now - blendStart) / blendDuration, 1)
     VCSWeather.interpolation = progress
     for weather = 0, 7 do
         weights[weather] = (fromWeights[weather] or 0) * (1-progress)
@@ -173,13 +174,13 @@ local function update(force)
         directional=rgb(13), dirMult=1, sky_top=rgb(16), sky_bot=rgb(19),
         sun_core=rgb(22), sun_corona=rgb(25), sun_size=v[28],
         sprite_size=v[29], sprite_brightness=v[30], farClp=clip, fogSt=fog, fogginess=fogginess,
-        wetRoads=wetRoads, rain=0.5*wetRoads, rainbow=rainbow, cloudsAlpha=cloudsAlpha,
+        wetRoads=wetRoads, rain=indoors and 0 or (syncedRain or 0.5*wetRoads), rainbow=rainbow, cloudsAlpha=cloudsAlpha,
         radiosityIntensity=v[36], radiosityLimit=v[37], lightOnGround=v[38],
         cloud=rgb(39), fluffy_top=rgb(42), fluffy_bot=rgb(45),
         blur=rgb(48), blurAlpha=v[55], blurOffset=v[56],
         postfx1={0,0,0,v[55]}, postfx2={v[48],v[49],v[50],v[55]},
         water={v[51],v[52],v[53],v[54]},
-        waterWind=math.min(waterWind, 1),
+        wind=waterWind, waterWind=math.min(waterWind, 1),
     }
     if indoors and outdoorClouds == nil then
         outdoorClouds = getCloudsEnabled()
@@ -218,7 +219,7 @@ local function update(force)
     setFarClipDistance(clip)
     setWaterColor(v[51],v[52],v[53],v[54])
     -- PS2 Update clamps rainy/hurricane rain to 0.5. Blend its endpoints here.
-    setRainLevel(0.5 * wetRoads)
+    setRainLevel(VCSWeather.data.rain)
     -- Keep SA heat distortion disabled throughout the VCS weather pipeline.
     setHeatHaze(0)
 end
@@ -244,14 +245,28 @@ function setVcsWeather(weather)
     if #rows ~= 192 or not validWeather(weather) then return false end
     VCSWeather.old, VCSWeather.new, VCSWeather.interpolation = weather, weather, 1
     weights, fromWeights, blendStart = {[weather]=1}, nil, nil
+    blendDuration, syncedRain = 60000, nil
     nativeSetWeather(nativeWeathers[weather])
     update(true)
     return true
 end
 
-function setVcsWeatherBlended(weather)
+function setVcsWeatherBlended(weather, oldWeather, phase, duration, rain)
     if #rows ~= 192 or not validWeather(weather) then return false end
+    if oldWeather ~= nil then
+        if not validWeather(oldWeather) or type(phase) ~= "number" or not (phase >= 0 and phase <= 1)
+                or type(duration) ~= "number" or not (duration > 0 and duration < math.huge)
+                or type(rain) ~= "number" or not (rain >= 0 and rain <= 1) then return false end
+        if nativeGetWeather() ~= nativeWeathers[oldWeather] then nativeSetWeather(nativeWeathers[oldWeather]) end
+        VCSWeather.old, VCSWeather.new = oldWeather, weather
+        syncedRain, blendDuration = rain, duration
+        fromWeights = {[oldWeather]=1}
+        blendStart = getTickCount() - phase * duration
+        update(true)
+        return true
+    end
     updateBlend(getTickCount())
+    syncedRain, blendDuration = nil, 60000
     fromWeights, blendStart = {}, getTickCount()
     for id, weight in pairs(weights) do fromWeights[id] = weight end
     VCSWeather.new, VCSWeather.interpolation = weather, 0
@@ -261,7 +276,7 @@ end
 
 function getOutdoorWeather()
     if #rows ~= 192 then return false end
-    return VCSWeather.old, blendStart and VCSWeather.new or nil
+    return VCSWeather.old, blendStart and (syncedRain == nil or VCSWeather.old ~= VCSWeather.new) and VCSWeather.new or nil
 end
 
 function getVcsWeather()
@@ -271,7 +286,7 @@ end
 
 function VCSWeather.seekBlend(fraction)
     if not blendStart or type(fraction) ~= "number" then return end
-    blendStart = getTickCount() - math.max(0, math.min(1, fraction)) * 60000
+    blendStart = getTickCount() - math.max(0, math.min(1, fraction)) * blendDuration
     update(true)
 end
 
@@ -302,6 +317,7 @@ function VCSWeather.start()
         VCSWeather.reloaded = true
         VCSWeather.old, VCSWeather.new = saved.old, saved.new
         weights, fromWeights, blendStart = saved.weights, saved.fromWeights, saved.blendStart
+        blendDuration, syncedRain = saved.blendDuration or 60000, saved.syncedRain
         setElementData(localPlayer, reloadSnapshot, nil, false)
     else
         nativeSetWeather(nativeWeathers[initialWeather])
@@ -329,6 +345,7 @@ function VCSWeather.stop(reloading)
         setElementData(localPlayer, reloadSnapshot, {
             original = original, old = VCSWeather.old, new = VCSWeather.new,
             weights = weights, fromWeights = fromWeights, blendStart = blendStart,
+            blendDuration = blendDuration, syncedRain = syncedRain,
         }, false)
         return
     end

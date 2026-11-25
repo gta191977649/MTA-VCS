@@ -112,18 +112,24 @@ local function nextFlashValue(seed)
 end
 
 function drawConcertCrowdFlashes(scene, time)
-    if scene.flashTexture == nil then
+    local shared = exports.skygfx:AreParticlesEnabled()
+    if not shared and scene.flashTexture == nil then
         scene.flashTexture = dxCreateTexture("assets/crowd_flash.png", "argb", false, "clamp")
     end
-    if not scene.flashTexture then return end
+    if not shared and not scene.flashTexture then return end
 
     -- RENC7_11423 spawns flashes with a 30% chance per source frame. Use
     -- that cadence and the original world bounds at every client FPS.
     local cx, cy, cz = getCameraMatrix()
     local _, height = guiGetScreenSize()
     local frame = math.floor(time * 30)
-    dxSetBlendMode("add")
-    for tick = math.max(0, frame - 3), frame do
+    if not shared then dxSetBlendMode("add") end
+    local first = math.max(0, frame - 3)
+    if shared and scene.lastParticleFrame and frame >= scene.lastParticleFrame then
+        first = math.max(first, scene.lastParticleFrame+1)
+    end
+    scene.lastParticleFrame = frame
+    for tick = first, frame do
         local age = time - tick / 30
         local seed = nextFlashValue(nextFlashValue(tick + 1))
         if age < 0.105 and seed / 2147483647 < 0.30 then
@@ -134,7 +140,9 @@ function drawConcertCrowdFlashes(scene, time)
             seed = nextFlashValue(seed)
             local z = -231 + seed / 2147483647 * 10
             local sx, sy = getScreenFromWorldPosition(x, y, z)
-            if sx and isLineOfSightClear(cx, cy, cz, x, y, z, true, false, false, true, true) then
+            if shared then
+                exports.skygfx:AddParticle(80,x,y,z,0,0,0,3.0)
+            elseif sx and isLineOfSightClear(cx, cy, cz, x, y, z, true, false, false, true, true) then
                 local distance = getDistanceBetweenPoints3D(cx, cy, cz, x, y, z)
                 local size = math.max(height * 0.018, math.min(height * 0.095, height * 3.2 / math.max(distance, 1)))
                 local alpha = math.floor(255 * (1 - age / 0.105)^1.5)
@@ -151,5 +159,5 @@ function drawConcertCrowdFlashes(scene, time)
             end
         end
     end
-    dxSetBlendMode("blend")
+    if not shared then dxSetBlendMode("blend") end
 end

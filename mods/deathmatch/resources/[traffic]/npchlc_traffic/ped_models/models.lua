@@ -91,6 +91,8 @@ StreetPedModels = {
     [100] = {base=7, name="ped_100"},
     [101] = {base=7, name="ped_101"},
     [102] = {base=7, name="ped_102"},
+    [103] = {base=7, name="ped_103"},
+    [104] = {base=7, name="ped_104"},
     [105] = {base=7, name="ped_105"},
     [106] = {base=7, name="ped_106"},
     [107] = {base=7, name="ped_107"},
@@ -100,4 +102,5 @@ StreetPedModels = {
     [119] = {base=284, name="ped_119"},
     [127] = {base=7, name="ped_127"},
     [130] = {base=7, name="ped_130"},
+    [138] = {base=7, name="ped_138"},
 }

@@ -19,10 +19,10 @@ function createMenuTab(title, panel)
     return exports.dgs:dgsCreateTab(title, panel)
 end
 
-function getVehicleSpawnMenuGroups(catalog, legacy)
+function getVehicleSpawnMenuGroups(catalog, legacy, rcVehicles)
     local rows, categories, labelCounts = {}, {}, {}
-    local function add(id, base, label, provider, modelName)
-        local category = getVehicleType(base) or 'Other'
+    local function add(id, base, label, provider, modelName, category)
+        category = category or getVehicleType(base) or 'Other'
         if not categories[category] then
             categories[category] = {'group', name=category, children={}}
             table.insert(rows, categories[category])
@@ -41,6 +41,9 @@ function getVehicleSpawnMenuGroups(catalog, legacy)
     for name, entry in pairs(catalog) do
         local label = getVcsText(entry.textKey or name:upper()) or labels[name]
         add(entry.id, entry.base, label or name:gsub('^%l', string.upper), 'vcs', name)
+    end
+    for id, name in pairs(rcVehicles or {}) do
+        add(id, id, name, nil, name, 'RC Vehicles')
     end
     local function byName(a, b) return a.name < b.name end
     table.sort(rows, byName)

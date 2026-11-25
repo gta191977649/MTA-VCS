@@ -2,9 +2,18 @@ local progress, leftProgress, npcBars = {}, {}, {}
 local theme = getHudTheme()
 local barLabel = {size = 24, align = "right", maxLines = 1}
 local missionRows, missionOwner, lastCountdownSecond = {}, nil, nil
+local golfMeter
+function showGolfMeter(phase, position)
+    local owner=Hud.owner()
+    if golfMeter and golfMeter.owner~=owner then return false end
+    if phase==false then golfMeter=nil return true end
+    if (phase~="power" and phase~="aim") or not Hud.number(position) then return false end
+    golfMeter={owner=owner,phase=phase,position=Hud.clamp(position/100)}
+    return true
+end
 local counterSilver = {200, 200, 200}
 
-function showVehicleMissionHud(seconds, level, label, value, bar, percent, countdown)
+function showVehicleMissionHud(seconds, level, label, value, bar, percent, countdown, secondCounter)
     local owner = Hud.owner()
     if missionOwner and missionOwner ~= owner then return false end
     if seconds then
@@ -14,6 +23,8 @@ function showVehicleMissionHud(seconds, level, label, value, bar, percent, count
     end
     if level and not Hud.number(level) then return false end
     if label and (type(label) ~= "string" or (type(value) ~= "string" and not Hud.number(value))) then return false end
+    if secondCounter and (type(secondCounter) ~= "table" or type(secondCounter.label) ~= "string"
+        or not Hud.number(secondCounter.value)) then return false end
     if bar then
         percent = Hud.number(percent)
         if type(bar) ~= "string" or not percent then return false end
@@ -27,6 +38,9 @@ function showVehicleMissionHud(seconds, level, label, value, bar, percent, count
     end
     if level then rows[#rows+1] = {label = "Level", value = tostring(level), color = counterSilver} end
     if label then rows[#rows+1] = {label = label, value = tostring(value), color = counterSilver} end
+    if secondCounter then
+        rows[#rows+1] = {label = secondCounter.label, value = tostring(secondCounter.value), color = counterSilver}
+    end
     if bar then rows[#rows+1] = {label = bar, amount = Hud.clamp(percent / 100), color = counterSilver} end
     missionRows = rows
     return true
@@ -134,6 +148,7 @@ addEventHandler("onClientPedWasted", root, clearPed)
 
 addEventHandler("onClientResourceStop", root, function(resource)
     local owner = getResourceName(resource)
+    if golfMeter and golfMeter.owner==owner then golfMeter=nil end
     if missionOwner == owner then missionRows, missionOwner, lastCountdownSecond = {}, nil, nil end
     for slot, bar in pairs(npcBars) do
         if bar.owner == owner then npcBars[slot] = nil end
@@ -162,6 +177,23 @@ end
 Hud.onRender(function(screen, now)
     if Hud.message("garage", now) then return end
     local viewportWidth, sx, sy = CWidescreenSupport:playerHud()
+    if golfMeter then
+        -- DRIVERA_3717, _3828 and _3910 use the 480 x 272 script viewport.
+        local width,height=guiGetScreenSize()
+        local gx,gy=width/480,height/272
+        local power=golfMeter.phase=="power"
+        local texture=CFont:texture(power and "pwrbar" or "aimbar")
+        local face=CFont:face("gametext")
+        if texture and face then
+            dxDrawRectangle(138*gx,198*gy,204*gx,20*gy,tocolor(0,0,0,128))
+            dxDrawImage(140*gx,200*gy,200*gx,16*gy,texture)
+            CFont:draw(power and "Power" or "Aim","gametext",140*gx,180*gy,
+                face.cellHeight*0.75*gy,tocolor(255,255,255),nil,gx/gy)
+            local pointerX=137+190*golfMeter.position
+            CFont:draw("!","gametext",pointerX*gx,188*gy,face.cellHeight*1.75*gy,
+                tocolor(255,255,0),nil,gx/(1.75*gy))
+        end
+    end
     local right = (viewportWidth - 25 * sx) / screen.scale
     local countdown = Hud.message("timer", now)
     local y = countdown and 122 or 101

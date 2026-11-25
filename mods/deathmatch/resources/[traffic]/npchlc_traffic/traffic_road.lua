@@ -997,6 +997,28 @@ local function ambientDriver(state)
         and not TrafficVisibility.hasPlayerOccupant(state.vehicle)
 end
 
+-- Only the traffic owner can retire a road car together with its driver and passengers.
+function clearAreaOfCars(x,y,z,radius,interior,dimension,keep)
+    if not finite(x) or not finite(y) or not finite(z) or not finite(radius) or radius<=0
+        or not finite(interior) or not finite(dimension) then return false end
+    local count=0
+    for _,vehicle in ipairs(getElementsWithinRange(x,y,z,radius,"vehicle",interior,dimension)) do
+        local state=vehicles[vehicle] or retiring[vehicle]
+        if vehicle~=keep and state and ownedVehicles[vehicle]==state and not state.borrowed
+            and ambientDriver(state) and not getElementData(vehicle,"mission:raceOwner",false)
+            and not getElementData(vehicle,"mission:actorOwner",false)
+            and not getElementData(state.driver,"mission:actorOwner",false)
+            and not (PedServices and PedServices.hasAssignment(state.driver)) then
+            local vx,vy,vz=getElementPosition(vehicle)
+            if (vx-x)^2+(vy-y)^2+(vz-z)^2<=radius^2 then
+                state=roadInteraction(vehicle)
+                if state then release(state,false) count=count+1 end
+            end
+        end
+    end
+    return count
+end
+
 -- Scripted assignments to an ordinary traffic driver keep its existing road route.
 function setNPCTrafficDrivingStyle(ped, style)
     local state = drivers[ped]
@@ -1688,6 +1710,35 @@ function TrafficRoad.nearestPursuitRoad(x,y,z,fx,fy,range)
 end
 
 -- Mission drivers use the same legal turn choices and lane centres as traffic.
+local function passingBounds(edge)
+    local a,b=graph.nodes[edge.from+1],graph.nodes[edge.to+1]
+    local half=2.5*edge.lanes
+    if edge.leftLanes>0 and edge.rightLanes>0 then
+        local median=math.max(a.rawWidth,b.rawWidth)/16
+        return -(5*(edge.leftLanes+edge.rightLanes-edge.lanes)+median),5*edge.lanes+median,median
+    end
+    return -half,half,0
+end
+
+function isMissionRacePassingLane(x,y,z,fx,fy,span,width)
+    if not graph or not finite(x) or not finite(y) or not finite(z) or not finite(fx) or not finite(fy)
+        or not finite(span) or not finite(width) or span<0 or span>200 or width<=0 or width>6 then return false end
+    for step=0,math.ceil(span/5) do
+        local d=math.min(span,step*5)
+        local cx,cy=x+fx*d,y+fy*d
+        local edge=TrafficRoad.nearestPursuitRoad(cx,cy,z,nil,nil,24)
+        if not edge then return false end
+        local px,py,pz=roadProjection(edge,cx,cy)
+        if math.abs(pz-z)>5 then return false end
+        local ex,ey=edgeDirection(edge)
+        local side=(cx-px)*ey-(cy-py)*ex
+        local low,high,median=passingBounds(edge)
+        if median>0.5 and math.abs(side)<median+width then return false end
+        if side-width<low or side+width>high or (cx-px)^2+(cy-py)^2>math.max(-low,high)^2 then return false end
+    end
+    return true
+end
+
 function getMissionTrafficRoad(x,y,z)
     if not graph or not finite(x) or not finite(y) or not finite(z) or math.abs(x)>16384 or math.abs(y)>16384 then return false end
     -- SCM 01B5 projects the authored point to a car node even when the
@@ -1783,16 +1834,99 @@ local function waypointsForRoadPath(path,matrix,tx,ty)
     return route
 end
 
-local function assignMissionRoadPath(ped,car,path,speed,tx,ty)
-    if not path then return false end
-    local route=waypointsForRoadPath(path,getElementMatrix(car),tx,ty)
+local function assignMissionWaypoints(ped,route,speed,race,raceExit)
     local segments={}
     for i,item in ipairs(route) do
         local x,y,z=unpack(item.point)
         local dx,dy=edgeDirection(item.edge)
         segments[i]={item.edge.id,item.lane,x,y,z,dx,dy,item.edge.speedClass or 0,signalGroup(item.edge,2)}
+        if race then
+            local a,b=graph.nodes[item.edge.from+1],graph.nodes[item.edge.to+1]
+            segments[i].carriageway={a.x,a.y,b.x,b.y,passingBounds(item.edge)}
+        end
     end
-    return TrafficActors.driveMissionPath(ped,segments,speed)
+    return TrafficActors.driveMissionPath(ped,segments,speed,race,raceExit)
+end
+
+local function assignMissionRoadPath(ped,car,path,speed,tx,ty)
+    return path and assignMissionWaypoints(ped,waypointsForRoadPath(path,getElementMatrix(car),tx,ty),speed) or false
+end
+
+-- 0043B858 joins the road system for a sufficiently distant destination
+-- when the search returns multiple nodes; mode 9 handles the final approach.
+function TrafficRoad.beginRaceRoute(ped,x,y,z,speed,raceExit)
+    local first,car=missionDriverEdge(ped)
+    if not first then return false end
+    local matrix=getElementMatrix(car)
+    local sx,sy,sz=unpack(matrix[4])
+    local distance=length2D(x-sx,y-sy)
+    if distance<20 then return false end
+    local destination=TrafficRoad.nearestPursuitRoad(x,y,z,nil,nil,30)
+    if not destination or destination==first then return false end
+    local function nearCarriageway(edge,px,py)
+        local ex,ey=roadProjection(edge,px,py)
+        -- The graph also serves gates on airport aprons and the dirt track.
+        -- Do not pull a racer onto a parallel road from beyond its shoulders.
+        return length2D(px-ex,py-ey)<=5+edge.lanes*4
+    end
+    if not nearCarriageway(first,sx,sy) or not nearCarriageway(destination,x,y) then return false end
+    local function routeFrom(edge)
+        local path=TrafficRoad.findPolicePath(graph,edge,0,destination,true,#graph.links*3)
+        if not path or #path<2 then return nil,math.huge end
+        local route=waypointsForRoadPath(path,matrix,x,y)
+        local length,px,py=0,sx,sy
+        for _,item in ipairs(route) do
+            local point=item.point
+            length=length+length2D(point[1]-px,point[2]-py)
+            px,py=point[1],point[2]
+        end
+        return route,length+length2D(x-px,y-py)
+    end
+    local route,length=routeFrom(first)
+    -- After rounding a gate or recovering from contact, the chassis can
+    -- still face the previous leg. Try the departure road in the new leg's
+    -- direction before sending the driver around an entire one-way block.
+    if length>distance*1.5+20 then
+        local outgoing=TrafficRoad.nearestPursuitRoad(sx,sy,sz,(x-sx)/distance,(y-sy)/distance)
+        if outgoing and outgoing~=first then
+            if outgoing==destination then return false end
+            local other,otherLength=routeFrom(outgoing)
+            if otherLength+10<length then route,length=other,otherLength end
+        end
+    end
+    -- At a junction the nearest lane can carry traffic away from the
+    -- authored exit, even while the racer is pointed towards it. Test
+    -- the legal reciprocal link before accepting a trip around the block.
+    if length>2*distance+20 then
+        local node=graph.nodes[first.to+1]
+        for i=1,node.linkCount do
+            local reverse=graph.links[node.firstLink+i]
+            if reverse.to==first.from and reverse.lanes>0 then
+                local other,otherLength=routeFrom(reverse)
+                if otherLength+10<length then route,length=other,otherLength end
+                break
+            end
+        end
+    end
+    -- Port Sports runs against the direction of the docks' one-way links.
+    -- Use the authored line when its entire length lies on that carriageway.
+    -- A crossing street, an intervening canal or an overpass breaks the test.
+    if length>2*distance+20 then
+        local samples=math.ceil(distance/12)
+        local onCarriageway=true
+        for i=0,samples do
+            local t=i/samples
+            local px,py,pz=sx+(x-sx)*t,sy+(y-sy)*t,sz+(z-sz)*t
+            local edge=TrafficRoad.nearestPursuitRoad(px,py,pz,nil,nil,24)
+            if not edge or not nearCarriageway(edge,px,py) then onCarriageway=false break end
+            local dx,dy=edgeDirection(edge)
+            if i>0 and i<samples and math.abs((x-sx)*dx+(y-sy)*dy)<distance*0.85 then
+                onCarriageway=false break
+            end
+        end
+        if onCarriageway then return false end
+    end
+    return route and assignMissionWaypoints(ped,route,speed,true,raceExit) or false
 end
 
 function driveMissionTrafficTo(ped,x,y,z,speed)
@@ -2742,7 +2876,9 @@ local function densityCentre(player, x, y)
     return x + observer.vx * lead, y + observer.vy * lead
 end
 
-local function areaCap(x, y, z, densityFactor)
+local function areaCap(player, x, y, z, densityFactor)
+    local mission=TrafficRoad.missionDensities and TrafficRoad.missionDensities[player]
+    if mission then densityFactor=densityFactor*mission.factor end
     if densityMode == "scheduled" then
         return math.min(MAX_PER_TRAFFIC_AREA,
             TrafficRoadPopulation.cap(graph.roadPopulation, x, y, z, getTime(), gameDay, densityFactor))
@@ -2771,7 +2907,7 @@ local function consumeReady(densityFactor)
             if not admission then
                 local x, y, z, vx, vy = batchPosition(player, batch)
                 admission = {x = x, y = y, z = z, vx = vx, vy = vy,
-                    cap = x and areaCap(x, y, z, densityFactor), boatCap = x and boatCap(x, y, z)}
+                    cap = x and areaCap(player, x, y, z, densityFactor), boatCap = x and boatCap(x, y, z)}
                 admissions[batch] = admission
             end
             local x, y, z = admission.x, admission.y, admission.z
@@ -2861,7 +2997,7 @@ local function dispatchProbes(densityFactor, urgent)
             end
             if not shared then
                 seen[#seen + 1] = proposal
-                local cap = math.max(areaCap(x, y, z, densityFactor), boatCap(x, y, z))
+                local cap = math.max(areaCap(player, x, y, z, densityFactor), boatCap(x, y, z))
                 if cap > 0 then
                     local cx, cy = densityCentre(player, x, y)
                     local count = localVehicleCount(cx, cy, z, proposal.dimension)
@@ -3185,7 +3321,7 @@ function getTrafficRoadStatus()
             status.observerDead = isPedDead(player)
             status.observerZ = observer.z
             status.observerSpeed = observer.speed or 0
-            status.observerCap = density and areaCap(observer.x, observer.y, observer.z, density("cars")) or 0
+            status.observerCap = density and areaCap(player, observer.x, observer.y, observer.z, density("cars")) or 0
         end
     end
     for reason, count in pairs(stats) do status[reason] = count end

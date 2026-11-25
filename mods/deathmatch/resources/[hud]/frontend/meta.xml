@@ -1,4 +1,12 @@
 <meta>
+    <file src="res/sampgui.png" />
+    <script src="dialog_skin_c.lua" type="client" />
+    <script src="player_dialog_c.lua" type="client" />
+    <script src="scoreboard_c.lua" type="client" />
+    <export function="setPlayerDialog" type="client" />
+    <export function="isPlayerDialogVisible" type="client" />
+    <export function="setScoreboardContent" type="client" />
+    <export function="getScoreboardBounds" type="client" />
     <include resource="wanted" />
     <include resource="dgs"/>
     <include resource="font"/>
@@ -32,6 +40,9 @@
     
 
     <file src="res/vice_city_map.png" />
+    <file src="res/race/*.png" />
+    <file src="res/race/*.dff" />
+    <file src="res/race/route.txd" />
     <script src="freeroam_c.lua" type="client" />
     <export function="createViceCityMapImage" type="client" />
     <export function="viceCityMapToWorld" type="client" />
@@ -42,6 +53,7 @@
     <script src="menu_c.lua" type="client" cache="false"/>
     <script src="stats_c.lua" type="client" cache="false"/>
     <script src="race_c.lua" type="client" cache="false"/>
+    <export function="showRaceCoursePreview" type="client" />
     <script src="dialog_c.lua" type="client" cache="false"/>
     <script src="colorpicker_c.lua" type="client" cache="false"/>
     <script src="wager_c.lua" type="client" cache="false"/>
@@ -72,6 +84,7 @@
     <export function="showVcsPager" type="client" />
     <export function="hideVcsPager" type="client" />
     <export function="showVcsCountdown" type="client" />
+    <export function="showGolfMeter" type="client" />
     <export function="showVehicleMissionHud" type="client" />
     <export function="hideVehicleMissionHud" type="client" />
     <export function="hideVcsCountdown" type="client" />

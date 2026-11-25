@@ -18,7 +18,8 @@ local function fire(r,x,y,z,entity,kind)
     local marker = Mission.marker(r,x,y,z,entity and "arrow" or "arrow2",0.65,kind=="roof" and pink or blue,true)
     if not marker then return false end
     if entity then attachElements(marker,entity,0,0,1.5) end
-    setElementData(marker,"mission:fireTarget",{r.token,entity or false},"broadcast","deny")
+    local fireId = kind ~= "occupant" and exports.fire:StartScriptFire(marker,entity,r.player,0.8)
+    setElementData(marker,"mission:fireTarget",{r.token,entity or false,fireId or false},"broadcast","deny")
     local f = {x=x,y=y,z=z,entity=entity,marker=marker,kind=kind,crew={}}
     r.fires[#r.fires+1]=f
     return f
@@ -199,6 +200,8 @@ local function groundTick(r,now)
                     if not exports.npchlc_traffic:assignTrafficPedObjective(e,"ignite") then
                         exports.npchlc_traffic:assignTrafficPedObjective(e,"flee",r.player)
                     end
+                    local fireId=exports.fire:StartScriptFire(f.marker,e,r.player,0.8)
+                    setElementData(f.marker,"mission:fireTarget",{r.token,e,fireId or false},"broadcast","deny")
                     f.burnBy=now+math.random(14000,22000)
                 end
                 if f.burnBy and now>=f.burnBy then

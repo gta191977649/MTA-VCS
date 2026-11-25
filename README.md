@@ -76,7 +76,7 @@ Run the importer before starting the server. Point it at the unpacked US PS2 rel
 py tools/import_vcs_frontend.py 'D:\ps2_game\Grand Theft Auto - Vice City Stories (USA)'
 ```
 
-It extracts the HUD and font atlases from `PS2/GAME.DTZ`, the weapon icons and radar map from `GTA3PS2.IMG`, the text from `AMERICAN.GXT`, and the HUD samples from the `AUDIO/SET0` sound bank. The generated `frontend/ps2` directory is local to each deployment. Its manifest records the sources, offsets and SHA-256 hashes.
+It extracts the HUD and font atlases from `PS2/GAME.DTZ`, the golf Power and Aim meters from `EMPHUD.XTX`, the weapon icons and radar map from `GTA3PS2.IMG`, the text from `AMERICAN.GXT`, and the HUD samples from the `AUDIO/SET0` sound bank. The generated `frontend/ps2` directory is local to each deployment. Its manifest records the sources, offsets and SHA-256 hashes.
 
 With Pillow and Lupa installed, run `py tools/check_vcs_hud_aspect.py --output hud-aspect.png` to render the imported HUD across six resolutions and verify the radar diameter and placement.
 Run `py tools/check_vcs_font_layout.py --output hud-font-layout.png` to verify the original font atlases and gameplay text scaling.

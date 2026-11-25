@@ -1,0 +1,10 @@
+<meta>
+    <info name="VCS fire manager" author="MTA-VCS" type="script" />
+    <include resource="skygfx" />
+    <include resource="custom_coronas" />
+    <script src="FireManager.lua" type="server" />
+    <script src="Fire.lua" type="client" cache="false" />
+    <export function="StartScriptFire" type="server" />
+    <export function="SetObjectHealth" type="server" />
+    <export function="ExtinguishPointWithWater" type="server" />
+</meta>

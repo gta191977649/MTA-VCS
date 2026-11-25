@@ -1,0 +1,14 @@
+<meta>
+    <info name="Weather" type="script" description="Vice City Stories world weather sequence"/>
+    <include resource="skygfx"/>
+    <script src="sequence.lua" type="server"/>
+    <script src="server.lua" type="server"/>
+    <script src="client.lua" type="client"/>
+    <export function="ForceWeather" type="server"/>
+    <export function="ForceWeatherNow" type="server"/>
+    <export function="ReleaseWeather" type="server"/>
+    <export function="StoreWeather" type="server"/>
+    <export function="RestoreWeather" type="server"/>
+    <export function="SetHurricaneEnabled" type="server"/>
+    <export function="GetWeatherState" type="server"/>
+</meta>

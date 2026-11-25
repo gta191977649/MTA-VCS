@@ -1,0 +1,28 @@
+<meta>
+    <info name="Little Haiti Car Crusher" type="script" description="Harwood magnet crane and crusher"/>
+    <include resource="frontend"/>
+    <include resource="server_coldata"/>
+    <script src="layout.lua" type="shared" cache="false"/>
+    <script src="motion.lua" type="shared" cache="false"/>
+    <script src="server.lua" type="server"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <export function="setCrusherMissionVehicle" type="server"/>
+    <file src="audio/crushing.wav"/>
+    <file src="audio/lid_stop.wav"/>
+    <file src="audio/magnet.wav"/>
+    <file src="audio/pickup.wav"/>
+    <file src="audio/press.wav"/>
+    <file src="models/back_box.col"/>
+    <file src="models/back_box.dff"/>
+    <file src="models/crushercrush.col"/>
+    <file src="models/crushercrush.dff"/>
+    <file src="models/crushertop.col"/>
+    <file src="models/crushertop.dff"/>
+    <file src="models/doc_crane_cab.col"/>
+    <file src="models/doc_crane_cab.dff"/>
+    <file src="models/doc_crane_leggs.col"/>
+    <file src="models/doc_crane_leggs.dff"/>
+    <file src="models/harwood.txd"/>
+    <file src="models/magnet.col"/>
+    <file src="models/magnet.dff"/>
+</meta>

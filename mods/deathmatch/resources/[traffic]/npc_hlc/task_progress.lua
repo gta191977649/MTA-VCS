@@ -29,7 +29,7 @@ end
 function getNPCControlElement(npc, task)
     local vehicle = getPedOccupiedVehicle(npc)
     local name = task[1]
-    if name == "driveToPos" or name == "driveTrafficToPoint" or name == "driveTrafficRail" or name == "driveTrafficPhysics"
+    if name == "driveRaceToPoint" or name == "driveToPos" or name == "driveTrafficToPoint" or name == "driveTrafficRail" or name == "driveTrafficPhysics"
         or name == "driveAlongLine" or name == "driveAroundBend" or name == "driveAtPed" or name == "drivePoliceBlock" or name == "stopVehicle" then
         return vehicle and getVehicleOccupant(vehicle, 0) == npc and vehicle or false
     end
@@ -100,6 +100,10 @@ function completion.driveToPos(_, actor, task)
     return actor and closeToPoint(actor, task, true)
 end
 
+function completion.stopVehicle(_,_,task,authoritative)
+    return authoritative and task.started and (getTickCount()-task.started)%4294967296>=task[2]
+end
+
 function completion.driveAtPed(_, _, task)
     return not isElement(task[2]) or isPedDead(task[2])
 end
@@ -125,6 +129,11 @@ end
 
 function completion.driveTrafficPhysics(_, actor, task, authoritative)
     if not actor or not authoritative then return false end
+    if task.race and not getElementSyncer(actor) then
+        local x,y,z=getElementPosition(actor)
+        local point=task[5][1]
+        if (x-point[3])^2+(y-point[4])^2<5^2 and math.abs(z-point[5])<7 then return true end
+    end
     return getNPCTrafficPhysicsIndex(task, 1, getNPCTrafficPhysicsMotion(actor)) > 1
 end
 

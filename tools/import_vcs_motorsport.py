@@ -16,7 +16,9 @@ def generate(source):
         return text.split("0@ == $" + key + " //", 1)[1].split("goto @RACEHUB_", 1)[0]
     def row(values):
         return "{" + ", ".join(values) + "}"
-    for key, kind, laps, fee, prize, number, name in entries:
+    models = re.findall(r"02E2: 0@ = (\d+) // \(any\)\n037B:[^\n]+@RACEHUB_14497", menu)
+    assert len(models) == len(entries)
+    for model, (key, kind, laps, fee, prize, number, name) in zip(models,entries):
         path, start = branch(route,number), branch(grid,number)
         spots = re.findall(r"@RACEHUB_8740 ([\d. -]+) 1@ 14 2@",start)
         player = re.search(r"@RACEHUB_8920 ([\d. -]+) 3@",start)[1].split()
@@ -29,8 +31,15 @@ def generate(source):
                 limits.append(f"[{tag}]=" + row(match.groups()))
         leader = re.search(r"@RACEHUB_3910 1 ([\d.]+) ([\d.]+)",start)
         limits.append("leader=" + row(leader.groups()))
+        for label, fn in (("pack",3978),("catchup",3995)):
+            values = re.search(rf"@RACEHUB_{fn} 1 ([\d.-]+) ([\d.-]+)",start)
+            limits.append(label+"="+row(values.groups()))
+        cruise = re.search(r"@RACEHUB_3891 ([\d.]+) ([\d.]+)",start)
+        limits.append("cruise="+row(cruise.groups() if cruise else ("15","60")))
+        limits.append("addOffsets="+("false" if "@RACEHUB_3903 0 " in start else "true"))
+        density = re.search(r"@RACEHUB_8628 \$5797\(0@,12\) ([\d.]+)",path)[1]
         limits = "{" + ", ".join(limits) + "}"
-        result.extend([f'    {{key="{key}", name="{name}", kind={kind}, laps={laps}, fee={fee}, prize={prize}, speed={speed},',
+        result.extend([f'    {{key="{key}", name="{name}", kind={kind}, laps={laps}, fee={fee}, prize={prize}, speed={speed}, density={density}, previewModel={model},',
                        f'        limits={limits}, grid={row(player)}, rivals={{'])
         assert len(spots) == 3
         result += ["            " + row(s.split()[:5]) + "," for s in spots]

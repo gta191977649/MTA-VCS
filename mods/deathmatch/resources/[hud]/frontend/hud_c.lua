@@ -67,6 +67,7 @@ end
 
 function isGameplayUiVisible()
     return Hud.baseUiVisible() and not (Hud.cinematicActive and Hud.cinematicActive())
+        and not (Hud.racePreviewActive and Hud.racePreviewActive())
 end
 
 function Hud.baseUiVisible()
@@ -294,7 +295,11 @@ addEventHandler("onClientRender", root, function()
         fontScaleY = sy / scale, textAspect = sx / sy}
     local now = getTickCount()
     local cinematic=Hud.cinematicActive and Hud.cinematicActive()
+    local preview=Hud.racePreviewActive and Hud.racePreviewActive()
     for _, render in ipairs(renderers) do
-        if not cinematic or render.channel=="help" then render.draw(screen, now) end
+        if render.channel=="help" or (not cinematic and
+            (not preview or render.channel=="racePreview" or render.channel=="caption")) then
+            render.draw(screen, now)
+        end
     end
 end)

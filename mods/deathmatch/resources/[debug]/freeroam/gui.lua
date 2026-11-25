@@ -120,7 +120,7 @@ function _planWindow(wnd, baseWnd, parentWnd, x, y, maxHeightInLine)
 
 	if wnd.tabs then
 		local maxTabHeight = 0
-		for id, tab in pairs(wnd.tabs) do
+		for _, tab in ipairs(wnd.tabs) do
 			tab[1] = 'tab'
 			tab.width = wnd.width
 			_planWindow(tab, baseWnd, wnd)
@@ -226,7 +226,7 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 	end
 
 	if wnd.tabs then
-		for id, tab in pairs(wnd.tabs) do
+		for _, tab in ipairs(wnd.tabs) do
 			_buildWindow(tab, baseWnd, wnd)
 		end
 	end
@@ -523,6 +523,21 @@ function getSelectedGridListItem(...)
 		return false
 	end
 	return guiGridListGetItemText(list, selID, column), selID
+end
+
+function getGridListGroupRows(control, ...)
+	local rows = g_gridListContents[control].data
+	for _, name in ipairs({...}) do
+		local children = {}
+		for _, group in ipairs(rows) do
+			if group.name == name and group.children then
+				children = group.children
+				break
+			end
+		end
+		rows = children
+	end
+	return rows
 end
 
 function getSelectedGridListLeaf(...)

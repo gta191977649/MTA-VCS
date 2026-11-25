@@ -2,7 +2,7 @@ VCSBoatWake = {}
 
 local states = {}
 local waterTexture, waterMaterial, sheetMaterial
-local particleMaterials, particleResources = {}, {}
+local particleResources = {}
 local surfaceShader, wakeMap, mapX, mapY, mapZ, mapTick
 local mapSpan, mapSize = 192, 512
 local selected = {}
@@ -16,7 +16,7 @@ local function isVcsBoat(vehicle)
         or getElementData(vehicle, "npchlc_traffic:originalModel", false)
     local custom = getElementData(vehicle, "mod.model", false)
     -- The DLC model name also identifies jetskis streamed by older servers.
-    return original == 233 or custom == "JETSKI" or getVehicleType(vehicle) == "Boat" and (original or custom)
+    return VCSBoatParticles.hasHull(original) or custom == "JETSKI" or getVehicleType(vehicle) == "Boat" and (original or custom)
 end
 
 local function scan(cx, cy, lookX, lookY, now)
@@ -94,7 +94,12 @@ local function recordWake(boat, state, now)
     local vx,vy=getElementVelocity(boat)
     local speed=math.sqrt(vx*vx+vy*vy)
     local water = getWaterLevel(x,y,position[3],true)
-    if type(water)~="number" or not isElementInWater(boat) then state.head=nil return end
+    -- A floating custom hull can straddle the surface while the host reports
+    -- the vehicle origin as dry. Use the original buoyancy box's keel.
+    if type(water)~="number" or matrix[3][3]<=0 or position[3]+hull.bottom*matrix[3][3]>water then
+        state.head=nil
+        return
+    end
     -- Keep the previous track fading when the engine is stopped. Eligibility in
     -- 001A1454 is based on throttle or coasting speed while supported by water.
     local driver=getVehicleOccupant(boat,0)
@@ -182,7 +187,6 @@ function VCSBoatWake.prepare(values)
         activeDimension=dimension
         mapTick=nil
         states,selected,lastScan={},{},nil
-        VCSBoatParticles.clear()
     end
     local now = getTickCount()
     advanceWake(now)
@@ -236,14 +240,12 @@ function VCSBoatWake.prepare(values)
             end
         end
     end
-    stats.spray=VCSBoatParticles.draw(now,particleMaterials)
+    stats.spray=CParticle.GetStats().spray
 end
 
-local function foamMaterial(texture, gain, additive)
+local function foamMaterial(texture, gain)
     if not texture then return end
     local macros={VCS_BOAT_FOAM="1"}
-    if additive then macros.VCS_SPLASH_ADDITIVE="1" end
-    if additive==0x2c then macros.VCS_SPLASH_ONE="1" end
     local material = dxCreateShader("shader/vcsWater.fx", macros)
     if material then
         dxSetShaderValue(material, "SurfaceTexture", texture)
@@ -252,15 +254,12 @@ local function foamMaterial(texture, gain, additive)
     return material
 end
 
-local function loadParticleMaterial(name,additive)
+local function loadSheetMaterial(name)
     local raster=dxCreateTexture("txd/vcs-"..name..".png","argb",true,"clamp")
     if not raster then return end
     particleResources[#particleResources+1]=raster
-    local material=foamMaterial(raster,1,additive)
+    local material=foamMaterial(raster,1)
     if material then particleResources[#particleResources+1]=material end
-    -- The RGB-only CAR_SPLASH frames have opaque black backgrounds. They
-    -- require additive blending even when the water surface shader failed.
-    if additive then return material end
     return material or raster
 end
 
@@ -275,12 +274,7 @@ function VCSBoatWake.start(texture,surface)
     end
     waterTexture = texture
     waterMaterial=foamMaterial(texture,1)
-    sheetMaterial=loadParticleMaterial("boatwake")
-    particleMaterials[0x2d]=loadParticleMaterial("boatwake2",0x2d)
-    particleMaterials[0x2c]={}
-    for frame=0,3 do
-        particleMaterials[0x2c][frame]=loadParticleMaterial(string.format("carsplash_%02d",frame+1),0x2c)
-    end
+    sheetMaterial=loadSheetMaterial("boatwake")
 end
 
 function VCSBoatWake.stop()
@@ -289,8 +283,7 @@ function VCSBoatWake.stop()
     wakeMap,surfaceShader,mapTick=nil,nil,nil
     if waterMaterial then destroyElement(waterMaterial) end
     for i=#particleResources,1,-1 do destroyElement(particleResources[i]) end
-    VCSBoatParticles.clear()
-    particleMaterials,particleResources={},{}
+    particleResources={}
     waterTexture,waterMaterial,sheetMaterial,lastScan,activeDimension=nil,nil,nil,nil,nil
     wakeClock, wakeU, wakeV, lastWakeTick = 0, 1, 0, nil
     states, selected = {}, {}

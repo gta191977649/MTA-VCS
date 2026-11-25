@@ -15,6 +15,7 @@ local signatures = {
     stopVehicle = "",
     driveAtPed = "p",
     drivePoliceBlock = "p",
+    driveRaceToPoint = "nnn",
     driveToPos = "nnnd",
     driveTrafficToPoint = "nnnd",
     driveTrafficRail = "nnnnnnnnnnnnddd",
@@ -38,6 +39,12 @@ function normalizeNPCTask(task)
             return false
         end
         signature = signature .. string.rep("dnnn", (#task - 16 - speedClasses) / 4)
+    elseif task[1]=="driveRaceToPoint" and (#task==6 or #task==7) then
+        if #task==7 and (type(task[7])~="number" or not (task[7]>0 and task[7]<=32)) then return false end
+        signature=#task==7 and "nnnnnd" or "nnnnn"
+    elseif task[1]=="stopVehicle" and task[2]~=nil then
+        if #task~=2 or type(task[2])~="number" or not (task[2]>0 and task[2]<4294967296) then return false end
+        signature="d"
     elseif task[1]=="approachDriverDoor" and #task>2 then
         if #task~=4 and #task~=5 then return false end
         signature=#task==5 and "pnnd" or "pnn"
@@ -55,6 +62,10 @@ function normalizeNPCTask(task)
     end
 
     local normalized = {task[1]}
+    if task[1]=="stopVehicle" and task[2] then
+        normalized.started=getTickCount()
+        if task.tempAction==5 then normalized.tempAction=5 end
+    end
     if task[1]=="walkTrafficToPoint" and task.flee==true then normalized.flee=true end
     if task[1] == "driveTrafficRail" then normalized.style = task.style end
     for index = 1, #signature do

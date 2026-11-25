@@ -1,6 +1,19 @@
 -- SCM location tests run every frame. Sweep consecutive server samples so a fast
 -- aircraft or bike can pass a narrow gate between two mission ticks.
 CourseGates = {}
+
+-- SLUS 0035B148 clears the bright flag. 00116928 selects the dim palette
+-- (5 for an ordinary coordinate, 0 for Turismo's upcoming finish).
+function CourseGates.nextBlip(run,point,zOffset,finish)
+    local r,g,b=110,16,60
+    if finish then r,g,b=127,0,0 end
+    local blip=Mission.track(run,createBlip(point[1],point[2],point[3]+zOffset,0,2,r,g,b,255,0,65535,run.player))
+    if blip then
+        setElementInterior(blip,run.interior)
+        setElementDimension(blip,run.dimension)
+    end
+    return blip
+end
 function CourseGates.crossed(run, now, point, width, height, zOffset)
     local last = run.gateSample
     if not last or last.now ~= now or last.vehicle ~= run.vehicle then

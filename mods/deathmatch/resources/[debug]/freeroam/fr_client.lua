@@ -1446,15 +1446,14 @@ local vcsList = {
     columns={{text='Vehicle', attr='name'}}, rows={}
 }
 
-local function running(name)
-    local resource = getResourceFromName(name)
-    return resource and getResourceState(resource) == 'running'
-end
-
 local function refreshVehicleList()
-    local catalog = running('vcs_model') and exports.vcs_model:getVcsVehicleCatalog() or {}
-    local legacy = running('model') and exports.model:getDlcVehicleCatalog() or {}
-    local rows = exports.frontend:getVehicleSpawnMenuGroups(catalog, legacy)
+    local catalog = exports.vcs_model:getVcsVehicleCatalog() or {}
+    local legacy = exports.model:getDlcVehicleCatalog() or {}
+    local rcVehicles = {}
+    for _, vehicle in ipairs(getGridListGroupRows(nativeList, 'Misc', 'RC Vehicles')) do
+        rcVehicles[vehicle.id] = vehicle.name
+    end
+    local rows = exports.frontend:getVehicleSpawnMenuGroups(catalog, legacy, rcVehicles)
     bindGridListToTable(vcsList, rows, false)
 end
 
@@ -1476,8 +1475,8 @@ wndCreateVehicle = {
     'wnd', text='Create vehicle', width=300,
     controls={
         {'tbp', id='vehicleTabs', width=280, tabs={
-            {id='sa', text='San Andreas', controls={nativeList}},
-            {id='vcs', text='VCS Vehicles', controls={vcsList}}
+            {id='vcs', text='VCS Vehicles', controls={vcsList}},
+            {id='sa', text='San Andreas', controls={nativeList}}
         }},
         {'btn', id='create', onclick=createSelectedVehicle, ClickSpamProtected=true},
         {'btn', id='close', closeswindow=true}

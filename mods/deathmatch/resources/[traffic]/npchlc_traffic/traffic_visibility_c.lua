@@ -85,10 +85,16 @@ end)
 
 local function updateAlpha(element, state, now, cx, cy, cz, px, py, pz, occupied, pedestrianScaleSquared)
     local alpha
+    local seatVehicle=state.profile=="pedestrian" and getPedOccupiedVehicle(element)
     if element == occupied then
         alpha = state.base
     elseif state.retiredAt then
         alpha = state.retiredAlpha * (1 - ease((now - state.retiredAt) % 4294967296 / visibility.fadeOutMs))
+    elseif seatVehicle then
+        -- A seated pedestrian belongs to the vehicle the camera is drawing.
+        -- The on-foot population distance can be much shorter in a remote view.
+        alpha=state.base*getElementAlpha(seatVehicle)/255
+        state.sample=nil
     else
         if not state.sample or (now - state.sample) % 4294967296 >= SAMPLE_MS then
             state.sample = now

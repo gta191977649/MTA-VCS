@@ -110,6 +110,8 @@ VCS_TRAFFIC_PEDESTRIAN_GROUPS = {
     [100] = 40,
     [101] = 39,
     [102] = 40,
+    [103] = 39,
+    [104] = 40,
     [105] = 0,
     [106] = 0,
     [107] = 39,
@@ -119,6 +121,7 @@ VCS_TRAFFIC_PEDESTRIAN_GROUPS = {
     [119] = 0,
     [127] = 0,
     [130] = 0,
+    [138] = 47,
 }
 VCS_TRAFFIC_EVADE_CLIPS = {
     idle_tired = {duration=1133, motion={

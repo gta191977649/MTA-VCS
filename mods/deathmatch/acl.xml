@@ -73,6 +73,10 @@
         <acl name="autoACL_runcode"/>
         <object name="resource.runcode"/>
     </group>
+    <group name="autoGroup_ip2c">
+        <acl name="autoACL_ip2c"/>
+        <object name="resource.ip2c"/>
+    </group>
     <acl name="RunCode">
         <right name="function.loadstring" access="true"/>
     </acl>
@@ -855,5 +859,8 @@
     </acl>
     <acl name="autoACL_runcode">
         <right name="function.loadstring" access="false" who="" pending="true" date=""/>
+    </acl>
+    <acl name="autoACL_ip2c">
+        <right name="function.fetchRemote" access="false" who="" pending="true" date=""/>
     </acl>
 </acl>

@@ -2,6 +2,7 @@
     <info name="Phil Collins Concert" type="script" description="Vice City Stories Stadium concert"/>
     <min_mta_version client="1.6.0-9.22741" server="1.6.0-9.22676"/>
     <include resource="frontend"/>
+    <include resource="skygfx"/>
     <include resource="marker"/>
     <include resource="interior"/>
     <include resource="vcs"/>

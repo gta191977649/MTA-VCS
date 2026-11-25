@@ -242,11 +242,70 @@ function performTask.driveToPos(npc, task)
     makeNPCDriveToPos(npc, task[2], task[3], task[4])
 end
 
-function performTask.stopVehicle(npc)
+function performTask.stopVehicle(npc,task)
+    if task and task[2] then
+        setNPCVehicleInputs(npc,task.tempAction==5 and 1 or 0,0,true)
+        return
+    end
     local vehicle = getPedOccupiedVehicle(npc)
     local motion = getNPCTrafficPhysicsMotion(vehicle)
     if motion and motion.forward > 0.5 then setNPCVehicleInputs(npc, 0, -1, false)
     else setNPCVehicleInputs(npc, 0, 0, true) end
+end
+
+-- VCS 00439580 is shared by chase steering and coordinate autopilot mode 9.
+local function steerToCoordinates(npc, vehicle, frame, x, y, z, exempt, cruise, progress, raceTask)
+    local forward = frame[2]
+    local vx, vy, vz = getElementVelocity(vehicle)
+    local dx, dy = x-frame[4][1], y-frame[4][2]
+    local scale = math.min(1, 100/math.max(1, math.abs(dx), math.abs(dy)))
+    recordNPCDebugTarget(npc, frame[4][1] + dx*scale, frame[4][2] + dy*scale, z)
+    local angle = math.atan2(dx*forward[2] - dy*forward[1], dx*forward[1] + dy*forward[2])
+    local avoid, clearSpeed = getNPCPoliceAvoidance(vehicle, exempt, dx, dy, progress, false, raceTask and cruise*50/60)
+    local steeringAngle = math.atan2(math.sin(angle+avoid), math.cos(angle+avoid))
+    if not progress.steeringLock then
+        local handling = getVehicleHandling(vehicle)
+        progress.steeringLock = math.max(0.01, math.rad(handling.steeringLock))
+    end
+    if not progress.steeringLimit then
+        progress.steeringLimit = getElementData(vehicle, "npchlc_traffic:originalModel", false) == 234 and 0.7 or 0.5
+    end
+    -- 00439580 feeds speed in native velocity * 60 and the current
+    -- cruise command through the angle multiplier from 00438060.
+    local steer = math.max(-progress.steeringLimit, math.min(progress.steeringLimit, steeringAngle)) / progress.steeringLock
+    if raceTask then steer=getNPCRaceSteeringInput(steeringAngle,progress.steeringLimit,progress.steeringLock) end
+    local factor = 1 - 0.6 * math.max(0, math.min(1, (math.abs(angle)-0.4)/0.8))
+    local speed = 60 * math.sqrt(vx^2 + vy^2 + vz^2)
+    local requested = cruise * factor
+    if raceTask then
+        requested=math.min(requested,getNPCRaceSteeringSpeed(cruise,math.sqrt(dx*dx+dy*dy),angle))
+        if clearSpeed then requested = math.min(requested, clearSpeed * (60/50)) end
+        if raceTask[5] and (raceTask[5]~=x or raceTask[6]~=y) then
+            local speedAtTurn=getNPCRaceApproachSpeed(cruise,math.sqrt(dx*dx+dy*dy),math.atan2(dy,dx),
+                math.atan2(raceTask[6]-y,raceTask[5]-x),raceTask[7])
+            requested=math.min(requested,speedAtTurn)
+        end
+    end
+    local error = requested - speed
+    local pedal = error > 0 and (speed >= 25 and 1 or math.min(1, error*0.1)) or math.max(-0.5, error*0.05)
+    if raceTask and progress.raceFollowing and clearSpeed and speed>clearSpeed*1.2 then
+        pedal=math.min(pedal,math.max(-1,(clearSpeed*1.2-speed)*.12))
+    end
+    setNPCVehicleInputs(npc, steer, pedal, false)
+    if speed > 18 and math.abs(steeringAngle) > 0.7 then setPedControlState(npc, "handbrake", true) end
+end
+
+function performTask.driveRaceToPoint(npc, task, _, progress)
+    local vehicle = getPedOccupiedVehicle(npc)
+    local frame = getElementMatrix(vehicle)
+    if isElementFrozen(vehicle) or not frame or frame[3][3] < 0.35 then
+        setNPCVehicleInputs(npc, 0, 0, false)
+        return
+    end
+    local motion = getNPCTrafficPhysicsMotion(vehicle)
+    if motion and recoverNPCRaceApproach(npc, vehicle, motion, progress, getTickCount(),
+        task[2]-motion.x, task[3]-motion.y) then return end
+    steerToCoordinates(npc, vehicle, frame, task[2], task[3], task[4], nil, getNPCDriveSpeed(npc)*50, progress, task)
 end
 
 local function drivePolicePoint(npc, vehicle, target, seed, progress)
@@ -295,26 +354,7 @@ local function drivePolicePoint(npc, vehicle, target, seed, progress)
         end
     end
 
-    local dx, dy = x-frame[4][1], y-frame[4][2]
-    local scale = math.min(1, 100/math.max(1, math.abs(dx), math.abs(dy)))
-    recordNPCDebugTarget(npc, frame[4][1] + dx*scale, frame[4][2] + dy*scale, z)
-    local angle = math.atan2(dx*forward[2] - dy*forward[1], dx*forward[1] + dy*forward[2])
-    local avoid = getNPCPoliceAvoidance(vehicle, ramVehicle, dx, dy, progress)
-    local steeringAngle = math.atan2(math.sin(angle+avoid), math.cos(angle+avoid))
-    if not progress.steeringLock then
-        local handling = getVehicleHandling(vehicle)
-        progress.steeringLock = math.max(0.01, math.rad(handling.steeringLock))
-        progress.steeringLimit = getElementData(vehicle, "npchlc_traffic:originalModel", false) == 234 and 0.7 or 0.5
-    end
-    -- 00439580 feeds speed in native velocity * 60 and the current
-    -- cruise command through the angle multiplier from 00438060.
-    local steer = math.max(-progress.steeringLimit, math.min(progress.steeringLimit, steeringAngle)) / progress.steeringLock
-    local factor = 1 - 0.6 * math.max(0, math.min(1, (math.abs(angle)-0.4)/0.8))
-    local speed = 60 * math.sqrt(vx^2 + vy^2 + vz^2)
-    local error = getNPCDriveSpeed(npc) * 50 * factor - speed
-    local pedal = error > 0 and (speed >= 25 and 1 or math.min(1, error*0.1)) or math.max(-0.5, error*0.05)
-    setNPCVehicleInputs(npc, steer, pedal, false)
-    if speed > 18 and math.abs(steeringAngle) > 0.7 then setPedControlState(npc, "handbrake", true) end
+    steerToCoordinates(npc, vehicle, frame, x, y, z, ramVehicle, getNPCDriveSpeed(npc)*50, progress)
 end
 
 function performTask.drivePoliceBlock(npc, task, _, progress)
@@ -368,29 +408,6 @@ function performTask.driveTrafficToPoint(npc, task, elapsed, useNextLane)
 end
 
 local roadSurface = setmetatable({}, {__mode = "k"})
-local railMotionSamples = setmetatable({}, {__mode = "k"})
-
-local function nearbyMotion(vehicle, now, x, y)
-    if not isElementFrozen(vehicle) then
-        local vx, vy = getElementVelocity(vehicle)
-        return vx * 50, vy * 50
-    end
-    local sample = railMotionSamples[vehicle]
-    if not sample then
-        railMotionSamples[vehicle] = {x = x, y = y, tick = now, vx = 0, vy = 0}
-        return 0, 0
-    end
-    local elapsed = (now - sample.tick) % 4294967296
-    if elapsed >= 50 then
-        local dx, dy = x - sample.x, y - sample.y
-        if elapsed >= 250 or dx * dx + dy * dy > 0.0004 then
-            local scale = math.min(1000 / elapsed, 50 / math.max(0.01, math.sqrt(dx * dx + dy * dy)))
-            sample.vx, sample.vy = elapsed < 400 and dx * scale or 0, elapsed < 400 and dy * scale or 0
-            sample.x, sample.y, sample.tick = x, y, now
-        end
-    end
-    return sample.vx, sample.vy
-end
 
 local function halfExtents(vehicle)
     local minX, minY, _, maxX, maxY = getElementBoundingBox(vehicle)
@@ -402,7 +419,7 @@ function getNPCTrafficFootprint(vehicle, now)
     local box = getNPCTrafficModelFootprint(vehicle, getElementBoundingBox(vehicle))
     if box then
         local x, y = getElementPosition(vehicle)
-        box.vx, box.vy = nearbyMotion(vehicle, now, x, y)
+        box.vx, box.vy = getNPCTrafficVelocity(vehicle, now, x, y)
         box.parked = box.vx^2+box.vy^2 < 0.3^2 and not getVehicleOccupant(vehicle,0)
     end
     return box
@@ -501,7 +518,7 @@ function limitNPCTrafficRailMerge(vehicle, task, segment, t, lengths, speed, x, 
             local ox, oy, oz = getElementPosition(other)
             local matrix = getElementMatrix(other)
             if matrix and math.abs(oz - z) < 4 then
-                local vx, vy = nearbyMotion(other, now, ox, oy)
+                local vx, vy = getNPCTrafficVelocity(other, now, ox, oy)
                 local ow, ol = halfExtents(other)
                 local heading = matrix[2]
                 obstacles[#obstacles + 1] = {x = ox, y = oy, z = oz, vx = vx, vy = vy,

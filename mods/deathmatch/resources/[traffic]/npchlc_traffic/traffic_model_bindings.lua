@@ -1,5 +1,9 @@
 TrafficModelBindings = {}
 
+-- A native 25-damage pistol hit removes 8.25 MTA ped HP. reVC applies
+-- the full weapon damage times the NPC's defend weakness.
+TrafficModelBindings.nativeDamageScale = 0.33
+
 local bindings, nativePeds, steeringLimits
 local providerName, streetModels
 -- The traffic archive contains the FBI and Vice variants. The other
@@ -151,10 +155,9 @@ function TrafficModelBindings.tag(element, originalId, scripted, populationType)
         -- 001ED840 starts a civilian at 100; 001D7940 scales incoming damage.
         -- Express the same damage budget in native MTA health units so synced
         -- hits, including lethal hits, keep their original attacker and order.
-        if not scripted and pedModel[1]>=4 and stat.damageScale and stat.damageScale~=1
+        if not scripted and pedModel[1]>=4 and stat.damageScale and stat.damageScale>0
             and not getElementData(element,"npchlc_traffic:originalModel",false) then
-            local hp=100/stat.damageScale
-            if hp>100 then setPedStat(element,24,math.ceil(hp/0.176)) end
+            local hp=100*TrafficModelBindings.nativeDamageScale/stat.damageScale
             setElementData(element,"npchlc_traffic:spawnHealth",hp,false)
             setElementHealth(element,hp)
         end

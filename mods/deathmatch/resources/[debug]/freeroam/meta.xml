@@ -8,6 +8,7 @@
 	<!-- extended freeroam", to avoid confusion for users.                       -->
 
 	<include resource="frontend" />
+	<include resource="model" />
 	<oop>true</oop>
 	<info name="Freeroam GUI" author="arc_" version="1.5.7" />
 	<min_mta_version client="1.5.6-9.16362"></min_mta_version>
@@ -61,7 +62,7 @@
 		<setting name="*alpha" value="true" />
 		<setting name="*anim" value="true" />
 		<setting name="*clothes" value="true" />
-		<setting name="*createvehicle" value="true" />
+		<setting name="*createvehicle" value="false" />
 		<setting name="*gamespeed/enabled" value="true" />
 		<setting name="*gamespeed/min" value="[0.2]" />
 		<setting name="*gamespeed/max" value="[3.0]" />
@@ -86,7 +87,7 @@
 		<setting name="*vehicles/maxidletime" value="[300000]" />  <!-- Time in ms before a vehicle without passengers gets destroyed. Any value below 0 will disable this -->
 		<setting name="*vehicles/idleexplode" value="false" />     <!-- If set to false, vehicles simply disappear when they time out instead of exploding -->
 		<setting name="*vehicles/maxperplayer" value="[2]" />     <!-- Maximum number of vehicles a player can have at the same time -->
-		<setting name="*vehicles/disallowed" value="[[432]]" />   <!-- Comma-separated list of vehicles that players may not create -->
+		<setting name="*vehicles/disallowed" value="[[]]" />      <!-- Comma-separated list of vehicles that players may not create -->
 
 		<!--
 			Comma-separated list of vehicles that players may not teleport with.

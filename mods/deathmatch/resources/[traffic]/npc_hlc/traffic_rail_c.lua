@@ -249,6 +249,107 @@ function groundNPCTrafficRail(vehicle, x, y, pathZ, dx, dy, clearance, pathGrade
         + (px * sample.dy - py * sample.dx) * sample.cross, math.deg(sample.pitch), math.deg(sample.roll)
 end
 
+-- One wheel fit when native physics acquires a server-driven road vehicle.
+-- Subsequent frames leave suspension, jumps, pitch and roll to the client.
+local function fitHandoff(vehicle, pending, roadPose)
+    if not (getElementData(vehicle,"vcs_vehicle:originalModel",false)
+        or getElementData(vehicle,"npchlc_traffic:originalModel",false)) then return true end
+    local kind=getVehicleType(vehicle)
+    if kind~="Automobile" and kind~="Bike" and kind~="Quad" and kind~="Monster Truck" then return true end
+    local x,y,z=getElementPosition(vehicle)
+    local now=getTickCount()
+    local vx,vy,vz=getElementVelocity(vehicle)
+    local frame=getElementMatrix(vehicle)
+    if not frame or frame[3][3]<0.75 then return true end
+    if vz>0.12 and not (pending and pending.onDeck) then return true end
+    if not pending then pending={x=x,y=y,z=z,at=now} end
+    if (now-pending.at)%4294967296>2000 or (x-pending.x)^2+(y-pending.y)^2>100 then return true end
+    if pending.sampleAt and (now-pending.sampleAt)%4294967296<25 then return pending end
+    pending.sampleAt=now
+    local _,_,bottom=getElementBoundingBox(vehicle)
+    if not finite(bottom) or bottom>=0 then return pending end
+    local dx,dy=frame[2][1],frame[2][2]
+    local length=math.sqrt(dx*dx+dy*dy)
+    if length<0.5 then return true end
+    local expected=pending.z+bottom
+    local predicted
+    if roadPose then
+        local ox,oy=x-roadPose[1],y-roadPose[2]
+        if ox*ox+oy*oy<=100 then
+            local yaw=math.rad(roadPose[7])
+            local along=-ox*math.sin(yaw)+oy*math.cos(yaw)
+            local across=ox*math.cos(yaw)+oy*math.sin(yaw)
+            predicted=roadPose[3]+along*math.tan(math.rad(roadPose[4]))-across*math.tan(math.rad(roadPose[5]))
+            expected=predicted-roadPose[6]
+        end
+    end
+    local lower=surfaceAt(vehicle,x,y,expected,0.04,2)
+    local upper=surfaceAt(vehicle,x,y,expected,2,0,true)
+    if not upper then upper=surfaceAt(vehicle,x,y,expected,2,0) end
+    local road=lower
+    if upper and (not road or math.abs(upper-expected)<math.abs(road-expected)) then road=upper end
+    if not road or (predicted and math.abs(road-expected)>1) then
+        -- Map collision can arrive later than the car. Support it on the
+        -- verified server deck during this short acquisition window.
+        if predicted and vz<=0 and z<predicted-0.04 then
+            setElementPosition(vehicle,x,y,predicted,false)
+            setElementVelocity(vehicle,vx,vy,0)
+        end
+        return pending
+    end
+    -- The visible wheel dummies acquire their suspension positions over the
+    -- first physics frames, including on long trucks and vans.
+    sampledRoad[vehicle]=nil
+    local support,pitch,roll=groundNPCTrafficRail(vehicle,x,y,road-bottom,dx/length,dy/length,-bottom)
+    if not support then return pending end
+    -- A vehicle already airborne above the deck keeps its flight path.
+    if not pending.onDeck and support<z-0.3 and (vx*vx+vy*vy>0.02 or math.abs(vz)>0.06)
+        and not isVehicleOnGround(vehicle) then return true end
+    pending.onDeck=true
+    local rx,ry,yaw=getElementRotation(vehicle,"ZXY")
+    local pitchError=(rx-pitch+180)%360-180
+    local rollError=(ry-roll+180)%360-180
+    if math.abs(support-z)>0.035 or math.abs(pitchError)>2 or math.abs(rollError)>2 then
+        setElementPosition(vehicle,x,y,support,false)
+        setElementRotation(vehicle,pitch,roll,yaw,"ZXY")
+    end
+    -- Remove the suspension impulse left by the old chassis placement while
+    -- preserving speed along both the grade and the bank.
+    local deckVZ=((vx*dx+vy*dy)*math.tan(math.rad(pitch))
+        -(vx*dy-vy*dx)*math.tan(math.rad(roll)))/length
+    if math.abs(vz-deckVZ)>0.003 then setElementVelocity(vehicle,vx,vy,deckVZ) end
+    if (now-pending.at)%4294967296<350 then return pending end
+    return true
+end
+
+local earlyContacts={}
+
+function settleNPCRoadHandoff(vehicle,pending,roadPose)
+    pending=pending or earlyContacts[vehicle]
+    earlyContacts[vehicle]=nil
+    return fitHandoff(vehicle,pending,roadPose)
+end
+
+local function beginRoadContact()
+    if getElementType(source)~="vehicle" or not isElementStreamedIn(source) or not isElementSyncer(source)
+        or not (getElementData(source,"npchlc_traffic:rail",false)
+            or getElementData(source,"mission:turismoRival",false)) then return end
+    local pending=fitHandoff(source,nil)
+    earlyContacts[source]=pending~=true and pending or nil
+end
+
+addEventHandler("onClientElementStreamIn",root,beginRoadContact)
+addEventHandler("npc_hlc:onVehicleGroundGeometry",root,beginRoadContact)
+addEventHandler("onClientElementDataChange",root,function(key)
+    if key=="npchlc_traffic:rail" or key=="mission:turismoRival" then beginRoadContact() end
+end)
+addEventHandler("onClientPreRender",root,function()
+    for vehicle,pending in pairs(earlyContacts) do
+        if not isElement(vehicle) or not isElementStreamedIn(vehicle) or not isElementSyncer(vehicle)
+            or fitHandoff(vehicle,pending)==true then earlyContacts[vehicle]=nil end
+    end
+end,true,"high")
+
 local function closestGroundSample()
     local x, y, z = getElementPosition(localPlayer)
     local closest, distance = nil, 25 ^ 2

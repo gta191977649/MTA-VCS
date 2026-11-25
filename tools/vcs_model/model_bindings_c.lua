@@ -8,6 +8,10 @@ local lampShaders = {}
 local lampBindings = {}
 local replacedVehicleModels = {}
 local vehicleRenderMaterials = {}
+function HasModelLoaded(originalId)
+    local model = models[originalId]
+    return model and model.id ~= nil or false
+end
 local legacyCatalogVehicles = {[191]=true, [193]=true, [204]=true, [207]=true, [234]=true, [246]=true, [268]=true}
 local lampTextures = {
     vehiclelights128 = "vehiclelights128.png",

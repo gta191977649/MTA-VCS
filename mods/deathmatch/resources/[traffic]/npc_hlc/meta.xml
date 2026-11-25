@@ -2,7 +2,13 @@
 	<include resource="vcs_vehicle"/>
 	<min_mta_version server="1.6.0-9.22815" />
 	<info author="CrystalMV" version="0.1" name="NPC high-level control" description="Higher level control over peds" type="script" />
-	<script src="npc_functions_s.lua"	type="server"	/>
+	<file src="vcs_road_surfaces.dat" download="false" />
+    <script src="vcs_road_wheels.lua" type="server" />
+    <script src="road_ground_s.lua" type="server" />
+    <export function="getVcsGroundHeight" type="server" http="false" />
+    <export function="getVcsRoadVehiclePose" type="server" http="false" />
+    <export function="getVcsRoadSpawnPose" type="server" http="false" />
+    <script src="npc_functions_s.lua"	type="server"	/>
 	<script src="npc_functions.lua"		type="server"	/>
 	<script src="npc_functions.lua"		type="client"	/>
 	<script src="npc_hlc_s.lua"			type="server"	/>

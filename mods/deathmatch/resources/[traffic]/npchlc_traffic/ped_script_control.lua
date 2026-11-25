@@ -97,8 +97,9 @@ function acquireTrafficPedInArea(x1,y1,x2,y2,z,interior,dimension,civilians,gang
     return best and acquireTrafficPed(best.ped) and best.ped or false
 end
 
-function createTrafficScriptPed(original,x,y,z,interior,dimension)
+function createTrafficScriptPed(original,x,y,z,interior,dimension,populationType)
     local owner = sourceResource
+    if populationType~=nil and not PedAITypes[populationType] then return false,"Invalid ped type" end
     local model = PedAIModels[original] and TrafficAmbient.getPedestrianModel(original)
     if not owner then return false,"Missing owning resource" end
     if not model then return false,"Missing VCS model binding" end
@@ -116,8 +117,8 @@ function createTrafficScriptPed(original,x,y,z,interior,dimension)
         return false,"Invalid mission interior or dimension"
     end
     if not hlc:enableHLCForNPC(ped,"walk") then destroyElement(ped) return false,"HLC enrollment failed" end
-    TrafficModelBindings.tag(ped,original,true)
-    PedAI.attach(ped,original)
+    TrafficModelBindings.tag(ped,original,true,populationType)
+    PedAI.attach(ped,original,populationType)
     if not TrafficAmbient.adoptDriver(ped,nil,nil,original) or not acquire(ped,owner) then
         destroyElement(ped)
         return false,"Mission actor adoption failed"
@@ -128,6 +129,7 @@ end
 local function release(brain)
     local ped = brain.ped
     cancelBoarding(ped)
+    TrafficRace.release(ped)
     owned[ped],seated[ped],brain.scriptOwner = nil,nil,nil
     if not isElement(ped) then return end
     TrafficActors.endMissionPath(ped)
@@ -139,7 +141,7 @@ local function release(brain)
     brain.tasks:clear(true)
     brain.objectives:clear()
     if not isPedDead(ped) then
-        setElementHealth(ped,100)
+        setElementHealth(ped,getElementData(ped,"npchlc_traffic:spawnHealth",false) or 100)
         brain.health,brain.sampled = getElementHealth(ped),getTickCount()
         local previous = brain.beforeScript
         if previous and (previous.origin or sameWorld(ped,previous.target)) then
@@ -152,12 +154,14 @@ local function release(brain)
     if TrafficRoad.driverScriptChanged then TrafficRoad.driverScriptChanged(ped,false) end
 end
 
-function releaseTrafficPed(ped)
+function TrafficActors.releaseScriptPed(ped,owner)
     local brain = owned[ped]
-    if not brain or brain.scriptOwner ~= sourceResource then return false end
+    if not brain or brain.scriptOwner ~= owner then return false end
     release(brain)
     return true
 end
+
+function releaseTrafficPed(ped) return TrafficActors.releaseScriptPed(ped,sourceResource) end
 
 function assignTrafficPedObjective(ped,order,target,y,z,pace)
     local brain = owned[ped]

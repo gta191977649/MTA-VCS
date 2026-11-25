@@ -43,10 +43,18 @@ technique vcs_boat_foam {
         AlphaTestEnable = false;
         CullMode = NONE;
         FogEnable = false;
+#if defined(PARTICLE_OVERLAY) || defined(PARTICLE_SCREEN)
+        ZEnable = false;
+#else
         ZEnable = true;
+#endif
         ZFunc = LESSEQUAL;
         ZWriteEnable = false;
+#ifdef PARTICLE_SCREEN
+        VertexShader = NULL;
+#else
         VertexShader = compile vs_2_0 foamVertex();
+#endif
         PixelShader = compile ps_2_0 foamPixel();
     }
 }

@@ -38,9 +38,21 @@ function setPlacementAlpha(element, alpha)
     local lod = lodRangeVisibility[element]
     if lod then
         lod.alpha = alpha
-        if lod.hidden then return end
+        alpha = math.floor(alpha * lod.fade)
     end
     setElementAlpha(element, alpha)
+end
+
+local function updateRangeLOD(element, lod, x, y)
+    local dx = math.max(lod.minX - x, 0, x - lod.maxX)
+    local dy = math.max(lod.minY - y, 0, y - lod.maxY)
+    -- These aggregate LODs have no native high-detail parent. Fade them in
+    -- over the same band that SA uses to fade an unlinked model out, ending
+    -- at the existing near distance. Native rendering still owns far fades.
+    local width = lod.distance > 150 and lod.distance / 15 + 10 or 20
+    lod.fade = math.max(0, math.min(1, (math.sqrt(dx*dx + dy*dy) - lod.distance + width) / width))
+    local alpha = math.floor(lod.alpha * lod.fade)
+    if getElementAlpha(element) ~= alpha then setElementAlpha(element, alpha) end
 end
 
 function registerRangeLOD(element, distance, minX, minY, maxX, maxY)
@@ -50,10 +62,7 @@ function registerRangeLOD(element, distance, minX, minY, maxX, maxY)
     }
     lodRangeVisibility[element] = lod
     local x, y = getCameraMatrix()
-    local dx = math.max(lod.minX - x, 0, x - lod.maxX)
-    local dy = math.max(lod.minY - y, 0, y - lod.maxY)
-    lod.hidden = dx*dx + dy*dy <= distance*distance
-    if lod.hidden then setElementAlpha(element, 0) end
+    updateRangeLOD(element, lod, x, y)
 end
 
 setTimer(function()
@@ -69,21 +78,18 @@ setTimer(function()
             end
         end
     end
+end, 100, 0)
+
+addEventHandler("onClientPreRender", root, function()
+    local x, y = getCameraMatrix()
     for element, lod in pairs(lodRangeVisibility) do
         if not isElement(element) then
             lodRangeVisibility[element] = nil
         else
-            local dx = math.max(lod.minX - x, 0, x - lod.maxX)
-            local dy = math.max(lod.minY - y, 0, y - lod.maxY)
-            local distance = lod.distance + (lod.hidden and 15 or 0)
-            local hidden = dx*dx + dy*dy <= distance*distance
-            if hidden ~= lod.hidden then
-                lod.hidden = hidden
-                setElementAlpha(element, hidden and 0 or lod.alpha)
-            end
+            updateRangeLOD(element, lod, x, y)
         end
     end
-end, 100, 0)
+end)
 
 local function restoreTimedElement(element)
     local state = streamTimeObj[element]

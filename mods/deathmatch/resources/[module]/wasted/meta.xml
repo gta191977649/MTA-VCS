@@ -1,0 +1,16 @@
+<meta>
+    <info name="Wasted" type="script" description="Hospital restarts and weapon recovery" />
+    <include resource="frontend" />
+    <script src="restart.lua" type="server" />
+    <script src="buyback_s.lua" type="server" />
+    <script src="hospital.lua" type="server" />
+    <script src="buyback_c.lua" type="client" />
+    <script src="hospital_c.lua" type="client" />
+    <file src="assets/unlockableicon.dff" />
+    <file src="assets/unlockableicon.txd" />
+    <export function="GetLevelFromPosition" type="server" />
+    <export function="FindClosestPoliceRestartPoint" type="server" />
+    <export function="ActivateWeaponBuyback" type="server" />
+    <export function="ConfiscatePlayerWeapons" type="server" />
+    <export function="setPlayerFreeHealthCare" type="server" />
+</meta>

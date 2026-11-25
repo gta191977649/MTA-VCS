@@ -28,8 +28,11 @@ addEventHandler("nspray:sprayEffect", resourceRoot, function(driver, bay, floor,
     local cameraX, cameraY, cameraZ = getCameraMatrix()
     local centerX, centerY = (bay[3] + bay[5]) / 2, (bay[4] + bay[6]) / 2
     if (cameraX - centerX)^2 + (cameraY - centerY)^2 + (cameraZ - floor)^2 > drawDistanceSquared then return end
-    smoke = smoke or dxCreateTexture("effects/smoke.png", "argb", true, "clamp")
-    if not smoke then return end
+    local shared = exports.skygfx:AreParticlesEnabled()
+    if not shared then
+        smoke = smoke or dxCreateTexture("effects/smoke.png", "argb", true, "clamp")
+        if not smoke then return end
+    end
 
     -- The original burst places GARAGEPAINT_SPRAY particles across the bay from the camera-facing side.
     local x, y, alongX, alongY, inX, inY = unpack(nearestWall(bay, cameraX, cameraY))
@@ -40,12 +43,16 @@ addEventHandler("nspray:sprayEffect", resourceRoot, function(driver, bay, floor,
     for index = 1, 200 do
         local along = math.random()
         local inward = 0.1 + math.random() * math.min(6.4, depth - 0.1)
-        particles[index] = {
-            x = x + alongX * along - outwardX * inward,
-            y = y + alongY * along - outwardY * inward,
-            z = ground + 0.2 + math.random() * 0.4,
-        }
+        local px = x + alongX * along - outwardX * inward
+        local py = y + alongY * along - outwardY * inward
+        local pz = ground + 0.2 + math.random() * 0.4
+        if shared then
+            exports.skygfx:AddParticle(24,px,py,pz,outwardX*.04,outwardY*.04,0,0,paint[1],paint[2],paint[3],255)
+        else
+            particles[index] = {x=px,y=py,z=pz}
+        end
     end
+    if shared then return end
     bursts[#bursts + 1] = {particles = particles, start = getTickCount(), paint = paint,
         vx = outwardX * 2, vy = outwardY * 2, interior = interior, dimension = dimension}
 end, false)

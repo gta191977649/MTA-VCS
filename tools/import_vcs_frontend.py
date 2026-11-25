@@ -275,6 +275,10 @@ def main():
         save_texture(image, name, entry, raster, texture_format, "PS2/GAME.DTZ (inflated)")
     for name, entry, raster, texture_format in texture_entries(image, (HUD_DICTIONARY,)):
         save_texture(image, name, entry, raster, texture_format, "PS2/GAME.DTZ (inflated)")
+    empire = (args.disc_directory / "EMPHUD.XTX").read_bytes()
+    for name, entry, raster, texture_format in texture_entries(empire, (0x20,), u32(empire, 12)):
+        if name in {"pwrbar", "aimbar"}:
+            save_texture(empire, name, entry, raster, texture_format, "EMPHUD.XTX")
     with (args.disc_directory / "GTA3PS2.IMG").open("rb") as archive, mmap.mmap(archive.fileno(), 0, access=mmap.ACCESS_READ) as img:
         archive_hash = sha256(img)
         for base in range(0, len(img) - 48, 2048):
@@ -290,7 +294,7 @@ def main():
                     save_texture(data, "weapon_" + name, entry, raster, texture_format, "GTA3PS2.IMG", base)
                 elif re.fullmatch(r"radar\d{2}", name):
                     save_texture(data, name, entry, raster, texture_format, "GTA3PS2.IMG", base)
-    required = (set(FONTS) | {"hudnumbers", "fist", "bar_inside1", "bar_inside2", "bar_outline", "radardisc"}
+    required = (set(FONTS) | {"pwrbar", "aimbar", "hudnumbers", "fist", "bar_inside1", "bar_inside2", "bar_outline", "radardisc"}
                 | {f"weapon_{name}" for name in WEAPONS} | {f"radar{id:02}" for id in range(64)})
     if missing := required - textures.keys():
         raise ValueError(f"Missing textures: {', '.join(sorted(missing))}")
