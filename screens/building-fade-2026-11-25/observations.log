@@ -1,0 +1,265 @@
+[2026-11-25 17:01:41] BUILDING_QA_READY
+[2026-11-25 17:01:41] BUILDING_QA [{"textures":["bevdoor03_law","ws_rooftarmac1","sl_plazatile01","citywall1","citywall5","concretemanky","cityhalldoor1","citywin1","citywall2","citywall3","citywall4","sl_LAbedingsoil","man_cellarfloor128","LAcityhwal1","LAcityhwin1","cityhalltow1","cityhalltow2","cityhallroof","LAcityhwin2"],"bounds":[-39.62115478515625,-17.3666877746582,8.897308349609375,47.61212158203125,17.85840225219727,135.93896484375]}]
+[2026-11-25 17:01:41] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:01:47] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":150}]
+[2026-11-25 17:01:47] BUILDING_QA_SCREEN native-distance-150 ok
+[2026-11-25 17:01:48] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":175}]
+[2026-11-25 17:01:49] BUILDING_QA_SCREEN native-distance-175 ok
+[2026-11-25 17:01:50] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":180}]
+[2026-11-25 17:01:50] BUILDING_QA_SCREEN native-distance-180 ok
+[2026-11-25 17:01:51] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":185}]
+[2026-11-25 17:01:52] BUILDING_QA_SCREEN native-distance-185 ok
+[2026-11-25 17:01:53] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":190}]
+[2026-11-25 17:01:53] BUILDING_QA_SCREEN native-distance-190 ok
+[2026-11-25 17:01:54] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":195}]
+[2026-11-25 17:01:55] BUILDING_QA_SCREEN native-distance-195 ok
+[2026-11-25 17:01:56] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":200}]
+[2026-11-25 17:01:56] BUILDING_QA_SCREEN native-distance-200 ok
+[2026-11-25 17:01:57] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":205}]
+[2026-11-25 17:01:58] BUILDING_QA_SCREEN native-distance-205 ok
+[2026-11-25 17:01:58] BUILDING_QA [{"bound":true,"mode":"before"}]
+[2026-11-25 17:02:03] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":150}]
+[2026-11-25 17:02:04] BUILDING_QA_SCREEN before-distance-150 ok
+[2026-11-25 17:02:05] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":175}]
+[2026-11-25 17:02:05] BUILDING_QA_SCREEN before-distance-175 ok
+[2026-11-25 17:02:06] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":180}]
+[2026-11-25 17:02:07] BUILDING_QA_SCREEN before-distance-180 ok
+[2026-11-25 17:02:08] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":185}]
+[2026-11-25 17:02:08] BUILDING_QA_SCREEN before-distance-185 ok
+[2026-11-25 17:02:09] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":190}]
+[2026-11-25 17:02:10] BUILDING_QA_SCREEN before-distance-190 ok
+[2026-11-25 17:02:11] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":195}]
+[2026-11-25 17:02:11] BUILDING_QA_SCREEN before-distance-195 ok
+[2026-11-25 17:02:12] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":200}]
+[2026-11-25 17:02:13] BUILDING_QA_SCREEN before-distance-200 ok
+[2026-11-25 17:02:14] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":205}]
+[2026-11-25 17:02:14] BUILDING_QA_SCREEN before-distance-205 ok
+[2026-11-25 17:02:15] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:02:20] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":150}]
+[2026-11-25 17:02:20] BUILDING_QA_SCREEN restored-distance-150 ok
+[2026-11-25 17:02:21] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":175}]
+[2026-11-25 17:02:22] BUILDING_QA_SCREEN restored-distance-175 ok
+[2026-11-25 17:02:23] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":180}]
+[2026-11-25 17:02:23] BUILDING_QA_SCREEN restored-distance-180 ok
+[2026-11-25 17:02:24] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":185}]
+[2026-11-25 17:02:25] BUILDING_QA_SCREEN restored-distance-185 ok
+[2026-11-25 17:02:26] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":190}]
+[2026-11-25 17:02:26] BUILDING_QA_SCREEN restored-distance-190 ok
+[2026-11-25 17:02:27] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":195}]
+[2026-11-25 17:02:28] BUILDING_QA_SCREEN restored-distance-195 ok
+[2026-11-25 17:02:29] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":200}]
+[2026-11-25 17:02:29] BUILDING_QA_SCREEN restored-distance-200 ok
+[2026-11-25 17:02:30] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":205}]
+[2026-11-25 17:02:31] BUILDING_QA_SCREEN restored-distance-205 ok
+[2026-11-25 17:02:31] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:02:34] BUILDING_QA_SCREEN native-alpha-0 ok
+[2026-11-25 17:02:35] BUILDING_QA_SCREEN native-alpha-64 ok
+[2026-11-25 17:02:37] BUILDING_QA_SCREEN native-alpha-128 ok
+[2026-11-25 17:02:38] BUILDING_QA_SCREEN native-alpha-255 ok
+[2026-11-25 17:02:39] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:02:41] BUILDING_QA_SCREEN restored-alpha-0 ok
+[2026-11-25 17:02:43] BUILDING_QA_SCREEN restored-alpha-64 ok
+[2026-11-25 17:02:44] BUILDING_QA_SCREEN restored-alpha-128 ok
+[2026-11-25 17:02:46] BUILDING_QA_SCREEN restored-alpha-255 ok
+[2026-11-25 17:02:46] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:02:49] BUILDING_QA [{"test":"extended","mode":"native","distance":650,"far":1913.908813476562}]
+[2026-11-25 17:02:49] BUILDING_QA_SCREEN native-extended-650 ok
+[2026-11-25 17:02:50] BUILDING_QA [{"test":"extended","mode":"native","distance":750,"far":1913.484008789062}]
+[2026-11-25 17:02:50] BUILDING_QA_SCREEN native-extended-750 ok
+[2026-11-25 17:02:52] BUILDING_QA [{"test":"extended","mode":"native","distance":775,"far":1913.0400390625}]
+[2026-11-25 17:02:52] BUILDING_QA_SCREEN native-extended-775 ok
+[2026-11-25 17:02:53] BUILDING_QA [{"test":"extended","mode":"native","distance":800,"far":1912.616455078125}]
+[2026-11-25 17:02:53] BUILDING_QA_SCREEN native-extended-800 ok
+[2026-11-25 17:02:55] BUILDING_QA [{"test":"extended","mode":"native","distance":825,"far":1912.1669921875}]
+[2026-11-25 17:02:55] BUILDING_QA_SCREEN native-extended-825 ok
+[2026-11-25 17:02:56] BUILDING_QA [{"test":"extended","mode":"native","distance":850,"far":1911.746948242188}]
+[2026-11-25 17:02:56] BUILDING_QA_SCREEN native-extended-850 ok
+[2026-11-25 17:02:58] BUILDING_QA [{"test":"extended","mode":"native","distance":900,"far":1911.300048828125}]
+[2026-11-25 17:02:58] BUILDING_QA_SCREEN native-extended-900 ok
+[2026-11-25 17:02:58] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:03:01] BUILDING_QA [{"test":"extended","mode":"restored","distance":650,"far":1910.424560546875}]
+[2026-11-25 17:03:01] BUILDING_QA_SCREEN restored-extended-650 ok
+[2026-11-25 17:03:02] BUILDING_QA [{"test":"extended","mode":"restored","distance":750,"far":1910.007568359375}]
+[2026-11-25 17:03:02] BUILDING_QA_SCREEN restored-extended-750 ok
+[2026-11-25 17:03:04] BUILDING_QA [{"test":"extended","mode":"restored","distance":775,"far":1909.55224609375}]
+[2026-11-25 17:03:04] BUILDING_QA_SCREEN restored-extended-775 ok
+[2026-11-25 17:03:05] BUILDING_QA [{"test":"extended","mode":"restored","distance":800,"far":1909.138793945312}]
+[2026-11-25 17:03:05] BUILDING_QA_SCREEN restored-extended-800 ok
+[2026-11-25 17:03:07] BUILDING_QA [{"test":"extended","mode":"restored","distance":825,"far":1908.682739257812}]
+[2026-11-25 17:03:07] BUILDING_QA_SCREEN restored-extended-825 ok
+[2026-11-25 17:03:08] BUILDING_QA [{"test":"extended","mode":"restored","distance":850,"far":1908.269653320312}]
+[2026-11-25 17:03:08] BUILDING_QA_SCREEN restored-extended-850 ok
+[2026-11-25 17:03:10] BUILDING_QA [{"test":"extended","mode":"restored","distance":900,"far":1907.81640625}]
+[2026-11-25 17:03:10] BUILDING_QA_SCREEN restored-extended-900 ok
+[2026-11-25 17:03:12] BUILDING_QA [{"test":"range","distance":70,"alpha":0}]
+[2026-11-25 17:03:14] BUILDING_QA [{"test":"range","distance":101,"alpha":0}]
+[2026-11-25 17:03:16] BUILDING_QA [{"test":"range","distance":106,"alpha":63}]
+[2026-11-25 17:03:18] BUILDING_QA [{"test":"range","distance":111,"alpha":127}]
+[2026-11-25 17:03:19] BUILDING_QA_SCREEN range-half ok
+[2026-11-25 17:03:20] BUILDING_QA [{"test":"range","distance":116,"alpha":191}]
+[2026-11-25 17:03:22] BUILDING_QA [{"test":"range","distance":121,"alpha":255}]
+[2026-11-25 17:03:24] BUILDING_QA [{"test":"range","distance":116,"alpha":191}]
+[2026-11-25 17:03:26] BUILDING_QA [{"test":"range","distance":111,"alpha":127}]
+[2026-11-25 17:03:27] BUILDING_QA_SCREEN range-half ok
+[2026-11-25 17:03:28] BUILDING_QA [{"test":"range","distance":106,"alpha":63}]
+[2026-11-25 17:03:30] BUILDING_QA [{"test":"range","distance":101,"alpha":0}]
+[2026-11-25 17:03:32] BUILDING_QA [{"test":"range","distance":70,"alpha":0}]
+[2026-11-25 17:03:34] BUILDING_QA [{"test":"placement-range","source":128,"actual":64}]
+[2026-11-25 17:03:36] BUILDING_QA [{"test":"placement-range","source":0,"actual":0}]
+[2026-11-25 17:03:37] BUILDING_QA [{"test":"placement-range","source":255,"actual":127}]
+[2026-11-25 17:03:44] BUILDING_QA [{"test":"return","stats":{"fullscreen":0,"propAlpha":true,"captures":0,"foliage":true,"alphaTextures":0,"props":true,"shopProps":true,"bloomPasses":0,"mode":"off","particles":{"spray":0,"active":4,"capacity":750,"drawn":4,"full":0,"accepted":894},"world":true,"post":true,"sun":{"rays":5,"draws":1,"haloHeight":2718.763970800032,"halo":false,"opacity":0,"haloWidth":2718.763970800032,"core":true,"mode":"custom","flares":0},"bloomHeight":0,"hudFrames":35310,"shopTextures":22,"water":{"surface":true,"boatWake":{"boats":0,"strips":0,"spray":0,"sheets":0},"waveGrid":true,"wake":true},"vehicles":{"glass":true,"vehicles":0,"captures":0,"reflectionReady":false,"litLensMaterials":0,"active":true,"materials":0,"nativeVehicles":0,"height":128,"failures":0,"shaders":6,"width":128},"vehicleTrails":{"segments":0,"active":true,"lamps":0,"samples":0,"failures":0},"historyWrites":0,"bloomWidth":0,"historyWidth":0,"historyHeight":0},"alpha":0}]
+[2026-11-25 17:03:48] BUILDING_QA_SCREEN restored-map-beach ok
+[2026-11-25 17:03:57] BUILDING_QA_SCREEN restored-map-starlite ok
+[2026-11-25 17:03:59] BUILDING_QA [{"result":"DONE"}]
+[2026-11-25 17:04:16] BUILDING_QA_READY
+[2026-11-25 17:04:16] BUILDING_QA [{"textures":["bevdoor03_law","ws_rooftarmac1","sl_plazatile01","citywall1","citywall5","concretemanky","cityhalldoor1","citywin1","citywall2","citywall3","citywall4","sl_LAbedingsoil","man_cellarfloor128","LAcityhwal1","LAcityhwin1","cityhalltow1","cityhalltow2","cityhallroof","LAcityhwin2"],"bounds":[-39.62115478515625,-17.3666877746582,8.897308349609375,47.61212158203125,17.85840225219727,135.93896484375]}]
+[2026-11-25 17:04:16] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:04:22] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":180}]
+[2026-11-25 17:04:22] BUILDING_QA_SCREEN native-distance-180 ok
+[2026-11-25 17:04:23] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":190}]
+[2026-11-25 17:04:23] BUILDING_QA_SCREEN native-distance-190 ok
+[2026-11-25 17:04:25] BUILDING_QA [{"lod":100,"mode":"native","alpha":255,"distance":200}]
+[2026-11-25 17:04:25] BUILDING_QA_SCREEN native-distance-200 ok
+[2026-11-25 17:04:25] BUILDING_QA [{"bound":true,"mode":"before"}]
+[2026-11-25 17:04:31] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":180}]
+[2026-11-25 17:04:31] BUILDING_QA_SCREEN before-distance-180 ok
+[2026-11-25 17:04:32] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":190}]
+[2026-11-25 17:04:33] BUILDING_QA_SCREEN before-distance-190 ok
+[2026-11-25 17:04:34] BUILDING_QA [{"lod":100,"mode":"before","alpha":255,"distance":200}]
+[2026-11-25 17:04:34] BUILDING_QA_SCREEN before-distance-200 ok
+[2026-11-25 17:04:34] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:04:40] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":180}]
+[2026-11-25 17:04:40] BUILDING_QA_SCREEN restored-distance-180 ok
+[2026-11-25 17:04:41] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":190}]
+[2026-11-25 17:04:42] BUILDING_QA_SCREEN restored-distance-190 ok
+[2026-11-25 17:04:43] BUILDING_QA [{"lod":100,"mode":"restored","alpha":255,"distance":200}]
+[2026-11-25 17:04:43] BUILDING_QA_SCREEN restored-distance-200 ok
+[2026-11-25 17:04:43] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:04:46] BUILDING_QA_SCREEN native-alpha-255 ok
+[2026-11-25 17:04:47] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:04:49] BUILDING_QA_SCREEN restored-alpha-255 ok
+[2026-11-25 17:04:50] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:04:52] BUILDING_QA [{"test":"extended","mode":"native","distance":950,"far":1921.826049804688}]
+[2026-11-25 17:04:52] BUILDING_QA_SCREEN native-extended-950 ok
+[2026-11-25 17:04:53] BUILDING_QA [{"test":"extended","mode":"native","distance":1040,"far":1921.376708984375}]
+[2026-11-25 17:04:54] BUILDING_QA_SCREEN native-extended-1040 ok
+[2026-11-25 17:04:55] BUILDING_QA [{"test":"extended","mode":"native","distance":1050,"far":1920.955444335938}]
+[2026-11-25 17:04:55] BUILDING_QA_SCREEN native-extended-1050 ok
+[2026-11-25 17:04:56] BUILDING_QA [{"test":"extended","mode":"native","distance":1060,"far":1920.507934570312}]
+[2026-11-25 17:04:57] BUILDING_QA_SCREEN native-extended-1060 ok
+[2026-11-25 17:04:58] BUILDING_QA [{"test":"extended","mode":"native","distance":1070,"far":1920.088500976562}]
+[2026-11-25 17:04:58] BUILDING_QA_SCREEN native-extended-1070 ok
+[2026-11-25 17:04:59] BUILDING_QA [{"test":"extended","mode":"native","distance":1080,"far":1919.667358398438}]
+[2026-11-25 17:05:00] BUILDING_QA_SCREEN native-extended-1080 ok
+[2026-11-25 17:05:01] BUILDING_QA [{"test":"extended","mode":"native","distance":1090,"far":1919.214599609375}]
+[2026-11-25 17:05:01] BUILDING_QA_SCREEN native-extended-1090 ok
+[2026-11-25 17:05:02] BUILDING_QA [{"test":"extended","mode":"native","distance":1100,"far":1918.800048828125}]
+[2026-11-25 17:05:03] BUILDING_QA_SCREEN native-extended-1100 ok
+[2026-11-25 17:05:04] BUILDING_QA [{"test":"extended","mode":"native","distance":1110,"far":1918.348510742188}]
+[2026-11-25 17:05:04] BUILDING_QA_SCREEN native-extended-1110 ok
+[2026-11-25 17:05:05] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:05:07] BUILDING_QA [{"test":"extended","mode":"restored","distance":950,"far":1917.475830078125}]
+[2026-11-25 17:05:07] BUILDING_QA_SCREEN restored-extended-950 ok
+[2026-11-25 17:05:08] BUILDING_QA [{"test":"extended","mode":"restored","distance":1040,"far":1917.026733398438}]
+[2026-11-25 17:05:09] BUILDING_QA_SCREEN restored-extended-1040 ok
+[2026-11-25 17:05:10] BUILDING_QA [{"test":"extended","mode":"restored","distance":1050,"far":1916.609985351562}]
+[2026-11-25 17:05:10] BUILDING_QA_SCREEN restored-extended-1050 ok
+[2026-11-25 17:05:11] BUILDING_QA [{"test":"extended","mode":"restored","distance":1060,"far":1916.158203125}]
+[2026-11-25 17:05:12] BUILDING_QA_SCREEN restored-extended-1060 ok
+[2026-11-25 17:05:13] BUILDING_QA [{"test":"extended","mode":"restored","distance":1070,"far":1915.737915039062}]
+[2026-11-25 17:05:13] BUILDING_QA_SCREEN restored-extended-1070 ok
+[2026-11-25 17:05:15] BUILDING_QA [{"test":"extended","mode":"restored","distance":1080,"far":1915.316040039062}]
+[2026-11-25 17:05:15] BUILDING_QA_SCREEN restored-extended-1080 ok
+[2026-11-25 17:05:16] BUILDING_QA [{"test":"extended","mode":"restored","distance":1090,"far":1914.8681640625}]
+[2026-11-25 17:05:16] BUILDING_QA_SCREEN restored-extended-1090 ok
+[2026-11-25 17:05:17] BUILDING_QA [{"test":"extended","mode":"restored","distance":1100,"far":1914.446655273438}]
+[2026-11-25 17:05:18] BUILDING_QA_SCREEN restored-extended-1100 ok
+[2026-11-25 17:05:19] BUILDING_QA [{"test":"extended","mode":"restored","distance":1110,"far":1914}]
+[2026-11-25 17:05:19] BUILDING_QA_SCREEN restored-extended-1110 ok
+[2026-11-25 17:05:22] BUILDING_QA [{"test":"range","distance":70,"alpha":0}]
+[2026-11-25 17:05:22] BUILDING_QA_SCREEN object-range-70 ok
+[2026-11-25 17:05:24] BUILDING_QA [{"test":"range","distance":101,"alpha":0}]
+[2026-11-25 17:05:24] BUILDING_QA_SCREEN object-range-101 ok
+[2026-11-25 17:05:26] BUILDING_QA [{"test":"range","distance":106,"alpha":63}]
+[2026-11-25 17:05:26] BUILDING_QA_SCREEN object-range-106 ok
+[2026-11-25 17:05:28] BUILDING_QA [{"test":"range","distance":111,"alpha":127}]
+[2026-11-25 17:05:28] BUILDING_QA_SCREEN object-range-111 ok
+[2026-11-25 17:05:30] BUILDING_QA [{"test":"range","distance":116,"alpha":191}]
+[2026-11-25 17:05:30] BUILDING_QA_SCREEN object-range-116 ok
+[2026-11-25 17:05:32] BUILDING_QA [{"test":"range","distance":121,"alpha":255}]
+[2026-11-25 17:05:32] BUILDING_QA_SCREEN object-range-121 ok
+[2026-11-25 17:05:34] BUILDING_QA [{"test":"range","distance":116,"alpha":191}]
+[2026-11-25 17:05:34] BUILDING_QA_SCREEN object-range-116 ok
+[2026-11-25 17:05:36] BUILDING_QA [{"test":"range","distance":111,"alpha":127}]
+[2026-11-25 17:05:36] BUILDING_QA_SCREEN object-range-111 ok
+[2026-11-25 17:05:38] BUILDING_QA [{"test":"range","distance":106,"alpha":63}]
+[2026-11-25 17:05:38] BUILDING_QA_SCREEN object-range-106 ok
+[2026-11-25 17:05:40] BUILDING_QA [{"test":"range","distance":101,"alpha":0}]
+[2026-11-25 17:05:40] BUILDING_QA_SCREEN object-range-101 ok
+[2026-11-25 17:05:42] BUILDING_QA [{"test":"range","distance":70,"alpha":0}]
+[2026-11-25 17:05:42] BUILDING_QA_SCREEN object-range-70 ok
+[2026-11-25 17:05:44] BUILDING_QA [{"test":"placement-range","source":128,"actual":64}]
+[2026-11-25 17:05:45] BUILDING_QA [{"test":"placement-range","source":0,"actual":0}]
+[2026-11-25 17:05:47] BUILDING_QA [{"test":"placement-range","source":255,"actual":127}]
+[2026-11-25 17:05:53] BUILDING_QA [{"test":"return","stats":{"fullscreen":0,"propAlpha":true,"captures":0,"foliage":true,"alphaTextures":0,"props":true,"shopProps":true,"bloomPasses":0,"mode":"off","particles":{"spray":0,"active":6,"capacity":750,"drawn":6,"full":0,"accepted":1214},"world":true,"post":true,"sun":{"rays":7,"draws":0,"haloHeight":2805.713230695016,"halo":false,"opacity":0,"haloWidth":2805.713230695016,"core":false,"mode":"custom","flares":0},"bloomHeight":0,"hudFrames":47931,"shopTextures":22,"water":{"surface":true,"boatWake":{"boats":0,"strips":0,"spray":0,"sheets":0},"waveGrid":true,"wake":true},"vehicles":{"glass":true,"vehicles":0,"captures":0,"reflectionReady":false,"litLensMaterials":0,"active":true,"materials":0,"nativeVehicles":0,"height":128,"failures":0,"shaders":6,"width":128},"vehicleTrails":{"segments":0,"active":true,"lamps":0,"samples":0,"failures":0},"historyWrites":0,"bloomWidth":0,"historyWidth":0,"historyHeight":0},"alpha":0}]
+[2026-11-25 17:05:58] BUILDING_QA_SCREEN restored-map-beach ok
+[2026-11-25 17:06:06] BUILDING_QA_SCREEN restored-map-starlite ok
+[2026-11-25 17:06:09] BUILDING_QA [{"result":"DONE"}]
+[2026-11-25 17:06:39] BUILDING_QA_READY
+[2026-11-25 17:06:39] BUILDING_QA [{"textures":["bevdoor03_law","ws_rooftarmac1","sl_plazatile01","citywall1","citywall5","concretemanky","cityhalldoor1","citywin1","citywall2","citywall3","citywall4","sl_LAbedingsoil","man_cellarfloor128","LAcityhwal1","LAcityhwin1","cityhalltow1","cityhalltow2","cityhallroof","LAcityhwin2"],"bounds":[-39.62115478515625,-17.3666877746582,8.897308349609375,47.61212158203125,17.85840225219727,135.93896484375]}]
+[2026-11-25 17:06:39] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:06:43] BUILDING_QA_SCREEN final-native-180 ok
+[2026-11-25 17:06:44] BUILDING_QA_SCREEN final-native-185 ok
+[2026-11-25 17:06:46] BUILDING_QA_SCREEN final-native-190 ok
+[2026-11-25 17:06:47] BUILDING_QA_SCREEN final-native-195 ok
+[2026-11-25 17:06:49] BUILDING_QA_SCREEN final-native-200 ok
+[2026-11-25 17:06:49] BUILDING_QA [{"bound":true,"mode":"before"}]
+[2026-11-25 17:06:54] BUILDING_QA_SCREEN final-before-180 ok
+[2026-11-25 17:06:55] BUILDING_QA_SCREEN final-before-185 ok
+[2026-11-25 17:06:57] BUILDING_QA_SCREEN final-before-190 ok
+[2026-11-25 17:06:58] BUILDING_QA_SCREEN final-before-195 ok
+[2026-11-25 17:06:59] BUILDING_QA_SCREEN final-before-200 ok
+[2026-11-25 17:07:00] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:07:04] BUILDING_QA_SCREEN final-restored-180 ok
+[2026-11-25 17:07:06] BUILDING_QA_SCREEN final-restored-185 ok
+[2026-11-25 17:07:07] BUILDING_QA_SCREEN final-restored-190 ok
+[2026-11-25 17:07:09] BUILDING_QA_SCREEN final-restored-195 ok
+[2026-11-25 17:07:10] BUILDING_QA_SCREEN final-restored-200 ok
+[2026-11-25 17:07:11] BUILDING_QA [{"bound":false,"mode":"native"}]
+[2026-11-25 17:07:14] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":250}]
+[2026-11-25 17:07:15] BUILDING_QA_SCREEN final-extended-native-250 ok
+[2026-11-25 17:07:16] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":270}]
+[2026-11-25 17:07:16] BUILDING_QA_SCREEN final-extended-native-270 ok
+[2026-11-25 17:07:17] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":280}]
+[2026-11-25 17:07:18] BUILDING_QA_SCREEN final-extended-native-280 ok
+[2026-11-25 17:07:19] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":290}]
+[2026-11-25 17:07:19] BUILDING_QA_SCREEN final-extended-native-290 ok
+[2026-11-25 17:07:20] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":300}]
+[2026-11-25 17:07:21] BUILDING_QA_SCREEN final-extended-native-300 ok
+[2026-11-25 17:07:22] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":310}]
+[2026-11-25 17:07:22] BUILDING_QA_SCREEN final-extended-native-310 ok
+[2026-11-25 17:07:23] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":320}]
+[2026-11-25 17:07:24] BUILDING_QA_SCREEN final-extended-native-320 ok
+[2026-11-25 17:07:25] BUILDING_QA [{"test":"extended-final","mode":"native","lod":600,"distance":330}]
+[2026-11-25 17:07:25] BUILDING_QA_SCREEN final-extended-native-330 ok
+[2026-11-25 17:07:26] BUILDING_QA [{"bound":true,"mode":"restored"}]
+[2026-11-25 17:07:29] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":250}]
+[2026-11-25 17:07:30] BUILDING_QA_SCREEN final-extended-restored-250 ok
+[2026-11-25 17:07:31] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":270}]
+[2026-11-25 17:07:31] BUILDING_QA_SCREEN final-extended-restored-270 ok
+[2026-11-25 17:07:32] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":280}]
+[2026-11-25 17:07:33] BUILDING_QA_SCREEN final-extended-restored-280 ok
+[2026-11-25 17:07:34] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":290}]
+[2026-11-25 17:07:34] BUILDING_QA_SCREEN final-extended-restored-290 ok
+[2026-11-25 17:07:36] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":300}]
+[2026-11-25 17:07:36] BUILDING_QA_SCREEN final-extended-restored-300 ok
+[2026-11-25 17:07:37] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":310}]
+[2026-11-25 17:07:37] BUILDING_QA_SCREEN final-extended-restored-310 ok
+[2026-11-25 17:07:38] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":320}]
+[2026-11-25 17:07:39] BUILDING_QA_SCREEN final-extended-restored-320 ok
+[2026-11-25 17:07:40] BUILDING_QA [{"test":"extended-final","mode":"restored","lod":600,"distance":330}]
+[2026-11-25 17:07:40] BUILDING_QA_SCREEN final-extended-restored-330 ok
+[2026-11-25 17:07:43] BUILDING_QA_SCREEN restored-map-beach ok
+[2026-11-25 17:07:52] BUILDING_QA_SCREEN restored-map-starlite ok
+[2026-11-25 17:08:01] BUILDING_QA_SCREEN restored-shop-native-states ok
+[2026-11-25 17:08:04] BUILDING_QA [{"result":"DONE"}]

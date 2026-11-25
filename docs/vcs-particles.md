@@ -4,6 +4,8 @@ SkyGfx loads 90 particle definitions from the USA PS2 disc. Each 0x84-byte recor
 
 Screen-space particles use the same explicit alpha, soft-additive or additive blend states as world particles. Their shader keeps the screen-space vertex transform and disables depth testing. MTA's `dxSetBlendMode("add")` uses `ONE/INVSRCALPHA`, so it cannot replace the original `ONE/ONE` particle blend: the opaque black background of `raindrop4` would darken the scene into rectangles. Preserve the disc raster and select the screen material when drawing `RAINDROP_2D`.
 
+Rain blending was checked on 2026-11-25 with a real MTA client on an isolated loopback server. A temporary resource held rain at 1.0 through the shared weather API and switched between the old and fixed screen draw paths. The old path reproduced dark rectangles; the fixed path retained visible streaks without the rectangles at 17:47 and 23:00. All three server-requested screenshots returned `ok`, and the client log contained no errors during the run. The disc importer check also passed for all 90 particle definitions and the unchanged atlas.
+
 ## Gameplay integration
 
 - The fire resource owns script fires, damaged vehicles, wrecks, burning pedestrians and flame-weapon ignition. The server synchronizes active fires with clients. Each client simulates particles and plays positional fire sounds in its current dimension and interior. Firefighter missions attach a fire to the mission target and release it when their cannon or bucket conditions are met. Free-roam water cannon hits reduce the strength of nearby fires.

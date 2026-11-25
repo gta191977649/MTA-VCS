@@ -34,7 +34,7 @@ function addEventHandler(name, element, fn) handlers[name] = fn end
 local e = {alpha=255, dimension=0, collisions=true}
 registerRangeLOD(e, 100, -1, -1, 1, 1)
 assert(e.alpha == 0, 'inside bounds must be hidden immediately')
-local expected = {{81,0}, {86,63}, {91,127}, {96,191}, {101,255}}
+local expected = {{101,0}, {106,63}, {111,127}, {116,191}, {121,255}}
 for pass=1,2 do
     for i=1,#expected do
         local row=expected[pass==1 and i or #expected-i+1]
@@ -42,11 +42,13 @@ for pass=1,2 do
         assert(e.alpha==row[2], 'near fade must be continuous and reversible')
     end
 end
-cameraX=91; handlers.onClientPreRender()
+cameraX=111; handlers.onClientPreRender()
 setPlacementAlpha(e,128)
 assert(e.alpha==64, 'placement opacity must compose immediately')
 handlers.onClientPreRender()
 assert(e.alpha==64, 'frame updates must not compound opacity')
+registerRangeLOD(e,100,-1,-1,1,1)
+assert(e.alpha==64, 're-registering bounds must preserve the original placement alpha')
 setModelStreamTime(nil,'test',6,18)
 hour=23; prepTime(e,'test')
 handlers.onClientPreRender()
@@ -60,7 +62,7 @@ assert(e.alpha==0, 'range updates must preserve explicit invisibility')
 setPlacementAlpha(e,255); handlers.onClientPreRender()
 assert(e.alpha==255)
 local long = {alpha=255, dimension=0, collisions=true}
-cameraX=286; registerRangeLOD(long,300,-1,-1,1,1)
+cameraX=306; registerRangeLOD(long,300,-1,-1,1,1)
 assert(long.alpha==127, 'long-range LODs must use the extended SA fade band')
 local ordinary = {alpha=255}
 setPlacementAlpha(ordinary,128)

@@ -47,17 +47,18 @@ local function updateRangeLOD(element, lod, x, y)
     local dx = math.max(lod.minX - x, 0, x - lod.maxX)
     local dy = math.max(lod.minY - y, 0, y - lod.maxY)
     -- These aggregate LODs have no native high-detail parent. Fade them in
-    -- over the same band that SA uses to fade an unlinked model out, ending
-    -- at the existing near distance. Native rendering still owns far fades.
+    -- over the same band that SA uses to fade an unlinked model out:
+    -- draw distance + 20 - fade width through draw distance + 20. Native
+    -- rendering still owns the far fade, so it is never applied twice here.
     local width = lod.distance > 150 and lod.distance / 15 + 10 or 20
-    lod.fade = math.max(0, math.min(1, (math.sqrt(dx*dx + dy*dy) - lod.distance + width) / width))
+    lod.fade = math.max(0, math.min(1, (math.sqrt(dx*dx + dy*dy) - lod.distance - 20 + width) / width))
     local alpha = math.floor(lod.alpha * lod.fade)
     if getElementAlpha(element) ~= alpha then setElementAlpha(element, alpha) end
 end
 
 function registerRangeLOD(element, distance, minX, minY, maxX, maxY)
     local lod = {
-        alpha = getElementAlpha(element), distance = distance,
+        alpha = getPlacementAlpha(element), distance = distance,
         minX = minX, minY = minY, maxX = maxX, maxY = maxY
     }
     lodRangeVisibility[element] = lod

@@ -2,6 +2,10 @@
 
 Date: 2026-11-20. Client: MTA:SA 1.7.0-7.27005.0, Windows x64.
 
+The lighting coverage recorded here remains applicable. The two-pass
+transparency behavior described below was superseded on 2026-11-25 by
+[native SA building render states](../../building-rendering.md).
+
 Shop furniture references streamed GTA3PS2 materials with bare content-hash
 texture names. These names matched neither `vcsw_*` nor SkyGfx's existing
 specialized prop lists. The furniture therefore retained SA's lighting while
