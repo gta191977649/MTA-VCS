@@ -1017,7 +1017,7 @@
 		<setting name="*metaBackup" value="true" friendlyname="Enable Meta Backup" group="Updater" accept="boolean" desc="Enable or disable backup of meta.xml when updating." />
 		<setting name="*metaStyleBackup" value="true" friendlyname="Enable Style Meta Backup" group="Updater" accept="boolean" desc="Enable or disable backup of style files from meta.xml when updating." />
 		
-		<setting name="*G2DCMD" value="true" friendlyname="Enable G2D Command Line" group="CMD" accept="boolean" desc="Enable or disable GUI to DGS command line." />
+		<setting name="*G2DCMD" value="false" friendlyname="Enable G2D Command Line" group="CMD" accept="boolean" desc="Enable or disable GUI to DGS command line." />
 		<setting name="*CMD" value="true" friendlyname="Enable Built-in CMD" group="CMD" accept="boolean" desc="Enable or disable DGS built-in CMD /dgscmd." />
 	</settings>
 

@@ -188,6 +188,17 @@ local function clearDoor(car,attempt)
     if openingDoors[car]~=attempt then return end
     openingDoors[car]=nil
     if attempt.work then attempt.work.doorRetry=getTickCount() end
+    if isElement(attempt.owner) then
+        triggerClientEvent(attempt.owner,"npchlc_traffic:cancelPoliceDriverDoor",resourceRoot,attempt.officer,attempt.id)
+    end
+end
+
+local function validDoor(car,a)
+    return isElement(car) and isElement(a.officer) and isElement(a.player)
+        and getElementSyncer(a.officer)==a.owner
+        and TrafficWanted.driverArrestCar(a.officer,a.player)==car
+        and TrafficWanted.officerCanPursue(a.officer,a.player)
+        and TrafficGroundPolice.target(a.officer)==a.player and atDriverDoor(a.officer,car)
 end
 
 addEventHandler("onVehicleStartEnter",root,function(officer,seat,driver,door)
@@ -205,11 +216,7 @@ end,true,"low-100")
 -- the independently replicated hinge angle for this vehicle and reach.
 local function confirmDoor(car,a,remaining)
     if openingDoors[car]~=a then return end
-    if not isElement(car) or not isElement(a.officer) or not isElement(a.player)
-        or getElementSyncer(a.officer)~=a.owner or isVehicleLocked(car)
-        or getVehicleOccupant(car,0)~=a.player or getPedOccupiedVehicle(a.player)~=car
-        or not TrafficWanted.officerCanPursue(a.officer,a.player)
-        or TrafficGroundPolice.target(a.officer)~=a.player or not atDriverDoor(a.officer,car) then
+    if not validDoor(car,a) then
         clearDoor(car,a)
         return
     end
@@ -239,11 +246,15 @@ end,false)
 function TrafficWanted.tryDriverArrest(officer,player,now,work)
     local current=getPedOccupiedVehicle(player)
     local pending=current and openingDoors[current]
+    if pending and (not validDoor(current,pending) or (now-pending.at)%4294967296>=5000) then
+        clearDoor(current,pending)
+        pending=nil
+    end
     if pending and pending.officer==officer then return false,true end
     local car=TrafficWanted.driverArrestCar(officer,player)
     if not car or TrafficGroundPolice.target(officer)~=player or not TrafficWanted.officerCanPursue(officer,player)
         or not atDriverDoor(officer,car) then return false end
-    if work and work.doorRetry and (now-work.doorRetry)%4294967296<2000 then return false,true end
+    if work and work.doorRetry and (now-work.doorRetry)%4294967296<250 then return false,true end
     if work and work.follow then
         exports.npc_hlc:clearNPCTasks(officer)
         work.follow=nil
@@ -270,6 +281,10 @@ function TrafficWanted.tryArrest(officer,player,now,work,deferDoor)
     if deferDoor then
         local car=getPedOccupiedVehicle(player)
         local pending=car and openingDoors[car]
+        if pending and (not validDoor(car,pending) or (now-pending.at)%4294967296>=5000) then
+            clearDoor(car,pending)
+            pending=nil
+        end
         return false,pending and pending.officer==officer
     end
     return TrafficWanted.tryDriverArrest(officer,player,now,work)

@@ -165,7 +165,8 @@ function performTask.approachDriverDoor(npc,task,_,progress)
         if task[5] and side<left+.2 then
             local now=getTickCount()
             progress.doorWait=progress.doorWait or now
-            if (now-progress.doorWait)%4294967296>=1500 and (progress.arrivals or 0)<4 then
+            local wait=(progress.arrivals or 0)==0 and 250 or 1500
+            if (now-progress.doorWait)%4294967296>=wait and (progress.arrivals or 0)<4 then
                 progress.arrivals=(progress.arrivals or 0)+1
                 progress.doorWait=now
                 triggerServerEvent("npc_hlc:driverDoorArrival",npc,car,task[5])

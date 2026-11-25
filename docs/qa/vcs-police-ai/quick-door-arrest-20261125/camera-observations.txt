@@ -1,0 +1,31 @@
+[2026-11-25 18:26:56] CAMERAQA CLIENT_READY
+[2026-11-25 18:26:57] CAMERAQA SPAWNED_PATROL camera-seated-two true
+[2026-11-25 18:26:59] CAMERAQA ARREST camera-seated-two 2 alive true false
+[2026-11-25 18:26:59] CAMERAQA camera-seated-two camera 205 45 false 23.787035 4.351168e-15 0 true -632.93195 756.73676 20.042608
+[2026-11-25 18:27:00] CAMERAQA camera-seated-two camera 1029 45 false 20.490923 0 0 true -636.92371 756.14087 20.042608
+[2026-11-25 18:27:01] CAMERAQA screenshot camera-seated-two-early ok
+[2026-11-25 18:27:01] CAMERAQA camera-seated-two camera 2018 45 false 16.807848 3.0767402e-15 0 true -641.81042 755.26447 20.042608
+[2026-11-25 18:27:03] CAMERAQA camera-seated-two camera 3911 45 false 11.660457 2.5146001e-15 0 true -650.78632 752.245 20.042608
+[2026-11-25 18:27:03] CAMERAQA screenshot camera-seated-two-fade ok
+[2026-11-25 18:27:03] CAMERAQA camera-seated-two camera-end 423348 false
+[2026-11-25 18:27:03] CAMERAQA camera-seated-two camera 4500 90 true 1.6214432 0.38701051 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:04] CAMERAQA camera-seated-two camera 5413 90 true 1.6188378 0.38712123 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:05] CAMERAQA screenshot camera-seated-two-station ok
+[2026-11-25 18:27:07] CAMERAQA camera-seated-two camera 8222 90 true 1.6218222 0.38702372 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:07] CAMERAQA RELEASE camera-seated-two 0 2300 false
+[2026-11-25 18:27:09] CAMERAQA SPAWNED_PATROL camera-foot-two true
+[2026-11-25 18:27:09] CAMERAQA ARREST camera-foot-two 2 alive false false
+[2026-11-25 18:27:09] CAMERAQA camera-foot-two camera 216 45 false 9.2471838 4.4408921e-16 0 false -648.49115 737.42535 15.683076
+[2026-11-25 18:27:10] CAMERAQA screenshot camera-foot-two-early ok
+[2026-11-25 18:27:10] CAMERAQA camera-foot-two camera 1019 45 false 12.324522 3.0767402e-15 0 false -644.5943 737.15082 18.623018
+[2026-11-25 18:27:11] CAMERAQA screenshot camera-foot-two-late ok
+[2026-11-25 18:27:11] CAMERAQA camera-foot-two camera 2023 45 false 12.498077 8.8817842e-16 0 false -644.43103 737.1394 18.762062
+[2026-11-25 18:27:13] CAMERAQA camera-foot-two camera 3922 45 false 12.498077 8.8817842e-16 0 false -644.43103 737.1394 18.762062
+[2026-11-25 18:27:13] CAMERAQA screenshot camera-foot-two-fade ok
+[2026-11-25 18:27:13] CAMERAQA camera-foot-two camera-end 433140 true
+[2026-11-25 18:27:13] CAMERAQA camera-foot-two camera 4527 90 true 1.6191268 0.38710687 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:14] CAMERAQA camera-foot-two camera 5423 90 true 1.6244832 0.38696939 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:14] CAMERAQA screenshot camera-foot-two-station ok
+[2026-11-25 18:27:17] CAMERAQA camera-foot-two camera 8226 90 true 1.6223191 0.38700464 -2.1412824e-07 false -656.24939 763.27081 12.288
+[2026-11-25 18:27:17] CAMERAQA RELEASE camera-foot-two 0 2300 false
+[2026-11-25 18:27:17] CAMERAQA DONE

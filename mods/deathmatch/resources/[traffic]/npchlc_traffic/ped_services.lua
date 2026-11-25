@@ -425,13 +425,15 @@ local function pursue(ped,w,now)
     end
     local ranged=PedAIRules.ranged(weapon)
     local range=ranged and PedAIRules.attackRange(weapon) or 1.7
-    local firing=car and ranged and TrafficWanted.vehicleFireDue(ped,suspect,car,range,now,w.seekRadius) or false
-    local door=car and not firing and TrafficWanted.driverArrestCar(ped,suspect) or false
-    if door then
+    -- A reachable driver's door takes priority over the current shooting cycle.
+    -- Keep the usual burst/recovery decision while approaching from farther away.
+    if car then
         local arrested,enteringCar=TrafficWanted.tryDriverArrest(ped,suspect,now,w)
         if arrested then release(ped) return true end
         if enteringCar then return true end
     end
+    local firing=car and ranged and TrafficWanted.vehicleFireDue(ped,suspect,car,range,now,w.seekRadius) or false
+    local door=car and not firing and TrafficWanted.driverArrestCar(ped,suspect) or false
     if not w.follow or w.car~=car or w.weapon~=weapon or w.door~=door or w.firing~=firing then
         local task=door and {"approachDriverDoor",suspect} or {car and "attackOccupiedVehicle" or "killPed",suspect,range,ranged and range/3 or range*.8,ranged and 1 or 0}
         if door then

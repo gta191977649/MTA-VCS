@@ -195,8 +195,11 @@ function TrafficCustodyCamera.begin(officer)
     local vehicle=getPedOccupiedVehicle(localPlayer)
     if vehicle and s.previousTarget==vehicle then s.previousTarget=localPlayer end
     local choices
-    if vehicle then choices=math.random()>.5 and {1,2,7} or {2,1,7}
-    else choices=math.random()>.65 and {1,7,2} or {7,2,1} end
+    -- 0029A8F0 branches on entity type: 6 is a ped, 4 is a vehicle.
+    -- Occupied vehicles favor a street anchor; on-foot arrests split the
+    -- officer and low-side choices evenly before falling back to an anchor.
+    if vehicle then choices=math.random()>.65 and {1,7,2} or {7,2,1}
+    else choices=math.random()>.5 and {1,2,7} or {2,1,7} end
     for _,mode in ipairs(choices) do
         if (mode==7 and streetView(s,tx,ty,tz)) or (mode~=7 and officerView(s,mode,tx,ty,tz)) then
             s.mode=mode==2 and math.random(2,6) or mode

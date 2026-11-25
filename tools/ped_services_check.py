@@ -149,6 +149,12 @@ def main():
         assert(PedServices.update(officer,8,now) and officer.task[1]=="attackOccupiedVehicle" and officer.task[6]==0)
         locked=false
         assert(PedServices.update(officer,8,now) and officer.task[1]=="approachDriverDoor")
+        -- A reachable door must win even during an active firearm burst.
+        shoot=true
+        local previousTask=officer.task
+        TrafficWanted.tryDriverArrest=function() return false,true end
+        TrafficWanted.vehicleFireDue=function() error("door reach must precede gunfire") end
+        assert(PedServices.update(officer,8,now) and officer.task==previousTask)
         function getPedOccupiedVehicle() return false end
         local casualty=actor(0,0,4,0)
         local elevated=actor(1,10,4,0)

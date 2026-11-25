@@ -126,6 +126,15 @@ end)
 -- Intercept the actual opening task on its owning GTA client while the
 -- driver is still seated. Replacing its primary task generates JACK_ABORT.
 local doorAttempts={}
+addEvent("npchlc_traffic:cancelPoliceDriverDoor",true)
+addEventHandler("npchlc_traffic:cancelPoliceDriverDoor",resourceRoot,function(officer,id)
+    local a=doorAttempts[officer]
+    if not a or a.id~=id then return end
+    doorAttempts[officer]=nil
+    if isElement(officer) and isElementSyncer(officer) then
+        setPedAnimation(officer,"PED","IDLE_stance",180,false,false,false,false,0)
+    end
+end,false)
 local function monitorDoors()
     for officer,a in pairs(doorAttempts) do
         local car=a.car

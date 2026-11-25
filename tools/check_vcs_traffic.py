@@ -346,6 +346,14 @@ end
 deliver("npc_hlc:control",resourceRoot,npc,10,{"approachDriverDoor",other,-1.6,.4,14},npc)
 deliver("onClientPreRender",root)
 assert(reports==0)
+now=now+249; deliver("onClientPreRender",root)
+assert(reports==0)
+now=now+1; deliver("onClientPreRender",root)
+assert(reports==1)
+now=now+1499; deliver("onClientPreRender",root)
+assert(reports==1)
+now=now+1; deliver("onClientPreRender",root)
+assert(reports==2)
 for _=1,6 do now=now+1500; deliver("onClientPreRender",root) end
 assert(reports==4)
 triggerServerEvent=previousReport

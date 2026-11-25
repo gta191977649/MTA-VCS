@@ -1,6 +1,6 @@
 -- The 8 x 8 PS2 radar tiles each cover 500 world units, north at the top.
 function createViceCityMapImage(x, y, width, height, parent)
-    return exports.dgs:dgsCreateImage(x, y, width, height, ":frontend/res/vice_city_map.png", true, parent)
+    return guiCreateStaticImage(x, y, width, height, ":frontend/res/vice_city_map.png", true, parent)
 end
 
 function viceCityMapToWorld(u, v)
@@ -12,11 +12,11 @@ function worldToViceCityMap(x, y)
 end
 
 function createMenuTabPanel(x, y, width, height, parent)
-    return exports.dgs:dgsCreateTabPanel(x, y, width, height, true, parent, 26)
+    return guiCreateTabPanel(x, y, width, height, true, parent)
 end
 
 function createMenuTab(title, panel)
-    return exports.dgs:dgsCreateTab(title, panel)
+    return guiCreateTab(title, panel)
 end
 
 function getVehicleSpawnMenuGroups(catalog, legacy, rcVehicles)

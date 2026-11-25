@@ -1,6 +1,3 @@
-loadstring(exports.dgs:dgsImportFunction())() --Import functions before
-loadstring(exports.dgs:dgsG2DLoadHooker())()  --Load G2D Hooker
-
 local CONTROL_MARGIN_RIGHT = 5
 local LINE_MARGIN = 5
 local LINE_HEIGHT = 16
@@ -8,6 +5,17 @@ local g_gridListContents = {}   -- info about binded gridlists
 local g_openedWindows = {}      -- {window1table = true, window2table = true, ...}
 local g_protectedElements = {}
 local GRIDLIST_UPDATE_CHUNK_SIZE = 10
+
+local function getScreenPosition(element)
+	local x, y = guiGetPosition(element, false)
+	local parent = getElementParent(element)
+	while isElement(parent) and getElementType(parent):sub(1, 4) == 'gui-' do
+		local parentX, parentY = guiGetPosition(parent, false)
+		x, y = x + parentX, y + parentY
+		parent = getElementParent(parent)
+	end
+	return x, y
+end
 
 local classInfo = {
 	wnd = {className = 'Window', padding = {25, 10, 10, 10}, isContainer = true},
@@ -246,7 +254,7 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 	if wnd.onclick then
 		if wndClass == 'img' then
 			clickhandler = function(btn, state, x, y)
-				local imgX, imgY = dgsGetPosition(wnd.element, false, true)
+				local imgX, imgY = getScreenPosition(wnd.element)
 				local width, height = guiGetSize(wnd.element, false)
 				wnd.onclick((x - imgX)/width, (y - imgY)/height, btn)
 			end
@@ -288,7 +296,7 @@ function _buildWindow(wnd, baseWnd, parentWnd)
 		local doubleclickhandler
 		if wndClass == 'img' then
 			doubleclickhandler = function(btn, state, x, y)
-				local imgX, imgY = dgsGetPosition(wnd.element, false, true)
+				local imgX, imgY = getScreenPosition(wnd.element)
 				local width, height = guiGetSize(wnd.element, false)
 				wnd.ondoubleclick((x - imgX)/width, (y - imgY)/height)
 			end

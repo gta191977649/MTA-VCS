@@ -59,6 +59,21 @@ def main():
 
         local street={name="lamppost2_0d311",x=17,y=0,z=0}
         objects={street}
+        -- The executable's entity-type branches use different ordering and
+        -- strict probability boundaries for ped and occupied-vehicle targets.
+        for _,case in ipairs({
+            {false,.5,"side"},{false,.5001,"officer"},
+            {true,.65,"street"},{true,.6501,"officer"}
+        }) do
+            localPlayer.vehicle=case[1] and vehicle or nil
+            roll=case[2]
+            assert(TrafficCustodyCamera.begin(officer))
+            if case[3]=="side" then assert(matrix[1]==10 and matrix[2]==5)
+            elseif case[3]=="street" then assert(math.abs(matrix[1]-20.7528)<.001)
+            else assert(math.abs(math.sqrt(matrix[1]^2+matrix[2]^2)-8)<.001) end
+            TrafficCustodyCamera.finish()
+        end
+        localPlayer.vehicle=vehicle;roll=.1
         assert(TrafficCustodyCamera.begin(officer))
         assert(math.abs(matrix[1]-20.7528)<.001)
         local z=matrix[3]
@@ -67,6 +82,7 @@ def main():
         handlers.onClientResourceStop()
         assert(matrix[1]==50 and matrix[8]==60)
 
+        objects={}
         localPlayer.vehicle=vehicle
         assert(TrafficCustodyCamera.begin(officer))
         assert(matrix[1]==10 and matrix[3]==.7)

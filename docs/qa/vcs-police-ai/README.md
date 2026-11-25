@@ -1,5 +1,7 @@
 # VCS police AI client acceptance
 
+The [prompt driver-door arrest and Busted camera checks](quick-door-arrest-20261125/README.md) cover fast seated arrests, lock interruption, corrected PS2 camera selection and normal camera restoration.
+
 A Windows MTA 1.7 client connected to an isolated loopback server with the VCS map, models, frontend, route graph, SkyGfx and production traffic resources. A temporary resource drove the wanted export, player position and inputs. Production traffic selected and spawned the responding units. The driver-seat and spike-strip sections identify where QA arranged an officer or a vehicle.
 
 The [pursuit acceptance runs](chase-update.md) record a wanted increase on the same patrol, a moving ram, a block, and the handoff from pursuit to seated arrest. The [roadblock and spike-strip runs](hazard-update.md) cover the two-star control, barrier selection through six stars, and wheel contact with a strip assigned by the ambient population.

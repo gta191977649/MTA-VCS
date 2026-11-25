@@ -5,8 +5,62 @@ from pathlib import Path
 from lupa.lua51 import LuaRuntime
 
 
+def check_door_client(traffic):
+    lua = LuaRuntime()
+    lua.execute('''
+        root, resourceRoot, events, reports = {}, {}, {}, {}
+        now=0
+        function addEvent() end
+        function addEventHandler(name,_,fn) events[name]=fn end
+        function removeEventHandler(name) events[name]=nil end
+        function isElement(e) return type(e)=="table" end
+        function isElementSyncer(e) return not e.lostOwner end
+        function isElementStreamedIn() return true end
+        function isPedDead() return false end
+        function isVehicleLocked(c) return c.locked end
+        function getVehicleOccupant(c) return c.driver end
+        function getVehicleDoorOpenRatio(c) return c.open or 0 end
+        function getElementVelocity(c) return c.vx or 0,0,0 end
+        function getTickCount() return now end
+        function getPedSimplestTask(p) return p.task end
+        function setPedControlState() end
+        function setPedEnterVehicle(p) p.entries=(p.entries or 0)+1; return true end
+        function setPedAnimation(p,_,anim) p.anim=anim end
+        function triggerServerEvent(...) table.insert(reports,{...}) end
+    ''')
+    lua.execute((traffic / "traffic_passengers_c.lua").read_text(encoding="utf-8"))
+    lua.execute('''
+        local open=events["npchlc_traffic:openPoliceDriverDoor"]
+        local cancel=events["npchlc_traffic:cancelPoliceDriverDoor"]
+        local p,c,o={},{},{}
+        c.driver=p
+        open(o,c,p,1)
+        cancel(o,99) -- a stale cancellation cannot interrupt this reach
+        o.task="TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE";c.open=.81
+        events.onClientPreRender()
+        assert(o.anim=="ARRESTgun" and reports[#reports][5]==true)
+        assert(not events.onClientPreRender)
+        open(o,c,p,2);cancel(o,1)
+        assert(o.entries==2)
+        cancel(o,2);assert(o.anim=="IDLE_stance")
+        open(o,c,p,3);assert(o.entries==3)
+        for _,reason in ipairs({"lock","speed","seat","owner"}) do
+            if reason=="lock" then c.locked=true elseif reason=="speed" then c.vx=.05
+            elseif reason=="seat" then c.driver={} else o.lostOwner=true end
+            events.onClientPreRender()
+            assert(not events.onClientPreRender)
+            c.locked,c.vx,c.driver,o.lostOwner=false,0,p,false
+            open(o,c,p,4)
+        end
+        cancel(o,4)
+        events.onClientPreRender()
+        assert(not events.onClientPreRender)
+    ''')
+
+
 def main():
     traffic = Path(__file__).resolve().parents[1] / "mods/deathmatch/resources/[traffic]/npchlc_traffic"
+    check_door_client(traffic)
     wanted = traffic.parents[1] / "[module]/wanted"
     lua = LuaRuntime()
     lua.execute('''
@@ -51,7 +105,7 @@ def main():
         function cancelEvent() eventCancelled=true end
         function wasEventCancelled() return vetoEnter end
         function getElementVelocity(c) return c.vx or 0,0,0 end
-        function getElementSyncer() return player end
+        function getElementSyncer(p) return p.owner or player end
         TrafficGroundPolice = {target=function(p) return p.suspect end}
         function setPedWeaponSlot(p,slot) p.slot=slot end
         function setPedAnimation() end
@@ -84,8 +138,9 @@ def main():
             table.insert(events, {element, old, new, reason})
             if onWanted then onWanted(element, old, new, reason) end
         end
+        once = {}
         function setTimer(handler, delay, repeats)
-            if repeats==1 then return true end
+            if repeats==1 then table.insert(once, handler); return true end
             assert(delay == 50 and repeats == 0)
             table.insert(timers, handler)
         end
@@ -283,25 +338,42 @@ def main():
         local function report(id)
             fire("npchlc_traffic:observedDriverDoor",resourceRoot,car,id,true)
         end
-        for _,reason in ipairs({"passenger","locked","moving","veto","wrongDoor","unconfirmed","early"}) do
-            local id=messages[#messages][7]
+        local function attemptId()
+            for i=#messages,1,-1 do
+                if messages[i][2]=="npchlc_traffic:openPoliceDriverDoor" then return messages[i][7] end
+            end
+        end
+        local oldExpiry=once[#once]
+        for _,reason in ipairs({"passenger","locked","moving","veto","wrongDoor","unconfirmed","early","owner","world","target"}) do
+            local id=attemptId()
             vetoEnter=reason=="veto"
             eventCancelled=false
             if reason=="wrongDoor" then fire("onVehicleStartEnter",car,policePed,0,player,3) elseif reason~="unconfirmed" then enter() end
             assert(eventCancelled==(reason=="veto" or reason=="wrongDoor"))
             client=other;report(id);client=player;report(id+99)
             if reason=="passenger" then car.driver=other elseif reason=="locked" then car.locked=true elseif reason=="moving" then car.vx=.1 end
+            if reason=="owner" then policePed.owner=other elseif reason=="world" then policePed.dimension=1 elseif reason=="target" then policePed.suspect=other end
             if reason~="early" then tick(60) end
             car.open=.85;report(id)
             assert(player.level==1)
+            -- Owner loss is also cleared by the ordinary pursuit update,
+            -- rather than waiting for the old owner's timeout.
+            TrafficWanted.tryArrest(policePed,player,getTickCount(),work,true)
             car.driver,car.locked,car.vx,car.open,vetoEnter=player,false,0,0,false
-            tick(2400)
+            policePed.owner,policePed.dimension,policePed.suspect=nil,0,player
+            tick(work.doorRetry+249-getTickCount())
+            local before=attemptId()
+            assert(select(2,TrafficWanted.tryArrest(policePed,player,getTickCount(),work)) and attemptId()==before,reason)
+            tick(1)
             assert(select(2,TrafficWanted.tryArrest(policePed,player,getTickCount(),work)))
+            assert(attemptId()~=id)
+            oldExpiry() -- a superseded attempt must not clear this retry
+            assert(select(2,TrafficWanted.tryArrest(policePed,player,getTickCount(),work)) and attemptId()~=id)
         end
         enter()
         tick(60)
         car.open=.82
-        report(messages[#messages][7])
+        report(attemptId())
         assert(player.level==0 and car.driver==player and not policePed.inVehicle and policePed.slot==2)
         for _,case in ipairs({"open","missing","bike"}) do
             assert(setPlayerWanted(player,1))
