@@ -6,11 +6,20 @@ sectors, static props, foliage, glass, shop furniture and floor decals.
 
 ## Native opacity and render states
 
-`vcsWorld.fx` uses the alpha returned by `MTACalcGTABuildingDiffuse`, then
-multiplies it by texture alpha. This follows the current lighting and material
-source states. Unlit geometry must not consume stale material opacity; native
-distance fades must not discard the opacity supplied by `RenderAtomicWithAlpha`.
+`vcsWorld.fx` starts with the alpha returned by `MTACalcGTABuildingDiffuse`.
+It also reproduces RenderWare's active second-stage `CURRENT * TFACTOR` alpha
+modulation before multiplying by texture alpha. The unlit/prelit rendering
+path uses this texture factor for distance fades on trees and street furniture;
+lighting/material alpha alone does not contain those fades. Disabled texture
+stages are ignored even if their registers retain a previous draw's factor.
 VCS RGB555 and expanded prop prelight calculations remain unchanged.
+
+Every model's far fade is based on its definition's `lodDistance`, applied by
+eagleLoader through `engineSetModelLODDistance`. Existing loader distance
+multipliers and GTA's camera LOD scaling remain effective. SkyGfx consumes
+the engine-calculated opacity, including its bounds and far-clip decisions;
+it has no global tree, lamp or building cutoff and no second distance timer.
+Both building elements and object elements use this shared opacity path.
 
 All building variants use a single-pass technique that overrides fog and the
 vertex/pixel shaders only. GTA retains ownership of alpha testing, blending,

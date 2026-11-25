@@ -6,6 +6,27 @@ float3 PrelightOffset = 0;
 float3 FogColor = 0;
 float2 FogRange = float2(0, 2000);
 
+// RenderWare's unlit/prelit path applies material opacity with a texture
+// factor stage instead of D3D lighting. This includes native distance fades
+// on vegetation and street furniture; gMaterialDiffuse can be stale here.
+float4 TextureFactor < string renderState="TEXTUREFACTOR"; >;
+int ColorOp1 < string stageState="1,COLOROP"; >;
+int AlphaOp1 < string stageState="1,ALPHAOP"; >;
+int AlphaArg1 < string stageState="1,ALPHAARG1"; >;
+int AlphaArg2 < string stageState="1,ALPHAARG2"; >;
+
+float CalculateBuildingAlpha(float4 diffuse) {
+    float alpha = MTACalcGTABuildingDiffuse(diffuse).a;
+    // D3DTOP_DISABLE=1, MODULATE=4; D3DTA_CURRENT=1, TFACTOR=3.
+    // Check the active stage as well as its arguments: the factor and alpha
+    // registers may retain an earlier draw when the stage is disabled.
+    if (ColorOp1 != 1 && AlphaOp1 == 4 &&
+        ((AlphaArg1 == 1 && AlphaArg2 == 3) || (AlphaArg1 == 3 && AlphaArg2 == 1))) {
+        alpha *= TextureFactor.a;
+    }
+    return alpha;
+}
+
 sampler WorldSampler = sampler_state {
     Texture = (gTexture0);
 #ifdef VCS_WORLD_FOLIAGE
@@ -44,10 +65,7 @@ VertexOut worldVertex(VertexIn input) {
     float3 prelight = floor(input.color.rgb * 31.0 + 0.5) * 8.0;
     float3 lit = floor(clamp(prelight * PrelightScale + PrelightOffset, 0.0, 255.0));
 #endif
-    // RenderAtomicWithAlpha changes the material and enables native lighting
-    // during fades. Unlit draws may retain a previous material, so use MTA's
-    // render-state-aware building alpha rather than multiplying it blindly.
-    output.color = float4(lit / 255.0, MTACalcGTABuildingDiffuse(input.color).a);
+    output.color = float4(lit / 255.0, CalculateBuildingAlpha(input.color));
     output.fog = saturate((output.position.w - FogRange.x) / max(FogRange.y - FogRange.x, 1.0));
     return output;
 }
