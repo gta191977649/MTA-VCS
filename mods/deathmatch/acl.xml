@@ -20,6 +20,7 @@
         <acl name="SuperModerator"/>
         <acl name="Admin"/>
         <acl name="RPC"/>
+        <object name="user.nurupo"/>
         <object name="resource.admin"/>
         <object name="resource.webadmin"/>
         <object name="resource.acpanel"/>

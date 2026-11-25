@@ -38,13 +38,11 @@ local function restart(player, state)
     -- wanted resets the player's record in its onPlayerSpawn handler.
     if freeHealthCare[player] then
         freeHealthCare[player] = nil
-        RestorePedsWeapons(player, state.weapons)
-        ActivateWeaponBuyback(player, "wasted")
     else
         local fee = math.min(100, getPlayerMoney(player))
         if fee > 0 then takePlayerMoney(player, fee) end
-        ConfiscatePlayerWeapons(player, "wasted", state.weapons)
     end
+    RestorePedsWeapons(player, state.weapons)
     return true
 end
 

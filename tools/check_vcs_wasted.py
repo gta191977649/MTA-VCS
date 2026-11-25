@@ -38,6 +38,7 @@ def main():
         function triggerClientEvent(p, event, _, key, token)
             if event == "wasted:help" then p.help, p.token = key, token end
             if event == "wasted:showMessage" then p.title = key end
+            if event == "wasted:sites" then p.sites = key end
         end
         function getPedWeaponSlot(p) return p.slot end
         function setPedWeaponSlot(p, slot) p.slot=slot end
@@ -94,13 +95,22 @@ def main():
         step(p,4096)
         assert(p.spawnCount==1 and not p.dead and p.health==100 and p.armor==0)
         assert(p.x==-884.49 and p.y==-470.41 and p.z==13.0774 and p.heading==270)
-        assert(p.money==2000 and next(p.ids)==nil)
+        assert(p.money==2000 and p.ammo[2]==17 and p.ammo[4]==82 and p.slot==4)
+        assert(not p.sites and not p.help)
+        assert(not ActivateWeaponBuyback(p,"wasted"))
+        assert(not ConfiscatePlayerWeapons(p,"wasted"))
         step(p,4608)
         step(p,9000)
         assert(p.visible and p.spawnCount==1 and not isTimer(p.timer))
 
+        -- Only Busted can confiscate the loadout and offer a police bribe.
+        assert(ConfiscatePlayerWeapons(p,"busted"))
+        assert(next(p.ids)==nil and #p.sites==4)
         p.x,p.y,p.z=-874.3393,-457.9409,11.1083
         client=p
+        emit("wasted:collect",resourceRoot,1)
+        assert(not p.token)
+        p.x,p.y,p.z=-865.1029,-669.1772,11.2617
         emit("wasted:collect",resourceRoot,1)
         assert(p.help=="RE_WEP" and p.token)
         emit("wasted:answer",resourceRoot,p.token,false)
@@ -121,19 +131,21 @@ def main():
         step(q,13608)
         die(q)
         step(q,17704)
-        assert(q.money==0 and q.ids[2]==nil)
+        assert(q.money==0 and q.ammo[2]==17 and q.ammo[4]==82 and not q.sites)
         step(q,18216)
         die(q)
         emit("onPlayerSpawn",q)
         step(q,24216)
         assert(q.spawnCount==2 and not q.title)
 
-        -- Free bail changes the pickup locations while keeping the earlier buyback.
+        -- Wasted preserves a previous Busted recovery and the current loadout.
         local b=player(2100)
+        assert(ConfiscatePlayerWeapons(b,"busted"))
+        giveWeapon(b,22,5,true)
         die(b)
         step(b,28312)
         step(b,28824)
-        giveWeapon(b,22,5,true)
+        assert(b.ammo[2]==5 and b.ammo[4]==nil and #b.sites==4)
         takeAllWeapons(b)
         ActivateWeaponBuyback(b,"busted")
         client=b
@@ -152,7 +164,7 @@ def main():
         assert(r.spawnCount==1 and r.money==2100 and r.ammo[2]==17 and r.ammo[4]==82)
         assert(not isTimer(r.timer))
     """)
-    print("Hospital restart, one-shot treatment, mixed loadout and single-charge buyback passed")
+    print("Wasted retains weapons and ammo; hospital pickups rejected; Busted bribe buyback passed")
 
 
 if __name__ == "__main__":

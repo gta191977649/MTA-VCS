@@ -1,9 +1,5 @@
--- US MAIN.SCM REWMON registers four type-3 UNLOCKABLEICON pickups per outcome.
+-- Police bribe pickups recover weapons confiscated after Busted only.
 local sites = {
-    wasted = {
-        {-874.3393, -457.9409, 11.1083}, {-827.2523, 1158.5951, 11.0727},
-        {476.3028, 720.377, 11.3976}, {-126.9099, -968.5217, 10.8463},
-    },
     busted = {
         {-865.1029, -669.1772, 11.2617}, {-651.5514, 758.763, 11.2463},
         {512.5314, 508.5707, 11.3028}, {402.7107, -464.5605, 10.1144},
