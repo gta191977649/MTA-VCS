@@ -1395,7 +1395,7 @@ end, false)
 
 addEvent("npchlc_traffic:vehicleBodyHit", true)
 addEventHandler("npchlc_traffic:vehicleBodyHit", resourceRoot, function(vehicle, attacker, weapon, health, loss)
-    local state = vehicles[vehicle]
+    local state = vehicles[vehicle] or retiring[vehicle]
     if not state or state.boat or state.scriptPaused or not client or not isElement(attacker)
         or not finite(weapon) or weapon ~= math.floor(weapon) or weapon < 0 or (weapon > 39 and weapon ~= 51)
         or not finite(health) or not finite(loss) or loss < 0 or loss >= health or (weapon > 15 and loss == 0)
@@ -1425,6 +1425,13 @@ addEventHandler("npchlc_traffic:vehicleBodyHit", resourceRoot, function(vehicle,
             return
         end
     end
+    -- A nearby player can strike a car during its population fade. Validate
+    -- the attack first, then reclaim the same occupants before the timer can
+    -- delete them. Opening a door uses this same ownership transition.
+    local restored
+    state, restored = roadInteraction(vehicle)
+    if not state then return end
+    if restored then assignTask(state, state.railTask or state.physicsTask) end
     if #receipts == 16 then table.remove(receipts, 1) end
     receipts[#receipts+1] = {owner=client, attacker=attacker, weapon=weapon, health=health, loss=loss, tick=now}
     state.bodyHits = state.bodyHits or {}
@@ -2043,7 +2050,28 @@ function TrafficRoad.updatePursuitRoute(state,actor,now)
     record("policeRoutes")
 end
 
--- The same budgeted vehicle visit owns acquisition, mission transitions and release.
+-- Wanted changes wake the scan; the budgeted visit still owns mission transitions.
+addEventHandler("onPlayerWanted",root,function(previous, level)
+    if not graph or graph.edition~="SLUS-21590 USA v1.00" or level<=previous or level==0
+        or getElementInterior(source)~=0 or isPedDead(source) or TrafficCustody.isActive(source)
+        or not TrafficGroundPolice.enabled(TrafficWanted.getPoliceResponse(level,source)) then return end
+    local x,y,z=getElementPosition(source)
+    local dimension=getElementDimension(source)
+    local function wake(state)
+        if not state.lawEnforcer or state.dimension~=dimension then return end
+        local vx,vy,vz=getElementPosition(state.vehicle)
+        if (vx-x)^2+(vy-y)^2+(vz-z)^2>65^2 then return end
+        state.patrolScan=nil
+        TrafficGroundPolice.trace(state,source,"wanted-rise")
+        record("policeWantedWakeups")
+        return true
+    end
+    for _,state in pairs(vehicles) do wake(state) end
+    for car,state in pairs(retiring) do
+        if wake(state) then roadInteraction(car) end
+    end
+end)
+
 local function patrolDuty(state, now, x, y, z)
     if not state.lawEnforcer or state.pursuit or graph.edition~="SLUS-21590 USA v1.00" or not TrafficGroundPolice then return false end
     local player = state.policeTarget
@@ -2052,7 +2080,12 @@ local function patrolDuty(state, now, x, y, z)
         if state.patrolScan and (now-state.patrolScan)%4294967296 < 1000 then return false end
         state.patrolScan = now
         for _, nearby in ipairs(getElementsWithinRange(x,y,z,65,"player",0,state.dimension) or {}) do
-            if not isPedDead(nearby) and TrafficGroundPolice.assignVehicle(state,nearby) then player=nearby break end
+            if not isPedDead(nearby) and not TrafficCustody.isActive(nearby)
+                and TrafficGroundPolice.assignVehicle(state,nearby,true) then
+                player=nearby
+                record("policeAcquired")
+                break
+            end
         end
         if not player then return false end
     end
@@ -2070,6 +2103,7 @@ local function patrolDuty(state, now, x, y, z)
             and (not car or (getVehicleType(car)~="Plane" and getVehicleType(car)~="Helicopter") or tz-z<=3)
     end
     if level==0 or not valid or not TrafficGroundPolice.vehicleTarget(state.vehicle) or state.boat and level<2 and not TrafficPolice.isBoatAssigned(state.vehicle) then
+        if isElement(player) then TrafficGroundPolice.trace(state,player,"released") end
         TrafficGroundPolice.releaseVehicle(state.vehicle)
         state.policeTarget,state.patrolScan = nil,now
         if state.patrol then
@@ -2108,6 +2142,8 @@ local function patrolDuty(state, now, x, y, z)
     end
     local tx,ty,tz=getElementPosition(actor)
     if not state.boat and (zone==0x110 or cruising and zone==0 and math.abs(tx-x)<=14 and math.abs(ty-y)<=14) then
+        TrafficGroundPolice.trace(state,player,"crew-exit")
+        record("policeCrewExits")
         state.evacuating={requested=now,policeTarget=player}
         assignTask(state,{"stopVehicle"})
         TrafficPassengers.policeExit(state.vehicle,now,player)
@@ -2152,6 +2188,8 @@ local function patrolDuty(state, now, x, y, z)
     local matrix=car and getElementMatrix(car)
     if (p.mission==3 or p.mission==5 or hold) and horizontal<(hold and 10 or 14) and (hold or state.originalVehicle~=246)
         and (not car or matrix and matrix[3][3]<=-.9 or p.slowSince and (now-p.slowSince)%4294967296>(hold and 2500 or 100)) then
+        TrafficGroundPolice.trace(state,player,"pursuit-exit")
+        record("policeCrewExits")
         state.evacuating={requested=now,policeTarget=player}
         assignTask(state,{"stopVehicle"})
         TrafficPassengers.policeExit(state.vehicle,now,player)
@@ -2216,12 +2254,14 @@ end
 
 addEventHandler("onVehicleDamage", root, function(loss)
     local vehicle = source
-    local state = vehicles[vehicle]
+    local state = vehicles[vehicle] or retiring[vehicle]
     if not state or state.boat or state.scriptPaused or loss <= 0 then return end
     state.losses = state.losses or {}
     if #state.losses == 16 then table.remove(state.losses, 1) end
     table.insert(state.losses, getTickCount())
-    if not state.rail or state.evacuating or state.damagePending then return end
+    -- Health sync can precede the attack report which cancels retirement.
+    -- Retain that evidence without restarting a retiring car's controller.
+    if retiring[vehicle] or not state.rail or state.evacuating or state.damagePending then return end
     -- Damage and the contact report may arrive in either order.
     state.damagePending = true
     setTimer(function()

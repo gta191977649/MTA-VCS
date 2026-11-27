@@ -153,6 +153,7 @@
 		<setting name="*graphFile" value="paths/generated/vcs_traffic.json" />
 		<setting name="*roadPopulationMode" value="auto" />
 		<setting name="*modelProvider" value="auto" />
+		<setting name="*tracePolice" value="false" />
 	</settings>
 </meta>
 

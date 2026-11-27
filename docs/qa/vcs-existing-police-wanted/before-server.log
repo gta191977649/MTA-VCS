@@ -1,0 +1,120 @@
+[2026-11-26 01:01:27] INFO: QA CLIENT READY mode=saturated
+[2026-11-26 01:01:30] INFO: QA SELECT original=207 driver=userdata: 0000000000000034 wanted=0
+[2026-11-26 01:01:30] INFO: QA TRACE phase=render age=243 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:30] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:30] INFO: QA TRACE phase=render age=774 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:31] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:31] INFO: QA TRACE phase=render age=1281 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:31] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:31] INFO: QA TRACE phase=render age=1827 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:32] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:32] INFO: QA SHOT tag=existing-patrol-before-wanted status=ok
+[2026-11-26 01:01:32] INFO: QA TRACE phase=render age=2358 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:32] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:32] INFO: QA TRACE phase=render age=2863 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:33] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:33] INFO: QA TRACE phase=render age=3380 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:33] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:33] INFO: QA TRACE phase=render age=3904 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0
+[2026-11-26 01:01:34] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:34] INFO: QA RAISED mode=saturated cops=2
+[2026-11-26 01:01:34] INFO: QA TRACE phase=wanted age=343 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:34] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:34] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:34] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:34] INFO: QA TRACE phase=wanted age=867 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:35] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:35] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:35] INFO: QA TRACE phase=wanted age=1398 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:36] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:36] INFO: QA TRACE phase=wanted age=1919 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:36] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:36] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:36] INFO: QA TRACE phase=wanted age=2424 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:37] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:37] INFO: QA TRACE phase=wanted age=2929 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:37] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:37] INFO: QA TRACE phase=wanted age=3450 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:37] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:38] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:38] INFO: QA TRACE phase=wanted age=3984 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:38] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:38] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:38] INFO: QA TRACE phase=wanted age=4499 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:39] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:39] INFO: QA TRACE phase=wanted age=5017 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:39] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:39] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:39] INFO: QA TRACE phase=wanted age=5529 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:40] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:40] INFO: QA TRACE phase=wanted age=6034 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:40] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:40] INFO: QA TRACE phase=wanted age=6552 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:40] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:41] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:41] INFO: QA TRACE phase=wanted age=7078 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:41] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:41] INFO: QA TRACE phase=wanted age=7590 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:41] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:42] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:42] INFO: QA TRACE phase=wanted age=8107 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:42] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:42] INFO: QA TRACE phase=wanted age=8611 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:42] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:43] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:43] INFO: QA TRACE phase=wanted age=9121 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:43] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:43] INFO: QA TRACE phase=wanted age=9659 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:43] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:44] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:44] INFO: QA TRACE phase=wanted age=10178 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:44] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:44] INFO: QA TRACE phase=wanted age=10678 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:44] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:45] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:45] INFO: QA TRACE phase=wanted age=11178 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:45] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:45] INFO: QA TRACE phase=wanted age=11702 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:45] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:46] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:46] INFO: QA TRACE phase=wanted age=12203 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:46] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:46] INFO: QA TRACE phase=wanted age=12738 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:46] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:47] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:47] INFO: QA TRACE phase=wanted age=13256 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:47] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:47] INFO: QA TRACE phase=wanted age=13756 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:47] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:48] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:48] INFO: QA TRACE phase=wanted age=14294 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:48] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:48] INFO: QA TRACE phase=wanted age=14794 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:49] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:49] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:49] INFO: QA TRACE phase=wanted age=15310 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:49] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:49] INFO: QA TRACE phase=wanted age=15818 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:50] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:50] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:50] INFO: QA TRACE phase=wanted age=16319 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:50] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:50] INFO: QA TRACE phase=wanted age=16834 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:51] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:51] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:51] INFO: QA TRACE phase=wanted age=17366 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:51] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:51] INFO: QA TRACE phase=wanted age=17871 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:52] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:52] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:52] INFO: QA TRACE phase=wanted age=18394 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:52] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:53] INFO: QA TRACE phase=wanted age=18912 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:53] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:53] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:53] INFO: QA TRACE phase=wanted age=19412 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:53] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:54] INFO: QA TRACE phase=wanted age=19925 active=true wanted=1 target=false mission=nil exit=false aboard=true cops=2
+[2026-11-26 01:01:54] INFO: QA ACQUIRE result=false cops=2 owner=nil
+[2026-11-26 01:01:54] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:01:54] INFO: QA RESULT timeout aboard=true

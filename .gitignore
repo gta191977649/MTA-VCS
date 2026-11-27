@@ -15,3 +15,4 @@ mods/deathmatch/resources/\[model\]/vcs_model/
 AGENTS.md
 mods/deathmatch/resources/\[vcs\]/radio/audio/radio.bin
 /screens
+/.deploy-cache.json

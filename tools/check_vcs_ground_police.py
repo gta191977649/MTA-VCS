@@ -9,6 +9,7 @@ def check_police_renderer(resources):
     vm.execute("""
         root, events, assets = {}, {}, {}
         SKYGFX = {sunGlare=true}
+        CPointLights = {Register=function() end}
         function addEvent() end
         function addEventHandler(name,_,fn) events[name]=fn end
         function removeEventHandler(name) events[name]=nil end
@@ -88,6 +89,106 @@ def check_police_renderer(resources):
     """)
 
 
+def check_existing_patrol(resources):
+    from check_vcs_traffic import SERVER_MOCK
+
+    vm = LuaRuntime()
+    vm.execute(SERVER_MOCK)
+    vm.globals().bitAnd = lambda a, b: a & b
+    vm.execute("""
+        exports={npc_hlc={setNPCDriveSpeed=function() end},server_coldata={}}
+        TrafficVisibility={roadRange=160}
+        TrafficCustody={isActive=function(p) return p.custody end}
+        function getPlayerWantedLevel(p) return p.stars or 0 end
+        function setVehicleSirensOn(v,active) v.siren=active end
+        function upvalue(fn, key, replacement)
+            for i=1,100 do
+                local name,value=debug.getupvalue(fn,i)
+                if not name then break end
+                if name==key then
+                    if replacement~=nil then debug.setupvalue(fn,i,replacement) end
+                    return value
+                end
+            end
+            error("missing upvalue "..key)
+        end
+    """)
+    runtime = resources / "[traffic]/npchlc_traffic"
+    for path in [resources / "[module]/wanted/rules.lua", runtime / "traffic_ground_police.lua"]:
+        vm.execute(path.read_text(encoding="utf-8"))
+    vm.execute("TrafficWanted={getPoliceResponse=WantedRules.getPoliceResponse}")
+    vm.execute((runtime / "traffic_road.lua").read_text(encoding="utf-8"))
+    vm.execute("""
+        upvalue(TrafficRoad.start,"graph",{edition="SLUS-21590 USA v1.00"})
+        local tick=upvalue(TrafficRoad.start,"tick")
+        local duty=upvalue(tick,"patrolDuty")
+        local vehicles=upvalue(duty,"vehicles")
+        upvalue(duty,"switchToPhysics",function(s) s.rail=false end)
+        upvalue(duty,"assignTask",function(s,t) s.task=t;return true end)
+        TrafficPassengers={policeExit=function() end,
+            requestExit=function(p,car,seat) p.exitCar=car;return true end}
+        local suspect=element("player");suspect.stars=0
+        local car,driver=element("vehicle"),element("ped")
+        local state={vehicle=car,driver=driver,dimension=0,lawEnforcer=true,rail=true,cruiseSpeed=20,drivingStyle=0}
+        vehicles[car]=state
+        function getElementsWithinRange() return {suspect} end
+        assert(not duty(state,now,0,0,0) and state.patrolScan==now)
+        suspect.stars=1
+        -- Both officer and vehicle creation budgets are already exhausted.
+        local g=TrafficGroundPolice
+        assert(g.assignVehicle({vehicle=element("vehicle")},suspect))
+        assert(g.enroll(element("ped"),suspect) and g.enroll(element("ped"),suspect))
+        assert(not g.available(suspect,select(2,g.response(suspect))))
+        deliver("onPlayerWanted",suspect,0,1)
+        assert(state.patrolScan==nil)
+        assert(duty(state,now+50,0,0,0))
+        assert(state.policeTarget==suspect and state.evacuating.policeTarget==suspect)
+        assert(state.task[1]=="stopVehicle" and driver.exitCar==car)
+        assert(not state.rail and state.drivingStyle==2)
+        -- Custody, other worlds, falling stars and response suppression do
+        -- not wake an unrelated patrol or steal another suspect's unit.
+        state.patrolScan=now
+        suspect.custody=true;deliver("onPlayerWanted",suspect,1,2)
+        suspect.custody=nil;suspect.dimension=1;deliver("onPlayerWanted",suspect,1,2)
+        suspect.dimension=0;deliver("onPlayerWanted",suspect,2,1)
+        assert(state.patrolScan==now)
+        local response=TrafficWanted.getPoliceResponse
+        TrafficWanted.getPoliceResponse=function() return {suppressPolice=true} end
+        deliver("onPlayerWanted",suspect,1,2);assert(state.patrolScan==now)
+        TrafficWanted.getPoliceResponse=response
+        local other=element("player");other.stars=1
+        assert(not g.assignVehicle(state,other) and state.policeTarget==suspect)
+        -- A still-visible patrol in the population fade must be restored
+        -- before it can participate in the regular budgeted visit.
+        local wake=events.onPlayerWanted[#events.onPlayerWanted]
+        local retiring=upvalue(wake,"retiring")
+        local fading={vehicle=element("vehicle"),lawEnforcer=true,dimension=0,patrolScan=now}
+        retiring[fading.vehicle]=fading
+        upvalue(wake,"roadInteraction",function(car)
+            vehicles[car],retiring[car]=retiring[car],nil
+            vehicles[car].restored=true
+        end)
+        deliver("onPlayerWanted",suspect,1,2)
+        assert(fading.restored and fading.patrolScan==nil and not retiring[fading.vehicle])
+        -- Traces are opt-in and carry the acquisition stage and quota counts.
+        local logs={}
+        function get() return true end
+        function outputDebugString(line) logs[#logs+1]=line end
+        g.trace(state,suspect,"crew-exit")
+        assert(#logs==1 and logs[1]:find("crew%-exit") and logs[1]:find("units=2/1"))
+        function get() return false end
+        g.trace(state,suspect,"crew-exit");assert(#logs==1)
+        -- Further-away existing patrols drive to the suspect instead of
+        -- taking the nearby crew-exit branch.
+        local far={vehicle=element("vehicle"),driver=element("ped"),dimension=0,
+            lawEnforcer=true,originalVehicle=207,rail=true,cruiseSpeed=20,drivingStyle=0}
+        far.vehicle.x=40;vehicles[far.vehicle]=far
+        TrafficRoad.updatePursuitRoute=function(s) s.routed=true end
+        assert(duty(far,now+100,40,0,0) and far.routed and not far.evacuating)
+        assert(far.patrol.mission==2 or far.patrol.mission==4)
+    """)
+
+
 def main():
     resources = Path(__file__).resolve().parents[1] / "mods/deathmatch/resources"
     vehicle_resource = resources / "[model]/vcs_vehicle"
@@ -129,6 +230,7 @@ def main():
         driver=localPlayer;car.base=411;tap(false);assert(not on and writes==1)
     """)
     check_police_renderer(resources)
+    check_existing_patrol(resources)
     vm = LuaRuntime()
     vm.execute("""
         root,now,events,world = {},0,{},{}
@@ -274,7 +376,22 @@ def main():
         assert(not g.enroll({x=19},a) and not g.enroll(near,b))
         assert(g.assignVehicle({vehicle={}},b))
         local state={vehicle={}}
-        assert(not g.assignVehicle(state,a))
+        -- Existing units still respond when officers and new dispatch slots
+        -- are full. These limits throttle creation, not ambient patrol duty.
+        assert(not g.available(a,select(2,g.response(a))))
+        assert(not g.assignVehicle(state,a) and g.assignVehicle(state,a,true))
+        local second={vehicle={}}
+        assert(not g.assignVehicle(second,a) and g.assignVehicle(second,a,true))
+        assert(not g.available(a,select(2,g.response(a))))
+        assert(not g.assignVehicle(second,b))
+        local response=TrafficWanted.getPoliceResponse
+        TrafficWanted.getPoliceResponse=function() return {suppressPolice=true} end
+        assert(not g.assignVehicle({vehicle={}},a,true))
+        TrafficWanted.getPoliceResponse=function() return {suppressGarage=true} end
+        assert(not g.assignVehicle({vehicle={}},a,true))
+        TrafficWanted.getPoliceResponse=response
+        assert(not g.assignVehicle({vehicle={}},{stars=0}))
+        g.releaseVehicle(second.vehicle)
         g.releaseOfficer(near)
         assert(g.assignVehicle(state,a) and not g.assignVehicle(state,b))
         g.releaseVehicle(state.vehicle)

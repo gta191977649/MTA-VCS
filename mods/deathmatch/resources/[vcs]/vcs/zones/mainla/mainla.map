@@ -28,7 +28,6 @@
     <building posX="-1400.809204" posY="-1287.345337" posZ="17.600908" rotX="-0.000000" rotY="-0.000000" rotZ="0.499994" interior="0" dimension="0" id="lodapsmallhang" uniqueID="11635" />
     <building posX="-1800.351196" posY="-1133.079346" posZ="13.959000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodapbighang" uniqueID="11641" />
     <building posX="-1800.351196" posY="-1006.952515" posZ="13.959000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodapbighang_3940e" uniqueID="11651" />
-    <object posX="-1800.351196" posY="-1133.079346" posZ="13.959000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodapbighang" lowLOD="true" lodNear="170.00" lodBounds="-1817.860 -1157.682 -1773.415 -1113.237" />
     <building posX="-1087.364258" posY="-897.844543" posZ="17.095049" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1342" uniqueID="11671" />
     <building posX="-1020.885376" posY="-971.935974" posZ="29.871626" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lod_fltanks_okay" uniqueID="11106" />
     <building posX="-1078.669067" posY="-1027.926147" posZ="15.975207" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodfuelbay1" uniqueID="11658" />
@@ -107,8 +106,8 @@
     <building posX="-1022.350952" posY="-850.754150" posZ="9.913601" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodsuncons" uniqueID="11685" />
     <building posX="-957.960876" posY="-839.047668" posZ="12.167980" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodtrailerpark" uniqueID="11089" />
     <building posX="-1020.885376" posY="-971.935974" posZ="29.871626" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lod_fltanks_dest" uniqueID="11108" />
-    <object posX="-493.133026" posY="783.927856" posZ="201.844345" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="lodrockstarb" uniqueID="11478" forceObject="true" />
-    <object posX="-481.515503" posY="952.746399" posZ="117.541664" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loddt22_neon" forceObject="true" lowLOD="true" />
+    <object posX="-493.133026" posY="783.927856" posZ="201.844345" rotX="90.000000" rotY="0.000000" rotZ="-90.000014" interior="0" dimension="0" id="lodrockstarb" uniqueID="11478" forceObject="true" />
+    <object posX="-481.515503" posY="952.746399" posZ="117.541664" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loddt22_neon" forceObject="true" uniqueID="11964" />
     <object posX="-1833.525391" posY="-751.972839" posZ="27.645769" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodotlight418" uniqueID="11675" forceObject="true" />
     <object posX="-986.273804" posY="-1153.920654" posZ="22.677586" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1285" uniqueID="11008" forceObject="true" />
     <object posX="-1435.707397" posY="-851.229614" posZ="41.662998" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1280" uniqueID="11666" forceObject="true" />
@@ -190,7 +189,7 @@
     <building posX="-1028.923096" posY="-419.109741" posZ="9.837000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodmiland039" uniqueID="11752" />
     <object posX="-1143.645874" posY="-1576.204224" posZ="-0.000000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="cdseabed27" lowLOD="true" />
     <building posX="-1059.332275" posY="-374.840271" posZ="20.321695" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodbuildingg2" uniqueID="11754" />
-    <object posX="-936.787354" posY="-399.204346" posZ="78.274925" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodlha_neonb" forceObject="true" lowLOD="true" />
+    <object posX="-936.787354" posY="-399.204346" posZ="78.274925" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodlha_neonb" forceObject="true" uniqueID="11965" />
     <building posX="-912.679749" posY="-372.395691" posZ="12.340988" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodallbit" uniqueID="11281" />
     <building posX="-841.955750" posY="-405.592163" posZ="5.286140" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodtlharoadgg2" uniqueID="11232" />
     <building posX="-885.716736" posY="-400.707672" posZ="55.068863" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodoastsky1" uniqueID="11234" />
@@ -243,8 +242,8 @@
     <building posX="-904.513733" posY="-1453.802979" posZ="24.744202" rotX="-0.000000" rotY="-0.000000" rotZ="156.499991" interior="0" dimension="0" id="sub_floodlite_e7ab0" />
     <building posX="-841.671814" posY="-1479.979004" posZ="24.885597" rotX="-0.000000" rotY="-0.000000" rotZ="156.499991" interior="0" dimension="0" id="sub_floodlite_e7ab0" />
     <building posX="-772.320496" posY="-1429.502441" posZ="24.602322" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="docks28" lodParent="lodks28" uniqueID="11612" />
-    <building posX="-728.989624" posY="-1535.535645" posZ="17.046185" rotX="89.999993" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="nt_aircon3_01_62076" />
-    <building posX="-732.111328" posY="-1543.262207" posZ="17.046185" rotX="89.999993" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="nt_aircon3_01_62076" />
+    <building posX="-728.989624" posY="-1535.535645" posZ="17.046185" rotX="90.000000" rotY="0.000000" rotZ="-111.999989" interior="0" dimension="0" id="nt_aircon3_01_62076" />
+    <building posX="-732.111328" posY="-1543.262207" posZ="17.046185" rotX="90.000000" rotY="0.000000" rotZ="-111.999989" interior="0" dimension="0" id="nt_aircon3_01_62076" />
     <building posX="-707.221069" posY="-1566.115234" posZ="15.673981" rotX="0.000000" rotY="-0.000000" rotZ="-112.499995" interior="0" dimension="0" id="nt_aircon1dbl_d6973" />
     <building posX="-700.034851" posY="-1575.967163" posZ="15.673981" rotX="0.000000" rotY="-0.000000" rotZ="-112.499995" interior="0" dimension="0" id="nt_aircon1dbl_d6973" />
     <object posX="-2152.709717" posY="-1228.037109" posZ="-0.000000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="cdseabed28" lowLOD="true" />
@@ -336,7 +335,7 @@
     <building posX="-944.049744" posY="-1337.057739" posZ="29.406807" rotX="-0.000000" rotY="-0.000000" rotZ="158.176827" interior="0" dimension="0" id="vcs_model_6311" />
     <building posX="-945.216736" posY="-1340.038940" posZ="29.406807" rotX="-0.000000" rotY="-0.000000" rotZ="158.176827" interior="0" dimension="0" id="vcs_model_6311" />
     <building posX="-967.031494" posY="-1344.973633" posZ="34.816181" rotX="-0.000000" rotY="-0.000000" rotZ="107.792889" interior="0" dimension="0" id="dr_etbill" lodParent="lodetbill" uniqueID="11631" />
-    <building posX="-729.015564" posY="-1471.031494" posZ="17.266899" rotX="90.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="nt_aircon1_02_1f83b" />
+    <building posX="-729.015564" posY="-1471.031494" posZ="17.266899" rotX="90.000000" rotY="0.000000" rotZ="-171.000007" interior="0" dimension="0" id="nt_aircon1_02_1f83b" />
     <building posX="-727.144836" posY="-1417.738892" posZ="12.871703" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_egg02" />
     <building posX="-1583.318970" posY="-233.271713" posZ="16.125076" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lod_substn" uniqueID="11767" />
     <building posX="-1682.229004" posY="-195.337784" posZ="13.663801" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodwall" uniqueID="11764" />
@@ -487,14 +486,14 @@
     <building posX="-951.447266" posY="-1185.267334" posZ="21.675703" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6351" />
     <building posX="-951.429688" posY="-1194.322998" posZ="21.675703" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6351" />
     <building posX="-1003.652039" posY="-1149.223022" posZ="31.761253" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
-    <building posX="-966.667908" posY="-1144.834595" posZ="16.692514" rotX="-89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventb" />
+    <building posX="-966.667908" posY="-1144.834595" posZ="16.692514" rotX="-90.000000" rotY="0.000000" rotZ="0.000000" interior="0" dimension="0" id="dr_roofventb" />
     <building posX="-1003.652039" posY="-1147.513062" posZ="31.761253" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
     <building posX="-960.799866" posY="-1195.128418" posZ="31.764540" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
     <building posX="-960.799866" posY="-1196.838379" posZ="31.764540" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
-    <building posX="-966.667908" posY="-1144.834595" posZ="20.300571" rotX="-89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventb" />
-    <building posX="-966.667908" posY="-1144.834595" posZ="23.830706" rotX="-89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventb" />
-    <building posX="-966.667908" posY="-1144.834595" posZ="27.470190" rotX="-89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventb" />
-    <building posX="-966.667908" posY="-1144.834595" posZ="30.988876" rotX="-89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventb" />
+    <building posX="-966.667908" posY="-1144.834595" posZ="20.300571" rotX="-90.000000" rotY="0.000000" rotZ="0.000000" interior="0" dimension="0" id="dr_roofventb" />
+    <building posX="-966.667908" posY="-1144.834595" posZ="23.830706" rotX="-90.000000" rotY="0.000000" rotZ="0.000000" interior="0" dimension="0" id="dr_roofventb" />
+    <building posX="-966.667908" posY="-1144.834595" posZ="27.470190" rotX="-90.000000" rotY="0.000000" rotZ="0.000000" interior="0" dimension="0" id="dr_roofventb" />
+    <building posX="-966.667908" posY="-1144.834595" posZ="30.988876" rotX="-90.000000" rotY="0.000000" rotZ="0.000000" interior="0" dimension="0" id="dr_roofventb" />
     <building posX="-996.520508" posY="-1186.374512" posZ="14.351479" rotX="-0.000000" rotY="-0.000000" rotZ="90.000007" interior="0" dimension="0" id="lounger" />
     <building posX="-995.050110" posY="-1186.374512" posZ="14.351479" rotX="-0.000000" rotY="-0.000000" rotZ="90.000007" interior="0" dimension="0" id="lounger" />
     <building posX="-993.570435" posY="-1186.374512" posZ="14.351479" rotX="-0.000000" rotY="-0.000000" rotZ="90.000007" interior="0" dimension="0" id="lounger" />
@@ -546,13 +545,13 @@
     <building posX="-1115.174683" posY="-1007.935852" posZ="15.803858" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1115.169312" posY="-1055.819580" posZ="15.112661" rotX="0.000000" rotY="-179.999991" rotZ="179.999991" interior="0" dimension="0" id="vcs_model_6395" />
     <building posX="-1066.220093" posY="-1015.603577" posZ="36.644897" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe_b2" />
-    <building posX="-1076.757446" posY="-1012.802673" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1087.280151" posY="-1012.802673" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1087.280151" posY="-1024.895386" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1076.757446" posY="-1024.895386" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1065.008911" posY="-1024.895386" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1057.219604" posY="-1042.865967" posZ="2.912428" rotX="89.999993" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1057.219604" posY="-1027.780396" posZ="2.912428" rotX="89.999993" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1076.757446" posY="-1012.802673" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1087.280151" posY="-1012.802673" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1087.280151" posY="-1024.895386" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1076.757446" posY="-1024.895386" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1065.008911" posY="-1024.895386" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1057.219604" posY="-1042.865967" posZ="2.912428" rotX="90.000000" rotY="0.000000" rotZ="149.999982" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1057.219604" posY="-1027.780396" posZ="2.912428" rotX="90.000000" rotY="0.000000" rotZ="149.999982" interior="0" dimension="0" id="jm_oilpipe02" />
     <building posX="-1120.760376" posY="-1007.935852" posZ="15.803831" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1120.760376" posY="-1023.196533" posZ="15.803831" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01" />
     <building posX="-1120.755005" posY="-1038.457275" posZ="15.803833" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01" />
@@ -560,7 +559,7 @@
     <building posX="-1018.967102" posY="-1119.876099" posZ="31.764542" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
     <building posX="-1018.967102" posY="-1121.516968" posZ="31.764542" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
     <building posX="-1018.967102" posY="-1123.110840" posZ="31.764542" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofblokc" />
-    <building posX="-1021.935242" posY="-1146.046875" posZ="16.819809" rotX="-89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_roofventb_4a9a9" />
+    <building posX="-1021.935242" posY="-1146.046875" posZ="16.819809" rotX="-90.000000" rotY="0.000000" rotZ="90.000000" interior="0" dimension="0" id="dr_roofventb_4a9a9" />
     <object posX="-1100.251587" posY="-1086.890137" posZ="13.733822" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_632b1" />
     <object posX="-1053.052246" posY="-1086.890015" posZ="13.733820" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_4e9e6" />
     <object posX="-1129.844238" posY="-1062.771362" posZ="13.832306" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_632b1" />
@@ -584,10 +583,10 @@
     <building posX="-1065.189209" posY="-1029.573608" posZ="22.658569" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6328" />
     <building posX="-1063.338623" posY="-1005.954834" posZ="16.517498" rotX="0.000000" rotY="-0.000000" rotZ="-0.000014" interior="0" dimension="0" id="vcs_model_6395_bf0d8" />
     <building posX="-1067.641113" posY="-1005.875732" posZ="16.514812" rotX="0.000000" rotY="-0.000000" rotZ="-0.000014" interior="0" dimension="0" id="vcs_model_6395_bf0d8" />
-    <building posX="-1063.338623" posY="-1005.263611" posZ="18.619156" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1067.641113" posY="-1005.184570" posZ="18.616470" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1067.641113" posY="-1005.875793" posZ="35.978809" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6395_3a033" />
-    <building posX="-1063.338623" posY="-1005.954895" posZ="35.981495" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6395_3a033" />
+    <building posX="-1063.338623" posY="-1005.263611" posZ="18.619156" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1067.641113" posY="-1005.184570" posZ="18.616470" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1067.641113" posY="-1005.875793" posZ="35.978809" rotX="90.000000" rotY="0.000000" rotZ="-0.000014" interior="0" dimension="0" id="vcs_model_6395_3a033" />
+    <building posX="-1063.338623" posY="-1005.954895" posZ="35.981495" rotX="90.000000" rotY="0.000000" rotZ="-0.000014" interior="0" dimension="0" id="vcs_model_6395_3a033" />
     <building posX="-1058.609985" posY="-1012.809326" posZ="36.669041" rotX="-0.000003" rotY="-60.000016" rotZ="-90.000000" interior="0" dimension="0" id="jm_oilpipe02_3ce85" />
     <building posX="-1058.598022" posY="-1017.019653" posZ="36.656895" rotX="-0.000003" rotY="-60.000016" rotZ="-90.000000" interior="0" dimension="0" id="jm_oilpipe02_3ce85" />
     <building posX="-1037.831909" posY="-1012.759216" posZ="36.678753" rotX="-0.000003" rotY="-60.000016" rotZ="-90.000000" interior="0" dimension="0" id="jm_oilpipe02_3ce85" />
@@ -596,17 +595,17 @@
     <building posX="-1016.416748" posY="-1029.334473" posZ="36.664066" rotX="0.000001" rotY="-0.000000" rotZ="-0.000006" interior="0" dimension="0" id="jm_oilpipe_b2_98121" />
     <building posX="-1040.623291" posY="-1016.969543" posZ="36.666607" rotX="-0.000000" rotY="179.999991" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipejnt" />
     <building posX="-1040.635254" posY="-1012.759216" posZ="36.678753" rotX="-0.000000" rotY="179.999991" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipejnt" />
-    <building posX="-1040.635254" posY="-1012.759216" posZ="34.573597" rotX="-89.999986" rotY="179.999993" rotZ="-179.999952" interior="0" dimension="0" id="jm_oilpipe02_64840" />
-    <building posX="-1040.623291" posY="-1016.969543" posZ="34.561451" rotX="-89.999986" rotY="179.999993" rotZ="-179.999952" interior="0" dimension="0" id="jm_oilpipe02_64840" />
-    <building posX="-1040.623291" posY="-1012.759216" posZ="16.497398" rotX="89.999991" rotY="68.458680" rotZ="-68.458681" interior="0" dimension="0" id="jm_oilpipejnt_6b378" />
-    <building posX="-1040.623291" posY="-1016.969543" posZ="16.497398" rotX="89.999991" rotY="68.458682" rotZ="68.458681" interior="0" dimension="0" id="jm_oilpipejnt_78b57" />
-    <building posX="-1005.991333" posY="-1030.750488" posZ="34.570911" rotX="-89.999986" rotY="179.999993" rotZ="-179.999952" interior="0" dimension="0" id="jm_oilpipe02_64840" />
-    <building posX="-1006.003296" posY="-1026.540283" posZ="34.583057" rotX="-89.999986" rotY="179.999993" rotZ="-179.999952" interior="0" dimension="0" id="jm_oilpipe02_64840" />
+    <building posX="-1040.635254" posY="-1012.759216" posZ="34.573597" rotX="-90.000000" rotY="0.000000" rotZ="0.000037" interior="0" dimension="0" id="jm_oilpipe02_64840" />
+    <building posX="-1040.623291" posY="-1016.969543" posZ="34.561451" rotX="-90.000000" rotY="0.000000" rotZ="0.000037" interior="0" dimension="0" id="jm_oilpipe02_64840" />
+    <building posX="-1040.623291" posY="-1012.759216" posZ="16.497398" rotX="90.000000" rotY="0.000000" rotZ="-0.000005" interior="0" dimension="0" id="jm_oilpipejnt_6b378" />
+    <building posX="-1040.623291" posY="-1016.969543" posZ="16.497398" rotX="90.000000" rotY="0.000000" rotZ="-180.000000" interior="0" dimension="0" id="jm_oilpipejnt_78b57" />
+    <building posX="-1005.991333" posY="-1030.750488" posZ="34.570911" rotX="-90.000000" rotY="0.000000" rotZ="0.000037" interior="0" dimension="0" id="jm_oilpipe02_64840" />
+    <building posX="-1006.003296" posY="-1026.540283" posZ="34.583057" rotX="-90.000000" rotY="0.000000" rotZ="0.000037" interior="0" dimension="0" id="jm_oilpipe02_64840" />
     <building posX="-1006.003296" posY="-1026.540283" posZ="36.688213" rotX="-0.000000" rotY="179.999991" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipejnt" />
     <building posX="-1005.991333" posY="-1030.750488" posZ="36.676067" rotX="-0.000000" rotY="179.999991" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipejnt" />
-    <building posX="-1065.008911" posY="-1012.802673" posZ="5.832781" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02" />
-    <building posX="-1005.991333" posY="-1026.540161" posZ="16.506859" rotX="89.999991" rotY="68.458680" rotZ="-68.458681" interior="0" dimension="0" id="jm_oilpipejnt_1da89" />
-    <building posX="-1005.991333" posY="-1030.750488" posZ="16.506859" rotX="89.999991" rotY="68.458682" rotZ="68.458681" interior="0" dimension="0" id="jm_oilpipejnt_e53b4" />
+    <building posX="-1065.008911" posY="-1012.802673" posZ="5.832781" rotX="90.000000" rotY="0.000000" rotZ="119.999987" interior="0" dimension="0" id="jm_oilpipe02" />
+    <building posX="-1005.991333" posY="-1026.540161" posZ="16.506859" rotX="90.000000" rotY="0.000000" rotZ="-0.000005" interior="0" dimension="0" id="jm_oilpipejnt_1da89" />
+    <building posX="-1005.991333" posY="-1030.750488" posZ="16.506859" rotX="90.000000" rotY="0.000000" rotZ="-180.000000" interior="0" dimension="0" id="jm_oilpipejnt_e53b4" />
     <building posX="-1059.597412" posY="-999.036682" posZ="17.795231" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6327" />
     <object posX="-1005.852905" posY="-1086.890015" posZ="13.733820" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_79bc4" />
     <object posX="-980.905823" posY="-1065.175049" posZ="13.733820" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_79bc4" />
@@ -647,7 +646,7 @@
     <building posX="-1435.706787" posY="-855.213318" posZ="35.345551" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="ap_termina2_01" />
     <building posX="-1585.271118" posY="-928.748840" posZ="27.701687" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="sub_floodlite_8ec65" />
     <building posX="-1432.254883" posY="-966.196655" posZ="27.701687" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="sub_floodlite_8ec65" />
-    <object posX="-1435.452271" posY="-841.491394" posZ="21.611483" rotX="89.999990" rotY="-90.000000" rotZ="0.037302" interior="0" dimension="0" id="vcs_model_1276" forceObject="true" lowLOD="true" />
+    <object posX="-1435.452271" posY="-841.491394" posZ="21.611483" rotX="90.000000" rotY="0.000000" rotZ="-179.833499" interior="0" dimension="0" id="vcs_model_1276" forceObject="true" lowLOD="true" />
     <object posX="-1435.707397" posY="-851.229614" posZ="41.662998" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1277" lodParent="vcs_model_1280" uniqueID="11666" forceObject="true" />
     <building posX="-1435.706787" posY="-858.020142" posZ="33.617729" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="ap_termwindows1b" />
     <building posX="-1262.778931" posY="27.055492" posZ="18.630726" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodcrushju" uniqueID="11830" />
@@ -701,7 +700,7 @@
     <building posX="-1088.350586" posY="-992.670715" posZ="15.589276" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1085.734009" posY="-992.670715" posZ="15.344638" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1088.350586" posY="-962.149353" posZ="15.589271" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
-    <building posX="-1115.882080" posY="-917.591919" posZ="20.010670" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1115.882080" posY="-917.591919" posZ="20.010670" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1115.180054" posY="-931.632446" posZ="15.803850" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1115.180054" posY="-946.893127" posZ="15.803850" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1115.180054" posY="-962.153809" posZ="15.803850" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
@@ -709,9 +708,9 @@
     <building posX="-1115.174683" posY="-992.675171" posZ="15.803856" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1120.085449" posY="-917.591919" posZ="20.010658" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
     <building posX="-1120.085449" posY="-923.198669" posZ="20.010656" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1115.882080" posY="-923.198669" posZ="20.010668" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1115.882080" posY="-923.198669" posZ="20.010668" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1120.085449" posY="-928.805420" posZ="20.010656" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1115.882080" posY="-928.805420" posZ="20.010668" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1115.882080" posY="-928.805420" posZ="20.010668" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1088.350586" posY="-953.739258" posZ="15.589271" rotX="-0.000000" rotY="179.999991" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipejnt_35c52" />
     <building posX="-1085.734009" posY="-984.260620" posZ="15.344638" rotX="-0.000000" rotY="179.999991" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipejnt_35c52" />
     <building posX="-1081.055786" posY="-990.047607" posZ="19.014917" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6328_215db" />
@@ -734,11 +733,11 @@
     <building posX="-1120.776611" posY="-923.198669" posZ="15.803832" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1120.776611" posY="-928.805420" posZ="15.803831" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1102.744385" posY="-924.753479" posZ="20.005198" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1098.541016" posY="-924.753479" posZ="20.005209" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
-    <building posX="-1098.541016" posY="-930.360229" posZ="20.005209" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1098.541016" posY="-924.753479" posZ="20.005209" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1098.541016" posY="-930.360229" posZ="20.005209" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1102.744385" posY="-930.360229" posZ="20.005198" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1103.435547" posY="-924.753479" posZ="2.642843" rotX="90.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
-    <building posX="-1103.435547" posY="-930.360229" posZ="2.642843" rotX="90.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
+    <building posX="-1103.435547" posY="-924.753479" posZ="2.642843" rotX="90.000000" rotY="0.000000" rotZ="149.999998" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
+    <building posX="-1103.435547" posY="-930.360229" posZ="2.642843" rotX="90.000000" rotY="0.000000" rotZ="149.999998" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
     <object posX="-1212.875854" posY="-959.559387" posZ="13.832306" rotX="0.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_632b1" />
     <building posX="-1083.938110" posY="-978.510437" posZ="15.323168" rotX="0.000000" rotY="-0.000000" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipe_b1_adb76" />
     <building posX="-1086.557495" posY="-947.989075" posZ="15.572534" rotX="0.000000" rotY="-0.000000" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipe_b1_adb76" />
@@ -758,15 +757,15 @@
     <building posX="-1115.190918" posY="-899.527832" posZ="15.803854" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1120.776611" posY="-897.426147" posZ="16.495028" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6395_bf0d8" />
     <building posX="-1090.694336" posY="-923.217651" posZ="15.344630" rotX="-0.000000" rotY="179.999991" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipejnt_35c52" />
-    <building posX="-1097.158691" posY="-907.933167" posZ="20.005215" rotX="89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1097.158691" posY="-907.933167" posZ="20.005215" rotX="90.000000" rotY="0.000000" rotZ="89.999990" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1092.955322" posY="-907.933167" posZ="20.005203" rotX="-0.000005" rotY="-180.000000" rotZ="-90.000007" interior="0" dimension="0" id="vcs_model_6395" />
-    <building posX="-1097.158691" posY="-913.539917" posZ="20.005217" rotX="89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1097.158691" posY="-913.539917" posZ="20.005217" rotX="90.000000" rotY="0.000000" rotZ="89.999990" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1092.955322" posY="-913.539917" posZ="20.005205" rotX="-0.000005" rotY="-180.000000" rotZ="-90.000007" interior="0" dimension="0" id="vcs_model_6395" />
-    <building posX="-1092.264160" posY="-913.539917" posZ="17.903547" rotX="-89.999988" rotY="90.000000" rotZ="56.309932" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
-    <building posX="-1092.264160" posY="-907.933167" posZ="17.903545" rotX="-89.999988" rotY="90.000000" rotZ="56.309932" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
-    <building posX="-1092.264160" posY="-902.326416" posZ="17.903545" rotX="-89.999988" rotY="90.000000" rotZ="56.309932" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
+    <building posX="-1092.264160" posY="-913.539917" posZ="17.903547" rotX="-90.000000" rotY="0.000000" rotZ="-90.000020" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
+    <building posX="-1092.264160" posY="-907.933167" posZ="17.903545" rotX="-90.000000" rotY="0.000000" rotZ="-90.000020" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
+    <building posX="-1092.264160" posY="-902.326416" posZ="17.903545" rotX="-90.000000" rotY="0.000000" rotZ="-90.000020" interior="0" dimension="0" id="jm_oilpipe02_67ee2" />
     <building posX="-1092.955322" posY="-902.326416" posZ="20.005203" rotX="-0.000005" rotY="-180.000000" rotZ="-90.000007" interior="0" dimension="0" id="vcs_model_6395" />
-    <building posX="-1097.158691" posY="-902.326416" posZ="20.005215" rotX="89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1097.158691" posY="-902.326416" posZ="20.005215" rotX="90.000000" rotY="0.000000" rotZ="89.999990" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1115.190918" posY="-897.426147" posZ="15.112653" rotX="0.000000" rotY="-179.999991" rotZ="0.000000" interior="0" dimension="0" id="vcs_model_6395_bf0d8" />
     <building posX="-1120.776611" posY="-899.527832" posZ="15.803827" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="jm_oilpipe01_41321" />
     <building posX="-1090.694336" posY="-928.824402" posZ="15.344630" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
@@ -774,15 +773,15 @@
     <building posX="-1094.771362" posY="-916.243225" posZ="27.701687" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="sub_floodlite_8ec65" />
     <building posX="-1066.242554" posY="-946.216919" posZ="16.244261" rotX="0.000002" rotY="-0.000025" rotZ="-89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
     <building posX="-1064.860229" posY="-946.216919" posZ="20.447603" rotX="-0.000009" rotY="179.999972" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1011.893555" posY="-945.964294" posZ="14.890096" rotX="89.999980" rotY="81.869898" rotZ="-180.000000" interior="0" dimension="0" id="vcs_model_6395_6eee1" />
+    <building posX="-1011.893555" posY="-945.964294" posZ="14.890096" rotX="90.000000" rotY="0.000000" rotZ="-89.999997" interior="0" dimension="0" id="vcs_model_6395_6eee1" />
     <building posX="-1097.849854" posY="-902.326477" posZ="15.798403" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1097.849854" posY="-907.933228" posZ="15.798402" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1097.849854" posY="-913.539978" posZ="15.798401" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1097.849854" posY="-924.753479" posZ="15.798397" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
     <building posX="-1097.849854" posY="-919.146729" posZ="15.798399" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6409" />
-    <building posX="-1098.541016" posY="-919.146729" posZ="20.005211" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
+    <building posX="-1098.541016" posY="-919.146729" posZ="20.005211" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="vcs_model_6395_d7ebf" />
     <building posX="-1102.744385" posY="-919.146729" posZ="20.005199" rotX="-0.000005" rotY="-180.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6395_9a091" />
-    <building posX="-1103.435547" posY="-919.146729" posZ="2.642845" rotX="90.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
+    <building posX="-1103.435547" posY="-919.146729" posZ="2.642845" rotX="90.000000" rotY="0.000000" rotZ="149.999998" interior="0" dimension="0" id="jm_oilpipe02_f6506" />
     <building posX="-1118.978516" posY="-896.726624" posZ="21.550404" rotX="-0.000002" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="jm_oilpipe_b1_8da7b" />
     <building posX="-1099.725952" posY="-896.738647" posZ="21.655766" rotX="0.000002" rotY="90.000000" rotZ="89.999990" interior="0" dimension="0" id="jm_oilpipe_b1_8da7b" />
     <building posX="-1088.904053" posY="-917.461975" posZ="15.323162" rotX="0.000000" rotY="-0.000000" rotZ="-89.999997" interior="0" dimension="0" id="jm_oilpipe_b1_adb76" />
@@ -965,7 +964,6 @@
     <building posX="-833.911621" posY="246.553589" posZ="9.451086" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodl2" uniqueID="11865" />
     <building posX="-897.503052" posY="264.724487" posZ="19.546789" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodlhaitibuilding06" uniqueID="11860" />
     <building posX="-1007.127441" posY="-220.775803" posZ="12.035541" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="0" dimension="0" id="lodhaithouseg" uniqueID="11797" />
-    <object posX="-1007.127441" posY="-220.775803" posZ="12.035541" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="0" dimension="0" id="lodhaithouseg" lowLOD="true" lodNear="100.00" lodBounds="-1012.094 -225.383 -1002.173 -216.170" />
     <object posX="-548.490112" posY="561.099182" posZ="-17.707615" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_2677" lowLOD="true" lodNear="100.00" lodBounds="-556.856 546.031 -540.125 576.167" />
     <object posX="-548.490112" posY="561.099182" posZ="1.754855" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodjettymid01" lowLOD="true" lodNear="100.00" lodBounds="-556.856 546.031 -540.125 576.167" />
     <building posX="-970.373840" posY="-693.086365" posZ="15.741651" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="littleha_hardware" lodParent="lodtleha_hardware" uniqueID="11704" />
@@ -986,13 +984,11 @@
     <building posX="-1082.040283" posY="357.460846" posZ="-7.427340" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodcoast5" uniqueID="11866" />
     <building posX="-1011.482971" posY="322.518921" posZ="14.441921" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loditnewbt" uniqueID="11867" />
     <building posX="-1007.426697" posY="-209.066742" posZ="11.815017" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithousea" uniqueID="11798" />
-    <object posX="-1007.426697" posY="-209.066742" posZ="11.815017" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithousea" lowLOD="true" lodNear="100.00" lodBounds="-1013.944 -212.258 -1000.404 -205.876" />
     <building posX="-1005.518188" posY="-171.789734" posZ="12.089717" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="0" dimension="0" id="lodhaithousec_12c61" uniqueID="11801" />
     <building posX="-963.101624" posY="-193.788010" posZ="12.315170" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithouseh" uniqueID="11792" />
     <building posX="-966.290955" posY="-210.873108" posZ="11.989957" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithoused" uniqueID="11795" />
     <building posX="-1008.838562" posY="-198.904984" posZ="11.989956" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithoused_c1b4c" uniqueID="11799" />
     <building posX="-1006.135742" posY="-185.880341" posZ="12.165552" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="0" dimension="0" id="lodhaithouseb_7059a" uniqueID="11800" />
-    <object posX="-1005.518188" posY="-171.789734" posZ="12.089717" rotX="0.000000" rotY="0.000000" rotZ="-179.999991" interior="0" dimension="0" id="lodhaithousec_12c61" lowLOD="true" lodNear="100.00" lodBounds="-1010.485 -176.397 -1000.563 -167.184" />
     <building posX="-1161.615723" posY="1423.882446" posZ="-1.386251" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodstadiumland_b" uniqueID="11931" />
     <building posX="-1163.031006" posY="-642.361328" posZ="10.585472" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="miamiland177" lodParent="lodmiland177" uniqueID="11708" />
     <building posX="-1163.682617" posY="-557.713989" posZ="16.018126" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="havbit03" lodParent="lodbit03" uniqueID="11709" />
@@ -1000,10 +996,10 @@
     <building posX="-1154.468872" posY="-710.472168" posZ="12.746302" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lha_gunshop_ext" lodParent="lod_gunshop_ext" uniqueID="11710" />
     <object posX="-1148.281860" posY="-698.471802" posZ="10.631301" rotX="0.121960" rotY="-0.004408" rotZ="-87.004099" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_a6a08" />
     <building posX="-1168.460449" posY="-699.131226" posZ="13.935528" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1913" />
-    <building posX="-1228.484253" posY="-692.148865" posZ="9.425721" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="dr_bigpipe" />
-    <building posX="-1238.328491" posY="-692.148865" posZ="9.425721" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="dr_bigpipe" />
-    <building posX="-1236.572510" posY="-700.162170" posZ="13.528079" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigpipe_aaebc" />
-    <building posX="-1240.338623" posY="-699.178467" posZ="13.528079" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigpipe_aaebc" />
+    <building posX="-1228.484253" posY="-692.148865" posZ="9.425721" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe" />
+    <building posX="-1238.328491" posY="-692.148865" posZ="9.425721" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe" />
+    <building posX="-1236.572510" posY="-700.162170" posZ="13.528079" rotX="90.000000" rotY="0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigpipe_aaebc" />
+    <building posX="-1240.338623" posY="-699.178467" posZ="13.528079" rotX="90.000000" rotY="0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigpipe_aaebc" />
     <building posX="-906.998413" posY="346.989899" posZ="21.127153" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loditwarhus" uniqueID="11868" />
     <building posX="-880.445984" posY="315.081238" posZ="10.173874" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodharoada4" uniqueID="11864" />
     <building posX="-1004.428406" posY="-157.095642" posZ="11.989954" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="lodhaithoused" uniqueID="11815" />
@@ -1082,9 +1078,9 @@
     <building posX="-1212.421143" posY="-451.499420" posZ="11.150250" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="havbit02" lodParent="lodbit02" uniqueID="11723" />
     <building posX="-1144.584106" posY="-446.002106" posZ="9.688462" rotX="-0.000000" rotY="-0.000000" rotZ="29.999997" interior="0" dimension="0" id="veg_palwee03_946eb" />
     <building posX="-1295.024658" posY="-438.416504" posZ="-5.864283" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_newgrounda" lodParent="lodnewgrounda" uniqueID="11724" />
-    <building posX="-1264.628418" posY="-518.664185" posZ="6.766544" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="dr_bigpipe" />
-    <building posX="-1264.959229" posY="-518.664185" posZ="6.766545" rotX="89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe_29a71" />
-    <building posX="-1272.121338" posY="-511.633972" posZ="6.468003" rotX="89.999997" rotY="-3.576335" rotZ="-3.576334" interior="0" dimension="0" id="dr_bigpipe_9ebc7" />
+    <building posX="-1264.628418" posY="-518.664185" posZ="6.766544" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe" />
+    <building posX="-1264.959229" posY="-518.664185" posZ="6.766545" rotX="90.000000" rotY="0.000000" rotZ="89.999990" interior="0" dimension="0" id="dr_bigpipe_29a71" />
+    <building posX="-1272.121338" posY="-511.633972" posZ="6.468003" rotX="90.000000" rotY="0.000000" rotZ="174.999992" interior="0" dimension="0" id="dr_bigpipe_9ebc7" />
     <building posX="-1045.174805" posY="-55.765907" posZ="11.815017" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousea_d228d" uniqueID="11837" />
     <building posX="-1043.762817" posY="-65.427460" posZ="11.989956" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithoused_3c3a8" uniqueID="11820" />
     <building posX="-1003.721985" posY="-90.535294" posZ="11.989956" rotX="0.000000" rotY="-0.000000" rotZ="-0.000017" interior="0" dimension="0" id="lodhaithoused_b6f9a" uniqueID="11821" />
@@ -1105,15 +1101,14 @@
     <building posX="-1136.795776" posY="-520.907898" posZ="9.699316" rotX="-0.000000" rotY="-0.000000" rotZ="98.056503" interior="0" dimension="0" id="dr_lhav_hseb_84cfb" lodParent="lodlhav_hseb_6295b" uniqueID="11729" />
     <building posX="-1162.030273" posY="-519.198669" posZ="13.311481" rotX="-0.000000" rotY="-0.000000" rotZ="98.147371" interior="0" dimension="0" id="dr_lhav_hsec" lodParent="lodlhav_hsec" uniqueID="11730" />
     <building posX="-1153.012817" posY="-522.250610" posZ="11.414830" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_havwalls3" />
-    <building posX="-1244.959229" posY="-518.664185" posZ="6.766545" rotX="89.999998" rotY="90.000000" rotZ="90.000000" interior="0" dimension="0" id="dr_bigpipe_38b59" />
-    <building posX="-1245.290039" posY="-518.664185" posZ="6.766544" rotX="89.999998" rotY="90.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe_46907" />
-    <building posX="-1225.290039" posY="-518.664185" posZ="6.766545" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigpipe_bb6c7" />
+    <building posX="-1244.959229" posY="-518.664185" posZ="6.766545" rotX="90.000000" rotY="0.000000" rotZ="-90.000000" interior="0" dimension="0" id="dr_bigpipe_38b59" />
+    <building posX="-1245.290039" posY="-518.664185" posZ="6.766544" rotX="90.000000" rotY="0.000000" rotZ="89.999990" interior="0" dimension="0" id="dr_bigpipe_46907" />
+    <building posX="-1225.290039" posY="-518.664185" posZ="6.766545" rotX="90.000000" rotY="0.000000" rotZ="-90.000020" interior="0" dimension="0" id="dr_bigpipe_bb6c7" />
     <building posX="-1212.654053" posY="-518.230347" posZ="9.952853" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1882" />
     <building posX="-1207.447021" posY="-458.113068" posZ="18.455879" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_1859" />
     <building posX="-1002.971985" posY="-16.410559" posZ="13.611834" rotX="0.000000" rotY="-0.000000" rotZ="-5.000016" interior="0" dimension="0" id="lodhaithousei_8d190" uniqueID="11841" />
     <building posX="-963.178650" posY="-24.690807" posZ="12.165552" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithouseb_44d47" uniqueID="11839" />
     <building posX="-963.796204" posY="-40.022152" posZ="12.089717" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousec_d99d1" uniqueID="11838" />
-    <object posX="-963.796204" posY="-40.022152" posZ="12.089717" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousec_d99d1" lowLOD="true" lodNear="100.00" lodBounds="-968.751 -44.628 -958.830 -35.415" />
     <building posX="-1062.024658" posY="-587.790405" posZ="10.788372" rotX="0.000000" rotY="-0.000000" rotZ="-81.500005" interior="0" dimension="0" id="stonebench1" />
     <building posX="-1035.505249" posY="-584.459290" posZ="10.788372" rotX="0.000000" rotY="-0.000000" rotZ="-81.500005" interior="0" dimension="0" id="stonebench1" />
     <building posX="-1090.685425" posY="-554.047241" posZ="10.788372" rotX="0.000000" rotY="0.000000" rotZ="-174.000003" interior="0" dimension="0" id="stonebench1" />
@@ -1136,7 +1131,6 @@
     <building posX="-1074.043823" posY="-553.782593" posZ="13.197461" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_umberto" lodParent="lodumberto" uniqueID="11734" />
     <building posX="-919.894836" posY="51.751160" posZ="11.817959" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnewcafe" uniqueID="11854" />
     <building posX="-960.475769" posY="-8.982474" posZ="11.989956" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithoused_3ff84" uniqueID="11840" />
-    <object posX="-960.475769" posY="-8.982474" posZ="11.989956" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="lodhaithoused_3ff84" lowLOD="true" lodNear="100.00" lodBounds="-967.402 -12.809 -953.552 -5.154" />
     <building posX="-949.316528" posY="840.055176" posZ="48.494408" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon_shops" uniqueID="11879" />
     <building posX="-956.370483" posY="-483.588989" posZ="13.994243" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="miamiland174b" lodParent="lodmiland174b" uniqueID="11735" />
     <object posX="-951.706177" posY="839.819458" posZ="81.216316" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loddts_winsb" uniqueID="11877" forceObject="true" />
@@ -1170,8 +1164,6 @@
     <building posX="-1155.368286" posY="-64.453865" posZ="16.443863" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodrocosign" uniqueID="11835" />
     <building posX="-1202.125610" posY="-43.339741" posZ="13.803246" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodboxgirdbridge" uniqueID="11807" />
     <object posX="-961.887634" posY="4.198795" posZ="11.815017" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousea_0922e" lowLOD="true" lodNear="50.00" lodBounds="-968.910 1.008 -955.371 7.390" />
-    <object posX="-961.887634" posY="4.198795" posZ="11.815017" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousea_0922e" lowLOD="true" lodNear="100.00" lodBounds="-968.910 1.008 -955.371 7.390" />
-    <object posX="-961.887634" posY="4.198795" posZ="11.815017" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodhaithousea_0922e" lowLOD="true" lodNear="100.00" lodBounds="-968.910 1.008 -955.371 7.390" />
     <object posX="-969.137085" posY="-59.452721" posZ="9.838033" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodharoada10" lowLOD="true" lodNear="100.00" lodBounds="-993.765 -141.469 -944.508 22.560" />
     <building posX="-908.564209" posY="534.122681" posZ="9.993256" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon_top04" uniqueID="11872" />
     <building posX="-1197.992432" posY="-418.265869" posZ="9.812460" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lhroadc2" lodParent="lodoadc2" uniqueID="11741" />
@@ -1282,7 +1274,6 @@
     <building posX="-1158.825806" posY="-249.461456" posZ="16.541258" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lh-hitbuild1aa" lodParent="lodhitbuild1aa" uniqueID="11778" />
     <object posX="-1168.447388" posY="-305.313232" posZ="9.917061" rotX="0.104577" rotY="-0.003650" rotZ="-87.002736" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_50a17" />
     <building posX="-1201.920288" posY="-310.226196" posZ="17.775246" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventa" />
-    <building posX="-1210.096191" posY="-267.186371" posZ="14.717159" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="me_warehouseext" lodParent="lodwarehouseext" uniqueID="11779" />
     <building posX="-1225.276123" posY="-319.337463" posZ="-4.208033" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="haicoastfirst" lodParent="lodcoastfirst" uniqueID="11780" />
     <object posX="-1126.728394" posY="-308.748962" posZ="9.917061" rotX="0.104577" rotY="-0.003650" rotZ="-87.002736" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_50a17" />
     <building posX="-1200.758423" posY="-310.226196" posZ="17.775246" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofventa" />
@@ -1338,7 +1329,7 @@
     <building posX="-1213.974976" posY="-160.820007" posZ="-7.285000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="haicoast1" lodParent="lodcoast1" uniqueID="11789" />
     <building posX="-1142.564209" posY="-240.201477" posZ="24.132002" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofblokc" />
     <building posX="-1145.385986" posY="-240.201477" posZ="24.132002" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_roofblokc" />
-    <building posX="-1210.096191" posY="-267.186371" posZ="14.717159" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="me_warehouseint" />
+    <building posX="-1210.096191" posY="-267.186371" posZ="14.717159" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="me_warehouseint" lodParent="lodwarehouseext" uniqueID="11779" />
     <object posX="-842.744141" posY="1076.028320" posZ="55.366425" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnitelites7" uniqueID="11896" forceObject="true" />
     <building posX="-1087.159424" posY="-239.193359" posZ="13.881936" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="pw_stairs" />
     <building posX="-1087.099487" posY="-239.151291" posZ="15.325274" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="pw_stairbarrier" />
@@ -1401,7 +1392,7 @@
     <building posX="-1165.821289" posY="-135.987991" posZ="16.127832" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofventa" />
     <building posX="-1155.747314" posY="-64.562859" posZ="16.476002" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="roco_neona" />
     <building posX="-1165.821289" posY="-134.986633" posZ="16.127832" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="dr_roofventa" />
-    <object posX="-674.447144" posY="1165.769775" posZ="46.443878" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnitelites6" forceObject="true" lowLOD="true" />
+    <object posX="-674.447144" posY="1165.769775" posZ="46.443878" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnitelites6" forceObject="true" uniqueID="11966" />
     <building posX="-1221.115967" posY="-53.537930" posZ="11.324691" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lh_dockposts1" />
     <building posX="-775.324219" posY="870.667114" posZ="12.314980" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon65" uniqueID="11880" />
     <building posX="-1026.944824" posY="-71.708900" posZ="9.940636" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="litharoada6" lodParent="lodharoada6" uniqueID="11808" />
@@ -1463,7 +1454,7 @@
     <building posX="-1148.608643" posY="61.944000" posZ="10.294319" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="litharoada2" lodParent="lodharoada2" uniqueID="11834" />
     <building posX="-1155.368286" posY="-64.453865" posZ="16.443863" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_rocosign" lodParent="lodrocosign" uniqueID="11835" />
     <object posX="-1155.747314" posY="-64.641273" posZ="16.476002" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="roco_neon_b" forceObject="true" lowLOD="true" />
-    <object posX="-951.228577" posY="1331.013794" posZ="49.969208" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnitelites8" forceObject="true" lowLOD="true" />
+    <object posX="-951.228577" posY="1331.013794" posZ="49.969208" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodnitelites8" forceObject="true" uniqueID="11967" />
     <building posX="-1023.916931" posY="-61.075016" posZ="11.031076" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="stationfence" />
     <building posX="-1048.137329" posY="-82.631866" posZ="10.645373" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="fence01" />
     <building posX="-1023.162903" posY="-60.734497" posZ="11.640452" rotX="0.000000" rotY="-0.000000" rotZ="-89.999997" interior="0" dimension="0" id="haitistation01" lodParent="lodtistation01" uniqueID="11836" />
@@ -1562,7 +1553,7 @@
     <building posX="-1087.147217" posY="126.337402" posZ="14.510434" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_stallsignb" />
     <object posX="-1079.996094" posY="98.402969" posZ="10.227612" rotX="-0.140027" rotY="0.000000" rotZ="-91.992671" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_bb1a2" />
     <object posX="-1054.282837" posY="136.301758" posZ="10.227612" rotX="-0.140027" rotY="0.000000" rotZ="-91.992671" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_1c149" />
-    <object posX="-1076.739014" posY="99.998924" posZ="19.156305" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_stallsign" forceObject="true" lowLOD="true" />
+    <object posX="-1076.739014" posY="99.998924" posZ="19.156305" rotX="90.000000" rotY="0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_stallsign" forceObject="true" lowLOD="true" />
     <building posX="-1063.982178" posY="136.270966" posZ="19.442822" rotX="-0.000000" rotY="-0.000000" rotZ="59.999997" interior="0" dimension="0" id="vcs_model_2428" />
     <building posX="-723.610229" posY="705.360291" posZ="22.240000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon_top01" uniqueID="11468" />
     <building posX="-675.082397" posY="688.104004" posZ="10.054451" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodd_downtown09" uniqueID="11449" />
@@ -1576,7 +1567,7 @@
     <building posX="-894.399902" posY="162.345001" posZ="17.182943" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="forbes2_cut_ext" lodParent="lodbes2_cut_ext" uniqueID="11855" />
     <object posX="-974.802307" posY="150.696350" posZ="8.136556" rotX="-0.140027" rotY="-0.000000" rotZ="-81.992676" interior="0" dimension="0" physicsRoot="1290" breakable="true" respawn="true" simulated="false" frozen="false" mass="1250" turnMass="12500" airResistance="0.99" elasticity="0.05" buoyancy="20" id="telgrphpole02_34bab" />
     <object posX="-628.561768" posY="694.776550" posZ="30.575062" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="loddts_neone" uniqueID="11475" forceObject="true" />
-    <building posX="-950.551697" posY="108.433014" posZ="10.845551" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="nhaitiplnt14" />
+    <building posX="-950.551697" posY="108.433014" posZ="10.845551" rotX="90.000000" rotY="0.000000" rotZ="136.499997" interior="0" dimension="0" id="nhaitiplnt14" />
     <building posX="-627.951294" posY="870.244019" posZ="18.550613" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon45" uniqueID="11889" />
     <building posX="-808.645508" posY="1130.259033" posZ="16.813999" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon58" uniqueID="11908" />
     <building posX="-460.449585" posY="1056.869263" posZ="22.115761" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon21" uniqueID="11575" />
@@ -1689,7 +1680,7 @@
     <building posX="-481.365936" posY="1363.557739" posZ="19.847607" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon_04_bit2" uniqueID="11944" />
     <building posX="-638.790466" posY="1444.132080" posZ="24.061134" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon31" uniqueID="11954" />
     <building posX="-795.240784" posY="475.993958" posZ="31.440899" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="me_scafbit" lodParent="lodscafbit" uniqueID="11874" />
-    <building posX="-808.879150" posY="476.321228" posZ="9.795853" rotX="89.999986" rotY="-7.125018" rotZ="1.789911" interior="0" dimension="0" id="dr_bigpipe_9e591" />
+    <building posX="-808.879150" posY="476.321228" posZ="9.795853" rotX="90.000000" rotY="0.000000" rotZ="-170.441732" interior="0" dimension="0" id="dr_bigpipe_9e591" />
     <building posX="-426.747375" posY="1436.140259" posZ="12.340030" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3052" uniqueID="11956" />
     <building posX="-501.409302" posY="1432.320679" posZ="10.281973" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3049" uniqueID="11955" />
     <building posX="-848.494141" posY="1494.222656" posZ="11.163834" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon61" uniqueID="11946" />
@@ -1699,7 +1690,7 @@
     <building posX="-982.464905" posY="556.238953" posZ="133.158478" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_2645" />
     <building posX="-825.612915" posY="575.012207" posZ="9.752123" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6358" />
     <building posX="-818.101135" posY="580.413452" posZ="9.752123" rotX="-0.000000" rotY="-0.000000" rotZ="39.439305" interior="0" dimension="0" id="vcs_model_6358" />
-    <building posX="-808.616882" posY="506.607513" posZ="9.758427" rotX="89.999996" rotY="-26.565052" rotZ="-26.565051" interior="0" dimension="0" id="dr_bigpipe_d908f" />
+    <building posX="-808.616882" posY="506.607513" posZ="9.758427" rotX="90.000000" rotY="0.000000" rotZ="139.283892" interior="0" dimension="0" id="dr_bigpipe_d908f" />
     <building posX="-835.487976" posY="588.457153" posZ="9.752123" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6358" />
     <building posX="-842.870850" posY="587.278809" posZ="12.372524" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="me_concfence2" />
     <building posX="-442.567474" posY="1539.709473" posZ="-3.519889" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3051" uniqueID="11959" />
@@ -1715,12 +1706,12 @@
     <building posX="-1117.252563" posY="772.416504" posZ="-19.874786" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dt_nbeach07" lodParent="lodnbeach07" uniqueID="11875" />
     <building posX="-704.941223" posY="1022.645996" posZ="20.226688" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lodntoon77" uniqueID="11899" />
     <building posX="-902.677979" posY="720.541260" posZ="32.021202" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="doontoon_top08" lodParent="lodntoon_top08" uniqueID="11876" />
-    <building posX="-889.591370" posY="586.144348" posZ="5.880001" rotX="89.999997" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_2617" />
+    <building posX="-889.591370" posY="586.144348" posZ="5.880001" rotX="90.000000" rotY="0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_2617" />
     <building posX="-891.434814" posY="604.332275" posZ="10.360981" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_bigsoil" />
     <building posX="-664.244202" posY="1036.441772" posZ="17.305122" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="lod_buildnew2" uniqueID="11902" />
-    <building posX="-843.040710" posY="599.305725" posZ="9.728704" rotX="89.999992" rotY="26.565050" rotZ="-26.565051" interior="0" dimension="0" id="dr_bigpipe_44fe5" />
-    <building posX="-842.280273" posY="603.750916" posZ="9.495979" rotX="89.999992" rotY="26.565050" rotZ="-26.565051" interior="0" dimension="0" id="dr_bigpipe_44fe5" />
-    <building posX="-836.048096" posY="596.749756" posZ="11.908383" rotX="89.999996" rotY="26.565052" rotZ="26.565051" interior="0" dimension="0" id="dr_bigpipe_f7384" />
+    <building posX="-843.040710" posY="599.305725" posZ="9.728704" rotX="90.000000" rotY="0.000000" rotZ="54.207423" interior="0" dimension="0" id="dr_bigpipe_44fe5" />
+    <building posX="-842.280273" posY="603.750916" posZ="9.495979" rotX="90.000000" rotY="0.000000" rotZ="54.207423" interior="0" dimension="0" id="dr_bigpipe_44fe5" />
+    <building posX="-836.048096" posY="596.749756" posZ="11.908383" rotX="90.000000" rotY="0.000000" rotZ="-125.792590" interior="0" dimension="0" id="dr_bigpipe_f7384" />
     <building posX="-812.705627" posY="635.342651" posZ="14.150825" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="vcs_model_6355" />
     <building posX="-812.705627" posY="635.342651" posZ="10.671554" rotX="-0.000000" rotY="-0.000000" rotZ="179.999991" interior="0" dimension="0" id="dr_portacabin" />
     <building posX="-837.498779" posY="596.343872" posZ="15.131372" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_2673" />
@@ -1901,7 +1892,7 @@
     <building posX="-888.528198" posY="1148.887939" posZ="39.788143" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6310_294bf" />
     <building posX="-887.572510" posY="1162.921997" posZ="39.807198" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6310_15884" />
     <building posX="-814.932251" posY="1029.990234" posZ="112.046989" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3002" />
-    <object posX="-674.447144" posY="1165.769775" posZ="46.443878" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dt_nitelites6" forceObject="true" lowLOD="true" />
+    <object posX="-674.447144" posY="1165.769775" posZ="46.443878" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dt_nitelites6" forceObject="true" lodParent="lodnitelites6" uniqueID="11966" />
     <building posX="-781.765869" posY="1166.899048" posZ="16.647158" rotX="0.000000" rotY="-0.000000" rotZ="-90.000007" interior="0" dimension="0" id="vcs_model_3009" />
     <building posX="-626.768738" posY="1128.564453" posZ="24.462000" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="doontoon50" lodParent="lodntoon50" uniqueID="11909" />
     <building posX="-703.371521" posY="1101.297607" posZ="37.095783" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6310_15884" />
@@ -1932,7 +1923,7 @@
     <building posX="-1003.071655" posY="1148.421143" posZ="11.982033" rotX="0.000000" rotY="-0.000000" rotZ="-89.999986" interior="0" dimension="0" id="vcs_model_6324" />
     <building posX="-937.147034" posY="1337.083252" posZ="8.645508" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3029" lodParent="vcs_model_3012" uniqueID="11914" />
     <building posX="-1039.591919" posY="1231.731812" posZ="7.696820" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3037" />
-    <object posX="-951.228577" posY="1331.013794" posZ="49.969208" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dt_nitelites8" forceObject="true" lowLOD="true" />
+    <object posX="-951.228577" posY="1331.013794" posZ="49.969208" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dt_nitelites8" forceObject="true" lodParent="lodnitelites8" uniqueID="11967" />
     <building posX="-1039.091553" posY="1148.289551" posZ="11.185240" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="dr_dtn_fence" />
     <building posX="-852.811768" posY="1131.026733" posZ="10.704832" rotX="0.000000" rotY="-0.000000" rotZ="-9.000000" interior="0" dimension="0" id="stonebench1" />
     <building posX="-853.491821" posY="1126.933105" posZ="10.704832" rotX="0.000000" rotY="-0.000000" rotZ="-9.000000" interior="0" dimension="0" id="stonebench1" />
@@ -1953,8 +1944,6 @@
     <building posX="-926.323059" posY="1153.286255" posZ="13.568197" rotX="-0.000000" rotY="-0.000000" rotZ="89.999997" interior="0" dimension="0" id="vcs_model_6312" />
     <building posX="-917.999512" posY="1328.790161" posZ="84.537834" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3028" />
     <building posX="-926.109314" posY="1336.516724" posZ="54.224174" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3033" lodParent="vcs_model_3065" uniqueID="11918" />
-    <building posX="-585.746582" posY="1047.270508" posZ="190.754425" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="pc_gantry" />
-    <object posX="-585.746582" posY="1047.270508" posZ="190.754425" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_6468" lowLOD="true" />
     <object posX="-887.958313" posY="1336.019409" posZ="15.728955" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="vcs_model_3018" forceObject="true" lowLOD="true" />
     <object posX="-926.091980" posY="1336.511597" posZ="54.255234" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="pm_scraplights" forceObject="true" lowLOD="true" />
     <object posX="-926.091980" posY="1336.511597" posZ="54.255234" rotX="0.000000" rotY="-0.000000" rotZ="-0.000000" interior="0" dimension="0" id="pm_scraplights2" forceObject="true" lowLOD="true" />

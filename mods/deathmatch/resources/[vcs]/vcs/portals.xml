@@ -72,6 +72,30 @@
         <portal x="-84.33000" y="-1576.43010" z="9.41593" yaw="0.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-84.33000" spawnY="-1574.93010" floorZ="9.42007" heading="0.00000" />
         <portal x="-86.00000" y="-1592.66000" z="13.19736" yaw="345.00000" width="2" depth="2" interior="1" dimension="434" spawnX="-85.61177" spawnY="-1591.21111" floorZ="13.19736" heading="345.00000" timecycle="8" />
     </pair>
+    <pair id="BAR_GAYCLUB" name="BAR_GAYCLUB" label="White Stallionz Bar" source="BRY_B4_2139 + BRY_B4_6482">
+        <portal x="-1088.00000" y="126.60000" z="10.23060" yaw="180.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1089.00000" spawnY="124.50000" floorZ="10.22710" heading="180.00000" />
+        <portal x="-1088.10000" y="127.30000" z="10.21599" yaw="90.00000" width="2" depth="2" interior="1" dimension="1154" spawnX="-1093.87000" spawnY="129.48000" floorZ="10.21599" heading="90.00000" timecycle="0" />
+    </pair>
+    <pair id="FORT_BAXTER_ADMIN" name="FORT_BAXTER_ADMIN" label="Fort Baxter Administration Building" source="DIA_C4_27308 + DIA_C4_27486">
+        <portal x="-1722.33980" y="-156.43540" z="13.92216" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-1718.33980" spawnY="-156.43540" floorZ="13.60331" heading="270.00000" />
+        <portal x="-1722.83980" y="-156.43540" z="13.81456" yaw="90.00000" width="2" depth="2" interior="1" dimension="1106" spawnX="-1726.33980" spawnY="-156.43540" floorZ="13.81456" heading="90.00000" timecycle="0" />
+    </pair>
+    <pair id="MARINEX" name="MARINEX" label="Freighter" source="BRY_B3_25774 + BRY_B3_27306">
+        <portal x="-660.27630" y="-1302.68240" z="12.16817" yaw="203.13430" width="2" depth="2" interior="0" dimension="0" spawnX="-659.27630" spawnY="-1308.68240" floorZ="12.16817" heading="203.13430" />
+        <portal x="-661.81810" y="-1299.22640" z="76.37970" yaw="22.94280" width="2" depth="2" interior="1" dimension="66" spawnX="-662.81810" spawnY="-1296.22640" floorZ="76.37970" heading="22.94280" timecycle="0" />
+    </pair>
+    <pair id="MENDEZ_MANSION" name="MENDEZ_MANSION" label="Mendez Mansion" source="LAN_C10_30282 + LAN_C10_28825 + LAN_C10_29140">
+        <portal x="22.59920" y="1185.83170" z="18.50906" yaw="172.19670" width="2" depth="2" interior="0" dimension="0" spawnX="18.09500" spawnY="1146.81340" floorZ="22.48761" heading="172.19670" />
+        <portal x="16.78000" y="1178.09000" z="42.89132" yaw="194.00000" width="2" depth="2" interior="1" dimension="162" spawnX="16.72000" spawnY="1175.33000" floorZ="42.79231" heading="194.00000" timecycle="0" />
+    </pair>
+    <pair id="MENDEZ_TOWER_ROOF" name="MENDEZ_TOWER_ROOF" label="Mendez Building" source="DIA_C5_21635 + DIA_C5_21726 + DIA_C5_27454">
+        <portal x="-922.32190" y="1328.72330" z="84.56011" yaw="270.00000" width="2" depth="2" interior="0" dimension="0" spawnX="-919.89500" spawnY="1328.83870" floorZ="84.36784" heading="270.00000" />
+        <portal x="-923.77780" y="1331.92350" z="77.40485" yaw="167.48390" width="2" depth="2" interior="0" dimension="0" spawnX="-924.36490" spawnY="1330.06140" floorZ="77.40485" heading="167.48390" timecycle="1" timecycleBounds="-941.1 1312.6 74.1 -911.1 1360.6 80.7" />
+    </pair>
+    <pair id="MENDEZ_TOWER_OFFICES" name="MENDEZ_TOWER_OFFICES" label="Mendez Building" source="DIA_C5_22755 + DIA_C5_26502">
+        <portal x="-924.12550" y="1341.35790" z="77.40485" yaw="352.65920" width="2" depth="2" interior="0" dimension="0" spawnX="-924.60850" spawnY="1344.15030" floorZ="77.40567" heading="352.65920" />
+        <portal x="-912.46790" y="1344.05130" z="74.13703" yaw="7.52180" width="2" depth="2" interior="0" dimension="0" spawnX="-924.16230" spawnY="1344.22800" floorZ="74.13703" heading="7.52180" />
+    </pair>
     <pair id="VCN" name="VCN" source="WARPSPO">
         <portal x="-410.49110" y="1117.34330" z="10.10000" yaw="179.60000" width="3" depth="3" interior="0" dimension="0" spawnX="-410.26970" spawnY="1114.92820" floorZ="10.02532" heading="179.60000" />
         <portal x="-447.67350" y="1128.20000" z="55.60000" yaw="282.00000" width="3" depth="3" interior="0" dimension="0" spawnX="-445.43800" spawnY="1128.20680" floorZ="55.65086" heading="282.00000" />

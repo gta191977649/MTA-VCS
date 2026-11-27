@@ -515,6 +515,17 @@ function onResourceStartTimer(resourceThatStarted)
             lowLODObjects[placement.id] = true
         end
     end
+    -- GTA stores draw distance on the model, not the placement. When one
+    -- copy uses the low-LOD object distance multiplier, every pair sharing
+    -- that target model must use the same object path. MTA also requires
+    -- both ends of a native LOD link to have the same element type.
+    for _, placement in ipairs(elementList) do
+        local target = placement.lodParent or placement.id
+        if placement.uniqueID and lowLODObjects[target] then
+            placement.type = "object"
+            placement.forceObject = "true"
+        end
+    end
 
     -- Then definitions. Reuse the already-parsed `maps` list (the zone names are
     -- the same lines) so the stripped #offset header isn't reintroduced by a

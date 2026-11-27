@@ -1,4 +1,4 @@
-"""Exercise both directions of the PS2 mall portals under the shipped MTA ACL."""
+"""Exercise both directions of mall and mission portals under the shipped MTA ACL."""
 import socket
 import subprocess
 import time
@@ -59,11 +59,19 @@ register("onResourceStart",resourceRoot,function()
     assert(not ready)
 """
     count = 0
+    mission_rooms = {"BAR_GAYCLUB": (1, 1154), "FORT_BAXTER_ADMIN": (1, 1106),
+                     "MARINEX": (1, 66), "MENDEZ_MANSION": (1, 162),
+                     "MENDEZ_TOWER_ROOF": (0, 0), "MENDEZ_TOWER_OFFICES": (0, 0)}
+    checked_rooms = set()
     for pair in ET.parse(catalog).getroot():
         route = pair.get("id")
-        if not route.startswith("MALL"):
+        if not route.startswith("MALL") and route not in mission_rooms:
             continue
         a, b = (node.attrib for node in pair)
+        if route in mission_rooms:
+            assert (a["interior"], a["dimension"]) == ("0", "0")
+            assert (int(b["interior"]), int(b["dimension"])) == mission_rooms[route]
+            checked_rooms.add(route)
         for entering, door, dest in (("true", a, b), ("false", b, a)):
             count += 1
             probe += f"""
@@ -76,7 +84,7 @@ register("onResourceStart",resourceRoot,function()
     handlers["enex:landed"]({count},{dest['spawnX']},{dest['spawnY']},{dest['floorZ']}+0.85)
     assert(getElementDimension(client)=={dest['dimension']} and getElementInterior(client)=={dest['interior']},"{route} landing")
 """
-    assert count >= 8
+    assert checked_rooms == set(mission_rooms) and count >= 16
     marker = f"ENEX_MALL_PASS directions={count}"
     server.write_text(prefix + server.read_text() + probe + f'    outputServerLog("{marker}")\nend)\n')
     config = ET.parse(MOD / "mtaserver.conf")

@@ -1804,7 +1804,7 @@ def check_gang_weapons(disc):
         function setPedWeaponSlot(p, slot) assert(slot == 0); p.gun = 0 end
     """)
     load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua",
-                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua"])
+                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_carjack.lua", "ped_ai.lua"])
     check = lua.eval("""
         function(model, index, sample, original, host)
             local p, player = element("ped"), element("player")
@@ -1870,7 +1870,7 @@ def check_ped_personalities(disc):
     lua.execute(SERVER_MOCK)
     lua.execute("exports = {npc_hlc = {}}")
     load(lua, RUNTIME, ["traffic_visibility.lua", "traffic_model_bindings.lua", "ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua",
-                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_ai.lua", "traffic_ambient.lua"])
+                        "ped_objectives.lua", "ped_ai_tasks.lua", "ped_carjack.lua", "ped_ai.lua", "traffic_ambient.lua"])
     runtime = lua.globals()
     expected_ids = set()
     for model, record in enumerate(struct.unpack_from(f"<{count}I", game, model_table)):
@@ -2215,7 +2215,7 @@ def check_reaction_latency():
         TrafficGraph={pedestrianAnchor=noop}
     """)
     load(lua, RUNTIME, ["ped_ai_profiles.lua", "ped_ai_rules.lua", "ped_weapons.lua", "ped_objectives.lua", "ped_ai_tasks.lua",
-                        "ped_ai.lua", "traffic_world.lua", "traffic_ambient.lua"])
+                        "ped_carjack.lua", "ped_ai.lua", "traffic_world.lua", "traffic_ambient.lua"])
     lua.execute("""
         local player=element("player",-1)
         client=player
@@ -3690,6 +3690,56 @@ def check_road(disc=None, vcs_pc=None):
         player.x,player.y,player.z,player.stars = 0,0,0,nil
         PedAI.passengerThreat, PedAI.vehicleThreat, PedVoice = oldFlee, oldFight, oldVoice
     end
+
+    -- A valid body attack must reclaim a car already queued for population
+    -- retirement, just as opening its door does. Keep both network orders.
+    for scenario = 1, 4 do
+        local roll = math.random
+        player.x, player.y, player.z, player.weapon = 0, 0, 0, 0
+        players, created, packets = {player}, {}, {}
+        TrafficRoad.start(graph, function() return 1 end)
+        tick()
+        answerProbe(assert(packets[1]))
+        tick()
+        local car = assert(created[1])
+        local ped = car.driver
+        ped.syncer = player
+        for _ = 1, 8 do
+            if not TrafficRoad.isManagedPed(ped) then break end
+            deliver("npc_hlc:onNPCTaskDone", ped, assert(ped.task))
+        end
+        assert(getElementData(car, TrafficVisibility.retiringKey))
+        local expire = assert(timers[TrafficVisibility.fadeOutMs + 50])
+        player.x, player.y, player.z, client = car.x, car.y, car.z, player
+        client = spectator
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 0, 1000, 0)
+        assert(getElementData(car, TrafficVisibility.retiringKey), "an unauthorized report must not cancel retirement")
+        client, player.x = player, car.x + 20
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, 0, 1000, 0)
+        assert(getElementData(car, TrafficVisibility.retiringKey), "an out-of-reach swing must not cancel retirement")
+        player.x = car.x
+        if scenario == 2 or scenario == 3 then
+            player.weapon = 22
+            TrafficRoad.noteGunfire(player, 22, car.x, car.y+26, car.z, car.x, car.y-5, car.z)
+            if scenario == 2 then deliver("onVehicleDamage", car, 8) end
+        end
+        deliver("npchlc_traffic:vehicleBodyHit", resourceRoot, car, player, player.weapon, 1000, player.weapon == 0 and 0 or 8)
+        assert(not getElementData(car, TrafficVisibility.retiringKey), "attacked car must cancel retirement")
+        assert(not getElementData(ped, TrafficVisibility.retiringKey))
+        if scenario == 3 then deliver("onVehicleDamage", car, 8) end
+        math.random = function(low) return low or (scenario == 4 and 0.501 or 0.5) end
+        tick()
+        math.random = roll
+        expire()
+        assert(not car.destroyed and not ped.destroyed and TrafficRoad.isManagedPed(ped))
+        if scenario == 4 then
+            assert(ped.task[1] == "driveTrafficPhysics" and ped.task[6] == 3)
+        else
+            assert(not ped.task, "the accepted attack must still request the native exit")
+        end
+        TrafficRoad.stop()
+    end
+    player.x, player.y, player.z, player.weapon = 0, 0, 0, nil
 
     do
         local oldVoice, oldRandom, oldPicker = PedVoice, math.random, chooseTrafficCivilianVehicle

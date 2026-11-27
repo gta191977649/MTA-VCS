@@ -1,0 +1,390 @@
+[2026-11-26 00:52:25] INFO: QA CLIENT READY
+[2026-11-26 00:52:33] INFO: QA PREPARED male-player originalActor=14 originalCar=270 committed=false
+[2026-11-26 00:52:34] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_IN_AIR", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 114, "targetAboard": true } ]
+[2026-11-26 00:52:34] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_LAND", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 330, "targetAboard": true } ]
+[2026-11-26 00:52:34] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_LAND", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 530, "targetAboard": true } ]
+[2026-11-26 00:52:34] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 732, "targetAboard": true } ]
+[2026-11-26 00:52:34] INFO: QA SERVER male-player intent=fight maneuver=Approach driver door extraction=nil seat=false
+[2026-11-26 00:52:34] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 949, "targetAboard": true } ]
+[2026-11-26 00:52:35] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1149, "targetAboard": true } ]
+[2026-11-26 00:52:35] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1365, "targetAboard": true } ]
+[2026-11-26 00:52:35] INFO: QA NATIVE START male-player seat=0 victim=true door=0
+[2026-11-26 00:52:35] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1566, "targetAboard": true } ]
+[2026-11-26 00:52:35] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_ALIGN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1782, "targetAboard": true } ]
+[2026-11-26 00:52:35] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:36] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1998, "targetAboard": true } ]
+[2026-11-26 00:52:36] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2198, "targetAboard": true } ]
+[2026-11-26 00:52:36] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2398, "targetAboard": true } ]
+[2026-11-26 00:52:36] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2599, "targetAboard": true } ]
+[2026-11-26 00:52:36] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2799, "targetAboard": true } ]
+[2026-11-26 00:52:36] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:37] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2999, "targetAboard": true } ]
+[2026-11-26 00:52:37] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3215, "targetAboard": true } ]
+[2026-11-26 00:52:37] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3416, "targetAboard": true } ]
+[2026-11-26 00:52:37] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3632, "targetAboard": true } ]
+[2026-11-26 00:52:37] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3832, "targetAboard": true } ]
+[2026-11-26 00:52:37] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:38] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4032, "targetAboard": true } ]
+[2026-11-26 00:52:38] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4248, "targetAboard": true } ]
+[2026-11-26 00:52:38] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4449, "targetAboard": true } ]
+[2026-11-26 00:52:38] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4649, "targetAboard": true } ]
+[2026-11-26 00:52:38] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4866, "targetAboard": true } ]
+[2026-11-26 00:52:38] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:39] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5083, "targetAboard": true } ]
+[2026-11-26 00:52:39] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5299, "targetAboard": true } ]
+[2026-11-26 00:52:39] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5515, "targetAboard": true } ]
+[2026-11-26 00:52:39] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5716, "targetAboard": true } ]
+[2026-11-26 00:52:39] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5916, "targetAboard": true } ]
+[2026-11-26 00:52:39] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:40] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6132, "targetAboard": true } ]
+[2026-11-26 00:52:40] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6332, "targetAboard": true } ]
+[2026-11-26 00:52:40] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6536, "targetAboard": true } ]
+[2026-11-26 00:52:40] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6752, "targetAboard": true } ]
+[2026-11-26 00:52:40] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=false
+[2026-11-26 00:52:40] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6967, "targetAboard": true } ]
+[2026-11-26 00:52:41] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 7168, "targetAboard": true } ]
+[2026-11-26 00:52:41] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 7368, "targetAboard": true } ]
+[2026-11-26 00:52:41] INFO: QA NATIVE EXIT male-player target=true seat=0 jacker=true
+[2026-11-26 00:52:41] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_DRIVE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7569, "targetAboard": false } ]
+[2026-11-26 00:52:41] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7769, "targetAboard": false } ]
+[2026-11-26 00:52:41] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=0
+[2026-11-26 00:52:41] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7969, "targetAboard": false } ]
+[2026-11-26 00:52:42] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8169, "targetAboard": false } ]
+[2026-11-26 00:52:42] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8369, "targetAboard": false } ]
+[2026-11-26 00:52:42] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8569, "targetAboard": false } ]
+[2026-11-26 00:52:42] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8786, "targetAboard": false } ]
+[2026-11-26 00:52:43] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8986, "targetAboard": false } ]
+[2026-11-26 00:52:43] INFO: QA SERVER male-player intent=fight maneuver=Pull driver out extraction=2 seat=0
+[2026-11-26 00:52:43] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 9187, "targetAboard": false } ]
+[2026-11-26 00:52:43] INFO: QA NATIVE EXIT male-player target=false seat=0 jacker=false
+[2026-11-26 00:52:43] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9388, "targetAboard": false } ]
+[2026-11-26 00:52:43] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9588, "targetAboard": false } ]
+[2026-11-26 00:52:43] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9788, "targetAboard": false } ]
+[2026-11-26 00:52:44] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9988, "targetAboard": false } ]
+[2026-11-26 00:52:44] INFO: QA SERVER male-player intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:52:44] INFO: QA CLIENT male-player [ { "targetTask": "TASK_SIMPLE_BE_HIT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 98.68000030517578, "age": 10190, "targetAboard": false } ]
+[2026-11-26 00:52:45] INFO: QA SERVER male-player intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:52:45] INFO: QA RESULT male-player PASS native extraction and melee
+[2026-11-26 00:52:46] INFO: QA SERVER male-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:52:46] INFO: QA DESTROY male-player stack traceback:
+[2026-11-26 00:52:49] INFO: QA PREPARED female-player originalActor=24 originalCar=211 committed=false
+[2026-11-26 00:52:49] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 31, "targetAboard": true } ]
+[2026-11-26 00:52:49] INFO: QA SERVER female-player intent=fight maneuver=Approach driver door extraction=nil seat=false
+[2026-11-26 00:52:49] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 231, "targetAboard": true } ]
+[2026-11-26 00:52:49] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 432, "targetAboard": true } ]
+[2026-11-26 00:52:49] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 632, "targetAboard": true } ]
+[2026-11-26 00:52:49] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 832, "targetAboard": true } ]
+[2026-11-26 00:52:49] INFO: QA NATIVE START female-player seat=0 victim=true door=0
+[2026-11-26 00:52:50] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1032, "targetAboard": true } ]
+[2026-11-26 00:52:50] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:50] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_ALIGN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1232, "targetAboard": true } ]
+[2026-11-26 00:52:50] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1432, "targetAboard": true } ]
+[2026-11-26 00:52:50] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1649, "targetAboard": true } ]
+[2026-11-26 00:52:50] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1858, "targetAboard": true } ]
+[2026-11-26 00:52:51] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2072, "targetAboard": true } ]
+[2026-11-26 00:52:51] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:51] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2274, "targetAboard": true } ]
+[2026-11-26 00:52:51] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2474, "targetAboard": true } ]
+[2026-11-26 00:52:51] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2674, "targetAboard": true } ]
+[2026-11-26 00:52:51] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2891, "targetAboard": true } ]
+[2026-11-26 00:52:52] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3110, "targetAboard": true } ]
+[2026-11-26 00:52:52] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:52] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3325, "targetAboard": true } ]
+[2026-11-26 00:52:52] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3541, "targetAboard": true } ]
+[2026-11-26 00:52:52] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3757, "targetAboard": true } ]
+[2026-11-26 00:52:53] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3957, "targetAboard": true } ]
+[2026-11-26 00:52:53] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:53] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4159, "targetAboard": true } ]
+[2026-11-26 00:52:53] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4359, "targetAboard": true } ]
+[2026-11-26 00:52:53] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4575, "targetAboard": true } ]
+[2026-11-26 00:52:53] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4791, "targetAboard": true } ]
+[2026-11-26 00:52:54] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4993, "targetAboard": true } ]
+[2026-11-26 00:52:54] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:54] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5208, "targetAboard": true } ]
+[2026-11-26 00:52:54] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5408, "targetAboard": true } ]
+[2026-11-26 00:52:54] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5609, "targetAboard": true } ]
+[2026-11-26 00:52:54] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5809, "targetAboard": true } ]
+[2026-11-26 00:52:55] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6024, "targetAboard": true } ]
+[2026-11-26 00:52:55] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=false
+[2026-11-26 00:52:55] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6226, "targetAboard": true } ]
+[2026-11-26 00:52:55] INFO: QA NATIVE EXIT female-player target=true seat=0 jacker=true
+[2026-11-26 00:52:55] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_DRIVE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 6426, "targetAboard": false } ]
+[2026-11-26 00:52:55] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 6643, "targetAboard": false } ]
+[2026-11-26 00:52:55] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 6859, "targetAboard": false } ]
+[2026-11-26 00:52:56] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7076, "targetAboard": false } ]
+[2026-11-26 00:52:56] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=0
+[2026-11-26 00:52:56] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7292, "targetAboard": false } ]
+[2026-11-26 00:52:56] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7493, "targetAboard": false } ]
+[2026-11-26 00:52:56] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7708, "targetAboard": false } ]
+[2026-11-26 00:52:57] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7909, "targetAboard": false } ]
+[2026-11-26 00:52:57] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8126, "targetAboard": false } ]
+[2026-11-26 00:52:57] INFO: QA SERVER female-player intent=fight maneuver=Pull driver out extraction=4 seat=0
+[2026-11-26 00:52:57] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8343, "targetAboard": false } ]
+[2026-11-26 00:52:57] INFO: QA NATIVE EXIT female-player target=false seat=0 jacker=false
+[2026-11-26 00:52:57] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 8543, "targetAboard": false } ]
+[2026-11-26 00:52:57] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 8759, "targetAboard": false } ]
+[2026-11-26 00:52:58] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 8961, "targetAboard": false } ]
+[2026-11-26 00:52:58] INFO: QA CLIENT female-player [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 98.68000030517578, "age": 9161, "targetAboard": false } ]
+[2026-11-26 00:52:58] INFO: QA SERVER female-player intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:52:59] INFO: QA RESULT female-player PASS native extraction and melee
+[2026-11-26 00:52:59] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:04] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false  [DUP x4]
+[2026-11-26 00:53:04] INFO: QA PREPARED male-ped originalActor=62 originalCar=175 committed=false
+[2026-11-26 00:53:04] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 32, "targetAboard": true } ]
+[2026-11-26 00:53:04] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 232, "targetAboard": true } ]
+[2026-11-26 00:53:04] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:04] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:04] INFO: QA SERVER male-ped intent=fight maneuver=Approach driver door extraction=nil seat=false
+[2026-11-26 00:53:04] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 432, "targetAboard": true } ]
+[2026-11-26 00:53:04] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 653, "targetAboard": true } ]
+[2026-11-26 00:53:05] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 865, "targetAboard": true } ]
+[2026-11-26 00:53:05] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1065, "targetAboard": true } ]
+[2026-11-26 00:53:05] INFO: QA NATIVE START male-ped seat=0 victim=true door=0
+[2026-11-26 00:53:05] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1265, "targetAboard": true } ]
+[2026-11-26 00:53:05] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:05] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:05] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:05] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1465, "targetAboard": true } ]
+[2026-11-26 00:53:05] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_ALIGN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1665, "targetAboard": true } ]
+[2026-11-26 00:53:06] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1865, "targetAboard": true } ]
+[2026-11-26 00:53:06] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2065, "targetAboard": true } ]
+[2026-11-26 00:53:06] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2266, "targetAboard": true } ]
+[2026-11-26 00:53:06] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:06] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:06] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:06] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2482, "targetAboard": true } ]
+[2026-11-26 00:53:06] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2684, "targetAboard": true } ]
+[2026-11-26 00:53:07] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2899, "targetAboard": true } ]
+[2026-11-26 00:53:07] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3099, "targetAboard": true } ]
+[2026-11-26 00:53:07] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3315, "targetAboard": true } ]
+[2026-11-26 00:53:07] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:07] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:07] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:07] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3517, "targetAboard": true } ]
+[2026-11-26 00:53:07] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3733, "targetAboard": true } ]
+[2026-11-26 00:53:08] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3949, "targetAboard": true } ]
+[2026-11-26 00:53:08] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4149, "targetAboard": true } ]
+[2026-11-26 00:53:08] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4350, "targetAboard": true } ]
+[2026-11-26 00:53:08] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:08] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:08] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:08] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4567, "targetAboard": true } ]
+[2026-11-26 00:53:08] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4782, "targetAboard": true } ]
+[2026-11-26 00:53:09] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4983, "targetAboard": true } ]
+[2026-11-26 00:53:09] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5199, "targetAboard": true } ]
+[2026-11-26 00:53:09] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5400, "targetAboard": true } ]
+[2026-11-26 00:53:09] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:09] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:09] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:09] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5616, "targetAboard": true } ]
+[2026-11-26 00:53:10] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5817, "targetAboard": true } ]
+[2026-11-26 00:53:10] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6034, "targetAboard": true } ]
+[2026-11-26 00:53:10] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6249, "targetAboard": true } ]
+[2026-11-26 00:53:10] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6449, "targetAboard": true } ]
+[2026-11-26 00:53:10] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:10] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:10] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=false
+[2026-11-26 00:53:10] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6650, "targetAboard": true } ]
+[2026-11-26 00:53:11] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6865, "targetAboard": true } ]
+[2026-11-26 00:53:11] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 7066, "targetAboard": true } ]
+[2026-11-26 00:53:11] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 7282, "targetAboard": true } ]
+[2026-11-26 00:53:11] INFO: QA NATIVE EXIT male-ped target=true seat=0 jacker=true
+[2026-11-26 00:53:11] INFO: QA DESTROY male-player-car stack traceback:
+[2026-11-26 00:53:11] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_DRIVE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7482, "targetAboard": false } ]
+[2026-11-26 00:53:11] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:11] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:11] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=0
+[2026-11-26 00:53:11] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7683, "targetAboard": false } ]
+[2026-11-26 00:53:12] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7884, "targetAboard": false } ]
+[2026-11-26 00:53:12] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8084, "targetAboard": false } ]
+[2026-11-26 00:53:12] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8291, "targetAboard": false } ]
+[2026-11-26 00:53:12] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8491, "targetAboard": false } ]
+[2026-11-26 00:53:12] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:12] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:12] INFO: QA SERVER male-ped intent=fight maneuver=Pull driver out extraction=6 seat=0
+[2026-11-26 00:53:12] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8707, "targetAboard": false } ]
+[2026-11-26 00:53:13] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8907, "targetAboard": false } ]
+[2026-11-26 00:53:13] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 9109, "targetAboard": false } ]
+[2026-11-26 00:53:13] INFO: QA NATIVE EXIT male-ped target=false seat=0 jacker=false
+[2026-11-26 00:53:13] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9310, "targetAboard": false } ]
+[2026-11-26 00:53:13] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9510, "targetAboard": false } ]
+[2026-11-26 00:53:13] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:13] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:13] INFO: QA SERVER male-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:13] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9710, "targetAboard": false } ]
+[2026-11-26 00:53:14] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9927, "targetAboard": false } ]
+[2026-11-26 00:53:14] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 10127, "targetAboard": false } ]
+[2026-11-26 00:53:14] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 10327, "targetAboard": false } ]
+[2026-11-26 00:53:14] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 10528, "targetAboard": false } ]
+[2026-11-26 00:53:14] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:14] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:14] INFO: QA SERVER male-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:14] INFO: QA CLIENT male-ped [ { "targetTask": "TASK_SIMPLE_BE_HIT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 98.68000030517578, "age": 10729, "targetAboard": false } ]
+[2026-11-26 00:53:15] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:15] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:15] INFO: QA SERVER male-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:15] INFO: QA RESULT male-ped PASS native extraction and melee
+[2026-11-26 00:53:16] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:16] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:16] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:17] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:17] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA PREPARED female-ped originalActor=64 originalCar=271 committed=false
+[2026-11-26 00:53:19] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 198, "targetAboard": true } ]
+[2026-11-26 00:53:19] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 414, "targetAboard": true } ]
+[2026-11-26 00:53:19] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 615, "targetAboard": true } ]
+[2026-11-26 00:53:19] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER female-ped intent=fight maneuver=Approach driver door extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:19] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:20] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 815, "targetAboard": true } ]
+[2026-11-26 00:53:20] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1031, "targetAboard": true } ]
+[2026-11-26 00:53:20] INFO: QA NATIVE START female-ped seat=0 victim=true door=0
+[2026-11-26 00:53:20] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1231, "targetAboard": true } ]
+[2026-11-26 00:53:20] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_GO_TO_POINT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1447, "targetAboard": true } ]
+[2026-11-26 00:53:20] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_ALIGN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1647, "targetAboard": true } ]
+[2026-11-26 00:53:20] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:20] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:20] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=false
+[2026-11-26 00:53:20] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:20] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:21] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 1849, "targetAboard": true } ]
+[2026-11-26 00:53:21] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2066, "targetAboard": true } ]
+[2026-11-26 00:53:21] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2282, "targetAboard": true } ]
+[2026-11-26 00:53:21] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2499, "targetAboard": true } ]
+[2026-11-26 00:53:21] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_DRIVE", "actorTask": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2715, "targetAboard": true } ]
+[2026-11-26 00:53:22] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:22] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:22] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=false
+[2026-11-26 00:53:22] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:22] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:22] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 2915, "targetAboard": true } ]
+[2026-11-26 00:53:22] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3132, "targetAboard": true } ]
+[2026-11-26 00:53:22] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3333, "targetAboard": true } ]
+[2026-11-26 00:53:22] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3549, "targetAboard": true } ]
+[2026-11-26 00:53:23] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3751, "targetAboard": true } ]
+[2026-11-26 00:53:23] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:23] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:23] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=false
+[2026-11-26 00:53:23] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:23] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:23] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 3967, "targetAboard": true } ]
+[2026-11-26 00:53:23] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4167, "targetAboard": true } ]
+[2026-11-26 00:53:23] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4367, "targetAboard": true } ]
+[2026-11-26 00:53:23] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4567, "targetAboard": true } ]
+[2026-11-26 00:53:24] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:24] INFO: QA SERVER male-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:24] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=false
+[2026-11-26 00:53:24] INFO: QA SERVER male-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:24] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:24] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4783, "targetAboard": true } ]
+[2026-11-26 00:53:24] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_SLOW_DRAG_PED_OUT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 4983, "targetAboard": true } ]
+[2026-11-26 00:53:24] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5201, "targetAboard": true } ]
+[2026-11-26 00:53:24] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5418, "targetAboard": true } ]
+[2026-11-26 00:53:24] INFO: QA DESTROY male-ped stack traceback:
+[2026-11-26 00:53:24] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_CAR_SLOW_BE_DRAGGED_OUT", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5633, "targetAboard": true } ]
+[2026-11-26 00:53:25] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:25] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:25] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=false
+[2026-11-26 00:53:25] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=0
+[2026-11-26 00:53:25] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 5833, "targetAboard": true } ]
+[2026-11-26 00:53:25] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_IN", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6049, "targetAboard": true } ]
+[2026-11-26 00:53:25] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6250, "targetAboard": true } ]
+[2026-11-26 00:53:25] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_INSIDE", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 6473, "targetAboard": true } ]
+[2026-11-26 00:53:25] INFO: QA DESTROY female-player-car stack traceback:
+[2026-11-26 00:53:25] INFO: QA NATIVE EXIT female-ped target=true seat=0 jacker=true
+[2026-11-26 00:53:25] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_DRIVE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 6682, "targetAboard": false } ]
+[2026-11-26 00:53:26] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:26] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:26] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=0
+[2026-11-26 00:53:26] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:26] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_GET_UP", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 6883, "targetAboard": false } ]
+[2026-11-26 00:53:26] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7083, "targetAboard": false } ]
+[2026-11-26 00:53:26] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7300, "targetAboard": false } ]
+[2026-11-26 00:53:26] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7500, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_GET_OUT", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7716, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:27] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:27] INFO: QA SERVER female-ped intent=fight maneuver=Pull driver out extraction=8 seat=0
+[2026-11-26 00:53:27] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:27] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 7917, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8118, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8318, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_CAR_CLOSE_DOOR_FROM_OUTSIDE", "actorHealth": 100, "actorAboard": true, "targetHealth": 100, "age": 8533, "targetAboard": false } ]
+[2026-11-26 00:53:27] INFO: QA NATIVE EXIT female-ped target=false seat=0 jacker=false
+[2026-11-26 00:53:28] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 8733, "targetAboard": false } ]
+[2026-11-26 00:53:28] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:28] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:28] INFO: QA SERVER female-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:28] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:28] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 8934, "targetAboard": false } ]
+[2026-11-26 00:53:28] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9134, "targetAboard": false } ]
+[2026-11-26 00:53:28] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9350, "targetAboard": false } ]
+[2026-11-26 00:53:28] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9568, "targetAboard": false } ]
+[2026-11-26 00:53:29] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9768, "targetAboard": false } ]
+[2026-11-26 00:53:29] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:29] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:29] INFO: QA SERVER female-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:29] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:29] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 9983, "targetAboard": false } ]
+[2026-11-26 00:53:29] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 100, "age": 10184, "targetAboard": false } ]
+[2026-11-26 00:53:29] INFO: QA CLIENT female-ped [ { "targetTask": "TASK_SIMPLE_BE_HIT", "actorTask": "TASK_SIMPLE_PLAYER_ON_FOOT", "actorHealth": 100, "actorAboard": false, "targetHealth": 98.68000030517578, "age": 10384, "targetAboard": false } ]
+[2026-11-26 00:53:30] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:30] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:30] INFO: QA SERVER female-ped intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:30] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:30] INFO: QA RESULT female-ped PASS native extraction and melee
+[2026-11-26 00:53:30] INFO: QA ALL CASES FINISHED
+[2026-11-26 00:53:31] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:31] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:31] INFO: QA SERVER female-ped intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:31] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:32] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:32] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:32] INFO: QA SERVER female-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:32] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:33] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:33] INFO: QA SERVER male-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:33] INFO: QA SERVER female-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:33] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:33] INFO: QA DESTROY male-ped-victim stack traceback:
+[2026-11-26 00:53:34] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:34] INFO: QA SERVER female-ped intent=flee maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:34] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:39] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:53:39] INFO: QA SERVER female-ped intent=flee maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:53:39] INFO: QA SERVER female-ped-victim intent=fight maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:53:39] INFO: QA DESTROY female-ped stack traceback:
+[2026-11-26 00:53:40] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:40] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:45] INFO: QA SERVER female-player intent=nil maneuver=nil extraction=nil seat=false  [DUP x4]
+[2026-11-26 00:53:45] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x4]
+[2026-11-26 00:53:45] INFO: QA DESTROY female-player stack traceback:
+[2026-11-26 00:53:45] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:51] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:53:51] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:53:57] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:53:57] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:03] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:03] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:09] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x4]
+[2026-11-26 00:54:09] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:15] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:15] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:21] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:21] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:27] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:27] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:33] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:33] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:39] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x5]
+[2026-11-26 00:54:39] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false
+[2026-11-26 00:54:43] INFO: QA SERVER female-ped-victim intent=nil maneuver=nil extraction=nil seat=false  [DUP x3]
+[2026-11-26 00:54:43] INFO: QA DESTROY female-ped-victim stack traceback:
+[2026-11-26 00:54:51] INFO: QA DESTROY female-ped-car stack traceback:
+[2026-11-26 00:54:51] INFO: QA DESTROY male-ped-car stack traceback:

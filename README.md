@@ -7,6 +7,10 @@ The goal of this project is to provide a boilerplate for your further gamemode d
 This resource includes VCS styled map, hud, vehicles, weapons, peds, weather, etc.
 Currently, many things are still working in progress, if you find any issue or you want to contribute, you're welcome!
 
+## Deploy to the Docker server
+
+Run `python tools/deploy.py` to incrementally sync the current workspace resources to `/root/mtasa/mta-vcs` and restart only when files changed. Server accounts, configuration and runtime databases are preserved. See [deployment instructions](docs/deployment.md) for authentication, previews and rollback behavior.
+
 ## Reload VCS scripts
 
 The server starts `eagleLoader`, `vcs`, and then `leeds_engine`. After changing a VCS script, run `restart leeds_engine` in the server console. The engine stops the managed scripts in reverse dependency order, then starts them with the changes on disk. The map and Eagle Loader stay running.

@@ -97,8 +97,8 @@
   ],
   "zones": {
     "beach": {
-      "placements": 4181,
-      "definitions": 2832
+      "placements": 4201,
+      "definitions": 2852
     },
     "int_1090": {
       "placements": 1,
@@ -617,7 +617,7 @@
       "definitions": 5
     },
     "mainla": {
-      "placements": 2204,
+      "placements": 2193,
       "definitions": 1556
     },
     "mall": {
@@ -759,8 +759,8 @@
   },
   "breakable_placements": 2480,
   "standalone_low_lods": 32,
-  "range_lods": 71,
-  "extended_neon_models": 86,
+  "range_lods": 63,
+  "extended_neon_models": 81,
   "duplicate_underwater_lods": 31,
   "shared_range_lods": 12,
   "authored_timed_lods": 94,
@@ -768,7 +768,7 @@
     3840,
     3841
   ],
-  "dff": 4850,
+  "dff": 4889,
   "col": 4851,
   "txd": 200,
   "interior_portals": [
@@ -790,6 +790,12 @@
     "VPSHOO",
     "JERRY",
     "LANCE_HIDEOUT",
+    "BAR_GAYCLUB",
+    "FORT_BAXTER_ADMIN",
+    "MARINEX",
+    "MENDEZ_MANSION",
+    "MENDEZ_TOWER_ROOF",
+    "MENDEZ_TOWER_OFFICES",
     "VCN",
     "HOS",
     "Mal Viento",
@@ -826,7 +832,6 @@
     "King Knuts, Little Haiti"
   ],
   "unresolved_portals": [
-    "BAR_GAYCLUB",
     "SCARAP",
     "SKY1",
     "SKY2",
@@ -834,7 +839,7 @@
     "SKY4",
     "STRIPC"
   ],
-  "lod_links": 1154,
+  "lod_links": 1181,
   "modelNameSources": {
     "jsrw_id_hash": 3131,
     "unresolved": 554,
@@ -22963,5 +22968,6 @@
       "nameSource": "jsrw_id_hash",
       "sourceTxd": "knackers"
     }
-  ]
+  ],
+  "split_window_details": 19
 }

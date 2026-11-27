@@ -4,6 +4,7 @@ local EXTRA_COLOURS = 6
 local DEFAULT_COLOUR = 0
 local CHANGE_EVENT = "onClientInteriorChanged"
 local rooms = {}
+local worldRooms = {}
 local area, dimension, colour
 local outdoorWeather, outdoorTarget
 local refreshPending = true
@@ -46,6 +47,14 @@ local function refresh()
     if not refreshPending and area == nextArea and dimension == nextDimension then return end
     refreshPending = false
     local nextColour = rooms[scope(nextArea, nextDimension)]
+    if nextArea == 0 and nextDimension == 0 then
+        for shape, row in pairs(worldRooms) do
+            if isElementWithinColShape(localPlayer, shape) then
+                nextColour = row
+                break
+            end
+        end
+    end
     if nextColour == nil and nextArea ~= 0 then nextColour = DEFAULT_COLOUR end
     if area == nextArea and dimension == nextDimension and colour == nextColour then return end
 
@@ -65,8 +74,18 @@ local function scheduleRefresh()
     refreshPending = true
 end
 
-local function loadRooms()
+local function clearRooms()
     rooms = {}
+    for shape in pairs(worldRooms) do destroyElement(shape) end
+    worldRooms = {}
+end
+
+local function refreshPlayer(element)
+    if element == localPlayer then scheduleRefresh() end
+end
+
+local function loadRooms()
+    clearRooms()
     local xml = xmlLoadFile(":vcs/portals.xml", true)
     if not xml then return end
     for _, pair in ipairs(xmlNodeGetChildren(xml)) do
@@ -76,6 +95,20 @@ local function loadRooms()
             local row = tonumber(xmlNodeGetAttribute(endpoint, "timecycle"))
             if interior and dim and (interior ~= 0 or dim ~= 0) and row and row >= 0 and row < 24 then
                 rooms[scope(interior, dim)] = row
+            elseif interior == 0 and dim == 0 and row and row >= 0 and row < 24 then
+                local values = {}
+                for value in (xmlNodeGetAttribute(endpoint, "timecycleBounds") or ""):gmatch("%S+") do
+                    values[#values+1] = tonumber(value)
+                end
+                if #values == 6 then
+                    local x, y, z, maxX, maxY, maxZ = unpack(values)
+                    local shape = createColCuboid(x, y, z, maxX - x, maxY - y, maxZ - z)
+                    if shape then
+                        worldRooms[shape] = row
+                        addEventHandler("onClientColShapeHit", shape, refreshPlayer, false)
+                        addEventHandler("onClientColShapeLeave", shape, refreshPlayer, false)
+                    end
+                end
             end
         end
     end
@@ -96,7 +129,7 @@ addEventHandler("onClientResourceStop", root, function(resource)
     if resource == getThisResource() then
         if outdoorWeather then applyWeather(outdoorWeather, outdoorTarget) end
     elseif getResourceName(resource) == "vcs" then
-        rooms = {}
+        clearRooms()
         scheduleRefresh()
     end
 end)

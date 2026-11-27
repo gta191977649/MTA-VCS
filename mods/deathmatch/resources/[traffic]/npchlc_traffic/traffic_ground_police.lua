@@ -136,13 +136,28 @@ end
 
 function police.vehicleTarget(vehicle) return dutyOwner[vehicle] end
 
-function police.assignVehicle(state, player)
+function police.trace(state, player, action)
+    local enabled = get and get("tracePolice")
+    if enabled ~= true and enabled ~= "true" then return end
+    local r = rosters[player]
+    local level, response = police.response(player)
+    outputDebugString(("[npchlc_traffic:police] %s car=%s driver=%s target=%s stars=%d units=%d/%d officers=%d/%d")
+        :format(action, tostring(state.vehicle), tostring(state.driver), tostring(player), level,
+            r and r.cars or 0, response and response.pursuitVehicleLimit or 0,
+            r and r.cops or 0, response and response.pursuitPedLimit or 0))
+end
+
+function police.assignVehicle(state, player, cruising)
     if dutyOwner[state.vehicle] then return dutyOwner[state.vehicle] == player end
     local level, response = police.response(player)
-    if level == 0 or not police.available(player,response) then return false end
+    -- 0042A010-0042A154 reacts in an existing on-duty car without consulting
+    -- dispatch quotas. available() limits new units; it must not idle a
+    -- rendered patrol when other units or on-foot officers fill the roster.
+    if level == 0 or not police.enabled(response) or not cruising and not police.available(player,response) then return false end
     local r = roster(player)
     r.units[state.vehicle],r.cars,dutyOwner[state.vehicle] = true,r.cars + 1,player
     state.policeTarget = player
+    police.trace(state, player, "acquired")
     return true
 end
 

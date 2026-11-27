@@ -40,6 +40,12 @@ def main():
         function getPlayerWantedLevel(e) return e.wanted or 0 end
         function getElementPosition(e) return e.x, e.y, e.z or 0 end
         function getElementSyncer(e) return e.owner end
+        function getElementVelocity(e) return e.vx or 0, e.vy or 0, e.vz or 0 end
+        function getPedOccupiedVehicleSeat(e) return e.vehicle and 0 or false end
+        function isVehicleLocked(e) return e.locked == true end
+        function cancelEvent() cancelled = true end
+        TrafficWanted = {atDriverDoor=function(p) return p.atDoor end,
+            driverDoorApproach=function() return -1.5, 0.4 end}
         function getDistanceBetweenPoints2D(x, y, a, b) return math.sqrt((x-a)^2 + (y-b)^2) end
         function getDistanceBetweenPoints3D(x,y,z,a,b,c) return math.sqrt((x-a)^2+(y-b)^2+(z-c)^2) end
         function getElementsWithinRange() return nearby end
@@ -308,6 +314,9 @@ def main():
         targetCar.driver,player.vehicle=player,targetCar
         PedAI.update(fighter,graph)
         assert(not fighter.task and messages[#messages][2]=="npchlc_traffic:reclaimDriverSeat")
+        cancelled,source=false,targetCar
+        handlers.onVehicleStartEnter(fighter,0,player,0)
+        assert(not cancelled, "ordinary carjack recovery must retain its existing entry path")
         targetCar.driver,player.vehicle=nil,nil
         PedAI.update(fighter,graph)
         assert(fighter.task[1]=="killPed" and fighter.task[2]==player)
@@ -359,7 +368,7 @@ def main():
         assert(PedAI.update(enraged,graph) and enraged.anim == "fucku" and not enraged.task)
         now = now + 1333
         PedAI.update(enraged,graph)
-        assert(enraged.task[1] == "attackOccupiedVehicle" and enraged.task[2] == player)
+        assert(enraged.task[1] == "approachDriverDoor" and enraged.task[2] == player)
         player.vehicle = nil
         PedAI.update(enraged,graph)
         assert(enraged.task[1] == "killPed" and enraged.task[2] == player)
@@ -369,6 +378,76 @@ def main():
         assert(messages[#messages][2] == "npchlc_traffic:reclaimDriverSeat" and messages[#messages][5] == ownCar)
         ownCar.driver, enraged.vehicle = enraged, ownCar
         assert(PedAI.confirmDriverSeat(enraged) and resumed == previousRoad)
+
+        -- Ordinary melee objective 8 uses the same native pull-out as road
+        -- rage, for both player and ped victims and both civilian sexes.
+        for _,kind in ipairs({"player","ped"}) do
+            for _,model in ipairs({tough,17}) do
+                local attacker, target, car = victim(model), person(kind), person("vehicle")
+                attacker.x, target.x, car.x = -3, 0, 0
+                target.vehicle, car.driver = car, target
+                local brain = PedAI.brain(attacker)
+                assert(brain:react("damage",target,0,"fight"))
+                local event = brain.event
+                assert(not event.committed and PedAI.update(attacker,graph))
+                assert(attacker.task[1]=="approachDriverDoor" and attacker.task[2]==target)
+                source=attacker
+                handlers["npc_hlc:onDriverDoorArrival"](car,event.doorOrder)
+                PedAI.update(attacker,graph)
+                assert(event.extractId and messages[#messages][2]=="npchlc_traffic:pullDriverOut")
+                assert(messages[#messages][5]==car and messages[#messages][6]==target)
+                cancelled=false
+                source=car
+                handlers.onVehicleStartEnter(attacker,0,target,2)
+                assert(not cancelled)
+                handlers.onVehicleStartEnter(attacker,1,target,1)
+                assert(cancelled)
+                car.locked=true
+                PedAI.update(attacker,graph)
+                assert(not event.extractId and event.maneuver=="Driver door locked")
+                car.locked,car.vx,attacker.atDoor=false,.1,true
+                PedAI.update(attacker,graph)
+                assert(event.maneuver=="Waiting for driver to stop")
+                car.vx=0
+                PedAI.update(attacker,graph)
+                assert(event.extractId)
+                attacker.weapon,attacker.ammo=22,10
+                PedAI.update(attacker,graph)
+                assert(not event.extractId and attacker.task[1]=="attackOccupiedVehicle")
+                attacker.weapon,attacker.ammo=0,0
+                local unrelated=person("ped")
+                car.driver=unrelated
+                PedAI.update(attacker,graph)
+                assert(not event.extractId and attacker.task[1]=="attackOccupiedVehicle")
+                car.driver=target
+                PedAI.update(attacker,graph)
+                assert(event.extractId)
+                -- MTA can report the entrant in-vehicle during the native
+                -- task. Retain the attack and leave after the seat transfer.
+                local exitCount=0
+                TrafficPassengers={requestExit=function(p,v,s)
+                    assert(p==attacker and v==car and s==0);exitCount=exitCount+1
+                end}
+                attacker.vehicle,car.driver=car,attacker
+                now=now+3000
+                PedAI.update(attacker,graph)
+                assert(brain.event==event and exitCount==1)
+                attacker.vehicle,target.vehicle,car.driver=nil,nil,nil
+                PedAI.update(attacker,graph)
+                assert(brain.event==event and not event.extractId and attacker.task[1]=="killPed")
+            end
+        end
+        local attacker, target, nextTarget, car = victim(tough), person("player"), person("ped"), person("vehicle")
+        target.vehicle,car.driver,attacker.atDoor=car,target,true
+        local brain=PedAI.brain(attacker)
+        assert(brain:react("damage",target,0,"fight"))
+        PedAI.update(attacker,graph)
+        local previous=brain.event
+        assert(previous.extractId)
+        assert(brain:react("damage",nextTarget,0,"fight"))
+        assert(not previous.extractId and messages[#messages][2]=="npchlc_traffic:cancelPullOut")
+        PedAI.update(attacker,graph)
+        assert(attacker.task[1]=="killPed" and attacker.task[2]==nextTarget)
     """)
     lua.execute((RESOURCE / "ped_ai_c.lua").read_text(encoding="utf-8-sig"))
     print("Street AI profiles, damage, witnesses, gunshot hearing, near misses, speech and recovery passed")

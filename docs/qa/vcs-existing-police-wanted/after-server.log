@@ -1,0 +1,63 @@
+INFO: QA CLIENT READY mode=saturated
+[2026-11-26 01:10:50] INFO: QA SELECT original=207 driver=userdata: 0000000000000030 wanted=0
+[2026-11-26 01:10:50] INFO: QA TRACE phase=render age=372 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:50] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:51] INFO: QA TRACE phase=render age=892 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:51] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:51] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:51] INFO: QA TRACE phase=render age=1435 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:52] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:52] INFO: QA TRACE phase=render age=1984 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:52] INFO: QA SHOT tag=existing-patrol-before-wanted status=ok
+[2026-11-26 01:10:52] INFO: QA TRACE phase=render age=2489 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:52] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:53] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:53] INFO: QA TRACE phase=render age=2999 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:53] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:54] INFO: QA TRACE phase=render age=3518 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:54] INFO: QA CLIENT [ { "aboard": true, "wanted": 0, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_DRIVE" } ]
+[2026-11-26 01:10:54] INFO: QA TRACE phase=render age=4021 active=true wanted=0 target=false mission=nil exit=false aboard=true cops=0 walk=none enrolled=false health=100 pursue=false tasks=1 worker=none
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] wanted-rise car=userdata: 000000000000003D driver=userdata: 000000000000003E target=userdata: 000000000000002E stars=1 units=0/1 officers=0/2
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] wanted-rise car=userdata: 000000000000002F driver=userdata: 0000000000000030 target=userdata: 000000000000002E stars=1 units=0/1 officers=0/2
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] acquired car=userdata: 000000000000003F driver=nil target=userdata: 000000000000002E stars=1 units=1/1 officers=0/2
+[2026-11-26 01:10:54] INFO: QA RAISED mode=saturated cops=2
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] acquired car=userdata: 000000000000002F driver=userdata: 0000000000000030 target=userdata: 000000000000002E stars=1 units=2/1 officers=2/2
+[2026-11-26 01:10:54] INFO: QA ACQUIRE result=true cops=2 owner=userdata: 000000000000002E
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] crew-exit car=userdata: 000000000000002F driver=userdata: 0000000000000030 target=userdata: 000000000000002E stars=1 units=2/1 officers=2/2
+[2026-11-26 01:10:54] INFO: [npchlc_traffic:police] acquired car=userdata: 000000000000003D driver=userdata: 000000000000003E target=userdata: 000000000000002E stars=1 units=3/1 officers=2/2
+[2026-11-26 01:10:54] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_GET_OUT" } ]
+[2026-11-26 01:10:55] INFO: QA TRACE phase=wanted age=417 active=true wanted=1 target=true mission=nil exit=true aboard=true cops=2 walk=none enrolled=false health=100 pursue=true tasks=1 worker=none
+[2026-11-26 01:10:55] INFO: QA CLIENT [ { "aboard": true, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_GET_OUT" } ]
+[2026-11-26 01:10:55] INFO: QA TRACE phase=wanted age=922 active=true wanted=1 target=true mission=nil exit=true aboard=true cops=2 walk=none enrolled=false health=100 pursue=true tasks=1 worker=none
+[2026-11-26 01:10:56] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:56] INFO: QA TRACE phase=wanted age=1447 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=true/0/nil enrolled=true health=100 pursue=true tasks=0 worker=none
+[2026-11-26 01:10:56] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:56] INFO: QA TRACE phase=wanted age=1991 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=1 worker=true/userdata: 0000000000000032/false
+[2026-11-26 01:10:57] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:57] INFO: QA TRACE phase=wanted age=2512 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=1 worker=true/userdata: 0000000000000032/false
+[2026-11-26 01:10:57] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:57] INFO: QA TRACE phase=wanted age=3037 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=1 worker=true/userdata: 0000000000000032/false
+[2026-11-26 01:10:58] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:58] INFO: QA TRACE phase=wanted age=3561 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=1 worker=true/userdata: 0000000000000032/false
+[2026-11-26 01:10:58] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:10:58] INFO: QA TRACE phase=wanted age=4080 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:10:59] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_GO_TO_POINT" } ]
+[2026-11-26 01:10:59] INFO: QA TRACE phase=wanted age=4599 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:10:59] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_CAR_OPEN_DOOR_FROM_OUTSIDE" } ]
+[2026-11-26 01:10:59] INFO: QA TRACE phase=wanted age=5104 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=true tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:00] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:00] INFO: QA ARREST selected=true phase=wanted
+[2026-11-26 01:11:00] INFO: QA TRACE phase=wanted age=5634 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=false tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:00] INFO: [npchlc_traffic:police] released car=userdata: 000000000000003D driver=userdata: 000000000000003E target=userdata: 000000000000002E stars=1 units=2/1 officers=2/2
+[2026-11-26 01:11:00] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:00] INFO: QA TRACE phase=wanted age=6152 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=false tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:01] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:01] INFO: QA TRACE phase=wanted age=6671 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=false tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:01] INFO: QA SHOT tag=existing-patrol-busted status=ok
+[2026-11-26 01:11:01] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:01] INFO: QA TRACE phase=wanted age=7186 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=false tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:02] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:02] INFO: QA TRACE phase=wanted age=7719 active=false wanted=1 target=false mission=nil exit=true aboard=false cops=2 walk=nil/0/true enrolled=true health=100 pursue=false tasks=0 worker=nil/userdata: 0000000000000032/false
+[2026-11-26 01:11:02] INFO: QA CLIENT [ { "aboard": false, "wanted": 1, "health": 100, "streamed": true, "pedStreamed": true, "task": "TASK_SIMPLE_PLAYER_ON_FOOT" } ]
+[2026-11-26 01:11:02] INFO: QA RESULT PASS selected existing patrol arrested player elapsed=5588
+[2026-11-26 01:11:02] INFO: QA CLIENT CAMERA AND INPUT RESTORED

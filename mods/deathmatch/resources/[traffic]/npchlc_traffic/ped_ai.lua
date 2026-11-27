@@ -149,6 +149,7 @@ function Intelligence:react(kind, attacker, weapon, intent, pace, duration)
         self.objectives.revision = self.objectives.revision + 1
     end
     if event.id and self.objectives.current ~= event then return false end
+    PedCarjack.cancelExtraction(self.ped, old)
     self.event = event
     if kind ~= "gunshot" then self.tasks:clear() end
     if TrafficAmbient and TrafficAmbient.scheduleReaction then
@@ -473,7 +474,7 @@ function PedAI.update(ped, graph)
     local pointFlight = event.intent == "flee" and event.origin and (not event.road or event.resolved)
     if isPedDead(ped) or not pointFlight and (not sameWorld(ped, event.target) or isPedDead(event.target)) then return returnToCar(brain, now) end
     if isPedInVehicle(ped) then
-        if event.committed then
+        if event.committed or event.extractId then
             local car, seat = getPedOccupiedVehicle(ped), getPedOccupiedVehicleSeat(ped)
             if car and seat and getVehicleOccupant(car, seat) == ped then
                 if not event.leaveAt or elapsed(now, event.leaveAt) >= 1600 then

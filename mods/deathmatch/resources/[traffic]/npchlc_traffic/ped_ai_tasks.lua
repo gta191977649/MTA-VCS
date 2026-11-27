@@ -170,6 +170,7 @@ function PedTaskManager:execute(graph, event, now)
         return
     end
     if event.intent == "fight" then
+        if not event.committed and PedCarjack.confront(self, event, now) then return end
         hlc:setNPCWalkSpeed(ped,event.pace or "run")
         if PedCombatNavigation and PedCombatNavigation.update(self,event,graph,now) then return end
         local armed = self:hasRangedWeapon()

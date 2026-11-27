@@ -10,9 +10,15 @@ addEventHandler("onVehicleStartEnter", root, function(ped, seat)
     end
 end)
 
--- Road rage uses the native carjacking task. Seat ownership always comes
--- from the vehicle, including when the player changes seats during approach.
+-- Melee objective 8 and road rage use the native carjacking task. Seat
+-- ownership comes from the vehicle, including changes during approach.
 local extractionSerial = 0
+
+local function attacksDriver(brain)
+    local event = brain and brain.event
+    return event and (event.committed or event.intent == "fight"
+        and brain.profile.pedType ~= 6 and not brain.tasks:hasRangedWeapon())
+end
 
 function PedCarjack.cancelExtraction(ped, event)
     if not event or not event.extractId then return end
@@ -30,7 +36,7 @@ end
 addEventHandler("onVehicleStartEnter", root, function(ped, seat, occupant, door)
     local brain = PedAI.brain(ped)
     local event = brain and brain.event
-    if not event or not event.committed then return end
+    if not attacksDriver(brain) or not event.committed and not event.followCar and not event.extractId then return end
     -- MTA 1.7 also reports door 2 for a native automobile jack through
     -- the front left door. Both forms still require seat zero, the exact
     -- victim, and the validated driver-side approach for this request.
@@ -72,7 +78,7 @@ end, false)
 addEventHandler("npc_hlc:onDriverDoorArrival", root, function(car, order)
     local brain = PedAI.brain(source)
     local event = brain and brain.event
-    if not event or not event.committed or event.doorOrder ~= order or event.followCar ~= car
+    if not attacksDriver(brain) or event.doorOrder ~= order or event.followCar ~= car
         or getVehicleOccupant(car, 0) ~= event.target or not stopped(car) then return end
     local x, y, z = getElementPosition(source)
     if getDistanceBetweenPoints3D(x, y, z, getElementPosition(car)) > 8 then return end
@@ -82,11 +88,16 @@ end)
 function PedCarjack.confront(manager, event, now)
     local ped, target = manager.ped, event.target
     local car = getPedOccupiedVehicle(target)
+    -- 00101D30 seeks the occupied target's door for ordinary melee too.
+    -- Police retain their arrest controller; firearms retain ranged combat.
+    if not attacksDriver(PedAI.brain(ped))
+        or not event.committed and car and getVehicleOccupant(car, 0) ~= target then car = nil end
     if not car then
         if event.maneuver then
             PedCarjack.cancelExtraction(ped, event)
             manager:clear()
-            event.task, event.maneuver, event.lastApproachedCar = nil, nil, nil
+            event.task, event.maneuver, event.lastApproachedCar, event.followCar = nil, nil, nil, nil
+            event.doorOrder, event.arrivalAt, event.arrivalOwner = nil, nil, nil
             event.lastSeen = now
         end
         return false

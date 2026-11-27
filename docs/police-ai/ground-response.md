@@ -100,6 +100,10 @@ The initializer at `00332460–00332468` loads the attribute-zone count and tabl
 
 The exit order at `0042AD80` sends objective `0x10` to the driver, then to each occupied passenger slot. The first passenger's deadline is now + 100 ms. Each further occupied slot adds 200–399 ms. After leaving the vehicle the officer uses the normal [officer decisions](officer-behavior.md). Shared physics can temporarily override the pursuit controls for contact, reversing or an overturned vehicle. See [vehicle impact and recovery](../vcs-vehicle-impact.md).
 
+An existing cruising patrol acquires a wanted suspect independently of the new-unit dispatch quotas. The original `00429FEC–0042A154` branch tests positive stars, the ignore flag and the suspect's position, without checking either roster count. New vehicle dispatch still uses the vehicle and officer limits. Existing units retain exclusive ownership by one suspect, count toward that suspect's roster, and obey response suppression and world checks. Officer enrollment retains its existing distance-based replacement policy.
+
+A wanted-level increase wakes nearby patrol scans for the next budgeted vehicle visit, including visible patrols whose population retirement can still be cancelled. Close cruising land units request native crew exit inside the original ±14-unit XY square; more distant units start their normal driving pursuit. Enable the `npchlc_traffic` resource setting `tracePolice` to log wanted-rise, acquisition, crew-exit, pursuit-exit and release transitions with the target, stars and current roster counts. It defaults to false. [Regression evidence](../qa/vcs-existing-police-wanted/report.md).
+
 The automobile physics update also reacts to a fast chase at three or more stars. The test at `0013A544` requires a player vehicle, a different pursuing vehicle on mission 2/3/4/5, and player 3D speed strictly above 0.3 in native units. The resulting branch writes vehicle `+0xC8` from `0.3 × float[vehicle+0x720] − float[vehicle+0x740]` at the path through `0013A9FC`. This changes the physics input while the same driving mission remains active.
 
 ### Specialist vehicles and crews
